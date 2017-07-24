@@ -19,7 +19,7 @@ def insert_scripdata(scripdata):
  
 if __name__ == "__main__":    
     end_date = (datetime.date.today() - datetime.timedelta(days=1)).strftime('%d-%m-%Y')
-    start_date = (datetime.date.today() - datetime.timedelta(days=3000)).strftime('%d-%m-%Y')
+    start_date = (datetime.date.today() - datetime.timedelta(days=4000)).strftime('%d-%m-%Y')
     print start_date + ' to ' + end_date
     
     for data in db.scrip.find():

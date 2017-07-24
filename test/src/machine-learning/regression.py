@@ -1,15 +1,25 @@
 import quandl, math, time
 import pandas as pd
 import numpy as np
+import os
+import logging
+import sys
 from sklearn import preprocessing, cross_validation, svm
 from sklearn.linear_model import LinearRegression
 from talib.abstract import *
 from pymongo import MongoClient
 from multiprocessing.dummy import Pool as ThreadPool
 from pip.req.req_file import preprocess
+from Algorithms.regression_helpers import load_dataset, addFeatures, \
+    mergeDataframes, count_missing, applyTimeLag, performRegression
 
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
+
+directory = '../../output' + '/' + time.strftime("%d%m%y-%H%M%S")
+logname = '../../output' + '/mllog' + time.strftime("%d%m%y-%H%M%S")
+logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=logging.INFO)
+log = logging.getLogger(__name__)
 
 def historical_data(data):
     ardate = np.array([x.encode('UTF8') for x in (np.array(data['data'])[:,0][::-1]).tolist()])
@@ -25,7 +35,7 @@ def historical_data(data):
 def ta_lib_data(scrip):
     data = db.history.find_one({'dataset_code':scrip.encode('UTF8').replace('&','').replace('-','_')})
     if(data is None):
-        print  'Missing Data for ',scrip.encode('UTF8'), '\n'
+        print('Missing Data for ', scrip.encode('UTF8'))
         return
         
     hsdate, hsopen, hshigh, hslow, hslast, hsclose, hsquantity, hsturnover = historical_data(data)   
@@ -38,73 +48,88 @@ def ta_lib_data(scrip):
         'volume': hsquantity,
         'turnover':hsturnover
     })
-    df = df[['open','high','low','close','volume','turnover']]
-    dfp = df[['open','high','low','close','volume','turnover']]
+    df = df[['date','open','high','low','close','volume','turnover']]
+    #dfp = df[['open','high','low','close']]
         
     if (df is not None):
-        df.columns = df.columns.str.lower()
         df=df.rename(columns = {'total trade quantity':'volume'})
         df=df.rename(columns = {'turnover (lacs)': 'turnover'})
-        dfp['PCT_change'] = ((df['close'] - df['open'])/df['open'])*100
+        df['PCT_day_change'] = (((df['close'] - df['open'])/df['open'])*100)
+        df['HL_change'] = (((df['high'] - df['low'])/df['low'])*100).astype(int)
+        df['volume_pre'] = df['volume'].shift(+1)
+        df['close_pre'] = df['close'].shift(+1)
+        #df.fillna(-99999, inplace=True)
+        df.dropna(inplace=True)
+        df['VOL_change'] = (((df['volume'] - df['volume_pre'])/df['volume_pre'])*100)
+        df['PCT_change'] = (((df['close'] - df['close_pre'])/df['close_pre'])*100)
         
-        dfp['ADX'] = ADX(df) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
-        dfp['ADXR'] = ADXR(df) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html
-        dfp['APO'] = APO(df) #Absolute Price Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/apo
-        aroon = AROON(df) #Aroon http://www.investopedia.com/terms/a/aroon.asp
-        dfp['AROONUP'], dfp['AROONDOWN'] = aroon['aroonup'], aroon['aroondown']
-        dfp['AROONOSC'] = AROONOSC(df)
-        dfp['BOP'] = BOP(df) #Balance Of Power https://www.marketvolume.com/technicalanalysis/balanceofpower.asp
-        dfp['CCI'] = CCI(df) #Commodity Channel Index http://www.investopedia.com/articles/trading/05/041805.asp
-        dfp['CMO'] = CMO(df) #Chande Momentum Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/cmo
-        dfp['DX'] = DX(df) #Directional Movement Index http://www.investopedia.com/terms/d/dmi.asp
-        macd = MACD(df)
-        dfp['MACD'], dfp['MACDSIGNAL'], dfp['MACDHIST'] = macd['macd'], macd['macdsignal'], macd['macdhist']
-        #dfp['MACDEXT'] = MACDEXT(df)
-        #dfp['MACDFIX'] = MACDFIX(df)
-        dfp['MFI'] = MFI(df)
-        dfp['MINUS_DI'] = MINUS_DI(df)
-        dfp['MINUS_DM'] = MINUS_DM(df)
-        dfp['MOM'] = MOM(df)
-        dfp['PLUS_DI'] = PLUS_DI(df)
-        dfp['PLUS_DM'] = PLUS_DM(df)
-        dfp['PPO'] = PPO(df)
-        dfp['ROC'] = ROC(df)
-        dfp['ROCP'] = ROCP(df)
-        dfp['ROCR'] = ROCR(df)
-        dfp['ROCR100'] = ROCR100(df)
-        dfp['RSI'] = RSI(df)
+        dfp = df[['VOL_change']]
+        maxdelta = 10
+        delta = range(1, maxdelta)
+        print('Delta days accounted: ', max(delta))
+        columns = df.columns
+        close = columns[4]
+        for dele in delta:
+            addFeatures(df, dfp, close, dele)
+            
+        dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
+        dfp['ADXR'] = ADXR(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html
+        dfp['APO'] = APO(df).apply(lambda x: 1 if x > 0 else 0) #Absolute Price Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/apo
+#         aroon = AROON(df) #Aroon http://www.investopedia.com/terms/a/aroon.asp
+#         dfp['AROONUP'], dfp['AROONDOWN'] = aroon['aroonup'], aroon['aroondown']
+        dfp['AROONOSC'] = AROONOSC(df).apply(lambda x: 1 if x > 0 else 0)
+        dfp['BOP'] = BOP(df).apply(lambda x: 1 if x > 0 else 0) #Balance Of Power https://www.marketvolume.com/technicalanalysis/balanceofpower.asp
+#        dfp['CCI'] = CCI(df) #Commodity Channel Index http://www.investopedia.com/articles/trading/05/041805.asp
+#        dfp['CMO'] = CMO(df) #Chande Momentum Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/cmo
+#        dfp['DX'] = DX(df) #Directional Movement Index http://www.investopedia.com/terms/d/dmi.asp
+#         macd = MACD(df)
+#         dfp['MACD'], dfp['MACDSIGNAL'], dfp['MACDHIST'] = macd['macd'], macd['macdsignal'], macd['macdhist']
+#         #dfp['MACDEXT'] = MACDEXT(df)
+#         #dfp['MACDFIX'] = MACDFIX(df)
+#         dfp['MFI'] = MFI(df)
+#         dfp['MINUS_DI'] = MINUS_DI(df)
+#         dfp['MINUS_DM'] = MINUS_DM(df)
+#         dfp['MOM'] = MOM(df)
+#         dfp['PLUS_DI'] = PLUS_DI(df)
+#         dfp['PLUS_DM'] = PLUS_DM(df)
+#         dfp['PPO'] = PPO(df)
+#         dfp['ROC'] = ROC(df)
+#         dfp['ROCP'] = ROCP(df)
+#         dfp['ROCR'] = ROCR(df)
+#         dfp['ROCR100'] = ROCR100(df)
+#        dfp['RSI'] = RSI(df)
         #dfp['STOCH'] = STOCH(df)
         #dfp['STOCHF'] = STOCHF(df)
         #dfp['STOCHRSI'] = STOCHRSI(df)
-        dfp['TRIX'] = TRIX(df)
-        dfp['ULTOSC'] = ULTOSC(df)
-        dfp['WILLR'] = WILLR(df)
-        
-        bbands = BBANDS(df)
-        dfp['BBANDSUPPER'], dfp['BBANDSMIDDLE'], dfp['BBANDSLOWER'] = bbands['upperband'], bbands['middleband'], bbands['lowerband']
-        
-#       dfp['DEMA'] = DEMA(df)
-        dfp['EMA9'] = EMA(df,9)
-        dfp['EMA21'] = EMA(df,21)
-        dfp['EMA25'] = EMA(df,25)
-        dfp['EMA50'] = EMA(df,50)
-        dfp['EMA100'] = EMA(df,100)
-        dfp['EMA200'] = EMA(df,200)
-        dfp['HT_TRENDLINE'] = HT_TRENDLINE(df)
-        dfp['KAMA'] = KAMA(df)
-        dfp['MA'] = MA(df)
-        #dfp['MAMA'] = MAMA(df)
-        #dfp['MAVP'] = MAVP(df)
-        dfp['MIDPOINT'] = MIDPOINT(df)
-        dfp['MIDPRICE'] = MIDPRICE(df)
-        dfp['SAR'] = SAR(df)
-        dfp['SAREXT'] = SAREXT(df)
-        dfp['SMA'] = SMA(df)
-        dfp['SMA9'] = SMA(df, 9)
-        dfp['T3'] = T3(df)
-        dfp['TEMA'] = TEMA(df)
-        dfp['TRIMA'] = TRIMA(df)
-        dfp['WMA'] = WMA(df)
+#         dfp['TRIX'] = TRIX(df)
+#         dfp['ULTOSC'] = ULTOSC(df)
+#         dfp['WILLR'] = WILLR(df)
+#         
+#         bbands = BBANDS(df)
+#         dfp['BBANDSUPPER'], dfp['BBANDSMIDDLE'], dfp['BBANDSLOWER'] = bbands['upperband'], bbands['middleband'], bbands['lowerband']
+#         
+# #       dfp['DEMA'] = DEMA(df)
+#         dfp['EMA9'] = EMA(df,9)
+#         dfp['EMA21'] = EMA(df,21)
+#         dfp['EMA25'] = EMA(df,25)
+#         dfp['EMA50'] = EMA(df,50)
+#         dfp['EMA100'] = EMA(df,100)
+#         dfp['EMA200'] = EMA(df,200)
+#         dfp['HT_TRENDLINE'] = HT_TRENDLINE(df)
+#         dfp['KAMA'] = KAMA(df)
+#         dfp['MA'] = MA(df)
+#         #dfp['MAMA'] = MAMA(df)
+#         #dfp['MAVP'] = MAVP(df)
+#         dfp['MIDPOINT'] = MIDPOINT(df)
+#         dfp['MIDPRICE'] = MIDPRICE(df)
+#         dfp['SAR'] = SAR(df)
+#         dfp['SAREXT'] = SAREXT(df)
+#         dfp['SMA'] = SMA(df)
+#         dfp['SMA9'] = SMA(df, 9)
+#         dfp['T3'] = T3(df)
+#         dfp['TEMA'] = TEMA(df)
+#         dfp['TRIMA'] = TRIMA(df)
+#         dfp['WMA'] = WMA(df)
 
 
         dfp['CDL2CROWS'] = CDL2CROWS(df)
@@ -169,47 +194,47 @@ def ta_lib_data(scrip):
         dfp['CDLUPSIDEGAP2CROWS'] = CDLUPSIDEGAP2CROWS(df)
         dfp['CDLXSIDEGAP3METHODS'] = CDLXSIDEGAP3METHODS(df)
 
-        dfp['AVGPRICE'] = AVGPRICE(df)
-        dfp['MEDPRICE'] = MEDPRICE(df)
-        dfp['TYPPRICE'] = TYPPRICE(df)
-        dfp['WCLPRICE'] = WCLPRICE(df)
-
-#         dfp['ATR'] = ATR(df)
-#         dfp['NATR'] = NATR(df)
-#         dfp['TRANGE'] = TRANGE(df)
+#         dfp['AVGPRICE'] = AVGPRICE(df)
+#         dfp['MEDPRICE'] = MEDPRICE(df)
+#         dfp['TYPPRICE'] = TYPPRICE(df)
+#         dfp['WCLPRICE'] = WCLPRICE(df)
+# 
+# #         dfp['ATR'] = ATR(df)
+# #         dfp['NATR'] = NATR(df)
+# #         dfp['TRANGE'] = TRANGE(df)
+#         
+#        dfp['AD'] = AD(df)
+#        dfp['ADOSC'] = ADOSC(df)
+#        dfp['OBV'] = OBV(df)
         
-        dfp['AD'] = AD(df)
-        dfp['ADOSC'] = ADOSC(df)
-        dfp['OBV'] = OBV(df)
-        
-        forecast_col = 'PCT_change'
+        forecast_col = 'PCT_change1'
         dfp.fillna(-99999, inplace=True)
         forecast_out = 1
         dfp['label'] = dfp[forecast_col].shift(-forecast_out)
         
-    dfp.to_csv('temp/' + scrip + '.csv', encoding='utf-8')    
-    #print 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-    #print '--------', scrip, '----------'
-    X = np.array(dfp.drop(['label'], 1))
-    X = preprocessing.scale(X)
-    X = X[:-forecast_out]
-    X_lately = X[-forecast_out:]
-    
-    dfp.dropna(inplace=True)
-    y = np.array(dfp['label'])
-    
-    X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.1)
-    clf = LinearRegression()
-    clf.fit(X_train, y_train)
-    accuracy = clf.score(X_test, y_test)
-    forecast_set = clf.predict(X_lately)
-    print(scrip, accuracy, forecast_set)
-    #print 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'    
+        dfp.to_csv(directory + '/' + scrip + '.csv', encoding='utf-8')    
+        #print 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+        #print '--------', scrip, '----------'
+        dfp = dfp.ix[50:]
+#         X = np.array(dfp.drop(['label'], 1))
+#         X = preprocessing.scale(X)
+#         X = X[:-forecast_out]
+#         X_lately = X[-forecast_out:]
+#         
+#         #dfp.dropna(inplace=True)
+#         y = np.array(dfp['label'])
+#         
+#         X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.1)
+#         clf = LinearRegression()
+#         #clf = svm.SVR(kernel='poly')
+#         clf.fit(X_train, y_train)
+#         accuracy = clf.score(X_test, y_test)
+#         forecast_set = clf.predict(X_lately)
+#         print(scrip, accuracy, forecast_set)
+#         #print 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'    
         
-        
-        
-        #df.to_csv('temp/' + scrip + '.csv', encoding='utf-8')
-             
+        performRegression(dfp, 0.95, scrip, directory, forecast_out)
+                   
 def calculateParallel(threads=2):
     pool = ThreadPool(threads)
     
@@ -221,8 +246,11 @@ def calculateParallel(threads=2):
     pool.map(ta_lib_data, scrips)
                      
 if __name__ == "__main__":
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     calculateParallel(1)
     connection.close()
+    
 
 
     

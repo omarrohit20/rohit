@@ -1,12 +1,18 @@
 import json
-import datetime
+import datetime, time
 import copy
+import sys
 from pymongo import MongoClient
 import numpy as np
 import talib
 import csv
+import logging
 from talib.abstract import *
 from multiprocessing.dummy import Pool as ThreadPool
+
+logname = '../../output' + '/technical' + time.strftime("%d%m%y-%H%M%S")
+logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=logging.INFO)
+log = logging.getLogger(__name__)
 
 connection = MongoClient('localhost',27017)
 db = connection.Nsedata
@@ -505,25 +511,14 @@ def ta_lib_data(scrip):
             technical_indicators['SellIndicatorsCount'] = all_sell_indicators.count(',') 
             technical_indicators['SellIndicators'] = all_sell_indicators   
         
-        if technical_indicators['BuyIndicatorsCount'] > 1:
-            print data['dataset_code'], 'Buy:', technical_indicators['BuyIndicators']
-        if technical_indicators['SellIndicatorsCount'] > 1:
-            print data['dataset_code'], 'Sell:', technical_indicators['SellIndicators'] 
+        if technical_indicators['BuyIndicatorsCount'] > 0:
+            log.info('%s Buy: %s', data['dataset_code'], technical_indicators['BuyIndicators'])
+        if technical_indicators['SellIndicatorsCount'] > 0:
+            log.info('%s Sell: %s', data['dataset_code'], technical_indicators['SellIndicators']) 
             
             
         json_data = json.loads(json.dumps(technical_indicators))
         db.technical.insert_one(json_data)   
-        #print data['dataset_code'], json_data
-        
-        rows = zip(hsdate.tolist()[::-1], hsopen.tolist()[::-1], hshigh.tolist()[::-1], hslow.tolist()[::-1], hslast.tolist()[::-1], hsclose.tolist()[::-1], momentum_indicators['ADX'], momentum_indicators['ADXR'], momentum_indicators['APO'], momentum_indicators['AROONOSC'], momentum_indicators['BOP'], momentum_indicators['CCI'], momentum_indicators['CMO'], momentum_indicators['DX'], momentum_indicators['MFI'], momentum_indicators['MINUS_DI'], momentum_indicators['MINUS_DM'], momentum_indicators['MOM'], momentum_indicators['PLUS_DI'], momentum_indicators['PLUS_DM'], momentum_indicators['PPO'], momentum_indicators['ROC'], momentum_indicators['ROCP'], momentum_indicators['ROCR'] , momentum_indicators['ROCR100'], momentum_indicators['RSI'], momentum_indicators['TRIX'], momentum_indicators['ULTOSC'], momentum_indicators['WILLR'],
-                   pattern_recognition['CDL2CROWS'], pattern_recognition['CDL3BLACKCROWS'], pattern_recognition['CDL3INSIDE'], pattern_recognition['CDL3LINESTRIKE'], pattern_recognition['CDL3OUTSIDE'], pattern_recognition['CDL3STARSINSOUTH'], pattern_recognition['CDL3WHITESOLDIERS'], pattern_recognition['CDLABANDONEDBABY'], pattern_recognition['CDLADVANCEBLOCK'], pattern_recognition['CDLBELTHOLD'], pattern_recognition['CDLBREAKAWAY'], pattern_recognition['CDLCLOSINGMARUBOZU'], pattern_recognition['CDLCONCEALBABYSWALL'], pattern_recognition['CDLCOUNTERATTACK'], pattern_recognition['CDLDARKCLOUDCOVER'], pattern_recognition['CDLDOJI'], pattern_recognition['CDLDOJISTAR'], pattern_recognition['CDLDRAGONFLYDOJI'], pattern_recognition['CDLENGULFING'], pattern_recognition['CDLEVENINGDOJISTAR'], pattern_recognition['CDLEVENINGSTAR'], pattern_recognition['CDLGAPSIDESIDEWHITE'], pattern_recognition['CDLGRAVESTONEDOJI'], pattern_recognition['CDLHAMMER'], pattern_recognition['CDLHANGINGMAN'], pattern_recognition['CDLHARAMI'], pattern_recognition['CDLHARAMICROSS'], pattern_recognition['CDLHIGHWAVE'], pattern_recognition['CDLHIKKAKE'], pattern_recognition['CDLHIKKAKEMOD'], pattern_recognition['CDLHOMINGPIGEON'], pattern_recognition['CDLIDENTICAL3CROWS'], pattern_recognition['CDLINNECK'], pattern_recognition['CDLINVERTEDHAMMER'], pattern_recognition['CDLKICKING'], pattern_recognition['CDLKICKINGBYLENGTH'], pattern_recognition['CDLLADDERBOTTOM'], pattern_recognition['CDLLONGLEGGEDDOJI'], pattern_recognition['CDLLONGLINE'], pattern_recognition['CDLMARUBOZU'], pattern_recognition['CDLMATCHINGLOW'], pattern_recognition['CDLMATHOLD'], pattern_recognition['CDLMORNINGDOJISTAR'], pattern_recognition['CDLMORNINGSTAR'], pattern_recognition['CDLONNECK'], pattern_recognition['CDLPIERCING'], pattern_recognition['CDLRICKSHAWMAN'], pattern_recognition['CDLRISEFALL3METHODS'], pattern_recognition['CDLSEPARATINGLINES'], pattern_recognition['CDLSHOOTINGSTAR'], pattern_recognition['CDLSHORTLINE'], pattern_recognition['CDLSPINNINGTOP'], pattern_recognition['CDLSTALLEDPATTERN'], pattern_recognition['CDLSTICKSANDWICH'], pattern_recognition['CDLTAKURI'], pattern_recognition['CDLTASUKIGAP'], pattern_recognition['CDLTHRUSTING'], pattern_recognition['CDLTRISTAR'], pattern_recognition['CDLUNIQUE3RIVER'], pattern_recognition['CDLUPSIDEGAP2CROWS'], pattern_recognition['CDLXSIDEGAP3METHODS'] 
-                   )
-        header = ("date","open","high","low","last","close","ADX","ADXR","APO","AROONOSC","BOP","CCI","CMO","DX","MFI","MINUS_DI","MINUS_DM","MOM","PLUS_DI","PLUS_DM","PPO","ROC","ROCP","ROCR","ROCR100","RSI","TRIX","ULTOSC","WILLR","CDL2CROWS","CDL3BLACKCROWS","CDL3INSIDE","CDL3LINESTRIKE","CDL3OUTSIDE","CDL3STARSINSOUTH","CDL3WHITESOLDIERS","CDLABANDONEDBABY","CDLADVANCEBLOCK","CDLBELTHOLD","CDLBREAKAWAY","CDLCLOSINGMARUBOZU","CDLCONCEALBABYSWALL","CDLCOUNTERATTACK","CDLDARKCLOUDCOVER","CDLDOJI","CDLDOJISTAR","CDLDRAGONFLYDOJI","CDLENGULFING","CDLEVENINGDOJISTAR","CDLEVENINGSTAR","CDLGAPSIDESIDEWHITE","CDLGRAVESTONEDOJI","CDLHAMMER","CDLHANGINGMAN","CDLHARAMI","CDLHARAMICROSS","CDLHIGHWAVE","CDLHIKKAKE","CDLHIKKAKEMOD","CDLHOMINGPIGEON","CDLIDENTICAL3CROWS","CDLINNECK","CDLINVERTEDHAMMER","CDLKICKING","CDLKICKINGBYLENGTH","CDLLADDERBOTTOM","CDLLONGLEGGEDDOJI","CDLLONGLINE","CDLMARUBOZU","CDLMATCHINGLOW","CDLMATHOLD","CDLMORNINGDOJISTAR","CDLMORNINGSTAR","CDLONNECK","CDLPIERCING","CDLRICKSHAWMAN","CDLRISEFALL3METHODS","CDLSEPARATINGLINES","CDLSHOOTINGSTAR","CDLSHORTLINE","CDLSPINNINGTOP","CDLSTALLEDPATTERN","CDLSTICKSANDWICH,CDLTAKURI","CDLTASUKIGAP","CDLTHRUSTING","CDLTRISTAR","CDLUNIQUE3RIVER","CDLUPSIDEGAP2CROWS","CDLXSIDEGAP3METHODS")
-        with open('../../temp/data/' + data['dataset_code'] + '.csv', 'w') as f:
-            writer = csv.writer(f)
-            writer.writerow(header)
-            for row in rows[::-1]:
-                writer.writerow(row)
             
     except Exception, err:
         print Exception, err
@@ -542,7 +537,7 @@ def calculateParallel(threads=2):
 if __name__ == "__main__":
     end_date = datetime.date.today().strftime('%d-%m-%Y')
     start_date = (datetime.date.today() - datetime.timedelta(days=30)).strftime('%d-%m-%Y')
-    print start_date + ' to ' + end_date
+    log.info('%s to %s', start_date, end_date)
     calculateParallel(1)
     
     connection.close()    
