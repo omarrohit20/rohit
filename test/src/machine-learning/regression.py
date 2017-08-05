@@ -1,14 +1,16 @@
+import os, logging, sys
+from openpyxl import Workbook
+from openpyxl.worksheet.table import Table, TableStyleInfo
+from openpyxl.styles import Color, PatternFill, Font, Border
+from pymongo import MongoClient
+from multiprocessing.dummy import Pool as ThreadPool
+
 import quandl, math, time
 import pandas as pd
 import numpy as np
-import os
-import logging
-import sys
 from sklearn import preprocessing, cross_validation, svm
 from sklearn.linear_model import LinearRegression
 from talib.abstract import *
-from pymongo import MongoClient
-from multiprocessing.dummy import Pool as ThreadPool
 from pip.req.req_file import preprocess
 from Algorithms.regression_helpers import load_dataset, addFeatures, \
     mergeDataframes, count_missing, applyTimeLag, performRegression
@@ -20,6 +22,20 @@ directory = '../../output' + '/' + time.strftime("%d%m%y-%H%M%S")
 logname = '../../output' + '/mllog' + time.strftime("%d%m%y-%H%M%S")
 logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
+
+wb = Workbook()
+ws = wb.active
+ws.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy"])
+
+def saveReports():
+    tab = Table(displayName="Table1", ref="A1:O503")
+    # Add a default style with striped rows and banded columns
+    style = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False,
+               showLastColumn=False, showRowStripes=True, showColumnStripes=True)
+    tab.tableStyleInfo = style
+    ws.add_table(tab)
+    wb.save(logname + ".xlsx")
+
 
 def historical_data(data):
     ardate = np.array([x.encode('UTF8') for x in (np.array(data['data'])[:,0][::-1]).tolist()])
@@ -66,7 +82,6 @@ def ta_lib_data(scrip):
         dfp = df[['VOL_change']]
         maxdelta = 10
         delta = range(1, maxdelta)
-        print('Delta days accounted: ', max(delta))
         columns = df.columns
         close = columns[4]
         for dele in delta:
@@ -232,8 +247,11 @@ def ta_lib_data(scrip):
 #         forecast_set = clf.predict(X_lately)
 #         print(scrip, accuracy, forecast_set)
 #         #print 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'    
-        
-        performRegression(dfp, 0.95, scrip, directory, forecast_out)
+        print(scrip) 
+        regressionResult = performRegression(dfp, 0.95, scrip, directory, forecast_out)
+        ws.append(regressionResult)
+        saveReports()
+
                    
 def calculateParallel(threads=2):
     pool = ThreadPool(threads)
@@ -250,6 +268,8 @@ if __name__ == "__main__":
         os.makedirs(directory)
     calculateParallel(1)
     connection.close()
+    saveReports()
+    
     
 
 

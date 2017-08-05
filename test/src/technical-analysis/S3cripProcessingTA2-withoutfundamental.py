@@ -1,14 +1,12 @@
-import json
-import datetime, time
-import copy
-import sys
+import json, datetime, time, copy, sys, csv, logging
+from openpyxl import Workbook
+from openpyxl.worksheet.table import Table, TableStyleInfo
 from pymongo import MongoClient
-import numpy as np
-import talib
-import csv
-import logging
-from talib.abstract import *
 from multiprocessing.dummy import Pool as ThreadPool
+
+import numpy as np
+import talib 
+from talib.abstract import *
 
 logname = '../../output' + '/technical' + time.strftime("%d%m%y-%H%M%S")
 logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=logging.INFO)
@@ -25,6 +23,19 @@ db.drop_collection('buy.momentum')
 db.drop_collection('sell.momentum')
 db.drop_collection('buy.volume')
 db.drop_collection('sell.volume')
+
+wb = Workbook()
+ws = wb.active
+ws.append(["Symbol", "Buy", "Sell"])
+
+def saveReports():
+    tab = Table(displayName="Table1", ref="A1:C503")
+    # Add a default style with striped rows and banded columns
+    style = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False,
+               showLastColumn=False, showRowStripes=True, showColumnStripes=True)
+    tab.tableStyleInfo = style
+    ws.add_table(tab)
+    wb.save(logname + ".xlsx")
 
 def numpy_conversion(arr):
     return np.array([x.encode('UTF8') for x in arr.tolist()])
@@ -516,7 +527,7 @@ def ta_lib_data(scrip):
         if technical_indicators['SellIndicatorsCount'] > 0:
             log.info('%s Sell: %s', data['dataset_code'], technical_indicators['SellIndicators']) 
             
-            
+        ws.append([data['dataset_code'], technical_indicators['BuyIndicators'], technical_indicators['SellIndicators']])    
         json_data = json.loads(json.dumps(technical_indicators))
         db.technical.insert_one(json_data)   
             
@@ -540,6 +551,7 @@ if __name__ == "__main__":
     log.info('%s to %s', start_date, end_date)
     calculateParallel(1)
     
-    connection.close()    
+    connection.close() 
+    saveReports()   
     
     

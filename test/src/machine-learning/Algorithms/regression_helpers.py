@@ -262,11 +262,16 @@ def performRegression(dataset, split, symbol, output_dir, forecast_out):
         Various algorithms
     """
 
+    predicted_values = []
+
     features = dataset.columns[:-1]
     index = int(np.floor(dataset.shape[0]*split))
     train, test, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
     log.info('-'*80)
     log.info('%s train set: %s, test set: %s', symbol, train.shape, test.shape)
+    predicted_values.append(str(symbol))
+    predicted_values.append(str(train.shape))
+    predicted_values.append(str(test.shape))
     
     #train, test = getFeatures(train[features], \
     #    train[output], test[features], 16)
@@ -274,8 +279,6 @@ def performRegression(dataset, split, symbol, output_dir, forecast_out):
     out_params = (symbol, output_dir)
 
     output = dataset.columns[-1]
-
-    predicted_values = []
 
     classifiers = [
         RandomForestRegressor(n_estimators=10, n_jobs=-1),
@@ -290,11 +293,10 @@ def performRegression(dataset, split, symbol, output_dir, forecast_out):
         model_name, forecast_set, accuracy = benchmark_model(classifier, \
             train, test, test_forecast, features, symbol, output, out_params)
         log.info('%s, %s, %s, %s', symbol, model_name, forecast_set, accuracy)
-
-    maxiter = 1000
-    batch = 150
-
-    classifier = NeuralNet(50, learn_rate=1e-2)
+        predicted_values.append(str(round(forecast_set.ravel()[0], 3)))
+        predicted_values.append(str(round(accuracy, 3)))
+    
+    return predicted_values
 
 #     benchmark_model(classifier, \
 #         train, test, test_forecast, features, symbol, output, out_params, \
