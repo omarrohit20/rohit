@@ -25,15 +25,29 @@ log = logging.getLogger(__name__)
 
 wb = Workbook()
 ws = wb.active
+ws_filter = wb.create_sheet("Filter")
 ws.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy"])
+ws_filter.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy"])
 
 def saveReports():
-    tab = Table(displayName="Table1", ref="A1:O503")
     # Add a default style with striped rows and banded columns
     style = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False,
                showLastColumn=False, showRowStripes=True, showColumnStripes=True)
+    
+    count = 0
+    for row in ws.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:O" + str(count))
     tab.tableStyleInfo = style
     ws.add_table(tab)
+    
+    count = 0
+    for row in ws_filter.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:O" + str(count))
+    tab.tableStyleInfo = style
+    ws_filter.add_table(tab)
+    
     wb.save(logname + ".xlsx")
 
 
@@ -250,8 +264,12 @@ def ta_lib_data(scrip):
         print(scrip) 
         regressionResult = performRegression(dfp, 0.95, scrip, directory, forecast_out)
         ws.append(regressionResult)
-        saveReports()
-
+        if((float(regressionResult[3]) > 0) and (float(regressionResult[7]) > 0) and (float(regressionResult[9]) > 0) and (float(regressionResult[11]) > 0) and (float(regressionResult[13]) > 0)):
+            ws_filter.append(regressionResult)
+        
+        if((float(regressionResult[3]) < 0) and (float(regressionResult[7]) < 0) and (float(regressionResult[9]) < 0) and (float(regressionResult[11]) < 0) and (float(regressionResult[13]) < 0)):
+            ws_filter.append(regressionResult)
+            
                    
 def calculateParallel(threads=2):
     pool = ThreadPool(threads)
@@ -269,9 +287,3 @@ if __name__ == "__main__":
     calculateParallel(1)
     connection.close()
     saveReports()
-    
-    
-
-
-    
-        
