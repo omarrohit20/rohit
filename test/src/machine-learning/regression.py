@@ -13,7 +13,9 @@ from sklearn.linear_model import LinearRegression
 from talib.abstract import *
 from pip.req.req_file import preprocess
 from Algorithms.regression_helpers import load_dataset, addFeatures, \
-    mergeDataframes, count_missing, applyTimeLag, performRegression
+    mergeDataframes, count_missing, applyTimeLag, performRegression   
+    
+from technical import ta_lib_data    
 
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
@@ -26,8 +28,22 @@ log = logging.getLogger(__name__)
 wb = Workbook()
 ws = wb.active
 ws_filter = wb.create_sheet("Filter")
-ws.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy"])
-ws_filter.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy"])
+ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
+ws_RandomForest = wb.create_sheet("RandomForest")
+ws_SVR = wb.create_sheet("SVR")
+ws_Bagging = wb.create_sheet("Bagging")
+ws_AdaBoost = wb.create_sheet("AdaBoost")
+ws_KNeighbors = wb.create_sheet("KNeighbors")
+ws_GradientBoosting = wb.create_sheet("GradientBoosting")
+ws.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators"])
+ws_filter.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators"])
+ws_gtltzero.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators"])
+ws_RandomForest.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators"])
+ws_SVR.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators"])
+ws_Bagging.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators"])
+ws_AdaBoost.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators"])
+ws_KNeighbors.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators"])
+ws_GradientBoosting.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators"])
 
 def saveReports():
     # Add a default style with striped rows and banded columns
@@ -37,16 +53,65 @@ def saveReports():
     count = 0
     for row in ws.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:O" + str(count))
+    tab = Table(displayName="Table1", ref="A1:Q" + str(count))
     tab.tableStyleInfo = style
     ws.add_table(tab)
     
     count = 0
     for row in ws_filter.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:O" + str(count))
+    tab = Table(displayName="Table1", ref="A1:Q" + str(count))
     tab.tableStyleInfo = style
     ws_filter.add_table(tab)
+    
+    count = 0
+    for row in ws_gtltzero.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Q" + str(count))
+    tab.tableStyleInfo = style
+    ws_gtltzero.add_table(tab)
+    
+    count = 0
+    for row in ws_RandomForest.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Q" + str(count))
+    tab.tableStyleInfo = style
+    ws_RandomForest.add_table(tab)
+    
+    count = 0
+    for row in ws_SVR.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Q" + str(count))
+    tab.tableStyleInfo = style
+    ws_SVR.add_table(tab)
+    
+    count = 0
+    for row in ws_Bagging.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Q" + str(count))
+    tab.tableStyleInfo = style
+    ws_Bagging.add_table(tab)
+    
+    count = 0
+    for row in ws_AdaBoost.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Q" + str(count))
+    tab.tableStyleInfo = style
+    ws_AdaBoost.add_table(tab)
+    
+    count = 0
+    for row in ws_KNeighbors.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Q" + str(count))
+    tab.tableStyleInfo = style
+    ws_KNeighbors.add_table(tab)
+    
+    count = 0
+    for row in ws_GradientBoosting.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Q" + str(count))
+    tab.tableStyleInfo = style
+    ws_GradientBoosting.add_table(tab)
     
     wb.save(logname + ".xlsx")
 
@@ -62,7 +127,7 @@ def historical_data(data):
     arturnover = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,7][::-1]).tolist()])
     return ardate, aropen, arhigh, arlow, arlast, arclose, arquantity, arturnover
 
-def ta_lib_data(scrip):
+def regression_ta_data(scrip):
     data = db.history.find_one({'dataset_code':scrip.encode('UTF8').replace('&','').replace('-','_')})
     if(data is None):
         print('Missing Data for ', scrip.encode('UTF8'))
@@ -263,14 +328,56 @@ def ta_lib_data(scrip):
 #         #print 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'    
         print(scrip) 
         regressionResult = performRegression(dfp, 0.95, scrip, directory, forecast_out)
+        buy, sell = ta_lib_data(scrip)
+        regressionResult.append(str(buy))
+        regressionResult.append(str(sell))
+        #ws = wb.active
         ws.append(regressionResult)
-        if((float(regressionResult[3]) > 0) and (float(regressionResult[7]) > 0) and (float(regressionResult[9]) > 0) and (float(regressionResult[11]) > 0) and (float(regressionResult[13]) > 0)):
-            ws_filter.append(regressionResult)
-        
-        if((float(regressionResult[3]) < 0) and (float(regressionResult[7]) < 0) and (float(regressionResult[9]) < 0) and (float(regressionResult[11]) < 0) and (float(regressionResult[13]) < 0)):
+        trainSize = int(regressionResult[1][1:-1].split(',')[0])
+        #ws_filter = wb.create_sheet("Filter")
+        if((trainSize> 1000) and (float(regressionResult[3]) > 1) and (float(regressionResult[7]) > 1) and (float(regressionResult[9]) > 0) and (float(regressionResult[11]) > 0) and (float(regressionResult[13]) > 0)):
             ws_filter.append(regressionResult)
             
-                   
+        if((trainSize> 1000) and (float(regressionResult[3]) > 1) and (float(regressionResult[5]) > 0) and (float(regressionResult[7]) > 1) and (float(regressionResult[9]) > 0) and (float(regressionResult[13]) > 0)):
+            ws_filter.append(regressionResult)    
+        
+        if((trainSize> 1000) and (float(regressionResult[3]) < -1) and (float(regressionResult[5]) < 0) and (float(regressionResult[7]) < 0) and (float(regressionResult[9]) < 0) and (float(regressionResult[13]) < 0)):
+            ws_filter.append(regressionResult)
+            
+            
+        #ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
+        if((trainSize> 1000) and (float(regressionResult[3]) > 0) and (float(regressionResult[7]) > 0) and (float(regressionResult[9]) > 0) and (float(regressionResult[11]) > 0) and (float(regressionResult[13]) > 0)):
+            ws_gtltzero.append(regressionResult)
+            
+        if((trainSize> 1000) and (float(regressionResult[3]) < 0) and (float(regressionResult[7]) < 0) and (float(regressionResult[9]) < 0) and (float(regressionResult[11]) < 0) and (float(regressionResult[13]) < 0)):
+            ws_gtltzero.append(regressionResult)  
+            
+
+        #ws_RandomForest = wb.create_sheet("RandomForest")
+        if((trainSize> 1000) and (float(regressionResult[3]) > 1 or float(regressionResult[3]) < -1)):
+            ws_RandomForest.append(regressionResult)
+            
+        #ws_SVR = wb.create_sheet("SVR")
+        if((trainSize> 1000) and (float(regressionResult[5]) > 1.5 or float(regressionResult[5]) < -1.5)):
+            ws_SVR.append(regressionResult)
+       
+        #ws_Bagging = wb.create_sheet("Bagging")
+        if((trainSize> 1000) and (float(regressionResult[7]) > 1.5 or float(regressionResult[7]) < -1.5)):
+            ws_Bagging.append(regressionResult)
+            
+        #ws_AdaBoost = wb.create_sheet("AdaBoost")
+        if((trainSize> 1000) and (float(regressionResult[9]) > 1.5 or float(regressionResult[9]) < -1.5)):
+            ws_AdaBoost.append(regressionResult)
+            
+        #ws_KNeighbors = wb.create_sheet("KNeighbors")
+        if((trainSize> 1000) and (float(regressionResult[11]) > 1.5 or float(regressionResult[11]) < -1.5)):
+            ws_KNeighbors.append(regressionResult)
+            
+        #ws_GradientBoosting = wb.create_sheet("GradientBoosting")
+        if((trainSize> 1000) and (float(regressionResult[13]) > 1.5 or float(regressionResult[13]) < -1.5)):
+            ws_GradientBoosting.append(regressionResult)
+                  
+                              
 def calculateParallel(threads=2):
     pool = ThreadPool(threads)
     
@@ -279,7 +386,7 @@ def calculateParallel(threads=2):
         scrips.append((data['scrip']).encode('UTF8').replace('&','').replace('-','_'))
     scrips.sort()
     
-    pool.map(ta_lib_data, scrips)
+    pool.map(regression_ta_data, scrips)
                      
 if __name__ == "__main__":
     if not os.path.exists(directory):
