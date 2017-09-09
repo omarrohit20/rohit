@@ -12,7 +12,7 @@ from sklearn import preprocessing, cross_validation, svm
 from sklearn.linear_model import LinearRegression
 from talib.abstract import *
 from pip.req.req_file import preprocess
-from Algorithms.regression_helpers import load_dataset, addFeatures, \
+from Algorithms.regression_helpers import load_dataset, addFeatures, addFeaturesVolChange, \
     mergeDataframes, count_missing, applyTimeLag, performRegression   
     
 from technical import ta_lib_data    
@@ -30,20 +30,20 @@ ws = wb.active
 ws_filter = wb.create_sheet("Filter")
 ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
 ws_RandomForest = wb.create_sheet("RandomForest")
-ws_SVR = wb.create_sheet("SVR")
+ws_SVR = wb.create_sheet("MLP")
 ws_Bagging = wb.create_sheet("Bagging")
 ws_AdaBoost = wb.create_sheet("AdaBoost")
 ws_KNeighbors = wb.create_sheet("KNeighbors")
 ws_GradientBoosting = wb.create_sheet("GradientBoosting")
-ws.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures"])
-ws_filter.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures"])
-ws_gtltzero.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures"])
-ws_RandomForest.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures"])
-ws_SVR.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures"])
-ws_Bagging.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures"])
-ws_AdaBoost.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures"])
-ws_KNeighbors.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures"])
-ws_GradientBoosting.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "SVR", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures"])
+ws.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change"])
+ws_filter.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change"])
+ws_gtltzero.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change"])
+ws_RandomForest.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change"])
+ws_SVR.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change"])
+ws_Bagging.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change"])
+ws_AdaBoost.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change"])
+ws_KNeighbors.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change"])
+ws_GradientBoosting.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change"])
 
 def saveReports():
     # Add a default style with striped rows and banded columns
@@ -53,63 +53,63 @@ def saveReports():
     count = 0
     for row in ws.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:R" + str(count))
+    tab = Table(displayName="Table1", ref="A1:T" + str(count))
     tab.tableStyleInfo = style
     ws.add_table(tab)
     
     count = 0
     for row in ws_filter.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:R" + str(count))
+    tab = Table(displayName="Table1", ref="A1:T" + str(count))
     tab.tableStyleInfo = style
     ws_filter.add_table(tab)
     
     count = 0
     for row in ws_gtltzero.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:R" + str(count))
+    tab = Table(displayName="Table1", ref="A1:T" + str(count))
     tab.tableStyleInfo = style
     ws_gtltzero.add_table(tab)
     
     count = 0
     for row in ws_RandomForest.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:R" + str(count))
+    tab = Table(displayName="Table1", ref="A1:T" + str(count))
     tab.tableStyleInfo = style
     ws_RandomForest.add_table(tab)
     
     count = 0
     for row in ws_SVR.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:R" + str(count))
+    tab = Table(displayName="Table1", ref="A1:T" + str(count))
     tab.tableStyleInfo = style
     ws_SVR.add_table(tab)
     
     count = 0
     for row in ws_Bagging.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:R" + str(count))
+    tab = Table(displayName="Table1", ref="A1:T" + str(count))
     tab.tableStyleInfo = style
     ws_Bagging.add_table(tab)
     
     count = 0
     for row in ws_AdaBoost.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:R" + str(count))
+    tab = Table(displayName="Table1", ref="A1:T" + str(count))
     tab.tableStyleInfo = style
     ws_AdaBoost.add_table(tab)
     
     count = 0
     for row in ws_KNeighbors.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:R" + str(count))
+    tab = Table(displayName="Table1", ref="A1:T" + str(count))
     tab.tableStyleInfo = style
     ws_KNeighbors.add_table(tab)
     
     count = 0
     for row in ws_GradientBoosting.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:R" + str(count))
+    tab = Table(displayName="Table1", ref="A1:T" + str(count))
     tab.tableStyleInfo = style
     ws_GradientBoosting.add_table(tab)
     
@@ -160,11 +160,13 @@ def regression_ta_data(scrip):
         
         dfp = df[['VOL_change']]
         maxdelta = 10
-        delta = range(1, maxdelta)
         columns = df.columns
         close = columns[4]
-        for dele in delta:
+        volume = columns[5]
+        for dele in range(1, 10):
             addFeatures(df, dfp, close, dele)
+        for dele in range(2, 5):
+            addFeaturesVolChange(df, dfp, volume, dele)    
             
         dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
         dfp['ADXR'] = ADXR(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html
@@ -306,10 +308,6 @@ def regression_ta_data(scrip):
         forecast_out = 1
         dfp['label'] = dfp[forecast_col].shift(-forecast_out)
         
-        dfp.to_csv(directory + '/' + scrip + '.csv', encoding='utf-8')    
-        #print 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-        #print '--------', scrip, '----------'
-        dfp = dfp.ix[50:]
 #         X = np.array(dfp.drop(['label'], 1))
 #         X = preprocessing.scale(X)
 #         X = X[:-forecast_out]
@@ -327,38 +325,41 @@ def regression_ta_data(scrip):
 #         print(scrip, accuracy, forecast_set)
 #         #print 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'    
         print(scrip) 
-        regressionResult = performRegression(dfp, 0.95, scrip, directory, forecast_out)
+        dfp = dfp.ix[50:]
+        forecast_day_PCT_change = dfp.iloc[-forecast_out:, 1].values[0]
+        forecast_day_VOL_change = dfp.iloc[-forecast_out:, 0].values[0]
+        dfp.to_csv(directory + '/' + scrip + '.csv', encoding='utf-8')    
+        regressionResult = performRegression(dfp, 0.98, scrip, directory, forecast_out)
         buy, sell = ta_lib_data(scrip)
         regressionResult.append(str(buy))
         regressionResult.append(str(sell))
         regressionResult.append(data['futures'])
+        regressionResult.append(forecast_day_VOL_change)
+        regressionResult.append(forecast_day_PCT_change)
         #ws = wb.active
         ws.append(regressionResult)
         trainSize = int(regressionResult[1][1:-1].split(',')[0])
         #ws_filter = wb.create_sheet("Filter")
-        if((trainSize> 1000) and (float(regressionResult[3]) > 1) and (float(regressionResult[7]) > 1) and (float(regressionResult[9]) > 0) and (float(regressionResult[11]) > 0) and (float(regressionResult[13]) > 0)):
+        if((trainSize> 1000) and (float(regressionResult[3]) > 1) and (float(regressionResult[7]) > 1)):
             ws_filter.append(regressionResult)
             
-        if((trainSize> 1000) and (float(regressionResult[3]) > 1) and (float(regressionResult[5]) > 0) and (float(regressionResult[7]) > 1) and (float(regressionResult[9]) > 0) and (float(regressionResult[13]) > 0)):
-            ws_filter.append(regressionResult)    
-        
-        if((trainSize> 1000) and (float(regressionResult[3]) < -1) and (float(regressionResult[5]) < 0) and (float(regressionResult[7]) < 0) and (float(regressionResult[9]) < 0) and (float(regressionResult[13]) < 0)):
+        if((trainSize> 1000) and (float(regressionResult[3]) < 1) and (float(regressionResult[7]) < 1)):
             ws_filter.append(regressionResult)
             
             
         #ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
-        if((trainSize> 1000) and (float(regressionResult[3]) > 0) and (float(regressionResult[7]) > 0) and (float(regressionResult[9]) > 0) and (float(regressionResult[11]) > 0) and (float(regressionResult[13]) > 0)):
+        if((trainSize> 1000) and (float(regressionResult[3]) > 0) and (float(regressionResult[7]) > 0) and (float(regressionResult[11]) > 0)):
             ws_gtltzero.append(regressionResult)
             
-        if((trainSize> 1000) and (float(regressionResult[3]) < 0) and (float(regressionResult[7]) < 0) and (float(regressionResult[9]) < 0) and (float(regressionResult[11]) < 0) and (float(regressionResult[13]) < 0)):
+        if((trainSize> 1000) and (float(regressionResult[3]) < 0) and (float(regressionResult[7]) < 0) and (float(regressionResult[11]) < 0)):
             ws_gtltzero.append(regressionResult)  
             
 
         #ws_RandomForest = wb.create_sheet("RandomForest")
-        if((trainSize> 1000) and (float(regressionResult[3]) > 1 or float(regressionResult[3]) < -1)):
+        if((trainSize> 1000) and (float(regressionResult[3]) > 1.5 or float(regressionResult[3]) < -1.5)):
             ws_RandomForest.append(regressionResult)
             
-        #ws_SVR = wb.create_sheet("SVR")
+        #ws_SVR = wb.create_sheet("MLP")
         if((trainSize> 1000) and (float(regressionResult[5]) > 1.5 or float(regressionResult[5]) < -1.5)):
             ws_SVR.append(regressionResult)
        

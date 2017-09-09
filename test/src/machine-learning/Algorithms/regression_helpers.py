@@ -14,10 +14,12 @@ from sklearn.ensemble import BaggingRegressor
 from sklearn.ensemble import AdaBoostRegressor
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.neighbors import KNeighborsRegressor
+from sklearn.neural_network import MLPRegressor
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import neighbors
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.neural_network import MLPClassifier
 #from sklearn.svm import SVR
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.svm import SVC, SVR
@@ -71,6 +73,11 @@ def addFeatures(dfsource, dftarget, close, n):
     
     return_n = "PCT_change" + str(n)
     dftarget[return_n] = (dfsource[close].pct_change(n))*100
+    
+    
+def addFeaturesVolChange(dfsource, dftarget, volume, n):
+    return_n = "VOL_change" + str(n)
+    dftarget[return_n] = (dfsource[volume].pct_change(n))*100   
  
         
 # def addFeatures(dataframe, adjclose, returns, n):
@@ -265,8 +272,13 @@ def performRegression(dataset, split, symbol, output_dir, forecast_out):
     predicted_values = []
 
     features = dataset.columns[:-1]
+    
     index = int(np.floor(dataset.shape[0]*split))
     train, test, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
+    #dataset_all, test_forecast = dataset[:-forecast_out], dataset[-forecast_out:]
+    #test = dataset_all.sample(frac=0.025)
+    #train = dataset_all.loc[~dataset_all.index.isin(test.index)]
+
     log.info('-'*80)
     log.info('%s train set: %s, test set: %s', symbol, train.shape, test.shape)
     predicted_values.append(str(symbol))
@@ -282,11 +294,13 @@ def performRegression(dataset, split, symbol, output_dir, forecast_out):
 
     classifiers = [
         RandomForestRegressor(n_estimators=10, n_jobs=-1),
-        SVR(C=1.0, cache_size=200, coef0=0.0, degree=3, epsilon=0.1, gamma='auto', kernel='rbf', max_iter=-1, shrinking=True, tol=0.001),
+        #SVR(C=1.0, cache_size=200, coef0=0.0, degree=3, epsilon=0.1, gamma='auto', kernel='rbf', max_iter=-1, shrinking=True, tol=0.001),
+        MLPRegressor(solver='lbfgs', hidden_layer_sizes=(40,20)),
         BaggingRegressor(),
         AdaBoostRegressor(),
         KNeighborsRegressor(),
-        GradientBoostingRegressor(),
+        GradientBoostingRegressor()
+        #NeuralNet(1, learn_rate=1e-2)
     ]
 
     for classifier in classifiers:
