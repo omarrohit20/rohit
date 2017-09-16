@@ -362,6 +362,14 @@ def benchmark_model(model, train, test, test_forecast, features, symbol, output,
     '''
 
     model_name = model.__str__().split('(')[0].replace('Regressor', ' Regressor')
+    
+    temp = np.ndarray((2,), buffer=np.array([0,0,0]), offset=np.int_().itemsize, dtype=int)
+    if model_name == 'MLP Regressor':
+        return model_name, temp, 0
+    if model_name == 'AdaBoost Regressor':
+        return model_name, temp, 0
+    if model_name == 'GradientBoosting Regressor':
+        return model_name, temp, 0
 
     '''
     if 'SVR' in model.__str__():

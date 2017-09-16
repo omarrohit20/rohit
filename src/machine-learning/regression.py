@@ -16,6 +16,7 @@ from Algorithms.regression_helpers import load_dataset, addFeatures, addFeatures
     mergeDataframes, count_missing, applyTimeLag, performRegression   
     
 from technical import ta_lib_data    
+from sklearn.ensemble.weight_boosting import AdaBoostRegressor
 
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
@@ -25,25 +26,45 @@ logname = '../../output' + '/mllog' + time.strftime("%d%m%y-%H%M%S")
 logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
 
+randomForestRegressor = True
+mlpRegressor = False
+baggingRegressor = True
+adaBoostRegressor = False
+kNeighboursRegressor = True
+gradientBoostingRegressor = False
+
 wb = Workbook()
 ws = wb.active
-ws_filter = wb.create_sheet("Filter")
-ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
-ws_RandomForest = wb.create_sheet("RandomForest")
-ws_SVR = wb.create_sheet("MLP")
-ws_Bagging = wb.create_sheet("Bagging")
-ws_AdaBoost = wb.create_sheet("AdaBoost")
-ws_KNeighbors = wb.create_sheet("KNeighbors")
-ws_GradientBoosting = wb.create_sheet("GradientBoosting")
 ws.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change", "Score"])
+ws_filter = wb.create_sheet("Filter")
 ws_filter.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change", "Score"])
+ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
 ws_gtltzero.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change", "Score"])
-ws_RandomForest.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change", "Score"])
-ws_SVR.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change", "Score"])
-ws_Bagging.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change", "Score"])
-ws_AdaBoost.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change", "Score"])
-ws_KNeighbors.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change", "Score"])
-ws_GradientBoosting.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change", "Score"])
+
+if randomForestRegressor:
+    ws_RandomForest = wb.create_sheet("RandomForest")
+    ws_RandomForest.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change", "Score"])
+
+if mlpRegressor:    
+    ws_SVR = wb.create_sheet("MLP")
+    ws_SVR.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change", "Score"])
+
+if baggingRegressor:    
+    ws_Bagging = wb.create_sheet("Bagging")
+    ws_Bagging.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change", "Score"])
+
+if AdaBoostRegressor:    
+    ws_AdaBoost = wb.create_sheet("AdaBoost")
+    ws_AdaBoost.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change", "Score"])
+    
+if kNeighboursRegressor:    
+    ws_KNeighbors = wb.create_sheet("KNeighbors")
+    ws_KNeighbors.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change", "Score"])
+
+if gradientBoostingRegressor:    
+    ws_GradientBoosting = wb.create_sheet("GradientBoosting")
+    ws_GradientBoosting.append(["Symbol", "train set", "test set", "RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "BuyIndicators", "SellIndicators", "futures", "VOL_change", "PCT_change", "Score"])
+  
 
 def getScore(vol_change, pct_change):
     try:
@@ -77,47 +98,53 @@ def saveReports():
     tab.tableStyleInfo = style
     ws_gtltzero.add_table(tab)
     
-    count = 0
-    for row in ws_RandomForest.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:U" + str(count))
-    tab.tableStyleInfo = style
-    ws_RandomForest.add_table(tab)
+    if randomForestRegressor:
+        count = 0
+        for row in ws_RandomForest.iter_rows(row_offset=1):
+            count += 1
+        tab = Table(displayName="Table1", ref="A1:U" + str(count))
+        tab.tableStyleInfo = style
+        ws_RandomForest.add_table(tab)
     
-    count = 0
-    for row in ws_SVR.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:U" + str(count))
-    tab.tableStyleInfo = style
-    ws_SVR.add_table(tab)
+    if mlpRegressor:
+        count = 0
+        for row in ws_SVR.iter_rows(row_offset=1):
+            count += 1
+        tab = Table(displayName="Table1", ref="A1:U" + str(count))
+        tab.tableStyleInfo = style
+        ws_SVR.add_table(tab)
     
-    count = 0
-    for row in ws_Bagging.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:U" + str(count))
-    tab.tableStyleInfo = style
-    ws_Bagging.add_table(tab)
+    if baggingRegressor:
+        count = 0
+        for row in ws_Bagging.iter_rows(row_offset=1):
+            count += 1
+        tab = Table(displayName="Table1", ref="A1:U" + str(count))
+        tab.tableStyleInfo = style
+        ws_Bagging.add_table(tab)
     
-    count = 0
-    for row in ws_AdaBoost.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:U" + str(count))
-    tab.tableStyleInfo = style
-    ws_AdaBoost.add_table(tab)
+    if adaBoostRegressor:
+        count = 0
+        for row in ws_AdaBoost.iter_rows(row_offset=1):
+            count += 1
+        tab = Table(displayName="Table1", ref="A1:U" + str(count))
+        tab.tableStyleInfo = style
+        ws_AdaBoost.add_table(tab)
     
-    count = 0
-    for row in ws_KNeighbors.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:U" + str(count))
-    tab.tableStyleInfo = style
-    ws_KNeighbors.add_table(tab)
+    if kNeighboursRegressor:
+        count = 0
+        for row in ws_KNeighbors.iter_rows(row_offset=1):
+            count += 1
+        tab = Table(displayName="Table1", ref="A1:U" + str(count))
+        tab.tableStyleInfo = style
+        ws_KNeighbors.add_table(tab)
     
-    count = 0
-    for row in ws_GradientBoosting.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:U" + str(count))
-    tab.tableStyleInfo = style
-    ws_GradientBoosting.add_table(tab)
+    if gradientBoostingRegressor:
+        count = 0
+        for row in ws_GradientBoosting.iter_rows(row_offset=1):
+            count += 1
+        tab = Table(displayName="Table1", ref="A1:U" + str(count))
+        tab.tableStyleInfo = style
+        ws_GradientBoosting.add_table(tab)
     
     wb.save(logname + ".xlsx")
 
@@ -170,16 +197,16 @@ def regression_ta_data(scrip):
         volume = columns[5]
         for dele in range(1, 10):
             addFeatures(df, dfp, close, dele)
-        for dele in range(2, 3):
+        for dele in range(2, 5):
             addFeaturesVolChange(df, dfp, volume, dele)    
             
-        #dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
-        #dfp['ADXR'] = ADXR(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html
-        #dfp['APO'] = APO(df).apply(lambda x: 1 if x > 0 else 0) #Absolute Price Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/apo
+        dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
+        dfp['ADXR'] = ADXR(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html
+        dfp['APO'] = APO(df).apply(lambda x: 1 if x > 0 else 0) #Absolute Price Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/apo
 #         aroon = AROON(df) #Aroon http://www.investopedia.com/terms/a/aroon.asp
 #         dfp['AROONUP'], dfp['AROONDOWN'] = aroon['aroonup'], aroon['aroondown']
-        #dfp['AROONOSC'] = AROONOSC(df).apply(lambda x: 1 if x > 0 else 0)
-        #dfp['BOP'] = BOP(df).apply(lambda x: 1 if x > 0 else 0) #Balance Of Power https://www.marketvolume.com/technicalanalysis/balanceofpower.asp
+        dfp['AROONOSC'] = AROONOSC(df).apply(lambda x: 1 if x > 0 else 0)
+        dfp['BOP'] = BOP(df).apply(lambda x: 1 if x > 0 else 0) #Balance Of Power https://www.marketvolume.com/technicalanalysis/balanceofpower.asp
 #        dfp['CCI'] = CCI(df) #Commodity Channel Index http://www.investopedia.com/articles/trading/05/041805.asp
 #        dfp['CMO'] = CMO(df) #Chande Momentum Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/cmo
 #        dfp['DX'] = DX(df) #Directional Movement Index http://www.investopedia.com/terms/d/dmi.asp
@@ -328,7 +355,7 @@ def regression_ta_data(scrip):
 #         accuracy = clf.score(X_test, y_test)
 #         forecast_set = clf.predict(X_lately)
 #         print(scrip, accuracy, forecast_set)
-#         #print 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'    
+#         #print 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'     
         print(scrip) 
         dfp = dfp.ix[50:]
         forecast_day_PCT_change = dfp.iloc[-forecast_out:, 1].values[0]
@@ -346,57 +373,71 @@ def regression_ta_data(scrip):
         #ws = wb.active
         ws.append(regressionResult)
         trainSize = int(regressionResult[1][1:-1].split(',')[0])
-        #ws_filter = wb.create_sheet("Filter")
-        if((trainSize> 1000) and (float(regressionResult[3]) > .5) and (float(regressionResult[11]) > .5)):
-            ws_filter.append(regressionResult)
+        randomForest = float(regressionResult[3])
+        mlp = float(regressionResult[5])
+        bagging = float(regressionResult[7])
+        adaBoost = float(regressionResult[9])
+        kNeighbours = float(regressionResult[11])
+        gradientBoosting = float(regressionResult[13])
+        
+        if randomForestRegressor and kNeighboursRegressor:
+            #ws_filter = wb.create_sheet("Filter")
+            if((trainSize> 1000) and (randomForest > .5) and (kNeighbours > .5)):
+                ws_filter.append(regressionResult)
+                
+            if((trainSize> 1000) and (randomForest < -.5) and (kNeighbours < -.5)):
+                ws_filter.append(regressionResult) 
+                   
+        if randomForestRegressor and kNeighboursRegressor:    
+            #ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
+            if((trainSize> 1000) and (randomForest > 0) and (kNeighbours > 0)):
+                ws_gtltzero.append(regressionResult)
+                
+            if((trainSize> 1000) and (randomForest < 0) and (kNeighbours < 0)):
+                ws_gtltzero.append(regressionResult)  
+        
+        if randomForestRegressor:    
+            #ws_RandomForest = wb.create_sheet("RandomForest")
+            if((trainSize> 1000) and (randomForest > 1)):
+                ws_RandomForest.append(regressionResult)
+            if((trainSize> 1000) and (randomForest < -1)):
+                ws_RandomForest.append(regressionResult)    
+        
+        if mlpRegressor:    
+            #ws_SVR = wb.create_sheet("MLP")
+            if((trainSize> 1000) and (mlp > 1) and abs(forecast_day_VOL_change) > 40 and score > 100):
+                ws_SVR.append(regressionResult)
+            if((trainSize> 1000) and (mlp < -1) and abs(forecast_day_VOL_change) > 40 and score < -100):
+                ws_SVR.append(regressionResult)    
+        
+        if baggingRegressor:       
+            #ws_Bagging = wb.create_sheet("Bagging")
+            if((trainSize> 1000) and (bagging > 1) and abs(forecast_day_VOL_change) > 40 and score > 100):
+                ws_Bagging.append(regressionResult)
+            if((trainSize> 1000) and (bagging < -1) and abs(forecast_day_VOL_change) > 40 and score < -100):
+                ws_Bagging.append(regressionResult)    
             
-        if((trainSize> 1000) and (float(regressionResult[3]) < -.5) and (float(regressionResult[11]) < -.5)):
-            ws_filter.append(regressionResult) 
+        if AdaBoostRegressor:    
+            #ws_AdaBoost = wb.create_sheet("AdaBoost")
+            if((trainSize> 1000) and (adaBoost > 1) and abs(forecast_day_VOL_change) > 40 and score > 100):
+                ws_AdaBoost.append(regressionResult)
+            if((trainSize> 1000) and (adaBoost < -1) and abs(forecast_day_VOL_change) > 40 and score < -100):
+                ws_AdaBoost.append(regressionResult)    
+        
+        if kNeighboursRegressor:    
+            #ws_KNeighbors = wb.create_sheet("KNeighbors")
+            if((trainSize> 1000) and (kNeighbours > 1)):
+                ws_KNeighbors.append(regressionResult)
+            if((trainSize> 1000) and (kNeighbours < -1)):
+                ws_KNeighbors.append(regressionResult)    
             
-            
-        #ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
-        if((trainSize> 1000) and (float(regressionResult[3]) > 0) and (float(regressionResult[11]) > 0)):
-            ws_gtltzero.append(regressionResult)
-            
-        if((trainSize> 1000) and (float(regressionResult[3]) < 0) and (float(regressionResult[11]) < 0)):
-            ws_gtltzero.append(regressionResult)  
-            
-
-        #ws_RandomForest = wb.create_sheet("RandomForest")
-        if((trainSize> 1000) and (float(regressionResult[3]) > 1)):
-            ws_RandomForest.append(regressionResult)
-        if((trainSize> 1000) and (float(regressionResult[3]) < -1)):
-            ws_RandomForest.append(regressionResult)    
-            
-        #ws_SVR = wb.create_sheet("MLP")
-        if((trainSize> 1000) and (float(regressionResult[5]) > 1) and abs(forecast_day_VOL_change) > 40 and score > 100):
-            ws_SVR.append(regressionResult)
-        if((trainSize> 1000) and (float(regressionResult[5]) < -1) and abs(forecast_day_VOL_change) > 40 and score < -100):
-            ws_SVR.append(regressionResult)    
-       
-        #ws_Bagging = wb.create_sheet("Bagging")
-        if((trainSize> 1000) and (float(regressionResult[7]) > 1) and abs(forecast_day_VOL_change) > 40 and score > 100):
-            ws_Bagging.append(regressionResult)
-        if((trainSize> 1000) and (float(regressionResult[7]) < -1) and abs(forecast_day_VOL_change) > 40 and score < -100):
-            ws_Bagging.append(regressionResult)    
-            
-        #ws_AdaBoost = wb.create_sheet("AdaBoost")
-        if((trainSize> 1000) and (float(regressionResult[9]) > 1) and abs(forecast_day_VOL_change) > 40 and score > 100):
-            ws_AdaBoost.append(regressionResult)
-        if((trainSize> 1000) and (float(regressionResult[9]) < -1) and abs(forecast_day_VOL_change) > 40 and score < -100):
-            ws_AdaBoost.append(regressionResult)    
-            
-        #ws_KNeighbors = wb.create_sheet("KNeighbors")
-        if((trainSize> 1000) and (float(regressionResult[11]) > 1)):
-            ws_KNeighbors.append(regressionResult)
-        if((trainSize> 1000) and (float(regressionResult[11]) < -1)):
-            ws_KNeighbors.append(regressionResult)    
-            
-        #ws_GradientBoosting = wb.create_sheet("GradientBoosting")
-        if((trainSize> 1000) and (float(regressionResult[13]) > 1) and abs(forecast_day_VOL_change) > 40 and score > 100):
-            ws_GradientBoosting.append(regressionResult)
-        if((trainSize> 1000) and (float(regressionResult[13]) < -1) and abs(forecast_day_VOL_change) > 40 and score < -100):
-            ws_GradientBoosting.append(regressionResult)    
+        if gradientBoostingRegressor:    
+            #ws_GradientBoosting = wb.create_sheet("GradientBoosting")
+            if((trainSize> 1000) and (gradientBoosting > 1) and abs(forecast_day_VOL_change) > 40 and score > 100):
+                ws_GradientBoosting.append(regressionResult)
+            if((trainSize> 1000) and (gradientBoosting < -1) and abs(forecast_day_VOL_change) > 40 and score < -100):
+                ws_GradientBoosting.append(regressionResult)    
+                
                                            
 def calculateParallel(threads=2):
     pool = ThreadPool(threads)

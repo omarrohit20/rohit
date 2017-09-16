@@ -32,12 +32,13 @@ with open('nselist/ind_nifty500list.csv') as csvfile:
                 if(data is None):
                     futures = "No"
                 
-                db.scrip.insert_one({
-                    "company": row[0],
-                    "industry": row[1],
-                    "scrip": row[2],
-                    "futures":futures
-                    })
+                if futures == "Yes":
+                    db.scrip.insert_one({
+                        "company": row[0],
+                        "industry": row[1],
+                        "scrip": row[2],
+                        "futures":futures
+                        })
             count = count + 1
         except:
             pass    

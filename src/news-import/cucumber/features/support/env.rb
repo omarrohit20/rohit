@@ -11,7 +11,7 @@ Capybara.configure do |config|
   config.default_driver = (ENV['DRIVER'] || 'selenium').to_sym
   config.javascript_driver = config.default_driver
   config.default_selector = :xpath
-  config.default_max_wait_time = 240
+  config.default_max_wait_time = 90
 end
 
 Capybara.register_driver :selenium do |app|

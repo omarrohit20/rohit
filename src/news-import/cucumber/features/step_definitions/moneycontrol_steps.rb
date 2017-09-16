@@ -7,7 +7,7 @@ And(/^User click on news link$/) do
   moneycontrol_page.click_news_link
 end
 
-And(/^User get news url company (.*), symbol (.*)$/) do |company, symbol|
+And(/^User get newsurl company (.*), symbol (.*)$/) do |company, symbol|
   moneycontrol_page.get_url_and_log(company, symbol)
 end
 
