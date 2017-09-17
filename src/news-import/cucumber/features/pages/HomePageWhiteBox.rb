@@ -11,6 +11,12 @@ class HomePageWhiteBox
     @session.visit(url)
   end
 
+  def visit_env_link
+    url = ENV['link']
+    puts url
+    @session.visit(url)
+  end
+
   def page_title
     @session.title
   end

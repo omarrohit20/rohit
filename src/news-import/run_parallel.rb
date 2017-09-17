@@ -1,9 +1,10 @@
 require 'logger'
+require 'socket'
 
-FLAG = '@regression'
-APPENV = 'qa'
-RETRYCOUNT = 3
-CONTAINER = 'my_test'
+RETRYCOUNT = 2
+CONTAINER = 'rohit_ni'
+IP=IPSocket.getaddress(Socket.gethostname)
+puts IP
 
 $testcases = Hash.new
 $dids_tc = Hash.new
@@ -18,11 +19,7 @@ startTime = Time.now
 $logger = Logger.new("../logfile#{Time.now.strftime('%Y-%m-%d_%H-%M-%S')}.log")
 
 # Populate user pool queue
-users = Array["test1India@mailinator.com, test1US@mailinator.com",
-              "test2India@mailinator.com, test2US@mailinator.com",
-              "test3India@mailinator.com, test3US@mailinator.com",
-              "test4India@mailinator.com, test4US@mailinator.com"
-             ]
+users = Array["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 users.each{|user| $users_queue.push(user)}
 
 def time_diff(start_time, end_time)
@@ -68,8 +65,7 @@ def process_container
         if $testcases[testcase] > 0
           p "### RETRYING ... #{RETRYCOUNT-$testcases[testcase]} TEST #{testcase}"
 
-          user = (!testcase.include? 'US') ? users.split(',')[0] : users.split(',')[1]
-          didtemp = `sudo docker run -d #{CONTAINER} "cucumber -p selenium #{testcase} app_env=#{APPENV} username=#{user}"`
+          didtemp = `sudo docker run -d #{CONTAINER} "rake get_news_from_link link=#{testcase} mongodbip=#{IP}:27017"`
           $dids_tc[didtemp.strip] = testcase
           $dids_users[didtemp.strip] = users
         else
@@ -87,22 +83,21 @@ def process_container
   end
 end
 
-# Build docker image and pull automation latest source
-`sudo docker build -t my_test .`
-# $logger.info(output)
-
-
 # Dry run to get list of test scenario
-output = `sudo docker run -a stdout -i #{CONTAINER} "cucumber -p selenium --tags #{FLAG} app_env=#{APPENV} dry_run=true -f rerun" | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g"`
-output.split(/ /).each{ |testcase|
-  $testcases[testcase] = RETRYCOUNT
-}
+File.open('newslink.txt').each do |line|
+  link = line.split('|')[3].gsub(/\s+/, "")
+  $testcases[link] = RETRYCOUNT
+end
 $logger.info("Total Test Scenario #{$testcases.length}")
 
 
+# Build docker image and pull automation latest source
+#`sudo docker build -t rohit_ni .`
+# $logger.info(output)
 
 # Iterate each test case, pop user credentials from pool queue
 # And run scenario in docker container
+
 count = 0
 for testcase in $testcases.keys[0..$testcases.length] do
   while $users_queue.empty?
@@ -112,9 +107,8 @@ for testcase in $testcases.keys[0..$testcases.length] do
   p "### #{count} ### RUNNING TEST #{testcase}"
 
   users = $users_queue.pop
-  user = (!testcase.include? 'US') ? users.split(',')[0] : users.split(',')[1]
-  p "sudo docker run -d #{CONTAINER} \"cucumber -p selenium #{testcase} app_env=#{APPENV} username=#{user}\""
-  did = `sudo docker run -d #{CONTAINER} "cucumber -p selenium #{testcase} app_env=#{APPENV} username=#{user}"`
+  p "sudo docker run -d #{CONTAINER} \"rake get_news_from_link link=#{testcase} mongodbip=#{IP}:27017\""
+  did = `sudo docker run -d #{CONTAINER} "rake get_news_from_link link=#{testcase} mongodbip=#{IP}:27017"`
   $dids_tc[did.strip] = testcase
   $dids_users[did.strip] = users
 end

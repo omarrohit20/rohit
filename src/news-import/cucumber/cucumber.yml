@@ -6,6 +6,7 @@ testingbot: DRIVER=testingbot
 poltergeist : DRIVER=poltergeist
 get_links : --tags @get_links
 get_news : --tags @get_news
+get_news_from_link: --tags @get_news_from_link
 selenium : DRIVER=selenium
 appium : DRIVER=appium
 appium_android_web : DRIVER=appium_android_web

@@ -21,8 +21,8 @@ from sklearn.ensemble.weight_boosting import AdaBoostRegressor
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
-directory = '../../output' + '/all' + time.strftime("%d%m%y-%H%M%S")
-logname = '../../output' + '/mllog-all' + time.strftime("%d%m%y-%H%M%S")
+directory = '../../output' + '/without-vol' + time.strftime("%d%m%y-%H%M%S")
+logname = '../../output' + '/mllog-without-vol' + time.strftime("%d%m%y-%H%M%S")
 logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
 
@@ -197,8 +197,8 @@ def regression_ta_data(scrip):
         volume = columns[5]
         for dele in range(1, 10):
             addFeatures(df, dfp, close, dele)
-        for dele in range(2, 5):
-            addFeaturesVolChange(df, dfp, volume, dele)    
+#         for dele in range(2, 5):
+#             addFeaturesVolChange(df, dfp, volume, dele)    
             
         dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
         dfp['ADXR'] = ADXR(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html
@@ -387,7 +387,6 @@ def regression_ta_data(scrip):
                 
             elif((trainSize> 1000) and (randomForest < 0) and (kNeighbours < -.7) and score < 0):
                 ws_filter.append(regressionResult)  
-                
                    
         if randomForestRegressor and kNeighboursRegressor:    
             #ws_gtltzero = wb.create_sheet("FilterAllgtlt0")

@@ -46,7 +46,8 @@ class MoneycontrolPage
   end
 
   def get_news_and_log(symbol)
-    client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'Nsedata')
+    monngodbip = ENV['mongodbip'] ? ENV['mongodbip'] : '127.0.0.1:27017'
+    client = Mongo::Client.new([ monngodbip ], :database => 'Nsedata')
     news = Array.new
 
     Capybara.default_selector = :css
