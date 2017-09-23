@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 from sklearn import preprocessing
 from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import *
 from sklearn.ensemble import RandomForestRegressor
 import matplotlib.pyplot as plt
 from sklearn.ensemble import BaggingRegressor
@@ -29,6 +30,7 @@ from sklearn.grid_search import GridSearchCV
 from Neural_Network import NeuralNet
 
 import logging
+from sklearn.ensemble.bagging import BaggingClassifier
 log = logging.getLogger(__name__)
 
 def load_dataset(path_directory, symbol): 
@@ -73,8 +75,7 @@ def addFeatures(dfsource, dftarget, close, n):
     
     return_n = "PCT_change" + str(n)
     dftarget[return_n] = (dfsource[close].pct_change(n))*100
-    
-    
+       
 def addFeaturesVolChange(dfsource, dftarget, volume, n):
     return_n = "VOL_change" + str(n)
     dftarget[return_n] = (dfsource[volume].pct_change(n))*100   
@@ -97,7 +98,8 @@ def addFeaturesVolChange(dfsource, dftarget, volume, n):
 # 
 #     exp_ma = returns[7:] + "ExponentMovingAvg" + str(n)
 #     dataframe[exp_ma] = pd.ewma(dataframe[returns], halflife=30)
-#     
+#  
+   
 def mergeDataframes(datasets):
     """
         Merge Datasets into Dataframe.
@@ -122,6 +124,7 @@ def applyTimeLag(dataset, lags, delta):
     return dataset.iloc[maxLag:-1, :]
 
 # CLASSIFICATION    
+
 def prepareDataForClassification(dataset, start_test):
     """
     generates categorical to be predicted column, attach to dataframe 
@@ -196,6 +199,108 @@ def benchmark_classifier(clf, X_train, y_train, X_test, y_test):
     return accuracy
 
 # REGRESSION
+
+def performClassification(dataset, split, symbol, output_dir, forecast_out):
+    """
+        Performing Classification on 
+        Various algorithms
+    """
+
+    predicted_values = []
+
+    features = dataset.columns[:-1]
+    
+    index = int(np.floor(dataset.shape[0]*split))
+    train, test, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
+    #dataset_all, test_forecast = dataset[:-forecast_out], dataset[-forecast_out:]
+    #test = dataset_all.sample(frac=0.025)
+    #train = dataset_all.loc[~dataset_all.index.isin(test.index)]
+
+    log.info('-'*80)
+    log.info('%s train set: %s, test set: %s', symbol, train.shape, test.shape)
+    predicted_values.append(str(symbol))
+    predicted_values.append(str(train.shape))
+    predicted_values.append(str(test.shape))
+    
+    #train, test = getFeatures(train[features], \
+    #    train[output], test[features], 16)
+
+    out_params = (symbol, output_dir)
+
+    output = dataset.columns[-1]
+
+    classifiers = [
+        RandomForestClassifier(n_estimators=100, n_jobs=-1),
+        SVC(degree=100, C=10000),
+        BaggingClassifier(),
+        AdaBoostClassifier(),
+        neighbors.KNeighborsClassifier(),
+        GradientBoostingClassifier(n_estimators=100),
+        #QDA(),
+    ]
+
+    for classifier in classifiers:
+        model_name, forecast_set, accuracy = benchmark_classifier(classifier, \
+            train, test, test_forecast, features, symbol, output, out_params)
+        log.info('%s, %s, %s, %s', symbol, model_name, forecast_set, accuracy)
+        predicted_values.append(str(round(forecast_set.ravel()[0], 3)))
+        predicted_values.append(str(round(accuracy, 3)))
+    
+    return predicted_values
+
+def performClassification(dataset, split, symbol, output_dir, forecast_out, classifier):
+    predicted_values = []
+
+    features = dataset.columns[:-1]
+    
+    index = int(np.floor(dataset.shape[0]*split))
+    train, test, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
+
+    log.info('-'*80)
+    log.info('%s train set: %s, test set: %s', symbol, train.shape, test.shape)
+
+    out_params = (symbol, output_dir)
+    output = dataset.columns[-1]
+
+    model_name, forecast_set, accuracy = benchmark_classifier(classifier, \
+        train, test, test_forecast, features, symbol, output, out_params)
+    log.info('%s, %s, %s, %s', symbol, model_name, forecast_set, accuracy)
+    predicted_values.append(str(round(forecast_set.ravel()[0], 3)))
+    predicted_values.append(str(round(accuracy, 3)))
+
+    return predicted_values
+
+def benchmark_classifier(model, train, test, test_forecast, features, symbol, output, \
+    output_params, *args, **kwargs):
+    '''
+        Performs Training and Testing of the Data on the Model.
+    '''
+
+    model_name = model.__str__().split('(')[0].replace('Classifier', ' Classifier')
+
+    symbol, output_dir = output_params
+
+    model.fit(train[features].as_matrix(), train[output].astype(int).as_matrix(), *args, **kwargs)
+    predicted_value = model.predict(test[features].as_matrix())
+    
+    accuracy = model.score(test[features].as_matrix(), test[output].astype(int).as_matrix())
+    forecast_set = model.predict(test_forecast[features].as_matrix())
+    
+    plt.plot(test[output].as_matrix(), color='g', ls='--', label='Actual Value')
+    plt.plot(predicted_value, color='b', ls='--', label='predicted_value Value')
+
+    plt.xlabel('Number of Set')
+    plt.ylabel('Output Value')
+
+    plt.title(model_name)
+    plt.legend(loc='best')
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, str(symbol) + '_' \
+        + model_name + '.png'), dpi=100)
+    #plt.show()
+    plt.clf()
+
+    return model_name, forecast_set, accuracy
     
 def getFeatures(X_train, y_train, X_test, num_features):
     ch2 = SelectKBest(chi2, k=5)
@@ -315,7 +420,27 @@ def performRegression(dataset, split, symbol, output_dir, forecast_out):
 #     benchmark_model(classifier, \
 #         train, test, test_forecast, features, symbol, output, out_params, \
 #         fine_tune=False, maxiter=maxiter, SGD=True, batch=batch, rho=0.9)
+
+def performRegression(dataset, split, symbol, output_dir, forecast_out, regressor):
+    predicted_values = []
+    features = dataset.columns[:-1]
+    index = int(np.floor(dataset.shape[0]*split))
+    train, test, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
+
+    log.info('-'*80)
+    log.info('%s train set: %s, test set: %s', symbol, train.shape, test.shape)
     
+    out_params = (symbol, output_dir)
+    output = dataset.columns[-1]
+
+    model_name, forecast_set, accuracy = benchmark_model(regressor, \
+        train, test, test_forecast, features, symbol, output, out_params)
+    log.info('%s, %s, %s, %s', symbol, model_name, forecast_set, accuracy)
+    predicted_values.append(str(round(forecast_set.ravel()[0], 3)))
+    predicted_values.append(str(round(accuracy, 3)))
+    
+    return predicted_values
+   
 def benchmark_model(model, train, test, features, output, \
     output_params, *args, **kwargs):
     '''
@@ -384,7 +509,10 @@ def benchmark_model(model, train, test, test_forecast, features, symbol, output,
 
     model.fit(train[features].as_matrix(), train[output].as_matrix(), *args, **kwargs)
     predicted_value = model.predict(test[features].as_matrix())
-
+    
+    accuracy = model.score(test[features].as_matrix(), test[output].as_matrix())
+    forecast_set = model.predict(test_forecast[features].as_matrix())
+    
     plt.plot(test[output].as_matrix(), color='g', ls='--', label='Actual Value')
     plt.plot(predicted_value, color='b', ls='--', label='predicted_value Value')
 
@@ -398,8 +526,5 @@ def benchmark_model(model, train, test, test_forecast, features, symbol, output,
         + model_name + '.png'), dpi=100)
     #plt.show()
     plt.clf()
-    
-    accuracy = model.score(test[features].as_matrix(), test[output].as_matrix())
-    forecast_set = model.predict(test_forecast[features].as_matrix())
 
     return model_name, forecast_set, accuracy
