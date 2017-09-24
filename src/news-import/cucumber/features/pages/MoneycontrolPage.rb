@@ -45,6 +45,38 @@ class MoneycontrolPage
     }
   end
 
+  def get_month(month)
+    month = month.downcase
+    case month
+      when "jan"
+        return '00'
+      when "feb"
+        return '01'
+      when "march"
+        return '03'
+      when "apr"
+        return '04'
+      when "may"
+        return '05'
+      when "june"
+        return '06'
+      when "july"
+        return '07'
+      when "aug"
+        return '08'
+      when "sep"
+        return '09'
+      when "oct"
+        return '10'
+      when "nov"
+        return '11'
+      when "dec"
+        return '12'
+      else
+        return '00'
+    end
+  end
+
   def get_news_and_log(symbol)
     monngodbip = ENV['mongodbip'] ? ENV['mongodbip'] : '127.0.0.1:27017'
     client = Mongo::Client.new([ monngodbip ], :database => 'Nsedata')
@@ -59,9 +91,17 @@ class MoneycontrolPage
       @session.all(@news_content).each { |a|
         f.puts '  {'
         attr = a.find("p[class=\"PT3 a_10dgry\"]").text.split('|')
-        timestamp = attr[0].strip + ' ' + attr[1].strip
-        date = attr[1].strip
-        time = attr[0].strip
+        timestampraw = attr[0].strip + ' ' + attr[1].strip
+
+        #get date
+        date = attr[1].strip.split(' ')[0] + '-' + get_month(attr[1].strip.split(' ')[1]) + '-' + attr[1].strip.split(' ')[2]
+
+        #get time
+        time = Float(attr[0].strip.split(' ')[0])
+        delta = String('pm').casecmp(attr[0].strip.split(' ')[1]) ? 12 : 0
+        time = time + delta
+        time = String(time).split('.')[0] + ':' + String(time).split('.')[1] + ':00'
+        timestamp = time + ' ' + date
         summary = a.find("a[class=\"g_14bl\"] > strong").text
         link = a.find("a[class=\"g_14bl\"]")[:href]
         f.puts '   timestamp:"' + timestamp + '"'
@@ -71,7 +111,7 @@ class MoneycontrolPage
         f.puts '   link:"' + link + '"'
         f.puts '  },'
 
-        news.push({ :timestamp => timestamp, :date => date, :time => time, :summary => summary, :link => link})
+        news.push({ :timestamp => timestamp, :timestampraw => timestampraw, :date => date, :time => time, :summary => summary, :link => link})
       }
       f.puts ' ]'
       f.puts '}'

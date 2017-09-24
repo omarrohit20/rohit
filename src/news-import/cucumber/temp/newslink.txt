@@ -11,7 +11,7 @@
 | AUROBINDO PHARMA LTD | AUROPHARMA | http://www.moneycontrol.com/company-article/aurobindopharma/news/AP#AP | 
 | AXIS BANK LIMITED | AXISBANK | http://www.moneycontrol.com/company-article/axisbank/news/AB16#AB16 | 
 | BAJAJ FINSERV LIMITED | BAJAJFINSV | http://www.moneycontrol.com/company-article/bajajfinserv/news/BF04#BF04 | 
-| BALKRISHNA INDUSTRIES LIMITED | BALKRISIND | http://www.moneycontrol.com/company-article/balkrishnaindustries/news/BI03#BI03 | 
+| BALKRISHNA INDUSTRIES LIMITED | BALKRISIND | http://www.moneycontrol.com/india/stockpricequote/tyres/balkrishnaindustries/BI03 | 
 | BALRAMPUR CHINI MILLS LIMITED | BALRAMCHIN | http://www.moneycontrol.com/company-article/balrampurchinimills/news/BCM#BCM | 
 | BANK OF BARODA | BANKBARODA | http://www.moneycontrol.com/company-article/bankofbaroda/news/BOB#BOB | 
 | BANK OF INDIA | BANKINDIA | http://www.moneycontrol.com/company-article/bankofindia/news/BOI#BOI | 
@@ -21,3 +21,132 @@
 | BHARAT FIN INCLUSION LTD | BHARATFIN | http://www.moneycontrol.com/company-article/bharatfinancialinclusion/news/SM11#SM11 | 
 | BHARAT PETROLEUM CORP LT | BPCL | http://www.moneycontrol.com/company-article/bharatpetroleumcorporation/news/BPC#BPC | 
 | BHARTI AIRTEL LIMITED | BHARTIARTL | http://www.moneycontrol.com/company-article/bhartiairtel/news/BA08#BA08 | 
+| BHEL | BHEL | http://www.moneycontrol.com/company-article/bharatheavyelectricals/news/BHE#BHE | 
+| BOSCH LIMITED | BOSCHLTD | http://www.moneycontrol.com/company-article/bosch/news/B05#B05 | 
+| CADILA HEALTHCARE LIMITED | CADILAHC | http://www.moneycontrol.com/company-article/cadilahealthcare/news/CHC#CHC | 
+| CAN FIN HOMES LIMITED | CANFINHOME | http://www.moneycontrol.com/company-article/canfinhomes/news/CFH#CFH | 
+| CANARA BANK | CANBK | http://www.moneycontrol.com/company-article/canarabank/news/CB06#CB06 | 
+| CASTROL INDIA LIMITED | CASTROLIND | http://www.moneycontrol.com/company-article/castrolindia/news/CI01#CI01 | 
+| CEAT LIMITED | CEATLTD | http://www.moneycontrol.com/company-article/ceat/news/C07#C07 | 
+| CENTURY TEXTILES LTD | CENTURYTEX | http://www.moneycontrol.com/company-article/centurytextilesindustries/news/CTI#CTI | 
+| CESC LTD | CESC | http://www.moneycontrol.com/company-article/cesc/news/CES#CES | 
+| CG POWER AND INDUSTRIAL SOLUTIONS LIMITED | CGPOWER | http://www.moneycontrol.com/company-article/cgpowerindustrialsolutions/news/CG#CG | 
+| CHENNAI PETROLEUM CORPORATION LIMITED | CHENNPETRO | http://www.moneycontrol.com/company-article/chennaipetroleumcorporation/news/CPC02#CPC02 | 
+| CIPLA LTD | CIPLA | http://www.moneycontrol.com/company-article/cipla/news/C#C | 
+| COAL INDIA LTD | COALINDIA | http://www.moneycontrol.com/company-article/coalindia/news/CI11#CI11 | 
+| COLGATE PALMOLIVE LTD. | COLPAL | http://www.moneycontrol.com/company-article/colgatepalmoliveindia/news/CPI#CPI | 
+| CUMMINS INDIA LTD | CUMMINSIND | http://www.moneycontrol.com/company-article/cumminsindia/news/CI02#CI02 | 
+| DCB BANK LIMITED | DCBBANK | http://www.moneycontrol.com/company-article/dcbbank/news/DCB01#DCB01 | 
+| DEWAN HOUSING FIN CORP LT | DHFL | http://www.moneycontrol.com/company-article/dewanhousingfinancecorporation/news/DHF#DHF | 
+| DISH TV INDIA LTD. | DISHTV | http://www.moneycontrol.com/company-article/dishtvindia/news/DTV#DTV | 
+| DIVI'S LABORATORIES LTD | DIVISLAB | http://www.moneycontrol.com/company-article/divislaboratories/news/DL03#DL03 | 
+| DLF LIMITED | DLF | http://www.moneycontrol.com/company-article/dlf/news/D04#D04 | 
+| EICHER MOTORS LTD | EICHERMOT | http://www.moneycontrol.com/company-article/eichermotors/news/EM#EM | 
+| ENGINEERS INDIA LTD | ENGINERSIN | http://www.moneycontrol.com/company-article/engineersindia/news/EI14#EI14 | 
+| EQUITAS HOLDINGS LIMITED | EQUITAS | http://www.moneycontrol.com/company-article/equitasholdings/news/EH03#EH03 | 
+| EXIDE INDUSTRIES LTD | EXIDEIND | http://www.moneycontrol.com/company-article/exideindustries/news/EI#EI | 
+| FEDERAL BANK LTD | FEDERALBNK | http://www.moneycontrol.com/company-article/federalbank/news/FB#FB | 
+| GAIL (INDIA) LTD | GAIL | http://www.moneycontrol.com/company-article/gailindia/news/GAI#GAI | 
+| GLENMARK PHARMACEUTICALS | GLENMARK | http://www.moneycontrol.com/company-article/glenmarkpharma/news/GP08#GP08 | 
+| GMR INFRASTRUCTURE LTD. | GMRINFRA | http://www.moneycontrol.com/company-article/gmrinfrastructure/news/GI27#GI27 | 
+| GODFREY PHILLIPS INDIA LIMITED | GODFRYPHLP | http://www.moneycontrol.com/company-article/godfreyphillipsindia/news/GPI#GPI | 
+| GODREJ CONSUMER PRODUCTS | GODREJCP | http://www.moneycontrol.com/company-article/godrejconsumerproducts/news/GCP#GCP | 
+| GODREJ INDUSTRIES LTD | GODREJIND | http://www.moneycontrol.com/company-article/godrejindustries/news/GI23#GI23 | 
+| GRANULES INDIA LIMITED | GRANULES | http://www.moneycontrol.com/company-article/granulesindia/news/GI25#GI25 | 
+| GRASIM INDUSTRIES LTD | GRASIM | http://www.moneycontrol.com/company-article/grasimindustries/news/GI01#GI01 | 
+| GUJARAT STATE FERTILIZERS & CHEMICALS LIMITED | GSFC | http://www.moneycontrol.com/company-article/gujaratstatefertilizerschemicals/news/GSF#GSF | 
+| HAVELLS INDIA LIMITED | HAVELLS | http://www.moneycontrol.com/company-article/havellsindia/news/HI01#HI01 | 
+| HCL TECHNOLOGIES LTD | HCLTECH | http://www.moneycontrol.com/company-article/hcltechnologies/news/HCL02#HCL02 | 
+| HDFC BANK LTD | HDFCBANK | http://www.moneycontrol.com/company-article/hdfcbank/news/HDF01#HDF01 | 
+| HERO MOTOCORP LIMITED | HEROMOTOCO | http://www.moneycontrol.com/company-article/heromotocorp/news/HHM#HHM | 
+| HEXAWARE TECHNOLOGIES LTD | HEXAWARE | http://www.moneycontrol.com/company-article/hexawaretechnologies/news/HT02#HT02 | 
+| HINDUSTAN CONSTRUCTION COMPANY LIMITED | HCC | http://www.moneycontrol.com/company-article/hindustanconstructioncompany/news/HCC#HCC | 
+| HINDUSTAN UNILEVER LTD. | HINDUNILVR | http://www.moneycontrol.com/company-article/hindustanunilever/news/HU#HU | 
+| HINDUSTAN ZINC LIMITED | HINDZINC | http://www.moneycontrol.com/company-article/hindustanzinc/news/HZ#HZ | 
+| HOUSING DEV & INFRA LTD | HDIL | http://www.moneycontrol.com/company-article/housingdevelopmentinfrastructure/news/HDI#HDI | 
+| ICICI PRUDENTIAL LIFE INSURANCE COMPANY LIMITED | ICICIPRULI | http://www.moneycontrol.com/company-article/iciciprudentiallifeinsurancecompany/news/IPL01#IPL01 | 
+| IDFC BANK LIMITED | IDFCBANK | http://www.moneycontrol.com/company-article/idfcbank/news/IDF01#IDF01 | 
+| INDIABULLS HSG FIN LTD | IBULHSGFIN | http://www.moneycontrol.com/company-article/indiabullshousingfinance/news/IHF01#IHF01 | 
+| INDIABULLS REAL EST. LTD | IBREALEST | http://www.moneycontrol.com/company-article/indiabullsrealestate/news/IRE01#IRE01 | 
+| INDIAN OIL CORP LTD | IOC | http://www.moneycontrol.com/company-article/indianoilcorporation/news/IOC#IOC | 
+| INDO COUNT INDUSTRIES LTD | ICIL | http://www.moneycontrol.com/company-article/indocountindustries/news/ICI07#ICI07 | 
+| INDRAPRASTHA GAS LTD | IGL | http://www.moneycontrol.com/company-article/indraprasthagas/news/IG04#IG04 | 
+| INDUSIND BANK LIMITED | INDUSINDBK | http://www.moneycontrol.com/company-article/indusindbank/news/IIB#IIB | 
+| INFIBEAM INCORPORATION LIMITED | INFIBEAM | http://www.moneycontrol.com/company-article/infibeamincorporation/news/IIL03#IIL03 | 
+| INFOSYS LIMITED | INFY | http://www.moneycontrol.com/company-article/infosys/news/IT#IT | 
+| INTERGLOBE AVIATION LIMITED | INDIGO | http://www.moneycontrol.com/company-article/interglobeaviation/news/IA04#IA04 | 
+| JAIN IRRIGATION SYSTEMS | JISLJALEQS | http://www.moneycontrol.com/company-article/jainirrigationsystems/news/JIS02#JIS02 | 
+| JAIPRAKASH ASSOCIATES LTD | JPASSOCIAT | http://www.moneycontrol.com/company-article/jaiprakashassociates/news/JA02#JA02 | 
+| JET AIRWAYS (INDIA) LTD. | JETAIRWAYS | http://www.moneycontrol.com/company-article/jetairways/news/JA01#JA01 | 
+| JINDAL STEEL & POWER LTD | JINDALSTEL | http://www.moneycontrol.com/company-article/jindalsteelpower/news/JSP#JSP | 
+| JSW ENERGY LIMITED | JSWENERGY | http://www.moneycontrol.com/company-article/jswenergy/news/JE01#JE01 | 
+| JSW STEEL LIMITED | JSWSTEEL | http://www.moneycontrol.com/company-article/jswsteel/news/JSW01#JSW01 | 
+| JUBILANT FOODWORKS LTD | JUBLFOOD | http://www.moneycontrol.com/company-article/jubilantfoodworks/news/JF04#JF04 | 
+| JUSTDIAL LTD. | JUSTDIAL | http://www.moneycontrol.com/company-article/justdial/news/JD#JD | 
+| KAJARIA CERAMICS LIMITED | KAJARIACER | http://www.moneycontrol.com/company-article/kajariaceramics/news/KC06#KC06 | 
+| KARNATAKA BANK LIMITED | KTKBANK | http://www.moneycontrol.com/india/stockpricequote/banks-private-sector/karnatakabank/KB04 | 
+| KAVERI SEED CO. LTD. | KSCL | http://www.moneycontrol.com/company-article/kaveriseedcompany/news/KSC01#KSC01 | 
+| KOTAK MAHINDRA BANK LTD | KOTAKBANK | http://www.moneycontrol.com/company-article/kotakmahindrabank/news/KMB#KMB | 
+| KPIT TECHNOLOGIES LTD | KPIT | http://www.moneycontrol.com/company-article/kpittechnologies/news/KPI02#KPI02 | 
+| L&T FINANCE HOLDINGS LTD | L&TFH | http://www.moneycontrol.com/company-article/ltfinanceholdings/news/LFH#LFH | 
+| LIC HOUSING FINANCE LTD | LICHSGFIN | http://www.moneycontrol.com/company-article/lichousingfinance/news/LIC#LIC | 
+| M&M FIN. SERVICES LTD | M&MFIN | http://www.moneycontrol.com/company-article/mahindramahindrafinancialservices/news/MMF04#MMF04 | 
+| MAHANAGAR GAS LIMITED | MGL | http://www.moneycontrol.com/company-article/mahanagargas/news/MG02#MG02 | 
+| MANGALORE REFINERY AND PETROCHEMICALS LIMITED | MRPL | http://www.moneycontrol.com/company-article/mangalorerefinerypetrochemicals/news/MRP#MRP | 
+| MAX FINANCIAL SERVICES LIMITED | MFSL | http://www.moneycontrol.com/company-article/maxfinancialservices/news/MI#MI | 
+| MINDTREE LIMITED | MINDTREE | http://www.moneycontrol.com/company-article/mindtree/news/MT13#MT13 | 
+| MOTHERSON SUMI SYSTEMS LT | MOTHERSUMI | http://www.moneycontrol.com/company-article/mothersonsumisystems/news/MSS01#MSS01 | 
+| MRF LTD | MRF | http://www.moneycontrol.com/company-article/mrf/news/MRF#MRF | 
+| MULTI COMMODITY EXCHANGE OF INDIA LIMITED | MCX | http://www.moneycontrol.com/company-article/multicommodityexchangeindia/news/MCE#MCE | 
+| NATIONAL ALUMINIUM COMPANY LIMITED | NATIONALUM | http://www.moneycontrol.com/company-article/nationalaluminiumcompany/news/NAC#NAC | 
+| NBCC (INDIA) LIMITED | NBCC | http://www.moneycontrol.com/company-article/nbccindia/news/NBC01#NBC01 | 
+| NESTLE INDIA LIMITED | NESTLEIND | http://www.moneycontrol.com/company-article/nestleindia/news/NI#NI | 
+| NHPC LTD | NHPC | http://www.moneycontrol.com/company-article/nhpc/news/N07#N07 | 
+| NIIT TECHNOLOGIES LTD | NIITTECH | http://www.moneycontrol.com/company-article/niittechnologies/news/NII02#NII02 | 
+| NMDC LTD. | NMDC | http://www.moneycontrol.com/company-article/nmdc/news/NMD02#NMD02 | 
+| NTPC LTD | NTPC | http://www.moneycontrol.com/company-article/ntpc/news/NTP#NTP | 
+| OIL AND NATURAL GAS CORP. | ONGC | http://www.moneycontrol.com/company-article/oilnaturalgascorporation/news/ONG#ONG | 
+| ORACLE FIN SERV SOFT LTD. | OFSS | http://www.moneycontrol.com/company-article/oraclefinancialservicessoftware/news/OFS01#OFS01 | 
+| ORIENTAL BANK OF COMMERCE | ORIENTBANK | http://www.moneycontrol.com/company-article/orientalbankcommerce/news/OBC#OBC | 
+| PAGE INDUSTRIES LTD | PAGEIND | http://www.moneycontrol.com/company-article/pageindustries/news/PI35#PI35 | 
+| PC JEWELLER LTD | PCJEWELLER | http://www.moneycontrol.com/company-article/pcjeweller/news/PJ#PJ | 
+| POWER FIN CORP LTD. | PFC | http://www.moneycontrol.com/company-article/powerfinancecorporation/news/PFC02#PFC02 | 
+| POWER GRID CORP. LTD. | POWERGRID | http://www.moneycontrol.com/company-article/powergridcorporationindia/news/PGC#PGC | 
+| PVR LIMITED | PVR | http://www.moneycontrol.com/company-article/pvr/news/PVR#PVR | 
+| RBL BANK LIMITED | RBLBANK | http://www.moneycontrol.com/company-article/rblbank/news/RB03#RB03 | 
+| RELIANCE COMMUNICATIONS L | RCOM | http://www.moneycontrol.com/company-article/reliancecommunications/news/RC13#RC13 | 
+| RELIANCE DEFENCE AND ENGINEERING LIMITED | RDEL | http://www.moneycontrol.com/company-article/reliancenavalengineering/news/PS04#PS04 | 
+| RELIANCE INFRASTRUCTU LTD | RELINFRA | http://www.moneycontrol.com/company-article/relianceinfrastructure/news/RI38#RI38 | 
+| RELIANCE POWER LTD. | RPOWER | http://www.moneycontrol.com/company-article/reliancepower/news/RP#RP | 
+| REPCO HOME FINANCE LIMITED | REPCOHOME | http://www.moneycontrol.com/company-article/repcohomefinance/news/RHF#RHF | 
+| RURAL ELEC CORP. LTD. | RECLTD | http://www.moneycontrol.com/company-article/ruralelectrificationcorporation/news/REC02#REC02 | 
+| SHREE CEMENTS LIMITED | SHREECEM | http://www.moneycontrol.com/company-article/shreecements/news/SC12#SC12 | 
+| SHRIRAM TRANSPORT FIN CO. | SRTRANSFIN | http://www.moneycontrol.com/company-article/shriramtransportfinancecorporation/news/STF#STF | 
+| SREI INFRASTRUCTURE FINANCE LIMITED | SREINFRA | http://www.moneycontrol.com/company-article/sreiinfrastructurefinance/news/SRE02#SRE02 | 
+| STEEL AUTHORITY OF INDIA | SAIL | http://www.moneycontrol.com/company-article/steelauthorityindia/news/SAI#SAI | 
+| SUN TV NETWORK LIMITED | SUNTV | http://www.moneycontrol.com/company-article/suntvnetwork/news/STN01#STN01 | 
+| SYNDICATE BANK | SYNDIBANK | http://www.moneycontrol.com/company-article/syndicatebank/news/SB9#SB9 | 
+| TATA CHEMICALS LTD | TATACHEM | http://www.moneycontrol.com/company-article/tatachemicals/news/TC#TC | 
+| TATA COMMUNICATIONS LTD | TATACOMM | http://www.moneycontrol.com/company-article/tatacommunications/news/TC17#TC17 | 
+| TATA CONSULTANCY SERV LT | TCS | http://www.moneycontrol.com/company-article/tataconsultancyservices/news/TCS#TCS | 
+| TATA ELXSI LIMITED | TATAELXSI | http://www.moneycontrol.com/company-article/tataelxsi/news/TE#TE | 
+| TATA GLOBAL BEVERAGES LTD | TATAGLOBAL | http://www.moneycontrol.com/company-article/tataglobalbeverage/news/TT#TT | 
+| TATA MOTORS DVR 'A' ORD | TATAMTRDVR | http://www.moneycontrol.com/company-article/tatamotorsdvr/news/TMD#TMD | 
+| TATA POWER CO LTD | TATAPOWER | http://www.moneycontrol.com/company-article/tatapowercompany/news/TPC#TPC | 
+| THE INDIA CEMENTS LIMITED | INDIACEM | http://www.moneycontrol.com/company-article/indiacements/news/IC#IC | 
+| THE RAMCO CEMENTS LIMITED | RAMCOCEM | http://www.moneycontrol.com/company-article/theramcocements/news/MC#MC | 
+| THE SOUTH INDIAN BANK LTD | SOUTHBANK | http://www.moneycontrol.com/company-article/southindianbank/news/SIB#SIB | 
+| TORRENT PHARMACEUTICALS L | TORNTPHARM | http://www.moneycontrol.com/india/stockpricequote/pharmaceuticals/torrentpharmaceuticals/TP06 | 
+| TORRENT POWER LTD | TORNTPOWER | http://www.moneycontrol.com/company-article/torrentpower/news/TP14#TP14 | 
+| TV18 BROADCAST LIMITED | TV18BRDCST | http://www.moneycontrol.com/company-article/tv18broadcast/news/IBN#IBN | 
+| TVS MOTOR COMPANY LTD | TVSMOTOR | http://www.moneycontrol.com/company-article/tvsmotorcompany/news/TVS#TVS | 
+| UJJIVAN FINANCIAL SERVICES LIMITED | UJJIVAN | http://www.moneycontrol.com/company-article/ujjivanfinancialservices/news/UFS01#UFS01 | 
+| ULTRATECH CEMENT LIMITED | ULTRACEMCO | http://www.moneycontrol.com/company-article/ultratechcement/news/UTC01#UTC01 | 
+| UNION BANK OF INDIA | UNIONBANK | http://www.moneycontrol.com/company-article/unionbankindia/news/UBI01#UBI01 | 
+| UNITED BREWERIES LTD | UBL | http://www.moneycontrol.com/company-article/unitedbreweries/news/UB02#UB02 | 
+| UNITED SPIRITS LIMITED | MCDOWELL-N | http://www.moneycontrol.com/company-article/unitedspirits/news/US#US | 
+| V-GUARD INDUSTRIES LIMITED | VGUARD | http://www.moneycontrol.com/india/stockpricequote/electric-equipment/vguardindustries/VI02 | 
+| VOLTAS LTD | VOLTAS | http://www.moneycontrol.com/india/stockpricequote/diversified/voltas/V | 
+| WIPRO LTD | WIPRO | http://www.moneycontrol.com/india/stockpricequote/computers-software/wipro/W | 
+| WOCKHARDT LIMITED | WOCKPHARMA | http://www.moneycontrol.com/company-article/wockhardt/news/W05#W05 | 
+| YES BANK LIMITED | YESBANK | http://www.moneycontrol.com/company-article/yesbank/news/YB#YB | 

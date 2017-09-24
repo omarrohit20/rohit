@@ -1,79 +1,65 @@
 {
  newsItems:[
   {
-   timestamp:"1.55 pm 04 Sep 2017"
-   date:"04 Sep 2017"
-   time:"1.55 pm"
+   timestamp:"13:55:00 04-09-2017"
+   date:"04-09-2017"
+   time:"13:55:00"
    summary:"Sell Adani Enterprises, Jaiprakash Associates, DLF: Ashwani Gujral"
    link:"http://www.moneycontrol.com/news/stocks-views/sell-adani-enterprises-jaiprakash-associates-dlf-ashwani-gujral_9609261.html"
   },
   {
-   timestamp:"1.05 pm 04 Sep 2017"
-   date:"04 Sep 2017"
-   time:"1.05 pm"
+   timestamp:"13:05:00 04-09-2017"
+   date:"04-09-2017"
+   time:"13:05:00"
    summary:"Top buzzing midcap stocks to trade on September 4"
    link:"http://www.moneycontrol.com/news/buzzing-stocks/top-buzzing-midcap-stocks-to-tradeseptember-4_9608201.html"
   },
   {
-   timestamp:"9.43 am 04 Sep 2017"
-   date:"04 Sep 2017"
-   time:"9.43 am"
+   timestamp:"21:43:00 04-09-2017"
+   date:"04-09-2017"
+   time:"21:43:00"
    summary:"Adani at odds over royalty negotiations for Australian coal mine"
    link:"http://www.moneycontrol.com/news/business/adani-at-odds-over-royalty-negotiations-for-australian-coal-mine_9604861.html"
   },
   {
-   timestamp:"8.29 am 31 Aug 2017"
-   date:"31 Aug 2017"
-   time:"8.29 am"
+   timestamp:"20:29:00 31-08-2017"
+   date:"31-08-2017"
+   time:"20:29:00"
    summary:"Stocks in the news: Ajanta Pharma, DHFL, Biocon, Aksh, Fortis Health, FAG Bearings"
    link:"http://www.moneycontrol.com/news/stocksnews/stocksthe-news-ajanta-pharma-dhfl-biocon-aksh-fortis-health-fag-bearings_9576021.html"
   },
   {
-   timestamp:"3.54 pm 30 Aug 2017"
-   date:"30 Aug 2017"
-   time:"3.54 pm"
+   timestamp:"15:54:00 30-08-2017"
+   date:"30-08-2017"
+   time:"15:54:00"
    summary:"Adani Enterprises likely to head to Rs 141, says Mitessh Thakkar"
    link:"http://www.moneycontrol.com/news/stocks-views/adani-enterprises-likely-to-head-to-rs-141-says-mitessh-thakkar_9572941.html"
   },
   {
-   timestamp:"3.33 pm 30 Aug 2017"
-   date:"30 Aug 2017"
-   time:"3.33 pm"
+   timestamp:"15:33:00 30-08-2017"
+   date:"30-08-2017"
+   time:"15:33:00"
    summary:"Adani Enterprises surges 8% on all approvals for Carmichael coal mine in Australia"
    link:"http://www.moneycontrol.com/news/buzzing-stocks/adani-enterprises-surges-8all-approvals-for-carmichael-coal-mineaustralia_9572621.html"
   },
   {
-   timestamp:"9.05 am 28 Aug 2017"
-   date:"28 Aug 2017"
-   time:"9.05 am"
+   timestamp:"21:05:00 28-08-2017"
+   date:"28-08-2017"
+   time:"21:05:00"
    summary:"Adani says to start Australian coal mine with own funds"
    link:"http://www.moneycontrol.com/news/business/adani-says-to-start-australian-coal-mineown-funds_9551661.html"
   },
   {
-   timestamp:"5.08 pm 12 Aug 2017"
-   date:"12 Aug 2017"
-   time:"5.08 pm"
+   timestamp:"17:08:00 12-08-2017"
+   date:"12-08-2017"
+   time:"17:08:00"
    summary:"Adani Enterprises Q1 net profit dives 62% in to Rs 141 cr"
    link:"http://www.moneycontrol.com/news/results/adani-enterprises-q1-net-profit-dives-62to-rs-141-cr_9466941.html"
   },
   {
-   timestamp:"1.36 pm 10 Aug 2017"
-   date:"10 Aug 2017"
-   time:"1.36 pm"
-   summary:"Adani picks funding advisor for giant Australia coal mine: Sources"
-   link:"http://www.moneycontrol.com/news/business/adani-picks-funding-advisor-for-giant-australia-coal-mine-sources_9448601.html"
-  },
-  {
-   timestamp:"1.28 pm 09 Aug 2017"
-   date:"09 Aug 2017"
-   time:"1.28 pm"
-   summary:"Adani Enterprises: Outcome of AGM"
-   link:"http://www.moneycontrol.com/news/announcements/adani-enterprises-outcomeagm_9438321.html"
-  },
-  {
-   timestamp:"9.40 pm 24 May 2017"
-   date:"24 May 2017"
-   time:"9.40 pm"
+   timestamp:"21:4:00 24-05-2017"
+   date:"24-05-2017"
+   time:"21:4:00"
    summary:"Adani Enterprises Q4 net profit jumps 60% to Rs 221 cr"
    link:"http://www.moneycontrol.com/news/results/adani-enterprises-q4-net-profit-jumps-60-to-rs-221-cr_8966441.html"
   },
