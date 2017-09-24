@@ -97,10 +97,23 @@ class MoneycontrolPage
         date = attr[1].strip.split(' ')[0] + '-' + get_month(attr[1].strip.split(' ')[1]) + '-' + attr[1].strip.split(' ')[2]
 
         #get time
-        time = Float(attr[0].strip.split(' ')[0])
-        delta = String('pm').casecmp(attr[0].strip.split(' ')[1]) ? 12 : 0
-        time = time + delta
-        time = String(time).split('.')[0] + ':' + String(time).split('.')[1] + ':00'
+        time = attr[0].strip.split(' ')[0]
+        if(Float(time) < 10)
+          time = '0' + time
+        end
+
+        if(String(attr[0].strip.split(' ')[1]).downcase == String('pm'))
+          time = Float(time) + 12
+        end
+
+        minutes = String(time).strip.split('.')[1]
+        if(minutes.length == 1)
+          minutes = minutes + '0'
+        elsif(minutes.length > 2)
+          minutes = minutes[1,2]
+        end
+
+        time = String(time).strip.split('.')[0] + ':' + minutes + ':00'
         timestamp = time + ' ' + date
         summary = a.find("a[class=\"g_14bl\"] > strong").text
         link = a.find("a[class=\"g_14bl\"]")[:href]

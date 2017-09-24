@@ -359,7 +359,7 @@ def get_data_frame(df, regressor=None):
 def create_csv(regressionResult):
     ws.append(regressionResult)
     trainSize = int(regressionResult[1])
-    forecast_day_VOL_change = int(regressionResult[5])
+    forecast_day_VOL_change = float(regressionResult[5])
     score = float(regressionResult[7])
     randomForestValue = float(regressionResult[8])
     mlpValue = float(regressionResult[10])
@@ -370,10 +370,10 @@ def create_csv(regressionResult):
     
     if randomForest and kNeighbours:
         #ws_filter = wb.create_sheet("Filter")
-        if((trainSize> 1000) and (randomForestValue > .5) and (kNeighboursValue > .5) and score > 0):
+        if((trainSize> 1000) and (randomForestValue > .1) and (kNeighboursValue > .5) and abs(forecast_day_VOL_change) > 30 and score > 0):
             ws_filter.append(regressionResult)
             
-        elif((trainSize> 1000) and (randomForestValue < -.5) and (kNeighboursValue < -.5) and score < 0):
+        elif((trainSize> 1000) and (randomForestValue < -.1) and (kNeighboursValue < -.5) and abs(forecast_day_VOL_change) > 30 and score < 0):
             ws_filter.append(regressionResult)  
                
     if randomForest and kNeighbours:    
