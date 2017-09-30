@@ -14,3 +14,8 @@ end
 And(/^User get news (.*)$/) do |symbol|
   moneycontrol_page.get_news_and_log(symbol)
 end
+
+And(/^Get news from link$/) do
+  moneycontrol_page.get_news_and_log(String(ENV['link']).split('@')[0])
+end
+

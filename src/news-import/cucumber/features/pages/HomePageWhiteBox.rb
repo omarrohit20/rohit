@@ -12,7 +12,7 @@ class HomePageWhiteBox
   end
 
   def visit_env_link
-    url = ENV['link']
+    url = String(ENV['link']).split('@')[1]
     puts url
     @session.visit(url)
   end

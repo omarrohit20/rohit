@@ -1,5 +1,6 @@
 require 'logger'
 require 'socket'
+require 'mongo'
 
 RETRYCOUNT = 2
 CONTAINER = 'rohit_ni'
@@ -17,6 +18,9 @@ $FAILED = 0
 startTime = Time.now
 
 $logger = Logger.new("../logfile#{Time.now.strftime('%Y-%m-%d_%H-%M-%S')}.log")
+client = Mongo::Client.new([ IP + ':27017'], :database => 'Nsedata')
+client[:news].drop
+
 
 # Populate user pool queue
 users = Array["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
@@ -83,9 +87,11 @@ def process_container
   end
 end
 
+
+
 # Dry run to get list of test scenario
 File.open('newslink.txt').each do |line|
-  link = line.split('|')[3].gsub(/\s+/, "")
+  link = line.split('|')[2].gsub(/\s+/, "") + '@' + line.split('|')[3].gsub(/\s+/, "")
   $testcases[link] = RETRYCOUNT
 end
 $logger.info("Total Test Scenario #{$testcases.length}")

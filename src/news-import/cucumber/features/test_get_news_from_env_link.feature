@@ -3,4 +3,4 @@ Feature: Moneycontrol news extractor from link
 
   Scenario: get news link
     Given User navigate env link
-    And User get news <symbol>
+    And Get news from link

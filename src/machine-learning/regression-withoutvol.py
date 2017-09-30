@@ -35,8 +35,8 @@ from sklearn.grid_search import GridSearchCV
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
-directory = '../../output' + '/' + time.strftime("%d%m%y-%H%M%S")
-logname = '../../output' + '/mllog' + time.strftime("%d%m%y-%H%M%S")
+directory = '../../output' + '/withoutvol' + time.strftime("%d%m%y-%H%M%S")
+logname = '../../output' + '/withoutvolmllog' + time.strftime("%d%m%y-%H%M%S")
 logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
 
@@ -194,9 +194,9 @@ def get_data_frame(df, regressor=None):
         volume = columns[5]
         for dele in range(1, 10):
             addFeatures(df, dfp, close, dele)
-        if regressor == 'kNeighbours':   
-            for dele in range(2, 5):
-                addFeaturesVolChange(df, dfp, volume, dele)    
+#         if regressor == 'kNeighbours':   
+#             for dele in range(2, 5):
+#                 addFeaturesVolChange(df, dfp, volume, dele)    
             
         dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
         dfp['ADXR'] = ADXR(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html
@@ -359,7 +359,7 @@ def get_data_frame(df, regressor=None):
 def create_csv(regressionResult):
     ws.append(regressionResult)
     trainSize = int(regressionResult[1])
-    forecast_day_VOL_change = float(regressionResult[5])
+    forecast_day_VOL_change = int(regressionResult[5])
     score = float(regressionResult[7])
     randomForestValue = float(regressionResult[8])
     mlpValue = float(regressionResult[10])
@@ -370,10 +370,10 @@ def create_csv(regressionResult):
     
     if randomForest and kNeighbours:
         #ws_filter = wb.create_sheet("Filter")
-        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > .5) and abs(forecast_day_VOL_change) > 30 and score > 0):
+        if((trainSize> 1000) and (randomForestValue > .1) and (kNeighboursValue > .5) and abs(forecast_day_VOL_change) > 30 and score > 0):
             ws_filter.append(regressionResult)
             
-        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < -.5) and abs(forecast_day_VOL_change) > 30 and score < 0):
+        elif((trainSize> 1000) and (randomForestValue < -.1) and (kNeighboursValue < -.5) and abs(forecast_day_VOL_change) > 30 and score < 0):
             ws_filter.append(regressionResult)  
                
     if randomForest and kNeighbours:    

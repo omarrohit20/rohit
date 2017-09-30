@@ -49,9 +49,9 @@ class MoneycontrolPage
     month = month.downcase
     case month
       when "jan"
-        return '00'
-      when "feb"
         return '01'
+      when "feb"
+        return '02'
       when "march"
         return '03'
       when "apr"
@@ -73,11 +73,12 @@ class MoneycontrolPage
       when "dec"
         return '12'
       else
-        return '00'
+        return '01'
     end
   end
 
   def get_news_and_log(symbol)
+    sleep 5
     monngodbip = ENV['mongodbip'] ? ENV['mongodbip'] : '127.0.0.1:27017'
     client = Mongo::Client.new([ monngodbip ], :database => 'Nsedata')
     news = Array.new
@@ -103,7 +104,7 @@ class MoneycontrolPage
         end
 
         if(String(attr[0].strip.split(' ')[1]).downcase == String('pm'))
-          time = Float(time) + 12
+          time = Float(time) + 11
         end
 
         minutes = String(time).strip.split('.')[1]
