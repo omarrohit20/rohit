@@ -36,8 +36,8 @@ from sklearn.grid_search import GridSearchCV
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
-directory = '../../output' + '/withoutvol/' + time.strftime("%d%m%y-%H%M%S")
-logname = '../../output' + '/withoutvol/mllog' + time.strftime("%d%m%y-%H%M%S")
+directory = '../../output' + '/withoutvol2/' + time.strftime("%d%m%y-%H%M%S")
+logname = '../../output' + '/withoutvol2/mllog' + time.strftime("%d%m%y-%H%M%S")
 logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
 
@@ -489,7 +489,7 @@ def regression_ta_data(scrip):
         regressionResult.extend([0,0])
             
     if mlp:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, MLPRegressor(activation='logistic',solver='lbfgs', hidden_layer_sizes=(98, 49, 24))))
+        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, MLPRegressor(activation='logistic',solver='lbfgs', hidden_layer_sizes=(88, 44, 22, 11))))
     else:
         regressionResult.extend([0,0])
         

@@ -11,7 +11,8 @@ import numpy as np
 from talib.abstract import *
 from pip.req.req_file import preprocess
 from Algorithms.regression_helpers import load_dataset, addFeatures, addFeaturesVolChange, \
-    mergeDataframes, count_missing, applyTimeLag, performRegression   
+    addFeaturesOpenChange, addFeaturesHighChange, addFeaturesLowChange, addFeaturesEMA9Change, addFeaturesEMA21Change, \
+    mergeDataframes, count_missing, applyTimeLag, performRegression
     
 from technical import ta_lib_data  
 
@@ -42,7 +43,7 @@ log = logging.getLogger(__name__)
 
 forecast_out = 1
 randomForest = True
-mlp = False
+mlp = True
 bagging = True
 adaBoost = False
 kNeighbours = True
@@ -186,17 +187,29 @@ def get_data_frame(df, regressor=None):
         df.dropna(inplace=True)
         df['VOL_change'] = (((df['volume'] - df['volume_pre'])/df['volume_pre'])*100)
         df['PCT_change'] = (((df['close'] - df['close_pre'])/df['close_pre'])*100)
+        df['EMA9'] = EMA(df,9)
+        df['EMA21'] = EMA(df,21)
         
         dfp = df[['VOL_change']]
         maxdelta = 10
         columns = df.columns
+        open = columns[1]
+        high = columns[2]
+        low = columns[3]
         close = columns[4]
         volume = columns[5]
-        for dele in range(1, 10):
+        EMA9 = columns[-2]
+        EMA21 = columns[-1]
+        for dele in range(1, 11):
             addFeatures(df, dfp, close, dele)
-        if regressor == 'kNeighbours':   
-            for dele in range(2, 5):
-                addFeaturesVolChange(df, dfp, volume, dele)    
+        #if regressor == 'kNeighbours':   
+        for dele in range(1, 2):
+            addFeaturesOpenChange(df, dfp, open, dele)    
+            addFeaturesLowChange(df, dfp, low, dele) 
+            addFeaturesHighChange(df, dfp, high, dele)
+            addFeaturesEMA9Change(df, dfp, EMA9, dele)
+            addFeaturesEMA21Change(df, dfp, EMA21, dele)
+ 
             
         dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
         dfp['ADXR'] = ADXR(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html
@@ -205,9 +218,9 @@ def get_data_frame(df, regressor=None):
 #         dfp['AROONUP'], dfp['AROONDOWN'] = aroon['aroonup'], aroon['aroondown']
         dfp['AROONOSC'] = AROONOSC(df).apply(lambda x: 1 if x > 0 else 0)
         dfp['BOP'] = BOP(df).apply(lambda x: 1 if x > 0 else 0) #Balance Of Power https://www.marketvolume.com/technicalanalysis/balanceofpower.asp
-#        dfp['CCI'] = CCI(df) #Commodity Channel Index http://www.investopedia.com/articles/trading/05/041805.asp
-#        dfp['CMO'] = CMO(df) #Chande Momentum Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/cmo
-#        dfp['DX'] = DX(df) #Directional Movement Index http://www.investopedia.com/terms/d/dmi.asp
+#         dfp['CCI'] = CCI(df) #Commodity Channel Index http://www.investopedia.com/articles/trading/05/041805.asp
+#         dfp['CMO'] = CMO(df) #Chande Momentum Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/cmo
+#         dfp['DX'] = DX(df) #Directional Movement Index http://www.investopedia.com/terms/d/dmi.asp
 #         macd = MACD(df)
 #         dfp['MACD'], dfp['MACDSIGNAL'], dfp['MACDHIST'] = macd['macd'], macd['macdsignal'], macd['macdhist']
 #         #dfp['MACDEXT'] = MACDEXT(df)
@@ -359,7 +372,8 @@ def get_data_frame(df, regressor=None):
 def create_csv(regressionResult):
     ws.append(regressionResult)
     trainSize = int(regressionResult[1])
-    forecast_day_VOL_change = float(regressionResult[5])
+    forecast_day_VOL_change = int(regressionResult[5])
+    forecast_day_PCT_change = float(regressionResult[6])
     score = float(regressionResult[7])
     randomForestValue = float(regressionResult[8])
     mlpValue = float(regressionResult[10])
@@ -368,20 +382,20 @@ def create_csv(regressionResult):
     kNeighboursValue = float(regressionResult[16])
     gradientBoostingValue = float(regressionResult[18])
     
-    if randomForest and kNeighbours:
-        #ws_filter = wb.create_sheet("Filter")
-        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > .5) and abs(forecast_day_VOL_change) > 30 and score > 0):
+    if randomForestValue and kNeighbours:    
+        #ws_filter = wb.create_sheet("FilterAllgtlt0")
+        if((trainSize> 1000) and (randomForestValue >= .5) and (kNeighboursValue >= .5) and (mlpValue >= .5) and (baggingValue >= .5)):
             ws_filter.append(regressionResult)
             
-        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < -.5) and abs(forecast_day_VOL_change) > 30 and score < 0):
+        if((trainSize> 1000) and (randomForestValue <= -.5) and (kNeighboursValue <= -.5) and (mlpValue <= -.5) and (baggingValue <= -.5)):
             ws_filter.append(regressionResult)  
                
-    if randomForest and kNeighbours:    
+    if randomForestValue and kNeighbours:    
         #ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
-        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 0)):
+        if((trainSize> 1000) and (randomForestValue >= 0) and (kNeighboursValue >= 0) and (mlpValue >= 0) and (baggingValue >= 0)):
             ws_gtltzero.append(regressionResult)
             
-        if((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 0)):
+        if((trainSize> 1000) and (randomForestValue <= 0) and (kNeighboursValue <= 0) and (mlpValue <= 0) and (baggingValue <= 0)):
             ws_gtltzero.append(regressionResult)  
     
     if randomForest:    
@@ -393,23 +407,23 @@ def create_csv(regressionResult):
     
     if mlp:    
         #ws_SVR = wb.create_sheet("MLP")
-        if((trainSize> 1000) and (mlpValue > 1) and abs(forecast_day_VOL_change) > 40 and score > 100):
+        if((trainSize> 1000) and (mlpValue > 1) and 0.8 < forecast_day_PCT_change < 2):
             ws_SVR.append(regressionResult)
-        if((trainSize> 1000) and (mlpValue < -1) and abs(forecast_day_VOL_change) > 40 and score < -100):
+        if((trainSize> 1000) and (mlpValue < 1) and -0.8 > forecast_day_PCT_change > -2):
             ws_SVR.append(regressionResult)    
     
     if bagging:       
         #ws_Bagging = wb.create_sheet("Bagging")
-        if((trainSize> 1000) and (baggingValue > 1) and abs(forecast_day_VOL_change) > 40 and score > 100):
+        if((trainSize> 1000) and (baggingValue > 1)):
             ws_Bagging.append(regressionResult)
-        if((trainSize> 1000) and (baggingValue < -1) and abs(forecast_day_VOL_change) > 40 and score < -100):
+        if((trainSize> 1000) and (baggingValue < -1)):
             ws_Bagging.append(regressionResult)    
         
     if adaBoost:    
         #ws_AdaBoost = wb.create_sheet("AdaBoost")
-        if((trainSize> 1000) and (adaBoostValue > 1) and abs(forecast_day_VOL_change) > 40 and score > 100):
+        if((trainSize> 1000) and (adaBoostValue > 1)):
             ws_AdaBoost.append(regressionResult)
-        if((trainSize> 1000) and (adaBoostValue < -1) and abs(forecast_day_VOL_change) > 40 and score < -100):
+        if((trainSize> 1000) and (adaBoostValue < -1)):
             ws_AdaBoost.append(regressionResult)    
     
     if kNeighbours:    
@@ -421,9 +435,9 @@ def create_csv(regressionResult):
         
     if gradientBoosting:    
         #ws_GradientBoosting = wb.create_sheet("GradientBoosting")
-        if((trainSize> 1000) and (gradientBoostingValue > 1) and abs(forecast_day_VOL_change) > 40 and score > 100):
+        if((trainSize> 1000) and (gradientBoostingValue > 1)):
             ws_GradientBoosting.append(regressionResult)
-        if((trainSize> 1000) and (gradientBoostingValue < -1) and abs(forecast_day_VOL_change) > 40 and score < -100):
+        if((trainSize> 1000) and (gradientBoostingValue < -1)):
             ws_GradientBoosting.append(regressionResult) 
 
 def regression_ta_data(scrip):
@@ -468,7 +482,7 @@ def regression_ta_data(scrip):
         regressionResult.extend([0,0])
             
     if mlp:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, MLPRegressor(solver='lbfgs', hidden_layer_sizes=(40,20))))
+        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, MLPRegressor(activation='logistic',solver='lbfgs', hidden_layer_sizes=(82, 40, 20))))
     else:
         regressionResult.extend([0,0])
         

@@ -76,9 +76,30 @@ def addFeatures(dfsource, dftarget, close, n):
     return_n = "PCT_change" + str(n)
     dftarget[return_n] = (dfsource[close].pct_change(n))*100
        
+def addFeaturesOpenChange(dfsource, dftarget, open, n):
+    return_n = "Open_change" + str(n)
+    dftarget[return_n] = (dfsource[open].pct_change(n))*100  
+    
+def addFeaturesLowChange(dfsource, dftarget, low, n):
+    return_n = "Low_change" + str(n)
+    dftarget[return_n] = (dfsource[low].pct_change(n))*100
+    
+def addFeaturesHighChange(dfsource, dftarget, high, n):
+    return_n = "High_change" + str(n)
+    dftarget[return_n] = (dfsource[high].pct_change(n))*100    
+    
 def addFeaturesVolChange(dfsource, dftarget, volume, n):
     return_n = "VOL_change" + str(n)
-    dftarget[return_n] = (dfsource[volume].pct_change(n))*100   
+    dftarget[return_n] = (dfsource[volume].pct_change(n))*100  
+    
+def addFeaturesEMA9Change(dfsource, dftarget, EMA9, n):
+    return_n = "EMA9_change" + str(n)
+    dftarget[return_n] = (dfsource[EMA9].pct_change(n))*100 
+    
+def addFeaturesEMA21Change(dfsource, dftarget, EMA21, n):
+    return_n = "EMA21_change" + str(n)
+    dftarget[return_n] = (dfsource[EMA21].pct_change(n))*100               
+         
  
         
 # def addFeatures(dataframe, adjclose, returns, n):
@@ -488,13 +509,13 @@ def benchmark_model(model, train, test, test_forecast, features, symbol, output,
 
     model_name = model.__str__().split('(')[0].replace('Regressor', ' Regressor')
     
-    temp = np.ndarray((2,), buffer=np.array([0,0,0]), offset=np.int_().itemsize, dtype=int)
-    if model_name == 'MLP Regressor':
-        return model_name, temp, 0
-    if model_name == 'AdaBoost Regressor':
-        return model_name, temp, 0
-    if model_name == 'GradientBoosting Regressor':
-        return model_name, temp, 0
+#     temp = np.ndarray((2,), buffer=np.array([0,0,0]), offset=np.int_().itemsize, dtype=int)
+#     if model_name == 'MLP Regressor':
+#         return model_name, temp, 0
+#     if model_name == 'AdaBoost Regressor':
+#         return model_name, temp, 0
+#     if model_name == 'GradientBoosting Regressor':
+#         return model_name, temp, 0
 
     '''
     if 'SVR' in model.__str__():
