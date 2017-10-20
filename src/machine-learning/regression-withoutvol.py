@@ -484,7 +484,7 @@ def regression_ta_data(scrip):
 #     dfp.drop('PCT_change', axis=1, inplace=True)
       
     if randomForest:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, RandomForestRegressor(n_estimators=10, n_jobs=-1)))
+        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, RandomForestRegressor(max_depth=30, n_estimators=10, n_jobs=1)))
     else: 
         regressionResult.extend([0,0])
             
@@ -494,7 +494,7 @@ def regression_ta_data(scrip):
         regressionResult.extend([0,0])
         
     if bagging:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, BaggingRegressor()))
+        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, BaggingRegressor(n_estimators=10, n_jobs=1)))
     else:
         regressionResult.extend([0,0])
         
@@ -505,7 +505,7 @@ def regression_ta_data(scrip):
         
     if kNeighbours:
         dfp_kneighbour = get_data_frame(df, 'kNeighbours')
-        regressionResult.extend(performRegression(dfp_kneighbour, 0.98, scrip, directory, forecast_out, KNeighborsRegressor()))
+        regressionResult.extend(performRegression(dfp_kneighbour, 0.98, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1)))
     else:
         regressionResult.extend([0,0])
         

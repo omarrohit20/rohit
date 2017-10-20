@@ -384,10 +384,10 @@ def create_csv(regressionResult):
     
     if bagging and kNeighbours:
         #ws_filter = wb.create_sheet("Filter")
-        if((trainSize> 1000) and (baggingValue > 0) and (kNeighboursValue > 0) and score > 0):
+        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 0) and score > 0):
             ws_filter.append(regressionResult)
             
-        elif((trainSize> 1000) and (baggingValue < 0) and (kNeighboursValue < 0) and score < 0):
+        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 0) and score < 0):
             ws_filter.append(regressionResult)  
                
     if bagging and mlp:    
@@ -477,7 +477,7 @@ def regression_ta_data(scrip):
     regressionResult.append(score)
       
     if randomForest:
-        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, RandomForestClassifier(n_estimators=10, n_jobs=-1)))
+        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, RandomForestClassifier(n_estimators=10, n_jobs=1)))
     else: 
         regressionResult.extend([0,0])
             
@@ -499,7 +499,7 @@ def regression_ta_data(scrip):
         
     if kNeighbours:
         #dfp_kneighbour = get_data_frame(df, 'kNeighbours')
-        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, neighbors.KNeighborsClassifier()))
+        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1)))
     else:
         regressionResult.extend([0,0])
         
