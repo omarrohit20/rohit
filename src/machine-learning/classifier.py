@@ -30,8 +30,11 @@ from sklearn.neural_network import MLPClassifier
 #from sklearn.svm import SVR
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.svm import SVC, SVR
-from sklearn.qda import QDA
+#from sklearn.qda import QDA
 from sklearn.grid_search import GridSearchCV
+
+import time
+import gc
 
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
@@ -376,47 +379,50 @@ def create_csv(regressionResult):
     forecast_day_PCT_change = float(regressionResult[6])
     score = float(regressionResult[7])
     randomForestValue = float(regressionResult[8])
+    randomForestAccuracy = float(regressionResult[9])
     mlpValue = float(regressionResult[10])
     baggingValue = float(regressionResult[12])
+    baggingAccuracy = float(regressionResult[13])
     adaBoostValue = float(regressionResult[14])
     kNeighboursValue = float(regressionResult[16])
+    kNeighboursAccuracy = float(regressionResult[17])
     gradientBoostingValue = float(regressionResult[18])
     
     if bagging and kNeighbours:
         #ws_filter = wb.create_sheet("Filter")
-        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 0) and score > 0):
+        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 0) and (mlpValue >= 0) and (baggingValue >= 0)):
             ws_filter.append(regressionResult)
             
-        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 0) and score < 0):
+        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 0) and (mlpValue <= 0) and (baggingValue <= 0)):
             ws_filter.append(regressionResult)  
                
     if bagging and mlp:    
         #ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
-        if((trainSize> 1000) and (randomForestValue >= 0) and (kNeighboursValue >= 0) and (mlpValue >= 0) and (baggingValue >= 0)):
+        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 0) and (mlpValue >= 0) and (baggingValue >= 0) and (score > 0)):
             ws_gtltzero.append(regressionResult)
             
-        if((trainSize> 1000) and (randomForestValue <= 0) and (kNeighboursValue <= 0) and (mlpValue <= 0) and (baggingValue <= 0)):
+        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 0) and (mlpValue <= 0) and (baggingValue <= 0) and (score < 0)):
             ws_gtltzero.append(regressionResult)   
     
     if randomForest:    
         #ws_RandomForest = wb.create_sheet("RandomForest")
-        if((trainSize> 1000) and (randomForestValue > 0) and score > 0):
+        if((trainSize> 1000) and (randomForestValue > 0) and (randomForestAccuracy > .5) and (score > 0)):
             ws_RandomForest.append(regressionResult)
-        if((trainSize> 1000) and (randomForestValue < 0) and score < 0):
+        elif((trainSize> 1000) and (randomForestValue < 0) and (randomForestAccuracy > .5) and (score > 0)):
             ws_RandomForest.append(regressionResult)    
     
     if mlp:    
         #ws_SVR = wb.create_sheet("MLP")
-        if((trainSize> 1000) and (mlpValue > 0) and 0.8 < forecast_day_PCT_change < 2):
+        if((trainSize> 1000) and (mlpValue > 0) and score > 0):
             ws_SVR.append(regressionResult)
-        if((trainSize> 1000) and (mlpValue < 0) and -0.8 > forecast_day_PCT_change > -2):
+        if((trainSize> 1000) and (mlpValue < 0) and score > 0):
             ws_SVR.append(regressionResult)    
     
     if bagging:       
         #ws_Bagging = wb.create_sheet("Bagging")
-        if((trainSize> 1000) and (baggingValue > 0) and score > 0):
+        if((trainSize> 1000) and (baggingValue > 0) and (baggingAccuracy > .5) and (score > 0)):
             ws_Bagging.append(regressionResult)
-        if((trainSize> 1000) and (baggingValue < 0) and score < 0):
+        if((trainSize> 1000) and (baggingValue < 0) and (baggingAccuracy > .5) and (score > 0)):
             ws_Bagging.append(regressionResult)    
         
     if adaBoost:    
@@ -428,9 +434,9 @@ def create_csv(regressionResult):
     
     if kNeighbours:    
         #ws_KNeighbors = wb.create_sheet("KNeighbors")
-        if((trainSize> 1000) and (kNeighboursValue > 0) and score > 0):
+        if((trainSize> 1000) and (kNeighboursValue > 0) and (kNeighboursAccuracy > .5) and (score > 0)):
             ws_KNeighbors.append(regressionResult)
-        if((trainSize> 1000) and (kNeighboursValue < 0) and score < 0):
+        if((trainSize> 1000) and (kNeighboursValue < 0) and (kNeighboursAccuracy > .5) and (score > 0)):
             ws_KNeighbors.append(regressionResult)    
         
     if gradientBoosting:    
@@ -479,10 +485,10 @@ def regression_ta_data(scrip):
     if randomForest:
         regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, RandomForestClassifier(n_estimators=10, n_jobs=1)))
     else: 
-        regressionResult.extend([0,0])
+        regressionResult.extend([0,0])    
             
     if mlp:
-        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, MLPClassifier(activation='logistic',solver='lbfgs', hidden_layer_sizes=((82, 40, 20)))))
+        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, MLPClassifier(activation='tanh',solver='adam', hidden_layer_sizes=((82, 40, 20)))))
     else:
         regressionResult.extend([0,0])
         

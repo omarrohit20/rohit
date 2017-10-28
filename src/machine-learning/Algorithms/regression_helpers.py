@@ -24,7 +24,7 @@ from sklearn.neural_network import MLPClassifier
 #from sklearn.svm import SVR
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.svm import SVC, SVR
-from sklearn.qda import QDA
+#from sklearn.qda import QDA
 import os
 from sklearn.grid_search import GridSearchCV
 from Neural_Network import NeuralNet
@@ -32,6 +32,10 @@ from Neural_Network import NeuralNet
 import logging
 from sklearn.ensemble.bagging import BaggingClassifier
 log = logging.getLogger(__name__)
+import gc
+import time
+
+plotgraph = True
 
 def load_dataset(path_directory, symbol): 
     """
@@ -288,6 +292,10 @@ def performClassification(dataset, split, symbol, output_dir, forecast_out, clas
     log.info('%s, %s, %s, %s', symbol, model_name, forecast_set, accuracy)
     predicted_values.append(str(round(forecast_set.ravel()[0], 3)))
     predicted_values.append(str(round(accuracy, 3)))
+    
+    time.sleep(2)
+    gc.collect()
+    gc.collect()
 
     return predicted_values
 
@@ -307,19 +315,20 @@ def benchmark_classifier(model, train, test, test_forecast, features, symbol, ou
     accuracy = model.score(test[features].as_matrix(), test[output].astype(int).as_matrix())
     forecast_set = model.predict(test_forecast[features].as_matrix())
     
-    plt.plot(test[output].as_matrix(), color='g', ls='--', label='Actual Value')
-    plt.plot(predicted_value, color='b', ls='--', label='predicted_value Value')
-
-    plt.xlabel('Number of Set')
-    plt.ylabel('Output Value')
-
-    plt.title(model_name)
-    plt.legend(loc='best')
-    plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, str(symbol) + '_' \
-        + model_name + '.png'), dpi=100)
-    #plt.show()
-    plt.clf()
+    if plotgraph:
+        plt.plot(test[output].as_matrix(), color='g', ls='--', label='Actual Value')
+        plt.plot(predicted_value, color='b', ls='--', label='predicted_value Value')
+    
+        plt.xlabel('Number of Set')
+        plt.ylabel('Output Value')
+    
+        plt.title(model_name)
+        plt.legend(loc='best')
+        plt.tight_layout()
+        plt.savefig(os.path.join(output_dir, str(symbol) + '_' \
+            + model_name + '.png'), dpi=100)
+        #plt.show()
+        plt.clf()
 
     return model_name, forecast_set, accuracy
     
@@ -460,6 +469,10 @@ def performRegression(dataset, split, symbol, output_dir, forecast_out, regresso
     predicted_values.append(str(round(forecast_set.ravel()[0], 3)))
     predicted_values.append(str(round(accuracy, 3)))
     
+    time.sleep(2)
+    gc.collect()
+    gc.collect()
+    
     return predicted_values
    
 def benchmark_model(model, train, test, features, output, \
@@ -485,19 +498,20 @@ def benchmark_model(model, train, test, features, output, \
     model.fit(train[features].as_matrix(), train[output].as_matrix(), *args, **kwargs)
     predicted_value = model.predict(test[features].as_matrix())
 
-    plt.plot(test[output].as_matrix(), color='g', ls='-', label='Actual Value')
-    plt.plot(predicted_value, color='b', ls='--', label='predicted_value Value')
-
-    plt.xlabel('Number of Set')
-    plt.ylabel('Output Value')
-
-    plt.title(model_name)
-    plt.legend(loc='best')
-    plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, str(symbol) + '_' \
-        + model_name + '.png'), dpi=100)
-    #plt.show()
-    plt.clf()
+    if plotgraph:
+        plt.plot(test[output].as_matrix(), color='g', ls='--', label='Actual Value')
+        plt.plot(predicted_value, color='b', ls='--', label='predicted_value Value')
+    
+        plt.xlabel('Number of Set')
+        plt.ylabel('Output Value')
+    
+        plt.title(model_name)
+        plt.legend(loc='best')
+        plt.tight_layout()
+        plt.savefig(os.path.join(output_dir, str(symbol) + '_' \
+            + model_name + '.png'), dpi=100)
+        #plt.show()
+        plt.clf()
 
     return predicted_value
 
@@ -534,18 +548,19 @@ def benchmark_model(model, train, test, test_forecast, features, symbol, output,
     accuracy = model.score(test[features].as_matrix(), test[output].as_matrix())
     forecast_set = model.predict(test_forecast[features].as_matrix())
     
-    plt.plot(test[output].as_matrix(), color='g', ls='--', label='Actual Value')
-    plt.plot(predicted_value, color='b', ls='--', label='predicted_value Value')
-
-    plt.xlabel('Number of Set')
-    plt.ylabel('Output Value')
-
-    plt.title(model_name)
-    plt.legend(loc='best')
-    plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, str(symbol) + '_' \
-        + model_name + '.png'), dpi=100)
-    #plt.show()
-    plt.clf()
+    if plotgraph:
+        plt.plot(test[output].as_matrix(), color='g', ls='--', label='Actual Value')
+        plt.plot(predicted_value, color='b', ls='--', label='predicted_value Value')
+    
+        plt.xlabel('Number of Set')
+        plt.ylabel('Output Value')
+    
+        plt.title(model_name)
+        plt.legend(loc='best')
+        plt.tight_layout()
+        plt.savefig(os.path.join(output_dir, str(symbol) + '_' \
+            + model_name + '.png'), dpi=100)
+        #plt.show()
+        plt.clf()
 
     return model_name, forecast_set, accuracy

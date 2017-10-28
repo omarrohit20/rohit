@@ -30,7 +30,7 @@ from sklearn.neural_network import MLPClassifier
 #from sklearn.svm import SVR
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.svm import SVC, SVR
-from sklearn.qda import QDA
+#from sklearn.qda import QDA
 from sklearn.grid_search import GridSearchCV
 
 connection = MongoClient('localhost', 27017)
@@ -178,6 +178,9 @@ def historical_data(data):
 def get_data_frame(df, regressor=None):
     if (df is not None):
         dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
+        dfp.loc[df['VOL_change'] > 20, 'VOL_change'] = 1
+        dfp.loc[df['VOL_change'] < 20, 'VOL_change'] = 0
+        dfp.loc[df['VOL_change'] < -20, 'VOL_change'] = -1
         columns = df.columns
         open = columns[1]
         high = columns[2]
@@ -363,10 +366,13 @@ def create_csv(regressionResult):
     forecast_day_PCT_change = float(regressionResult[6])
     score = float(regressionResult[7])
     randomForestValue = float(regressionResult[8])
+    randomForestAccuracy = float(regressionResult[9])
     mlpValue = float(regressionResult[10])
     baggingValue = float(regressionResult[12])
+    baggingAccuracy = float(regressionResult[13])
     adaBoostValue = float(regressionResult[14])
     kNeighboursValue = float(regressionResult[16])
+    kNeighboursAccuracy = float(regressionResult[17])
     gradientBoostingValue = float(regressionResult[18])
     
     if randomForestValue and kNeighbours:    
@@ -374,22 +380,22 @@ def create_csv(regressionResult):
         if((trainSize> 1000) and (randomForestValue >= .5) and (kNeighboursValue >= .5) and (mlpValue >= .5) and (baggingValue >= .5)):
             ws_filter.append(regressionResult)
             
-        if((trainSize> 1000) and (randomForestValue <= -.5) and (kNeighboursValue <= -.5) and (mlpValue <= -.5) and (baggingValue <= -.5)):
+        elif((trainSize> 1000) and (randomForestValue <= -.5) and (kNeighboursValue <= -.5) and (mlpValue <= -.5) and (baggingValue <= -.5)):
             ws_filter.append(regressionResult)  
                
     if randomForestValue and kNeighbours:    
         #ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
-        if((trainSize> 1000) and (randomForestValue >= 0) and (kNeighboursValue >= 0) and (mlpValue >= 0) and (baggingValue >= 0)):
+        if((trainSize> 1000) and (randomForestValue >= .5) and (kNeighboursValue >= .5) and (mlpValue >= 1) and (baggingValue >= .5) and (score > 0)):
             ws_gtltzero.append(regressionResult)
             
-        if((trainSize> 1000) and (randomForestValue <= 0) and (kNeighboursValue <= 0) and (mlpValue <= 0) and (baggingValue <= 0)):
+        elif((trainSize> 1000) and (randomForestValue <= -.5) and (kNeighboursValue <= -.5) and (mlpValue <= -1) and (baggingValue <= -.5) and (score < 0)):
             ws_gtltzero.append(regressionResult)  
     
     if randomForest:    
         #ws_RandomForest = wb.create_sheet("RandomForest")
-        if((trainSize> 1000) and (randomForestValue > 1)):
+        if((trainSize> 1000) and (randomForestValue >= .5) and (kNeighboursValue > 0) and (mlpValue > 0) and (baggingValue > 0) and (randomForestAccuracy > 0)):
             ws_RandomForest.append(regressionResult)
-        if((trainSize> 1000) and (randomForestValue < -1)):
+        elif((trainSize> 1000) and (randomForestValue <= -.5) and (kNeighboursValue < 0) and (mlpValue < 0) and (baggingValue < 0) and (randomForestAccuracy > 0)):
             ws_RandomForest.append(regressionResult)    
     
     if mlp:    
@@ -415,9 +421,9 @@ def create_csv(regressionResult):
     
     if kNeighbours:    
         #ws_KNeighbors = wb.create_sheet("KNeighbors")
-        if((trainSize> 1000) and (kNeighboursValue > 1)):
+        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue >= .5) and (mlpValue > 0) and (baggingValue > 0) and (kNeighboursAccuracy > 0)):
             ws_KNeighbors.append(regressionResult)
-        if((trainSize> 1000) and (kNeighboursValue < -1)):
+        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue <= -.5) and (mlpValue < 0) and (baggingValue < 0) and (kNeighboursAccuracy > 0)):
             ws_KNeighbors.append(regressionResult)    
         
     if gradientBoosting:    
