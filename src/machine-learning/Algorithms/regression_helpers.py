@@ -35,7 +35,7 @@ log = logging.getLogger(__name__)
 import gc
 import time
 
-plotgraph = True
+plotgraph = False
 
 def load_dataset(path_directory, symbol): 
     """
@@ -293,7 +293,7 @@ def performClassification(dataset, split, symbol, output_dir, forecast_out, clas
     predicted_values.append(str(round(forecast_set.ravel()[0], 3)))
     predicted_values.append(str(round(accuracy, 3)))
     
-    time.sleep(2)
+    time.sleep(1)
     gc.collect()
     gc.collect()
 
@@ -469,7 +469,7 @@ def performRegression(dataset, split, symbol, output_dir, forecast_out, regresso
     predicted_values.append(str(round(forecast_set.ravel()[0], 3)))
     predicted_values.append(str(round(accuracy, 3)))
     
-    time.sleep(2)
+    time.sleep(1)
     gc.collect()
     gc.collect()
     

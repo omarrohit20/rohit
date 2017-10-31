@@ -337,7 +337,8 @@ def get_data_frame(df, regressor=None):
 #        dfp['OBV'] = OBV(df)
         
         forecast_col = 'PCT_change1'
-        dfp.fillna(-99999, inplace=True)
+        dfp.dropna(inplace=True)
+        #dfp.fillna(-99999, inplace=True)
         dfp['label'] = dfp[forecast_col].shift(-forecast_out)
         
 #         X = np.array(dfp.drop(['label'], 1))
@@ -377,10 +378,10 @@ def create_csv(regressionResult):
     
     if randomForestValue and kNeighbours:    
         #ws_filter = wb.create_sheet("FilterAllgtlt0")
-        if((trainSize> 1000) and (randomForestValue >= .5) and (kNeighboursValue >= .5) and (mlpValue >= .5) and (baggingValue >= .5)):
+        if((trainSize> 1000) and (randomForestValue >= .5) and (kNeighboursValue >= .5) and (mlpValue >= 1) and (baggingValue >= .5)):
             ws_filter.append(regressionResult)
             
-        elif((trainSize> 1000) and (randomForestValue <= -.5) and (kNeighboursValue <= -.5) and (mlpValue <= -.5) and (baggingValue <= -.5)):
+        elif((trainSize> 1000) and (randomForestValue <= -.5) and (kNeighboursValue <= -.5) and (mlpValue <= -1) and (baggingValue <= -.5)):
             ws_filter.append(regressionResult)  
                
     if randomForestValue and kNeighbours:    
@@ -393,9 +394,9 @@ def create_csv(regressionResult):
     
     if randomForest:    
         #ws_RandomForest = wb.create_sheet("RandomForest")
-        if((trainSize> 1000) and (randomForestValue >= .5) and (kNeighboursValue > 0) and (mlpValue > 0) and (baggingValue > 0) and (randomForestAccuracy > 0)):
+        if((trainSize> 1000) and (randomForestValue > 1) and (kNeighboursValue > 0) and (mlpValue > 0) and (baggingValue > 0) and (randomForestAccuracy > 0)):
             ws_RandomForest.append(regressionResult)
-        elif((trainSize> 1000) and (randomForestValue <= -.5) and (kNeighboursValue < 0) and (mlpValue < 0) and (baggingValue < 0) and (randomForestAccuracy > 0)):
+        elif((trainSize> 1000) and (randomForestValue < -1) and (kNeighboursValue < 0) and (mlpValue < 0) and (baggingValue < 0) and (randomForestAccuracy > 0)):
             ws_RandomForest.append(regressionResult)    
     
     if mlp:    
@@ -421,9 +422,9 @@ def create_csv(regressionResult):
     
     if kNeighbours:    
         #ws_KNeighbors = wb.create_sheet("KNeighbors")
-        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue >= .5) and (mlpValue > 0) and (baggingValue > 0) and (kNeighboursAccuracy > 0)):
+        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 1) and (mlpValue > 0) and (baggingValue > 0) and (kNeighboursAccuracy > 0)):
             ws_KNeighbors.append(regressionResult)
-        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue <= -.5) and (mlpValue < 0) and (baggingValue < 0) and (kNeighboursAccuracy > 0)):
+        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 1) and (mlpValue < 0) and (baggingValue < 0) and (kNeighboursAccuracy > 0)):
             ws_KNeighbors.append(regressionResult)    
         
     if gradientBoosting:    

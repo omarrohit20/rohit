@@ -12,9 +12,11 @@ log = logging.getLogger(__name__)
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
  
-if __name__ == "__main__":   
-    last_date = (datetime.date.today() - datetime.timedelta(hours=24))
-    last_date = datetime.datetime(last_date.year, last_date.month, last_date.day)
+if __name__ == "__main__":  
+    start_date = (datetime.datetime.now() - datetime.timedelta(hours=0))
+    start_date = datetime.datetime(start_date.year, start_date.month, start_date.day, start_date.hour) 
+    end_date = (datetime.datetime.now() - datetime.timedelta(hours=24))
+    end_date = datetime.datetime(end_date.year, end_date.month, end_date.day, end_date.hour)
     newsDict = {}
     for data in db.news.find():
         newslist = data['news']
@@ -26,7 +28,7 @@ if __name__ == "__main__":
             newslink = news['link']
             try:
                 news_time = datetime.datetime.strptime(newstime, "%H:%M:%S %d-%m-%Y")
-                if news_time > last_date: 
+                if start_date > news_time > end_date: 
                     if newslink in newsDict:
                         newsDict[newslink]['scrip'] = newsDict[newslink]['scrip'] + ',' + scrip
                     else:

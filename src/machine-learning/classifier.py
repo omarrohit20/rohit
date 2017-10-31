@@ -398,17 +398,15 @@ def create_csv(regressionResult):
                
     if bagging and mlp:    
         #ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
-        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 0) and (mlpValue >= 0) and (baggingValue >= 0) and (score > 0)):
+        if((trainSize> 1000) and (randomForestValue > 1) and (kNeighboursValue > 1) and (mlpValue >= 0) and (baggingValue >= 0)):
             ws_gtltzero.append(regressionResult)
             
-        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 0) and (mlpValue <= 0) and (baggingValue <= 0) and (score < 0)):
+        elif((trainSize> 1000) and (randomForestValue < -1) and (kNeighboursValue < -1) and (mlpValue <= 0) and (baggingValue <= 0)):
             ws_gtltzero.append(regressionResult)   
     
     if randomForest:    
         #ws_RandomForest = wb.create_sheet("RandomForest")
-        if((trainSize> 1000) and (randomForestValue > 0) and (randomForestAccuracy > .5) and (score > 0)):
-            ws_RandomForest.append(regressionResult)
-        elif((trainSize> 1000) and (randomForestValue < 0) and (randomForestAccuracy > .5) and (score > 0)):
+        if((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue <= 0) and (randomForestAccuracy > .5)):
             ws_RandomForest.append(regressionResult)    
     
     if mlp:    
@@ -434,9 +432,7 @@ def create_csv(regressionResult):
     
     if kNeighbours:    
         #ws_KNeighbors = wb.create_sheet("KNeighbors")
-        if((trainSize> 1000) and (kNeighboursValue > 0) and (kNeighboursAccuracy > .5) and (score > 0)):
-            ws_KNeighbors.append(regressionResult)
-        if((trainSize> 1000) and (kNeighboursValue < 0) and (kNeighboursAccuracy > .5) and (score > 0)):
+        if((trainSize> 1000) and (kNeighboursValue < 0) and (randomForestValue <= 0) and (kNeighboursAccuracy > .5)):
             ws_KNeighbors.append(regressionResult)    
         
     if gradientBoosting:    
