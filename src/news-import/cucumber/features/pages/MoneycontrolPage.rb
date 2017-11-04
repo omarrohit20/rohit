@@ -104,7 +104,7 @@ class MoneycontrolPage
         end
 
         if(String(attr[0].strip.split(' ')[1]).downcase == String('pm'))
-          time = Float(time) + 11
+          time = Float(time) + 12
         end
 
         minutes = String(time).strip.split('.')[1]
