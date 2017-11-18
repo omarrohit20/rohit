@@ -30,23 +30,23 @@ from sklearn.neural_network import MLPClassifier
 #from sklearn.svm import SVR
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.svm import SVC, SVR
-from sklearn.qda import QDA
+#from sklearn.qda import QDA
 from sklearn.grid_search import GridSearchCV
 
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
-directory = '../../output' + '/withoutvol2/' + time.strftime("%d%m%y-%H%M%S")
-logname = '../../output' + '/withoutvol2/mllog' + time.strftime("%d%m%y-%H%M%S")
+directory = '../../output' + '/withoutvol/' + time.strftime("%d%m%y-%H%M%S")
+logname = '../../output' + '/withoutvol/mllog' + time.strftime("%d%m%y-%H%M%S")
 logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
 
 forecast_out = 1
-randomForest = True
+randomForest = False
 mlp = True
 bagging = True
 adaBoost = False
-kNeighbours = True
+kNeighbours = False
 gradientBoosting = False
 
 wb = Workbook()
@@ -175,7 +175,7 @@ def historical_data(data):
     arturnover = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,7][::-1]).tolist()])
     return ardate, aropen, arhigh, arlow, arlast, arclose, arquantity, arturnover
 
-def get_data_frame(df, regressor=None):
+def get_data_frame(df, regressor="None"):
     if (df is not None):
         dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
         dfp.loc[df['VOL_change'] > 20, 'VOL_change'] = 1
@@ -197,12 +197,13 @@ def get_data_frame(df, regressor=None):
             addFeaturesOpenChange(df, dfp, open, dele)    
             addFeaturesLowChange(df, dfp, low, dele) 
             addFeaturesHighChange(df, dfp, high, dele)
-            addFeaturesEMA9Change(df, dfp, EMA9, dele)
-            addFeaturesEMA21Change(df, dfp, EMA21, dele)
+            if regressor != 'mlp':  
+                addFeaturesEMA9Change(df, dfp, EMA9, dele)
+                addFeaturesEMA21Change(df, dfp, EMA21, dele)
  
-            
-        dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
-        dfp['ADXR'] = ADXR(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html
+        if regressor != 'mlp':      
+            dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
+            dfp['ADXR'] = ADXR(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html
         dfp['APO'] = APO(df).apply(lambda x: 1 if x > 0 else 0) #Absolute Price Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/apo
 #         aroon = AROON(df) #Aroon http://www.investopedia.com/terms/a/aroon.asp
 #         dfp['AROONUP'], dfp['AROONDOWN'] = aroon['aroonup'], aroon['aroondown']
@@ -337,7 +338,8 @@ def get_data_frame(df, regressor=None):
 #        dfp['OBV'] = OBV(df)
         
         forecast_col = 'PCT_change1'
-        dfp.fillna(-99999, inplace=True)
+        dfp.dropna(inplace=True)
+        #dfp.fillna(-99999, inplace=True)
         dfp['label'] = dfp[forecast_col].shift(-forecast_out)
         
 #         X = np.array(dfp.drop(['label'], 1))
@@ -368,6 +370,7 @@ def create_csv(regressionResult):
     randomForestValue = float(regressionResult[8])
     randomForestAccuracy = float(regressionResult[9])
     mlpValue = float(regressionResult[10])
+    mlpAccuracy = float(regressionResult[11])
     baggingValue = float(regressionResult[12])
     baggingAccuracy = float(regressionResult[13])
     adaBoostValue = float(regressionResult[14])
@@ -385,31 +388,35 @@ def create_csv(regressionResult):
                
     if randomForestValue and kNeighbours:    
         #ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
-        if((trainSize> 1000) and (randomForestValue >= .5) and (kNeighboursValue >= .5) and (mlpValue >= 1) and (baggingValue >= .5) and (score > 0)):
+        if((trainSize> 1000) and (randomForestValue >= 1) and (kNeighboursValue >= 1) and (mlpValue >= 0) and (baggingValue >= 1)):
             ws_gtltzero.append(regressionResult)
             
-        elif((trainSize> 1000) and (randomForestValue <= -.5) and (kNeighboursValue <= -.5) and (mlpValue <= -1) and (baggingValue <= -.5) and (score < 0)):
+        elif((trainSize> 1000) and (randomForestValue <= -1) and (kNeighboursValue <= -1) and (mlpValue <= 0) and (baggingValue <= -1)):
             ws_gtltzero.append(regressionResult)  
     
     if randomForest:    
         #ws_RandomForest = wb.create_sheet("RandomForest")
-        if((trainSize> 1000) and (randomForestValue >= .5) and (kNeighboursValue > 0) and (mlpValue > 0) and (baggingValue > 0) and (randomForestAccuracy > 0)):
+        if((trainSize> 1000) and (randomForestValue > 1) and (kNeighboursValue > 0) and (mlpValue > 0) and (baggingValue > 0) and (randomForestAccuracy > 0)):
             ws_RandomForest.append(regressionResult)
-        elif((trainSize> 1000) and (randomForestValue <= -.5) and (kNeighboursValue < 0) and (mlpValue < 0) and (baggingValue < 0) and (randomForestAccuracy > 0)):
+        elif((trainSize> 1000) and (randomForestValue > 1) and (kNeighboursValue > 1) and (mlpValue > 0) and (baggingValue > 0)):
             ws_RandomForest.append(regressionResult)    
+        elif((trainSize> 1000) and (randomForestValue < -1) and (kNeighboursValue < 0) and (mlpValue < 0) and (baggingValue < 0) and (randomForestAccuracy > 0)):
+            ws_RandomForest.append(regressionResult) 
+        elif((trainSize> 1000) and (randomForestValue < -1) and (kNeighboursValue < -1) and (mlpValue < 0) and (baggingValue < 0)):
+            ws_RandomForest.append(regressionResult)       
     
     if mlp:    
         #ws_SVR = wb.create_sheet("MLP")
-        if((trainSize> 1000) and (mlpValue > 1) and 0.8 < forecast_day_PCT_change < 2):
+        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 0) and (mlpValue > 1) and (baggingValue > 0) and (mlpAccuracy > 0)):
             ws_SVR.append(regressionResult)
-        if((trainSize> 1000) and (mlpValue < 1) and -0.8 > forecast_day_PCT_change > -2):
+        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 0) and (mlpValue < -1) and (baggingValue < 0) and (mlpAccuracy > 0)):
             ws_SVR.append(regressionResult)    
     
     if bagging:       
         #ws_Bagging = wb.create_sheet("Bagging")
-        if((trainSize> 1000) and (baggingValue > 1)):
+        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 0) and (mlpValue > 0) and (baggingValue > 1) and (baggingAccuracy > 0)):
             ws_Bagging.append(regressionResult)
-        if((trainSize> 1000) and (baggingValue < -1)):
+        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 0) and (mlpValue < 0) and (baggingValue < -1) and (baggingAccuracy > 0)):
             ws_Bagging.append(regressionResult)    
         
     if adaBoost:    
@@ -421,9 +428,9 @@ def create_csv(regressionResult):
     
     if kNeighbours:    
         #ws_KNeighbors = wb.create_sheet("KNeighbors")
-        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue >= .5) and (mlpValue > 0) and (baggingValue > 0) and (kNeighboursAccuracy > 0)):
+        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 1) and (mlpValue > 0) and (baggingValue > 0) and (kNeighboursAccuracy > 0)):
             ws_KNeighbors.append(regressionResult)
-        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue <= -.5) and (mlpValue < 0) and (baggingValue < 0) and (kNeighboursAccuracy > 0)):
+        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < -1) and (mlpValue < 0) and (baggingValue < 0) and (kNeighboursAccuracy > 0)):
             ws_KNeighbors.append(regressionResult)    
         
     if gradientBoosting:    
@@ -468,7 +475,7 @@ def regression_ta_data(scrip):
     df['EMA9'] = EMA(df,9)
     df['EMA21'] = EMA(df,21)
     dfp = get_data_frame(df)
-    dfp.to_csv(directory + '/' + scrip + '.csv', encoding='utf-8')
+    #dfp.to_csv(directory + '/' + scrip + '.csv', encoding='utf-8')
     forecast_day_PCT_change = df.iloc[-forecast_out:, 10].values[0]
     forecast_day_VOL_change = df.iloc[-forecast_out:, 9].values[0]
     score = getScore(forecast_day_VOL_change, forecast_day_PCT_change) 
@@ -495,12 +502,12 @@ def regression_ta_data(scrip):
         regressionResult.extend([0,0])
             
     if mlp:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, MLPRegressor(activation='logistic',solver='lbfgs', hidden_layer_sizes=(88, 44, 22, 11))))
+        regressionResult.extend(performRegression(get_data_frame(df, 'mlp'), 0.98, scrip, directory, forecast_out, MLPRegressor(solver='sgd', hidden_layer_sizes=(84, 21, 10), max_iter=10, alpha=1e-4, tol=1e-4, learning_rate_init=.0005)))
     else:
         regressionResult.extend([0,0])
         
     if bagging:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, BaggingRegressor(n_estimators=10, n_jobs=1)))
+        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, SVR(kernel='rbf')))
     else:
         regressionResult.extend([0,0])
         
@@ -510,8 +517,7 @@ def regression_ta_data(scrip):
         regressionResult.extend([0,0])
         
     if kNeighbours:
-        dfp_kneighbour = get_data_frame(df, 'kNeighbours')
-        regressionResult.extend(performRegression(dfp_kneighbour, 0.98, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1)))
+        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1), True))
     else:
         regressionResult.extend([0,0])
         
@@ -530,6 +536,7 @@ def calculateParallel(threads=2):
         scrips.append((data['scrip']).encode('UTF8').replace('&','').replace('-','_'))
     scrips.sort()
     
+    pool.map(regression_ta_data, scrips)
     pool.map(regression_ta_data, scrips)
                      
 if __name__ == "__main__":

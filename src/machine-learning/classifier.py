@@ -205,7 +205,8 @@ def get_data_frame(df, regressor="None"):
         EMA21 = columns[-1]
         for dele in range(1, 11):
             addFeatures(df, dfp, close, dele)
-        #if regressor == 'kNeighbours':   
+        #if regressor == 'kNeighbours':
+           
         for dele in range(1, 2):
             addFeaturesOpenChange(df, dfp, open, dele)    
             addFeaturesLowChange(df, dfp, low, dele) 
@@ -393,38 +394,49 @@ def create_csv(regressionResult):
     
     if bagging and kNeighbours:
         #ws_filter = wb.create_sheet("Filter")
-        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 0) and (mlpValue >= 0) and (baggingValue >= 0)):
+        if((trainSize> 1000) and (randomForestValue >= 0) and (kNeighboursValue > 0) and (mlpValue >= 0) and (baggingValue > 0)):
             ws_filter.append(regressionResult)
             
-        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 0) and (mlpValue <= 0) and (baggingValue <= 0)):
+        elif((trainSize> 1000) and (randomForestValue <= 0) and (kNeighboursValue < 0) and (mlpValue <= 0) and (baggingValue < 0)):
             ws_filter.append(regressionResult)  
                
     if bagging and mlp:    
         #ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
-        if((trainSize> 1000) and (randomForestValue > 1) and (kNeighboursValue > 1) and (mlpValue >= 0) and (baggingValue >= 0)):
+        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 0) and (mlpValue >= 0) and (baggingValue > 0)):
             ws_gtltzero.append(regressionResult)
             
-        elif((trainSize> 1000) and (randomForestValue < -1) and (kNeighboursValue < -1) and (mlpValue <= 0) and (baggingValue <= 0)):
+        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 0) and (mlpValue <= 0) and (baggingValue < 0)):
             ws_gtltzero.append(regressionResult)   
     
     if randomForest:    
         #ws_RandomForest = wb.create_sheet("RandomForest")
-        if((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue <= 0) and (randomForestAccuracy > .5)):
-            ws_RandomForest.append(regressionResult)    
+        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue >= 0) and (mlpValue >= 0) and (baggingValue >= 0) and (randomForestAccuracy > .5)):
+            ws_RandomForest.append(regressionResult)  
+            
+        elif((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 0) and (mlpValue >= 0) and (baggingValue >= 0)):
+            ws_RandomForest.append(regressionResult)     
+            
+        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue <= 0) and (mlpValue <= 0) and (baggingValue <= 0) and (randomForestAccuracy > .5)):
+            ws_RandomForest.append(regressionResult)  
+            
+        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 0) and (mlpValue <= 0) and (baggingValue <= 0)):
+            ws_RandomForest.append(regressionResult)        
     
     if mlp:    
         #ws_SVR = wb.create_sheet("MLP")
-        if((trainSize> 1000) and (mlpValue > 0) and (mlpAccuracy > .5)):
-            ws_SVR.append(regressionResult)
-        if((trainSize> 1000) and (mlpValue < 0) and (mlpAccuracy > .5)):
-            ws_SVR.append(regressionResult)    
+        if((trainSize> 1000) and (randomForestValue >= 0) and (kNeighboursValue >= 0) and (mlpValue > 0) and (baggingValue >= 0) and (mlpAccuracy > .5)):
+            ws_SVR.append(regressionResult) 
+            
+        elif((trainSize> 1000) and (randomForestValue <= 0) and (kNeighboursValue <= 0) and (mlpValue < 0) and (baggingValue <= 0) and (mlpAccuracy > .5)):
+            ws_SVR.append(regressionResult)        
     
     if bagging:       
         #ws_Bagging = wb.create_sheet("Bagging")
-        if((trainSize> 1000) and (baggingValue > 0) and (baggingAccuracy > .5)):
-            ws_Bagging.append(regressionResult)
-        if((trainSize> 1000) and (baggingValue < 0) and (baggingAccuracy > .5)):
-            ws_Bagging.append(regressionResult)    
+        if((trainSize> 1000) and (randomForestValue >= 0) and (kNeighboursValue >= 0) and (mlpValue >= 0) and (baggingValue > 0) and (baggingAccuracy > .5)):
+            ws_Bagging.append(regressionResult)  
+            
+        elif((trainSize> 1000) and (randomForestValue <= 0) and (kNeighboursValue <= 0) and (mlpValue <= 0) and (baggingValue < 0) and (baggingAccuracy > .5)):
+            ws_Bagging.append(regressionResult)       
         
     if adaBoost:    
         #ws_AdaBoost = wb.create_sheet("AdaBoost")
@@ -435,8 +447,10 @@ def create_csv(regressionResult):
     
     if kNeighbours:    
         #ws_KNeighbors = wb.create_sheet("KNeighbors")
-        if((trainSize> 1000) and (kNeighboursValue < 0) and (randomForestValue <= 0) and (kNeighboursAccuracy > .5)):
-            ws_KNeighbors.append(regressionResult)    
+        if((trainSize> 1000) and (randomForestValue <= 0) and (kNeighboursValue < 0) and (mlpValue <= 0) and (baggingValue <= 0) and (kNeighboursAccuracy > .5)):
+            ws_KNeighbors.append(regressionResult) 
+        elif((trainSize> 1000) and (randomForestValue >= 0) and (kNeighboursValue > 0) and (mlpValue >= 0) and (baggingValue >= 0) and (kNeighboursAccuracy > .5)):
+            ws_KNeighbors.append(regressionResult)        
         
     if gradientBoosting:    
         #ws_GradientBoosting = wb.create_sheet("GradientBoosting")
@@ -487,13 +501,13 @@ def regression_ta_data(scrip):
         regressionResult.extend([0,0])    
             
     if mlp:
-        regressionResult.extend(performClassification(get_data_frame(df, 'mlp'), 0.98, scrip, directory, forecast_out, MLPClassifier(activation='tanh', solver='adam', hidden_layer_sizes=((40, 20, 10)))))
+        regressionResult.extend(performClassification(get_data_frame(df, 'mlp'), 0.98, scrip, directory, forecast_out, MLPClassifier(activation='tanh', solver='adam', max_iter=200, hidden_layer_sizes=(40, 20, 10))))
     else:
         regressionResult.extend([0,0])
         
     if bagging:
         regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
-                                                                                                     decision_function_shape='ovr', degree=3, gamma='auto', kernel='sigmoid')))
+                                                                                                     decision_function_shape='ovr', degree=3, gamma='auto', kernel='sigmoid'), True))
     else:
         regressionResult.extend([0,0])
         
@@ -504,7 +518,7 @@ def regression_ta_data(scrip):
         
     if kNeighbours:
         #dfp_kneighbour = get_data_frame(df, 'kNeighbours')
-        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1)))
+        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1), True))
     else:
         regressionResult.extend([0,0])
         
@@ -523,6 +537,7 @@ def calculateParallel(threads=2):
         scrips.append((data['scrip']).encode('UTF8').replace('&','').replace('-','_'))
     scrips.sort()
     
+    pool.map(regression_ta_data, scrips)
     pool.map(regression_ta_data, scrips)
                      
 if __name__ == "__main__":

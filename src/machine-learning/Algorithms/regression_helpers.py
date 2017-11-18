@@ -16,6 +16,7 @@ from sklearn.ensemble import AdaBoostRegressor
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.neural_network import MLPRegressor
+from sknn.mlp import Classifier, Layer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import neighbors
 from sklearn.ensemble import AdaBoostClassifier
@@ -35,7 +36,8 @@ log = logging.getLogger(__name__)
 import gc
 import time
 
-plotgraph = False
+plotgraph = True
+memoize_data = {}
 
 def load_dataset(path_directory, symbol): 
     """
@@ -273,7 +275,11 @@ def performClassification(dataset, split, symbol, output_dir, forecast_out):
     
     return predicted_values
 
-def performClassification(dataset, split, symbol, output_dir, forecast_out, classifier):
+def performClassification(dataset, split, symbol, output_dir, forecast_out, classifier, memoiz=None):
+    if memoiz is not None:
+        if (symbol+classifier.__str__().split('(')[0]) in memoize_data.keys():
+            return memoize_data[symbol+classifier.__str__().split('(')[0]]
+    
     predicted_values = []
 
     features = dataset.columns[:-1]
@@ -297,6 +303,86 @@ def performClassification(dataset, split, symbol, output_dir, forecast_out, clas
     gc.collect()
     gc.collect()
 
+    if memoiz is not None:
+        if (symbol+classifier.__str__().split('(')[0]) not in memoize_data.keys():
+            memoize_data[symbol+classifier.__str__().split('(')[0]] = predicted_values
+    return predicted_values
+
+def performClassificationTest(dataset, split, symbol, output_dir, forecast_out, memoiz=None):
+    if memoiz is not None:
+        if (symbol+classifier.__str__().split('(')[0]) in memoize_data.keys():
+            return memoize_data[symbol+classifier.__str__().split('(')[0]]
+    
+    predicted_values = []
+
+    features = dataset.columns[:-1]
+    
+    index = int(np.floor(dataset.shape[0]*split))
+    train, test, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
+
+    log.info('-'*80)
+    log.info('%s train set: %s, test set: %s', symbol, train.shape, test.shape)
+
+    output = dataset.columns[-1]
+
+    out_params = (symbol, output_dir)
+    
+#     model_name, forecast_set, accuracy = benchmark_classifier(MLPClassifier(activation='tanh', solver='adam', max_iter=200, hidden_layer_sizes=(40, 20, 10)), \
+#         train, test, test_forecast, features, symbol, output, out_params)
+#     log.info('%s, %s, %s, %s', symbol, model_name, forecast_set, accuracy)
+    
+    
+    model_name, forecast_set, accuracy = benchmark_classifier(Classifier(
+    layers=[
+        Layer("Tanh", units=100),
+        Layer("Softmax")],
+    learning_rate=0.0001,
+    n_iter=25),
+        train, test, test_forecast, features, symbol, output, out_params)
+    
+    
+    model_name, forecast_set, accuracy = benchmark_classifier(Classifier(
+    layers=[
+        Layer("Tanh", units=100),
+        Layer("Softmax")],
+    learning_rate=0.0001,
+    n_iter=25),
+        train, test, test_forecast, features, symbol, output, out_params)
+    
+    model_name, forecast_set, accuracy = benchmark_classifier(Classifier(
+    layers=[
+        Layer("Tanh", units=100),
+        Layer("Softmax")],
+    learning_rate=0.0001,
+    n_iter=25),
+        train, test, test_forecast, features, symbol, output, out_params)
+    
+    model_name, forecast_set, accuracy = benchmark_classifier(Classifier(
+    layers=[
+        Layer("Tanh", units=100),
+        Layer("Softmax")],
+    learning_rate=0.0001,
+    n_iter=25),
+        train, test, test_forecast, features, symbol, output, out_params)
+    
+    model_name, forecast_set, accuracy = benchmark_classifier(Classifier(
+    layers=[
+        Layer("Tanh", units=100),
+        Layer("Softmax")],
+    learning_rate=0.0001,
+    n_iter=25),
+        train, test, test_forecast, features, symbol, output, out_params)
+    
+    predicted_values.append(str(round(forecast_set.ravel()[0], 3)))
+    predicted_values.append(str(round(accuracy, 3)))
+    
+    time.sleep(1)
+    gc.collect()
+    gc.collect()
+
+    if memoiz is not None:
+        if (symbol+classifier.__str__().split('(')[0]) not in memoize_data.keys():
+            memoize_data[symbol+classifier.__str__().split('(')[0]] = predicted_values
     return predicted_values
 
 def benchmark_classifier(model, train, test, test_forecast, features, symbol, output, \
@@ -326,7 +412,7 @@ def benchmark_classifier(model, train, test, test_forecast, features, symbol, ou
         plt.legend(loc='best')
         plt.tight_layout()
         plt.savefig(os.path.join(output_dir, str(symbol) + '_' \
-            + model_name + '.png'), dpi=100)
+            + model_name + time.strftime("%d%m%y-%H%M%S") +'.png'), dpi=100)
         #plt.show()
         plt.clf()
 
@@ -451,7 +537,11 @@ def performRegression(dataset, split, symbol, output_dir, forecast_out):
 #         train, test, test_forecast, features, symbol, output, out_params, \
 #         fine_tune=False, maxiter=maxiter, SGD=True, batch=batch, rho=0.9)
 
-def performRegression(dataset, split, symbol, output_dir, forecast_out, regressor):
+def performRegression(dataset, split, symbol, output_dir, forecast_out, regressor, memoiz=None):
+    if memoiz is not None:
+        if (symbol+regressor.__str__().split('(')[0]) in memoize_data.keys():
+            return memoize_data[symbol+regressor.__str__().split('(')[0]]
+    
     predicted_values = []
     features = dataset.columns[:-1]
     index = int(np.floor(dataset.shape[0]*split))
@@ -472,6 +562,10 @@ def performRegression(dataset, split, symbol, output_dir, forecast_out, regresso
     time.sleep(1)
     gc.collect()
     gc.collect()
+    
+    if memoiz is not None:
+        if (symbol+regressor.__str__().split('(')[0]) not in memoize_data.keys():
+            memoize_data[symbol+regressor.__str__().split('(')[0]] = predicted_values
     
     return predicted_values
    
@@ -509,7 +603,7 @@ def benchmark_model(model, train, test, features, output, \
         plt.legend(loc='best')
         plt.tight_layout()
         plt.savefig(os.path.join(output_dir, str(symbol) + '_' \
-            + model_name + '.png'), dpi=100)
+            + model_name + time.strftime("%d%m%y-%H%M%S") +'.png'), dpi=100)
         #plt.show()
         plt.clf()
 
@@ -559,7 +653,7 @@ def benchmark_model(model, train, test, test_forecast, features, symbol, output,
         plt.legend(loc='best')
         plt.tight_layout()
         plt.savefig(os.path.join(output_dir, str(symbol) + '_' \
-            + model_name + '.png'), dpi=100)
+            + model_name + time.strftime("%d%m%y-%H%M%S") +'.png'), dpi=100)
         #plt.show()
         plt.clf()
 
