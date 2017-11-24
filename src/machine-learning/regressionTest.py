@@ -12,7 +12,7 @@ from talib.abstract import *
 from pip.req.req_file import preprocess
 from Algorithms.regression_helpers import load_dataset, addFeatures, addFeaturesVolChange, \
     addFeaturesOpenChange, addFeaturesHighChange, addFeaturesLowChange, addFeaturesEMA9Change, addFeaturesEMA21Change, \
-    mergeDataframes, count_missing, applyTimeLag, performRegression
+    mergeDataframes, count_missing, applyTimeLag, performRegression, performRegressionTest
     
 from technical import ta_lib_data  
 
@@ -36,17 +36,17 @@ from sklearn.grid_search import GridSearchCV
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
-directory = '../../output' + '/regression/' + time.strftime("%d%m%y-%H%M%S")
-logname = '../../output' + '/regression/mllog' + time.strftime("%d%m%y-%H%M%S")
+directory = '../../output' + '/regressionTest/' + time.strftime("%d%m%y-%H%M%S")
+logname = '../../output' + '/regressionTest/mllog' + time.strftime("%d%m%y-%H%M%S")
 logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
 
 forecast_out = 1
-randomForest = True
-mlp = True
+randomForest = False
+mlp = False
 bagging = True
 adaBoost = False
-kNeighbours = True
+kNeighbours = False
 gradientBoosting = False
 
 wb = Workbook()
@@ -508,8 +508,7 @@ def regression_ta_data(scrip):
         regressionResult.extend([0,0])
         
     if bagging:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, SVR(C=1e3, cache_size=500, coef0=0.0, degree=3, epsilon=0.2, gamma=.05,
-    kernel='rbf', max_iter=500, shrinking=True, tol=0.001, verbose=False), True))
+        regressionResult.extend(performRegressionTest(dfp, 0.98, scrip, directory, forecast_out))
     else:
         regressionResult.extend([0,0])
         

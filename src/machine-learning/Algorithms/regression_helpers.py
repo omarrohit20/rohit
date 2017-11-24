@@ -568,6 +568,47 @@ def performRegression(dataset, split, symbol, output_dir, forecast_out, regresso
             memoize_data[symbol+regressor.__str__().split('(')[0]] = predicted_values
     
     return predicted_values
+
+def performRegressionTest(dataset, split, symbol, output_dir, forecast_out):
+    predicted_values = []
+    features = dataset.columns[:-1]
+    index = int(np.floor(dataset.shape[0]*split))
+    train, test, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
+
+    log.info('-'*80)
+    log.info('%s train set: %s, test set: %s', symbol, train.shape, test.shape)
+    
+    out_params = (symbol, output_dir)
+    output = dataset.columns[-1]
+
+#     regressor = SVR(C=1.0, cache_size=500, coef0=0.0, degree=3, epsilon=0.2, gamma='auto',
+#     kernel='rbf', max_iter=-1, shrinking=True, tol=0.001, verbose=False)
+#     model_name, forecast_set, accuracy = benchmark_model(regressor, \
+#         train, test, test_forecast, features, symbol, output, out_params)
+#     log.info('%s, %s, %s, %s', symbol, model_name, forecast_set, accuracy)
+#     
+#     regressor = SVR(C=1e3, cache_size=500, coef0=0.0, degree=3, epsilon=0.2, gamma='auto',
+#     kernel='rbf', max_iter=-1, shrinking=True, tol=0.001, verbose=False)
+#     model_name, forecast_set, accuracy = benchmark_model(regressor, \
+#         train, test, test_forecast, features, symbol, output, out_params)
+#     log.info('%s, %s, %s, %s', symbol, model_name, forecast_set, accuracy)
+    
+    regressor = SVR(C=1e3, cache_size=500, coef0=0.0, degree=3, epsilon=0.2, gamma=.05,
+    kernel='rbf', max_iter=500, shrinking=True, tol=0.001, verbose=False)
+    model_name, forecast_set, accuracy = benchmark_model(regressor, \
+        train, test, test_forecast, features, symbol, output, out_params)
+    log.info('%s, %s, %s, %s', symbol, model_name, forecast_set, accuracy)
+    
+
+    predicted_values.append(str(round(forecast_set.ravel()[0], 3)))
+    predicted_values.append(str(round(accuracy, 3)))
+    
+    time.sleep(1)
+    gc.collect()
+    gc.collect()
+    
+    return predicted_values
+
    
 def benchmark_model(model, train, test, features, output, \
     output_params, *args, **kwargs):

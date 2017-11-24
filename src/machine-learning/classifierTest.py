@@ -12,7 +12,7 @@ from talib.abstract import *
 from pip.req.req_file import preprocess
 from Algorithms.regression_helpers import load_dataset, addFeatures, addFeaturesVolChange, \
     addFeaturesOpenChange, addFeaturesHighChange, addFeaturesLowChange, addFeaturesEMA9Change, addFeaturesEMA21Change, \
-    mergeDataframes, count_missing, applyTimeLag, performRegression
+    mergeDataframes, count_missing, applyTimeLag, performClassification, performClassificationTest   
     
 from technical import ta_lib_data  
 
@@ -33,20 +33,23 @@ from sklearn.svm import SVC, SVR
 #from sklearn.qda import QDA
 from sklearn.grid_search import GridSearchCV
 
+import time
+import gc
+
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
-directory = '../../output' + '/regression/' + time.strftime("%d%m%y-%H%M%S")
-logname = '../../output' + '/regression/mllog' + time.strftime("%d%m%y-%H%M%S")
+directory = '../../output/classifierTest' + '/' + time.strftime("%d%m%y-%H%M%S")
+logname = '../../output/classifierTest' + '/mllog' + time.strftime("%d%m%y-%H%M%S")
 logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
 
 forecast_out = 1
-randomForest = True
+randomForest = False
 mlp = True
-bagging = True
+bagging = False
 adaBoost = False
-kNeighbours = True
+kNeighbours = False
 gradientBoosting = False
 
 wb = Workbook()
@@ -177,10 +180,21 @@ def historical_data(data):
 
 def get_data_frame(df, regressor="None"):
     if (df is not None):
-        dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
-        dfp.loc[df['VOL_change'] > 20, 'VOL_change'] = 1
-        dfp.loc[df['VOL_change'] < 20, 'VOL_change'] = 0
-        dfp.loc[df['VOL_change'] < -20, 'VOL_change'] = -1
+        df=df.rename(columns = {'total trade quantity':'volume'})
+        df=df.rename(columns = {'turnover (lacs)': 'turnover'})
+        df['PCT_day_change'] = (((df['close'] - df['open'])/df['open'])*100)
+        df['HL_change'] = (((df['high'] - df['low'])/df['low'])*100).astype(int)
+        df['volume_pre'] = df['volume'].shift(+1)
+        df['close_pre'] = df['close'].shift(+1)
+        #df.fillna(-99999, inplace=True)
+        df.dropna(inplace=True)
+        df['VOL_change'] = (((df['volume'] - df['volume_pre'])/df['volume_pre'])*100)
+        df['PCT_change'] = (((df['close'] - df['close_pre'])/df['close_pre'])*100)
+        df['EMA9'] = EMA(df,9)
+        df['EMA21'] = EMA(df,21)
+        
+        dfp = df[['VOL_change']]
+        maxdelta = 10
         columns = df.columns
         open = columns[1]
         high = columns[2]
@@ -189,19 +203,18 @@ def get_data_frame(df, regressor="None"):
         volume = columns[5]
         EMA9 = columns[-2]
         EMA21 = columns[-1]
-#         for dele in range(1, 11):
-#             addFeaturesVolChange(df, dfp, volume, dele)     
         for dele in range(1, 11):
-            addFeatures(df, dfp, close, dele)  
-        for dele in range(1, 2):
-            addFeaturesOpenChange(df, dfp, open, dele)    
-            addFeaturesLowChange(df, dfp, low, dele) 
-            addFeaturesHighChange(df, dfp, high, dele)
-            if regressor != 'mlp':  
-                addFeaturesEMA9Change(df, dfp, EMA9, dele)
-                addFeaturesEMA21Change(df, dfp, EMA21, dele)
+            addFeatures(df, dfp, close, dele)
+        #if regressor == 'kNeighbours':   
+#         for dele in range(1, 2):
+#             addFeaturesOpenChange(df, dfp, open, dele)    
+#             addFeaturesLowChange(df, dfp, low, dele) 
+#             addFeaturesHighChange(df, dfp, high, dele)
+#             if regressor != 'mlp': 
+#                 addFeaturesEMA9Change(df, dfp, EMA9, dele)
+#                 addFeaturesEMA21Change(df, dfp, EMA21, dele)
  
-        if regressor != 'mlp':      
+        if regressor != 'mlp':    
             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
             dfp['ADXR'] = ADXR(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html
         dfp['APO'] = APO(df).apply(lambda x: 1 if x > 0 else 0) #Absolute Price Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/apo
@@ -260,8 +273,8 @@ def get_data_frame(df, regressor="None"):
 #         dfp['TEMA'] = TEMA(df)
 #         dfp['TRIMA'] = TRIMA(df)
 #         dfp['WMA'] = WMA(df)
-
-
+ 
+ 
         dfp['CDL2CROWS'] = CDL2CROWS(df)
         dfp['CDL3BLACKCROWS'] = CDL3BLACKCROWS(df)
         dfp['CDL3INSIDE'] = CDL3INSIDE(df)
@@ -338,8 +351,7 @@ def get_data_frame(df, regressor="None"):
 #        dfp['OBV'] = OBV(df)
         
         forecast_col = 'PCT_change1'
-        dfp.dropna(inplace=True)
-        #dfp.fillna(-99999, inplace=True)
+        dfp.fillna(-99999, inplace=True)
         dfp['label'] = dfp[forecast_col].shift(-forecast_out)
         
 #         X = np.array(dfp.drop(['label'], 1))
@@ -364,8 +376,6 @@ def get_data_frame(df, regressor="None"):
 def create_csv(regressionResult):
     ws.append(regressionResult)
     trainSize = int(regressionResult[1])
-    buyIndia = str(regressionResult[2])
-    sellIndia = str(regressionResult[3])
     forecast_day_VOL_change = int(regressionResult[5])
     forecast_day_PCT_change = float(regressionResult[6])
     score = float(regressionResult[7])
@@ -376,69 +386,76 @@ def create_csv(regressionResult):
     baggingValue = float(regressionResult[12])
     baggingAccuracy = float(regressionResult[13])
     adaBoostValue = float(regressionResult[14])
+    adaBoostAccuracy = float(regressionResult[15])
     kNeighboursValue = float(regressionResult[16])
     kNeighboursAccuracy = float(regressionResult[17])
     gradientBoostingValue = float(regressionResult[18])
     
-    if randomForestValue and kNeighbours:    
-        #ws_filter = wb.create_sheet("FilterAllgtlt0")
-        if((trainSize> 1000) and (kNeighboursValue >= .5) and (mlpValue >= .5) and len(sellIndia) < 2):
+    if bagging and kNeighbours:
+        #ws_filter = wb.create_sheet("Filter")
+        if((trainSize> 1000) and (randomForestValue >= 0) and (kNeighboursValue > 0) and (mlpValue >= 0) and (baggingValue > 0)):
             ws_filter.append(regressionResult)
-        elif((trainSize> 1000) and (kNeighboursValue <= -.5) and (mlpValue <= -.5) and len(buyIndia) < 2):
-            ws_filter.append(regressionResult)    
+            
+        elif((trainSize> 1000) and (randomForestValue <= 0) and (kNeighboursValue < 0) and (mlpValue <= 0) and (baggingValue < 0)):
+            ws_filter.append(regressionResult)  
                
-    if randomForestValue and kNeighbours:    
+    if bagging and mlp:    
         #ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
-        if((trainSize> 1000) and (randomForestValue >= 0) and (kNeighboursValue >= 0) and (mlpValue >= 0) and (baggingValue >= 0)):
+        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 0) and (mlpValue >= 0) and (baggingValue > 0)):
             ws_gtltzero.append(regressionResult)
             
-        elif((trainSize> 1000) and (randomForestValue <= 0) and (kNeighboursValue <= 0) and (mlpValue <= 0) and (baggingValue <= 0)):
-            ws_gtltzero.append(regressionResult)  
+        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 0) and (mlpValue <= 0) and (baggingValue < 0)):
+            ws_gtltzero.append(regressionResult)   
     
     if randomForest:    
         #ws_RandomForest = wb.create_sheet("RandomForest")
-        if((trainSize> 1000) and (randomForestValue > 1) and (kNeighboursValue > 0) and (mlpValue > 0) and (baggingValue > 0) and (randomForestAccuracy > 0)):
-            ws_RandomForest.append(regressionResult)
-        elif((trainSize> 1000) and (randomForestValue > 1) and (kNeighboursValue > 1) and (mlpValue > 0) and (baggingValue > 0)):
-            ws_RandomForest.append(regressionResult)    
-        elif((trainSize> 1000) and (randomForestValue < -1) and (kNeighboursValue < 0) and (mlpValue < 0) and (baggingValue < 0) and (randomForestAccuracy > 0)):
-            ws_RandomForest.append(regressionResult) 
-        elif((trainSize> 1000) and (randomForestValue < -1) and (kNeighboursValue < -1) and (mlpValue < 0) and (baggingValue < 0)):
-            ws_RandomForest.append(regressionResult)       
+        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue >= 0) and (mlpValue >= 0) and (baggingValue >= 0) and (randomForestAccuracy > .5)):
+            ws_RandomForest.append(regressionResult)  
+            
+        elif((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 0) and (mlpValue >= 0) and (baggingValue >= 0)):
+            ws_RandomForest.append(regressionResult)     
+            
+        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue <= 0) and (mlpValue <= 0) and (baggingValue <= 0) and (randomForestAccuracy > .5)):
+            ws_RandomForest.append(regressionResult)  
+            
+        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 0) and (mlpValue <= 0) and (baggingValue <= 0)):
+            ws_RandomForest.append(regressionResult)        
     
     if mlp:    
         #ws_SVR = wb.create_sheet("MLP")
-        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 0) and (mlpValue > 1) and (baggingValue > 0) and (mlpAccuracy > 0)):
-            ws_SVR.append(regressionResult)
-        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 0) and (mlpValue < -1) and (baggingValue < 0) and (mlpAccuracy > 0)):
-            ws_SVR.append(regressionResult)    
+        if((trainSize> 1000) and (randomForestValue >= 0) and (kNeighboursValue >= 0) and (mlpValue > 0) and (baggingValue >= 0) and (mlpAccuracy > .5)):
+            ws_SVR.append(regressionResult) 
+            
+        elif((trainSize> 1000) and (randomForestValue <= 0) and (kNeighboursValue <= 0) and (mlpValue < 0) and (baggingValue <= 0) and (mlpAccuracy > .5)):
+            ws_SVR.append(regressionResult)        
     
     if bagging:       
         #ws_Bagging = wb.create_sheet("Bagging")
-        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 0) and (mlpValue > 0) and (baggingValue > 1) and (baggingAccuracy > 0)):
-            ws_Bagging.append(regressionResult)
-        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < 0) and (mlpValue < 0) and (baggingValue < -1) and (baggingAccuracy > 0)):
-            ws_Bagging.append(regressionResult)    
+        if((trainSize> 1000) and (randomForestValue >= 0) and (kNeighboursValue >= 0) and (mlpValue >= 0) and (baggingValue > 0) and (baggingAccuracy > .5)):
+            ws_Bagging.append(regressionResult)  
+            
+        elif((trainSize> 1000) and (randomForestValue <= 0) and (kNeighboursValue <= 0) and (mlpValue <= 0) and (baggingValue < 0) and (baggingAccuracy > .5)):
+            ws_Bagging.append(regressionResult)       
         
     if adaBoost:    
         #ws_AdaBoost = wb.create_sheet("AdaBoost")
-        if((trainSize> 1000) and (adaBoostValue > 1)):
+        if((trainSize> 1000) and (adaBoostValue > 0) and (adaBoostAccuracy > .5)):
             ws_AdaBoost.append(regressionResult)
-        if((trainSize> 1000) and (adaBoostValue < -1)):
+        if((trainSize> 1000) and (adaBoostValue < 0) and (adaBoostAccuracy > .5)):
             ws_AdaBoost.append(regressionResult)    
     
     if kNeighbours:    
         #ws_KNeighbors = wb.create_sheet("KNeighbors")
-        if((trainSize> 1000) and (randomForestValue > 0) and (kNeighboursValue > 1) and (mlpValue > 0) and (baggingValue > 0) and (kNeighboursAccuracy > 0)):
-            ws_KNeighbors.append(regressionResult)
-        elif((trainSize> 1000) and (randomForestValue < 0) and (kNeighboursValue < -1) and (mlpValue < 0) and (baggingValue < 0) and (kNeighboursAccuracy > 0)):
-            ws_KNeighbors.append(regressionResult)    
+        if((trainSize> 1000) and (randomForestValue <= 0) and (kNeighboursValue < 0) and (mlpValue <= 0) and (baggingValue <= 0) and (kNeighboursAccuracy > .5)):
+            ws_KNeighbors.append(regressionResult) 
+        elif((trainSize> 1000) and (randomForestValue >= 0) and (kNeighboursValue > 0) and (mlpValue >= 0) and (baggingValue >= 0) and (kNeighboursAccuracy > .5)):
+            ws_KNeighbors.append(regressionResult)        
         
     if gradientBoosting:    
         #ws_GradientBoosting = wb.create_sheet("GradientBoosting")
-        if((trainSize> 1000) and (gradientBoostingValue > 1)):
+        if((trainSize> 1000) and (gradientBoostingValue > 0) and score > 0):
             ws_GradientBoosting.append(regressionResult)
-        if((trainSize> 1000) and (gradientBoostingValue < -1)):
+        if((trainSize> 1000) and (gradientBoostingValue < 0) and score < 0):
             ws_GradientBoosting.append(regressionResult) 
 
 def regression_ta_data(scrip):
@@ -459,26 +476,10 @@ def regression_ta_data(scrip):
     })
     df = df[['date','open','high','low','close','volume','turnover']]
     print(scrip)
-    df=df.rename(columns = {'total trade quantity':'volume'})
-    df=df.rename(columns = {'turnover (lacs)': 'turnover'})
-    df['volume_pre'] = df['volume'].shift(+1)
-    df['close_pre'] = df['close'].shift(+1)
-    df['VOL_change'] = (((df['volume'] - df['volume_pre'])/df['volume_pre'])*100)
-    df['PCT_change'] = (((df['close'] - df['close_pre'])/df['close_pre'])*100)
-    df['PCT_day_change'] = (((df['close'] - df['open'])/df['open'])*100)
-    df['HL_change'] = (((df['high'] - df['low'])/df['low'])*100).astype(int)
-    df['CL_change'] = (((df['close'] - df['low'])/df['low'])*100).astype(int)
-    df['CH_change'] = (((df['close'] - df['high'])/df['high'])*100).astype(int)
-    df['OL_change'] = (((df['open'] - df['low'])/df['low'])*100).astype(int)
-    df['OH_change'] = (((df['open'] - df['high'])/df['high'])*100).astype(int)
-    #df.fillna(-99999, inplace=True)
-    df.dropna(inplace=True)
-    df['EMA9'] = EMA(df,9)
-    df['EMA21'] = EMA(df,21)
     dfp = get_data_frame(df)
     #dfp.to_csv(directory + '/' + scrip + '.csv', encoding='utf-8')
-    forecast_day_PCT_change = df.iloc[-forecast_out:, 10].values[0]
-    forecast_day_VOL_change = df.iloc[-forecast_out:, 9].values[0]
+    forecast_day_PCT_change = dfp.iloc[-forecast_out:, 1].values[0]
+    forecast_day_VOL_change = dfp.iloc[-forecast_out:, 0].values[0]
     score = getScore(forecast_day_VOL_change, forecast_day_PCT_change) 
     buy, sell = ta_lib_data(scrip) 
     trainSize = int((df.shape)[0])
@@ -492,39 +493,36 @@ def regression_ta_data(scrip):
     regressionResult.append(forecast_day_VOL_change)
     regressionResult.append(forecast_day_PCT_change)
     regressionResult.append(score)
-    
-    #drop not required columns
-#     dfp.drop('VOL_change', axis=1, inplace=True)
-#     dfp.drop('PCT_change', axis=1, inplace=True)
       
     if randomForest:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, RandomForestRegressor(max_depth=30, n_estimators=10, n_jobs=1), True))
+        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, RandomForestClassifier(n_estimators=10, n_jobs=1)))
     else: 
-        regressionResult.extend([0,0])
+        regressionResult.extend([0,0])    
             
     if mlp:
-        regressionResult.extend(performRegression(get_data_frame(df, 'mlp'), 0.98, scrip, directory, forecast_out, MLPRegressor(activation='tanh', solver='adam', max_iter=200, hidden_layer_sizes=(42, 21, 10))))
+        regressionResult.extend(performClassificationTest(get_data_frame(df, 'mlp'), 0.98, scrip, directory, forecast_out))
     else:
         regressionResult.extend([0,0])
         
     if bagging:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, SVR(C=1e3, cache_size=500, coef0=0.0, degree=3, epsilon=0.2, gamma=.05,
-    kernel='rbf', max_iter=500, shrinking=True, tol=0.001, verbose=False), True))
+        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+                                                                                                     decision_function_shape='ovr', degree=3, gamma='auto', kernel='sigmoid'), True))
     else:
         regressionResult.extend([0,0])
         
     if adaBoost:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, AdaBoostRegressor()))
+        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, AdaBoostClassifier()))
     else:
         regressionResult.extend([0,0])
         
     if kNeighbours:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1), True))
+        #dfp_kneighbour = get_data_frame(df, 'kNeighbours')
+        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1), True))
     else:
         regressionResult.extend([0,0])
         
     if gradientBoosting:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, GradientBoostingRegressor()))
+        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, GradientBoostingClassifier()))
     else:
         regressionResult.extend([0,0])
     

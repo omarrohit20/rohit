@@ -36,17 +36,17 @@ from sklearn.grid_search import GridSearchCV
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
-directory = '../../output' + '/withoutvol/' + time.strftime("%d%m%y-%H%M%S")
-logname = '../../output' + '/withoutvol/mllog' + time.strftime("%d%m%y-%H%M%S")
+directory = '../../output' + '/regression/' + time.strftime("%d%m%y-%H%M%S")
+logname = '../../output' + '/regression/mllog' + time.strftime("%d%m%y-%H%M%S")
 logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
 
 forecast_out = 1
-randomForest = False
+randomForest = True
 mlp = True
 bagging = True
 adaBoost = False
-kNeighbours = False
+kNeighbours = True
 gradientBoosting = False
 
 wb = Workbook()
@@ -193,11 +193,12 @@ def get_data_frame(df, regressor="None"):
 #             addFeaturesVolChange(df, dfp, volume, dele)     
         for dele in range(1, 11):
             addFeatures(df, dfp, close, dele)  
-        for dele in range(1, 2):
-            addFeaturesOpenChange(df, dfp, open, dele)    
-            addFeaturesLowChange(df, dfp, low, dele) 
-            addFeaturesHighChange(df, dfp, high, dele)
-            if regressor != 'mlp':  
+        
+        if regressor != 'mlp': 
+            for dele in range(1, 2):
+                addFeaturesOpenChange(df, dfp, open, dele)    
+                addFeaturesLowChange(df, dfp, low, dele) 
+                addFeaturesHighChange(df, dfp, high, dele) 
                 addFeaturesEMA9Change(df, dfp, EMA9, dele)
                 addFeaturesEMA21Change(df, dfp, EMA21, dele)
  
@@ -364,6 +365,8 @@ def get_data_frame(df, regressor="None"):
 def create_csv(regressionResult):
     ws.append(regressionResult)
     trainSize = int(regressionResult[1])
+    buyIndia = str(regressionResult[2])
+    sellIndia = str(regressionResult[3])
     forecast_day_VOL_change = int(regressionResult[5])
     forecast_day_PCT_change = float(regressionResult[6])
     score = float(regressionResult[7])
@@ -380,18 +383,17 @@ def create_csv(regressionResult):
     
     if randomForestValue and kNeighbours:    
         #ws_filter = wb.create_sheet("FilterAllgtlt0")
-        if((trainSize> 1000) and (randomForestValue >= .5) and (kNeighboursValue >= .5) and (mlpValue >= .5) and (baggingValue >= .5)):
+        if((trainSize> 1000) and (kNeighboursValue >= .5) and (mlpValue >= .5) and len(sellIndia) < 2):
             ws_filter.append(regressionResult)
-            
-        elif((trainSize> 1000) and (randomForestValue <= -.5) and (kNeighboursValue <= -.5) and (mlpValue <= -.5) and (baggingValue <= -.5)):
-            ws_filter.append(regressionResult)  
+        elif((trainSize> 1000) and (kNeighboursValue <= -.5) and (mlpValue <= -.5) and len(buyIndia) < 2):
+            ws_filter.append(regressionResult)    
                
     if randomForestValue and kNeighbours:    
         #ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
-        if((trainSize> 1000) and (randomForestValue >= 1) and (kNeighboursValue >= 1) and (mlpValue >= 0) and (baggingValue >= 1)):
+        if((trainSize> 1000) and (randomForestValue >= 0) and (kNeighboursValue >= 0) and (mlpValue >= 0) and (baggingValue >= 0)):
             ws_gtltzero.append(regressionResult)
             
-        elif((trainSize> 1000) and (randomForestValue <= -1) and (kNeighboursValue <= -1) and (mlpValue <= 0) and (baggingValue <= -1)):
+        elif((trainSize> 1000) and (randomForestValue <= 0) and (kNeighboursValue <= 0) and (mlpValue <= 0) and (baggingValue <= 0)):
             ws_gtltzero.append(regressionResult)  
     
     if randomForest:    
@@ -497,17 +499,17 @@ def regression_ta_data(scrip):
 #     dfp.drop('PCT_change', axis=1, inplace=True)
       
     if randomForest:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, RandomForestRegressor(max_depth=30, n_estimators=10, n_jobs=1)))
+        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, RandomForestRegressor(max_depth=30, n_estimators=10, n_jobs=1), True))
     else: 
         regressionResult.extend([0,0])
             
     if mlp:
-        regressionResult.extend(performRegression(get_data_frame(df, 'mlp'), 0.98, scrip, directory, forecast_out, MLPRegressor(solver='sgd', hidden_layer_sizes=(84, 21, 10), max_iter=10, alpha=1e-4, tol=1e-4, learning_rate_init=.0005)))
+        regressionResult.extend(performRegression(get_data_frame(df, 'mlp'), 0.98, scrip, directory, forecast_out, MLPRegressor(activation='tanh', solver='adam', max_iter=200, hidden_layer_sizes=(42, 21, 10))))
     else:
         regressionResult.extend([0,0])
         
     if bagging:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, SVR(kernel='rbf')))
+        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, BaggingRegressor(n_estimators=10, n_jobs=1), True))
     else:
         regressionResult.extend([0,0])
         
