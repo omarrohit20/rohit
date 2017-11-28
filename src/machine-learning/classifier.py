@@ -222,7 +222,8 @@ def get_data_frame(df, regressor="None"):
 #         dfp['AROONUP'], dfp['AROONDOWN'] = aroon['aroonup'], aroon['aroondown']
         dfp['AROONOSC'] = AROONOSC(df).apply(lambda x: 1 if x > 0 else 0)
         dfp['BOP'] = BOP(df).apply(lambda x: 1 if x > 0 else 0) #Balance Of Power https://www.marketvolume.com/technicalanalysis/balanceofpower.asp
-#         dfp['CCI'] = CCI(df) #Commodity Channel Index http://www.investopedia.com/articles/trading/05/041805.asp
+        if regressor == 'kNeighbours': 
+            dfp['CCI'] = CCI(df) #Commodity Channel Index http://www.investopedia.com/articles/trading/05/041805.asp
 #         dfp['CMO'] = CMO(df) #Chande Momentum Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/cmo
 #         dfp['DX'] = DX(df) #Directional Movement Index http://www.investopedia.com/terms/d/dmi.asp
 #         macd = MACD(df)
@@ -240,7 +241,8 @@ def get_data_frame(df, regressor="None"):
 #         dfp['ROCP'] = ROCP(df)
 #         dfp['ROCR'] = ROCR(df)
 #         dfp['ROCR100'] = ROCR100(df)
-#        dfp['RSI'] = RSI(df)
+        if regressor == 'kNeighbours':
+            dfp['RSI'] = RSI(df)
         #dfp['STOCH'] = STOCH(df)
         #dfp['STOCHF'] = STOCHF(df)
         #dfp['STOCHRSI'] = STOCHRSI(df)
@@ -371,6 +373,8 @@ def get_data_frame(df, regressor="None"):
 #         print(scrip, accuracy, forecast_set)
 #         #print 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'      
         dfp = dfp.ix[50:]
+        dfp.drop(dfp[dfp.label > 7].index, inplace=True)
+        dfp.drop(dfp[dfp.label < -7].index, inplace=True)
     return dfp
 
 def create_csv(regressionResult):
@@ -393,14 +397,14 @@ def create_csv(regressionResult):
     kNeighboursAccuracy = float(regressionResult[17])
     gradientBoostingValue = float(regressionResult[18])
     
-    if bagging and kNeighbours:
+    if mlp and kNeighbours:
         #ws_filter = wb.create_sheet("Filter")
         if((trainSize> 1000) and (kNeighboursValue > 0) and (mlpValue > 0) and len(sellIndia) < 2):
             ws_filter.append(regressionResult)     
         elif((trainSize> 1000) and (kNeighboursValue < 0) and (mlpValue < 0) and len(buyIndia) < 2):
             ws_filter.append(regressionResult)
                
-    if bagging and mlp:    
+    if mlp and kNeighbours:    
         #ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
         if((trainSize> 1000) and (randomForestValue == 0) and (kNeighboursValue == 0) and (mlpValue == 0) and (baggingValue == 0)):
             #do Nothing
@@ -517,7 +521,7 @@ def regression_ta_data(scrip):
         
     if kNeighbours:
         #dfp_kneighbour = get_data_frame(df, 'kNeighbours')
-        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1), True))
+        regressionResult.extend(performClassification(get_data_frame(df, 'kNeighbours'), 0.98, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1), True))
     else:
         regressionResult.extend([0,0])
         
