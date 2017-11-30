@@ -1,4 +1,4 @@
-import os, logging, sys
+import os, logging, sys, json
 from openpyxl import Workbook
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.styles import Color, PatternFill, Font, Border
@@ -83,7 +83,10 @@ if kNeighbours:
 if gradientBoosting:    
     ws_GradientBoosting = wb.create_sheet("GradientBoosting")
     ws_GradientBoosting.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy"])
-  
+
+def insert_classificationdata(data):     
+    json_data = json.loads(json.dumps(data))
+    db.classification.insert_one(json_data)  
 
 def getScore(vol_change, pct_change):
     try:
@@ -382,6 +385,7 @@ def create_csv(regressionResult):
     trainSize = int(regressionResult[1])
     buyIndia = str(regressionResult[2])
     sellIndia = str(regressionResult[3])
+    scrip = str(regressionResult[4])
     forecast_day_VOL_change = int(regressionResult[5])
     forecast_day_PCT_change = float(regressionResult[6])
     score = float(regressionResult[7])
@@ -396,6 +400,7 @@ def create_csv(regressionResult):
     kNeighboursValue = float(regressionResult[16])
     kNeighboursAccuracy = float(regressionResult[17])
     gradientBoostingValue = float(regressionResult[18])
+    gradientBoostingAccuracy = float(regressionResult[19])
     
     if mlp and kNeighbours:
         #ws_filter = wb.create_sheet("Filter")
@@ -461,6 +466,29 @@ def create_csv(regressionResult):
             ws_GradientBoosting.append(regressionResult)
         if((trainSize> 1000) and (gradientBoostingValue < 0) and score < 0):
             ws_GradientBoosting.append(regressionResult) 
+            
+    #Insert in db
+    data = {}
+    data['trainSize'] = trainSize
+    data['buyIndia'] = buyIndia
+    data['sellIndia'] = sellIndia
+    data['scrip'] = scrip
+    data['forecast_day_VOL_change'] = forecast_day_VOL_change
+    data['forecast_day_PCT_change'] = forecast_day_PCT_change
+    data['score'] = score
+    data['randomForestValue'] = randomForestValue
+    data['randomForestAccuracy'] = randomForestAccuracy
+    data['mlpValue'] = mlpValue
+    data['mlpAccuracy'] = mlpAccuracy
+    data['baggingValue'] = baggingValue
+    data['baggingAccuracy'] = baggingAccuracy
+    data['adaBoostValue'] = adaBoostValue
+    data['adaBoostAccuracy'] = adaBoostAccuracy
+    data['kNeighboursValue'] = kNeighboursValue
+    data['kNeighboursAccuracy'] = kNeighboursAccuracy
+    data['gradientBoostingValue'] = gradientBoostingValue 
+    data['gradientBoostingAccuracy'] = gradientBoostingAccuracy 
+    insert_classificationdata(data)   
 
 def regression_ta_data(scrip):
     data = db.history.find_one({'dataset_code':scrip.encode('UTF8').replace('&','').replace('-','_')})

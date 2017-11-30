@@ -14,15 +14,15 @@ log = logging.getLogger(__name__)
 
 connection = MongoClient('localhost',27017)
 db = connection.Nsedata
-db.drop_collection('technical')
-db.drop_collection('buy.overlap')
-db.drop_collection('sell.overlap')
-db.drop_collection('buy.pattern')
-db.drop_collection('sell.pattern')
-db.drop_collection('buy.momentum')
-db.drop_collection('sell.momentum')
-db.drop_collection('buy.volume')
-db.drop_collection('sell.volume')
+# db.drop_collection('technical')
+# db.drop_collection('buy.overlap')
+# db.drop_collection('sell.overlap')
+# db.drop_collection('buy.pattern')
+# db.drop_collection('sell.pattern')
+# db.drop_collection('buy.momentum')
+# db.drop_collection('sell.momentum')
+# db.drop_collection('buy.volume')
+# db.drop_collection('sell.volume')
 
 wb = Workbook()
 ws = wb.active
@@ -295,8 +295,11 @@ def momentum_screener(data, todayInputs, tdchange, historicalInputs, hchange):
 
 def ta_lib_data(scrip):
     try:  
-        data = db.history.find_one({'dataset_code':scrip.encode('UTF8').replace('&','').replace('-','_')})
+        stored_data = db.technical.find_one({'dataset_code':scrip.encode('UTF8').replace('&','').replace('-','_')})
+        if(stored_data is not None):
+            return stored_data['BuyIndicators'], stored_data['SellIndicators']  
         
+        data = db.history.find_one({'dataset_code':scrip.encode('UTF8').replace('&','').replace('-','_')})
         if(data is None):
             print  'Missing Data for ',scrip.encode('UTF8'), '\n'
             return
