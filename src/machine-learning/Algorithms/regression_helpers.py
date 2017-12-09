@@ -332,46 +332,31 @@ def performClassificationTest(dataset, split, symbol, output_dir, forecast_out, 
 #     log.info('%s, %s, %s, %s', symbol, model_name, forecast_set, accuracy)
     
     
-    model_name, forecast_set, accuracy = benchmark_classifier(Classifier(
-    layers=[
-        Layer("Tanh", units=100),
-        Layer("Softmax")],
-    learning_rate=0.0001,
-    n_iter=25),
-        train, test, test_forecast, features, symbol, output, out_params)
+#     model_name, forecast_set, accuracy = benchmark_classifier(Classifier(
+#     layers=[
+#         Layer("Tanh", units=100),
+#         Layer("Softmax")],
+#     learning_rate=0.0001,
+#     n_iter=25),
+#         train, test, test_forecast, features, symbol, output, out_params)
+
+    
+    model_name, forecast_set, accuracy = benchmark_classifier(MLPClassifier(hidden_layer_sizes=(150, 150)),
+         train, test, test_forecast, features, symbol, output, out_params)
     
     
-    model_name, forecast_set, accuracy = benchmark_classifier(Classifier(
-    layers=[
-        Layer("Tanh", units=100),
-        Layer("Softmax")],
-    learning_rate=0.0001,
-    n_iter=25),
-        train, test, test_forecast, features, symbol, output, out_params)
+    model_name, forecast_set, accuracy = benchmark_classifier(MLPClassifier(hidden_layer_sizes=(75, 75)),
+         train, test, test_forecast, features, symbol, output, out_params)
     
-    model_name, forecast_set, accuracy = benchmark_classifier(Classifier(
-    layers=[
-        Layer("Tanh", units=100),
-        Layer("Softmax")],
-    learning_rate=0.0001,
-    n_iter=25),
-        train, test, test_forecast, features, symbol, output, out_params)
     
-    model_name, forecast_set, accuracy = benchmark_classifier(Classifier(
-    layers=[
-        Layer("Tanh", units=100),
-        Layer("Softmax")],
-    learning_rate=0.0001,
-    n_iter=25),
-        train, test, test_forecast, features, symbol, output, out_params)
+    model_name, forecast_set, accuracy = benchmark_classifier(MLPClassifier(hidden_layer_sizes=(37, 37)),
+         train, test, test_forecast, features, symbol, output, out_params)
     
-    model_name, forecast_set, accuracy = benchmark_classifier(Classifier(
-    layers=[
-        Layer("Tanh", units=100),
-        Layer("Softmax")],
-    learning_rate=0.0001,
-    n_iter=25),
-        train, test, test_forecast, features, symbol, output, out_params)
+    
+    
+   
+    
+    
     
     predicted_values.append(str(round(forecast_set.ravel()[0], 3)))
     predicted_values.append(str(round(accuracy, 3)))

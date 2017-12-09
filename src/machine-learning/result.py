@@ -22,11 +22,11 @@ logname = '../../output/final' + '/results' + time.strftime("%d%m%y-%H%M%S")
 
 wb = Workbook()
 ws = wb.active
-ws.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy"])
+ws.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_buy = wb.create_sheet("Buy")
-ws_buy.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy"])
+ws_buy.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_sell = wb.create_sheet("Sell")
-ws_sell.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy"])
+ws_sell.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 
 def saveReports():
     # Add a default style with striped rows and banded columns
@@ -36,21 +36,21 @@ def saveReports():
     count = 0
     for row in ws.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:T" + str(count))
+    tab = Table(displayName="Table1", ref="A1:W" + str(count))
     tab.tableStyleInfo = style
     ws.add_table(tab)
     
     count = 0
     for row in ws_buy.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:T" + str(count))
+    tab = Table(displayName="Table1", ref="A1:W" + str(count))
     tab.tableStyleInfo = style
     ws_buy.add_table(tab)
     
     count = 0
     for row in ws_sell.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:T" + str(count))
+    tab = Table(displayName="Table1", ref="A1:W" + str(count))
     tab.tableStyleInfo = style
     ws_sell.add_table(tab)
       
@@ -87,6 +87,9 @@ def result_data(scrip):
         regressionResult.append(regression_data['kNeighboursAccuracy'])
         regressionResult.append(regression_data['gradientBoostingValue'])
         regressionResult.append(regression_data['gradientBoostingAccuracy'])
+        regressionResult.append(regression_data['trend'])
+        regressionResult.append(regression_data['yearHighChange'])
+        regressionResult.append(regression_data['yearLowChange'])
         ws_buy.append(regressionResult)
         
     #Sell Indicators
@@ -112,6 +115,9 @@ def result_data(scrip):
         regressionResult.append(classification_data['kNeighboursAccuracy'])
         regressionResult.append(classification_data['gradientBoostingValue'])
         regressionResult.append(classification_data['gradientBoostingAccuracy'])
+        regressionResult.append(classification_data['trend'])
+        regressionResult.append(classification_data['yearHighChange'])
+        regressionResult.append(classification_data['yearLowChange'])
         ws_sell.append(regressionResult)   
                                   
 

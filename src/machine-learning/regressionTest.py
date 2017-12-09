@@ -1,4 +1,4 @@
-import os, logging, sys
+import os, logging, sys, json
 from openpyxl import Workbook
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.styles import Color, PatternFill, Font, Border
@@ -12,7 +12,7 @@ from talib.abstract import *
 from pip.req.req_file import preprocess
 from Algorithms.regression_helpers import load_dataset, addFeatures, addFeaturesVolChange, \
     addFeaturesOpenChange, addFeaturesHighChange, addFeaturesLowChange, addFeaturesEMA9Change, addFeaturesEMA21Change, \
-    mergeDataframes, count_missing, applyTimeLag, performRegression, performRegressionTest
+    mergeDataframes, count_missing, applyTimeLag, performRegression
     
 from technical import ta_lib_data  
 
@@ -42,11 +42,11 @@ logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=log
 log = logging.getLogger(__name__)
 
 forecast_out = 1
-randomForest = False
-mlp = False
+randomForest = True
+mlp = True
 bagging = True
 adaBoost = False
-kNeighbours = False
+kNeighbours = True
 gradientBoosting = False
 
 wb = Workbook()
@@ -80,7 +80,10 @@ if kNeighbours:
 if gradientBoosting:    
     ws_GradientBoosting = wb.create_sheet("GradientBoosting")
     ws_GradientBoosting.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy"])
-  
+
+def insert_regressiondata(data): 
+    json_data = json.loads(json.dumps(data))
+    db.regression.insert_one(json_data)  
 
 def getScore(vol_change, pct_change):
     try:
@@ -366,6 +369,7 @@ def create_csv(regressionResult):
     trainSize = int(regressionResult[1])
     buyIndia = str(regressionResult[2])
     sellIndia = str(regressionResult[3])
+    scrip = str(regressionResult[4])
     forecast_day_VOL_change = int(regressionResult[5])
     forecast_day_PCT_change = float(regressionResult[6])
     score = float(regressionResult[7])
@@ -376,9 +380,11 @@ def create_csv(regressionResult):
     baggingValue = float(regressionResult[12])
     baggingAccuracy = float(regressionResult[13])
     adaBoostValue = float(regressionResult[14])
+    adaBoostAccuracy = float(regressionResult[15])
     kNeighboursValue = float(regressionResult[16])
     kNeighboursAccuracy = float(regressionResult[17])
     gradientBoostingValue = float(regressionResult[18])
+    gradientBoostingAccuracy = float(regressionResult[19])
     
     if randomForestValue and kNeighbours:    
         #ws_filter = wb.create_sheet("FilterAllgtlt0")
@@ -440,6 +446,29 @@ def create_csv(regressionResult):
             ws_GradientBoosting.append(regressionResult)
         if((trainSize> 1000) and (gradientBoostingValue < -1)):
             ws_GradientBoosting.append(regressionResult) 
+            
+    #Insert in db
+    data = {}
+    data['trainSize'] = trainSize
+    data['buyIndia'] = buyIndia
+    data['sellIndia'] = sellIndia
+    data['scrip'] = scrip
+    data['forecast_day_VOL_change'] = forecast_day_VOL_change
+    data['forecast_day_PCT_change'] = forecast_day_PCT_change
+    data['score'] = score
+    data['randomForestValue'] = randomForestValue
+    data['randomForestAccuracy'] = randomForestAccuracy
+    data['mlpValue'] = mlpValue
+    data['mlpAccuracy'] = mlpAccuracy
+    data['baggingValue'] = baggingValue
+    data['baggingAccuracy'] = baggingAccuracy
+    data['adaBoostValue'] = adaBoostValue
+    data['adaBoostAccuracy'] = adaBoostAccuracy
+    data['kNeighboursValue'] = kNeighboursValue
+    data['kNeighboursAccuracy'] = kNeighboursAccuracy
+    data['gradientBoostingValue'] = gradientBoostingValue 
+    data['gradientBoostingAccuracy'] = gradientBoostingAccuracy 
+    insert_regressiondata(data)        
 
 def regression_ta_data(scrip):
     data = db.history.find_one({'dataset_code':scrip.encode('UTF8').replace('&','').replace('-','_')})
@@ -508,7 +537,8 @@ def regression_ta_data(scrip):
         regressionResult.extend([0,0])
         
     if bagging:
-        regressionResult.extend(performRegressionTest(dfp, 0.98, scrip, directory, forecast_out))
+        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, SVR(C=1e3, cache_size=500, coef0=0.0, degree=3, epsilon=0.2, gamma=.05,
+    kernel='rbf', max_iter=500, shrinking=True, tol=0.001, verbose=False), True))
     else:
         regressionResult.extend([0,0])
         

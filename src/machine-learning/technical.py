@@ -4,6 +4,7 @@ from openpyxl.worksheet.table import Table, TableStyleInfo
 from pymongo import MongoClient
 from multiprocessing.dummy import Pool as ThreadPool
 
+import pandas as pd
 import numpy as np
 import talib 
 from talib.abstract import *
@@ -297,7 +298,7 @@ def ta_lib_data(scrip):
     try:  
         stored_data = db.technical.find_one({'dataset_code':scrip.encode('UTF8').replace('&','').replace('-','_')})
         if(stored_data is not None):
-            return stored_data['BuyIndicators'], stored_data['SellIndicators']  
+            return stored_data['BuyIndicators'], stored_data['SellIndicators'], stored_data['trend'], stored_data['yearHighChange'], stored_data['yearLowChange']    
         
         data = db.history.find_one({'dataset_code':scrip.encode('UTF8').replace('&','').replace('-','_')})
         if(data is None):
@@ -323,7 +324,32 @@ def ta_lib_data(scrip):
             'volume': hsquantity
         }
         
+        df = pd.DataFrame({
+            'date': hsdate,
+            'open': hsopen,
+            'high': hshigh,
+            'low': hslow,
+            'close': hsclose,
+            'volume': hsquantity,
+            'turnover':hsturnover
+        })
+        
+        end_date = (datetime.date.today() - datetime.timedelta(days=0)).strftime('%Y-%m-%d')
+        start_date = (datetime.date.today() - datetime.timedelta(weeks=52)).strftime('%Y-%m-%d')
+        df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
+        yearHigh = df['high'].max()
+        yearLow = df['low'].min()
+        yearHighChange = (hsclose[-1] - yearHigh)*100/yearHigh
+        yearLowChange = (hsclose[-1] - yearLow)*100/yearLow
+        
         hchange = (hsclose[-2]-hsclose[-10])*100/hsclose[-10]
+        change = (hsclose[-1]-hsclose[-2])*100/hsclose[-2]
+        pchange = (hsclose[-2]-hsclose[-3])*100/hsclose[-3]
+        trend = "NA"
+        if change > 1 and pchange > 1:
+            trend = "up" 
+        elif change < -1 and pchange < -1:
+            trend = "down"      
     
         technical_indicators={}
         technical_indicators['dataset_code'] = data['dataset_code']
@@ -331,7 +357,13 @@ def ta_lib_data(scrip):
         technical_indicators['end_date'] = data['end_date']
         technical_indicators['column_names'] = data['column_names']
         technical_indicators['data'] = data['data']
-        technical_indicators['change'] = tdchange
+        technical_indicators['change'] = change
+        technical_indicators['pChange'] = pchange
+        technical_indicators['trend'] = trend
+        technical_indicators['yearHigh'] = yearHigh
+        technical_indicators['yearLow'] = yearLow
+        technical_indicators['yearHighChange'] = yearHighChange
+        technical_indicators['yearLowChange'] = yearLowChange
         technical_indicators['BuyIndicators'] = ''
         technical_indicators['SellIndicators'] = ''
         technical_indicators['BuyIndicatorsCount'] = 0
@@ -533,7 +565,7 @@ def ta_lib_data(scrip):
         ws.append([data['dataset_code'], technical_indicators['BuyIndicators'], technical_indicators['SellIndicators']])    
         json_data = json.loads(json.dumps(technical_indicators))
         db.technical.insert_one(json_data) 
-        return technical_indicators['BuyIndicators'], technical_indicators['SellIndicators']  
+        return technical_indicators['BuyIndicators'], technical_indicators['SellIndicators'], technical_indicators['trend'], technical_indicators['yearHighChange'], technical_indicators['yearLowChange']  
             
     except Exception, err:
         print Exception, err
