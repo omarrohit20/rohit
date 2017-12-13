@@ -28,7 +28,14 @@ from sklearn.svm import SVC, SVR
 #from sklearn.qda import QDA
 import os
 from sklearn.grid_search import GridSearchCV
-from Neural_Network import NeuralNet
+#from Neural_Network import NeuralNet
+
+import lasagne
+from lasagne import layers
+from lasagne.updates import nesterov_momentum
+from nolearn.lasagne import NeuralNet as nlNeuralNet
+
+import tflearn
 
 import logging
 from sklearn.ensemble.bagging import BaggingClassifier
@@ -341,22 +348,39 @@ def performClassificationTest(dataset, split, symbol, output_dir, forecast_out, 
 #         train, test, test_forecast, features, symbol, output, out_params)
 
     
-    model_name, forecast_set, accuracy = benchmark_classifier(MLPClassifier(hidden_layer_sizes=(150, 150)),
+#     model_name, forecast_set, accuracy = benchmark_classifier(neighbors.KNeighborsClassifier(n_jobs=1, n_neighbors=5, weights='uniform', algorithm='auto', leaf_size=30),
+#          train, test, test_forecast, features, symbol, output, out_params)
+    
+#     model_name, forecast_set, accuracy = benchmark_classifier(nlNeuralNet(
+#         layers=[('input', layers.InputLayer),
+#                 ('hidden', layers.DenseLayer),
+#                 ('output', layers.DenseLayer),
+#                 ],
+#         # layer parameters:
+#         input_shape=(None, 84),
+#         hidden_num_units=300,  # number of units in 'hidden' layer
+#         output_nonlinearity=lasagne.nonlinearities.rectify,
+#         output_num_units=10,  # 10 target values for the digits 0, 1, 2, ..., 9
+# 
+#         # optimization method:
+#         update=nesterov_momentum,
+#         update_learning_rate=0.01,
+#         update_momentum=0.9,
+# 
+#         max_epochs=10,
+#         verbose=1,
+#         ),
+#         train, test, test_forecast, features, symbol, output, out_params)
+ 
+    # Build neural network
+    net = tflearn.input_data(shape=[None, 84])
+    net = tflearn.fully_connected(net, 32)
+    net = tflearn.fully_connected(net, 32)
+    net = tflearn.fully_connected(net, 2, activation='softmax')
+    net = tflearn.regression(net)
+
+    model_name, forecast_set, accuracy = benchmark_classifier(tflearn.DNN(net),
          train, test, test_forecast, features, symbol, output, out_params)
-    
-    
-    model_name, forecast_set, accuracy = benchmark_classifier(MLPClassifier(hidden_layer_sizes=(75, 75)),
-         train, test, test_forecast, features, symbol, output, out_params)
-    
-    
-    model_name, forecast_set, accuracy = benchmark_classifier(MLPClassifier(hidden_layer_sizes=(37, 37)),
-         train, test, test_forecast, features, symbol, output, out_params)
-    
-    
-    
-   
-    
-    
     
     predicted_values.append(str(round(forecast_set.ravel()[0], 3)))
     predicted_values.append(str(round(accuracy, 3)))
@@ -380,7 +404,7 @@ def benchmark_classifier(model, train, test, test_forecast, features, symbol, ou
 
     symbol, output_dir = output_params
 
-    model.fit(train[features].as_matrix(), train[output].astype(int).as_matrix(), *args, **kwargs)
+    model.fit(train[features].as_matrix(), train[output].astype(np.int32).as_matrix(), *args, **kwargs)
     predicted_value = model.predict(test[features].as_matrix())
     
     accuracy = model.score(test[features].as_matrix(), test[output].astype(int).as_matrix())
@@ -402,6 +426,41 @@ def benchmark_classifier(model, train, test, test_forecast, features, symbol, ou
         plt.clf()
 
     return model_name, forecast_set, accuracy
+
+
+def benchmark_classifier_tf(model, train, test, test_forecast, features, symbol, output, \
+    output_params, *args, **kwargs):
+    '''
+        Performs Training and Testing of the Data on the Model.
+    '''
+
+    model_name = model.__str__().split('(')[0].replace('Classifier', ' Classifier')
+
+    symbol, output_dir = output_params
+
+    model.fit(train[features].as_matrix(), train[output].astype(np.int32).as_matrix(), *args, **kwargs)
+    predicted_value = model.predict(test[features].as_matrix())
+    
+    accuracy = model.score(test[features].as_matrix(), test[output].astype(int).as_matrix())
+    forecast_set = model.predict(test_forecast[features].as_matrix())
+    
+    if plotgraph:
+        plt.plot(test[output].as_matrix(), color='g', ls='--', label='Actual Value')
+        plt.plot(predicted_value, color='b', ls='--', label='predicted_value Value')
+    
+        plt.xlabel('Number of Set')
+        plt.ylabel('Output Value')
+    
+        plt.title(model_name)
+        plt.legend(loc='best')
+        plt.tight_layout()
+        plt.savefig(os.path.join(output_dir, str(symbol) + '_' \
+            + model_name + time.strftime("%d%m%y-%H%M%S") +'.png'), dpi=100)
+        #plt.show()
+        plt.clf()
+
+    return model_name, forecast_set, accuracy
+
     
 def getFeatures(X_train, y_train, X_test, num_features):
     ch2 = SelectKBest(chi2, k=5)
@@ -447,7 +506,7 @@ def performRegression(dataset, split, symbol, output_dir):
     maxiter = 1000
     batch = 150
 
-    classifier = NeuralNet(50, learn_rate=1e-2)
+    #classifier = NeuralNet(50, learn_rate=1e-2)
 
     predicted_values.append(benchmark_model(classifier, \
         train, test, features, output, out_params, \

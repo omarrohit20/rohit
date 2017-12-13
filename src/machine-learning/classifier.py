@@ -539,7 +539,7 @@ def regression_ta_data(scrip):
         regressionResult.extend([0,0])    
             
     if mlp:
-        regressionResult.extend(performClassification(get_data_frame(df, 'mlp'), 0.98, scrip, directory, forecast_out, MLPClassifier(activation='tanh', solver='adam', max_iter=200, hidden_layer_sizes=(40, 20, 10))))
+        regressionResult.extend(performClassification(get_data_frame(df, 'mlp'), 0.98, scrip, directory, forecast_out, MLPClassifier(activation='tanh', solver='adam', max_iter=200, hidden_layer_sizes=(84, 40, 10))))
     else:
         regressionResult.extend([0,0])
         
