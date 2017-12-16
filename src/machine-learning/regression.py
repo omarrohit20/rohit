@@ -10,7 +10,7 @@ import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
 import numpy as np
 from talib.abstract import *
-from pip.req.req_file import preprocess
+#from pip.req.req_file import preprocess
 from Algorithms.regression_helpers import load_dataset, addFeatures, addFeaturesVolChange, \
     addFeaturesOpenChange, addFeaturesHighChange, addFeaturesLowChange, addFeaturesEMA9Change, addFeaturesEMA21Change, \
     mergeDataframes, count_missing, applyTimeLag, performRegression
@@ -539,13 +539,13 @@ def regression_ta_data(scrip):
         regressionResult.extend([0,0])
             
     if mlp:
-        regressionResult.extend(performRegression(get_data_frame(df, 'mlp'), 0.98, scrip, directory, forecast_out, MLPRegressor(activation='tanh', solver='adam', max_iter=200, hidden_layer_sizes=(84, 40, 10))))
+        regressionResult.extend(performRegression(get_data_frame(df, 'mlp'), 0.98, scrip, directory, forecast_out, MLPRegressor(activation='tanh', solver='adam', max_iter=500, hidden_layer_sizes=(84, 40, 10))))
     else:
         regressionResult.extend([0,0])
         
     if bagging:
         regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, SVR(C=1e3, cache_size=500, coef0=0.0, degree=3, epsilon=0.2, gamma=.05,
-    kernel='rbf', max_iter=500, shrinking=True, tol=0.001, verbose=False), True))
+    kernel='rbf', max_iter=5000, shrinking=True, tol=0.001, verbose=False), True))
     else:
         regressionResult.extend([0,0])
         

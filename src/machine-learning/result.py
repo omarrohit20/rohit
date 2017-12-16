@@ -9,7 +9,6 @@ import quandl, math, time
 import pandas as pd
 import numpy as np
 from talib.abstract import *
-from pip.req.req_file import preprocess
 
 import time
 import gc
@@ -75,11 +74,11 @@ def saveReports():
     wb.save(logname + ".xlsx")
 
 def result_data(scrip):
-    classification_data = db.classification.find_one({'scrip':str(scrip.encode('UTF8')).replace('&','').replace('-','_')})
-    regression_data = db.regression.find_one({'scrip':str(scrip.encode('UTF8')).replace('&','').replace('-','_')})
+    classification_data = db.classification.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    regression_data = db.regression.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     
     if(classification_data is None or regression_data is None):
-        print('Missing or very less Data for ', scrip.encode('UTF8'))
+        print('Missing or very less Data for ', scrip)
         return
     
     #Buy Indicators
@@ -148,7 +147,7 @@ def calculateParallel(threads=2):
     
     scrips = []
     for data in db.scrip.find():
-        scrips.append(str((data['scrip']).encode('UTF8')).replace('&','').replace('-','_'))
+        scrips.append(data['scrip'].replace('&','').replace('-','_'))
     scrips.sort()
     
     pool.map(result_data, scrips)
