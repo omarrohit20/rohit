@@ -7,6 +7,7 @@ from multiprocessing.dummy import Pool as ThreadPool
 
 import quandl, math, time
 import pandas as pd
+pd.options.mode.chained_assignment = None  # default='warn'
 import numpy as np
 from talib.abstract import *
 from pip.req.req_file import preprocess
@@ -360,7 +361,7 @@ def get_data_frame(df, regressor="None"):
 #         accuracy = clf.score(X_test, y_test)
 #         forecast_set = clf.predict(X_lately)
 #         print(scrip, accuracy, forecast_set)
-#         #print 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'      
+#         #print('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')   
         dfp = dfp.ix[50:]
     return dfp
 
@@ -477,9 +478,9 @@ def create_csv(regressionResult):
     insert_regressiondata(data)        
 
 def regression_ta_data(scrip):
-    data = db.history.find_one({'dataset_code':scrip.encode('UTF8').replace('&','').replace('-','_')})
+    data = db.history.find_one({'dataset_code':scrip})
     if(data is None or (np.array(data['data'])).size < 200):
-        print('Missing or very less Data for ', scrip.encode('UTF8'))
+        print('Missing or very less Data for ', scrip)
         return
         
     hsdate, hsopen, hshigh, hslow, hslast, hsclose, hsquantity, hsturnover = historical_data(data)   
@@ -573,7 +574,7 @@ def calculateParallel(threads=2):
     
     scrips = []
     for data in db.scrip.find():
-        scrips.append((data['scrip']).encode('UTF8').replace('&','').replace('-','_'))
+        scrips.append(data['scrip'].replace('&','').replace('-','_'))
     scrips.sort()
     
     pool.map(regression_ta_data, scrips)

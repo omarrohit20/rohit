@@ -15,12 +15,12 @@ db = connection.Nsedata
 if __name__ == "__main__":  
     start_date = (datetime.datetime.now() - datetime.timedelta(hours=0))
     start_date = datetime.datetime(start_date.year, start_date.month, start_date.day, start_date.hour) 
-    end_date = (datetime.datetime.now() - datetime.timedelta(hours=17))
+    end_date = (datetime.datetime.now() - datetime.timedelta(hours=20))
     end_date = datetime.datetime(end_date.year, end_date.month, end_date.day, end_date.hour)
     newsDict = {}
     for data in db.news.find():
         newslist = data['news']
-        scrip = (data['scrip']).encode('UTF8').replace('&','').replace('-','_')
+        scrip = str(data['scrip'].encode('UTF8')).replace('&','').replace('-','_')
         
         for news in newslist:
             newstime = news['timestamp']
@@ -51,4 +51,4 @@ for newslink,newsValue in newsDict.iteritems():
 
     log.info("%s", newsValue['newstime'])
     log.info("---------------------") 
-print 'Done News'
+print('Done News')

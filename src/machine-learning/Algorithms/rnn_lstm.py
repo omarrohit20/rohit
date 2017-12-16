@@ -24,6 +24,7 @@ hidden_neurons = 300
 import os
 import sys
 import pandas as pd
+pd.options.mode.chained_assignment = None  # default='warn'
 
 
 def _load_data(data, n_prev=100):

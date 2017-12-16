@@ -7,6 +7,7 @@ from __future__ import print_function
 import os
 import sys
 import pandas as pd
+pd.options.mode.chained_assignment = None  # default='warn'
 from sklearn.svm import SVR
 from sklearn import cross_validation
 import numpy as np

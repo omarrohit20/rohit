@@ -5,12 +5,13 @@ from pymongo import MongoClient
 from multiprocessing.dummy import Pool as ThreadPool
 
 import pandas as pd
+pd.options.mode.chained_assignment = None  # default='warn'
 import numpy as np
 import talib 
 from talib.abstract import *
 
 logname = '../../output' + '/technical' + time.strftime("%d%m%y-%H%M%S")
-logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=logging.INFO)
+logging.basicConfig(filename=logname, filemode='a', level=logging.INFO)
 log = logging.getLogger(__name__)
 
 connection = MongoClient('localhost',27017)
@@ -296,13 +297,13 @@ def momentum_screener(data, todayInputs, tdchange, historicalInputs, hchange):
 
 def ta_lib_data(scrip):
     try:  
-        stored_data = db.technical.find_one({'dataset_code':scrip.encode('UTF8').replace('&','').replace('-','_')})
+        stored_data = db.technical.find_one({'dataset_code':scrip})
         if(stored_data is not None):
             return stored_data['BuyIndicators'], stored_data['SellIndicators'], stored_data['trend'], stored_data['yearHighChange'], stored_data['yearLowChange']    
         
-        data = db.history.find_one({'dataset_code':scrip.encode('UTF8').replace('&','').replace('-','_')})
+        data = db.history.find_one({'dataset_code':scrip})
         if(data is None):
-            print  'Missing Data for ',scrip.encode('UTF8'), '\n'
+            print('Missing or very less Data for ', scrip) 
             return
             
         hsdate, hsopen, hshigh, hslow, hslast, hsclose, hsquantity, hsturnover = historical_data(data)   
@@ -567,8 +568,8 @@ def ta_lib_data(scrip):
         db.technical.insert_one(json_data) 
         return technical_indicators['BuyIndicators'], technical_indicators['SellIndicators'], technical_indicators['trend'], technical_indicators['yearHighChange'], technical_indicators['yearLowChange']  
             
-    except Exception, err:
-        print Exception, err
+    except Exception:
+        print(Exception)
         pass  
           
 def calculateParallel(threads=2):
@@ -576,7 +577,7 @@ def calculateParallel(threads=2):
     
     scrips = []
     for data in db.scrip.find():
-        scrips.append((data['scrip']).encode('UTF8').replace('&','').replace('-','_'))
+        scrips.append(data['scrip'].replace('&','').replace('-','_'))
     scrips.sort()
     
     pool.map(ta_lib_data, scrips)

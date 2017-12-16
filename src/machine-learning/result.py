@@ -75,8 +75,8 @@ def saveReports():
     wb.save(logname + ".xlsx")
 
 def result_data(scrip):
-    classification_data = db.classification.find_one({'scrip':scrip.encode('UTF8').replace('&','').replace('-','_')})
-    regression_data = db.regression.find_one({'scrip':scrip.encode('UTF8').replace('&','').replace('-','_')})
+    classification_data = db.classification.find_one({'scrip':str(scrip.encode('UTF8')).replace('&','').replace('-','_')})
+    regression_data = db.regression.find_one({'scrip':str(scrip.encode('UTF8')).replace('&','').replace('-','_')})
     
     if(classification_data is None or regression_data is None):
         print('Missing or very less Data for ', scrip.encode('UTF8'))
@@ -148,7 +148,7 @@ def calculateParallel(threads=2):
     
     scrips = []
     for data in db.scrip.find():
-        scrips.append((data['scrip']).encode('UTF8').replace('&','').replace('-','_'))
+        scrips.append(str((data['scrip']).encode('UTF8')).replace('&','').replace('-','_'))
     scrips.sort()
     
     pool.map(result_data, scrips)

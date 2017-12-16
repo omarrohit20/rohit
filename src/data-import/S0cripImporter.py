@@ -9,7 +9,7 @@ with open('nselist/ind_niftyfuturelist.csv') as csvfile:
     for row in readCSV:
         try:
             if (count != 0):
-                print row[0]
+                print(row[0])
                 db.scrip_futures.insert_one({
                     "company": row[0],
                     "scrip": row[1]
@@ -17,7 +17,7 @@ with open('nselist/ind_niftyfuturelist.csv') as csvfile:
             count = count + 1
         except:
             pass    
-print count
+print(count)
 
 count = 0
 with open('nselist/ind_nifty500list.csv') as csvfile:
@@ -25,7 +25,7 @@ with open('nselist/ind_nifty500list.csv') as csvfile:
     for row in readCSV:
         try:
             if (count != 0):
-                print row[0]
+                print(row[0])
                 
                 futures = "Yes"
                 data = db.scrip_futures.find_one({'scrip':row[2]})
@@ -42,7 +42,7 @@ with open('nselist/ind_nifty500list.csv') as csvfile:
             count = count + 1
         except:
             pass    
-print count
+print(count)
 
 connection.close()
 

@@ -6,6 +6,7 @@
 from __future__ import print_function
 import numpy as np
 import pandas as pd
+pd.options.mode.chained_assignment = None  # default='warn'
 from sklearn import preprocessing
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.metrics import *

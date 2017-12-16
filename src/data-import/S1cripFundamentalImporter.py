@@ -16,7 +16,7 @@ for data in db.scrip.find():
             if stock is not None:
                 db.fundamental.insert_one(stock)
             else:
-                print 'fundamental ', str(data['scrip'])    
+                print('fundamental ', str(data['scrip']))  
     except:
         time.sleep(2)
         try:
@@ -28,11 +28,11 @@ for data in db.scrip.find():
                 if stock is not None:
                     db.fundamental.insert_one(stock)
                 else:
-                    print 'fundamental ', str(data['scrip'])   
+                    print('fundamental ', str(data['scrip']))
         except:
-            print 'fundamental ', str(data['scrip'])  
+            print('fundamental ', str(data['scrip'])) 
             pass
 
 
 connection.close()
-print 'Done fundamental'
+print('Done fundamental')
