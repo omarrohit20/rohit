@@ -35,7 +35,7 @@ from lasagne import layers
 from lasagne.updates import nesterov_momentum
 from nolearn.lasagne import NeuralNet as nlNeuralNet
 
-import tflearn
+#import tflearn
 
 import logging
 from sklearn.ensemble.bagging import BaggingClassifier
@@ -372,12 +372,12 @@ def performClassificationTest(dataset, split, symbol, output_dir, forecast_out, 
 #         ),
 #         train, test, test_forecast, features, symbol, output, out_params)
  
-    # Build neural network
-    net = tflearn.input_data(shape=[None, 84])
-    net = tflearn.fully_connected(net, 32)
-    net = tflearn.fully_connected(net, 32)
-    net = tflearn.fully_connected(net, 2, activation='softmax')
-    net = tflearn.regression(net)
+#     # Build neural network
+#     net = tflearn.input_data(shape=[None, 84])
+#     net = tflearn.fully_connected(net, 32)
+#     net = tflearn.fully_connected(net, 32)
+#     net = tflearn.fully_connected(net, 2, activation='softmax')
+#     net = tflearn.regression(net)
 
     model_name, forecast_set, accuracy = benchmark_classifier(tflearn.DNN(net),
          train, test, test_forecast, features, symbol, output, out_params)
