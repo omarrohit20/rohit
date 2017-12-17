@@ -539,7 +539,9 @@ def regression_ta_data(scrip):
         regressionResult.extend([0,0])
             
     if mlp:
-        regressionResult.extend(performRegression(get_data_frame(df, 'mlp'), 0.98, scrip, directory, forecast_out, MLPRegressor(activation='tanh', solver='adam', max_iter=500, hidden_layer_sizes=(84, 40, 10))))
+        dfp_mlp = get_data_frame(df, 'mlp')
+        regressionResult.extend(performRegression(dfp_mlp, 0.98, scrip, directory, forecast_out, MLPRegressor(activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27))))
+        dfp_mlp.to_csv(directory + '/' + scrip + '.csv', encoding='utf-8')
     else:
         regressionResult.extend([0,0])
         
