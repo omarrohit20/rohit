@@ -26,6 +26,10 @@ ws_buyFilter = wb.create_sheet("BuyFilter")
 ws_buyFilter.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_sellFilter = wb.create_sheet("SellFilter")
 ws_sellFilter.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_buyNews = wb.create_sheet("BuyNews")
+ws_buyNews.append(["timestamps", "summary", "Link"])
+ws_sellNews = wb.create_sheet("SellNews")
+ws_sellNews.append(["timestamps", "summary", "Link"])
 ws_buy = wb.create_sheet("Buy")
 ws_buy.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_sell = wb.create_sheet("Sell")
@@ -62,6 +66,20 @@ def saveReports():
     ws_sellFilter.add_table(tab)
     
     count = 0
+    for row in ws_buyNews.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:C" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyNews.add_table(tab)
+    
+    count = 0
+    for row in ws_sellNews.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:C" + str(count))
+    tab.tableStyleInfo = style
+    ws_sellNews.add_table(tab)
+    
+    count = 0
     for row in ws_buy.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:W" + str(count))
@@ -90,6 +108,22 @@ def saveReports():
     ws_sellAll.add_table(tab)
       
     wb.save(logname + ".xlsx")
+
+def buy_News(scrip):
+    scrip_newsList = db.news.find_one({'scrip':scrip.replace('&','').replace('-','_')})['news']
+    ws_buyNews.append([scrip])
+    ws_buyNews.append(["#####################"])
+    for scrip_news in scrip_newsList:
+        ws_buyNews.append([scrip_news['timestamp'], scrip_news['summary'], scrip_news['link']])
+    ws_buyNews.append([" "])
+    
+def sell_News(scrip):
+    scrip_newsList = db.news.find_one({'scrip':scrip.replace('&','').replace('-','_')})['news']
+    ws_sellNews.append([scrip])
+    ws_sellNews.append(["#####################"])
+    for scrip_news in scrip_newsList:
+        ws_sellNews.append([scrip_news['timestamp'], scrip_news['summary'], scrip_news['link']])
+    ws_sellNews.append([" "])  
 
 def result_data(scrip):
     classification_data = db.classification.find_one({'scrip':scrip.replace('&','').replace('-','_')})
@@ -124,14 +158,17 @@ def result_data(scrip):
     regressionResult.append(regression_data['trend'])
     regressionResult.append(regression_data['yearHighChange'])
     regressionResult.append(regression_data['yearLowChange'])
-    if(classification_data['kNeighboursValue'] >= 0 and regression_data['kNeighboursValue'] > .5):
+    if(classification_data['kNeighboursValue'] >= 0 and regression_data['kNeighboursValue'] > .5 and len(regression_data['sellIndia'].encode('utf8')) < 1):
         ws_buy.append(regressionResult)
         if(regression_data['kNeighboursValue'] >= 1 and 5 >= regression_data['mlpValue'] >= 1.5 and regression_data['baggingValue'] >= 0 and regression_data['randomForestValue'] >= 0):
             ws_buyFilter.append(regressionResult)
+            buy_News(scrip)
         elif(regression_data['forecast_day_PCT_change'] <= -1.5 and regression_data['kNeighboursValue'] > 1 and regression_data['mlpValue'] > 0):
             ws_buyFilter.append(regressionResult)
-        elif(regression_data['forecast_day_PCT_change'] >= 1.5 and regression_data['kNeighboursValue'] > 1 and regression_data['mlpValue'] > 0):
-            ws_buyFilter.append(regressionResult)        
+            buy_News(scrip)
+        elif(regression_data['forecast_day_PCT_change'] >= 1.5 and regression_data['kNeighboursValue'] > 1 and regression_data['mlpValue'] >= 0 and regression_data['baggingValue'] >= 0 and regression_data['randomForestValue'] >= 0):
+            ws_buyFilter.append(regressionResult)
+            buy_News(scrip)        
     if(regression_data['kNeighboursValue'] > .5):
         ws_buyAll.append(regressionResult)    
         
@@ -160,16 +197,20 @@ def result_data(scrip):
     regressionResult.append(classification_data['trend'])
     regressionResult.append(classification_data['yearHighChange'])
     regressionResult.append(classification_data['yearLowChange'])
-    if(classification_data['kNeighboursValue'] < 0 and regression_data['kNeighboursValue'] <= 0):            
+    if(classification_data['kNeighboursValue'] < 0 and regression_data['kNeighboursValue'] <= 0 and len(regression_data['buyIndia'].encode('utf8')) < 1):            
         ws_sell.append(regressionResult)
         if(classification_data['kNeighboursValue'] <= -1 and classification_data['mlpValue'] <= -1 and classification_data['baggingValue'] <= -1 and classification_data['randomForestValue'] <= -1):
             ws_sellFilter.append(regressionResult)
-        if(classification_data['kNeighboursValue'] <= -2 and classification_data['mlpValue'] <= -2):
+            sell_News(scrip)
+        elif(classification_data['kNeighboursValue'] <= -2 and classification_data['mlpValue'] <= -2):
             ws_sellFilter.append(regressionResult)
+            sell_News(scrip)
         elif(regression_data['forecast_day_PCT_change'] <= -1.5 and classification_data['kNeighboursValue'] <= -1 and classification_data['mlpValue'] <= 0):
             ws_sellFilter.append(regressionResult)
+            sell_News(scrip)
         elif(regression_data['forecast_day_PCT_change'] >= 1.5 and classification_data['kNeighboursValue'] <= -1):
-            ws_sellFilter.append(regressionResult)  
+            ws_sellFilter.append(regressionResult)
+            sell_News(scrip)  
     if(classification_data['kNeighboursValue'] < 0):            
         ws_sellAll.append(regressionResult)     
                                   
