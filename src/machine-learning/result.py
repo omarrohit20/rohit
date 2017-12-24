@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 from talib.abstract import *
 
+import datetime
 import time
 import gc
 
@@ -19,9 +20,10 @@ db = connection.Nsedata
 directory = '../../output/final'
 logname = '../../output/final' + '/results' + time.strftime("%d%m%y-%H%M%S")
 
+newsDict = {}
 wb = Workbook()
 ws = wb.active
-ws.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws.append(["scrip", "timestamps", "summary", "Link"])
 ws_buyFilter = wb.create_sheet("BuyFilter")
 ws_buyFilter.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_sellFilter = wb.create_sheet("SellFilter")
@@ -39,6 +41,10 @@ ws_buyAll.append(["futures", "train set","BuyIndicators", "SellIndicators","Symb
 ws_sellAll = wb.create_sheet("SellAll")
 ws_sellAll.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 
+def saveDailyNews():
+    for newslink,newsValue in newsDict.items():
+        ws.append([newsValue['scrip'], newsValue['newstime'], newsValue['newssummary'], newslink])
+
 def saveReports():
     # Add a default style with striped rows and banded columns
     style = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False,
@@ -47,7 +53,7 @@ def saveReports():
     count = 0
     for row in ws.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:W" + str(count))
+    tab = Table(displayName="Table1", ref="A1:D" + str(count))
     tab.tableStyleInfo = style
     ws.add_table(tab)
     
@@ -110,18 +116,25 @@ def saveReports():
     wb.save(logname + ".xlsx")
 
 def buy_News(scrip):
-    scrip_newsList = db.news.find_one({'scrip':scrip.replace('&','').replace('-','_')})['news']
+    scrip_newsList = db.news.find_one({'scrip':scrip})
     ws_buyNews.append([scrip])
     ws_buyNews.append(["#####################"])
-    for scrip_news in scrip_newsList:
+    if(scrip_newsList is None):
+        print('Missing news for ', scrip)
+        return
+    
+    for scrip_news in scrip_newsList['news']:
         ws_buyNews.append([scrip_news['timestamp'], scrip_news['summary'], scrip_news['link']])
     ws_buyNews.append([" "])
     
 def sell_News(scrip):
-    scrip_newsList = db.news.find_one({'scrip':scrip.replace('&','').replace('-','_')})['news']
+    scrip_newsList = db.news.find_one({'scrip':scrip})
     ws_sellNews.append([scrip])
     ws_sellNews.append(["#####################"])
-    for scrip_news in scrip_newsList:
+    if(scrip_newsList is None):
+        print('Missing news for ', scrip)
+        return
+    for scrip_news in scrip_newsList['news']:
         ws_sellNews.append([scrip_news['timestamp'], scrip_news['summary'], scrip_news['link']])
     ws_sellNews.append([" "])  
 
@@ -160,15 +173,13 @@ def result_data(scrip):
     regressionResult.append(regression_data['yearLowChange'])
     if(classification_data['kNeighboursValue'] >= 0 and regression_data['kNeighboursValue'] > .5 and len(regression_data['sellIndia'].encode('utf8')) < 1):
         ws_buy.append(regressionResult)
+        buy_News(scrip)
         if(regression_data['kNeighboursValue'] >= 1 and 5 >= regression_data['mlpValue'] >= 1.5 and regression_data['baggingValue'] >= 0 and regression_data['randomForestValue'] >= 0):
             ws_buyFilter.append(regressionResult)
-            buy_News(scrip)
-        elif(regression_data['forecast_day_PCT_change'] <= -1.5 and regression_data['kNeighboursValue'] > 1 and regression_data['mlpValue'] > 0):
+        elif(regression_data['forecast_day_PCT_change'] <= -1 and regression_data['kNeighboursValue'] > 0 and regression_data['mlpValue'] > 0):
             ws_buyFilter.append(regressionResult)
-            buy_News(scrip)
-        elif(regression_data['forecast_day_PCT_change'] >= 1.5 and regression_data['kNeighboursValue'] > 1 and regression_data['mlpValue'] >= 0 and regression_data['baggingValue'] >= 0 and regression_data['randomForestValue'] >= 0):
-            ws_buyFilter.append(regressionResult)
-            buy_News(scrip)        
+        elif(regression_data['forecast_day_PCT_change'] >= 1 and regression_data['kNeighboursValue'] >= 0 and regression_data['mlpValue'] >= 0 and regression_data['baggingValue'] >= 0 and regression_data['randomForestValue'] >= 0):
+            ws_buyFilter.append(regressionResult)        
     if(regression_data['kNeighboursValue'] > .5):
         ws_buyAll.append(regressionResult)    
         
@@ -199,22 +210,46 @@ def result_data(scrip):
     regressionResult.append(classification_data['yearLowChange'])
     if(classification_data['kNeighboursValue'] < 0 and regression_data['kNeighboursValue'] <= 0 and len(regression_data['buyIndia'].encode('utf8')) < 1):            
         ws_sell.append(regressionResult)
+        sell_News(scrip)
         if(classification_data['kNeighboursValue'] <= -1 and classification_data['mlpValue'] <= -1 and classification_data['baggingValue'] <= -1 and classification_data['randomForestValue'] <= -1):
             ws_sellFilter.append(regressionResult)
-            sell_News(scrip)
         elif(classification_data['kNeighboursValue'] <= -2 and classification_data['mlpValue'] <= -2):
             ws_sellFilter.append(regressionResult)
-            sell_News(scrip)
-        elif(regression_data['forecast_day_PCT_change'] <= -1.5 and classification_data['kNeighboursValue'] <= -1 and classification_data['mlpValue'] <= 0):
+        elif(regression_data['forecast_day_PCT_change'] <= -1 and classification_data['kNeighboursValue'] <= -1 and classification_data['mlpValue'] <= 0):
             ws_sellFilter.append(regressionResult)
-            sell_News(scrip)
-        elif(regression_data['forecast_day_PCT_change'] >= 1.5 and classification_data['kNeighboursValue'] <= -1):
+        elif(regression_data['forecast_day_PCT_change'] >= 1 and classification_data['kNeighboursValue'] <= -1):
             ws_sellFilter.append(regressionResult)
-            sell_News(scrip)  
     if(classification_data['kNeighboursValue'] < 0):            
-        ws_sellAll.append(regressionResult)     
-                                  
-
+        ws_sellAll.append(regressionResult) 
+        
+    start_date = (datetime.datetime.now() - datetime.timedelta(hours=0))
+    start_date = datetime.datetime(start_date.year, start_date.month, start_date.day, start_date.hour) 
+    end_date = (datetime.datetime.now() - datetime.timedelta(hours=18))
+    end_date = datetime.datetime(end_date.year, end_date.month, end_date.day, end_date.hour)
+    
+    scrip_newsList = db.news.find_one({'scrip':scrip})
+    if(scrip_newsList is None):
+        return
+    for news in scrip_newsList['news']:
+        newstime = news['timestamp']
+        newssummary = news['summary']
+        newslink = news['link']
+        try:
+            news_time = datetime.datetime.strptime(newstime, "%H:%M:%S %d-%m-%Y")
+            if start_date > news_time > end_date: 
+                if newslink in newsDict:
+                    newsDict[newslink]['scrip'] = newsDict[newslink]['scrip'] + ',' + scrip
+                else:
+                    newsValue = {}
+                    newsValue['newssummary'] = newssummary
+                    newsValue['newstime'] = newstime
+                    newsValue['scrip'] = scrip
+                    newsDict[newslink] = newsValue
+                
+                
+        except:
+            pass
+                              
 def calculateParallel(threads=2):
     pool = ThreadPool(threads)
     
@@ -230,4 +265,5 @@ if __name__ == "__main__":
         os.makedirs(directory)
     calculateParallel(1)
     connection.close()
+    saveDailyNews()
     saveReports()

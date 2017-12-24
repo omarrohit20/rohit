@@ -582,7 +582,7 @@ def calculateParallel(threads=2):
     scrips.sort()
     
     pool.map(regression_ta_data, scrips)
-    pool.map(regression_ta_data, scrips)
+    #pool.map(regression_ta_data, scrips)
                      
 if __name__ == "__main__":
     if not os.path.exists(directory):
