@@ -36,7 +36,7 @@ from lasagne import layers
 from lasagne.updates import nesterov_momentum
 from nolearn.lasagne import NeuralNet as nlNeuralNet
 
-#import tflearn
+import tflearn
 
 import logging
 from sklearn.ensemble.bagging import BaggingClassifier
@@ -358,29 +358,48 @@ def performClassificationTest(dataset, split, symbol, output_dir, forecast_out, 
 #                 ('output', layers.DenseLayer),
 #                 ],
 #         # layer parameters:
-#         input_shape=(None, 84),
-#         hidden_num_units=300,  # number of units in 'hidden' layer
+#         input_shape=(None, 82),
+#         hidden_num_units=55,  # number of units in 'hidden' layer
 #         output_nonlinearity=lasagne.nonlinearities.rectify,
 #         output_num_units=10,  # 10 target values for the digits 0, 1, 2, ..., 9
-# 
+#  
 #         # optimization method:
 #         update=nesterov_momentum,
 #         update_learning_rate=0.01,
 #         update_momentum=0.9,
-# 
+#  
 #         max_epochs=10,
 #         verbose=1,
 #         ),
 #         train, test, test_forecast, features, symbol, output, out_params)
  
-#     # Build neural network
-#     net = tflearn.input_data(shape=[None, 84])
-#     net = tflearn.fully_connected(net, 32)
-#     net = tflearn.fully_connected(net, 32)
-#     net = tflearn.fully_connected(net, 2, activation='softmax')
-#     net = tflearn.regression(net)
+    #Build neural network
+    net = tflearn.input_data(shape=[None, 82])
+    net = tflearn.fully_connected(net, 55, activation='tanh',
+                                 regularizer='L2', weight_decay=0.005)
+    net = tflearn.fully_connected(net, 37, activation='tanh',
+                                 regularizer='L2', weight_decay=0.005)
+    net = tflearn.fully_connected(net, 1)
+    net = tflearn.reshape(net,[-1])
+    net = tflearn.regression(net)
+    
+#     input_layer = tflearn.input_data(shape=[None, 82])
+#     dense1 = tflearn.fully_connected(input_layer, 55, activation='tanh',
+#                                      regularizer='L2', weight_decay=0.001)
+#     dropout1 = tflearn.dropout(dense1, 0.8)
+#     dense2 = tflearn.fully_connected(dropout1, 37, activation='tanh',
+#                                      regularizer='L2', weight_decay=0.001)
+#     dropout2 = tflearn.dropout(dense2, 0.8)
+#     softmax = tflearn.fully_connected(dropout2, 1)
+#     
+#     # Regression using SGD with learning rate decay and Top-3 accuracy
+#     sgd = tflearn.SGD(learning_rate=0.1, lr_decay=0.96, decay_step=1000)
+#     #top_k = tflearn.metrics.Top_k(3)
+#     softmax = tflearn.reshape(softmax,[-1])
+#     net = tflearn.regression(softmax, optimizer=sgd,
+#                          loss='categorical_crossentropy')
 
-    model_name, forecast_set, accuracy = benchmark_classifier(tflearn.DNN(net),
+    model_name, forecast_set, accuracy = benchmark_classifier(tflearn.DNN(net, tensorboard_verbose=0),
          train, test, test_forecast, features, symbol, output, out_params)
     
     predicted_values.append(str(round(forecast_set.ravel()[0], 3)))
@@ -408,7 +427,12 @@ def benchmark_classifier(model, train, test, test_forecast, features, symbol, ou
     model.fit(train[features].as_matrix(), train[output].astype(np.int32).as_matrix(), *args, **kwargs)
     predicted_value = model.predict(test[features].as_matrix())
     
-    accuracy = model.score(test[features].as_matrix(), test[output].astype(int).as_matrix())
+    accuracy = 0
+    try:
+        accuracy = model.score(test[features].as_matrix(), test[output].astype(int).as_matrix())
+    except AttributeError:
+        accuracy = 0
+    
     forecast_set = model.predict(test_forecast[features].as_matrix())
     
     if plotgraph:

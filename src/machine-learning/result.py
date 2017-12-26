@@ -173,15 +173,16 @@ def result_data(scrip):
     regressionResult.append(regression_data['yearLowChange'])
     if(classification_data['kNeighboursValue'] >= 0 and regression_data['kNeighboursValue'] > .5 and len(regression_data['sellIndia'].encode('utf8')) < 1):
         ws_buy.append(regressionResult)
-        buy_News(scrip)
         if(regression_data['kNeighboursValue'] >= 1 and 5 >= regression_data['mlpValue'] >= 1.5 and regression_data['baggingValue'] >= 0 and regression_data['randomForestValue'] >= 0):
             ws_buyFilter.append(regressionResult)
         elif(regression_data['forecast_day_PCT_change'] <= -1 and regression_data['kNeighboursValue'] > 0 and regression_data['mlpValue'] > 0):
             ws_buyFilter.append(regressionResult)
         elif(regression_data['forecast_day_PCT_change'] >= 1 and regression_data['kNeighboursValue'] >= 0 and regression_data['mlpValue'] >= 0 and regression_data['baggingValue'] >= 0 and regression_data['randomForestValue'] >= 0):
             ws_buyFilter.append(regressionResult)        
-    if(regression_data['kNeighboursValue'] > .5):
-        ws_buyAll.append(regressionResult)    
+    if(regression_data['kNeighboursValue'] > 1 and regression_data['mlpValue'] > 1):
+        ws_buyAll.append(regressionResult)  
+    if(regression_data['kNeighboursValue'] > 0): 
+        buy_News(scrip)     
         
     #Sell Indicators
     regressionResult = [ ]
@@ -210,7 +211,6 @@ def result_data(scrip):
     regressionResult.append(classification_data['yearLowChange'])
     if(classification_data['kNeighboursValue'] < 0 and regression_data['kNeighboursValue'] <= 0 and len(regression_data['buyIndia'].encode('utf8')) < 1):            
         ws_sell.append(regressionResult)
-        sell_News(scrip)
         if(classification_data['kNeighboursValue'] <= -1 and classification_data['mlpValue'] <= -1 and classification_data['baggingValue'] <= -1 and classification_data['randomForestValue'] <= -1):
             ws_sellFilter.append(regressionResult)
         elif(classification_data['kNeighboursValue'] <= -2 and classification_data['mlpValue'] <= -2):
@@ -219,8 +219,10 @@ def result_data(scrip):
             ws_sellFilter.append(regressionResult)
         elif(regression_data['forecast_day_PCT_change'] >= 1 and classification_data['kNeighboursValue'] <= -1):
             ws_sellFilter.append(regressionResult)
-    if(classification_data['kNeighboursValue'] < 0):            
+    if(classification_data['kNeighboursValue'] < 0 and classification_data['mlpValue'] < 0):            
         ws_sellAll.append(regressionResult) 
+    if(classification_data['kNeighboursValue'] < 0):
+        sell_News(scrip)  
         
     start_date = (datetime.datetime.now() - datetime.timedelta(hours=0))
     start_date = datetime.datetime(start_date.year, start_date.month, start_date.day, start_date.hour) 
