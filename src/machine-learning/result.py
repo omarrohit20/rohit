@@ -25,21 +25,21 @@ wb = Workbook()
 ws = wb.active
 ws.append(["scrip", "timestamps", "summary", "Link"])
 ws_buyFilter = wb.create_sheet("BuyFilter")
-ws_buyFilter.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_buyFilter.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "predScore"])
 ws_sellFilter = wb.create_sheet("SellFilter")
-ws_sellFilter.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_sellFilter.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "predScore"])
 ws_buyNews = wb.create_sheet("BuyNews")
 ws_buyNews.append(["timestamps", "summary", "Link"])
 ws_sellNews = wb.create_sheet("SellNews")
 ws_sellNews.append(["timestamps", "summary", "Link"])
 ws_buy = wb.create_sheet("Buy")
-ws_buy.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_buy.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "predScore"])
 ws_sell = wb.create_sheet("Sell")
-ws_sell.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_sell.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "predScore"])
 ws_buyAll = wb.create_sheet("BuyAll")
-ws_buyAll.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_buyAll.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "predScore"])
 ws_sellAll = wb.create_sheet("SellAll")
-ws_sellAll.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_sellAll.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "predScore"])
 
 def saveDailyNews():
     for newslink,newsValue in newsDict.items():
@@ -60,14 +60,14 @@ def saveReports():
     count = 0
     for row in ws_buyFilter.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:W" + str(count))
+    tab = Table(displayName="Table1", ref="A1:X" + str(count))
     tab.tableStyleInfo = style
     ws_buyFilter.add_table(tab)
     
     count = 0
     for row in ws_sellFilter.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:W" + str(count))
+    tab = Table(displayName="Table1", ref="A1:X" + str(count))
     tab.tableStyleInfo = style
     ws_sellFilter.add_table(tab)
     
@@ -88,28 +88,28 @@ def saveReports():
     count = 0
     for row in ws_buy.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:W" + str(count))
+    tab = Table(displayName="Table1", ref="A1:X" + str(count))
     tab.tableStyleInfo = style
     ws_buy.add_table(tab)
     
     count = 0
     for row in ws_sell.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:W" + str(count))
+    tab = Table(displayName="Table1", ref="A1:X" + str(count))
     tab.tableStyleInfo = style
     ws_sell.add_table(tab)
     
     count = 0
     for row in ws_buyAll.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:W" + str(count))
+    tab = Table(displayName="Table1", ref="A1:X" + str(count))
     tab.tableStyleInfo = style
     ws_buyAll.add_table(tab)
     
     count = 0
     for row in ws_sellAll.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:W" + str(count))
+    tab = Table(displayName="Table1", ref="A1:X" + str(count))
     tab.tableStyleInfo = style
     ws_sellAll.add_table(tab)
       
@@ -171,13 +171,14 @@ def result_data(scrip):
     regressionResult.append(regression_data['trend'])
     regressionResult.append(regression_data['yearHighChange'])
     regressionResult.append(regression_data['yearLowChange'])
+    regressionResult.append(float(regression_data['randomForestValue'])
+                            + float(regression_data['mlpValue'])
+                            + float(regression_data['baggingValue'])
+                            + float(regression_data['kNeighboursValue'])
+                            )
     if(classification_data['kNeighboursValue'] >= 0 and regression_data['kNeighboursValue'] > .5 and len(regression_data['sellIndia'].encode('utf8')) < 1):
         ws_buy.append(regressionResult)
-        if(regression_data['kNeighboursValue'] >= 1 and 5 >= regression_data['mlpValue'] >= 1.5 and regression_data['baggingValue'] >= 0 and regression_data['randomForestValue'] >= 0):
-            ws_buyFilter.append(regressionResult)
-        elif(regression_data['forecast_day_PCT_change'] <= -1 and regression_data['kNeighboursValue'] > 0 and regression_data['mlpValue'] > 0):
-            ws_buyFilter.append(regressionResult)
-        elif(regression_data['forecast_day_PCT_change'] >= 1 and regression_data['kNeighboursValue'] >= 0 and regression_data['mlpValue'] >= 0 and regression_data['baggingValue'] >= 0 and regression_data['randomForestValue'] >= 0):
+        if(regression_data['kNeighboursValue'] >= .5 and regression_data['mlpValue'] >= -.1 and regression_data['baggingValue'] >= 0 and regression_data['randomForestValue'] >= -.1 and regression_data['yearHighChange'] <= -10 and regression_data['forecast_day_PCT_change'] < 1):
             ws_buyFilter.append(regressionResult)        
     if(regression_data['kNeighboursValue'] > 1 and regression_data['mlpValue'] > 1):
         ws_buyAll.append(regressionResult)  
@@ -209,15 +210,14 @@ def result_data(scrip):
     regressionResult.append(classification_data['trend'])
     regressionResult.append(classification_data['yearHighChange'])
     regressionResult.append(classification_data['yearLowChange'])
-    if(classification_data['kNeighboursValue'] < 0 and regression_data['kNeighboursValue'] <= 0 and len(regression_data['buyIndia'].encode('utf8')) < 1):            
+    regressionResult.append(float(classification_data['randomForestValue'])
+                            + float(classification_data['mlpValue'])
+                            + float(classification_data['baggingValue'])
+                            + float(classification_data['kNeighboursValue'])
+                            )
+    if(classification_data['kNeighboursValue'] < 0 and regression_data['kNeighboursValue'] <= .5 and len(regression_data['buyIndia'].encode('utf8')) < 1):            
         ws_sell.append(regressionResult)
-        if(classification_data['kNeighboursValue'] <= -1 and classification_data['mlpValue'] <= -1 and classification_data['baggingValue'] <= -1 and classification_data['randomForestValue'] <= -1):
-            ws_sellFilter.append(regressionResult)
-        elif(classification_data['kNeighboursValue'] <= -2 and classification_data['mlpValue'] <= -2):
-            ws_sellFilter.append(regressionResult)
-        elif(regression_data['forecast_day_PCT_change'] <= -1 and classification_data['kNeighboursValue'] <= -1 and classification_data['mlpValue'] <= 0):
-            ws_sellFilter.append(regressionResult)
-        elif(regression_data['forecast_day_PCT_change'] >= 1 and classification_data['kNeighboursValue'] <= -1):
+        if(classification_data['kNeighboursValue'] <= -1 and classification_data['mlpValue'] <= 0 and classification_data['yearLowChange'] > 10 and classification_data['forecast_day_PCT_change'] > -1):
             ws_sellFilter.append(regressionResult)
     if(classification_data['kNeighboursValue'] < 0 and classification_data['mlpValue'] < 0):            
         ws_sellAll.append(regressionResult) 

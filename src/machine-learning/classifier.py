@@ -23,7 +23,7 @@ from sklearn.ensemble import AdaBoostRegressor
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.neural_network import MLPRegressor
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, VotingClassifier
 from sklearn import neighbors
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.ensemble import GradientBoostingClassifier
@@ -535,13 +535,14 @@ def regression_ta_data(scrip):
     regressionResult.append(score)
       
     if randomForest:
-        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, RandomForestClassifier(n_estimators=10, n_jobs=1), True))
+        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, RandomForestClassifier(n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1)))
     else: 
         regressionResult.extend([0,0])    
             
     if mlp:
         dfp_mlp = get_data_frame(df, 'mlp')
-        regressionResult.extend(performClassification(dfp_mlp, 0.98, scrip, directory, forecast_out, MLPClassifier(activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25))))
+        clf = MLPClassifier(activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25))
+        regressionResult.extend(performClassification(dfp_mlp, 0.98, scrip, directory, forecast_out, VotingClassifier(estimators=[('lr', clf), ('rf', clf), ('gnb', clf)], voting='soft')))
         dfp_mlp.to_csv(directory + '/' + scrip + '.csv', encoding='utf-8')
     else:
         regressionResult.extend([0,0])
@@ -582,6 +583,7 @@ def calculateParallel(threads=2):
     scrips.sort()
     
     pool.map(regression_ta_data, scrips)
+    pool.wait_completion()
     #pool.map(regression_ta_data, scrips)
                      
 if __name__ == "__main__":

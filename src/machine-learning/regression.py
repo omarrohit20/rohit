@@ -580,6 +580,7 @@ def calculateParallel(threads=2):
     scrips.sort()
     
     pool.map(regression_ta_data, scrips)
+    pool.wait_completion()
     #pool.map(regression_ta_data, scrips)
                      
 if __name__ == "__main__":
