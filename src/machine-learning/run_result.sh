@@ -1,0 +1,9 @@
+pyenv global system
+pyenv local system
+python ./technical.py result
+pyenv global 3.5.0
+pyenv local 3.5.0
+python ./classifier.py result
+python ./regression.py result
+pyenv global system
+pyenv local system

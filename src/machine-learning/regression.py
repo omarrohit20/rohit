@@ -1,4 +1,4 @@
-import os, logging, sys, json
+import os, logging, sys, json, csv
 from openpyxl import Workbook
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.styles import Color, PatternFill, Font, Border
@@ -92,7 +92,7 @@ def getScore(vol_change, pct_change):
     except ZeroDivisionError:
         return 0
 
-def saveReports():
+def saveReports(run_type=None):
     # Add a default style with striped rows and banded columns
     style = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False,
                showLastColumn=False, showRowStripes=True, showColumnStripes=True)
@@ -166,7 +166,14 @@ def saveReports():
         tab.tableStyleInfo = style
         ws_GradientBoosting.add_table(tab)
     
-    wb.save(logname + ".xlsx")
+    if(run_type == 'broker'):
+        wb.save(logname + "broker_buy.xlsx")
+    elif(run_type == 'result'):
+        wb.save(logname + "result.xlsx")   
+    else:
+        wb.save(logname + ".xlsx")
+        
+            
 
 def historical_data(data):
     ardate = np.array([x.encode('UTF8') for x in (np.array(data['data'])[:,0][::-1]).tolist()])
@@ -571,21 +578,44 @@ def regression_ta_data(scrip):
     regressionResult.append(yearLowChange)
     create_csv(regressionResult)   
                                                           
-def calculateParallel(threads=2):
+def calculateParallel(threads=2, run_type=None):
     pool = ThreadPool(threads)
     
-    scrips = []
-    for data in db.scrip.find():
-        scrips.append(data['scrip'].replace('&','').replace('-','_'))
-    scrips.sort()
     
-    pool.map(regression_ta_data, scrips)
-    pool.wait_completion()
-    #pool.map(regression_ta_data, scrips)
+    if(run_type == 'broker'):
+        count=0
+        scrips = []
+        with open('../data-import/nselist/ind_broker_buy.csv') as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=',')
+            for row in readCSV:
+                if (count != 0):
+                    scrips.append(row[0].replace('&','').replace('-','_'))
+                count = count + 1
+                
+            scrips.sort()
+            pool.map(regression_ta_data, scrips)
+    elif(run_type == 'result'):
+        count=0
+        scrips = []
+        with open('../data-import/nselist/ind_result.csv') as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=',')
+            for row in readCSV:
+                if (count != 0):
+                    scrips.append(row[0].replace('&','').replace('-','_'))
+                count = count + 1
+                
+            scrips.sort()
+            pool.map(regression_ta_data, scrips)        
+    else:
+        scrips = []
+        for data in db.scrip.find():
+            scrips.append(data['scrip'].replace('&','').replace('-','_'))
+        scrips.sort()
+        pool.map(regression_ta_data, scrips)   
                      
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(1)
+    calculateParallel(1, sys.argv[1])
     connection.close()
-    saveReports()
+    saveReports(sys.argv[1])

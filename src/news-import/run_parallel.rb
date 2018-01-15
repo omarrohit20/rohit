@@ -2,7 +2,7 @@ require 'logger'
 require 'socket'
 require 'mongo'
 
-RETRYCOUNT = 2
+RETRYCOUNT = 3
 CONTAINER = 'rohit_ni'
 IP=IPSocket.getaddress(Socket.gethostname)
 puts IP

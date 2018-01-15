@@ -622,12 +622,15 @@ def performRegression(dataset, split, symbol, output_dir, forecast_out, regresso
     out_params = (symbol, output_dir)
     output = dataset.columns[-1]
 
-    model_name, forecast_set, accuracy = benchmark_model(regressor, \
-        train, test, test_forecast, features, symbol, output, out_params)
-    log.info('%s, %s, %s, %s', symbol, model_name, forecast_set, accuracy)
-    predicted_values.append(str(round(forecast_set.ravel()[0], 3)))
-    predicted_values.append(str(round(accuracy, 3)))
-    
+    try:
+        model_name, forecast_set, accuracy = benchmark_model(regressor, \
+            train, test, test_forecast, features, symbol, output, out_params)
+        log.info('%s, %s, %s, %s', symbol, model_name, forecast_set, accuracy)
+        predicted_values.append(str(round(forecast_set.ravel()[0], 3)))
+        predicted_values.append(str(round(accuracy, 3)))
+    except:
+        return [0,0]
+          
     time.sleep(1)
     gc.collect()
     gc.collect()

@@ -3,9 +3,11 @@ import json
 import datetime
 import time
 import sys
+import csv
 from pymongo import MongoClient
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
+API_KEY="TipsAmiHm6nzXRhoabFs"
 
 def insert_scripdata(scripdata, futures): 
     data = {}
@@ -31,19 +33,92 @@ if __name__ == "__main__":
         try:
             data = db.history.find_one({'dataset_code':scrip})
             if(data is None):
-                scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key=xMH7BiBu6s24LHCizug3&start_date="+start_date+"&end_date="+end_date).read().decode())
+                scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
                 insert_scripdata(scripdata, futures)
                 print(scrip)      
         except:
             time.sleep(2)
             try:
-                scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key=xMH7BiBu6s24LHCizug3&start_date="+start_date+"&end_date="+end_date).read().decode())
+                scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
                 insert_scripdata(scripdata, futures)
                 print(scrip)
             except:
                 print('historical fail', str(data['scrip'])) 
                 pass
 
-
+    count = 0
+    with open('nselist/ind_broker_buy.csv') as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        
+        for row in readCSV:
+            if (count != 0):
+                scrip = row[0].replace('&','').replace('-','_')
+                try:
+                    data = db.history.find_one({'dataset_code':scrip})
+                    if(data is None):
+                        scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
+                        insert_scripdata(scripdata, futures)
+                        print(scrip)      
+                except:
+                    time.sleep(2)
+                    try:
+                        scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
+                        insert_scripdata(scripdata, futures)
+                        print(scrip)
+                    except:
+                        print('historical fail', scrip) 
+                        pass  
+            count = count + 1    
+    
+    count = 0
+    with open('nselist/ind_broker_sell.csv') as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        
+        for row in readCSV:
+            if (count != 0):
+                scrip = row[0].replace('&','').replace('-','_')
+                try:
+                    data = db.history.find_one({'dataset_code':scrip})
+                    if(data is None):
+                        scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
+                        insert_scripdata(scripdata, futures)
+                        print(scrip)      
+                except:
+                    time.sleep(2)
+                    try:
+                        scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
+                        insert_scripdata(scripdata, futures)
+                        print(scrip)
+                    except:
+                        print('historical fail', scrip) 
+                        pass  
+            count = count + 1
+            
+    count = 0
+    with open('nselist/ind_result.csv') as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        
+        for row in readCSV:
+            if (count != 0):
+                scrip = row[0].replace('&','').replace('-','_')
+                try:
+                    data = db.history.find_one({'dataset_code':scrip})
+                    if(data is None):
+                        scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
+                        insert_scripdata(scripdata, futures)
+                        print(scrip)      
+                except:
+                    time.sleep(2)
+                    try:
+                        scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
+                        insert_scripdata(scripdata, futures)
+                        print(scrip)
+                    except:
+                        print('historical fail', scrip) 
+                        pass  
+            count = count + 1            
+    
+    
+    
 connection.close()
 print('Done Historical')

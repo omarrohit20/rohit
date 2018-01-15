@@ -572,21 +572,55 @@ def ta_lib_data(scrip):
         print(Exception)
         pass  
           
-def calculateParallel(threads=2):
+def calculateParallel(threads=2, run_type=None):
     pool = ThreadPool(threads)
     
-    scrips = []
-    for data in db.scrip.find():
-        scrips.append(data['scrip'].replace('&','').replace('-','_'))
-    scrips.sort()
+    if(run_type == 'broker'):
+        count=0
+        scrips = []
+        with open('../data-import/nselist/ind_broker_buy.csv') as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=',')
+            for row in readCSV:
+                if (count != 0):
+                    scrips.append(row[0].replace('&','').replace('-','_'))
+                count = count + 1
+                
+            scrips.sort()
+            pool.map(ta_lib_data, scrips)
+        with open('../data-import/nselist/ind_broker_sell.csv') as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=',')
+            for row in readCSV:
+                if (count != 0):
+                    scrips.append(row[0].replace('&','').replace('-','_'))
+                count = count + 1
+                
+            scrips.sort()
+            pool.map(ta_lib_data, scrips)    
+    elif(run_type == 'result'):
+        count=0
+        scrips = []
+        with open('../data-import/nselist/ind_result.csv') as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=',')
+            for row in readCSV:
+                if (count != 0):
+                    scrips.append(row[0].replace('&','').replace('-','_'))
+                count = count + 1
+                
+            scrips.sort()
+            pool.map(ta_lib_data, scrips)   
+    else:
+        scrips = []
+        for data in db.scrip.find():
+            scrips.append(data['scrip'].replace('&','').replace('-','_'))
+        scrips.sort()
+        pool.map(ta_lib_data, scrips)     
     
-    pool.map(ta_lib_data, scrips)
            
 if __name__ == "__main__":
     end_date = datetime.date.today().strftime('%d-%m-%Y')
     start_date = (datetime.date.today() - datetime.timedelta(days=30)).strftime('%d-%m-%Y')
     log.info('%s to %s', start_date, end_date)
-    calculateParallel(1)
+    calculateParallel(1, sys.argv[1])
     
     connection.close() 
     saveReports()   
