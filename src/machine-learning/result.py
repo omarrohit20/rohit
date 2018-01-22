@@ -1,4 +1,4 @@
-import os, logging, sys, json
+import os, logging, sys, json, csv
 from openpyxl import Workbook
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.styles import Color, PatternFill, Font, Border
@@ -45,7 +45,7 @@ def saveDailyNews():
     for newslink,newsValue in newsDict.items():
         ws.append([newsValue['scrip'], newsValue['newstime'], newsValue['newssummary'], newslink])
 
-def saveReports():
+def saveReports(run_type=None):
     # Add a default style with striped rows and banded columns
     style = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False,
                showLastColumn=False, showRowStripes=True, showColumnStripes=True)
@@ -113,7 +113,14 @@ def saveReports():
     tab.tableStyleInfo = style
     ws_sellAll.add_table(tab)
       
-    wb.save(logname + ".xlsx")
+    if(run_type == 'broker'):
+        wb.save(logname + "broker_buy.xlsx")
+    elif(run_type == 'result'):
+        wb.save(logname + "result.xlsx")
+    elif(run_type == 'result_declared'):
+        wb.save(logname + "result_declared.xlsx")       
+    else:
+        wb.save(logname + ".xlsx")
 
 def buy_News(scrip):
     scrip_newsList = db.news.find_one({'scrip':scrip})
@@ -256,20 +263,55 @@ def result_data(scrip):
         except:
             pass
                               
-def calculateParallel(threads=2):
+def calculateParallel(threads=2, run_type=None):
     pool = ThreadPool(threads)
-    
-    scrips = []
-    for data in db.scrip.find():
-        scrips.append(data['scrip'].replace('&','').replace('-','_'))
-    scrips.sort()
-    
-    pool.map(result_data, scrips)
+    if(run_type == 'broker'):
+        count=0
+        scrips = []
+        with open('../data-import/nselist/ind_broker_buy.csv') as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=',')
+            for row in readCSV:
+                if (count != 0):
+                    scrips.append(row[0].replace('&','').replace('-','_'))
+                count = count + 1
+                
+            scrips.sort()
+            pool.map(result_data, scrips)
+    elif(run_type == 'result'):
+        count=0
+        scrips = []
+        with open('../data-import/nselist/ind_result.csv') as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=',')
+            for row in readCSV:
+                if (count != 0):
+                    scrips.append(row[0].replace('&','').replace('-','_'))
+                count = count + 1
+                
+            scrips.sort()
+            pool.map(result_data, scrips)  
+    elif(run_type == 'result_declared'):
+        count=0
+        scrips = []
+        with open('../data-import/nselist/ind_result_declared.csv') as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=',')
+            for row in readCSV:
+                if (count != 0):
+                    scrips.append(row[0].replace('&','').replace('-','_'))
+                count = count + 1
+                
+            scrips.sort()
+            pool.map(result_data, scrips)               
+    else:
+        scrips = []
+        for data in db.scrip.find():
+            scrips.append(data['scrip'].replace('&','').replace('-','_'))
+        scrips.sort()
+        pool.map(result_data, scrips)
                      
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(1)
+    calculateParallel(1, sys.argv[1])
     connection.close()
     saveDailyNews()
-    saveReports()
+    saveReports(sys.argv[1])

@@ -57,13 +57,13 @@ if __name__ == "__main__":
                     data = db.history.find_one({'dataset_code':scrip})
                     if(data is None):
                         scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
-                        insert_scripdata(scripdata, futures)
+                        insert_scripdata(scripdata, "NO")
                         print(scrip)      
                 except:
                     time.sleep(2)
                     try:
                         scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
-                        insert_scripdata(scripdata, futures)
+                        insert_scripdata(scripdata, "NO")
                         print(scrip)
                     except:
                         print('historical fail', scrip) 
@@ -81,13 +81,13 @@ if __name__ == "__main__":
                     data = db.history.find_one({'dataset_code':scrip})
                     if(data is None):
                         scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
-                        insert_scripdata(scripdata, futures)
+                        insert_scripdata(scripdata, "NO")
                         print(scrip)      
                 except:
                     time.sleep(2)
                     try:
                         scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
-                        insert_scripdata(scripdata, futures)
+                        insert_scripdata(scripdata, "NO")
                         print(scrip)
                     except:
                         print('historical fail', scrip) 
@@ -105,18 +105,42 @@ if __name__ == "__main__":
                     data = db.history.find_one({'dataset_code':scrip})
                     if(data is None):
                         scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
-                        insert_scripdata(scripdata, futures)
+                        insert_scripdata(scripdata, "NO")
                         print(scrip)      
                 except:
                     time.sleep(2)
                     try:
                         scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
-                        insert_scripdata(scripdata, futures)
+                        insert_scripdata(scripdata, "NO")
                         print(scrip)
                     except:
                         print('historical fail', scrip) 
                         pass  
             count = count + 1            
+            
+    count = 0
+    with open('nselist/ind_result_declared.csv') as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        
+        for row in readCSV:
+            if (count != 0):
+                scrip = row[0].replace('&','').replace('-','_')
+                try:
+                    data = db.history.find_one({'dataset_code':scrip})
+                    if(data is None):
+                        scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
+                        insert_scripdata(scripdata, "NO")
+                        print(scrip)      
+                except:
+                    time.sleep(2)
+                    try:
+                        scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
+                        insert_scripdata(scripdata, "NO")
+                        print(scrip)
+                    except:
+                        print('historical fail', scrip) 
+                        pass  
+            count = count + 1                    
     
     
     

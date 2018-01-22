@@ -1,4 +1,4 @@
-import os, logging, sys, json
+import os, logging, sys, json, csv
 from openpyxl import Workbook
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.styles import Color, PatternFill, Font, Border
@@ -172,7 +172,9 @@ def saveReports(run_type=None):
     if(run_type == 'broker'):
         wb.save(logname + "broker_sell.xlsx")
     elif(run_type == 'result'):
-        wb.save(logname + "result.xlsx")   
+        wb.save(logname + "result.xlsx")
+    elif(run_type == 'result_declared'):
+        wb.save(logname + "result_declared.xlsx") 
     else:
         wb.save(logname + ".xlsx")
 
@@ -386,8 +388,32 @@ def get_data_frame(df, regressor="None"):
         dfp.drop(dfp[dfp.label < -7].index, inplace=True)
     return dfp
 
-def create_csv(regressionResult):
-    ws.append(regressionResult)
+def create_csv(scrip, regressionResult=None):
+    regression_data_db = db.classification.find_one({'scrip':scrip})
+    if(regression_data_db is not None):
+        regressionResult = [ ]
+        regressionResult.append('YES')
+        regressionResult.append(regression_data_db['trainSize'])
+        regressionResult.append(regression_data_db['buyIndia'])
+        regressionResult.append(regression_data_db['sellIndia'])
+        regressionResult.append(regression_data_db['scrip'])
+        regressionResult.append(regression_data_db['forecast_day_VOL_change'])
+        regressionResult.append(regression_data_db['forecast_day_PCT_change'])
+        regressionResult.append(regression_data_db['score'])
+        regressionResult.extend([regression_data_db['randomForestValue'],regression_data_db['randomForestAccuracy']])
+        regressionResult.extend([regression_data_db['mlpValue'],regression_data_db['mlpAccuracy']])
+        regressionResult.extend([regression_data_db['baggingValue'],regression_data_db['baggingAccuracy']])
+        regressionResult.extend([regression_data_db['adaBoostValue'],regression_data_db['adaBoostAccuracy']])
+        regressionResult.extend([regression_data_db['kNeighboursValue'],regression_data_db['kNeighboursAccuracy']])
+        regressionResult.extend([regression_data_db['gradientBoostingValue'],regression_data_db['gradientBoostingAccuracy']])
+        regressionResult.append(regression_data_db['trend'])
+        regressionResult.append(regression_data_db['yearHighChange'])
+        regressionResult.append(regression_data_db['yearLowChange'])
+        regressionResult.append(regression_data_db['forecast_day_PCT2_change'])
+        regressionResult.append(regression_data_db['forecast_day_PCT3_change'])
+        regressionResult.append(regression_data_db['forecast_day_PCT4_change'])
+        regressionResult.append(regression_data_db['forecast_day_PCT5_change'])
+        
     trainSize = int(regressionResult[1])
     buyIndia = str(regressionResult[2])
     sellIndia = str(regressionResult[3])
@@ -410,8 +436,43 @@ def create_csv(regressionResult):
     trend = str(regressionResult[20])
     yearHighChange = float(regressionResult[21])
     yearLowChange = float(regressionResult[22])
+    forecast_day_PCT2_change = float(regressionResult[23])
+    forecast_day_PCT3_change = float(regressionResult[24])
+    forecast_day_PCT4_change = float(regressionResult[25])
+    forecast_day_PCT5_change = float(regressionResult[26])
     
+    #Insert in db
+    if(regression_data_db is None):
+        data = {}
+        data['trainSize'] = trainSize
+        data['buyIndia'] = buyIndia
+        data['sellIndia'] = sellIndia
+        data['scrip'] = scrip
+        data['forecast_day_VOL_change'] = forecast_day_VOL_change
+        data['forecast_day_PCT_change'] = forecast_day_PCT_change
+        data['forecast_day_PCT2_change'] = forecast_day_PCT2_change
+        data['forecast_day_PCT3_change'] = forecast_day_PCT3_change
+        data['forecast_day_PCT4_change'] = forecast_day_PCT4_change
+        data['forecast_day_PCT5_change'] = forecast_day_PCT5_change
+        data['score'] = score
+        data['randomForestValue'] = randomForestValue
+        data['randomForestAccuracy'] = randomForestAccuracy
+        data['mlpValue'] = mlpValue
+        data['mlpAccuracy'] = mlpAccuracy
+        data['baggingValue'] = baggingValue
+        data['baggingAccuracy'] = baggingAccuracy
+        data['adaBoostValue'] = adaBoostValue
+        data['adaBoostAccuracy'] = adaBoostAccuracy
+        data['kNeighboursValue'] = kNeighboursValue
+        data['kNeighboursAccuracy'] = kNeighboursAccuracy
+        data['gradientBoostingValue'] = gradientBoostingValue 
+        data['gradientBoostingAccuracy'] = gradientBoostingAccuracy 
+        data['trend'] = trend 
+        data['yearHighChange'] = yearHighChange 
+        data['yearLowChange'] = yearLowChange 
+        insert_classificationdata(data)
     
+    ws.append(regressionResult)
     if mlp and kNeighbours:
         #ws_filter = wb.create_sheet("Filter")
         if((trainSize> 1000) and (kNeighboursValue > 0) and (mlpValue > 0) and len(sellIndia) < 2):
@@ -475,38 +536,17 @@ def create_csv(regressionResult):
         if((trainSize> 1000) and (gradientBoostingValue > 0) and score > 0):
             ws_GradientBoosting.append(regressionResult)
         if((trainSize> 1000) and (gradientBoostingValue < 0) and score < 0):
-            ws_GradientBoosting.append(regressionResult) 
-            
-    #Insert in db
-    data = {}
-    data['trainSize'] = trainSize
-    data['buyIndia'] = buyIndia
-    data['sellIndia'] = sellIndia
-    data['scrip'] = scrip
-    data['forecast_day_VOL_change'] = forecast_day_VOL_change
-    data['forecast_day_PCT_change'] = forecast_day_PCT_change
-    data['score'] = score
-    data['randomForestValue'] = randomForestValue
-    data['randomForestAccuracy'] = randomForestAccuracy
-    data['mlpValue'] = mlpValue
-    data['mlpAccuracy'] = mlpAccuracy
-    data['baggingValue'] = baggingValue
-    data['baggingAccuracy'] = baggingAccuracy
-    data['adaBoostValue'] = adaBoostValue
-    data['adaBoostAccuracy'] = adaBoostAccuracy
-    data['kNeighboursValue'] = kNeighboursValue
-    data['kNeighboursAccuracy'] = kNeighboursAccuracy
-    data['gradientBoostingValue'] = gradientBoostingValue 
-    data['gradientBoostingAccuracy'] = gradientBoostingAccuracy 
-    data['trend'] = trend 
-    data['yearHighChange'] = yearHighChange 
-    data['yearLowChange'] = yearLowChange 
-    insert_classificationdata(data)   
+            ws_GradientBoosting.append(regressionResult)    
 
 def regression_ta_data(scrip):
     data = db.history.find_one({'dataset_code':scrip})
     if(data is None or (np.array(data['data'])).size < 200):
         print('Missing or very less Data for ', scrip)
+        return
+    
+    classification_data = db.classification.find_one({'scrip':scrip})
+    if(classification_data is not None):
+        create_csv(scrip)
         return
         
     hsdate, hsopen, hshigh, hslow, hslast, hsclose, hsquantity, hsturnover = historical_data(data)   
@@ -524,6 +564,10 @@ def regression_ta_data(scrip):
     dfp = get_data_frame(df)
     #dfp.to_csv(directory + '/' + scrip + '.csv', encoding='utf-8')
     forecast_day_PCT_change = dfp.iloc[-forecast_out:, 1].values[0]
+    forecast_day_PCT2_change = dfp.iloc[-forecast_out:, 2].values[0]
+    forecast_day_PCT3_change = dfp.iloc[-forecast_out:, 3].values[0]
+    forecast_day_PCT4_change = dfp.iloc[-forecast_out:, 4].values[0]
+    forecast_day_PCT5_change = dfp.iloc[-forecast_out:, 5].values[0]
     forecast_day_VOL_change = dfp.iloc[-forecast_out:, 0].values[0]
     score = getScore(forecast_day_VOL_change, forecast_day_PCT_change) 
     buy, sell, trend, yearHighChange, yearLowChange = ta_lib_data(scrip) 
@@ -577,7 +621,11 @@ def regression_ta_data(scrip):
     regressionResult.append(trend)
     regressionResult.append(yearHighChange)
     regressionResult.append(yearLowChange)
-    create_csv(regressionResult)   
+    regressionResult.append(forecast_day_PCT2_change)
+    regressionResult.append(forecast_day_PCT3_change)
+    regressionResult.append(forecast_day_PCT4_change)
+    regressionResult.append(forecast_day_PCT5_change)
+    create_csv(scrip, regressionResult)   
                                                           
 def calculateParallel(threads=2, run_type=None):
     pool = ThreadPool(threads)
@@ -606,6 +654,18 @@ def calculateParallel(threads=2, run_type=None):
                 
             scrips.sort()
             pool.map(regression_ta_data, scrips)        
+    elif(run_type == 'result_declared'):
+        count=0
+        scrips = []
+        with open('../data-import/nselist/ind_result_declared.csv') as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=',')
+            for row in readCSV:
+                if (count != 0):
+                    scrips.append(row[0].replace('&','').replace('-','_'))
+                count = count + 1
+                
+            scrips.sort()
+            pool.map(regression_ta_data, scrips)                
     else:
         scrips = []
         for data in db.scrip.find():

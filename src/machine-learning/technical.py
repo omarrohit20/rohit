@@ -607,7 +607,19 @@ def calculateParallel(threads=2, run_type=None):
                 count = count + 1
                 
             scrips.sort()
-            pool.map(ta_lib_data, scrips)   
+            pool.map(ta_lib_data, scrips) 
+    elif(run_type == 'result_declared'):
+        count=0
+        scrips = []
+        with open('../data-import/nselist/ind_result_declared.csv') as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=',')
+            for row in readCSV:
+                if (count != 0):
+                    scrips.append(row[0].replace('&','').replace('-','_'))
+                count = count + 1
+                
+            scrips.sort()
+            pool.map(ta_lib_data, scrips)          
     else:
         scrips = []
         for data in db.scrip.find():

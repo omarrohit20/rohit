@@ -23,7 +23,7 @@ client[:news].drop
 
 
 # Populate user pool queue
-users = Array["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+users = Array["1", "2", "3", "4", "5"]
 users.each{|user| $users_queue.push(user)}
 
 def time_diff(start_time, end_time)

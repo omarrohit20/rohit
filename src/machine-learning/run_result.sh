@@ -1,9 +1,14 @@
 pyenv global system
 pyenv local system
 python ./technical.py result
+python ./technical.py result_declared
 pyenv global 3.5.0
 pyenv local 3.5.0
 python ./classifier.py result
 python ./regression.py result
+python ./result.py result
+python ./classifier.py result_declared
+python ./regression.py result_declared
+python ./result.py result_declared
 pyenv global system
 pyenv local system
