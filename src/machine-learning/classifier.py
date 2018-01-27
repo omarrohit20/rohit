@@ -392,7 +392,7 @@ def create_csv(scrip, regressionResult=None):
     regression_data_db = db.classification.find_one({'scrip':scrip})
     if(regression_data_db is not None):
         regressionResult = [ ]
-        regressionResult.append('YES')
+        regressionResult.append(regression_data_db['futures'])
         regressionResult.append(regression_data_db['trainSize'])
         regressionResult.append(regression_data_db['buyIndia'])
         regressionResult.append(regression_data_db['sellIndia'])
@@ -413,7 +413,8 @@ def create_csv(scrip, regressionResult=None):
         regressionResult.append(regression_data_db['forecast_day_PCT3_change'])
         regressionResult.append(regression_data_db['forecast_day_PCT4_change'])
         regressionResult.append(regression_data_db['forecast_day_PCT5_change'])
-        
+    
+    futures = str(regressionResult[0])   
     trainSize = int(regressionResult[1])
     buyIndia = str(regressionResult[2])
     sellIndia = str(regressionResult[3])
@@ -444,6 +445,7 @@ def create_csv(scrip, regressionResult=None):
     #Insert in db
     if(regression_data_db is None):
         data = {}
+        data['futures'] = futures
         data['trainSize'] = trainSize
         data['buyIndia'] = buyIndia
         data['sellIndia'] = sellIndia
