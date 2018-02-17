@@ -55,35 +55,35 @@ gradientBoosting = False
 
 wb = Workbook()
 ws = wb.active
-ws.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "PCT2", "PCT3", "PCT4", "PCT5", "PCT_DAY"])
+ws.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT1", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_filter = wb.create_sheet("Filter")
-ws_filter.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "PCT2", "PCT3", "PCT4", "PCT5", "PCT_DAY"])
+ws_filter.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT1", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_gtltzero = wb.create_sheet("FilterAllgtlt0")
-ws_gtltzero.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "PCT2", "PCT3", "PCT4", "PCT5", "PCT_DAY"])
+ws_gtltzero.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT1", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 
 if randomForest:
     ws_RandomForest = wb.create_sheet("RandomForest")
-    ws_RandomForest.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "PCT2", "PCT3", "PCT4", "PCT5", "PCT_DAY"])
+    ws_RandomForest.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT1", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 
 if mlp:    
     ws_SVR = wb.create_sheet("MLP")
-    ws_SVR.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "PCT2", "PCT3", "PCT4", "PCT5", "PCT_DAY"])
+    ws_SVR.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT1", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 
 if bagging:    
     ws_Bagging = wb.create_sheet("Bagging")
-    ws_Bagging.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "PCT2", "PCT3", "PCT4", "PCT5", "PCT_DAY"])
+    ws_Bagging.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT1", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 
 if adaBoost:    
     ws_AdaBoost = wb.create_sheet("AdaBoost")
-    ws_AdaBoost.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "PCT2", "PCT3", "PCT4", "PCT5", "PCT_DAY"])
+    ws_AdaBoost.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT1", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
     
 if kNeighbours:    
     ws_KNeighbors = wb.create_sheet("KNeighbors")
-    ws_KNeighbors.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "PCT2", "PCT3", "PCT4", "PCT5", "PCT_DAY"])
+    ws_KNeighbors.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT1", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 
 if gradientBoosting:    
     ws_GradientBoosting = wb.create_sheet("GradientBoosting")
-    ws_GradientBoosting.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "PCT2", "PCT3", "PCT4", "PCT5", "PCT_DAY"])
+    ws_GradientBoosting.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT1", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 
 def insert_classificationdata(data):     
     json_data = json.loads(json.dumps(data))
@@ -103,21 +103,21 @@ def saveReports(run_type=None):
     count = 0
     for row in ws.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AB" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
     ws.add_table(tab)
     
     count = 0
     for row in ws_filter.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AB" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
     ws_filter.add_table(tab)
     
     count = 0
     for row in ws_gtltzero.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AB" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
     ws_gtltzero.add_table(tab)
     
@@ -125,7 +125,7 @@ def saveReports(run_type=None):
         count = 0
         for row in ws_RandomForest.iter_rows(row_offset=1):
             count += 1
-        tab = Table(displayName="Table1", ref="A1:AB" + str(count))
+        tab = Table(displayName="Table1", ref="A1:AD" + str(count))
         tab.tableStyleInfo = style
         ws_RandomForest.add_table(tab)
     
@@ -133,7 +133,7 @@ def saveReports(run_type=None):
         count = 0
         for row in ws_SVR.iter_rows(row_offset=1):
             count += 1
-        tab = Table(displayName="Table1", ref="A1:AB" + str(count))
+        tab = Table(displayName="Table1", ref="A1:AD" + str(count))
         tab.tableStyleInfo = style
         ws_SVR.add_table(tab)
     
@@ -141,7 +141,7 @@ def saveReports(run_type=None):
         count = 0
         for row in ws_Bagging.iter_rows(row_offset=1):
             count += 1
-        tab = Table(displayName="Table1", ref="A1:AB" + str(count))
+        tab = Table(displayName="Table1", ref="A1:AD" + str(count))
         tab.tableStyleInfo = style
         ws_Bagging.add_table(tab)
     
@@ -149,7 +149,7 @@ def saveReports(run_type=None):
         count = 0
         for row in ws_AdaBoost.iter_rows(row_offset=1):
             count += 1
-        tab = Table(displayName="Table1", ref="A1:AB" + str(count))
+        tab = Table(displayName="Table1", ref="A1:AD" + str(count))
         tab.tableStyleInfo = style
         ws_AdaBoost.add_table(tab)
     
@@ -157,7 +157,7 @@ def saveReports(run_type=None):
         count = 0
         for row in ws_KNeighbors.iter_rows(row_offset=1):
             count += 1
-        tab = Table(displayName="Table1", ref="A1:AB" + str(count))
+        tab = Table(displayName="Table1", ref="A1:AD" + str(count))
         tab.tableStyleInfo = style
         ws_KNeighbors.add_table(tab)
     
@@ -165,7 +165,7 @@ def saveReports(run_type=None):
         count = 0
         for row in ws_GradientBoosting.iter_rows(row_offset=1):
             count += 1
-        tab = Table(displayName="Table1", ref="A1:AB" + str(count))
+        tab = Table(displayName="Table1", ref="A1:AD" + str(count))
         tab.tableStyleInfo = style
         ws_GradientBoosting.add_table(tab)
     
@@ -386,6 +386,13 @@ def create_csv(scrip, regressionResult=None):
         regressionResult.append(regression_data_db['scrip'])
         regressionResult.append(regression_data_db['forecast_day_VOL_change'])
         regressionResult.append(regression_data_db['forecast_day_PCT_change'])
+        regressionResult.append(regression_data_db['forecast_day_PCT2_change'])
+        regressionResult.append(regression_data_db['forecast_day_PCT3_change'])
+        regressionResult.append(regression_data_db['forecast_day_PCT4_change'])
+        regressionResult.append(regression_data_db['forecast_day_PCT5_change'])
+        regressionResult.append(regression_data_db['forecast_day_PCT7_change'])
+        regressionResult.append(regression_data_db['forecast_day_PCT10_change'])
+        regressionResult.append(regression_data_db['PCT_day_change'])
         regressionResult.append(regression_data_db['score'])
         regressionResult.extend([regression_data_db['randomForestValue'],regression_data_db['randomForestAccuracy']])
         regressionResult.extend([regression_data_db['mlpValue'],regression_data_db['mlpAccuracy']])
@@ -396,11 +403,6 @@ def create_csv(scrip, regressionResult=None):
         regressionResult.append(regression_data_db['trend'])
         regressionResult.append(regression_data_db['yearHighChange'])
         regressionResult.append(regression_data_db['yearLowChange'])
-        regressionResult.append(regression_data_db['forecast_day_PCT2_change'])
-        regressionResult.append(regression_data_db['forecast_day_PCT3_change'])
-        regressionResult.append(regression_data_db['forecast_day_PCT4_change'])
-        regressionResult.append(regression_data_db['forecast_day_PCT5_change'])
-        regressionResult.append(regression_data_db['PCT_day_change'])
     
     futures = str(regressionResult[0])   
     trainSize = int(regressionResult[1])
@@ -409,27 +411,29 @@ def create_csv(scrip, regressionResult=None):
     scrip = str(regressionResult[4])
     forecast_day_VOL_change = int(regressionResult[5])
     forecast_day_PCT_change = float(regressionResult[6])
-    score = float(regressionResult[7])
-    randomForestValue = float(regressionResult[8])
-    randomForestAccuracy = float(regressionResult[9])
-    mlpValue = float(regressionResult[10])
-    mlpAccuracy = float(regressionResult[11])
-    baggingValue = float(regressionResult[12])
-    baggingAccuracy = float(regressionResult[13])
-    adaBoostValue = float(regressionResult[14])
-    adaBoostAccuracy = float(regressionResult[15])
-    kNeighboursValue = float(regressionResult[16])
-    kNeighboursAccuracy = float(regressionResult[17])
-    gradientBoostingValue = float(regressionResult[18])
-    gradientBoostingAccuracy = float(regressionResult[19])
-    trend = str(regressionResult[20])
-    yearHighChange = float(regressionResult[21])
-    yearLowChange = float(regressionResult[22])
-    forecast_day_PCT2_change = float(regressionResult[23])
-    forecast_day_PCT3_change = float(regressionResult[24])
-    forecast_day_PCT4_change = float(regressionResult[25])
-    forecast_day_PCT5_change = float(regressionResult[26])
-    PCT_day_change = float(regressionResult[27])
+    forecast_day_PCT2_change = float(regressionResult[7])
+    forecast_day_PCT3_change = float(regressionResult[8])
+    forecast_day_PCT4_change = float(regressionResult[9])
+    forecast_day_PCT5_change = float(regressionResult[10])
+    forecast_day_PCT7_change = float(regressionResult[11])
+    forecast_day_PCT10_change = float(regressionResult[12])
+    PCT_day_change = float(regressionResult[13])
+    score = float(regressionResult[14])
+    randomForestValue = float(regressionResult[15])
+    randomForestAccuracy = float(regressionResult[16])
+    mlpValue = float(regressionResult[17])
+    mlpAccuracy = float(regressionResult[18])
+    baggingValue = float(regressionResult[19])
+    baggingAccuracy = float(regressionResult[20])
+    adaBoostValue = float(regressionResult[21])
+    adaBoostAccuracy = float(regressionResult[22])
+    kNeighboursValue = float(regressionResult[23])
+    kNeighboursAccuracy = float(regressionResult[24])
+    gradientBoostingValue = float(regressionResult[25])
+    gradientBoostingAccuracy = float(regressionResult[26])
+    trend = str(regressionResult[27])
+    yearHighChange = float(regressionResult[28])
+    yearLowChange = float(regressionResult[29])
     
     #Insert in db
     if(regression_data_db is None):
@@ -445,6 +449,8 @@ def create_csv(scrip, regressionResult=None):
         data['forecast_day_PCT3_change'] = forecast_day_PCT3_change
         data['forecast_day_PCT4_change'] = forecast_day_PCT4_change
         data['forecast_day_PCT5_change'] = forecast_day_PCT5_change
+        data['forecast_day_PCT7_change'] = forecast_day_PCT7_change
+        data['forecast_day_PCT10_change'] = forecast_day_PCT10_change
         data['PCT_day_change'] = PCT_day_change
         data['score'] = score
         data['randomForestValue'] = randomForestValue
@@ -573,6 +579,8 @@ def regression_ta_data(scrip):
     forecast_day_PCT3_change = dfp.iloc[-forecast_out:, 3].values[0]
     forecast_day_PCT4_change = dfp.iloc[-forecast_out:, 4].values[0]
     forecast_day_PCT5_change = dfp.iloc[-forecast_out:, 5].values[0]
+    forecast_day_PCT7_change = dfp.iloc[-forecast_out:, 7].values[0]
+    forecast_day_PCT10_change = dfp.iloc[-forecast_out:, 10].values[0]
     forecast_day_VOL_change = dfp.iloc[-forecast_out:, 0].values[0]
     score = getScore(forecast_day_VOL_change, forecast_day_PCT_change) 
     buy, sell, trend, yearHighChange, yearLowChange = ta_lib_data(scrip) 
@@ -586,6 +594,13 @@ def regression_ta_data(scrip):
     regressionResult.append(str(scrip))
     regressionResult.append(forecast_day_VOL_change)
     regressionResult.append(forecast_day_PCT_change)
+    regressionResult.append(forecast_day_PCT2_change)
+    regressionResult.append(forecast_day_PCT3_change)
+    regressionResult.append(forecast_day_PCT4_change)
+    regressionResult.append(forecast_day_PCT5_change)
+    regressionResult.append(forecast_day_PCT7_change)
+    regressionResult.append(forecast_day_PCT10_change)
+    regressionResult.append(PCT_day_change)
     regressionResult.append(score)
       
     if randomForest:
@@ -626,11 +641,6 @@ def regression_ta_data(scrip):
     regressionResult.append(trend)
     regressionResult.append(yearHighChange)
     regressionResult.append(yearLowChange)
-    regressionResult.append(forecast_day_PCT2_change)
-    regressionResult.append(forecast_day_PCT3_change)
-    regressionResult.append(forecast_day_PCT4_change)
-    regressionResult.append(forecast_day_PCT5_change)
-    regressionResult.append(PCT_day_change)
     create_csv(scrip, regressionResult)   
                                                           
 def calculateParallel(threads=2, run_type=None):

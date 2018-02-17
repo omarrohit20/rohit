@@ -25,21 +25,26 @@ wb = Workbook()
 ws = wb.active
 ws.append(["scrip", "timestamps", "summary", "Link"])
 ws_buyFilter = wb.create_sheet("BuyFilter")
-ws_buyFilter.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "PCT2", "PCT3", "PCT4", "PCT5", "PCT_DAY"])
+ws_buyFilter.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_sellFilter = wb.create_sheet("SellFilter")
-ws_sellFilter.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "PCT2", "PCT3", "PCT4", "PCT5", "PCT_DAY"])
+ws_sellFilter.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_buyNews = wb.create_sheet("BuyNews")
 ws_buyNews.append(["timestamps", "summary", "Link"])
 ws_sellNews = wb.create_sheet("SellNews")
 ws_sellNews.append(["timestamps", "summary", "Link"])
 ws_buy = wb.create_sheet("Buy")
-ws_buy.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "PCT2", "PCT3", "PCT4", "PCT5", "PCT_DAY"])
+ws_buy.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_sell = wb.create_sheet("Sell")
-ws_sell.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "PCT2", "PCT3", "PCT4", "PCT5", "PCT_DAY"])
+ws_sell.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_buyAll = wb.create_sheet("BuyAll")
-ws_buyAll.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "PCT2", "PCT3", "PCT4", "PCT5", "PCT_DAY"])
+ws_buyAll.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_sellAll = wb.create_sheet("SellAll")
-ws_sellAll.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT_change", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange", "PCT2", "PCT3", "PCT4", "PCT5", "PCT_DAY"])
+ws_sellAll.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_buyFinal = wb.create_sheet("BuyFinal")
+ws_buyFinal.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_sellFinal = wb.create_sheet("SellFinal")
+ws_sellFinal.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+
 
 def saveDailyNews():
     for newslink,newsValue in newsDict.items():
@@ -60,14 +65,14 @@ def saveReports(run_type=None):
     count = 0
     for row in ws_buyFilter.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AB" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
     ws_buyFilter.add_table(tab)
     
     count = 0
     for row in ws_sellFilter.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AB" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
     ws_sellFilter.add_table(tab)
     
@@ -88,30 +93,44 @@ def saveReports(run_type=None):
     count = 0
     for row in ws_buy.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AB" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
     ws_buy.add_table(tab)
     
     count = 0
     for row in ws_sell.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AB" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
     ws_sell.add_table(tab)
     
     count = 0
     for row in ws_buyAll.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AB" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
     ws_buyAll.add_table(tab)
     
     count = 0
     for row in ws_sellAll.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AB" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
     ws_sellAll.add_table(tab)
+    
+    count = 0
+    for row in ws_buyFinal.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyFinal.add_table(tab)
+    
+    count = 0
+    for row in ws_sellFinal.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_sellFinal.add_table(tab)
       
     if(run_type == 'broker'):
         wb.save(logname + "broker_buy.xlsx")
@@ -162,6 +181,13 @@ def result_data(scrip):
     regressionResult.append(regression_data['scrip'])
     regressionResult.append(regression_data['forecast_day_VOL_change'])
     regressionResult.append(regression_data['forecast_day_PCT_change'])
+    regressionResult.append(regression_data['forecast_day_PCT2_change'])
+    regressionResult.append(regression_data['forecast_day_PCT3_change'])
+    regressionResult.append(regression_data['forecast_day_PCT4_change'])
+    regressionResult.append(regression_data['forecast_day_PCT5_change'])
+    regressionResult.append(regression_data['forecast_day_PCT7_change'])
+    regressionResult.append(regression_data['forecast_day_PCT10_change'])
+    regressionResult.append(regression_data['PCT_day_change'])
     regressionResult.append(regression_data['score'])
     regressionResult.append(regression_data['randomForestValue'])
     regressionResult.append(regression_data['randomForestAccuracy'])
@@ -178,11 +204,6 @@ def result_data(scrip):
     regressionResult.append(regression_data['trend'])
     regressionResult.append(regression_data['yearHighChange'])
     regressionResult.append(regression_data['yearLowChange'])
-    regressionResult.append(regression_data['forecast_day_PCT2_change'])
-    regressionResult.append(regression_data['forecast_day_PCT3_change'])
-    regressionResult.append(regression_data['forecast_day_PCT4_change'])
-    regressionResult.append(regression_data['forecast_day_PCT5_change'])
-    regressionResult.append(regression_data['PCT_day_change'])
     if(classification_data['kNeighboursValue'] >= 0 and regression_data['kNeighboursValue'] > .5):
         ws_buy.append(regressionResult)
         if(regression_data['kNeighboursValue'] >= .5 
@@ -190,8 +211,10 @@ def result_data(scrip):
            and (float(regression_data['mlpValue']) + float(regression_data['randomForestValue'])) >= 1
            and regression_data['baggingValue'] >= 0 
            and regression_data['yearHighChange'] <= -10):
-            ws_buyFilter.append(regressionResult)        
-    if(regression_data['kNeighboursValue'] > 1 and regression_data['mlpValue'] > 1):
+            ws_buyFilter.append(regressionResult) 
+        if(regression_data['forecast_day_PCT7_change'] < -1 and regression_data['forecast_day_PCT10_change'] < -1 and regression_data['PCT_day_change'] > -.5):
+            ws_buyFinal.append(regressionResult)          
+    if(regression_data['kNeighboursValue'] > 1 and regression_data['mlpValue'] > .5):
         ws_buyAll.append(regressionResult)  
     if(regression_data['kNeighboursValue'] > 0): 
         buy_News(scrip)     
@@ -205,6 +228,13 @@ def result_data(scrip):
     regressionResult.append(classification_data['scrip'])
     regressionResult.append(classification_data['forecast_day_VOL_change'])
     regressionResult.append(classification_data['forecast_day_PCT_change'])
+    regressionResult.append(classification_data['forecast_day_PCT2_change'])
+    regressionResult.append(classification_data['forecast_day_PCT3_change'])
+    regressionResult.append(classification_data['forecast_day_PCT4_change'])
+    regressionResult.append(classification_data['forecast_day_PCT5_change'])
+    regressionResult.append(classification_data['forecast_day_PCT7_change'])
+    regressionResult.append(classification_data['forecast_day_PCT10_change'])
+    regressionResult.append(classification_data['PCT_day_change'])
     regressionResult.append(classification_data['score'])
     regressionResult.append(classification_data['randomForestValue'])
     regressionResult.append(classification_data['randomForestAccuracy'])
@@ -221,17 +251,14 @@ def result_data(scrip):
     regressionResult.append(classification_data['trend'])
     regressionResult.append(classification_data['yearHighChange'])
     regressionResult.append(classification_data['yearLowChange'])
-    regressionResult.append(classification_data['forecast_day_PCT2_change'])
-    regressionResult.append(classification_data['forecast_day_PCT3_change'])
-    regressionResult.append(classification_data['forecast_day_PCT4_change'])
-    regressionResult.append(classification_data['forecast_day_PCT5_change'])
-    regressionResult.append(classification_data['PCT_day_change'])
     if(classification_data['kNeighboursValue'] < 0 and regression_data['kNeighboursValue'] <= .5):            
         ws_sell.append(regressionResult)
         if(float(classification_data['yearHighChange']) > -30):
-            ws_sellFilter.append(regressionResult)
+            ws_sellFilter.append(regressionResult)    
     if(classification_data['kNeighboursValue'] < 0 and classification_data['mlpValue'] <= 0):            
         ws_sellAll.append(regressionResult) 
+        if(classification_data['forecast_day_PCT7_change'] > 1 and classification_data['forecast_day_PCT10_change'] > 1 and classification_data['PCT_day_change'] < .5):
+            ws_sellFinal.append(regressionResult)
     if(classification_data['kNeighboursValue'] < 0):
         sell_News(scrip)  
         
