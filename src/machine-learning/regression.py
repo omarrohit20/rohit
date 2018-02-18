@@ -43,9 +43,9 @@ logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=log
 log = logging.getLogger(__name__)
 
 forecast_out = 1
-randomForest = True
+randomForest = False
 mlp = True
-bagging = True
+bagging = False
 adaBoost = False
 kNeighbours = True
 gradientBoosting = False

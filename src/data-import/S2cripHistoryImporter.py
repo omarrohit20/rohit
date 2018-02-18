@@ -27,7 +27,7 @@ if __name__ == "__main__":
     start_date = (datetime.date.today() - datetime.timedelta(days=4000)).strftime('%d-%m-%Y')
     print(start_date + ' to ' + end_date)
     
-    for data in db.scrip.find():
+    for data in db.scrip.find({'futures':'Yes'}):
         futures = data['futures']
         scrip = data['scrip'].replace('&','').replace('-','_')
         try:
@@ -35,7 +35,7 @@ if __name__ == "__main__":
             if(data is None):
                 scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
                 insert_scripdata(scripdata, futures)
-                print(scrip)      
+            print(scrip)      
         except:
             time.sleep(2)
             try:
@@ -45,6 +45,25 @@ if __name__ == "__main__":
             except:
                 print('historical fail', str(data['scrip'])) 
                 pass
+            
+    for data in db.scrip.find({'futures':'No'}):
+        futures = data['futures']
+        scrip = data['scrip'].replace('&','').replace('-','_')
+        try:
+            data = db.history.find_one({'dataset_code':scrip})
+            if(data is None):
+                scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
+                insert_scripdata(scripdata, futures)
+            print(scrip)      
+        except:
+            time.sleep(2)
+            try:
+                scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
+                insert_scripdata(scripdata, futures)
+                print(scrip)
+            except:
+                print('historical fail', str(data['scrip'])) 
+                pass        
 
     count = 0
     with open('nselist/ind_broker_buy.csv') as csvfile:

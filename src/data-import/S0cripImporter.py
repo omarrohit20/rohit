@@ -2,6 +2,9 @@ import csv
 from pymongo import MongoClient
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
+db.drop_collection('scrip')
+db.drop_collection('scrip_futures')
+
 
 count = 0
 with open('nselist/ind_niftyfuturelist.csv') as csvfile:
@@ -31,14 +34,13 @@ with open('nselist/ind_nifty500list.csv') as csvfile:
                 data = db.scrip_futures.find_one({'scrip':row[2]})
                 if(data is None):
                     futures = "No"
-                
-                if futures == "Yes":
-                    db.scrip.insert_one({
-                        "company": row[0],
-                        "industry": row[1],
-                        "scrip": row[2],
-                        "futures":futures
-                        })
+
+                db.scrip.insert_one({
+                    "company": row[0],
+                    "industry": row[1],
+                    "scrip": row[2],
+                    "futures":futures
+                    })
             count = count + 1
         except:
             pass    

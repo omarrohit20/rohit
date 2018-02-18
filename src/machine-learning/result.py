@@ -174,7 +174,7 @@ def result_data(scrip):
     
     #Buy Indicators
     regressionResult = [ ]
-    regressionResult.append("YES")
+    regressionResult.append(regression_data['futures'])
     regressionResult.append(regression_data['trainSize'])
     regressionResult.append(regression_data['buyIndia'])
     regressionResult.append(regression_data['sellIndia'])
@@ -212,7 +212,7 @@ def result_data(scrip):
            and regression_data['baggingValue'] >= 0 
            and regression_data['yearHighChange'] <= -10):
             ws_buyFilter.append(regressionResult) 
-        if(regression_data['forecast_day_PCT7_change'] < -1 and regression_data['forecast_day_PCT10_change'] < -1 and regression_data['PCT_day_change'] > -.5):
+        if(regression_data['forecast_day_PCT7_change'] < -1 and regression_data['forecast_day_PCT10_change'] < -1 and 5 > regression_data['PCT_day_change'] > -.5):
             ws_buyFinal.append(regressionResult)          
     if(regression_data['kNeighboursValue'] > 1 and regression_data['mlpValue'] > .5):
         ws_buyAll.append(regressionResult)  
@@ -221,7 +221,7 @@ def result_data(scrip):
         
     #Sell Indicators
     regressionResult = [ ]
-    regressionResult.append("YES")
+    regressionResult.append(classification_data['futures'])
     regressionResult.append(classification_data['trainSize'])
     regressionResult.append(classification_data['buyIndia'])
     regressionResult.append(classification_data['sellIndia'])
@@ -257,7 +257,7 @@ def result_data(scrip):
             ws_sellFilter.append(regressionResult)    
     if(classification_data['kNeighboursValue'] < 0 and classification_data['mlpValue'] <= 0):            
         ws_sellAll.append(regressionResult) 
-        if(classification_data['forecast_day_PCT7_change'] > 1 and classification_data['forecast_day_PCT10_change'] > 1 and classification_data['PCT_day_change'] < .5):
+        if(classification_data['forecast_day_PCT7_change'] > 1 and classification_data['forecast_day_PCT10_change'] > 1 and -5 < classification_data['PCT_day_change'] < .5):
             ws_sellFinal.append(regressionResult)
     if(classification_data['kNeighboursValue'] < 0):
         sell_News(scrip)  
