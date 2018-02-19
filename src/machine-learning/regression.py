@@ -642,7 +642,7 @@ def regression_ta_data(scrip):
     regressionResult.append(yearLowChange)
     create_csv(scrip, regressionResult)   
                                                           
-def calculateParallel(threads=2, run_type=None):
+def calculateParallel(threads=2, run_type=None, futures=None):
     pool = ThreadPool(threads)
     if(run_type == 'broker'):
         count=0
@@ -682,7 +682,7 @@ def calculateParallel(threads=2, run_type=None):
             pool.map(regression_ta_data, scrips)               
     else:
         scrips = []
-        for data in db.scrip.find():
+        for data in db.scrip.find({'futures':futures}):
             scrips.append(data['scrip'].replace('&','').replace('-','_'))
         scrips.sort()
         pool.map(regression_ta_data, scrips)   
@@ -690,6 +690,6 @@ def calculateParallel(threads=2, run_type=None):
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(1, sys.argv[1])
+    calculateParallel(1, sys.argv[1], sys.argv[2])
     connection.close()
     saveReports(sys.argv[1])

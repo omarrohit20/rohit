@@ -572,7 +572,7 @@ def ta_lib_data(scrip):
         print(Exception)
         pass  
           
-def calculateParallel(threads=2, run_type=None):
+def calculateParallel(threads=2, run_type=None, futures=None):
     pool = ThreadPool(threads)
     
     if(run_type == 'broker'):
@@ -622,7 +622,7 @@ def calculateParallel(threads=2, run_type=None):
             pool.map(ta_lib_data, scrips)          
     else:
         scrips = []
-        for data in db.scrip.find():
+        for data in db.scrip.find({'futures':futures}):
             scrips.append(data['scrip'].replace('&','').replace('-','_'))
         scrips.sort()
         pool.map(ta_lib_data, scrips)     
@@ -632,7 +632,7 @@ if __name__ == "__main__":
     end_date = datetime.date.today().strftime('%d-%m-%Y')
     start_date = (datetime.date.today() - datetime.timedelta(days=30)).strftime('%d-%m-%Y')
     log.info('%s to %s', start_date, end_date)
-    calculateParallel(1, sys.argv[1])
+    calculateParallel(1, sys.argv[1], sys.argv[2])
     
     connection.close() 
     saveReports()   
