@@ -188,10 +188,11 @@ def historical_data(data):
 
 def get_data_frame(df, regressor="None"):
     if (df is not None):
-        dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
-        dfp.loc[df['VOL_change'] > 20, 'VOL_change'] = 1
-        dfp.loc[df['VOL_change'] < 20, 'VOL_change'] = 0
-        dfp.loc[df['VOL_change'] < -20, 'VOL_change'] = -1
+        #dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
+        dfp = df[['PCT_day_change']]
+#         dfp.loc[df['VOL_change'] > 20, 'VOL_change'] = 1
+#         dfp.loc[df['VOL_change'] < 20, 'VOL_change'] = 0
+#         dfp.loc[df['VOL_change'] < -20, 'VOL_change'] = -1
         columns = df.columns
         open = columns[1]
         high = columns[2]
@@ -571,13 +572,13 @@ def regression_ta_data(scrip):
     dfp = get_data_frame(df)
     #dfp.to_csv(directory + '/' + scrip + '.csv', encoding='utf-8')
     PCT_day_change = df.iloc[-forecast_out:, 11].values[0]
-    forecast_day_PCT_change = dfp.iloc[-forecast_out:, 7].values[0]
-    forecast_day_PCT2_change = dfp.iloc[-forecast_out:, 8].values[0]
-    forecast_day_PCT3_change = dfp.iloc[-forecast_out:, 9].values[0]
-    forecast_day_PCT4_change = dfp.iloc[-forecast_out:, 10].values[0]
-    forecast_day_PCT5_change = dfp.iloc[-forecast_out:, 11].values[0]
-    forecast_day_PCT7_change = dfp.iloc[-forecast_out:, 13].values[0]
-    forecast_day_PCT10_change = dfp.iloc[-forecast_out:, 16].values[0]
+    forecast_day_PCT_change = dfp.iloc[-forecast_out:, 1].values[0]
+    forecast_day_PCT2_change = dfp.iloc[-forecast_out:, 2].values[0]
+    forecast_day_PCT3_change = dfp.iloc[-forecast_out:, 3].values[0]
+    forecast_day_PCT4_change = dfp.iloc[-forecast_out:, 4].values[0]
+    forecast_day_PCT5_change = dfp.iloc[-forecast_out:, 5].values[0]
+    forecast_day_PCT7_change = dfp.iloc[-forecast_out:, 7].values[0]
+    forecast_day_PCT10_change = dfp.iloc[-forecast_out:, 10].values[0]
     forecast_day_VOL_change = df.iloc[-forecast_out:, 9].values[0]
     score = getScore(forecast_day_VOL_change, forecast_day_PCT_change) 
     buy, sell, trend, yearHighChange, yearLowChange = ta_lib_data(scrip) 
