@@ -118,88 +118,88 @@ def pattern_screener(data, todayInputs, tdchange, historicalInputs, hchange):
     if pattern_recognition['CDLMARUBOZU'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',MARUBOZU'
         
-#     if(hchange < -10) and pattern_recognition['CDLDOJI'][0] == 100:  
+#     if pattern_recognition['CDLDOJI'][0] == 100:  
 #         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',DOJI' 
-#     if(hchange > 10) and pattern_recognition['CDLDOJI'][0] == 100:  
+#     if pattern_recognition['CDLDOJI'][0] == 100:  
 #         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',DOJI'    
         
-    if(hchange < -10) and pattern_recognition['CDLHAMMER'][0] == 100:
+    if pattern_recognition['CDLHAMMER'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',HAMMER'
         
-    if(hchange < -10) and pattern_recognition['CDL3STARSINSOUTH'][0] == 100:
+    if pattern_recognition['CDL3STARSINSOUTH'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',CDL3STARSINSOUTH' 
         
-    if(hchange < -10) and pattern_recognition['CDL3WHITESOLDIERS'][0] == 100:
+    if pattern_recognition['CDL3WHITESOLDIERS'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',CDL3WHITESOLDIERS'          
         
-    if(hchange > 10) and pattern_recognition['CDL2CROWS'][0] == 100:
+    if pattern_recognition['CDL2CROWS'][0] == 100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',CDL2CROWS' 
         
-    if(hchange > 10) and pattern_recognition['CDL3BLACKCROWS'][0] == 100:
+    if pattern_recognition['CDL3BLACKCROWS'][0] == 100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',CDL3BLACKCROWS'       
         
-    if(hchange > 10) and pattern_recognition['CDLHANGINGMAN'][0] == 100:
+    if pattern_recognition['CDLHANGINGMAN'][0] == 100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',HANGINGMAN' 
         
-    if(hchange > 10) and pattern_recognition['CDLSHOOTINGSTAR'][0] == 100:
+    if pattern_recognition['CDLSHOOTINGSTAR'][0] == 100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',SHOOTINGSTAR' 
         
-    if(hchange > 10) and pattern_recognition['CDLDARKCLOUDCOVER'][0] == 100:
+    if pattern_recognition['CDLDARKCLOUDCOVER'][0] == 100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',CDLDARKCLOUDCOVER'     
         
-    if(hchange < -10) and pattern_recognition['CDL3INSIDE'][0] == 100:
+    if pattern_recognition['CDL3INSIDE'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',CDL3INSIDE'
-    if(hchange > 10) and pattern_recognition['CDL3INSIDE'][0] == -100:
+    if pattern_recognition['CDL3INSIDE'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',CDL3INSIDE'
         
-    if(hchange < -10) and pattern_recognition['CDL3LINESTRIKE'][0] == 100:
+    if pattern_recognition['CDL3LINESTRIKE'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',CDL3LINESTRIKE'
-    if(hchange > 10) and pattern_recognition['CDL3LINESTRIKE'][0] == -100:
+    if pattern_recognition['CDL3LINESTRIKE'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',CDL3LINESTRIKE'  
         
-    if(hchange < -10) and pattern_recognition['CDL3OUTSIDE'][0] == 100:
+    if pattern_recognition['CDL3OUTSIDE'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',CDL3OUTSIDE'
-    if(hchange > 10) and pattern_recognition['CDL3OUTSIDE'][0] == -100:
+    if pattern_recognition['CDL3OUTSIDE'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',CDL3OUTSIDE' 
     
-    if(hchange < -10) and pattern_recognition['CDLABANDONEDBABY'][0] == 100:
+    if pattern_recognition['CDLABANDONEDBABY'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',CDLABANDONEDBABY'
-    if(hchange > 10) and pattern_recognition['CDLABANDONEDBABY'][0] == -100:
+    if pattern_recognition['CDLABANDONEDBABY'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',CDLABANDONEDBABY'   
     
-    if(hchange < -10) and pattern_recognition['CDLBELTHOLD'][0] == 100:
+    if pattern_recognition['CDLBELTHOLD'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',CDLBELTHOLD'
-    if(hchange > 10) and pattern_recognition['CDLBELTHOLD'][0] == -100:
+    if pattern_recognition['CDLBELTHOLD'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',CDLBELTHOLD'
           
-    if(hchange < -10) and pattern_recognition['CDLBREAKAWAY'][0] == 100:
+    if pattern_recognition['CDLBREAKAWAY'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',CDLBREAKAWAY'
-    if(hchange > 10) and pattern_recognition['CDLBREAKAWAY'][0] == -100:
+    if pattern_recognition['CDLBREAKAWAY'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',CDLBREAKAWAY'  
     
-    if(hchange < -10) and pattern_recognition['CDLENGULFING'][0] == 100:
+    if pattern_recognition['CDLENGULFING'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',ENGULFING'
-    if(hchange > 10) and pattern_recognition['CDLENGULFING'][0] == -100:
+    if pattern_recognition['CDLENGULFING'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',ENGULFING'  
         
-    if(hchange < -10) and pattern_recognition['CDLHARAMI'][0] == 100:
+    if pattern_recognition['CDLHARAMI'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',HARAMI'
-    if(hchange > 10) and pattern_recognition['CDLHARAMI'][0] == -100:
+    if pattern_recognition['CDLHARAMI'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',HARAMI'
         
-    if(hchange < -10) and pattern_recognition['CDLCLOSINGMARUBOZU'][0] == 100:
+    if pattern_recognition['CDLCLOSINGMARUBOZU'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',CDLCLOSINGMARUBOZU'
-    if(hchange > 10) and pattern_recognition['CDLCLOSINGMARUBOZU'][0] == -100:
+    if pattern_recognition['CDLCLOSINGMARUBOZU'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',CDLCLOSINGMARUBOZU'
         
-    if(hchange < -10) and pattern_recognition['CDLCONCEALBABYSWALL'][0] == 100:
+    if pattern_recognition['CDLCONCEALBABYSWALL'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',CDLCONCEALBABYSWALL'
-    if(hchange > 10) and pattern_recognition['CDLCONCEALBABYSWALL'][0] == -100:
+    if pattern_recognition['CDLCONCEALBABYSWALL'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',CDLCONCEALBABYSWALL'  
         
-    if(hchange < -10) and pattern_recognition['CDLCOUNTERATTACK'][0] == 100:
+    if pattern_recognition['CDLCOUNTERATTACK'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',CDLCOUNTERATTACK'
-    if(hchange > 10) and pattern_recognition['CDLCOUNTERATTACK'][0] == -100:
+    if pattern_recognition['CDLCOUNTERATTACK'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',CDLCOUNTERATTACK'                  
         
     json_data = json.loads(json.dumps(technical_indicators))
