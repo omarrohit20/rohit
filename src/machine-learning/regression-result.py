@@ -150,11 +150,11 @@ def result_data(scrip):
     regressionResult.append(regression_data['trend'])
     regressionResult.append(regression_data['yearHighChange'])
     regressionResult.append(regression_data['yearLowChange'])
-    if(regression_data['mlpValue'] > 0 and regression_data['kNeighboursValue'] > .5):
+    if(regression_data['mlpValue'] > 0 and regression_data['kNeighboursValue'] > 0):
         ws_buy.append(regressionResult)
-    if(regression_data['mlpValue'] > .5 and regression_data['kNeighboursValue'] > .5 and regression_data['forecast_day_PCT7_change'] < -1 and regression_data['forecast_day_PCT10_change'] < -1 and 5 > regression_data['PCT_day_change'] > -.5 and 5 > regression_data['forecast_day_PCT_change'] > 0):
+    if(regression_data['mlpValue'] > 0 and regression_data['kNeighboursValue'] > .5 and regression_data['forecast_day_PCT7_change'] < -1 and regression_data['forecast_day_PCT10_change'] < -1 and 5 > regression_data['PCT_day_change'] > -.5 and 5 > regression_data['forecast_day_PCT_change'] > 0):
         ws_buyFinal.append(regressionResult) 
-    elif(regression_data['mlpValue'] > 0 and regression_data['kNeighboursValue'] > .5 and 5 > regression_data['PCT_day_change'] > -.5):
+    elif(regression_data['mlpValue'] > 0 and regression_data['kNeighboursValue'] > 0 and 5 > regression_data['PCT_day_change'] > -.5):
         ws_buyFinal1.append(regressionResult)
     
         
@@ -195,9 +195,9 @@ def result_data(scrip):
     regressionResult.append(regression_data['yearLowChange'])
     if(regression_data['mlpValue'] < 0 and regression_data['kNeighboursValue'] < -.5):
         ws_sell.append(regressionResult)
-    if(regression_data['mlpValue'] < -.5 and regression_data['kNeighboursValue'] < -.5 and regression_data['forecast_day_PCT7_change'] > 1 and regression_data['forecast_day_PCT10_change'] > 1 and -5 < regression_data['PCT_day_change'] < .5 and -5 < regression_data['forecast_day_PCT_change'] < 0):
+    if(regression_data['mlpValue'] < 0 and regression_data['kNeighboursValue'] < -.5 and regression_data['forecast_day_PCT7_change'] > 1 and regression_data['forecast_day_PCT10_change'] > 1 and -5 < regression_data['PCT_day_change'] < .5 and -5 < regression_data['forecast_day_PCT_change'] < 0):
         ws_sellFinal.append(regressionResult) 
-    elif(regression_data['mlpValue'] < 0 and regression_data['kNeighboursValue'] < -.5 and -5 < regression_data['PCT_day_change'] < .5):
+    elif(regression_data['mlpValue'] < 0 and regression_data['kNeighboursValue'] < 0 and -5 < regression_data['PCT_day_change'] < .5):
         ws_sellFinal1.append(regressionResult)
                                   
 def calculateParallel(threads=2, run_type=None, futures=None):

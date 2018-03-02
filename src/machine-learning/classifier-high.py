@@ -201,13 +201,15 @@ def get_data_frame(df, regressor="None"):
         volume = columns[5]
         EMA9 = columns[-2]
         EMA21 = columns[-1]
-        for dele in range(1, 16):    
+        for dele in range(1, 16):
             addFeaturesHighChange(df, dfp, high, dele)
         for dele in range(1, 16):
-            addFeaturesLowChange(df, dfp, low, dele)    
-        for dele in range(1, 3):  
+            addFeaturesLowChange(df, dfp, low, dele) 
+        for dele in range(1, 4):  
             addFeaturesEMA9Change(df, dfp, EMA9, dele)
-            addFeaturesEMA21Change(df, dfp, EMA21, dele)  
+            addFeaturesEMA21Change(df, dfp, EMA21, dele) 
+        dfp['uptrend'] = df['uptrend']
+        dfp['downtrend'] = df['downtrend']  
  
         if regressor != 'mlp':    
             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
@@ -415,7 +417,7 @@ def create_csv(scrip, regressionResult=None):
     forecast_day_PCT7_change = float(regressionResult[11])
     forecast_day_PCT10_change = float(regressionResult[12])
     PCT_day_change = float(regressionResult[13])
-    score = float(regressionResult[14])
+    score = str(regressionResult[14])
     randomForestValue = float(regressionResult[15])
     randomForestAccuracy = float(regressionResult[16])
     mlpValue = float(regressionResult[17])
@@ -558,28 +560,41 @@ def regression_ta_data(scrip):
     print(scrip)
     df=df.rename(columns = {'total trade quantity':'volume'})
     df=df.rename(columns = {'turnover (lacs)': 'turnover'})
-    df['PCT_day_change'] = (((df['close'] - df['open'])/df['open'])*100)
-    df['HL_change'] = (((df['high'] - df['low'])/df['low'])*100).astype(int)
     df['volume_pre'] = df['volume'].shift(+1)
+    df['open_pre'] = df['open'].shift(+1)
+    df['high_pre'] = df['high'].shift(+1)
+    df['low_pre'] = df['low'].shift(+1)
     df['close_pre'] = df['close'].shift(+1)
-    #df.fillna(-99999, inplace=True)
-    df.dropna(inplace=True)
     df['VOL_change'] = (((df['volume'] - df['volume_pre'])/df['volume_pre'])*100)
     df['PCT_change'] = (((df['close'] - df['close_pre'])/df['close_pre'])*100)
+    df['PCT_day_change'] = (((df['close'] - df['open'])/df['open'])*100)
+    df['HL_change'] = (((df['high'] - df['low'])/df['low'])*100).astype(int)
+    df['CL_change'] = (((df['close'] - df['low'])/df['low'])*100).astype(int)
+    df['CH_change'] = (((df['close'] - df['high'])/df['high'])*100).astype(int)
+    df['OL_change'] = (((df['open'] - df['low'])/df['low'])*100).astype(int)
+    df['OH_change'] = (((df['open'] - df['high'])/df['high'])*100).astype(int)
+    df['bar_high'] = np.where(df['close'] > df['open'], df['close'], df['open'])
+    df['bar_low'] = np.where(df['close'] > df['open'], df['open'], df['close'])
+    df['bar_high_pre'] = np.where(df['close_pre'] > df['open_pre'], df['close_pre'], df['open_pre'])
+    df['bar_low_pre'] = np.where(df['close_pre'] > df['open_pre'], df['open_pre'], df['close_pre'])
+    df['uptrend'] = np.where((df['bar_high'] >  df['bar_high_pre']) & (df['high'] > df['high_pre']), 1, 0)
+    df['downtrend'] = np.where((df['bar_low'] <  df['bar_low_pre']) & (df['low'] < df['low_pre']), 1, 0)
+    
+    df.dropna(inplace=True)
     df['EMA9'] = EMA(df,9)
-    df['EMA21'] = EMA(df,21) 
+    df['EMA21'] = EMA(df,21)
     dfp = get_data_frame(df)
-    #dfp.to_csv(directory + '/' + scrip + '.csv', encoding='utf-8')
-    PCT_day_change = df.iloc[-forecast_out:, 7].values[0]
-    forecast_day_PCT_change = dfp.iloc[-forecast_out:, 1].values[0]
-    forecast_day_PCT2_change = dfp.iloc[-forecast_out:, 2].values[0]
-    forecast_day_PCT3_change = dfp.iloc[-forecast_out:, 3].values[0]
-    forecast_day_PCT4_change = dfp.iloc[-forecast_out:, 4].values[0]
-    forecast_day_PCT5_change = dfp.iloc[-forecast_out:, 5].values[0]
-    forecast_day_PCT7_change = dfp.iloc[-forecast_out:, 7].values[0]
-    forecast_day_PCT10_change = dfp.iloc[-forecast_out:, 10].values[0]
-    forecast_day_VOL_change = dfp.iloc[-forecast_out:, 0].values[0]
-    score = getScore(forecast_day_VOL_change, forecast_day_PCT_change) 
+    PCT_day_change = df.tail(1).loc[-forecast_out:,'PCT_day_change'].values[0]
+    forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'High_change1'].values[0]
+    forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'High_change2'].values[0]
+    forecast_day_PCT3_change = dfp.tail(1).loc[-forecast_out:, 'High_change3'].values[0]
+    forecast_day_PCT4_change = dfp.tail(1).loc[-forecast_out:, 'High_change4'].values[0]
+    forecast_day_PCT5_change = dfp.tail(1).loc[-forecast_out:, 'High_change5'].values[0]
+    forecast_day_PCT7_change = dfp.tail(1).loc[-forecast_out:, 'High_change7'].values[0]
+    forecast_day_PCT10_change = dfp.tail(1).loc[-forecast_out:, 'High_change10'].values[0]
+    forecast_day_VOL_change = df.tail(1).loc[-forecast_out:, 'VOL_change'].values[0]
+    #score = getScore(forecast_day_VOL_change, forecast_day_PCT_change) 
+    score = df.tail(1).loc[-forecast_out:, 'uptrend'].values[0].astype(str) + '' + df.tail(1).loc[-forecast_out:, 'downtrend'].values[0].astype(str)
     buy, sell, trend, yearHighChange, yearLowChange = ta_lib_data(scrip) 
     trainSize = int((df.shape)[0])
     

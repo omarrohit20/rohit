@@ -204,13 +204,13 @@ def get_data_frame(df, regressor="None"):
 #         for dele in range(1, 11):
 #             addFeaturesVolChange(df, dfp, volume, dele)     
         for dele in range(1, 16):
-            addFeaturesLowChange(df, dfp, low, dele) 
+            addFeaturesHighChange(df, dfp, high, dele)
         for dele in range(1, 16):
-            addFeaturesHighChange(df, dfp, high, dele)          
-        if regressor != 'mlp':          
-            for dele in range(1, 4):  
+            addFeaturesLowChange(df, dfp, low, dele) 
+        if regressor != 'mlp':      
+            for dele in range(1, 2):  
                 addFeaturesEMA9Change(df, dfp, EMA9, dele)
-                addFeaturesEMA21Change(df, dfp, EMA21, dele)
+                addFeaturesEMA21Change(df, dfp, EMA21, dele) 
         dfp['uptrend'] = df['uptrend']
         dfp['downtrend'] = df['downtrend']    
  
@@ -576,24 +576,21 @@ def regression_ta_data(scrip):
     df['uptrend'] = np.where((df['bar_high'] >  df['bar_high_pre']) & (df['high'] > df['high_pre']), 1, 0)
     df['downtrend'] = np.where((df['bar_low'] <  df['bar_low_pre']) & (df['low'] < df['low_pre']), 1, 0)
     
-    
-    #df.fillna(-99999, inplace=True)
     df.dropna(inplace=True)
     df['EMA9'] = EMA(df,9)
     df['EMA21'] = EMA(df,21)
     dfp = get_data_frame(df)
-    #dfp.to_csv(directory + '/' + scrip + '.csv', encoding='utf-8')
-    PCT_day_change = df.iloc[-forecast_out:, 11].values[0]
-    forecast_day_PCT_change = dfp.iloc[-forecast_out:, 1].values[0]
-    forecast_day_PCT2_change = dfp.iloc[-forecast_out:, 2].values[0]
-    forecast_day_PCT3_change = dfp.iloc[-forecast_out:, 3].values[0]
-    forecast_day_PCT4_change = dfp.iloc[-forecast_out:, 4].values[0]
-    forecast_day_PCT5_change = dfp.iloc[-forecast_out:, 5].values[0]
-    forecast_day_PCT7_change = dfp.iloc[-forecast_out:, 7].values[0]
-    forecast_day_PCT10_change = dfp.iloc[-forecast_out:, 10].values[0]
-    forecast_day_VOL_change = df.iloc[-forecast_out:, 9].values[0]
+    PCT_day_change = dfp.tail(1).loc[-forecast_out:,'PCT_day_change'].values[0]
+    forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'Low_change1'].values[0]
+    forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'Low_change2'].values[0]
+    forecast_day_PCT3_change = dfp.tail(1).loc[-forecast_out:, 'Low_change3'].values[0]
+    forecast_day_PCT4_change = dfp.tail(1).loc[-forecast_out:, 'Low_change4'].values[0]
+    forecast_day_PCT5_change = dfp.tail(1).loc[-forecast_out:, 'Low_change5'].values[0]
+    forecast_day_PCT7_change = dfp.tail(1).loc[-forecast_out:, 'Low_change7'].values[0]
+    forecast_day_PCT10_change = dfp.tail(1).loc[-forecast_out:, 'Low_change10'].values[0]
+    forecast_day_VOL_change = df.tail(1).loc[-forecast_out:, 'VOL_change'].values[0]
     #score = getScore(forecast_day_VOL_change, forecast_day_PCT_change) 
-    score = dfp.loc[-forecast_out:, 'uptrend'].values[0].astype(str) + ',' + dfp.loc[-forecast_out:, 'downtrend'].values[0].astype(str)
+    score = df.tail(1).loc[-forecast_out:, 'uptrend'].values[0].astype(str) + '' + df.tail(1).loc[-forecast_out:, 'downtrend'].values[0].astype(str)
     buy, sell, trend, yearHighChange, yearLowChange = ta_lib_data(scrip) 
     trainSize = int((df.shape)[0])
     
@@ -617,7 +614,8 @@ def regression_ta_data(scrip):
     #drop not required columns
 #     dfp.drop('VOL_change', axis=1, inplace=True)
 #     dfp.drop('PCT_change', axis=1, inplace=True)
-      
+#     dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
+#     df.to_csv(directory + '/' + scrip + '_df.csv', encoding='utf-8')
     if randomForest:
         regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, RandomForestRegressor(max_depth=30, n_estimators=10, n_jobs=1), True))
     else: 
@@ -626,7 +624,6 @@ def regression_ta_data(scrip):
     if mlp:
         dfp_mlp = get_data_frame(df, 'mlp')
         regressionResult.extend(performRegression(dfp_mlp, 0.98, scrip, directory, forecast_out, MLPRegressor(activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27))))
-        dfp_mlp.to_csv(directory + '/' + scrip + '.csv', encoding='utf-8')
     else:
         regressionResult.extend([0,0])
         
