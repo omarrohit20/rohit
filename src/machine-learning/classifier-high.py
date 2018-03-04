@@ -614,7 +614,8 @@ def regression_ta_data(scrip):
     regressionResult.append(forecast_day_PCT10_change)
     regressionResult.append(PCT_day_change)
     regressionResult.append(score)
-      
+    
+    dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')  
     if randomForest:
         regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, RandomForestClassifier(n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1)))
     else: 
@@ -624,7 +625,6 @@ def regression_ta_data(scrip):
         dfp_mlp = get_data_frame(df, 'mlp')
         clf = MLPClassifier(activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25))
         regressionResult.extend(performClassification(dfp_mlp, 0.98, scrip, directory, forecast_out, VotingClassifier(estimators=[('lr', clf), ('rf', clf), ('gnb', clf)], voting='soft')))
-        dfp_mlp.to_csv(directory + '/' + scrip + '.csv', encoding='utf-8')
     else:
         regressionResult.extend([0,0])
         
