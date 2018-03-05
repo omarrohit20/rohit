@@ -86,8 +86,8 @@ def sell_News(scrip):
     ws_sellNews.append([" "])  
 
 def result_data(scrip):
-    classification_data = db.classification.find_one({'scrip':scrip.replace('&','').replace('-','_')})
-    regression_data = db.regression.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    classification_data = db.classificationlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    regression_data = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     
     if(classification_data is None or regression_data is None):
         print('Missing or very less Data for ', scrip)
@@ -128,7 +128,7 @@ def result_data(scrip):
 def calculateParallel(threads=2):
     pool = ThreadPool(threads)
     scrips = []
-    for data in db.scrip.find({'futures':futures}):
+    for data in db.scrip.find({'futures':'Yes'}):
         scrips.append(data['scrip'].replace('&','').replace('-','_'))
     scrips.sort()
     pool.map(result_data, scrips)
@@ -140,4 +140,4 @@ if __name__ == "__main__":
     calculateParallel(1)
     connection.close()
     saveDailyNews()
-    saveReports(sys.argv[1])
+    saveReports()
