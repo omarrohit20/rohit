@@ -7,7 +7,7 @@ import csv
 from pymongo import MongoClient
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
-API_KEY="TipsAmiHm6nzXRhoabFs"
+API_KEY="hni7BykTJ6oEzMs3pwz_" #guptanikrohit@gmail.com
 
 def insert_scripdata(scripdata, futures): 
     data = {}
