@@ -52,15 +52,15 @@ class MoneycontrolPage
         return '01'
       when "feb"
         return '02'
-      when "march"
+      when "mar"
         return '03'
       when "apr"
         return '04'
       when "may"
         return '05'
-      when "june"
+      when "jun"
         return '06'
-      when "july"
+      when "jul"
         return '07'
       when "aug"
         return '08'
