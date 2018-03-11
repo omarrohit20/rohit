@@ -150,7 +150,7 @@ def result_data(scrip):
         classificationResult.append(classification_data['yearLowChange'])
         if((classification_data['mlpValue'] >= 0 and classification_data['kNeighboursValue'] > 0) or (classification_data['mlpValue'] > 0 and classification_data['kNeighboursValue'] >= 0)):
             ws_buy.append(classificationResult)
-            if(classification_data['forecast_day_PCT7_change'] <= 1 and classification_data['forecast_day_PCT10_change'] <= 1 and 5 > classification_data['PCT_day_change'] >= 0 and 5 > classification_data['forecast_day_PCT_change'] >= 0):
+            if(classification_data['forecast_day_PCT7_change'] <= 0 and classification_data['forecast_day_PCT10_change'] <= 0 and 5 > classification_data['PCT_day_change'] >= .5 and 5 > classification_data['forecast_day_PCT_change'] >= 0):
                 ws_buyFinal.append(classificationResult) 
             elif(5 > classification_data['PCT_day_change'] > -.5):
                 ws_buyFinal1.append(classificationResult)
@@ -191,7 +191,7 @@ def result_data(scrip):
         classificationResult.append(classification_data['yearLowChange'])
         if((classification_data['mlpValue'] <= 0 and classification_data['kNeighboursValue'] < 0) or (classification_data['mlpValue'] < 0 and classification_data['kNeighboursValue'] <= 0)):
             ws_sell.append(classificationResult)
-            if(classification_data['forecast_day_PCT7_change'] >= -1 and classification_data['forecast_day_PCT10_change'] >= -1 and -5 < classification_data['PCT_day_change'] <= 0 and -5 < classification_data['forecast_day_PCT_change'] <= 0):
+            if(classification_data['forecast_day_PCT7_change'] >= 0 and classification_data['forecast_day_PCT10_change'] >= 0 and -5 < classification_data['PCT_day_change'] <= -.5 and -5 < classification_data['forecast_day_PCT_change'] <= 0):
                 ws_sellFinal.append(classificationResult) 
             elif(-5 < classification_data['PCT_day_change'] < .5):
                 ws_sellFinal1.append(classificationResult)
