@@ -201,13 +201,16 @@ def get_data_frame(df, regressor="None"):
         volume = columns[5]
         EMA9 = columns[-2]
         EMA21 = columns[-1]
-        for dele in range(1, 16):
-            addFeaturesHighChange(df, dfp, high, dele)
-        for dele in range(1, 16):
-            addFeaturesLowChange(df, dfp, low, dele) 
-        for dele in range(1, 4):  
-            addFeaturesEMA9Change(df, dfp, EMA9, dele)
-            addFeaturesEMA21Change(df, dfp, EMA21, dele) 
+        for dele in range(1, 11):
+            addFeaturesLowChange(df, dfp, low, dele)
+        #if regressor == 'kNeighbours':
+        if regressor != 'mlp':    
+            for dele in range(1, 2):
+                addFeaturesOpenChange(df, dfp, open, dele)    
+                addFeaturesLowChange(df, dfp, close, dele) 
+                addFeaturesHighChange(df, dfp, high, dele)
+                addFeaturesEMA9Change(df, dfp, EMA9, dele)
+                addFeaturesEMA21Change(df, dfp, EMA21, dele)
         dfp['uptrend'] = df['uptrend']
         dfp['downtrend'] = df['downtrend']  
  
@@ -578,7 +581,7 @@ def regression_ta_data(scrip):
     df['bar_high_pre'] = np.where(df['close_pre'] > df['open_pre'], df['close_pre'], df['open_pre'])
     df['bar_low_pre'] = np.where(df['close_pre'] > df['open_pre'], df['open_pre'], df['close_pre'])
     df['uptrend'] = np.where((df['bar_high'] >  df['bar_high_pre']) & (df['high'] > df['high_pre']), 1, 0)
-    df['downtrend'] = np.where((df['bar_low'] <  df['bar_low_pre']) & (df['low'] < df['low_pre']), 1, 0)
+    df['downtrend'] = np.where((df['bar_low'] <  df['bar_low_pre']) & (df['low'] < df['low_pre']), -1, 0)
     
     df.dropna(inplace=True)
     df['EMA9'] = EMA(df,9)

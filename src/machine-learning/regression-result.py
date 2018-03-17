@@ -148,13 +148,14 @@ def result_data(scrip):
         regressionResult.append(regression_data['trend'])
         regressionResult.append(regression_data['yearHighChange'])
         regressionResult.append(regression_data['yearLowChange'])
-        if((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0) or (regression_data['mlpValue'] >= 0 and regression_data['kNeighboursValue'] >= 1)):
-            ws_buy.append(regressionResult)
-            if(regression_data['forecast_day_PCT7_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 0 and 5 > regression_data['PCT_day_change'] >= .5 and 5 > regression_data['forecast_day_PCT_change'] >= 0):
-                ws_buyFinal.append(regressionResult) 
-            elif(5 > regression_data['PCT_day_change'] > -.5):
-                ws_buyFinal1.append(regressionResult)
-    
+        if(5 > regression_data['PCT_day_change'] > 0.5 and str(regression_data['sellIndia']) == ''):
+            if((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1)):
+                if(regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT7_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 0 and 5 > regression_data['forecast_day_PCT_change'] >= 0):
+                    ws_buyFinal.append(regressionResult) 
+                elif(regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= 1):
+                    ws_buyFinal1.append(regressionResult)
+                else:
+                    ws_buy.append(regressionResult)    
         
     regression_data = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     if(regression_data is not None):
@@ -189,12 +190,15 @@ def result_data(scrip):
         regressionResult.append(regression_data['trend'])
         regressionResult.append(regression_data['yearHighChange'])
         regressionResult.append(regression_data['yearLowChange'])
-        if((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= 0) or (regression_data['mlpValue'] <= 0 and regression_data['kNeighboursValue'] <= -1)):
-            ws_sell.append(regressionResult)
-            if(regression_data['forecast_day_PCT7_change'] >= 0 and regression_data['forecast_day_PCT10_change'] >= 0 and -5 < regression_data['PCT_day_change'] <= -.5 and -5 < regression_data['forecast_day_PCT_change'] <= 0):
-                ws_sellFinal.append(regressionResult) 
-            elif(-5 < regression_data['PCT_day_change'] < .5):
-                ws_sellFinal1.append(regressionResult)
+        if(-5 < regression_data['PCT_day_change'] < -0.5 and str(regression_data['buyIndia']) == ''):
+            if((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1)):
+                if(regression_data['forecast_day_PCT5_change'] >= 0 and regression_data['forecast_day_PCT7_change'] >= 0 and regression_data['forecast_day_PCT10_change'] >= 0 and -5 < regression_data['forecast_day_PCT_change'] <= 0):
+                    ws_sellFinal.append(regressionResult) 
+                elif(regression_data['forecast_day_PCT5_change'] >= 1 and regression_data['forecast_day_PCT7_change'] >= 1):
+                    ws_sellFinal1.append(regressionResult)
+                else:
+                    ws_sell.append(regressionResult)    
+                    
                                   
 def calculateParallel(threads=2, run_type=None, futures=None):
     pool = ThreadPool(threads)

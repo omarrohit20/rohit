@@ -148,13 +148,14 @@ def result_data(scrip):
         classificationResult.append(classification_data['trend'])
         classificationResult.append(classification_data['yearHighChange'])
         classificationResult.append(classification_data['yearLowChange'])
-        if((classification_data['mlpValue'] >= 0 and classification_data['kNeighboursValue'] > 0) or (classification_data['mlpValue'] > 0 and classification_data['kNeighboursValue'] >= 0)):
-            ws_buy.append(classificationResult)
-            if(classification_data['forecast_day_PCT7_change'] <= 0 and classification_data['forecast_day_PCT10_change'] <= 0 and 5 > classification_data['PCT_day_change'] >= .5 and 5 > classification_data['forecast_day_PCT_change'] >= 0):
-                ws_buyFinal.append(classificationResult) 
-            elif(5 > classification_data['PCT_day_change'] > -.5):
-                ws_buyFinal1.append(classificationResult)
-    
+        if(5 > classification_data['PCT_day_change'] > 0.5 and str(classification_data['sellIndia']) == ''):
+            if((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1)):
+                if(classification_data['forecast_day_PCT5_change'] <= 0 and classification_data['forecast_day_PCT7_change'] <= 0 and classification_data['forecast_day_PCT10_change'] <= 0 and 5 > classification_data['forecast_day_PCT_change'] >= 0):
+                    ws_buyFinal.append(classificationResult) 
+                elif(classification_data['forecast_day_PCT5_change'] <= 1 and classification_data['forecast_day_PCT7_change'] <= 1):
+                    ws_buyFinal1.append(classificationResult)
+                else:
+                    ws_buy.append(classificationResult)
         
     classification_data = db.classificationlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     if(classification_data is not None):
@@ -189,13 +190,15 @@ def result_data(scrip):
         classificationResult.append(classification_data['trend'])
         classificationResult.append(classification_data['yearHighChange'])
         classificationResult.append(classification_data['yearLowChange'])
-        if((classification_data['mlpValue'] <= 0 and classification_data['kNeighboursValue'] < 0) or (classification_data['mlpValue'] < 0 and classification_data['kNeighboursValue'] <= 0)):
-            ws_sell.append(classificationResult)
-            if(classification_data['forecast_day_PCT7_change'] >= 0 and classification_data['forecast_day_PCT10_change'] >= 0 and -5 < classification_data['PCT_day_change'] <= -.5 and -5 < classification_data['forecast_day_PCT_change'] <= 0):
-                ws_sellFinal.append(classificationResult) 
-            elif(-5 < classification_data['PCT_day_change'] < .5):
-                ws_sellFinal1.append(classificationResult)
-                                  
+        if(-5 < classification_data['PCT_day_change'] < -0.5 and str(classification_data['buyIndia']) == ''):
+            if((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1)):
+                if(classification_data['forecast_day_PCT5_change'] >= 0 and classification_data['forecast_day_PCT7_change'] >= 0 and classification_data['forecast_day_PCT10_change'] >= 0 and -5 < classification_data['forecast_day_PCT_change'] <= 0):
+                    ws_sellFinal.append(classificationResult) 
+                elif(classification_data['forecast_day_PCT5_change'] >= 1 and classification_data['forecast_day_PCT7_change'] >= 1):
+                    ws_sellFinal1.append(classificationResult)
+                else:
+                    ws_sell.append(classificationResult) 
+                                      
 def calculateParallel(threads=2, run_type=None, futures=None):
     pool = ThreadPool(threads)
     if(run_type == 'broker'):
