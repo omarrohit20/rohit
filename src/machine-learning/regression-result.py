@@ -22,6 +22,10 @@ logname = '../../output/final' + '/regression-result' + time.strftime("%d%m%y-%H
 
 newsDict = {}
 wb = Workbook()
+ws_buyothers = wb.create_sheet("BuyOthers")
+ws_buyothers.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_sellothers = wb.create_sheet("SellOthers")
+ws_sellothers.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_buy = wb.create_sheet("Buy")
 ws_buy.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_sell = wb.create_sheet("Sell")
@@ -39,6 +43,20 @@ def saveReports(run_type=None):
     # Add a default style with striped rows and banded columns
     style = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False,
                showLastColumn=False, showRowStripes=True, showColumnStripes=True)
+    
+    count = 0
+    for row in ws_buyothers.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyothers.add_table(tab)
+    
+    count = 0
+    for row in ws_sellothers.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_sellothers.add_table(tab)
     
     count = 0
     for row in ws_buy.iter_rows(row_offset=1):
@@ -148,14 +166,18 @@ def result_data(scrip):
         regressionResult.append(regression_data['trend'])
         regressionResult.append(regression_data['yearHighChange'])
         regressionResult.append(regression_data['yearLowChange'])
-        if(5 > regression_data['PCT_day_change'] > 0.5 and str(regression_data['sellIndia']) == ''):
+        if(5 > regression_data['PCT_day_change'] > 0 and str(regression_data['sellIndia']) == ''):
             if((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1)):
                 if(regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT7_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 0 and 5 > regression_data['forecast_day_PCT_change'] >= 0):
                     ws_buyFinal.append(regressionResult) 
                 elif(regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= 1):
                     ws_buyFinal1.append(regressionResult)
                 else:
-                    ws_buy.append(regressionResult)    
+                    ws_buy.append(regressionResult) 
+        else:
+            if((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1)):
+                ws_buyothers.append(regressionResult)
+                           
         
     regression_data = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     if(regression_data is not None):
@@ -190,14 +212,17 @@ def result_data(scrip):
         regressionResult.append(regression_data['trend'])
         regressionResult.append(regression_data['yearHighChange'])
         regressionResult.append(regression_data['yearLowChange'])
-        if(-5 < regression_data['PCT_day_change'] < -0.5 and str(regression_data['buyIndia']) == ''):
+        if(-5 < regression_data['PCT_day_change'] < 0 and str(regression_data['buyIndia']) == ''):
             if((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1)):
                 if(regression_data['forecast_day_PCT5_change'] >= 0 and regression_data['forecast_day_PCT7_change'] >= 0 and regression_data['forecast_day_PCT10_change'] >= 0 and -5 < regression_data['forecast_day_PCT_change'] <= 0):
                     ws_sellFinal.append(regressionResult) 
                 elif(regression_data['forecast_day_PCT5_change'] >= 1 and regression_data['forecast_day_PCT7_change'] >= 1):
                     ws_sellFinal1.append(regressionResult)
                 else:
-                    ws_sell.append(regressionResult)    
+                    ws_sell.append(regressionResult) 
+        else:
+            if((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1)):
+                ws_sellothers.append(regressionResult) 
                     
                                   
 def calculateParallel(threads=2, run_type=None, futures=None):

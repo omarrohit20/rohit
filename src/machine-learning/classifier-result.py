@@ -148,7 +148,7 @@ def result_data(scrip):
         classificationResult.append(classification_data['trend'])
         classificationResult.append(classification_data['yearHighChange'])
         classificationResult.append(classification_data['yearLowChange'])
-        if(5 > classification_data['PCT_day_change'] > 0.5 and str(classification_data['sellIndia']) == ''):
+        if(5 > classification_data['PCT_day_change'] > 0 and str(classification_data['sellIndia']) == ''):
             if((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1)):
                 if(classification_data['forecast_day_PCT5_change'] <= 0 and classification_data['forecast_day_PCT7_change'] <= 0 and classification_data['forecast_day_PCT10_change'] <= 0 and 5 > classification_data['forecast_day_PCT_change'] >= 0):
                     ws_buyFinal.append(classificationResult) 
@@ -190,7 +190,7 @@ def result_data(scrip):
         classificationResult.append(classification_data['trend'])
         classificationResult.append(classification_data['yearHighChange'])
         classificationResult.append(classification_data['yearLowChange'])
-        if(-5 < classification_data['PCT_day_change'] < -0.5 and str(classification_data['buyIndia']) == ''):
+        if(-5 < classification_data['PCT_day_change'] < 0 and str(classification_data['buyIndia']) == ''):
             if((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1)):
                 if(classification_data['forecast_day_PCT5_change'] >= 0 and classification_data['forecast_day_PCT7_change'] >= 0 and classification_data['forecast_day_PCT10_change'] >= 0 and -5 < classification_data['forecast_day_PCT_change'] <= 0):
                     ws_sellFinal.append(classificationResult) 

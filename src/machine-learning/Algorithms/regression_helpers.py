@@ -44,7 +44,7 @@ log = logging.getLogger(__name__)
 import gc
 import time
 
-plotgraph = False
+plotgraph = True
 memoize_data = {}
 
 def load_dataset(path_directory, symbol): 
