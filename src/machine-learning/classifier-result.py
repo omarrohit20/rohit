@@ -209,10 +209,13 @@ def result_data(scrip):
            or 'KICKING' in str(classification_data['buyIndia'])
            or 'BREAKAWAY' in str(classification_data['buyIndia'])
            or 'TRISTAR' in str(classification_data['buyIndia'])
-           or ('BOP' in str(classification_data['buyIndia']) and 'BELTHOLD' in str(classification_data['buyIndia']))
+           or '3WHITESOLDIERS' in str(classification_data['buyIndia'])
+           or '3INSIDE' in str(classification_data['buyIndia'])
+           or '3OUTSIDE' in str(classification_data['buyIndia'])
+           or ('CCI:BOP' in str(classification_data['buyIndia']) and 'BELTHOLD' in str(classification_data['buyIndia']))
            ): 
             if(5 > classification_data['PCT_day_change'] > 0 
-               and (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1)):
+               and ((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1))):
                 ws_buyPattern.append(classificationResult) 
                          
     classification_data = db.classificationlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
@@ -272,9 +275,15 @@ def result_data(scrip):
            or 'KICKING' in str(classification_data['sellIndia'])
            or 'BREAKAWAY' in str(classification_data['sellIndia'])
            or 'TRISTAR' in str(classification_data['sellIndia'])
+           or 'SHOOTINGSTAR' in str(classification_data['sellIndia'])
+           or 'DARKCLOUDCOVER' in str(classification_data['sellIndia'])
+           or '3INSIDE' in str(classification_data['sellIndia'])
+           or '3OUTSIDE' in str(classification_data['sellIndia'])
+           or '2CROWS' in str(classification_data['sellIndia'])
+           or '3BLACKCROWS' in str(classification_data['sellIndia'])
            ):
             if(-5 < classification_data['PCT_day_change'] < 0 
-               and (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1)):
+               and ((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1))):
                 ws_sellPattern.append(classificationResult)            
                                       
 def calculateParallel(threads=2, run_type=None, futures=None):
