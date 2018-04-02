@@ -22,10 +22,10 @@ logname = '../../output/final' + '/final-result' + time.strftime("%d%m%y-%H%M%S"
 
 newsDict = {}
 wb = Workbook()
-ws_buyothers = wb.create_sheet("BuyOthers")
-ws_buyothers.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
-ws_sellothers = wb.create_sheet("SellOthers")
-ws_sellothers.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_buyOthers = wb.create_sheet("BuyOthers")
+ws_buyOthers.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_sellOthers = wb.create_sheet("SellOthers")
+ws_sellOthers.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_buy = wb.create_sheet("Buy")
 ws_buy.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_sell = wb.create_sheet("Sell")
@@ -42,6 +42,10 @@ ws_buyPattern = wb.create_sheet("BuyPattern")
 ws_buyPattern.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_sellPattern = wb.create_sheet("SellPattern")
 ws_sellPattern.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_buyPattern1 = wb.create_sheet("BuyPattern1")
+ws_buyPattern1.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_sellPattern1 = wb.create_sheet("SellPattern1")
+ws_sellPattern1.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 
 def saveReports(run_type=None):
     # Add a default style with striped rows and banded columns
@@ -49,18 +53,18 @@ def saveReports(run_type=None):
                showLastColumn=False, showRowStripes=True, showColumnStripes=True)
     
     count = 0
-    for row in ws_buyothers.iter_rows(row_offset=1):
+    for row in ws_buyOthers.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
-    ws_buyothers.add_table(tab)
+    ws_buyOthers.add_table(tab)
     
     count = 0
-    for row in ws_sellothers.iter_rows(row_offset=1):
+    for row in ws_sellOthers.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
-    ws_sellothers.add_table(tab)
+    ws_sellOthers.add_table(tab)
     
     count = 0
     for row in ws_buy.iter_rows(row_offset=1):
@@ -117,6 +121,20 @@ def saveReports(run_type=None):
     tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
     ws_sellPattern.add_table(tab)
+    
+    count = 0
+    for row in ws_buyPattern1.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyPattern1.add_table(tab)
+    
+    count = 0
+    for row in ws_sellPattern1.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_sellPattern1.add_table(tab)
       
     if(run_type == 'broker'):
         wb.save(logname + "broker_buy.xlsx")
@@ -228,36 +246,36 @@ def result_data(scrip):
                 else:
                     ws_buy.append(regressionResult)
                     ws_buy.append(classificationResult)
-        else:
-            if(((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1)) 
-               and ((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1))):
-                ws_buyothers.append(regressionResult)
-                ws_buyothers.append(classificationResult) 
-        
-        if('MARUBOZU' in str(regression_data['buyIndia'])
-           or 'HAMMER' in str(regression_data['buyIndia'])
-           or 'ENGULFING' in str(regression_data['buyIndia'])
-           or 'HARAMI' in str(regression_data['buyIndia'])
-           or 'PIERCING' in str(regression_data['buyIndia'])
-           or 'MORNINGSTAR' in str(regression_data['buyIndia'])
-           or 'DOJISTAR' in str(regression_data['buyIndia'])
-           or 'MORNINGDOJISTAR' in str(regression_data['buyIndia'])
-           or 'ABANDONEDBABY' in str(regression_data['buyIndia'])
-           or 'COUNTERATTACK' in str(regression_data['buyIndia'])
-           or 'KICKING' in str(regression_data['buyIndia'])
-           or 'BREAKAWAY' in str(regression_data['buyIndia'])
-           or 'TRISTAR' in str(regression_data['buyIndia'])
-           or '3WHITESOLDIERS' in str(regression_data['buyIndia'])
-           or '3INSIDE' in str(regression_data['buyIndia'])
-           or '3OUTSIDE' in str(regression_data['buyIndia'])
-           or ('CCI:BOP' in str(regression_data['buyIndia']) and 'BELTHOLD' in str(regression_data['buyIndia']))
-           ): 
-            if(5 > regression_data['PCT_day_change'] > 0
-               and ((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1)) 
-               and ((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1))):
+         
+        if(5 > regression_data['PCT_day_change'] > 0
+           and ((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1)) 
+           and ((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1))):
+            if('MARUBOZU' in str(regression_data['buyIndia'])
+               or 'HAMMER' in str(regression_data['buyIndia'])
+               or 'ENGULFING' in str(regression_data['buyIndia'])
+               or 'HARAMI' in str(regression_data['buyIndia'])
+               or 'PIERCING' in str(regression_data['buyIndia'])
+               or 'MORNINGSTAR' in str(regression_data['buyIndia'])
+               #or ':DOJISTAR' in str(regression_data['buyIndia'])
+               #or 'MORNINGDOJISTAR' in str(regression_data['buyIndia'])
+               or 'ABANDONEDBABY' in str(regression_data['buyIndia'])
+               or 'COUNTERATTACK' in str(regression_data['buyIndia'])
+               or 'KICKING' in str(regression_data['buyIndia'])
+               or 'BREAKAWAY' in str(regression_data['buyIndia'])
+               #or 'TRISTAR' in str(regression_data['buyIndia'])
+               #or '3WHITESOLDIERS' in str(regression_data['buyIndia'])
+               #or '3INSIDE' in str(regression_data['buyIndia'])
+               or '3OUTSIDE' in str(regression_data['buyIndia'])
+               or ('CCI:BOP' in str(regression_data['buyIndia']) and 'BELTHOLD' in str(regression_data['buyIndia']))
+               ):
                 ws_buyPattern.append(regressionResult)
                 ws_buyPattern.append(classificationResult)       
-                            
+            elif(str(regression_data['buyIndia']) != ''):
+                ws_buyPattern1.append(regressionResult)
+                ws_buyPattern1.append(classificationResult)
+            elif(str(regression_data['buyIndia']) == '' and regression_data['forecast_day_PCT5_change'] <= 0): 
+                ws_buyOthers.append(regressionResult)
+                ws_buyOthers.append(classificationResult)                    
     
         
     regression_data = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
@@ -337,36 +355,37 @@ def result_data(scrip):
                 else:
                     ws_sell.append(regressionResult)
                     ws_sell.append(classificationResult)  
-        else:
-            if(((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1))
-               and ((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1))):
-                ws_sellothers.append(regressionResult)
-                ws_sellothers.append(classificationResult) 
                                
-        if('MARUBOZU' in str(regression_data['sellIndia'])
-           or 'HANGINGMAN' in str(regression_data['sellIndia'])
-           or 'ENGULFING' in str(regression_data['sellIndia'])
-           or 'HARAMI' in str(regression_data['sellIndia'])
-           or 'EVENINGSTAR' in str(regression_data['sellIndia'])
-           or 'DOJISTAR' in str(regression_data['sellIndia'])
-           or 'EVENINGDOJISTAR' in str(regression_data['sellIndia'])
-           or 'ABANDONEDBABY' in str(regression_data['sellIndia'])
-           or 'COUNTERATTACK' in str(regression_data['sellIndia'])
-           or 'KICKING' in str(regression_data['sellIndia'])
-           or 'BREAKAWAY' in str(regression_data['sellIndia'])
-           or 'TRISTAR' in str(regression_data['sellIndia'])
-           or 'SHOOTINGSTAR' in str(regression_data['sellIndia'])
-           or 'DARKCLOUDCOVER' in str(regression_data['sellIndia'])
-           or '3INSIDE' in str(regression_data['sellIndia'])
-           or '3OUTSIDE' in str(regression_data['sellIndia'])
-           or '2CROWS' in str(regression_data['sellIndia'])
-           or '3BLACKCROWS' in str(regression_data['sellIndia'])
-           ):
-            if(-5 < regression_data['PCT_day_change'] < 0
-               and ((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1))
-               and ((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1))):
+        if(-5 < regression_data['PCT_day_change'] < 0
+           and ((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1))
+           and ((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1))):
+            if('MARUBOZU' in str(regression_data['sellIndia'])
+               or 'HANGINGMAN' in str(regression_data['sellIndia'])
+               or 'ENGULFING' in str(regression_data['sellIndia'])
+               or 'HARAMI' in str(regression_data['sellIndia'])
+               or 'EVENINGSTAR' in str(regression_data['sellIndia'])
+               #or ':DOJISTAR' in str(regression_data['sellIndia'])
+               #or 'EVENINGDOJISTAR' in str(regression_data['sellIndia'])
+               or 'ABANDONEDBABY' in str(regression_data['sellIndia'])
+               or 'COUNTERATTACK' in str(regression_data['sellIndia'])
+               or 'KICKING' in str(regression_data['sellIndia'])
+               or 'BREAKAWAY' in str(regression_data['sellIndia'])
+               #or 'TRISTAR' in str(regression_data['sellIndia'])
+               or 'SHOOTINGSTAR' in str(regression_data['sellIndia'])
+               or 'DARKCLOUDCOVER' in str(regression_data['sellIndia'])
+               #or '3INSIDE' in str(regression_data['sellIndia'])
+               #or '3OUTSIDE' in str(regression_data['sellIndia'])
+               #or '2CROWS' in str(regression_data['sellIndia'])
+               #or '3BLACKCROWS' in str(regression_data['sellIndia'])
+               ):
                 ws_sellPattern.append(regressionResult)
-                ws_sellPattern.append(classificationResult)   
+                ws_sellPattern.append(classificationResult) 
+            elif(str(regression_data['sellIndia']) != ''):
+                ws_sellPattern1.append(regressionResult)
+                ws_sellPattern1.append(classificationResult)
+            elif(str(regression_data['sellIndia']) == '' and regression_data['forecast_day_PCT5_change'] >= 0):
+                ws_sellOthers.append(regressionResult)
+                ws_sellOthers.append(classificationResult)    
                                    
 def calculateParallel(threads=2, run_type=None, futures=None):
     pool = ThreadPool(threads)

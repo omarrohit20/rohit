@@ -207,7 +207,7 @@ def get_data_frame(df, regressor="None"):
         if regressor != 'mlp':    
             for dele in range(1, 2):
                 addFeaturesOpenChange(df, dfp, open, dele)    
-                addFeaturesLowChange(df, dfp, close, dele) 
+                addFeatures(df, dfp, close, dele) 
                 addFeaturesHighChange(df, dfp, high, dele)
                 addFeaturesEMA9Change(df, dfp, EMA9, dele)
                 addFeaturesEMA21Change(df, dfp, EMA21, dele)
