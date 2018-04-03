@@ -643,7 +643,7 @@ def regression_ta_data(scrip):
         regressionResult.extend([0,0])
         
     if kNeighbours:
-        regressionResult.extend(performClassification(get_data_frame(df, 'kNeighbours'), 0.98, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1, n_neighbors=7, weights='distance', algorithm='brute'), True))
+        regressionResult.extend(performClassification(get_data_frame(df, 'kNeighbours'), 0.98, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1), True))
     else:
         regressionResult.extend([0,0])
         
