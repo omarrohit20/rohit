@@ -211,13 +211,13 @@ def result_data(scrip):
                 else:
                     ws_buy.append(classificationResult)
         
-        if(5 > classification_data['PCT_day_change'] > 0 
-           and ((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1))):
-            if('MARUBOZU' in str(classification_data['buyIndia'])
+        if(4 > classification_data['PCT_day_change'] 
+           and ((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0.5) or (classification_data['mlpValue'] >= 0.5 and classification_data['kNeighboursValue'] >= 1))):
+            if(',MARUBOZU' in str(classification_data['buyIndia'])
                or 'HAMMER' in str(classification_data['buyIndia'])
-               or 'ENGULFING' in str(classification_data['buyIndia'])
-               or 'HARAMI' in str(classification_data['buyIndia'])
-               or 'PIERCING' in str(classification_data['buyIndia'])
+               #or 'ENGULFING' in str(classification_data['buyIndia'])
+               #or 'HARAMI' in str(classification_data['buyIndia'])
+               #or 'PIERCING' in str(classification_data['buyIndia'])
                or 'MORNINGSTAR' in str(classification_data['buyIndia'])
                #or ':DOJISTAR' in str(classification_data['buyIndia'])
                #or 'MORNINGDOJISTAR' in str(classification_data['buyIndia'])
@@ -228,8 +228,10 @@ def result_data(scrip):
                #or 'TRISTAR' in str(classification_data['buyIndia'])
                #or '3WHITESOLDIERS' in str(classification_data['buyIndia'])
                #or '3INSIDE' in str(classification_data['buyIndia'])
-               or '3OUTSIDE' in str(classification_data['buyIndia'])
+               #or '3OUTSIDE' in str(classification_data['buyIndia'])
                or ('CCI:BOP' in str(classification_data['buyIndia']) and 'BELTHOLD' in str(classification_data['buyIndia']))
+               or ('AROON:BOP' in str(classification_data['buyIndia']) and 'BELTHOLD' in str(classification_data['buyIndia']) and 'ENGULFING' in str(classification_data['buyIndia']))
+               or ('P@[,BELTHOLD]' == str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0)
                ): 
                 ws_buyPattern.append(classificationResult) 
             elif(str(classification_data['buyIndia']) != ''):
@@ -279,27 +281,27 @@ def result_data(scrip):
                 else:
                     ws_sell.append(classificationResult)
                                
-        if(-5 < classification_data['PCT_day_change'] < 0 
-           and ((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1))):
-            if('MARUBOZU' in str(classification_data['sellIndia'])
+        if(-4 < classification_data['PCT_day_change'] 
+               and ((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -0.5) or (classification_data['mlpValue'] <= -0.5 and classification_data['kNeighboursValue'] <= -1))):
+            if(('MARUBOZU' in str(classification_data['sellIndia'])
                or 'HANGINGMAN' in str(classification_data['sellIndia'])
-               or 'ENGULFING' in str(classification_data['sellIndia'])
+               #or 'ENGULFING' in str(classification_data['sellIndia'])
                or 'HARAMI' in str(classification_data['sellIndia'])
                or 'EVENINGSTAR' in str(classification_data['sellIndia'])
-               #or ':DOJISTAR' in str(regression_data['sellIndia'])
-               #or 'EVENINGDOJISTAR' in str(regression_data['sellIndia'])
+               #or ':DOJISTAR' in str(classification_data['sellIndia'])
+               #or 'EVENINGDOJISTAR' in str(classification_data['sellIndia'])
                or 'ABANDONEDBABY' in str(classification_data['sellIndia'])
                or 'COUNTERATTACK' in str(classification_data['sellIndia'])
                or 'KICKING' in str(classification_data['sellIndia'])
                or 'BREAKAWAY' in str(classification_data['sellIndia'])
-               #or 'TRISTAR' in str(regression_data['sellIndia'])
+               #or 'TRISTAR' in str(classification_data['sellIndia'])
                or 'SHOOTINGSTAR' in str(classification_data['sellIndia'])
                or 'DARKCLOUDCOVER' in str(classification_data['sellIndia'])
-               #or '3INSIDE' in str(regression_data['sellIndia'])
-               #or '3OUTSIDE' in str(regression_data['sellIndia'])
-               #or '2CROWS' in str(regression_data['sellIndia'])
-               #or '3BLACKCROWS' in str(regression_data['sellIndia'])
-               ):
+               #or '3INSIDE' in str(classification_data['sellIndia'])
+               #or '3OUTSIDE' in str(classification_data['sellIndia'])
+               #or '2CROWS' in str(classification_data['sellIndia'])
+               #or '3BLACKCROWS' in str(classification_data['sellIndia'])
+               ) and (classification_data['forecast_day_PCT5_change'] >= 0)):
                 ws_sellPattern.append(classificationResult)            
             elif(str(classification_data['sellIndia']) != ''):
                 ws_sellPattern1.append(classificationResult)

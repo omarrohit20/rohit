@@ -204,26 +204,26 @@ def get_data_frame(df, regressor="None"):
         for dele in range(1, 11):
             addFeaturesLowChange(df, dfp, low, dele)
         #if regressor == 'kNeighbours':
-        if regressor != 'mlp':    
-            for dele in range(1, 2):
-                addFeaturesOpenChange(df, dfp, open, dele)    
-                addFeatures(df, dfp, close, dele) 
-                addFeaturesHighChange(df, dfp, high, dele)
-                addFeaturesEMA9Change(df, dfp, EMA9, dele)
-                addFeaturesEMA21Change(df, dfp, EMA21, dele)
+#         if regressor != 'mlp':    
+#             for dele in range(1, 2):
+#                 addFeaturesOpenChange(df, dfp, open, dele)    
+#                 addFeatures(df, dfp, close, dele) 
+#                 addFeaturesHighChange(df, dfp, high, dele)
+#                 addFeaturesEMA9Change(df, dfp, EMA9, dele)
+#                 addFeaturesEMA21Change(df, dfp, EMA21, dele)
         dfp['uptrend'] = df['uptrend']
         dfp['downtrend'] = df['downtrend']  
  
-        if regressor != 'mlp':    
-            dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
-            dfp['ADXR'] = ADXR(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html
+#         if regressor != 'mlp':    
+#             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
+#             dfp['ADXR'] = ADXR(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html
         dfp['APO'] = APO(df).apply(lambda x: 1 if x > 0 else 0) #Absolute Price Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/apo
 #         aroon = AROON(df) #Aroon http://www.investopedia.com/terms/a/aroon.asp
 #         dfp['AROONUP'], dfp['AROONDOWN'] = aroon['aroonup'], aroon['aroondown']
         dfp['AROONOSC'] = AROONOSC(df).apply(lambda x: 1 if x > 0 else 0)
         dfp['BOP'] = BOP(df).apply(lambda x: 1 if x > 0 else 0) #Balance Of Power https://www.marketvolume.com/technicalanalysis/balanceofpower.asp
-        if regressor == 'kNeighbours': 
-            dfp['CCI'] = CCI(df) #Commodity Channel Index http://www.investopedia.com/articles/trading/05/041805.asp
+#         if regressor == 'kNeighbours': 
+#             dfp['CCI'] = CCI(df) #Commodity Channel Index http://www.investopedia.com/articles/trading/05/041805.asp
 #         dfp['CMO'] = CMO(df) #Chande Momentum Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/cmo
 #         dfp['DX'] = DX(df) #Directional Movement Index http://www.investopedia.com/terms/d/dmi.asp
 #         macd = MACD(df)
@@ -241,8 +241,8 @@ def get_data_frame(df, regressor="None"):
 #         dfp['ROCP'] = ROCP(df)
 #         dfp['ROCR'] = ROCR(df)
 #         dfp['ROCR100'] = ROCR100(df)
-        if regressor == 'kNeighbours':
-            dfp['RSI'] = RSI(df)
+#         if regressor == 'kNeighbours':
+#             dfp['RSI'] = RSI(df)
         #dfp['STOCH'] = STOCH(df)
         #dfp['STOCHF'] = STOCHF(df)
         #dfp['STOCHRSI'] = STOCHRSI(df)
