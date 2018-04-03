@@ -213,10 +213,10 @@ def result_data(scrip):
                  
         if(4 > regression_data['PCT_day_change'] 
            and ((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1))):
-            if(',MARUBOZU' in str(regression_data['buyIndia'])
+            if(('MARUBOZU' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0)
                or 'HAMMER' in str(regression_data['buyIndia'])
                #or 'ENGULFING' in str(regression_data['buyIndia'])
-               #or 'HARAMI' in str(regression_data['buyIndia'])
+               or ('HARAMI' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0)
                #or 'PIERCING' in str(regression_data['buyIndia'])
                or 'MORNINGSTAR' in str(regression_data['buyIndia'])
                #or ':DOJISTAR' in str(regression_data['buyIndia'])
@@ -228,7 +228,7 @@ def result_data(scrip):
                #or 'TRISTAR' in str(regression_data['buyIndia'])
                #or '3WHITESOLDIERS' in str(regression_data['buyIndia'])
                #or '3INSIDE' in str(regression_data['buyIndia'])
-               #or '3OUTSIDE' in str(regression_data['buyIndia'])
+               or ('3OUTSIDE' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0)
                or ('CCI:BOP' in str(regression_data['buyIndia']) and 'BELTHOLD' in str(regression_data['buyIndia']))
                or ('AROON:BOP' in str(regression_data['buyIndia']) and 'BELTHOLD' in str(regression_data['buyIndia']) and 'ENGULFING' in str(regression_data['buyIndia']))
                or ('P@[,BELTHOLD]' == str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0)

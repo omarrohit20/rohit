@@ -213,10 +213,10 @@ def result_data(scrip):
         
         if(4 > classification_data['PCT_day_change'] 
            and ((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0.5) or (classification_data['mlpValue'] >= 0.5 and classification_data['kNeighboursValue'] >= 1))):
-            if(',MARUBOZU' in str(classification_data['buyIndia'])
+            if(('MARUBOZU' in str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0)
                or 'HAMMER' in str(classification_data['buyIndia'])
                #or 'ENGULFING' in str(classification_data['buyIndia'])
-               #or 'HARAMI' in str(classification_data['buyIndia'])
+               or ('HARAMI' in str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0)
                #or 'PIERCING' in str(classification_data['buyIndia'])
                or 'MORNINGSTAR' in str(classification_data['buyIndia'])
                #or ':DOJISTAR' in str(classification_data['buyIndia'])
@@ -228,7 +228,7 @@ def result_data(scrip):
                #or 'TRISTAR' in str(classification_data['buyIndia'])
                #or '3WHITESOLDIERS' in str(classification_data['buyIndia'])
                #or '3INSIDE' in str(classification_data['buyIndia'])
-               #or '3OUTSIDE' in str(classification_data['buyIndia'])
+               or ('3OUTSIDE' in str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0)
                or ('CCI:BOP' in str(classification_data['buyIndia']) and 'BELTHOLD' in str(classification_data['buyIndia']))
                or ('AROON:BOP' in str(classification_data['buyIndia']) and 'BELTHOLD' in str(classification_data['buyIndia']) and 'ENGULFING' in str(classification_data['buyIndia']))
                or ('P@[,BELTHOLD]' == str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0)
