@@ -245,8 +245,8 @@ def performClassification(dataset, split, symbol, output_dir, forecast_out):
 
     features = dataset.columns[:-1]
     
-    index = int(np.floor(dataset.shape[0]*split))
-    train, test, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
+    index = int(np.floor(dataset.shape[0])) - int(np.floor(dataset.shape[0]*split))
+    test, train, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
     #dataset_all, test_forecast = dataset[:-forecast_out], dataset[-forecast_out:]
     #test = dataset_all.sample(frac=0.025)
     #train = dataset_all.loc[~dataset_all.index.isin(test.index)]
@@ -292,8 +292,8 @@ def performClassification(dataset, split, symbol, output_dir, forecast_out, clas
 
     features = dataset.columns[:-1]
     
-    index = int(np.floor(dataset.shape[0]*split))
-    train, test, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
+    index = int(np.floor(dataset.shape[0])) - int(np.floor(dataset.shape[0]*split))
+    test, train, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
 
     log.info('-'*80)
     log.info('%s train set: %s, test set: %s', symbol, train.shape, test.shape)
@@ -325,8 +325,8 @@ def performClassificationTest(dataset, split, symbol, output_dir, forecast_out, 
 
     features = dataset.columns[:-1]
     
-    index = int(np.floor(dataset.shape[0]*split))
-    train, test, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
+    index = int(np.floor(dataset.shape[0])) - int(np.floor(dataset.shape[0]*split))
+    test, train, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
 
     log.info('-'*80)
     log.info('%s train set: %s, test set: %s', symbol, train.shape, test.shape)
@@ -563,8 +563,8 @@ def performRegression(dataset, split, symbol, output_dir, forecast_out):
 
     features = dataset.columns[:-1]
     
-    index = int(np.floor(dataset.shape[0]*split))
-    train, test, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
+    index = int(np.floor(dataset.shape[0])) - int(np.floor(dataset.shape[0]*split))
+    test, train, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
     #dataset_all, test_forecast = dataset[:-forecast_out], dataset[-forecast_out:]
     #test = dataset_all.sample(frac=0.025)
     #train = dataset_all.loc[~dataset_all.index.isin(test.index)]
@@ -613,9 +613,9 @@ def performRegression(dataset, split, symbol, output_dir, forecast_out, regresso
     
     predicted_values = []
     features = dataset.columns[:-1]
-    index = int(np.floor(dataset.shape[0]*split))
-    train, test, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
-
+    index = int(np.floor(dataset.shape[0])) - int(np.floor(dataset.shape[0]*split))
+    test, train, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
+    
     log.info('-'*80)
     log.info('%s train set: %s, test set: %s', symbol, train.shape, test.shape)
     
@@ -644,9 +644,9 @@ def performRegression(dataset, split, symbol, output_dir, forecast_out, regresso
 def performRegressionTest(dataset, split, symbol, output_dir, forecast_out):
     predicted_values = []
     features = dataset.columns[:-1]
-    index = int(np.floor(dataset.shape[0]*split))
-    train, test, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
-
+    index = int(np.floor(dataset.shape[0])) - int(np.floor(dataset.shape[0]*split))
+    test, train, test_forecast = dataset[:index], dataset[index:-forecast_out], dataset[-forecast_out:]
+    
     log.info('-'*80)
     log.info('%s train set: %s, test set: %s', symbol, train.shape, test.shape)
     

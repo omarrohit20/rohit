@@ -234,6 +234,9 @@ def result_data(scrip):
         classificationResult.append(classification_data['trend'])
         classificationResult.append(classification_data['yearHighChange'])
         classificationResult.append(classification_data['yearLowChange'])
+        score = ''
+        if(regression_data['score'] == '10' or regression_data['score'] == '1-1'):
+            score = 'up'
         if(5 > regression_data['PCT_day_change'] > 0 and str(regression_data['sellIndia']) == ''):
             if(((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1)) 
                and ((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1))):
@@ -254,7 +257,6 @@ def result_data(scrip):
             if(('MARUBOZU' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0)
                or 'HAMMER' in str(regression_data['buyIndia'])
                #or 'ENGULFING' in str(regression_data['buyIndia'])
-               or ('HARAMI' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0)
                #or 'PIERCING' in str(regression_data['buyIndia'])
                or 'MORNINGSTAR' in str(regression_data['buyIndia'])
                #or ':DOJISTAR' in str(regression_data['buyIndia'])
@@ -266,10 +268,11 @@ def result_data(scrip):
                #or 'TRISTAR' in str(regression_data['buyIndia'])
                #or '3WHITESOLDIERS' in str(regression_data['buyIndia'])
                #or '3INSIDE' in str(regression_data['buyIndia'])
-               or ('3OUTSIDE' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0)
                or ('CCI:BOP' in str(regression_data['buyIndia']) and 'BELTHOLD' in str(regression_data['buyIndia']))
                or ('AROON:BOP' in str(regression_data['buyIndia']) and 'BELTHOLD' in str(regression_data['buyIndia']) and 'ENGULFING' in str(regression_data['buyIndia']))
-               or ('P@[,BELTHOLD]' == str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0)
+               or ('BELTHOLD' == str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
+               or ('3OUTSIDE' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
+               or ('HARAMI' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
                ):
                 ws_buyPattern.append(regressionResult)
                 ws_buyPattern.append(classificationResult)       
@@ -346,6 +349,9 @@ def result_data(scrip):
         classificationResult.append(classification_data['trend'])
         classificationResult.append(classification_data['yearHighChange'])
         classificationResult.append(classification_data['yearLowChange'])
+        score = ''
+        if(regression_data['score'] == '01' or regression_data['score'] == '0-1'):
+            score = 'down'
         if(-5 < regression_data['PCT_day_change'] < 0 and str(regression_data['buyIndia']) == ''):
             if(((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1))
                and ((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1))):
@@ -366,7 +372,6 @@ def result_data(scrip):
             if(('MARUBOZU' in str(regression_data['sellIndia'])
                or 'HANGINGMAN' in str(regression_data['sellIndia'])
                #or 'ENGULFING' in str(regression_data['sellIndia'])
-               or 'HARAMI' in str(regression_data['sellIndia'])
                or 'EVENINGSTAR' in str(regression_data['sellIndia'])
                #or ':DOJISTAR' in str(regression_data['sellIndia'])
                #or 'EVENINGDOJISTAR' in str(regression_data['sellIndia'])
@@ -381,6 +386,7 @@ def result_data(scrip):
                #or '3OUTSIDE' in str(regression_data['sellIndia'])
                #or '2CROWS' in str(regression_data['sellIndia'])
                #or '3BLACKCROWS' in str(regression_data['sellIndia'])
+               or ('HARAMI' in str(regression_data['sellIndia']) and regression_data['forecast_day_PCT5_change'] >= 0 and score == 'down')
                ) and (regression_data['forecast_day_PCT5_change'] >= 0)):
                 ws_sellPattern.append(regressionResult)
                 ws_sellPattern.append(classificationResult) 

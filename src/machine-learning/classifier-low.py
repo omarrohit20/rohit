@@ -46,6 +46,7 @@ logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=log
 log = logging.getLogger(__name__)
 
 forecast_out = 1
+split = .99
 randomForest = False
 mlp = True
 bagging = False
@@ -620,35 +621,35 @@ def regression_ta_data(scrip):
     
     dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')  
     if randomForest:
-        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, RandomForestClassifier(n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1)))
+        regressionResult.extend(performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1)))
     else: 
         regressionResult.extend([0,0])    
             
     if mlp:
         dfp_mlp = get_data_frame(df, 'mlp')
         clf = MLPClassifier(activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25))
-        regressionResult.extend(performClassification(dfp_mlp, 0.98, scrip, directory, forecast_out, VotingClassifier(estimators=[('lr', clf), ('rf', clf), ('gnb', clf)], voting='soft')))
+        regressionResult.extend(performClassification(dfp_mlp, split, scrip, directory, forecast_out, VotingClassifier(estimators=[('lr', clf), ('rf', clf), ('gnb', clf)], voting='soft')))
     else:
         regressionResult.extend([0,0])
         
     if bagging:
-        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+        regressionResult.extend(performClassification(dfp, split, scrip, directory, forecast_out, SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
                                                                                                      decision_function_shape='ovr', degree=3, gamma='auto', kernel='sigmoid'), True))
     else:
         regressionResult.extend([0,0])
         
     if adaBoost:
-        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, AdaBoostClassifier()))
+        regressionResult.extend(performClassification(dfp, split, scrip, directory, forecast_out, AdaBoostClassifier()))
     else:
         regressionResult.extend([0,0])
         
     if kNeighbours:
-        regressionResult.extend(performClassification(get_data_frame(df, 'kNeighbours'), 0.98, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1), True))
+        regressionResult.extend(performClassification(get_data_frame(df, 'kNeighbours'), split, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1), True))
     else:
         regressionResult.extend([0,0])
         
     if gradientBoosting:
-        regressionResult.extend(performClassification(dfp, 0.98, scrip, directory, forecast_out, GradientBoostingClassifier()))
+        regressionResult.extend(performClassification(dfp, split, scrip, directory, forecast_out, GradientBoostingClassifier()))
     else:
         regressionResult.extend([0,0])
     

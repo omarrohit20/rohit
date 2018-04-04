@@ -43,6 +43,7 @@ logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=log
 log = logging.getLogger(__name__)
 
 forecast_out = 1
+split = .99
 randomForest = False
 mlp = True
 bagging = False
@@ -613,34 +614,34 @@ def regression_ta_data(scrip):
     
     dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     if randomForest:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, RandomForestRegressor(max_depth=30, n_estimators=10, n_jobs=1), True))
+        regressionResult.extend(performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor(max_depth=30, n_estimators=10, n_jobs=1), True))
     else: 
         regressionResult.extend([0,0])
             
     if mlp:
         dfp_mlp = get_data_frame(df, 'mlp')
-        regressionResult.extend(performRegression(dfp_mlp, 0.98, scrip, directory, forecast_out, MLPRegressor(activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27))))
+        regressionResult.extend(performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27))))
     else:
         regressionResult.extend([0,0])
         
     if bagging:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, SVR(C=1e3, cache_size=500, coef0=0.0, degree=3, epsilon=0.2, gamma=.05,
+        regressionResult.extend(performRegression(dfp, split, scrip, directory, forecast_out, SVR(C=1e3, cache_size=500, coef0=0.0, degree=3, epsilon=0.2, gamma=.05,
     kernel='rbf', max_iter=5000, shrinking=True, tol=0.001, verbose=False), True))
     else:
         regressionResult.extend([0,0])
         
     if adaBoost:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, AdaBoostRegressor()))
+        regressionResult.extend(performRegression(dfp, split, scrip, directory, forecast_out, AdaBoostRegressor()))
     else:
         regressionResult.extend([0,0])
         
     if kNeighbours:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1), True))
+        regressionResult.extend(performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1), True))
     else:
         regressionResult.extend([0,0])
         
     if gradientBoosting:
-        regressionResult.extend(performRegression(dfp, 0.98, scrip, directory, forecast_out, GradientBoostingRegressor()))
+        regressionResult.extend(performRegression(dfp, split, scrip, directory, forecast_out, GradientBoostingRegressor()))
     else:
         regressionResult.extend([0,0])
     
