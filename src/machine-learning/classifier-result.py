@@ -22,14 +22,10 @@ logname = '../../output/final' + '/classification-result' + time.strftime("%d%m%
 
 newsDict = {}
 wb = Workbook()
-ws_buyOthers = wb.create_sheet("BuyOthers")
-ws_buyOthers.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
-ws_sellOthers = wb.create_sheet("SellOthers")
-ws_sellOthers.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
-ws_buy = wb.create_sheet("Buy")
-ws_buy.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
-ws_sell = wb.create_sheet("Sell")
-ws_sell.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_buyAll = wb.create_sheet("BuyAll")
+ws_buyAll.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_sellAll = wb.create_sheet("SellAll")
+ws_sellAll.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_buyFinal = wb.create_sheet("BuyFinal")
 ws_buyFinal.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_sellFinal = wb.create_sheet("SellFinal")
@@ -38,6 +34,10 @@ ws_buyFinal1 = wb.create_sheet("BuyFinal1")
 ws_buyFinal1.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_sellFinal1 = wb.create_sheet("SellFinal1")
 ws_sellFinal1.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_buy = wb.create_sheet("Buy")
+ws_buy.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_sell = wb.create_sheet("Sell")
+ws_sell.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_buyPattern = wb.create_sheet("BuyPattern")
 ws_buyPattern.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_sellPattern = wb.create_sheet("SellPattern")
@@ -46,6 +46,10 @@ ws_buyPattern1 = wb.create_sheet("BuyPattern1")
 ws_buyPattern1.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 ws_sellPattern1 = wb.create_sheet("SellPattern1")
 ws_sellPattern1.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_buyOthers = wb.create_sheet("BuyOthers")
+ws_buyOthers.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
+ws_sellOthers = wb.create_sheet("SellOthers")
+ws_sellOthers.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score","RandomForest", "accuracy", "MLP", "accuracy", "Bagging", "accuracy", "AdaBoost", "accuracy", "KNeighbors", "accuracy", "GradientBoosting", "accuracy", "trend", "yHighChange","yLowChange"])
 
 def saveReports(run_type=None):
     # Add a default style with striped rows and banded columns
@@ -53,32 +57,18 @@ def saveReports(run_type=None):
                showLastColumn=False, showRowStripes=True, showColumnStripes=True)
     
     count = 0
-    for row in ws_buyOthers.iter_rows(row_offset=1):
+    for row in ws_buyAll.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
-    ws_buyOthers.add_table(tab)
+    ws_buyAll.add_table(tab)
     
     count = 0
-    for row in ws_sellOthers.iter_rows(row_offset=1):
+    for row in ws_sellAll.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
-    ws_sellOthers.add_table(tab)
-    
-    count = 0
-    for row in ws_buy.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
-    tab.tableStyleInfo = style
-    ws_buy.add_table(tab)
-    
-    count = 0
-    for row in ws_sell.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
-    tab.tableStyleInfo = style
-    ws_sell.add_table(tab)
+    ws_sellAll.add_table(tab)
     
     count = 0
     for row in ws_buyFinal.iter_rows(row_offset=1):
@@ -109,6 +99,20 @@ def saveReports(run_type=None):
     ws_sellFinal1.add_table(tab)
     
     count = 0
+    for row in ws_buy.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_buy.add_table(tab)
+    
+    count = 0
+    for row in ws_sell.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_sell.add_table(tab)
+    
+    count = 0
     for row in ws_buyPattern.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:AD" + str(count))
@@ -135,6 +139,20 @@ def saveReports(run_type=None):
     tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
     ws_sellPattern1.add_table(tab)
+    
+    count = 0
+    for row in ws_buyOthers.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyOthers.add_table(tab)
+    
+    count = 0
+    for row in ws_sellOthers.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_sellOthers.add_table(tab)
       
     if(run_type == 'broker'):
         wb.save(logname + "broker_buy.xlsx")
@@ -205,8 +223,9 @@ def result_data(scrip):
         score = ''
         if(classification_data['score'] == '10' or classification_data['score'] == '1-1'):
             score = 'up'
-        if(5 > classification_data['PCT_day_change'] > 0 and str(classification_data['sellIndia']) == ''):
-            if((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1)):
+        if((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1)):
+            ws_buyAll.append(classificationResult)
+            if(5 > classification_data['PCT_day_change'] > 0 and str(classification_data['sellIndia']) == ''):
                 if(classification_data['forecast_day_PCT5_change'] <= 0 and classification_data['forecast_day_PCT7_change'] <= 0 and classification_data['forecast_day_PCT10_change'] <= 0 and 5 > classification_data['forecast_day_PCT_change'] >= 0):
                     ws_buyFinal.append(classificationResult) 
                 elif(classification_data['forecast_day_PCT5_change'] <= 1 and classification_data['forecast_day_PCT7_change'] <= 1):
@@ -235,11 +254,14 @@ def result_data(scrip):
                or ('BELTHOLD' == str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
                or ('3OUTSIDE' in str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
                or ('HARAMI' in str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
+               or (classification_data['yearHighChange'] <= -35 and 'HARAMI' in str(classification_data['buyIndia']) and 'SHORTLINE' in str(classification_data['buyIndia']))
+               or (classification_data['yearHighChange'] <= -35 and 'BELTHOLD' in str(classification_data['buyIndia']) and 'LONGLINE' in str(classification_data['buyIndia']))
+               or (classification_data['yearHighChange'] <= -35 and ',CCI:BOP' in str(classification_data['buyIndia']) and 'LONGLINE' in str(classification_data['buyIndia']))
                ):
                 ws_buyPattern.append(classificationResult) 
             elif(str(classification_data['buyIndia']) != ''):
                 ws_buyPattern1.append(classificationResult)  
-            elif(str(classification_data['buyIndia']) == '' and classification_data['forecast_day_PCT5_change'] <= 0):
+            elif(str(classification_data['buyIndia']) == '' and classification_data['yearLowChange'] >= 10): 
                 ws_buyOthers.append(classificationResult)       
                          
     classification_data = db.classificationlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
@@ -278,8 +300,9 @@ def result_data(scrip):
         score = ''
         if(classification_data['score'] == '01' or classification_data['score'] == '0-1'):
             score = 'down'
-        if(-5 < classification_data['PCT_day_change'] < 0 and str(classification_data['buyIndia']) == ''):
-            if((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1)):
+        if((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1)):
+            ws_sellAll.append(classificationResult)
+            if(-5 < classification_data['PCT_day_change'] < 0 and str(classification_data['buyIndia']) == ''):
                 if(classification_data['forecast_day_PCT5_change'] >= 0 and classification_data['forecast_day_PCT7_change'] >= 0 and classification_data['forecast_day_PCT10_change'] >= 0 and -5 < classification_data['forecast_day_PCT_change'] <= 0):
                     ws_sellFinal.append(classificationResult) 
                 elif(classification_data['forecast_day_PCT5_change'] >= 1 and classification_data['forecast_day_PCT7_change'] >= 1):
@@ -311,7 +334,7 @@ def result_data(scrip):
                 ws_sellPattern.append(classificationResult)            
             elif(str(classification_data['sellIndia']) != ''):
                 ws_sellPattern1.append(classificationResult)
-            elif(str(classification_data['sellIndia']) == '' and classification_data['forecast_day_PCT5_change'] >= 0):
+            elif(str(classification_data['sellIndia']) == '' and classification_data['yearHighChange'] <= -10):
                 ws_sellOthers.append(classificationResult)    
                                           
 def calculateParallel(threads=2, run_type=None, futures=None):
