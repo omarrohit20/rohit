@@ -612,7 +612,7 @@ def regression_ta_data(scrip):
     regressionResult.append(PCT_day_change)
     regressionResult.append(score)
     
-    dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
+    #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     if randomForest:
         regressionResult.extend(performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor(max_depth=30, n_estimators=10, n_jobs=1), True))
     else: 

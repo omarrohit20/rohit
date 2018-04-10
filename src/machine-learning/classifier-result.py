@@ -264,8 +264,8 @@ def result_data(scrip):
                or ('3OUTSIDE' in str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
                or ('HARAMI' in str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
                or (classification_data['yearHighChange'] <= -35 and 'HARAMI' in str(classification_data['buyIndia']) and 'SHORTLINE' in str(classification_data['buyIndia']))
-               or (classification_data['yearHighChange'] <= -35 and 'BELTHOLD' in str(classification_data['buyIndia']) and 'LONGLINE' in str(classification_data['buyIndia']))
-               or (classification_data['yearHighChange'] <= -35 and ',CCI:BOP' in str(classification_data['buyIndia']) and 'LONGLINE' in str(classification_data['buyIndia']))
+               #or (classification_data['yearHighChange'] <= -35 and 'BELTHOLD' in str(classification_data['buyIndia']) and 'LONGLINE' in str(classification_data['buyIndia']))
+               #or (classification_data['yearHighChange'] <= -35 and ',CCI:BOP' in str(classification_data['buyIndia']) and 'LONGLINE' in str(classification_data['buyIndia']))
                ):
                 ws_buyPattern.append(classificationResult) 
             elif(str(classification_data['buyIndia']) != ''):
@@ -316,8 +316,8 @@ def result_data(scrip):
                                
         if(-4 < classification_data['PCT_day_change'] 
                and ((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -0.5) or (classification_data['mlpValue'] <= -0.5 and classification_data['kNeighboursValue'] <= -1))):
-            if(('MARUBOZU' in str(classification_data['sellIndia'])
-               or 'HANGINGMAN' in str(classification_data['sellIndia'])
+            if(('HANGINGMAN' in str(classification_data['sellIndia'])
+               #or 'MARUBOZU' in str(classification_data['sellIndia'])
                #or 'ENGULFING' in str(classification_data['sellIndia'])
                or 'EVENINGSTAR' in str(classification_data['sellIndia'])
                #or ':DOJISTAR' in str(classification_data['sellIndia'])

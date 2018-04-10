@@ -264,8 +264,8 @@ def result_data(scrip):
                or ('3OUTSIDE' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
                or ('HARAMI' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
                or (regression_data['yearHighChange'] <= -35 and 'HARAMI' in str(regression_data['buyIndia']) and 'SHORTLINE' in str(regression_data['buyIndia']))
-               or (regression_data['yearHighChange'] <= -35 and 'BELTHOLD' in str(regression_data['buyIndia']) and 'LONGLINE' in str(regression_data['buyIndia']))
-               or (regression_data['yearHighChange'] <= -35 and ',CCI:BOP' in str(regression_data['buyIndia']) and 'LONGLINE' in str(regression_data['buyIndia']))
+               #or (regression_data['yearHighChange'] <= -35 and 'BELTHOLD' in str(regression_data['buyIndia']) and 'LONGLINE' in str(regression_data['buyIndia']))
+               #or (regression_data['yearHighChange'] <= -35 and ',CCI:BOP' in str(regression_data['buyIndia']) and 'LONGLINE' in str(regression_data['buyIndia']))
                ):
                 ws_buyPattern.append(regressionResult) 
             elif(str(regression_data['buyIndia']) != ''):
@@ -290,6 +290,7 @@ def result_data(scrip):
         regressionResult.append(regression_data['forecast_day_PCT7_change'])
         regressionResult.append(regression_data['forecast_day_PCT10_change'])
         regressionResult.append(regression_data['PCT_day_change'])
+        regressionResult.append(regression_data['score'])
         regressionResult.append(regression_data['mlpValue'])
         regressionResult.append(regression_data['mlpAccuracy'])
         regressionResult.append(regression_data['kNeighboursValue'])
@@ -315,8 +316,8 @@ def result_data(scrip):
         
         if(-4 < regression_data['PCT_day_change'] 
                and ((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1))):
-            if(('MARUBOZU' in str(regression_data['sellIndia'])
-               or 'HANGINGMAN' in str(regression_data['sellIndia'])
+            if(('HANGINGMAN' in str(regression_data['sellIndia'])
+               #or 'MARUBOZU' in str(classification_data['sellIndia'])
                #or 'ENGULFING' in str(regression_data['sellIndia'])
                or 'EVENINGSTAR' in str(regression_data['sellIndia'])
                #or ':DOJISTAR' in str(regression_data['sellIndia'])
