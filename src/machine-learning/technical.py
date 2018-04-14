@@ -188,35 +188,35 @@ def pattern_screener(data, todayInputs, tdchange, historicalInputs, hchange):
     if pattern_recognition['CDLEVENINGSTAR'][0] == 100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',EVENINGSTAR'
     
-#     if pattern_recognition['CDLDOJ'][0] == 100:
-#         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',DOJI'
-#     if pattern_recognition['CDLDOJ'][0] == -100:
-#         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',DOJI'      
-#         
-#     if pattern_recognition['CDLDOJISTAR'][0] == 100:
-#         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',DOJISTAR'
-#     if pattern_recognition['CDLDOJISTAR'][0] == -100:
-#         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',DOJISTAR' 
-#         
-#     if pattern_recognition['CDLDRAGONFLYDOJI'][0] == 100:
-#         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',DRAGONFLYDOJI'
-#     if pattern_recognition['CDLDRAGONFLYDOJI'][0] == -100:
-#         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',DRAGONFLYDOJI' 
-#         
-#     if pattern_recognition['CDLGRAVESTONEDOJI'][0] == 100:
-#         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',GRAVESTONEDOJI'
-#     if pattern_recognition['CDLGRAVESTONEDOJI'][0] == -100:
-#         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',GRAVESTONEDOJI'
-#         
-#     if pattern_recognition['CDLLONGLEGGEDDOJI'][0] == 100:
-#         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',LONGLEGGEDDOJI'
-#     if pattern_recognition['CDLLONGLEGGEDDOJI'][0] == -100:
-#         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',LONGLEGGEDDOJI' 
-#         
-#     if pattern_recognition['CDLSPINNINGTOP'][0] == 100:
-#         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',SPINNINGTOP'
-#     if pattern_recognition['CDLSPINNINGTOP'][0] == -100:
-#         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',SPINNINGTOP'                 
+    if pattern_recognition['CDLDOJI'][0] == 100:
+        technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',DOJI'
+    if pattern_recognition['CDLDOJI'][0] == -100:
+        technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',DOJI'      
+         
+    if pattern_recognition['CDLDOJISTAR'][0] == 100:
+        technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',DOJISTAR'
+    if pattern_recognition['CDLDOJISTAR'][0] == -100:
+        technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',DOJISTAR' 
+         
+    if pattern_recognition['CDLDRAGONFLYDOJI'][0] == 100:
+        technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',DRAGONFLYDOJI'
+    if pattern_recognition['CDLDRAGONFLYDOJI'][0] == -100:
+        technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',DRAGONFLYDOJI' 
+         
+    if pattern_recognition['CDLGRAVESTONEDOJI'][0] == 100:
+        technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',GRAVESTONEDOJI'
+    if pattern_recognition['CDLGRAVESTONEDOJI'][0] == -100:
+        technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',GRAVESTONEDOJI'
+         
+    if pattern_recognition['CDLLONGLEGGEDDOJI'][0] == 100:
+        technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',LONGLEGGEDDOJI'
+    if pattern_recognition['CDLLONGLEGGEDDOJI'][0] == -100:
+        technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',LONGLEGGEDDOJI' 
+         
+    if pattern_recognition['CDLSPINNINGTOP'][0] == 100:
+        technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',SPINNINGTOP'
+    if pattern_recognition['CDLSPINNINGTOP'][0] == -100:
+        technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',SPINNINGTOP'                 
         
     if pattern_recognition['CDLMORNINGDOJISTAR'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',MORNINGDOJISTAR'
