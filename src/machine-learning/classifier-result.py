@@ -237,17 +237,17 @@ def result_data(scrip):
             if(5 > classification_data['PCT_day_change'] > 0 and str(classification_data['sellIndia']) == ''):
                 if(classification_data['forecast_day_PCT5_change'] <= 0 and classification_data['forecast_day_PCT7_change'] <= 0 and classification_data['forecast_day_PCT10_change'] <= 0 and 5 > classification_data['forecast_day_PCT_change'] >= 0):
                     ws_buyFinal.append(classificationResult) 
-                elif(classification_data['forecast_day_PCT5_change'] <= 1 and classification_data['forecast_day_PCT7_change'] <= 1):
+                elif(classification_data['forecast_day_PCT5_change'] <= 1 and classification_data['forecast_day_PCT7_change'] <= 1 and classification_data['forecast_day_PCT10_change'] <= 1):
                     ws_buyFinal1.append(classificationResult)
-                else:
+                elif(classification_data['forecast_day_PCT10_change'] <= 1 and classification_data['kNeighboursValue'] >= 1):
                     ws_buy.append(classificationResult)
         
             if(4 > classification_data['PCT_day_change']):
-                if(('MARUBOZU' in str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0)
-                   or 'HAMMER' in str(classification_data['buyIndia'])
+                if(('MARUBOZU' in str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0 and classification_data['forecast_day_PCT10_change'] <= 1)
+                   or ('HAMMER' in str(classification_data['buyIndia']) and classification_data['PCT_day_change'] > 0)
                    #or 'ENGULFING' in str(classification_data['buyIndia'])
                    #or 'PIERCING' in str(classification_data['buyIndia'])
-                   or 'MORNINGSTAR' in str(classification_data['buyIndia'])
+                   or 'MORNINGSTAR' in str(classification_data['buyIndia'] and classification_data['forecast_day_PCT5_change'] <= 0 and classification_data['forecast_day_PCT10_change'] <= 1)
                    #or ':DOJISTAR' in str(classification_data['buyIndia'])
                    #or 'MORNINGDOJISTAR' in str(classification_data['buyIndia'])
                    or 'ABANDONEDBABY' in str(classification_data['buyIndia'])
@@ -307,12 +307,12 @@ def result_data(scrip):
             score = 'down'
         if((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1)):
             ws_sellAll.append(classificationResult)
-            if(-5 < classification_data['PCT_day_change'] < 0 and str(classification_data['buyIndia']) == ''):
+            if(-5 < classification_data['PCT_day_change'] < 0 and str(classification_data['buyIndia']) == '' and classification_data['yearHighChange'] < -10):
                 if(classification_data['forecast_day_PCT5_change'] >= 0 and classification_data['forecast_day_PCT7_change'] >= 0 and classification_data['forecast_day_PCT10_change'] >= 0 and -5 < classification_data['forecast_day_PCT_change'] <= 0):
                     ws_sellFinal.append(classificationResult) 
-                elif(classification_data['forecast_day_PCT5_change'] >= 1 and classification_data['forecast_day_PCT7_change'] >= 1):
+                elif(classification_data['forecast_day_PCT5_change'] >= 1 and classification_data['forecast_day_PCT7_change'] >= 1 and classification_data['forecast_day_PCT10_change'] >= 1):
                     ws_sellFinal1.append(classificationResult)
-                else:
+                elif(classification_data['forecast_day_PCT10_change'] >= 1 and classification_data['kNeighboursValue'] <= -1):
                     ws_sell.append(classificationResult)
                                
             if(-4 < classification_data['PCT_day_change']):
@@ -327,7 +327,7 @@ def result_data(scrip):
                    or 'KICKING' in str(classification_data['sellIndia'])
                    or 'BREAKAWAY' in str(classification_data['sellIndia'])
                    #or 'TRISTAR' in str(classification_data['sellIndia'])
-                   or 'SHOOTINGSTAR' in str(classification_data['sellIndia'])
+                   or ('SHOOTINGSTAR' in str(classification_data['sellIndia']) and classification_data['PCT_day_change'] < 0)
                    or 'DARKCLOUDCOVER' in str(classification_data['sellIndia'])
                    #or '3INSIDE' in str(classification_data['sellIndia'])
                    #or '3OUTSIDE' in str(classification_data['sellIndia'])

@@ -237,17 +237,17 @@ def result_data(scrip):
             if(5 > regression_data['PCT_day_change'] > 0 and str(regression_data['sellIndia']) == ''):
                 if(regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT7_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 0 and 5 > regression_data['forecast_day_PCT_change'] >= 0):
                     ws_buyFinal.append(regressionResult) 
-                elif(regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= 1):
+                elif(regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= 1 and regression_data['forecast_day_PCT10_change'] <= 1):
                     ws_buyFinal1.append(regressionResult)
-                else:
+                elif(regression_data['forecast_day_PCT10_change'] <= 1 and regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 1):
                     ws_buy.append(regressionResult) 
                  
             if(4 > regression_data['PCT_day_change']):
-                if(('MARUBOZU' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0)
-                   or 'HAMMER' in str(regression_data['buyIndia'])
+                if(('MARUBOZU' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 1)
+                   or ('HAMMER' in str(regression_data['buyIndia']) and regression_data['PCT_day_change'] > 0)
                    #or 'ENGULFING' in str(regression_data['buyIndia'])
                    #or 'PIERCING' in str(regression_data['buyIndia'])
-                   or 'MORNINGSTAR' in str(regression_data['buyIndia'])
+                   or 'MORNINGSTAR' in str(regression_data['buyIndia'] and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 1)
                    #or ':DOJISTAR' in str(regression_data['buyIndia'])
                    #or 'MORNINGDOJISTAR' in str(regression_data['buyIndia'])
                    or 'ABANDONEDBABY' in str(regression_data['buyIndia'])
@@ -307,12 +307,12 @@ def result_data(scrip):
             score = 'down'
         if((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1)):
             ws_sellAll.append(regressionResult)
-            if(-5 < regression_data['PCT_day_change'] < 0 and str(regression_data['buyIndia']) == ''):
+            if(-5 < regression_data['PCT_day_change'] < 0 and str(regression_data['buyIndia']) == '' and regression_data['yearHighChange'] < -10):
                 if(regression_data['forecast_day_PCT5_change'] >= 0 and regression_data['forecast_day_PCT7_change'] >= 0 and regression_data['forecast_day_PCT10_change'] >= 0 and -5 < regression_data['forecast_day_PCT_change'] <= 0):
                     ws_sellFinal.append(regressionResult) 
-                elif(regression_data['forecast_day_PCT5_change'] >= 1 and regression_data['forecast_day_PCT7_change'] >= 1):
+                elif(regression_data['forecast_day_PCT5_change'] >= 1 and regression_data['forecast_day_PCT7_change'] >= 1 and regression_data['forecast_day_PCT10_change'] >= 1):
                     ws_sellFinal1.append(regressionResult)
-                else:
+                elif(regression_data['forecast_day_PCT10_change'] >= 1 and regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -1):
                     ws_sell.append(regressionResult) 
         
             if(-4 < regression_data['PCT_day_change']):
@@ -327,7 +327,7 @@ def result_data(scrip):
                    or 'KICKING' in str(regression_data['sellIndia'])
                    or 'BREAKAWAY' in str(regression_data['sellIndia'])
                    #or 'TRISTAR' in str(regression_data['sellIndia'])
-                   or 'SHOOTINGSTAR' in str(regression_data['sellIndia'])
+                   or ('SHOOTINGSTAR' in str(regression_data['sellIndia']) and regression_data['PCT_day_change'] < 0)
                    or 'DARKCLOUDCOVER' in str(regression_data['sellIndia'])
                    #or '3INSIDE' in str(regression_data['sellIndia'])
                    #or '3OUTSIDE' in str(regression_data['sellIndia'])
