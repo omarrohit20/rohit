@@ -203,7 +203,7 @@ def result_data(scrip):
         
     regression_data = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     classification_data = db.classificationhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
-    if(classification_data is not None and regression_data is not None):
+    if(regression_data is not None and regression_data is not None):
         regressionResult = [ ]
         regressionResult.append(regression_data['futures'])
         regressionResult.append(regression_data['trainSize'])
@@ -279,7 +279,7 @@ def result_data(scrip):
                    or ('HAMMER' in str(regression_data['buyIndia']) and regression_data['PCT_day_change'] > 0)
                    #or 'ENGULFING' in str(regression_data['buyIndia'])
                    #or 'PIERCING' in str(regression_data['buyIndia'])
-                   or 'MORNINGSTAR' in str(regression_data['buyIndia'] and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 1)
+                   or ('MORNINGSTAR' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 1)
                    #or ':DOJISTAR' in str(regression_data['buyIndia'])
                    #or 'MORNINGDOJISTAR' in str(regression_data['buyIndia'])
                    or 'ABANDONEDBABY' in str(regression_data['buyIndia'])
@@ -305,14 +305,28 @@ def result_data(scrip):
                    ):
                     ws_buyPattern1.append(regressionResult)
                     ws_buyPattern1.append(classificationResult)
-                else: 
+                elif((('MARUBOZU' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 1)
+                   or ('HAMMER' in str(regression_data['buyIndia']) and regression_data['PCT_day_change'] > 0)
+                   or 'ENGULFING' in str(regression_data['buyIndia'])
+                   or 'PIERCING' in str(regression_data['buyIndia'])
+                   or ('MORNINGSTAR' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 1)
+                   or ':DOJISTAR' in str(regression_data['buyIndia'])
+                   or 'MORNINGDOJISTAR' in str(regression_data['buyIndia'])
+                   or 'ABANDONEDBABY' in str(regression_data['buyIndia'])
+                   or 'COUNTERATTACK' in str(regression_data['buyIndia'])
+                   or 'KICKING' in str(regression_data['buyIndia'])
+                   or 'BREAKAWAY' in str(regression_data['buyIndia'])
+                   or 'TRISTAR' in str(regression_data['buyIndia'])
+                   or '3WHITESOLDIERS' in str(regression_data['buyIndia'])
+                   or '3INSIDE' in str(regression_data['buyIndia'])
+                   ) and (regression_data['forecast_day_PCT5_change'] <= -5) and (regression_data['forecast_day_PCT10_change'] <= -5)): 
                     ws_buyOthers.append(regressionResult)
                     ws_buyOthers.append(classificationResult)                    
     
         
     regression_data = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     classification_data = db.classificationlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
-    if(classification_data is not None or regression_data is not None):
+    if(regression_data is not None or regression_data is not None):
         regressionResult = [ ]
         regressionResult.append(regression_data['futures'])
         regressionResult.append(regression_data['trainSize'])
@@ -385,7 +399,7 @@ def result_data(scrip):
                                
             if(-4 < regression_data['PCT_day_change']):
                 if(('HANGINGMAN' in str(regression_data['sellIndia'])
-                   #or 'MARUBOZU' in str(classification_data['sellIndia'])
+                   #or 'MARUBOZU' in str(regression_data['sellIndia'])
                    #or 'ENGULFING' in str(regression_data['sellIndia'])
                    or 'EVENINGSTAR' in str(regression_data['sellIndia'])
                    #or ':DOJISTAR' in str(regression_data['sellIndia'])
@@ -409,7 +423,24 @@ def result_data(scrip):
                    ):
                     ws_sellPattern1.append(regressionResult)
                     ws_sellPattern1.append(classificationResult)
-                else:
+                elif(('HANGINGMAN' in str(regression_data['sellIndia'])
+                   or 'MARUBOZU' in str(regression_data['sellIndia'])
+                   or 'ENGULFING' in str(regression_data['sellIndia'])
+                   or 'EVENINGSTAR' in str(regression_data['sellIndia'])
+                   or ':DOJISTAR' in str(regression_data['sellIndia'])
+                   or 'EVENINGDOJISTAR' in str(regression_data['sellIndia'])
+                   or 'ABANDONEDBABY' in str(regression_data['sellIndia'])
+                   or 'COUNTERATTACK' in str(regression_data['sellIndia'])
+                   or 'KICKING' in str(regression_data['sellIndia'])
+                   or 'BREAKAWAY' in str(regression_data['sellIndia'])
+                   or 'TRISTAR' in str(regression_data['sellIndia'])
+                   or ('SHOOTINGSTAR' in str(regression_data['sellIndia']) and regression_data['PCT_day_change'] < 0)
+                   or 'DARKCLOUDCOVER' in str(regression_data['sellIndia'])
+                   or '3INSIDE' in str(regression_data['sellIndia'])
+                   or '3OUTSIDE' in str(regression_data['sellIndia'])
+                   or '2CROWS' in str(regression_data['sellIndia'])
+                   or '3BLACKCROWS' in str(regression_data['sellIndia'])
+                   ) and (regression_data['forecast_day_PCT5_change'] >= 5) and (regression_data['forecast_day_PCT10_change'] >= 5)):
                     ws_sellOthers.append(regressionResult)
                     ws_sellOthers.append(classificationResult)    
                                    
