@@ -26,18 +26,14 @@ ws_buyAll = wb.create_sheet("BuyAll")
 ws_buyAll.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
 ws_sellAll = wb.create_sheet("SellAll")
 ws_sellAll.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
+ws_buyMomentum1 = wb.create_sheet("buyMomentum1")
+ws_buyMomentum1.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
+ws_sellMomentum1 = wb.create_sheet("sellMomentum1")
+ws_sellMomentum1.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
 ws_buyFinal = wb.create_sheet("BuyFinal")
 ws_buyFinal.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
 ws_sellFinal = wb.create_sheet("SellFinal")
 ws_sellFinal.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
-ws_buyFinal1 = wb.create_sheet("BuyFinal1")
-ws_buyFinal1.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
-ws_sellFinal1 = wb.create_sheet("SellFinal1")
-ws_sellFinal1.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
-ws_buy = wb.create_sheet("Buy")
-ws_buy.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
-ws_sell = wb.create_sheet("Sell")
-ws_sell.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
 ws_buyPattern = wb.create_sheet("BuyPattern")
 ws_buyPattern.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
 ws_sellPattern = wb.create_sheet("SellPattern")
@@ -50,10 +46,14 @@ ws_buyPattern2 = wb.create_sheet("buyPattern2")
 ws_buyPattern2.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
 ws_sellPattern2 = wb.create_sheet("sellPattern2")
 ws_sellPattern2.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
-ws_buyMomentum1 = wb.create_sheet("buyMomentum1")
-ws_buyMomentum1.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
-ws_sellMomentum1 = wb.create_sheet("sellMomentum1")
-ws_sellMomentum1.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
+ws_buy = wb.create_sheet("Buy")
+ws_buy.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
+ws_sell = wb.create_sheet("Sell")
+ws_sell.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
+ws_buyFinal1 = wb.create_sheet("BuyFinal1")
+ws_buyFinal1.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
+ws_sellFinal1 = wb.create_sheet("SellFinal1")
+ws_sellFinal1.append(["futures", "train set","BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_DAY", "Score", "MLP", "accuracy", "KNeighbors", "accuracy", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment"])
 
 def saveReports(run_type=None):
     # Add a default style with striped rows and banded columns
@@ -73,6 +73,34 @@ def saveReports(run_type=None):
     tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
     ws_sellAll.add_table(tab)
+    
+    count = 0
+    for row in ws_buyMomentum1.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyMomentum1.add_table(tab)
+    
+    count = 0
+    for row in ws_sellMomentum1.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_sellMomentum1.add_table(tab)
+    
+    count = 0
+    for row in ws_buy.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_buy.add_table(tab)
+    
+    count = 0
+    for row in ws_sell.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_sell.add_table(tab)
     
     count = 0
     for row in ws_buyFinal.iter_rows(row_offset=1):
@@ -101,20 +129,6 @@ def saveReports(run_type=None):
     tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
     ws_sellFinal1.add_table(tab)
-    
-    count = 0
-    for row in ws_buy.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
-    tab.tableStyleInfo = style
-    ws_buy.add_table(tab)
-    
-    count = 0
-    for row in ws_sell.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
-    tab.tableStyleInfo = style
-    ws_sell.add_table(tab)
     
     count = 0
     for row in ws_buyPattern.iter_rows(row_offset=1):
@@ -157,20 +171,6 @@ def saveReports(run_type=None):
     tab = Table(displayName="Table1", ref="A1:AD" + str(count))
     tab.tableStyleInfo = style
     ws_sellPattern2.add_table(tab)
-    
-    count = 0
-    for row in ws_buyMomentum1.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
-    tab.tableStyleInfo = style
-    ws_buyMomentum1.add_table(tab)
-    
-    count = 0
-    for row in ws_sellMomentum1.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
-    tab.tableStyleInfo = style
-    ws_sellMomentum1.add_table(tab)
       
     if(run_type == 'broker'):
         wb.save(logname + "broker_buy.xlsx")
@@ -255,13 +255,14 @@ def result_data(scrip):
             if(-20 < regression_data['yearHighChange'] < -1):
                 ws_buyMomentum1.append(regressionResult)
                 
+            if(regression_data['score'] == '10' and regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 1 and regression_data['yearHighChange'] < -20):
+                ws_buy.append(regressionResult)    
+                
             if(5 > regression_data['PCT_day_change'] > 0 and str(regression_data['sellIndia']) == '' and -95 < regression_data['yearHighChange'] < -15):
-                if(regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT7_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 0 and 5 > regression_data['forecast_day_PCT_change'] >= 0):
-                    ws_buyFinal.append(regressionResult) 
-                elif(regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= 1 and regression_data['forecast_day_PCT10_change'] <= 1):
-                    ws_buyFinal1.append(regressionResult)
+                if(regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= 1 and regression_data['forecast_day_PCT10_change'] <= 1):
+                    ws_buyFinal.append(regressionResult)
                 elif(regression_data['forecast_day_PCT10_change'] <= 1 and regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 1):
-                    ws_buy.append(regressionResult) 
+                    ws_buyFinal1.append(regressionResult) 
                  
             if(4 > regression_data['PCT_day_change']):
                 if(('MARUBOZU' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 1)
@@ -345,13 +346,14 @@ def result_data(scrip):
             if(-5 < regression_data['yearHighChange'] < -2):
                 ws_sellMomentum1.append(regressionResult)
                 
+            if(regression_data['score'] == '0-1' and regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -1 and regression_data['yearHighChange'] > -80):
+                ws_sell.append(regressionResult)    
+                
             if(-5 < regression_data['PCT_day_change'] < 0 and str(regression_data['buyIndia']) == '' and -95 < regression_data['yearHighChange'] < -20):
-                if(regression_data['forecast_day_PCT5_change'] >= 0 and regression_data['forecast_day_PCT7_change'] >= 0 and regression_data['forecast_day_PCT10_change'] >= 0 and -5 < regression_data['forecast_day_PCT_change'] <= 0):
-                    ws_sellFinal.append(regressionResult) 
-                elif(regression_data['forecast_day_PCT5_change'] >= 1 and regression_data['forecast_day_PCT7_change'] >= 1 and regression_data['forecast_day_PCT10_change'] >= 1):
-                    ws_sellFinal1.append(regressionResult)
+                if(regression_data['forecast_day_PCT5_change'] >= 1 and regression_data['forecast_day_PCT7_change'] >= 1 and regression_data['forecast_day_PCT10_change'] >= 1):
+                    ws_sellFinal.append(regressionResult)
                 elif(regression_data['forecast_day_PCT10_change'] >= 1 and regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -1):
-                    ws_sell.append(regressionResult) 
+                    ws_sellFinal1.append(regressionResult) 
         
             if(-4 < regression_data['PCT_day_change']):
                 if(('HANGINGMAN' in str(regression_data['sellIndia'])
