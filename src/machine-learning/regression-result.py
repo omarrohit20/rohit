@@ -234,7 +234,7 @@ def result_data(scrip):
             score = 'up'
         if((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1)):
             ws_buyAll.append(regressionResult)
-            if(5 > regression_data['PCT_day_change'] > 0 and str(regression_data['sellIndia']) == ''):
+            if(5 > regression_data['PCT_day_change'] > 0 and str(regression_data['sellIndia']) == '' and -95 < regression_data['yearHighChange'] < -15):
                 if(regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT7_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 0 and 5 > regression_data['forecast_day_PCT_change'] >= 0):
                     ws_buyFinal.append(regressionResult) 
                 elif(regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= 1 and regression_data['forecast_day_PCT10_change'] <= 1):
@@ -321,7 +321,7 @@ def result_data(scrip):
             score = 'down'
         if((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1)):
             ws_sellAll.append(regressionResult)
-            if(-5 < regression_data['PCT_day_change'] < 0 and str(regression_data['buyIndia']) == '' and regression_data['yearHighChange'] < -10):
+            if(-5 < regression_data['PCT_day_change'] < 0 and str(regression_data['buyIndia']) == '' and -95 < regression_data['yearHighChange'] < -20):
                 if(regression_data['forecast_day_PCT5_change'] >= 0 and regression_data['forecast_day_PCT7_change'] >= 0 and regression_data['forecast_day_PCT10_change'] >= 0 and -5 < regression_data['forecast_day_PCT_change'] <= 0):
                     ws_sellFinal.append(regressionResult) 
                 elif(regression_data['forecast_day_PCT5_change'] >= 1 and regression_data['forecast_day_PCT7_change'] >= 1 and regression_data['forecast_day_PCT10_change'] >= 1):
@@ -370,7 +370,7 @@ def result_data(scrip):
                    or '3OUTSIDE' in str(regression_data['sellIndia'])
                    or '2CROWS' in str(regression_data['sellIndia'])
                    or '3BLACKCROWS' in str(regression_data['sellIndia'])
-                   ) and (regression_data['forecast_day_PCT10_change'] >= 5)):
+                   ) and (regression_data['forecast_day_PCT5_change'] >= 5) and (regression_data['forecast_day_PCT10_change'] >= 5)):
                     ws_sellOthers.append(regressionResult)   
                                   
 def calculateParallel(threads=2, run_type=None, futures=None):
