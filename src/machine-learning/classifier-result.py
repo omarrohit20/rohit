@@ -252,10 +252,12 @@ def result_data(scrip):
             score = 'up'
         if((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1)):
             ws_buyAll.append(classificationResult)
-            if(-20 < classification_data['yearHighChange'] < -1):
+            if(-5 < classification_data['yearHighChange'] < -1 and classification_data['forecast_day_PCT5_change'] <= 5):
+                ws_buyMomentum1.append(classificationResult)
+            elif(-20 < classification_data['yearHighChange'] < -1 and 0 < classification_data['PCT_day_change'] < 3 and (score == 'up'  or classification_data['forecast_day_PCT_change'] > 0)):
                 ws_buyMomentum1.append(classificationResult)
                 
-            if(classification_data['score'] == '10' and classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1 and classification_data['yearHighChange'] < -20 and classification_data['yearHighChange'] > -80):
+            if(-20 < classification_data['yearHighChange'] < -1):
                 ws_buy.append(classificationResult)    
             
             if(5 > classification_data['PCT_day_change'] > 0 and str(classification_data['sellIndia']) == '' and -95 < classification_data['yearHighChange'] < -15):
@@ -286,8 +288,8 @@ def result_data(scrip):
                    or ('BELTHOLD' == str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
                    or ('3OUTSIDE' in str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
                    or ('HARAMI' in str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
-                   or (classification_data['yearHighChange'] <= -35 and 'HARAMI' in str(classification_data['buyIndia']) and 'SHORTLINE' in str(classification_data['buyIndia']))
-                   or ('DOJI' in str(classification_data['buyIndia']) and 'GRAVESTONEDOJI' in str(classification_data['buyIndia']) and 'LONGLEGGEDDOJI' in classification_data['buyIndia'] and classification_data['PCT_day_change'] > 0)
+                   or (classification_data['yearHighChange'] <= -35 and 'HARAMI' in str(classification_data['buyIndia']) and 'SHORTLINE' in str(classification_data['buyIndia']) and classification_data['PCT_day_change'] > 0)
+                   or ('DOJI' in str(classification_data['buyIndia']) and 'GRAVESTONEDOJI' in str(classification_data['buyIndia']) and 'LONGLEGGEDDOJI' in str(classification_data['buyIndia']) and classification_data['PCT_day_change'] > 0)
                    or ('P@[,HIKKAKE]' == str(classification_data['buyIndia']) and classification_data['PCT_day_change'] < 0)
                    #or (classification_data['yearHighChange'] <= -35 and 'BELTHOLD' in str(classification_data['buyIndia']) and 'LONGLINE' in str(classification_data['buyIndia']))
                    #or (classification_data['yearHighChange'] <= -35 and ',CCI:BOP' in str(classification_data['buyIndia']) and 'LONGLINE' in str(classification_data['buyIndia']))
@@ -343,10 +345,10 @@ def result_data(scrip):
             score = 'down'
         if((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1)):
             ws_sellAll.append(classificationResult)
-            if(-5 < classification_data['yearHighChange'] < -2):
+            if(-10 < classification_data['yearHighChange'] < -2 and -2 < classification_data['PCT_day_change'] < 0 and (score == 'down'  or classification_data['forecast_day_PCT_change'] < 0)):
                 ws_sellMomentum1.append(classificationResult)
                 
-            if(classification_data['score'] == '0-1' and classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1):
+            if(-5 < classification_data['yearHighChange'] < -2):
                 ws_sell.append(classificationResult)    
             
             if(-5 < classification_data['PCT_day_change'] < 0 and str(classification_data['buyIndia']) == '' and -95 < classification_data['yearHighChange'] < -20):

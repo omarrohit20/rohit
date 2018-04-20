@@ -252,10 +252,12 @@ def result_data(scrip):
             score = 'up'
         if((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1)):
             ws_buyAll.append(regressionResult)
-            if(-20 < regression_data['yearHighChange'] < -1):
+            if(-5 < regression_data['yearHighChange'] < -1 and regression_data['forecast_day_PCT5_change'] <= 5):
+                ws_buyMomentum1.append(regressionResult)
+            elif(-20 < regression_data['yearHighChange'] < -1 and 0 < regression_data['PCT_day_change'] < 3 and (score == 'up'  or regression_data['forecast_day_PCT_change'] > 0)):
                 ws_buyMomentum1.append(regressionResult)
                 
-            if(regression_data['score'] == '10' and regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 1 and regression_data['yearHighChange'] < -20):
+            if(-20 < regression_data['yearHighChange'] < -1):
                 ws_buy.append(regressionResult)    
                 
             if(5 > regression_data['PCT_day_change'] > 0 and str(regression_data['sellIndia']) == '' and -95 < regression_data['yearHighChange'] < -15):
@@ -286,8 +288,8 @@ def result_data(scrip):
                    or ('BELTHOLD' == str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
                    or ('3OUTSIDE' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
                    or ('HARAMI' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
-                   or (regression_data['yearHighChange'] <= -35 and 'HARAMI' in str(regression_data['buyIndia']) and 'SHORTLINE' in str(regression_data['buyIndia']))
-                   or ('DOJI' in str(regression_data['buyIndia']) and 'GRAVESTONEDOJI' in str(regression_data['buyIndia']) and 'LONGLEGGEDDOJI' in regression_data['buyIndia'] and regression_data['PCT_day_change'] > 0)
+                   or (regression_data['yearHighChange'] <= -35 and 'HARAMI' in str(regression_data['buyIndia']) and 'SHORTLINE' in str(regression_data['buyIndia']) and regression_data['PCT_day_change'] > 0)
+                   or ('DOJI' in str(regression_data['buyIndia']) and 'GRAVESTONEDOJI' in str(regression_data['buyIndia']) and 'LONGLEGGEDDOJI' in str(regression_data['buyIndia']) and regression_data['PCT_day_change'] > 0)
                    or ('P@[,HIKKAKE]' == str(regression_data['buyIndia']) and regression_data['PCT_day_change'] < 0)
                    #or (regression_data['yearHighChange'] <= -35 and 'BELTHOLD' in str(regression_data['buyIndia']) and 'LONGLINE' in str(regression_data['buyIndia']))
                    #or (regression_data['yearHighChange'] <= -35 and ',CCI:BOP' in str(regression_data['buyIndia']) and 'LONGLINE' in str(regression_data['buyIndia']))
@@ -343,10 +345,10 @@ def result_data(scrip):
             score = 'down'
         if((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1)):
             ws_sellAll.append(regressionResult)
-            if(-5 < regression_data['yearHighChange'] < -2):
+            if(-10 < regression_data['yearHighChange'] < -2 and -2 < regression_data['PCT_day_change'] < 0 and (score == 'down'  or regression_data['forecast_day_PCT_change'] < 0)):
                 ws_sellMomentum1.append(regressionResult)
                 
-            if(regression_data['score'] == '0-1' and regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -1 and regression_data['yearHighChange'] > -80):
+            if(-5 < regression_data['yearHighChange'] < -2):
                 ws_sell.append(regressionResult)    
                 
             if(-5 < regression_data['PCT_day_change'] < 0 and str(regression_data['buyIndia']) == '' and -95 < regression_data['yearHighChange'] < -20):
