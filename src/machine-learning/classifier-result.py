@@ -258,7 +258,7 @@ def result_data(scrip):
             elif(-20 < classification_data['yearHighChange'] < -1 and 0 < classification_data['PCT_day_change'] < 3 and (score == 'up'  or classification_data['forecast_day_PCT_change'] > 0)):
                 ws_buyMomentum1.append(classificationResult)
                 
-            if(1 < classification_data['yearLowChange'] < 10 and score == 'up'):
+            if(1 < classification_data['yearLowChange'] < 10 and 0 < classification_data['PCT_day_change'] < 3 and score == 'up'):
                 ws_buy.append(classificationResult)    
             
             if(2 > classification_data['PCT_day_change'] > 0 and str(classification_data['sellIndia']) == '' and -95 < classification_data['yearHighChange'] < -15
@@ -351,7 +351,7 @@ def result_data(scrip):
             if(-10 < classification_data['yearHighChange'] < -2 and -2 < classification_data['PCT_day_change'] < 0 and (score == 'down'  or classification_data['forecast_day_PCT_change'] < 0)):
                 ws_sellMomentum1.append(classificationResult)
                 
-            if(1 < classification_data['yearLowChange'] < 15 and classification_data['forecast_day_PCT_change'] < 0):
+            if(1 < classification_data['yearLowChange'] < 15 and -2 < classification_data['PCT_day_change'] < 0 and classification_data['forecast_day_PCT_change'] < 0):
                 ws_sell.append(classificationResult)    
             
             if(-2 < classification_data['PCT_day_change'] < 0 and str(classification_data['buyIndia']) == '' and -95 < classification_data['yearHighChange'] < -20

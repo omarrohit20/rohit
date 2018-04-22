@@ -278,8 +278,8 @@ def result_data(scrip):
         if(regression_data['score'] == '10' or regression_data['score'] == '1-1'):
             score = 'up'
         if(((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1)) 
-               and ((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1))
-               and 'P@[' not in str(regression_data['sellIndia'])):
+            and ((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1))
+            and 'P@[' not in str(regression_data['sellIndia'])):
             ws_buyAll.append(regressionResult)
             ws_buyAll.append(classificationResult)
             if(-5 < regression_data['yearHighChange'] < -1 and regression_data['forecast_day_PCT5_change'] <= 5):
@@ -289,7 +289,7 @@ def result_data(scrip):
                 ws_buyMomentum1.append(regressionResult)
                 ws_buyMomentum1.append(classificationResult)
                 
-            if(1 < regression_data['yearLowChange'] < 10 and score == 'up'):
+            if(1 < regression_data['yearLowChange'] < 10 and 0 < regression_data['PCT_day_change'] < 3 and score == 'up'):
                 ws_buy.append(regressionResult)
                 ws_buy.append(classificationResult)    
                 
@@ -411,15 +411,15 @@ def result_data(scrip):
         if(regression_data['score'] == '1-1' or regression_data['score'] == '0-1'):
             score = 'down'
         if(((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1))
-               and ((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1))
-               and 'P@[' not in str(regression_data['buyIndia'])):
+            and ((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1))
+            and 'P@[' not in str(regression_data['buyIndia'])):
             ws_sellAll.append(regressionResult)
             ws_sellAll.append(classificationResult)
             if(-10 < regression_data['yearHighChange'] < -2 and -2 < regression_data['PCT_day_change'] < 0 and (score == 'down'  or regression_data['forecast_day_PCT_change'] < 0)):
                 ws_sellMomentum1.append(regressionResult)
                 ws_sellMomentum1.append(classificationResult)
                 
-            if(1 < regression_data['yearLowChange'] < 15 and regression_data['forecast_day_PCT_change'] < 0):
+            if(1 < regression_data['yearLowChange'] < 15 and -2 < regression_data['PCT_day_change'] < 0 and regression_data['forecast_day_PCT_change'] < 0):
                 ws_sell.append(regressionResult)
                 ws_sell.append(classificationResult)    
             
