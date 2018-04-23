@@ -268,7 +268,7 @@ def result_data(scrip):
                 and classification_data['forecast_day_PCT5_change'] <= 1 and classification_data['forecast_day_PCT7_change'] <= -1 and classification_data['forecast_day_PCT10_change'] <= -5):
                 ws_buyFinal1.append(classificationResult)
         
-            if(4 > classification_data['PCT_day_change']):
+            if(classification_data['PCT_day_change'] < 4 and classification_data['yearLowChange'] > 5):
                 if(('MARUBOZU' in str(classification_data['buyIndia']) and classification_data['forecast_day_PCT5_change'] <= 0 and classification_data['forecast_day_PCT10_change'] <= 1)
                    or ('HAMMER' in str(classification_data['buyIndia']) and classification_data['PCT_day_change'] > 0)
                    #or 'ENGULFING' in str(classification_data['buyIndia'])
@@ -361,7 +361,7 @@ def result_data(scrip):
                 and classification_data['forecast_day_PCT5_change'] >= -1 and classification_data['forecast_day_PCT7_change'] >= 1 and classification_data['forecast_day_PCT10_change'] >= 5):
                 ws_sellFinal1.append(classificationResult)
                                
-            if(-4 < classification_data['PCT_day_change']):
+            if(-4 < classification_data['PCT_day_change'] and classification_data['yearHighChange'] < -5):
                 if(('HANGINGMAN' in str(classification_data['sellIndia'])
                    #or 'MARUBOZU' in str(classification_data['sellIndia'])
                    #or 'ENGULFING' in str(classification_data['sellIndia'])
@@ -381,9 +381,9 @@ def result_data(scrip):
                    #or '3BLACKCROWS' in str(classification_data['sellIndia'])
                    ) and (classification_data['forecast_day_PCT5_change'] >= 0)):
                     ws_sellPattern.append(classificationResult)            
-                elif(('HARAMI' in str(classification_data['sellIndia']) and classification_data['forecast_day_PCT5_change'] >= 0 and score == 'down')
+                elif((('HARAMI' in str(classification_data['sellIndia']) and classification_data['forecast_day_PCT5_change'] >= 0 and score == 'down')
                    or ('ENGULFING' in str(classification_data['sellIndia']) and 'LONGLINE' in str(classification_data['sellIndia']) and score == 'down')
-                   ):
+                   ) and classification_data['yearHighChange'] < -5):
                     ws_sellPattern1.append(classificationResult)
                 elif(('HANGINGMAN' in str(classification_data['sellIndia'])
                    or 'MARUBOZU' in str(classification_data['sellIndia'])
@@ -399,7 +399,7 @@ def result_data(scrip):
                    or ('SHOOTINGSTAR' in str(classification_data['sellIndia']) and classification_data['PCT_day_change'] < 0)
                    or 'DARKCLOUDCOVER' in str(classification_data['sellIndia'])
                    or '3INSIDE' in str(classification_data['sellIndia'])
-                   or ('3OUTSIDE' in str(classification_data['sellIndia']) and classification_data['yearHighChange'] < -10 and (classification_data['forecast_day_PCT10_change'] >= 10))
+                   or '3OUTSIDE' in str(classification_data['sellIndia'])
                    or '2CROWS' in str(classification_data['sellIndia'])
                    or '3BLACKCROWS' in str(classification_data['sellIndia'])
                    ) and (classification_data['forecast_day_PCT5_change'] >= 5) and (classification_data['forecast_day_PCT10_change'] >= 5)):
