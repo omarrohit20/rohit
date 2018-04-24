@@ -396,6 +396,7 @@ def create_csv(scrip, regressionResult=None):
         regressionResult.append(regression_data_db['forecast_day_PCT7_change'])
         regressionResult.append(regression_data_db['forecast_day_PCT10_change'])
         regressionResult.append(regression_data_db['PCT_day_change'])
+        regressionResult.append(regression_data_db['PCT_change'])
         regressionResult.append(regression_data_db['score'])
         regressionResult.extend([regression_data_db['randomForestValue'],regression_data_db['randomForestAccuracy']])
         regressionResult.extend([regression_data_db['mlpValue'],regression_data_db['mlpAccuracy']])
@@ -421,22 +422,23 @@ def create_csv(scrip, regressionResult=None):
     forecast_day_PCT7_change = float(regressionResult[11])
     forecast_day_PCT10_change = float(regressionResult[12])
     PCT_day_change = float(regressionResult[13])
-    score = str(regressionResult[14])
-    randomForestValue = float(regressionResult[15])
-    randomForestAccuracy = float(regressionResult[16])
-    mlpValue = float(regressionResult[17])
-    mlpAccuracy = float(regressionResult[18])
-    baggingValue = float(regressionResult[19])
-    baggingAccuracy = float(regressionResult[20])
-    adaBoostValue = float(regressionResult[21])
-    adaBoostAccuracy = float(regressionResult[22])
-    kNeighboursValue = float(regressionResult[23])
-    kNeighboursAccuracy = float(regressionResult[24])
-    gradientBoostingValue = float(regressionResult[25])
-    gradientBoostingAccuracy = float(regressionResult[26])
-    trend = str(regressionResult[27])
-    yearHighChange = float(regressionResult[28])
-    yearLowChange = float(regressionResult[29])
+    PCT_change = float(regressionResult[14])
+    score = str(regressionResult[15])
+    randomForestValue = float(regressionResult[16])
+    randomForestAccuracy = float(regressionResult[17])
+    mlpValue = float(regressionResult[18])
+    mlpAccuracy = float(regressionResult[19])
+    baggingValue = float(regressionResult[20])
+    baggingAccuracy = float(regressionResult[21])
+    adaBoostValue = float(regressionResult[22])
+    adaBoostAccuracy = float(regressionResult[23])
+    kNeighboursValue = float(regressionResult[24])
+    kNeighboursAccuracy = float(regressionResult[25])
+    gradientBoostingValue = float(regressionResult[26])
+    gradientBoostingAccuracy = float(regressionResult[27])
+    trend = str(regressionResult[28])
+    yearHighChange = float(regressionResult[29])
+    yearLowChange = float(regressionResult[30])
     
     #Insert in db
     if(regression_data_db is None):
@@ -455,6 +457,7 @@ def create_csv(scrip, regressionResult=None):
         data['forecast_day_PCT7_change'] = forecast_day_PCT7_change
         data['forecast_day_PCT10_change'] = forecast_day_PCT10_change
         data['PCT_day_change'] = PCT_day_change
+        data['PCT_change'] = PCT_change
         data['score'] = score
         data['randomForestValue'] = randomForestValue
         data['randomForestAccuracy'] = randomForestAccuracy
@@ -588,6 +591,7 @@ def regression_ta_data(scrip):
     df['EMA9'] = EMA(df,9)
     df['EMA21'] = EMA(df,21)
     dfp = get_data_frame(df)
+    PCT_change = df.tail(1).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_day_change = df.tail(1).loc[-forecast_out:,'PCT_day_change'].values[0]
     forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'High_change1'].values[0]
     forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'High_change2'].values[0]
@@ -617,6 +621,7 @@ def regression_ta_data(scrip):
     regressionResult.append(forecast_day_PCT7_change)
     regressionResult.append(forecast_day_PCT10_change)
     regressionResult.append(PCT_day_change)
+    regressionResult.append(PCT_change)
     regressionResult.append(score)
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')  
