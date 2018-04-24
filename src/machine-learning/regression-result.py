@@ -348,10 +348,10 @@ def result_data(scrip):
         if(((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1))
            and 'P@[' not in str(regression_data['buyIndia'])):
             ws_sellAll.append(regressionResult)
-            if(-10 < regression_data['yearHighChange'] < -2 and -2 < regression_data['PCT_day_change'] < 0 and (score == 'down'  or regression_data['forecast_day_PCT_change'] < 0)):
+            if(-10 < regression_data['yearHighChange'] < -2 and -2 < regression_data['PCT_day_change'] < 0.8 and (score == 'down'  or regression_data['forecast_day_PCT_change'] < 0)):
                 ws_sellYearHigh.append(regressionResult)
                 
-            if(1 < regression_data['yearLowChange'] < 15 and -2 < regression_data['PCT_day_change'] < 0 and regression_data['forecast_day_PCT_change'] < 0):
+            if(1 < regression_data['yearLowChange'] < 15 and -2 < regression_data['PCT_day_change'] < 0.8 and regression_data['forecast_day_PCT_change'] < 0):
                 ws_sellYearLow.append(regressionResult)    
                 
             if(-2 < regression_data['PCT_day_change'] < 0 and str(regression_data['buyIndia']) == '' and -95 < regression_data['yearHighChange'] < -20

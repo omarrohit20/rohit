@@ -415,11 +415,11 @@ def result_data(scrip):
             and 'P@[' not in str(regression_data['buyIndia'])):
             ws_sellAll.append(regressionResult)
             ws_sellAll.append(classificationResult)
-            if(-10 < regression_data['yearHighChange'] < -2 and -2 < regression_data['PCT_day_change'] < 0 and (score == 'down'  or regression_data['forecast_day_PCT_change'] < 0)):
+            if(-10 < regression_data['yearHighChange'] < -2 and -2 < regression_data['PCT_day_change'] < 0.8 and (score == 'down'  or regression_data['forecast_day_PCT_change'] < 0)):
                 ws_sellYearHigh.append(regressionResult)
                 ws_sellYearHigh.append(classificationResult)
                 
-            if(1 < regression_data['yearLowChange'] < 15 and -2 < regression_data['PCT_day_change'] < 0 and regression_data['forecast_day_PCT_change'] < 0):
+            if(1 < regression_data['yearLowChange'] < 15 and -2 < regression_data['PCT_day_change'] < 0.8 and regression_data['forecast_day_PCT_change'] < 0):
                 ws_sellYearLow.append(regressionResult)
                 ws_sellYearLow.append(classificationResult)    
             
