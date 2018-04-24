@@ -253,12 +253,13 @@ def result_data(scrip):
         if(((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1))
            and 'P@[' not in str(regression_data['sellIndia'])):
             ws_buyAll.append(regressionResult)
-            if(-5 < regression_data['yearHighChange'] < -1 and regression_data['forecast_day_PCT5_change'] <= 5):
+            if(-5 < regression_data['yearHighChange'] < -1 and regression_data['forecast_day_PCT2_change'] <= 5):
                 ws_buyYearHigh.append(regressionResult)
-            elif(-20 < regression_data['yearHighChange'] < -1 and 0 < regression_data['PCT_day_change'] < 3 and (score == 'up'  or regression_data['forecast_day_PCT_change'] > 0)):
+            elif(-20 < regression_data['yearHighChange'] < -1 and regression_data['forecast_day_PCT2_change'] <= 5 and 0 < regression_data['PCT_day_change'] < 3 and (score == 'up'  or regression_data['forecast_day_PCT_change'] > 0)):
                 ws_buyYearHigh.append(regressionResult)
                 
-            if(1 < regression_data['yearLowChange'] < 10 and 0 < regression_data['PCT_day_change'] < 3 and score == 'up'):
+            if((1 < regression_data['yearLowChange'] < 10 and 0 < regression_data['PCT_day_change'] < 3 and score == 'up')
+                and (regression_data['forecast_day_PCT10_change'] <= -5 or regression_data['forecast_day_PCT5_change'] > 5)):
                 ws_buyYearLow.append(regressionResult)    
                 
             if(2 > regression_data['PCT_day_change'] > 0 and str(regression_data['sellIndia']) == '' and -95 < regression_data['yearHighChange'] < -15
@@ -346,7 +347,8 @@ def result_data(scrip):
         if(((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1))
            and 'P@[' not in str(regression_data['buyIndia'])):
             ws_sellAll.append(regressionResult)
-            if(-10 < regression_data['yearHighChange'] < -2 and -2 < regression_data['PCT_day_change'] < 0.8 and (score == 'down'  or regression_data['forecast_day_PCT_change'] < 0)):
+            if(-10 < regression_data['yearHighChange'] < -2 and -2 < regression_data['PCT_day_change'] < 0.8 
+                and regression_data['forecast_day_PCT5_change'] > 0 and (score == 'down'  or regression_data['forecast_day_PCT_change'] < 0)):
                 ws_sellYearHigh.append(regressionResult)
                 
             if(1 < regression_data['yearLowChange'] < 15 and -2 < regression_data['PCT_day_change'] < 0.8 and regression_data['forecast_day_PCT_change'] < 0):
