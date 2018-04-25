@@ -204,6 +204,16 @@ def sell_News(scrip):
         ws_sellNews.append([scrip_news['timestamp'], scrip_news['summary'], scrip_news['link']])
     ws_sellNews.append([" "])  
 
+
+def all_day_pct_change_negative(regression_data):
+    if(regression_data['forecast_day_PCT2_change'] < .5
+        and regression_data['forecast_day_PCT3_change'] < .5
+        and regression_data['forecast_day_PCT4_change'] < .5
+        and regression_data['forecast_day_PCT5_change'] < .5
+        and regression_data['forecast_day_PCT7_change'] < .5
+        and regression_data['forecast_day_PCT10_change'] < .5):
+        return True;
+
 def result_data(scrip):
     resultDeclared = ""
     resultDate = ""
@@ -281,32 +291,40 @@ def result_data(scrip):
         score = ''
         if(regression_data['score'] == '10' or regression_data['score'] == '1-1'):
             score = 'up'
-        if(((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1)) 
-            and ((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 1))
-            and 'P@[' not in str(regression_data['sellIndia'])):
+        dayClose = False
+        if(regression_data['PCT_day_change'] > .5 and regression_data['PCT_change'] < .1):
+            dayClose = True
+        regressionResult.append(dayClose)            
+        if(((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1))
+           and ((classification_data['mlpValue'] >= 1 and classification_data['kNeighboursValue'] >= 0) or (classification_data['mlpValue'] >=0 and classification_data['kNeighboursValue'] >=1))
+           and 'P@[' not in str(regression_data['sellIndia'])):
             ws_buyAll.append(regressionResult)
             ws_buyAll.append(classificationResult)
-            if(-5 < regression_data['yearHighChange'] < -1 and regression_data['forecast_day_PCT2_change'] <= 5):
+            if(-5 <= regression_data['yearHighChange'] < -1 and regression_data['yearLowChange'] > 5 
+                and regression_data['forecast_day_PCT2_change'] <= 5):
                 ws_buyYearHigh.append(regressionResult)
                 ws_buyYearHigh.append(classificationResult)
-            elif(-20 < regression_data['yearHighChange'] < -1 and regression_data['forecast_day_PCT2_change'] <= 5 and 0 < regression_data['PCT_day_change'] < 3 and (score == 'up'  or regression_data['forecast_day_PCT_change'] > 0)):
+            elif(-20 < regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 5 
+                and 0 < regression_data['PCT_day_change'] < 3 and (score == 'up'  or regression_data['forecast_day_PCT_change'] > 0)):
                 ws_buyYearHigh.append(regressionResult)
                 ws_buyYearHigh.append(classificationResult)
                 
-            if((1 < regression_data['yearLowChange'] < 10 and 0 < regression_data['PCT_day_change'] < 3 and score == 'up')
+            if(1 < regression_data['yearLowChange'] < 10 and regression_data['yearHighChange'] < -10 
+                and 0 < regression_data['PCT_day_change'] < 3 and score == 'up'
                 and (regression_data['forecast_day_PCT10_change'] <= -5 or regression_data['forecast_day_PCT5_change'] > 5)):
                 ws_buyYearLow.append(regressionResult)
-                ws_buyYearLow.append(classificationResult)    
-                
-            if(2 > regression_data['PCT_day_change'] > 0 and str(regression_data['sellIndia']) == '' and -95 < regression_data['yearHighChange'] < -15
-                and regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= 1 and regression_data['forecast_day_PCT10_change'] <= 1):
-                ws_buyFinal.append(regressionResult)
-                ws_buyFinal.append(classificationResult)
-            elif(2 > regression_data['PCT_day_change'] > 0
-                and regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= -1 and regression_data['forecast_day_PCT10_change'] <= -5):
-                ws_buyFinal1.append(regressionResult)
-                ws_buyFinal1.append(classificationResult)
-         
+                ws_buyYearLow.append(classificationResult)
+                   
+            if(regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 5):   
+                if(2 > regression_data['PCT_day_change'] > 0 and str(regression_data['sellIndia']) == '' and -95 < regression_data['yearHighChange'] < -15
+                    and regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= 1 and regression_data['forecast_day_PCT10_change'] <= 1):
+                    ws_buyFinal.append(regressionResult)
+                    ws_buyFinal.append(classificationResult)
+                elif(2 > regression_data['PCT_day_change'] > 0
+                    and regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= -1 and regression_data['forecast_day_PCT10_change'] <= -5):
+                    ws_buyFinal1.append(regressionResult)
+                    ws_buyFinal1.append(classificationResult) 
+                 
             if(regression_data['PCT_day_change'] < 4 and regression_data['yearLowChange'] > 5):
                 if(('MARUBOZU' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 1)
                    or ('HAMMER' in str(regression_data['buyIndia']) and regression_data['PCT_day_change'] > 0)
@@ -324,7 +342,7 @@ def result_data(scrip):
                    #or '3INSIDE' in str(regression_data['buyIndia'])
                    ):
                     ws_buyPattern.append(regressionResult)
-                    ws_buyPattern.append(classificationResult)       
+                    ws_buyPattern.append(classificationResult) 
                 elif(('CCI:BOP' in str(regression_data['buyIndia']) and 'BELTHOLD' in str(regression_data['buyIndia']))
                    or ('AROON:BOP' in str(regression_data['buyIndia']) and 'BELTHOLD' in str(regression_data['buyIndia']) and 'ENGULFING' in str(regression_data['buyIndia']))
                    or ('BELTHOLD' == str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
@@ -354,7 +372,7 @@ def result_data(scrip):
                    or '3INSIDE' in str(regression_data['buyIndia'])
                    ) and (regression_data['forecast_day_PCT5_change'] <= -5) and (regression_data['forecast_day_PCT10_change'] <= -5)): 
                     ws_buyPattern2.append(regressionResult)
-                    ws_buyPattern2.append(classificationResult)                    
+                    ws_buyPattern2.append(classificationResult)                            
     
         
     regression_data = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
@@ -411,29 +429,37 @@ def result_data(scrip):
         score = ''
         if(regression_data['score'] == '1-1' or regression_data['score'] == '0-1'):
             score = 'down'
+        if(regression_data['PCT_day_change'] < -.5 and regression_data['PCT_change'] > -.1):
+            dayClose = True   
+        regressionResult.append(dayClose)     
         if(((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1))
-            and ((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= -1))
-            and 'P@[' not in str(regression_data['buyIndia'])):
+           and ((classification_data['mlpValue'] <= -1 and classification_data['kNeighboursValue'] <= 0) or (classification_data['mlpValue'] <= 0 and classification_data['kNeighboursValue'] <= -1))
+           and 'P@[' not in str(regression_data['buyIndia'])):
             ws_sellAll.append(regressionResult)
             ws_sellAll.append(classificationResult)
-            if(-10 < regression_data['yearHighChange'] < -2 and -2 < regression_data['PCT_day_change'] < 0.8 
-                and regression_data['forecast_day_PCT5_change'] > 0 and (score == 'down'  or regression_data['forecast_day_PCT_change'] < 0)):
+            if(-10 < regression_data['yearHighChange'] < -2 and regression_data['yearLowChange'] > 5 and -2 < regression_data['PCT_day_change'] < 0.8 
+                and regression_data['forecast_day_PCT5_change'] > 0 and regression_data['forecast_day_PCT10_change'] > 5 
+                and (score == 'down'  or regression_data['forecast_day_PCT_change'] < 0)):
                 ws_sellYearHigh.append(regressionResult)
                 ws_sellYearHigh.append(classificationResult)
                 
-            if(1 < regression_data['yearLowChange'] < 15 and -2 < regression_data['PCT_day_change'] < 0.8 and regression_data['forecast_day_PCT_change'] < 0):
-                ws_sellYearLow.append(regressionResult)
-                ws_sellYearLow.append(classificationResult)    
+            if(1 < regression_data['yearLowChange'] < 15 and regression_data['yearHighChange'] < -10 
+                and -2 < regression_data['PCT_day_change'] < 0.8 and regression_data['forecast_day_PCT_change'] < 0
+                and all_day_pct_change_negative(regression_data)):
+                ws_sellYearLow.append(regressionResult)  
+                ws_sellYearLow.append(classificationResult)   
             
-            if(-2 < regression_data['PCT_day_change'] < 0 and str(regression_data['buyIndia']) == '' and -95 < regression_data['yearHighChange'] < -20
-                and regression_data['forecast_day_PCT5_change'] >= 1 and regression_data['forecast_day_PCT7_change'] >= 1 and regression_data['forecast_day_PCT10_change'] >= 1):
-                ws_sellFinal.append(regressionResult)
-                ws_sellFinal.append(classificationResult)
-            elif(-2 < regression_data['PCT_day_change'] < 0 
-                and regression_data['forecast_day_PCT5_change'] >= -1 and regression_data['forecast_day_PCT7_change'] >= 1 and regression_data['forecast_day_PCT10_change'] >= 5):
-                ws_sellFinal1.append(regressionResult)
-                ws_sellFinal1.append(classificationResult)  
-                               
+            if(regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 5):
+                if(-2 < regression_data['PCT_day_change'] < 0 and str(regression_data['buyIndia']) == '' and -95 < regression_data['yearHighChange'] < -20
+                    and regression_data['forecast_day_PCT5_change'] >= 1 and regression_data['forecast_day_PCT7_change'] >= 1 and regression_data['forecast_day_PCT10_change'] >= 1):
+                    ws_sellFinal.append(regressionResult)
+                    ws_sellFinal.append(classificationResult)
+                elif(-2 < regression_data['PCT_day_change'] < 0 
+                    and regression_data['forecast_day_PCT5_change'] >= -1 and regression_data['forecast_day_PCT7_change'] >= 1 and regression_data['forecast_day_PCT10_change'] >= 5):
+                    ws_sellFinal1.append(regressionResult) 
+                    ws_sellFinal1.append(classificationResult)    
+           
+        
             if(-4 < regression_data['PCT_day_change'] and regression_data['yearHighChange'] < -5):
                 if(('HANGINGMAN' in str(regression_data['sellIndia'])
                    #or 'MARUBOZU' in str(regression_data['sellIndia'])
@@ -454,7 +480,7 @@ def result_data(scrip):
                    #or '3BLACKCROWS' in str(regression_data['sellIndia'])
                    ) and (regression_data['forecast_day_PCT5_change'] >= 0)):
                     ws_sellPattern.append(regressionResult)
-                    ws_sellPattern.append(classificationResult) 
+                    ws_sellPattern.append(classificationResult)
                 elif((('HARAMI' in str(regression_data['sellIndia']) and regression_data['forecast_day_PCT5_change'] >= 0 and score == 'down')
                    or ('ENGULFING' in str(regression_data['sellIndia']) and 'LONGLINE' in str(regression_data['sellIndia']) and score == 'down')
                    ) and regression_data['yearHighChange'] < -5):
@@ -478,7 +504,7 @@ def result_data(scrip):
                    or '2CROWS' in str(regression_data['sellIndia'])
                    or '3BLACKCROWS' in str(regression_data['sellIndia'])
                    ) and (regression_data['forecast_day_PCT5_change'] >= 5) and (regression_data['forecast_day_PCT10_change'] >= 5)):
-                    ws_sellPattern2.append(regressionResult)
+                    ws_sellPattern2.append(regressionResult) 
                     ws_sellPattern2.append(classificationResult)    
                                    
 def calculateParallel(threads=2, run_type=None, futures=None):
