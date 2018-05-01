@@ -287,7 +287,7 @@ def result_data(scrip):
         regressionResult.append(resultComment)
         score = ''
         if(regression_data['score'] == '10' or regression_data['score'] == '1-1'):
-            score = 'up'
+            score = 'up'    
         dayClose = False
         if(regression_data['PCT_day_change'] > .5 and regression_data['PCT_change'] < .1):
             dayClose = True
@@ -314,7 +314,7 @@ def result_data(scrip):
             if(longTrend and regression_data['PCT_day_change'] > 0 and regression_data['yearHighChange'] < -10):
                 ws_buyUpTrend.append(regressionResult)    
                    
-            if(regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 5):   
+            if(regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 5 and regression_data['score'] != '0-1'):   
                 if(2 > regression_data['PCT_day_change'] > 0 and str(regression_data['sellIndia']) == '' and -95 < regression_data['yearHighChange'] < -15
                     and regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= 1 and regression_data['forecast_day_PCT10_change'] <= 1):
                     ws_buyFinal.append(regressionResult)
@@ -421,7 +421,7 @@ def result_data(scrip):
             if(longTrend and regression_data['PCT_day_change'] < 0 and regression_data['yearLowChange'] > 10):
                 ws_sellDownTrend.append(regressionResult)      
             
-            if(regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 5):
+            if(regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 5 and regression_data['score'] != '10'):
                 if(-2 < regression_data['PCT_day_change'] < 0 and str(regression_data['buyIndia']) == '' and -95 < regression_data['yearHighChange'] < -20
                     and regression_data['forecast_day_PCT5_change'] >= 1 and regression_data['forecast_day_PCT7_change'] >= 1 and regression_data['forecast_day_PCT10_change'] >= 1):
                     ws_sellFinal.append(regressionResult)
