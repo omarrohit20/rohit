@@ -115,7 +115,6 @@ def get_data_frame(df, regressor="None"):
                 addFeaturesEMA21Change(df, dfp, EMA21, dele) 
         dfp['uptrend'] = df['uptrend']
         dfp['downtrend'] = df['downtrend']    
-       
  
         if regressor != 'mlp':      
             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
@@ -253,12 +252,12 @@ def get_data_frame(df, regressor="None"):
 #        dfp['ADOSC'] = ADOSC(df)
 #        dfp['OBV'] = OBV(df)
         dfp = dfp.ix[50:]    
-        forecast_col = 'High_change1'
+        forecast_col = 'Low_change1'
         dfp.dropna(inplace=True)
         dfp['label'] = dfp[forecast_col].shift(-forecast_out) 
         return dfp
 
-def create_csv(forecast_day_date, forecast_day_HO, scrip, regressionResult):
+def create_csv(forecast_day_date, forecast_day_OL, scrip, regressionResult):
     futures = str(regressionResult[0])   
     trainSize = int(regressionResult[1])
     buyIndia = str(regressionResult[2])
@@ -275,23 +274,23 @@ def create_csv(forecast_day_date, forecast_day_HO, scrip, regressionResult):
     PCT_day_change = float(regressionResult[13])
     PCT_change = float(regressionResult[14])
     score = str(regressionResult[15])
-    randomForestValue = float(regressionResult[16])
-    randomForestAccuracy = float(regressionResult[17])
-    mlpValue = float(regressionResult[18])
-    mlpAccuracy = float(regressionResult[19])
-    baggingValue = float(regressionResult[20])
-    baggingAccuracy = float(regressionResult[21])
-    adaBoostValue = float(regressionResult[22])
-    adaBoostAccuracy = float(regressionResult[23])
-    kNeighboursValue = float(regressionResult[24])
-    kNeighboursAccuracy = float(regressionResult[25])
+    kNeighboursValue = float(regressionResult[16])
+    kNeighboursAccuracy = float(regressionResult[17])
+    randomForestValue = float(regressionResult[18])
+    randomForestAccuracy = float(regressionResult[19])
+    mlpValue = float(regressionResult[20])
+    mlpAccuracy = float(regressionResult[21])
+    baggingValue = float(regressionResult[22])
+    baggingAccuracy = float(regressionResult[23])
+    adaBoostValue = float(regressionResult[24])
+    adaBoostAccuracy = float(regressionResult[25])
     gradientBoostingValue = float(regressionResult[26])
     gradientBoostingAccuracy = float(regressionResult[27])
     trend = str(regressionResult[28])
     yearHighChange = float(regressionResult[29])
     yearLowChange = float(regressionResult[30])
     regressionResult.append(forecast_day_date)
-    regressionResult.append(forecast_day_HO)
+    regressionResult.append(forecast_day_OL)
     
     regression_data = {}
     regression_data['date'] = forecast_day_date
@@ -316,7 +315,7 @@ def create_csv(forecast_day_date, forecast_day_HO, scrip, regressionResult):
     regression_data['yearHighChange'] = yearHighChange 
     regression_data['yearLowChange'] = yearLowChange
     regression_data['patterns'] = ''
-    regression_data['forecast_day_HO'] = forecast_day_HO
+    regression_data['forecast_day_OL'] = forecast_day_OL
     json_data = json.loads(json.dumps(regression_data))
     
     score = ''
@@ -328,91 +327,88 @@ def create_csv(forecast_day_date, forecast_day_HO, scrip, regressionResult):
     longTrend = False 
     if(all_day_pct_change_positive(regression_data)):
         longTrend = True     
-    if(((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1))
-       and 'P@[' not in str(regression_data['sellIndia'])):
-        stored = db.RbuyAll.find_one({'scrip':regression_data['scrip'], 'date':regression_data['date']})
+    if(((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1))
+        and 'P@[' not in str(regression_data['buyIndia'])):
+        stored = db.RsellAll.find_one({'scrip':regression_data['scrip'], 'date':regression_data['date']})
         if stored is None:
-            regression_data['patterns'] = 'Other'
-            if(-5 <= regression_data['yearHighChange'] < -1 and regression_data['yearLowChange'] > 5 
-                and -0.5 < regression_data['PCT_day_change'] < 3 and regression_data['forecast_day_PCT2_change'] <= 5):
-                regression_data['patterns'] = regression_data['patterns'] + 'buyYearHigh'
-                db.RbuyYearHigh.insert_one(json_data)
-            elif(-20 < regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 5 
-                and -0.5 < regression_data['PCT_day_change'] < 3 and (score == 'up'  or regression_data['forecast_day_PCT_change'] > 0)):
-                regression_data['patterns'] = regression_data['patterns'] + 'buyYearHigh'
-                db.RbuyYearHigh.insert_one(json_data)
+            if (regression_data['sellIndia'] != ''):
+                regression_data['patterns'] = 'Other'
+            if(-10 < regression_data['yearHighChange'] < -2 and regression_data['yearLowChange'] > 5 and -2 < regression_data['PCT_day_change'] < 0.8 
+                and regression_data['forecast_day_PCT5_change'] > 0 and regression_data['forecast_day_PCT10_change'] > 5 
+                and (score == 'down'  or regression_data['forecast_day_PCT_change'] < 0)):
+                regression_data['patterns'] = regression_data['patterns'] + ', sellYearHigh'
+                db.RsellYearHigh.insert_one(json_data)
                 
-            if(1 < regression_data['yearLowChange'] < 10 and regression_data['yearHighChange'] < -10 
-                and 0 < regression_data['PCT_day_change'] < 3 and score == 'up'
-                and (regression_data['forecast_day_PCT10_change'] <= -5 or regression_data['forecast_day_PCT5_change'] > 5)):
-                regression_data['patterns'] = regression_data['patterns'] + 'buyYearLow' 
-                db.RbuyYearLow.insert_one(json_data)
+            if(1 < regression_data['yearLowChange'] < 15 and regression_data['yearHighChange'] < -10 
+                and -2 < regression_data['PCT_day_change'] < 0.8 and regression_data['forecast_day_PCT_change'] < 0
+                and all_day_pct_change_negative(regression_data)):
+                regression_data['patterns'] = regression_data['patterns'] + ', sellYearLow'
+                db.RsellYearLow.insert_one(json_data)
                 
-            if(longTrend and regression_data['PCT_day_change'] > 0 and regression_data['yearHighChange'] < -10):
-                regression_data['patterns'] = regression_data['patterns'] + 'buyUpTrend' 
-                db.RbuyUpTrend.insert_one(json_data)   
-                   
-            if(regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 5 and regression_data['score'] != '0-1'):   
-                if(2 > regression_data['PCT_day_change'] > 0 and str(regression_data['sellIndia']) == '' and -95 < regression_data['yearHighChange'] < -15
-                    and regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= 1 and regression_data['forecast_day_PCT10_change'] <= 1):
-                    regression_data['patterns'] = regression_data['patterns'] + 'buyFinal'
-                    db.RbuyFinal.insert_one(json_data)
-                elif(2 > regression_data['PCT_day_change'] > 0
-                    and regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= -1 and regression_data['forecast_day_PCT10_change'] <= -5):
-                    regression_data['patterns'] = regression_data['patterns'] + 'buyFinal1' 
-                    db.RbuyFinal1.insert_one(json_data)
-                 
-            if(regression_data['PCT_day_change'] < 4 and regression_data['yearLowChange'] > 5):
-                if(('MARUBOZU' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 1)
-                   or ('HAMMER' in str(regression_data['buyIndia']) and regression_data['PCT_day_change'] > 0)
-                   #or 'ENGULFING' in str(regression_data['buyIndia'])
-                   #or 'PIERCING' in str(regression_data['buyIndia'])
-                   or ('MORNINGSTAR' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 1)
-                   #or ':DOJISTAR' in str(regression_data['buyIndia'])
-                   #or 'MORNINGDOJISTAR' in str(regression_data['buyIndia'])
-                   or 'ABANDONEDBABY' in str(regression_data['buyIndia'])
-                   or 'COUNTERATTACK' in str(regression_data['buyIndia'])
-                   or 'KICKING' in str(regression_data['buyIndia'])
-                   or 'BREAKAWAY' in str(regression_data['buyIndia'])
-                   #or 'TRISTAR' in str(regression_data['buyIndia'])
-                   #or '3WHITESOLDIERS' in str(regression_data['buyIndia'])
-                   #or '3INSIDE' in str(regression_data['buyIndia'])
-                   ):
-                    regression_data['patterns'] = regression_data['patterns'] + 'buyPattern'
-                    db.RbuyPattern.insert_one(json_data) 
-                elif(('CCI:BOP' in str(regression_data['buyIndia']) and 'BELTHOLD' in str(regression_data['buyIndia']))
-                   or ('AROON:BOP' in str(regression_data['buyIndia']) and 'BELTHOLD' in str(regression_data['buyIndia']) and 'ENGULFING' in str(regression_data['buyIndia']))
-                   or ('BELTHOLD' == str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
-                   or ('3OUTSIDE' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
-                   or ('HARAMI' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
-                   or (regression_data['yearHighChange'] <= -35 and 'HARAMI' in str(regression_data['buyIndia']) and 'SHORTLINE' in str(regression_data['buyIndia']) and regression_data['PCT_day_change'] > 0)
-                   or ('DOJI' in str(regression_data['buyIndia']) and 'GRAVESTONEDOJI' in str(regression_data['buyIndia']) and 'LONGLEGGEDDOJI' in str(regression_data['buyIndia']) and regression_data['PCT_day_change'] > 0)
-                   or ('P@[,HIKKAKE]' == str(regression_data['buyIndia']) and regression_data['PCT_day_change'] < 0)
-                   #or (regression_data['yearHighChange'] <= -35 and 'BELTHOLD' in str(regression_data['buyIndia']) and 'LONGLINE' in str(regression_data['buyIndia']))
-                   #or (regression_data['yearHighChange'] <= -35 and ',CCI:BOP' in str(regression_data['buyIndia']) and 'LONGLINE' in str(regression_data['buyIndia']))
-                   ):
-                    regression_data['patterns'] = regression_data['patterns'] + 'buyPattern1'
-                    db.RbuyPattern1.insert_one(json_data)
-                elif((('MARUBOZU' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 1)
-                   or ('HAMMER' in str(regression_data['buyIndia']) and regression_data['PCT_day_change'] > 0)
-                   or 'ENGULFING' in str(regression_data['buyIndia'])
-                   or 'PIERCING' in str(regression_data['buyIndia'])
-                   or ('MORNINGSTAR' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 1)
-                   or ':DOJISTAR' in str(regression_data['buyIndia'])
-                   or 'MORNINGDOJISTAR' in str(regression_data['buyIndia'])
-                   or 'ABANDONEDBABY' in str(regression_data['buyIndia'])
-                   or 'COUNTERATTACK' in str(regression_data['buyIndia'])
-                   or 'KICKING' in str(regression_data['buyIndia'])
-                   or 'BREAKAWAY' in str(regression_data['buyIndia'])
-                   or 'TRISTAR' in str(regression_data['buyIndia'])
-                   or '3WHITESOLDIERS' in str(regression_data['buyIndia'])
-                   or '3INSIDE' in str(regression_data['buyIndia'])
-                   ) and (regression_data['forecast_day_PCT5_change'] <= -5) and (regression_data['forecast_day_PCT10_change'] <= -5)): 
-                    regression_data['patterns'] = regression_data['patterns'] + 'buyPattern2'
-                    db.RbuyPattern2.insert_one(json_data)
+            if(longTrend and regression_data['PCT_day_change'] < 0 and regression_data['yearLowChange'] > 10):
+                regression_data['patterns'] = regression_data['patterns'] + ', sellDownTrend'
+                db.RsellDownTrend.insert_one(json_data)      
+            
+            if(regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 5 and regression_data['score'] != '10'):
+                if(-2 < regression_data['PCT_day_change'] < 0 and str(regression_data['buyIndia']) == '' and -95 < regression_data['yearHighChange'] < -20
+                    and regression_data['forecast_day_PCT5_change'] >= 1 and regression_data['forecast_day_PCT7_change'] >= 1 and regression_data['forecast_day_PCT10_change'] >= 1):
+                    regression_data['patterns'] = regression_data['patterns'] + ', sellFinal'
+                    db.RsellFinal.insert_one(json_data)
+                elif(-2 < regression_data['PCT_day_change'] < 0 
+                    and regression_data['forecast_day_PCT5_change'] >= -1 and regression_data['forecast_day_PCT7_change'] >= 1 and regression_data['forecast_day_PCT10_change'] >= 5):
+                    regression_data['patterns'] = regression_data['patterns'] + ', sellFinal1'
+                    db.RsellFinal1.insert_one(json_data)   
+           
+        
+            if(-4 < regression_data['PCT_day_change'] and regression_data['yearHighChange'] < -5):
+                if(('HANGINGMAN' in str(regression_data['sellIndia'])
+                   #or 'MARUBOZU' in str(regression_data['sellIndia'])
+                   #or 'ENGULFING' in str(regression_data['sellIndia'])
+                   or 'EVENINGSTAR' in str(regression_data['sellIndia'])
+                   #or ':DOJISTAR' in str(regression_data['sellIndia'])
+                   #or 'EVENINGDOJISTAR' in str(regression_data['sellIndia'])
+                   or 'ABANDONEDBABY' in str(regression_data['sellIndia'])
+                   or 'COUNTERATTACK' in str(regression_data['sellIndia'])
+                   or 'KICKING' in str(regression_data['sellIndia'])
+                   or 'BREAKAWAY' in str(regression_data['sellIndia'])
+                   #or 'TRISTAR' in str(regression_data['sellIndia'])
+                   or ('SHOOTINGSTAR' in str(regression_data['sellIndia']) and regression_data['PCT_day_change'] < 0)
+                   or 'DARKCLOUDCOVER' in str(regression_data['sellIndia'])
+                   #or '3INSIDE' in str(regression_data['sellIndia'])
+                   #or '3OUTSIDE' in str(regression_data['sellIndia'])
+                   #or '2CROWS' in str(regression_data['sellIndia'])
+                   #or '3BLACKCROWS' in str(regression_data['sellIndia'])
+                   ) and (regression_data['forecast_day_PCT5_change'] >= 0)):
+                    regression_data['patterns'] = regression_data['patterns'] + ', sellPatterns'
+                    db.RsellPattern.insert_one(json_data)
+                elif((('HARAMI' in str(regression_data['sellIndia']) and regression_data['forecast_day_PCT5_change'] >= 0 and score == 'down')
+                   or ('ENGULFING' in str(regression_data['sellIndia']) and 'LONGLINE' in str(regression_data['sellIndia']) and score == 'down')
+                   ) and regression_data['yearHighChange'] < -5):
+                    regression_data['patterns'] = regression_data['patterns'] + ', sellPatterns1'
+                    db.RsellPattern1.insert_one(json_data)
+                elif(('HANGINGMAN' in str(regression_data['sellIndia'])
+                   or 'MARUBOZU' in str(regression_data['sellIndia'])
+                   or 'ENGULFING' in str(regression_data['sellIndia'])
+                   or 'EVENINGSTAR' in str(regression_data['sellIndia'])
+                   #or ':DOJISTAR' in str(regression_data['sellIndia'])
+                   #or 'EVENINGDOJISTAR' in str(regression_data['sellIndia'])
+                   or 'ABANDONEDBABY' in str(regression_data['sellIndia'])
+                   or 'COUNTERATTACK' in str(regression_data['sellIndia'])
+                   or 'KICKING' in str(regression_data['sellIndia'])
+                   or 'BREAKAWAY' in str(regression_data['sellIndia'])
+                   or 'TRISTAR' in str(regression_data['sellIndia'])
+                   or ('SHOOTINGSTAR' in str(regression_data['sellIndia']) and regression_data['PCT_day_change'] < 0)
+                   or 'DARKCLOUDCOVER' in str(regression_data['sellIndia'])
+                   or '3INSIDE' in str(regression_data['sellIndia'])
+                   or '3OUTSIDE' in str(regression_data['sellIndia'])
+                   or '2CROWS' in str(regression_data['sellIndia'])
+                   or '3BLACKCROWS' in str(regression_data['sellIndia'])
+                   ) and (regression_data['forecast_day_PCT5_change'] >= 5) and (regression_data['forecast_day_PCT10_change'] >= 5)):
+                    regression_data['patterns'] = regression_data['patterns'] + ', sellPatterns2'
+                    db.RsellPattern2.insert_one(json_data) 
             if regression_data['patterns'] == 'Other':
-                db.RbuyOthers.insert_one(json_data)
-            db.RbuyAll.insert_one(json_data)    
+                db.RsellOthers.insert_one(json_data)
+            db.RsellAll.insert_one(json_data)    
                                     
 def regression_ta_data(scrip):
     data = db.history.find_one({'dataset_code':scrip})
@@ -445,7 +441,7 @@ def regression_ta_data(scrip):
     df['HL_change'] = (((df['high'] - df['low'])/df['low'])*100).astype(int)
     df['CL_change'] = (((df['close'] - df['low'])/df['low'])*100).astype(int)
     df['CH_change'] = (((df['close'] - df['high'])/df['high'])*100).astype(int)
-    df['LO_change'] = (((df['low'] - df['low'])/df['open'])*100).astype(float)
+    df['OL_change'] = (((df['open'] - df['low'])/df['open'])*100).astype(float)
     df['HO_change'] = (((df['high'] - df['open'])/df['open'])*100).astype(float)
     df['bar_high'] = np.where(df['close'] > df['open'], df['close'], df['open'])
     df['bar_low'] = np.where(df['close'] > df['open'], df['open'], df['close'])
@@ -468,20 +464,22 @@ def process_regression(scrip, df):
     dfp = get_data_frame(df)
     PCT_change = df.tail(1).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_day_change = dfp.tail(1).loc[-forecast_out:,'PCT_day_change'].values[0]
-    forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'High_change1'].values[0]
-    forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'High_change2'].values[0]
-    forecast_day_PCT3_change = dfp.tail(1).loc[-forecast_out:, 'High_change3'].values[0]
-    forecast_day_PCT4_change = dfp.tail(1).loc[-forecast_out:, 'High_change4'].values[0]
-    forecast_day_PCT5_change = dfp.tail(1).loc[-forecast_out:, 'High_change5'].values[0]
-    forecast_day_PCT7_change = dfp.tail(1).loc[-forecast_out:, 'High_change7'].values[0]
-    forecast_day_PCT10_change = dfp.tail(1).loc[-forecast_out:, 'High_change10'].values[0]
+    forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'Low_change1'].values[0]
+    forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'Low_change2'].values[0]
+    forecast_day_PCT3_change = dfp.tail(1).loc[-forecast_out:, 'Low_change3'].values[0]
+    forecast_day_PCT4_change = dfp.tail(1).loc[-forecast_out:, 'Low_change4'].values[0]
+    forecast_day_PCT5_change = dfp.tail(1).loc[-forecast_out:, 'Low_change5'].values[0]
+    forecast_day_PCT7_change = dfp.tail(1).loc[-forecast_out:, 'Low_change7'].values[0]
+    forecast_day_PCT10_change = dfp.tail(1).loc[-forecast_out:, 'Low_change10'].values[0]
     forecast_day_VOL_change = df.tail(1).loc[-forecast_out:, 'VOL_change'].values[0]
     forecast_day_date = df.tail(1).loc[-forecast_out:, 'date'].values[0]
-    forecast_day_HO = df.tail(1).loc[-forecast_out:, 'HO_change'].values[0]
+    forecast_day_OL = df.tail(1).loc[-forecast_out:, 'OL_change'].values[0]
     
     #score = getScore(forecast_day_VOL_change, forecast_day_PCT_change) 
     score = df.tail(1).loc[-forecast_out:, 'uptrend'].values[0].astype(str) + '' + df.tail(1).loc[-forecast_out:, 'downtrend'].values[0].astype(str)
     buy, sell, trend, yearHighChange, yearLowChange = ta_lib_data(scrip, df, False) 
+    if 'P@[' in str(buy):
+        return
     trainSize = int((df.shape)[0])
     
     regressionResult = [ ]
@@ -503,33 +501,33 @@ def process_regression(scrip, df):
     regressionResult.append(score)
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
+    if kNeighbours:
+        result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1))
+        if float(result[0]) > -.5:
+            return
+        regressionResult.extend(result)
+    else:
+        regressionResult.extend([0,0])
+    
     if randomForest:
-        regressionResult.extend(performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor(max_depth=30, n_estimators=10, n_jobs=1), True))
+        regressionResult.extend(performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor(max_depth=30, n_estimators=10, n_jobs=1)))
     else: 
         regressionResult.extend([0,0])
             
     if mlp:
         dfp_mlp = get_data_frame(df, 'mlp')
-#         forecast_col = 'High_change1'
-#         dfp_mlp.dropna(inplace=True)
-#         dfp_mlp['label'] = dfp[forecast_col].shift(-forecast_out) 
         regressionResult.extend(performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27))))
     else:
         regressionResult.extend([0,0])
         
     if bagging:
         regressionResult.extend(performRegression(dfp, split, scrip, directory, forecast_out, SVR(C=1e3, cache_size=500, coef0=0.0, degree=3, epsilon=0.2, gamma=.05,
-    kernel='rbf', max_iter=5000, shrinking=True, tol=0.001, verbose=False), True))
+    kernel='rbf', max_iter=5000, shrinking=True, tol=0.001, verbose=False)))
     else:
         regressionResult.extend([0,0])
         
     if adaBoost:
         regressionResult.extend(performRegression(dfp, split, scrip, directory, forecast_out, AdaBoostRegressor()))
-    else:
-        regressionResult.extend([0,0])
-        
-    if kNeighbours:
-        regressionResult.extend(performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1), True))
     else:
         regressionResult.extend([0,0])
         
@@ -541,7 +539,7 @@ def process_regression(scrip, df):
     regressionResult.append(trend)
     regressionResult.append(yearHighChange)
     regressionResult.append(yearLowChange)
-    create_csv(forecast_day_date, forecast_day_HO, scrip, regressionResult)   
+    create_csv(forecast_day_date, forecast_day_OL, scrip, regressionResult)   
                                                           
 def calculateParallel(threads=2, run_type=None, futures=None):
     pool = ThreadPool(threads)

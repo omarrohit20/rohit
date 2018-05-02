@@ -331,7 +331,7 @@ def result_data(scrip):
                 and -0.5 < regression_data['PCT_day_change'] < 3 and regression_data['forecast_day_PCT2_change'] <= 5):
                 ws_buyYearHigh.append(regressionResult)
                 ws_buyYearHigh.append(classificationResult)
-            elif(-20 < regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 5 
+            elif(-15 < regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 5 
                 and -0.5 < regression_data['PCT_day_change'] < 3 and (score == 'up'  or regression_data['forecast_day_PCT_change'] > 0)):
                 ws_buyYearHigh.append(regressionResult)
                 ws_buyYearHigh.append(classificationResult)
