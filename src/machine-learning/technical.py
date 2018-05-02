@@ -774,7 +774,7 @@ def ta_lib_data(scrip):
         print(Exception)
         pass  
 
-def ta_lib_data(scrip, df, db_store=False):
+def ta_lib_data_df(scrip, df, db_store=False):
     try:
         data = db.history.find_one({'dataset_code':scrip})
         if(data is None):

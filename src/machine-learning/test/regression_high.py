@@ -17,6 +17,8 @@ from Algorithms.regression_helpers import load_dataset, addFeatures, addFeatures
     addFeaturesOpenChange, addFeaturesHighChange, addFeaturesLowChange, addFeaturesEMA9Change, addFeaturesEMA21Change, \
     mergeDataframes, count_missing, applyTimeLag, performRegression
     
+from util.util import getScore, all_day_pct_change_negative, all_day_pct_change_positive, historical_data    
+    
 from technical import ta_lib_data  
 
 from sklearn.ensemble import RandomForestRegressor
@@ -39,11 +41,6 @@ from sklearn.grid_search import GridSearchCV
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
-directory = '../../output' + '/regression/' + time.strftime("%d%m%y-%H%M%S")
-logname = '../../output' + '/regression/mllog' + time.strftime("%d%m%y-%H%M%S")
-logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=logging.INFO)
-log = logging.getLogger(__name__)
-
 forecast_out = 1
 split = .99
 randomForest = False
@@ -52,43 +49,6 @@ bagging = False
 adaBoost = False
 kNeighbours = True
 gradientBoosting = False
-
-def getScore(vol_change, pct_change):
-    try:
-        return float(vol_change)/float(pct_change) 
-    except ZeroDivisionError:
-        return 0
-
-def all_day_pct_change_negative(regression_data):
-    if(regression_data['forecast_day_PCT_change'] < 0
-        and regression_data['forecast_day_PCT2_change'] < .5
-        and regression_data['forecast_day_PCT3_change'] < .5
-        and regression_data['forecast_day_PCT4_change'] < .5
-        and regression_data['forecast_day_PCT5_change'] < .5
-        and regression_data['forecast_day_PCT7_change'] < .5
-        and regression_data['forecast_day_PCT10_change'] < .5):
-        return True;
-    
-def all_day_pct_change_positive(regression_data):
-    if(regression_data['forecast_day_PCT_change'] > 0
-        and regression_data['forecast_day_PCT2_change'] > -.5
-        and regression_data['forecast_day_PCT3_change'] > -.5
-        and regression_data['forecast_day_PCT4_change'] > -.5
-        and regression_data['forecast_day_PCT5_change'] > -.5
-        and regression_data['forecast_day_PCT7_change'] > -.5
-        and regression_data['forecast_day_PCT10_change'] > -.5):
-        return True;    
-        
-def historical_data(data):
-    ardate = np.array([str(x) for x in (np.array(data['data'])[:,0][::-1]).tolist()])
-    aropen = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,1][::-1]).tolist()])
-    arhigh = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,2][::-1]).tolist()])
-    arlow  = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,3][::-1]).tolist()])
-    arlast = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,4][::-1]).tolist()])
-    arclose= np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,5][::-1]).tolist()])
-    arquantity = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,6][::-1]).tolist()])
-    arturnover = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,7][::-1]).tolist()])
-    return ardate, aropen, arhigh, arlow, arlast, arclose, arquantity, arturnover
 
 def get_data_frame(df, regressor="None"):
     if (df is not None):
@@ -416,58 +376,10 @@ def create_csv(forecast_day_date, forecast_day_HO, scrip, regressionResult):
             if regression_data['patterns'] == 'Other':
                 db.RbuyOthers.insert_one(json_data)
             db.RbuyAll.insert_one(json_data)    
-                                    
-def regression_ta_data(scrip):
-    data = db.history.find_one({'dataset_code':scrip})
-    if(data is None or (np.array(data['data'])).size < 1000):
-        print('Missing or very less Data for ', scrip)
+    
+def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory):
+    if 'P@[' in str(sell):
         return
-        
-    hsdate, hsopen, hshigh, hslow, hslast, hsclose, hsquantity, hsturnover = historical_data(data)   
-    df = pd.DataFrame({
-        'date': hsdate,
-        'open': hsopen,
-        'high': hshigh,
-        'low': hslow,
-        'close': hsclose,
-        'volume': hsquantity,
-        'turnover':hsturnover
-    })
-    df = df[['date','open','high','low','close','volume','turnover']]
-    print(scrip)
-    df=df.rename(columns = {'total trade quantity':'volume'})
-    df=df.rename(columns = {'turnover (lacs)': 'turnover'})
-    df['volume_pre'] = df['volume'].shift(+1)
-    df['open_pre'] = df['open'].shift(+1)
-    df['high_pre'] = df['high'].shift(+1)
-    df['low_pre'] = df['low'].shift(+1)
-    df['close_pre'] = df['close'].shift(+1)
-    df['VOL_change'] = (((df['volume'] - df['volume_pre'])/df['volume_pre'])*100)
-    df['PCT_change'] = (((df['close'] - df['close_pre'])/df['close_pre'])*100)
-    df['PCT_day_change'] = (((df['close'] - df['open'])/df['open'])*100)
-    df['HL_change'] = (((df['high'] - df['low'])/df['low'])*100).astype(int)
-    df['CL_change'] = (((df['close'] - df['low'])/df['low'])*100).astype(int)
-    df['CH_change'] = (((df['close'] - df['high'])/df['high'])*100).astype(int)
-    df['OL_change'] = (((df['open'] - df['low'])/df['open'])*100).astype(float)
-    df['HO_change'] = (((df['high'] - df['open'])/df['open'])*100).astype(float)
-    df['bar_high'] = np.where(df['close'] > df['open'], df['close'], df['open'])
-    df['bar_low'] = np.where(df['close'] > df['open'], df['open'], df['close'])
-    df['bar_high_pre'] = np.where(df['close_pre'] > df['open_pre'], df['close_pre'], df['open_pre'])
-    df['bar_low_pre'] = np.where(df['close_pre'] > df['open_pre'], df['open_pre'], df['close_pre'])
-    df['uptrend'] = np.where((df['bar_high'] >  df['bar_high_pre']) & (df['high'] > df['high_pre']), 1, 0)
-    df['downtrend'] = np.where((df['bar_low'] <  df['bar_low_pre']) & (df['low'] < df['low_pre']), -1, 0)
-    
-    df.dropna(inplace=True)
-    df['EMA9'] = EMA(df,9)
-    df['EMA21'] = EMA(df,21)
-    
-    size = int(int(np.floor(df.shape[0]))/3)
-    process_regression(scrip, df)
-    for x in range(size):
-        df = df[:-1]
-        process_regression(scrip, df)
-    
-def process_regression(scrip, df):
     dfp = get_data_frame(df)
     PCT_change = df.tail(1).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_day_change = dfp.tail(1).loc[-forecast_out:,'PCT_day_change'].values[0]
@@ -484,9 +396,6 @@ def process_regression(scrip, df):
     
     #score = getScore(forecast_day_VOL_change, forecast_day_PCT_change) 
     score = df.tail(1).loc[-forecast_out:, 'uptrend'].values[0].astype(str) + '' + df.tail(1).loc[-forecast_out:, 'downtrend'].values[0].astype(str)
-    buy, sell, trend, yearHighChange, yearLowChange = ta_lib_data(scrip, df, False) 
-    if 'P@[' in str(sell):
-        return
     trainSize = int((df.shape)[0])
     
     regressionResult = [ ]
@@ -548,16 +457,3 @@ def process_regression(scrip, df):
     regressionResult.append(yearLowChange)
     create_csv(forecast_day_date, forecast_day_HO, scrip, regressionResult)   
                                                           
-def calculateParallel(threads=2, run_type=None, futures=None):
-    pool = ThreadPool(threads)
-    with open('../../data-import/nselist/test.csv') as csvfile:
-        readCSV = csv.reader(csvfile, delimiter=',')
-        scrips = []
-        for row in readCSV:
-            scrips.append(row[0].replace('&','').replace('-','_'))   
-        scrips.sort()
-        pool.map(regression_ta_data, scrips)   
-                     
-if __name__ == "__main__":
-    calculateParallel(1)
-    connection.close()
