@@ -121,10 +121,10 @@ def overlap_screener(data, todayInputs, tdchange, historicalInputs, hchange):
                 
     json_data = json.loads(json.dumps(technical_indicators))
     if technical_indicators['BuyIndicators'] != '' and technical_indicators['SellIndicators'] == '':
-        db.buy.overlap.insert_one(json_data) 
+        #db.buy.overlap.insert_one(json_data) 
         return 'buy', 'O@[' + technical_indicators['BuyIndicators'] + ']'
     elif technical_indicators['SellIndicators'] != '' and technical_indicators['BuyIndicators'] == '':
-        db.sell.overlap.insert_one(json_data)
+        #db.sell.overlap.insert_one(json_data)
         return 'sell', 'O@[' + technical_indicators['SellIndicators'] + ']'
     else:
         return '', ''
@@ -406,10 +406,10 @@ def pattern_screener(data, todayInputs, tdchange, historicalInputs, hchange):
         
     json_data = json.loads(json.dumps(technical_indicators))
     if technical_indicators['BuyIndicators'] != '' and technical_indicators['SellIndicators'] == '':
-        db.buy.pattern.insert_one(json_data)
+        #db.buy.pattern.insert_one(json_data)
         return 'buy', 'P@[' + technical_indicators['BuyIndicators'] + ']'
     elif technical_indicators['SellIndicators'] != '' and technical_indicators['BuyIndicators'] == '':
-        db.sell.pattern.insert_one(json_data)  
+        #db.sell.pattern.insert_one(json_data)  
         return 'sell', 'P@[' + technical_indicators['SellIndicators'] + ']'
     else:
         return '', ''  
@@ -427,12 +427,12 @@ def volume_screener(data, todayInputs, tdchange, historicalInputs, hchange):
     
         
     if technical_indicators['BuyIndicators'] != '' and technical_indicators['SellIndicators'] == '':
-        db.buy.volume.insert_one(json_data)
+        #db.buy.volume.insert_one(json_data)
         if tdchange > 0 and volume_indicators['OBV'][0] > volume_indicators['OBV'][1]:
             technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ':OBV'
         return 'buy', 'V@[' + technical_indicators['BuyIndicators'] + ']'
     elif technical_indicators['SellIndicators'] != '' and technical_indicators['BuyIndicators'] == '':
-        db.sell.volume.insert_one(json_data)
+        #db.sell.volume.insert_one(json_data)
         if tdchange < 0 and volume_indicators['OBV'][0] < volume_indicators['OBV'][1]:
             technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ':OBV'
         return 'sell', 'V@[' + technical_indicators['SellIndicators'] + ']'
@@ -485,12 +485,12 @@ def momentum_screener(data, todayInputs, tdchange, historicalInputs, hchange):
         
     json_data = json.loads(json.dumps(technical_indicators))
     if technical_indicators['BuyIndicators'] != '' and technical_indicators['SellIndicators'] == '':
-        db.buy.momentum.insert_one(json_data)
+        #db.buy.momentum.insert_one(json_data)
         if tdchange > 0 and momentum_indicators['BOP'][0] > 0:
             technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ':BOP'
         return 'buy', 'M@[' + technical_indicators['BuyIndicators'] + ']'
     elif technical_indicators['SellIndicators'] != '' and technical_indicators['BuyIndicators'] == '':
-        db.sell.momentum.insert_one(json_data)  
+        #db.sell.momentum.insert_one(json_data)  
         if tdchange > 0 and momentum_indicators['BOP'][0] < 0:
             technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ':BOP'
         return 'sell', 'M@[' + technical_indicators['SellIndicators'] + ']' 
@@ -780,17 +780,6 @@ def ta_lib_data_df(scrip, df, db_store=False):
         if(data is None):
             print('Missing or very less Data for ', scrip) 
             return
-            
-        tddate, tdopen, tdhigh, tdlow, tdclose, tdquantity, tdturnover, tdchange = today_data_df(df) 
-        hsclose = (df['close'].values)
-        
-        todayInputs = {
-            'open': tdopen,
-            'high': tdhigh,
-            'low': tdlow,
-            'close': tdclose,
-            'volume': tdquantity
-        }
         
         historicalInputs = {
             'open': df['open'].values,
@@ -798,6 +787,16 @@ def ta_lib_data_df(scrip, df, db_store=False):
             'low': df['low'].values,
             'close': df['close'].values,
             'volume': df['volume'].values
+        }
+        
+        hsclose = (df['close'].values)    
+        tddate, tdopen, tdhigh, tdlow, tdclose, tdquantity, tdturnover, tdchange = today_data_df(df) 
+        todayInputs = {
+            'open': tdopen,
+            'high': tdhigh,
+            'low': tdlow,
+            'close': tdclose,
+            'volume': tdquantity
         }
         
         end_date = parser.parse(tddate.tostring().decode()).strftime('%Y-%m-%d')

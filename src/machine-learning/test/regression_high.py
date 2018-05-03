@@ -220,7 +220,7 @@ def get_data_frame(df, regressor="None"):
         dfp['label'] = dfp[forecast_col].shift(-forecast_out) 
         return dfp
 
-def create_csv(forecast_day_date, forecast_day_HO, scrip, regressionResult):
+def create_csv(forecast_day_date, forecast_day_OL, forecast_day_HO, scrip, regressionResult):
     futures = str(regressionResult[0])   
     trainSize = int(regressionResult[1])
     buyIndia = str(regressionResult[2])
@@ -253,6 +253,7 @@ def create_csv(forecast_day_date, forecast_day_HO, scrip, regressionResult):
     yearHighChange = float(regressionResult[29])
     yearLowChange = float(regressionResult[30])
     regressionResult.append(forecast_day_date)
+    regressionResult.append(forecast_day_OL)
     regressionResult.append(forecast_day_HO)
     
     regression_data = {}
@@ -278,6 +279,7 @@ def create_csv(forecast_day_date, forecast_day_HO, scrip, regressionResult):
     regression_data['yearHighChange'] = yearHighChange 
     regression_data['yearLowChange'] = yearLowChange
     regression_data['patterns'] = ''
+    regression_data['forecast_day_OL'] = forecast_day_OL
     regression_data['forecast_day_HO'] = forecast_day_HO
     json_data = json.loads(json.dumps(regression_data))
     
@@ -392,6 +394,7 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     forecast_day_PCT10_change = dfp.tail(1).loc[-forecast_out:, 'High_change10'].values[0]
     forecast_day_VOL_change = df.tail(1).loc[-forecast_out:, 'VOL_change'].values[0]
     forecast_day_date = df.tail(1).loc[-forecast_out:, 'date'].values[0]
+    forecast_day_OL = df.tail(1).loc[-forecast_out:, 'OL_change'].values[0]
     forecast_day_HO = df.tail(1).loc[-forecast_out:, 'HO_change'].values[0]
     
     #score = getScore(forecast_day_VOL_change, forecast_day_PCT_change) 
@@ -455,5 +458,5 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     regressionResult.append(trend)
     regressionResult.append(yearHighChange)
     regressionResult.append(yearLowChange)
-    create_csv(forecast_day_date, forecast_day_HO, scrip, regressionResult)   
+    create_csv(forecast_day_date, forecast_day_OL, forecast_day_HO, scrip, regressionResult)  
                                                           

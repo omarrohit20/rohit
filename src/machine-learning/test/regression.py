@@ -71,16 +71,13 @@ def regression_ta_data(scrip):
     df['EMA21'] = EMA(df,21)
     
     size = int(int(np.floor(df.shape[0]))/3)
-    buy, sell, trend, yearHighChange, yearLowChange = ta_lib_data_df(scrip, df, False) 
-    process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory)
-    process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory)
     for x in range(size):
-        df = df[:-1]
         buy, sell, trend, yearHighChange, yearLowChange = ta_lib_data_df(scrip, df, False) 
         process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory)
         process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory)
+        df = df[:-1]
 
-def calculateParallel(threads=2):
+def calculateParallel(threads=1):
     pool = ThreadPool(threads)
     with open('../../data-import/nselist/test.csv') as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
@@ -91,5 +88,5 @@ def calculateParallel(threads=2):
         pool.map(regression_ta_data, scrips)   
                      
 if __name__ == "__main__":
-    calculateParallel(2)
+    calculateParallel(1)
     connection.close()
