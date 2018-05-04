@@ -312,8 +312,8 @@ def create_csv(forecast_day_date, forecast_day_OL, forecast_day_HO, scrip, regre
                 regression_data['patterns'] = regression_data['patterns'] + ', sellYearHigh'
                 db.RsellYearHigh.insert_one(json_data)
                 
-            if(1 < regression_data['yearLowChange'] < 15 and regression_data['yearHighChange'] < -10 
-                and -2 < regression_data['PCT_day_change'] < 0.8 and regression_data['forecast_day_PCT_change'] < 0
+            if(0 < regression_data['yearLowChange'] < 15 and regression_data['yearHighChange'] < -20 
+                and -2 < regression_data['PCT_day_change'] < 0 and regression_data['forecast_day_PCT_change'] < 0
                 and all_day_pct_change_negative(regression_data)):
                 regression_data['patterns'] = regression_data['patterns'] + ', sellYearLow'
                 db.RsellYearLow.insert_one(json_data)
@@ -325,7 +325,7 @@ def create_csv(forecast_day_date, forecast_day_OL, forecast_day_HO, scrip, regre
             
             if(regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 5 and regression_data['score'] != '10'):
                 if(-2 < regression_data['PCT_day_change'] < 0 and str(regression_data['buyIndia']) == '' and -95 < regression_data['yearHighChange'] < -20
-                    and regression_data['forecast_day_PCT5_change'] >= 1 and regression_data['forecast_day_PCT7_change'] >= 1 and regression_data['forecast_day_PCT10_change'] >= 1):
+                    and regression_data['forecast_day_PCT5_change'] >= 1 and regression_data['forecast_day_PCT7_change'] >= 1 and regression_data['forecast_day_PCT10_change'] >= 5):
                     regression_data['patterns'] = regression_data['patterns'] + ', sellFinal'
                     db.RsellFinal.insert_one(json_data)
                 elif(-2 < regression_data['PCT_day_change'] < 0 
