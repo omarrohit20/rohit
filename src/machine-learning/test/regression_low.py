@@ -318,7 +318,8 @@ def create_csv(forecast_day_date, forecast_day_OL, forecast_day_HO, scrip, regre
                 regression_data['patterns'] = regression_data['patterns'] + ', sellYearLow'
                 db.RsellYearLow.insert_one(json_data)
                 
-            if(longTrend and regression_data['PCT_day_change'] < 0 and regression_data['yearLowChange'] > 10):
+            if(longTrend and -8 < regression_data['PCT_day_change'] < 0 and regression_data['yearLowChange'] > 10
+                and regression_data['forecast_day_PCT10_change'] <= regression_data['PCT_change'] - 2):
                 regression_data['patterns'] = regression_data['patterns'] + ', sellDownTrend'
                 db.RsellDownTrend.insert_one(json_data)      
             

@@ -27,6 +27,10 @@ db = connection.Nsedata
 
 
 def regression_ta_data(scrip):
+    data = db.regreesionHistoryScrip.find_one({'dataset_code':scrip})
+    if(data is not None):
+        return
+    
     data = db.history.find_one({'dataset_code':scrip})
     if(data is None or (np.array(data['data'])).size < 1000):
         print('Missing or very less Data for ', scrip)
@@ -76,6 +80,11 @@ def regression_ta_data(scrip):
         process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory)
         process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory)
         df = df[:-1]
+        
+    db.regreesionHistoryScrip.insert_one({
+        "dataset_code": scrip,
+        "date":(df['date'].values)[-1]
+        })    
 
 def calculateParallel(threads=1):
     pool = ThreadPool(threads)

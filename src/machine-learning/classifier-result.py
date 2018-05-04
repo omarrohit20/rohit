@@ -311,7 +311,8 @@ def result_data(scrip):
                 and (regression_data['forecast_day_PCT10_change'] <= -5 or regression_data['forecast_day_PCT5_change'] > 5)):
                 ws_buyYearLow.append(regressionResult) 
                 
-            if(longTrend and regression_data['PCT_day_change'] > 0 and regression_data['yearHighChange'] < -10):
+            if(longTrend and 0 < regression_data['PCT_day_change'] < 8 and regression_data['yearHighChange'] < -10
+                and regression_data['forecast_day_PCT10_change'] >= regression_data['PCT_change'] + 2):
                 ws_buyUpTrend.append(regressionResult)    
                    
             if(regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 5 and regression_data['score'] != '0-1'):   
@@ -419,7 +420,8 @@ def result_data(scrip):
                 and all_day_pct_change_negative(regression_data)):
                 ws_sellYearLow.append(regressionResult)   
                 
-            if(longTrend and regression_data['PCT_day_change'] < 0 and regression_data['yearLowChange'] > 10):
+            if(longTrend and -8 < regression_data['PCT_day_change'] < 0 and regression_data['yearLowChange'] > 10
+                and regression_data['forecast_day_PCT10_change'] <= regression_data['PCT_change'] - 2):
                 ws_sellDownTrend.append(regressionResult)      
             
             if(regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 5 and regression_data['score'] != '10'):
