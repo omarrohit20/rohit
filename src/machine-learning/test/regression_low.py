@@ -342,10 +342,13 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     PCT_day_change = df.tail(1).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_day_OL = df.tail(1).loc[-forecast_out:, 'PCT_day_OL'].values[0]
     PCT_day_HO = df.tail(1).loc[-forecast_out:, 'PCT_day_HO'].values[0]
+    PCT_day_CH = df.tail(1).loc[-forecast_out:, 'PCT_day_CH'].values[0]
     Act_PCT_change = df.tail(1).loc[-forecast_out:,'Act_PCT_change'].values[0]
     Act_PCT_day_change = df.tail(1).loc[-forecast_out:,'Act_PCT_day_change'].values[0]
     Act_PCT_day_OL = df.tail(1).loc[-forecast_out:, 'Act_PCT_day_OL'].values[0]
     Act_PCT_day_HO = df.tail(1).loc[-forecast_out:, 'Act_PCT_day_HO'].values[0]
+    Act_High_change = df.tail(1).loc[-forecast_out:, 'Act_High_change'].values[0]
+    Act_Low_change = df.tail(1).loc[-forecast_out:, 'Act_Low_change'].values[0]
     score = df.tail(1).loc[-forecast_out:, 'uptrend'].values[0].astype(str) + '' + df.tail(1).loc[-forecast_out:, 'downtrend'].values[0].astype(str)
     
     regression_data = {}
@@ -353,45 +356,48 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     regression_data['scrip'] = str(scrip)
     regression_data['buyIndia'] = str(buy)
     regression_data['sellIndia'] = str(sell)
-    regression_data['forecast_day_VOL_change'] = forecast_day_VOL_change
-    regression_data['forecast_day_PCT_change'] = forecast_day_PCT_change
-    regression_data['forecast_day_PCT2_change'] = forecast_day_PCT2_change
-    regression_data['forecast_day_PCT3_change'] = forecast_day_PCT3_change
-    regression_data['forecast_day_PCT4_change'] = forecast_day_PCT4_change
-    regression_data['forecast_day_PCT5_change'] = forecast_day_PCT5_change
-    regression_data['forecast_day_PCT7_change'] = forecast_day_PCT7_change
-    regression_data['forecast_day_PCT10_change'] = forecast_day_PCT10_change
+    regression_data['forecast_day_VOL_change'] = float(forecast_day_VOL_change)
+    regression_data['forecast_day_PCT_change'] = float(forecast_day_PCT_change)
+    regression_data['forecast_day_PCT2_change'] = float(forecast_day_PCT2_change)
+    regression_data['forecast_day_PCT3_change'] = float(forecast_day_PCT3_change)
+    regression_data['forecast_day_PCT4_change'] = float(forecast_day_PCT4_change)
+    regression_data['forecast_day_PCT5_change'] = float(forecast_day_PCT5_change)
+    regression_data['forecast_day_PCT7_change'] = float(forecast_day_PCT7_change)
+    regression_data['forecast_day_PCT10_change'] = float(forecast_day_PCT10_change)
     regression_data['score'] = score
     #regression_data['mlpValue'] = mlpValue
     #regression_data['kNeighboursValue'] = kNeighboursValue
     regression_data['trend'] = trend 
-    regression_data['yearHighChange'] = yearHighChange 
-    regression_data['yearLowChange'] = yearLowChange
+    regression_data['yearHighChange'] = float(yearHighChange) 
+    regression_data['yearLowChange'] = float(yearLowChange)
     regression_data['patterns'] = ''
-    regression_data['PCT_change'] = PCT_change
-    regression_data['PCT_day_change'] = PCT_day_change
-    regression_data['PCT_day_OL'] = PCT_day_OL
-    regression_data['PCT_day_HO'] = PCT_day_HO
-    regression_data['Act_PCT_change'] = Act_PCT_change
-    regression_data['Act_PCT_day_change'] = Act_PCT_day_change
-    regression_data['Act_PCT_day_OL'] = Act_PCT_day_OL
-    regression_data['Act_PCT_day_HO'] = Act_PCT_day_HO
+    regression_data['PCT_change'] = float(PCT_change)
+    regression_data['PCT_day_change'] = float(PCT_day_change)
+    regression_data['PCT_day_OL'] = float(PCT_day_OL)
+    regression_data['PCT_day_HO'] = float(PCT_day_HO)
+    regression_data['PCT_day_CH'] = float(PCT_day_CH)
+    regression_data['Act_PCT_change'] = float(Act_PCT_change)
+    regression_data['Act_PCT_day_change'] = float(Act_PCT_day_change)
+    regression_data['Act_PCT_day_OL'] = float(Act_PCT_day_OL)
+    regression_data['Act_PCT_day_HO'] = float(Act_PCT_day_HO)
+    regression_data['Act_High_change'] = float(Act_High_change)
+    regression_data['Act_Low_change'] = float(Act_Low_change)
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     if kNeighbours:
         result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1))
         if float(result[0]) > -.5:
             return
-        regression_data['kNeighboursValue'] = result[0]
+        regression_data['kNeighboursValue'] = float(result[0])
     else:
-        regression_data['kNeighboursValue'] = 0
+        regression_data['kNeighboursValue'] = float(0)
         
     if mlp:
         dfp_mlp = get_data_frame(df, 'mlp')
         result = performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
-        regression_data['mlpValue'] = result[0]
+        regression_data['mlpValue'] = float(result[0])
     else:
-        regression_data['mlpValue'] = 0
+        regression_data['mlpValue'] = float(0)
         
     
     create_csv(regression_data)   

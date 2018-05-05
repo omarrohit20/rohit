@@ -28,7 +28,7 @@ db = connection.Nsedata
 forecast_out = 1
 
 def regression_ta_data(scrip):
-    data = db.regreesionHistoryScrip.find_one({'dataset_code':scrip})
+    data = db.regressionHistoryScrip.find_one({'dataset_code':scrip})
     if(data is not None):
         return
     
@@ -58,28 +58,32 @@ def regression_ta_data(scrip):
     df['close_pre'] = df['close'].shift(+1)
     df['VOL_change'] = (((df['volume'] - df['volume_pre'])/df['volume_pre'])*100)
     df['PCT_change'] = (((df['close'] - df['close_pre'])/df['close_pre'])*100)
+    df['Act_PCT_change'] = df['PCT_change'].shift(-forecast_out)
     df['PCT_day_change'] = (((df['close'] - df['open'])/df['open'])*100)
-    df['HL_change'] = (((df['high'] - df['low'])/df['low'])*100).astype(int)
-    df['CL_change'] = (((df['close'] - df['low'])/df['low'])*100).astype(int)
-    df['CH_change'] = (((df['close'] - df['high'])/df['high'])*100).astype(int)
+    df['Act_PCT_day_change'] = df['PCT_day_change'].shift(-forecast_out)
+    df['PCT_day_LH'] = (((df['high'] - df['low'])/df['low'])*100).astype(float)
+    df['PCT_day_LC'] = (((df['close'] - df['low'])/df['low'])*100).astype(float)
+    df['PCT_day_CH'] = (((df['close'] - df['high'])/df['close'])*100).astype(float)
     df['PCT_day_OL'] = (((df['low'] - df['open'])/df['open'])*100).astype(float)
+    df['Act_PCT_day_OL'] = df['PCT_day_OL'].shift(-forecast_out)
     df['PCT_day_HO'] = (((df['high'] - df['open'])/df['open'])*100).astype(float)
+    df['Act_PCT_day_HO'] = df['PCT_day_HO'].shift(-forecast_out)
+    df['High_change'] = (((df['high'] - df['high_pre'])/df['high_pre'])*100)
+    df['Act_High_change'] = df['High_change'].shift(-forecast_out)
+    df['Low_change'] = (((df['low'] - df['low_pre'])/df['low_pre'])*100)
+    df['Act_Low_change'] = df['Low_change'].shift(-forecast_out)
+    
     df['bar_high'] = np.where(df['close'] > df['open'], df['close'], df['open'])
     df['bar_low'] = np.where(df['close'] > df['open'], df['open'], df['close'])
     df['bar_high_pre'] = np.where(df['close_pre'] > df['open_pre'], df['close_pre'], df['open_pre'])
     df['bar_low_pre'] = np.where(df['close_pre'] > df['open_pre'], df['open_pre'], df['close_pre'])
     df['uptrend'] = np.where((df['bar_high'] >  df['bar_high_pre']) & (df['high'] > df['high_pre']), 1, 0)
     df['downtrend'] = np.where((df['bar_low'] <  df['bar_low_pre']) & (df['low'] < df['low_pre']), -1, 0)
-    
-    df.dropna(inplace=True)
+
     df['EMA9'] = EMA(df,9)
     df['EMA21'] = EMA(df,21)
     
-    df['Act_PCT_change'] = df['PCT_change'].shift(-forecast_out)
-    df['Act_PCT_day_change'] = df['PCT_day_change'].shift(-forecast_out)
-    df['Act_PCT_day_OL'] = df['PCT_day_OL'].shift(-forecast_out)
-    df['Act_PCT_day_HO'] = df['PCT_day_HO'].shift(-forecast_out)
-    df = df[:-1]
+    df.dropna(inplace=True)
     
     size = int(int(np.floor(df.shape[0]))/3)
     for x in range(size):
@@ -88,7 +92,7 @@ def regression_ta_data(scrip):
         process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory)
         df = df[:-1]
         
-    db.regreesionHistoryScrip.insert_one({
+    db.regressionHistoryScrip.insert_one({
         "dataset_code": scrip,
         "date":(df['date'].values)[-1]
         })    
@@ -104,5 +108,7 @@ def calculateParallel(threads=1):
         pool.map(regression_ta_data, scrips)   
                      
 if __name__ == "__main__":
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     calculateParallel(1)
     connection.close()
