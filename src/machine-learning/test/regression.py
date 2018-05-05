@@ -25,6 +25,7 @@ log = logging.getLogger(__name__)
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
+forecast_out = 1
 
 def regression_ta_data(scrip):
     data = db.regreesionHistoryScrip.find_one({'dataset_code':scrip})
@@ -61,8 +62,8 @@ def regression_ta_data(scrip):
     df['HL_change'] = (((df['high'] - df['low'])/df['low'])*100).astype(int)
     df['CL_change'] = (((df['close'] - df['low'])/df['low'])*100).astype(int)
     df['CH_change'] = (((df['close'] - df['high'])/df['high'])*100).astype(int)
-    df['OL_change'] = (((df['low'] - df['open'])/df['open'])*100).astype(float)
-    df['HO_change'] = (((df['high'] - df['open'])/df['open'])*100).astype(float)
+    df['PCT_day_OL'] = (((df['low'] - df['open'])/df['open'])*100).astype(float)
+    df['PCT_day_HO'] = (((df['high'] - df['open'])/df['open'])*100).astype(float)
     df['bar_high'] = np.where(df['close'] > df['open'], df['close'], df['open'])
     df['bar_low'] = np.where(df['close'] > df['open'], df['open'], df['close'])
     df['bar_high_pre'] = np.where(df['close_pre'] > df['open_pre'], df['close_pre'], df['open_pre'])
@@ -73,6 +74,12 @@ def regression_ta_data(scrip):
     df.dropna(inplace=True)
     df['EMA9'] = EMA(df,9)
     df['EMA21'] = EMA(df,21)
+    
+    df['Act_PCT_change'] = df['PCT_change'].shift(-forecast_out)
+    df['Act_PCT_day_change'] = df['PCT_day_change'].shift(-forecast_out)
+    df['Act_PCT_day_OL'] = df['PCT_day_OL'].shift(-forecast_out)
+    df['Act_PCT_day_HO'] = df['PCT_day_HO'].shift(-forecast_out)
+    df = df[:-1]
     
     size = int(int(np.floor(df.shape[0]))/3)
     for x in range(size):

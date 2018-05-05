@@ -220,67 +220,7 @@ def get_data_frame(df, regressor="None"):
         dfp['label'] = dfp[forecast_col].shift(-forecast_out) 
         return dfp
 
-def create_csv(forecast_day_date, forecast_day_OL, forecast_day_HO, scrip, regressionResult):
-    futures = str(regressionResult[0])   
-    trainSize = int(regressionResult[1])
-    buyIndia = str(regressionResult[2])
-    sellIndia = str(regressionResult[3])
-    scrip = str(regressionResult[4])
-    forecast_day_VOL_change = int(regressionResult[5])
-    forecast_day_PCT_change = float(regressionResult[6])
-    forecast_day_PCT2_change = float(regressionResult[7])
-    forecast_day_PCT3_change = float(regressionResult[8])
-    forecast_day_PCT4_change = float(regressionResult[9])
-    forecast_day_PCT5_change = float(regressionResult[10])
-    forecast_day_PCT7_change = float(regressionResult[11])
-    forecast_day_PCT10_change = float(regressionResult[12])
-    PCT_day_change = float(regressionResult[13])
-    PCT_change = float(regressionResult[14])
-    score = str(regressionResult[15])
-    kNeighboursValue = float(regressionResult[16])
-    kNeighboursAccuracy = float(regressionResult[17])
-    randomForestValue = float(regressionResult[18])
-    randomForestAccuracy = float(regressionResult[19])
-    mlpValue = float(regressionResult[20])
-    mlpAccuracy = float(regressionResult[21])
-    baggingValue = float(regressionResult[22])
-    baggingAccuracy = float(regressionResult[23])
-    adaBoostValue = float(regressionResult[24])
-    adaBoostAccuracy = float(regressionResult[25])
-    gradientBoostingValue = float(regressionResult[26])
-    gradientBoostingAccuracy = float(regressionResult[27])
-    trend = str(regressionResult[28])
-    yearHighChange = float(regressionResult[29])
-    yearLowChange = float(regressionResult[30])
-    regressionResult.append(forecast_day_date)
-    regressionResult.append(forecast_day_OL)
-    regressionResult.append(forecast_day_HO)
-    
-    regression_data = {}
-    regression_data['date'] = forecast_day_date
-    regression_data['trainSize'] = trainSize
-    regression_data['buyIndia'] = buyIndia
-    regression_data['sellIndia'] = sellIndia
-    regression_data['scrip'] = scrip
-    regression_data['forecast_day_VOL_change'] = forecast_day_VOL_change
-    regression_data['forecast_day_PCT_change'] = forecast_day_PCT_change
-    regression_data['forecast_day_PCT2_change'] = forecast_day_PCT2_change
-    regression_data['forecast_day_PCT3_change'] = forecast_day_PCT3_change
-    regression_data['forecast_day_PCT4_change'] = forecast_day_PCT4_change
-    regression_data['forecast_day_PCT5_change'] = forecast_day_PCT5_change
-    regression_data['forecast_day_PCT7_change'] = forecast_day_PCT7_change
-    regression_data['forecast_day_PCT10_change'] = forecast_day_PCT10_change
-    regression_data['PCT_day_change'] = PCT_day_change
-    regression_data['PCT_change'] = PCT_change
-    regression_data['score'] = score
-    regression_data['mlpValue'] = mlpValue
-    regression_data['kNeighboursValue'] = kNeighboursValue
-    regression_data['trend'] = trend 
-    regression_data['yearHighChange'] = yearHighChange 
-    regression_data['yearLowChange'] = yearLowChange
-    regression_data['patterns'] = ''
-    regression_data['forecast_day_OL'] = forecast_day_OL
-    regression_data['forecast_day_HO'] = forecast_day_HO
+def create_csv(regression_data):
     json_data = json.loads(json.dumps(regression_data))
     
     score = ''
@@ -384,8 +324,7 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     if 'P@[' in str(sell):
         return
     dfp = get_data_frame(df)
-    PCT_change = df.tail(1).loc[-forecast_out:,'PCT_change'].values[0]
-    PCT_day_change = dfp.tail(1).loc[-forecast_out:,'PCT_day_change'].values[0]
+    
     forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'High_change1'].values[0]
     forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'High_change2'].values[0]
     forecast_day_PCT3_change = dfp.tail(1).loc[-forecast_out:, 'High_change3'].values[0]
@@ -395,69 +334,60 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     forecast_day_PCT10_change = dfp.tail(1).loc[-forecast_out:, 'High_change10'].values[0]
     forecast_day_VOL_change = df.tail(1).loc[-forecast_out:, 'VOL_change'].values[0]
     forecast_day_date = df.tail(1).loc[-forecast_out:, 'date'].values[0]
-    forecast_day_OL = df.tail(1).loc[-forecast_out:, 'OL_change'].values[0]
-    forecast_day_HO = df.tail(1).loc[-forecast_out:, 'HO_change'].values[0]
-    
-    #score = getScore(forecast_day_VOL_change, forecast_day_PCT_change) 
+    PCT_change = df.tail(1).loc[-forecast_out:,'PCT_change'].values[0]
+    PCT_day_change = df.tail(1).loc[-forecast_out:,'PCT_day_change'].values[0]
+    PCT_day_OL = df.tail(1).loc[-forecast_out:, 'PCT_day_OL'].values[0]
+    PCT_day_HO = df.tail(1).loc[-forecast_out:, 'PCT_day_HO'].values[0]
+    Act_PCT_change = df.tail(1).loc[-forecast_out:,'Act_PCT_change'].values[0]
+    Act_PCT_day_change = df.tail(1).loc[-forecast_out:,'Act_PCT_day_change'].values[0]
+    Act_PCT_day_OL = df.tail(1).loc[-forecast_out:, 'Act_PCT_day_OL'].values[0]
+    Act_PCT_day_HO = df.tail(1).loc[-forecast_out:, 'Act_PCT_day_HO'].values[0]
     score = df.tail(1).loc[-forecast_out:, 'uptrend'].values[0].astype(str) + '' + df.tail(1).loc[-forecast_out:, 'downtrend'].values[0].astype(str)
-    trainSize = int((df.shape)[0])
     
-    regressionResult = [ ]
-    regressionResult.append('YES')
-    regressionResult.append(str(trainSize))
-    regressionResult.append(str(buy))
-    regressionResult.append(str(sell))
-    regressionResult.append(str(scrip))
-    regressionResult.append(forecast_day_VOL_change)
-    regressionResult.append(forecast_day_PCT_change)
-    regressionResult.append(forecast_day_PCT2_change)
-    regressionResult.append(forecast_day_PCT3_change)
-    regressionResult.append(forecast_day_PCT4_change)
-    regressionResult.append(forecast_day_PCT5_change)
-    regressionResult.append(forecast_day_PCT7_change)
-    regressionResult.append(forecast_day_PCT10_change)
-    regressionResult.append(PCT_day_change)
-    regressionResult.append(PCT_change)
-    regressionResult.append(score)
+    regression_data = {}
+    regression_data['date'] = forecast_day_date
+    regression_data['scrip'] = str(scrip)
+    regression_data['buyIndia'] = str(buy)
+    regression_data['sellIndia'] = str(sell)
+    regression_data['forecast_day_VOL_change'] = forecast_day_VOL_change
+    regression_data['forecast_day_PCT_change'] = forecast_day_PCT_change
+    regression_data['forecast_day_PCT2_change'] = forecast_day_PCT2_change
+    regression_data['forecast_day_PCT3_change'] = forecast_day_PCT3_change
+    regression_data['forecast_day_PCT4_change'] = forecast_day_PCT4_change
+    regression_data['forecast_day_PCT5_change'] = forecast_day_PCT5_change
+    regression_data['forecast_day_PCT7_change'] = forecast_day_PCT7_change
+    regression_data['forecast_day_PCT10_change'] = forecast_day_PCT10_change
+    regression_data['score'] = score
+    #regression_data['mlpValue'] = mlpValue
+    #regression_data['kNeighboursValue'] = kNeighboursValue
+    regression_data['trend'] = trend 
+    regression_data['yearHighChange'] = yearHighChange 
+    regression_data['yearLowChange'] = yearLowChange
+    regression_data['patterns'] = ''
+    regression_data['PCT_change'] = PCT_change
+    regression_data['PCT_day_change'] = PCT_day_change
+    regression_data['PCT_day_OL'] = PCT_day_OL
+    regression_data['PCT_day_HO'] = PCT_day_HO
+    regression_data['Act_PCT_change'] = Act_PCT_change
+    regression_data['Act_PCT_day_change'] = Act_PCT_day_change
+    regression_data['Act_PCT_day_OL'] = Act_PCT_day_OL
+    regression_data['Act_PCT_day_HO'] = Act_PCT_day_HO
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     if kNeighbours:
         result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1))
         if float(result[0]) < .5:
             return
-        regressionResult.extend(result)
+        regression_data['kNeighboursValue'] = result[0]
     else:
-        regressionResult.extend([0,0])
-    
-    if randomForest:
-        regressionResult.extend(performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor(max_depth=30, n_estimators=10, n_jobs=1)))
-    else: 
-        regressionResult.extend([0,0])
+        regression_data['kNeighboursValue'] = 0
             
     if mlp:
         dfp_mlp = get_data_frame(df, 'mlp')
-        regressionResult.extend(performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27))))
+        result = performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
+        regression_data['mlpValue'] = result[0]
     else:
-        regressionResult.extend([0,0])
-        
-    if bagging:
-        regressionResult.extend(performRegression(dfp, split, scrip, directory, forecast_out, SVR(C=1e3, cache_size=500, coef0=0.0, degree=3, epsilon=0.2, gamma=.05,
-    kernel='rbf', max_iter=5000, shrinking=True, tol=0.001, verbose=False)))
-    else:
-        regressionResult.extend([0,0])
-        
-    if adaBoost:
-        regressionResult.extend(performRegression(dfp, split, scrip, directory, forecast_out, AdaBoostRegressor()))
-    else:
-        regressionResult.extend([0,0])
-        
-    if gradientBoosting:
-        regressionResult.extend(performRegression(dfp, split, scrip, directory, forecast_out, GradientBoostingRegressor()))
-    else:
-        regressionResult.extend([0,0])
+        regression_data['mlpValue'] = 0
     
-    regressionResult.append(trend)
-    regressionResult.append(yearHighChange)
-    regressionResult.append(yearLowChange)
-    create_csv(forecast_day_date, forecast_day_OL, forecast_day_HO, scrip, regressionResult)  
+    create_csv(regression_data)  
                                                           
