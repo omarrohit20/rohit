@@ -140,7 +140,7 @@ def pattern_screener(data, todayInputs, tdchange, historicalInputs, hchange):
         
     if pattern_recognition['CDLHAMMER'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',HAMMER'
-    if pattern_recognition['CDLHANGINGMAN'][0] == 100:
+    if pattern_recognition['CDLHANGINGMAN'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',HANGINGMAN' 
     
     if pattern_recognition['CDLSHOOTINGSTAR'][0] == 100:
@@ -205,7 +205,7 @@ def pattern_screener(data, todayInputs, tdchange, historicalInputs, hchange):
         
     if pattern_recognition['CDLMORNINGSTAR'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',MORNINGSTAR'
-    if pattern_recognition['CDLEVENINGSTAR'][0] == 100:
+    if pattern_recognition['CDLEVENINGSTAR'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',EVENINGSTAR'
     
     if pattern_recognition['CDLDOJI'][0] == 100:
@@ -259,13 +259,13 @@ def pattern_screener(data, todayInputs, tdchange, historicalInputs, hchange):
     if pattern_recognition['CDL3WHITESOLDIERS'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',3WHITESOLDIERS'          
         
-    if pattern_recognition['CDL2CROWS'][0] == 100:
+    if pattern_recognition['CDL2CROWS'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',2CROWS' 
         
-    if pattern_recognition['CDL3BLACKCROWS'][0] == 100:
+    if pattern_recognition['CDL3BLACKCROWS'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',3BLACKCROWS'                     
     
-    if pattern_recognition['CDLDARKCLOUDCOVER'][0] == 100:
+    if pattern_recognition['CDLDARKCLOUDCOVER'][0] == -100:
         technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',DARKCLOUDCOVER'     
         
     if pattern_recognition['CDL3INSIDE'][0] == 100:

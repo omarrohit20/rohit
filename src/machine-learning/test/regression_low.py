@@ -230,6 +230,10 @@ def get_data_frame(df, regressor="None"):
 
 def create_csv(regression_data):
     json_data = json.loads(json.dumps(regression_data))
+    if 'P@[' in str(regression_data['sellIndia']):
+        stored = db.sellIndia.find_one({'scrip':regression_data['scrip'], 'date':regression_data['date']})
+        if stored is None:
+            db.sellIndia.insert_one(json_data)
     
     score = ''
     if(regression_data['score'] == '10' or regression_data['score'] == '1-1'):
