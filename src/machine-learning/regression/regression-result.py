@@ -480,7 +480,7 @@ def result_data(scrip):
                    or '3BLACKCROWS' in str(regression_data['sellIndia'])
                    ) and (regression_data['forecast_day_PCT5_change'] >= 5) and (regression_data['forecast_day_PCT10_change'] >= 5)):
                     ws_sellPattern2.append(regressionResult)                                 
-                elif(('BELTHOLD' in str(regression_data['sellIndia']) and 'LONGLINE' in str(regression_data['sellIndia']) and score == '0-1' and regression_data['trend'] != 'down')
+                elif(('BELTHOLD' in str(regression_data['sellIndia']) and 'LONGLINE' in str(regression_data['sellIndia']) and score == '0-1')
                      or ('CLOSINGMARUBOZU' in str(regression_data['sellIndia']) and 'LONGLINE' in str(regression_data['sellIndia']))
                      or ('M@[,CROSSOVER-MACD]' in str(regression_data['sellIndia']) and 'LONGLINE' in str(regression_data['sellIndia']))
                      or ('3OUTSIDE' in str(regression_data['sellIndia']) and 'SPINNINGTOP' not in str(regression_data['sellIndia']) and 'P@[3OUTSIDE]' != str(regression_data['sellIndia']))

@@ -23,16 +23,16 @@ logname = '../../output/final' + '/news' + time.strftime("%d%m%y-%H%M%S")
 newsDict = {}
 wb = Workbook()
 ws = wb.active
-ws.append(["scrip", "timestamps", "summary", "Link"])
+ws.append(["scrip", "timestamps", "summary", "Link", "MLIndicator"])
 ws_buyNews = wb.create_sheet("BuyNews")
-ws_buyNews.append(["timestamps", "summary", "Link"])
+ws_buyNews.append(["timestamps", "summary", "Link", "MLIndicator"])
 ws_sellNews = wb.create_sheet("SellNews")
-ws_sellNews.append(["timestamps", "summary", "Link"])
+ws_sellNews.append(["timestamps", "summary", "Link", "MLIndicator"])
 
 
 def saveDailyNews():
     for newslink,newsValue in newsDict.items():
-        ws.append([newsValue['scrip'], newsValue['newstime'], newsValue['newssummary'], newslink])
+        ws.append([newsValue['scrip'], newsValue['newstime'], newsValue['newssummary'], newslink, newsValue['mlindicator']])
 
 def saveReports():
     # Add a default style with striped rows and banded columns
@@ -42,7 +42,7 @@ def saveReports():
     count = 0
     for row in ws.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:D" + str(count))
+    tab = Table(displayName="Table1", ref="A1:E" + str(count))
     tab.tableStyleInfo = style
     ws.add_table(tab)
     
@@ -86,17 +86,22 @@ def sell_News(scrip):
     ws_sellNews.append([" "])  
 
 def result_data(scrip):
-    classification_data = db.classificationlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
-    regression_data = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     
-    if(classification_data is None or regression_data is None):
-        print('Missing or very less Data for ', scrip)
-    else:
-        if(regression_data['kNeighboursValue'] > 0): 
+    
+    regression_data_high = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    if(regression_data_high['kNeighboursValue'] > 0 and regression_data_high['mlpValue'] > 0):
+        if(regression_data_high is None):
+            print('Missing or very less Data for ', scrip)
+        else:
             buy_News(scrip)
-        if(classification_data['kNeighboursValue'] < 0):
-            sell_News(scrip)    
-        
+            
+    regression_data_low = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    if(regression_data_low['kNeighboursValue'] < 0 and regression_data_low['mlpValue'] < 0):
+        if(regression_data_low is None):
+            print('Missing or very less Data for ', scrip)
+        else:
+            sell_News(scrip)        
+         
     start_date = (datetime.datetime.now() - datetime.timedelta(hours=0))
     start_date = datetime.datetime(start_date.year, start_date.month, start_date.day, start_date.hour)
     end_date = (datetime.datetime.now() - datetime.timedelta(hours=18))
@@ -114,11 +119,20 @@ def result_data(scrip):
             if start_date > news_time > end_date: 
                 if newslink in newsDict:
                     newsDict[newslink]['scrip'] = newsDict[newslink]['scrip'] + ',' + scrip
+                    if(regression_data_high['kNeighboursValue'] > 0 and regression_data_high['mlpValue'] > 0):
+                        newsDict[newslink]['mlindicator'] = newsDict[newslink]['mlindicator'] + ',' + 'Buy:' + scrip
+                    if(regression_data_low['kNeighboursValue'] < 0 and regression_data_low['mlpValue'] < 0):
+                        newsDict[newslink]['mlindicator'] = newsDict[newslink]['mlindicator'] + ',' + 'Sell:' + scrip    
                 else:
                     newsValue = {}
                     newsValue['newssummary'] = newssummary
                     newsValue['newstime'] = newstime
                     newsValue['scrip'] = scrip
+                    newsValue['mlindicator'] = ""
+                    if(regression_data_high['kNeighboursValue'] > 0 and regression_data_high['mlpValue'] > 0):
+                        newsValue['mlindicator'] = 'Buy:' + scrip
+                    if(regression_data_low['kNeighboursValue'] < 0 and regression_data_low['mlpValue'] < 0):
+                        newsValue['mlindicator'] = newsValue['mlindicator'] + ',' + 'Sell:' + scrip    
                     newsDict[newslink] = newsValue
                 
                 
