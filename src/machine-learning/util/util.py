@@ -46,3 +46,16 @@ def historical_data(data):
     arquantity = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,6][::-1]).tolist()])
     arturnover = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,7][::-1]).tolist()])
     return ardate, aropen, arhigh, arlow, arlast, arclose, arquantity, arturnover
+
+def no_doji_or_spinning_buy_india(regression_data):
+    if ('SPINNINGTOP' not in str(regression_data['buyIndia']) and 'DOJI' not in str(regression_data['buyIndia'])):
+        return True;
+    else:
+        return False
+    
+def no_doji_or_spinning_sell_india(regression_data): 
+    if ('SPINNINGTOP' not in str(regression_data['sellIndia']) and 'DOJI' not in str(regression_data['sellIndia'])):
+        return True;
+    else:
+        return False   
+    

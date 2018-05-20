@@ -1,4 +1,6 @@
 import os, logging, sys, json, csv
+sys.path.insert(0, '../')
+
 from openpyxl import Workbook
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.styles import Color, PatternFill, Font, Border
@@ -13,6 +15,8 @@ from talib.abstract import *
 import datetime
 import time
 import gc
+
+from util.util import getScore, all_day_pct_change_negative, all_day_pct_change_positive, no_doji_or_spinning_buy_india, no_doji_or_spinning_sell_india
 
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
@@ -198,66 +202,7 @@ def saveReports(run_type=None):
         wb.save(logname + "result_declared.xlsx")       
     else:
         wb.save(logname + ".xlsx")
-
-def buy_News(scrip):
-    scrip_newsList = db.news.find_one({'scrip':scrip})
-    ws_buyNews.append([scrip])
-    ws_buyNews.append(["#####################"])
-    if(scrip_newsList is None):
-        print('Missing news for ', scrip)
-        return
-    
-    for scrip_news in scrip_newsList['news']:
-        ws_buyNews.append([scrip_news['timestamp'], scrip_news['summary'], scrip_news['link']])
-    ws_buyNews.append([" "])
-    
-def sell_News(scrip):
-    scrip_newsList = db.news.find_one({'scrip':scrip})
-    ws_sellNews.append([scrip])
-    ws_sellNews.append(["#####################"])
-    if(scrip_newsList is None):
-        print('Missing news for ', scrip)
-        return
-    for scrip_news in scrip_newsList['news']:
-        ws_sellNews.append([scrip_news['timestamp'], scrip_news['summary'], scrip_news['link']])
-    ws_sellNews.append([" "])  
-
-def all_day_pct_change_negative(regression_data):
-    if(regression_data['forecast_day_PCT_change'] < 0
-        and regression_data['forecast_day_PCT2_change'] < .5
-        and regression_data['forecast_day_PCT3_change'] < .5
-        and regression_data['forecast_day_PCT4_change'] < .5
-        and regression_data['forecast_day_PCT5_change'] < .5
-        and regression_data['forecast_day_PCT7_change'] < .5
-        and regression_data['forecast_day_PCT10_change'] < .5):
-        return True;
-    else:
-        return False
-    
-def all_day_pct_change_positive(regression_data):
-    if(regression_data['forecast_day_PCT_change'] > 0
-        and regression_data['forecast_day_PCT2_change'] > -.5
-        and regression_data['forecast_day_PCT3_change'] > -.5
-        and regression_data['forecast_day_PCT4_change'] > -.5
-        and regression_data['forecast_day_PCT5_change'] > -.5
-        and regression_data['forecast_day_PCT7_change'] > -.5
-        and regression_data['forecast_day_PCT10_change'] > -.5):
-        return True;
-    else:
-        return False    
-
-def no_doji_or_spinning_buy_india(regression_data):
-    if ('SPINNINGTOP' not in str(regression_data['buyIndia']) and 'DOJI' not in str(regression_data['buyIndia'])):
-        return True;
-    else:
-        return False
-    
-def no_doji_or_spinning_sell_india(regression_data): 
-    if ('SPINNINGTOP' not in str(regression_data['sellIndia']) and 'DOJI' not in str(regression_data['sellIndia'])):
-        return True;
-    else:
-        return False   
-    
+   
 def result_data(scrip):
     resultDeclared = ""
     resultDate = ""
@@ -307,11 +252,9 @@ def result_data(scrip):
         dayClose = False
         if(regression_data['PCT_day_change'] > .5 and regression_data['PCT_change'] < .1):
             dayClose = True
-        regressionResult.append(dayClose)
         longTrend = False 
         if(all_day_pct_change_positive(regression_data)):
-            longTrend = True
-        regressionResult.append(longTrend)      
+            longTrend = True     
         if(((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0.5) or (regression_data['mlpValue'] >= 0.5 and regression_data['kNeighboursValue'] >= 1))
            and 'P@[' not in str(regression_data['sellIndia'])):
             ws_buyAll.append(regressionResult)
@@ -427,12 +370,10 @@ def result_data(scrip):
             score = 'down'
         dayClose = False
         if(regression_data['PCT_day_change'] < -.5 and regression_data['PCT_change'] > -.1):
-            dayClose = True   
-        regressionResult.append(dayClose)
+            dayClose = True
         longTrend = False 
         if(all_day_pct_change_negative(regression_data)):
-            longTrend = True
-        regressionResult.append(longTrend)       
+            longTrend = True       
         if(((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= -0.5) or (regression_data['mlpValue'] <= -0.5 and regression_data['kNeighboursValue'] <= -1))
            and 'P@[' not in str(regression_data['buyIndia'])):
             ws_sellAll.append(regressionResult)
@@ -513,54 +454,17 @@ def result_data(scrip):
                      ):
                     ws_sellPattern2.append(regressionResult)
             
-def calculateParallel(threads=2, run_type=None, futures=None):
+def calculateParallel(threads=2, futures=None):
     pool = ThreadPool(threads)
-    if(run_type == 'broker'):
-        count=0
-        scrips = []
-        with open('../data-import/nselist/ind_broker_buy.csv') as csvfile:
-            readCSV = csv.reader(csvfile, delimiter=',')
-            for row in readCSV:
-                if (count != 0):
-                    scrips.append(row[0].replace('&','').replace('-','_'))
-                count = count + 1
-                
-            scrips.sort()
-            pool.map(result_data, scrips)
-    elif(run_type == 'result'):
-        count=0
-        scrips = []
-        with open('../data-import/nselist/ind_result.csv') as csvfile:
-            readCSV = csv.reader(csvfile, delimiter=',')
-            for row in readCSV:
-                if (count != 0):
-                    scrips.append(row[0].replace('&','').replace('-','_'))
-                count = count + 1
-                
-            scrips.sort()
-            pool.map(result_data, scrips)  
-    elif(run_type == 'result_declared'):
-        count=0
-        scrips = []
-        with open('../data-import/nselist/ind_result_declared.csv') as csvfile:
-            readCSV = csv.reader(csvfile, delimiter=',')
-            for row in readCSV:
-                if (count != 0):
-                    scrips.append(row[0].replace('&','').replace('-','_'))
-                count = count + 1
-                
-            scrips.sort()
-            pool.map(result_data, scrips)               
-    else:
-        scrips = []
-        for data in db.scrip.find({'futures':futures}):
-            scrips.append(data['scrip'].replace('&','').replace('-','_'))
-        scrips.sort()
-        pool.map(result_data, scrips)
+    scrips = []
+    for data in db.scrip.find({'futures':futures}):
+        scrips.append(data['scrip'].replace('&','').replace('-','_'))
+    scrips.sort()
+    pool.map(result_data, scrips)       
                      
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(1, sys.argv[1], sys.argv[2])
+    calculateParallel(1, sys.argv[1])
     connection.close()
     saveReports(sys.argv[1])

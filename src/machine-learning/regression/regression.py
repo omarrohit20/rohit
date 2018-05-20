@@ -83,7 +83,6 @@ def regression_ta_data(scrip):
     df['EMA9'] = EMA(df,9)
     df['EMA21'] = EMA(df,21)
     
-    forecast_day_date = df.tail(1).loc[-forecast_out:, 'date'].values[0]
     buy, sell, trend, yearHighChange, yearLowChange = ta_lib_data_df(scrip, df, False) 
     process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory)
     process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory)    
