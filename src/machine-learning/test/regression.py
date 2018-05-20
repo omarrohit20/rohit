@@ -83,8 +83,6 @@ def regression_ta_data(scrip):
     df['EMA9'] = EMA(df,9)
     df['EMA21'] = EMA(df,21)
     
-    df.dropna(inplace=True)
-    
     size = int(int(np.floor(df.shape[0]))/3)
     for x in range(size):
         buy, sell, trend, yearHighChange, yearLowChange = ta_lib_data_df(scrip, df, False) 

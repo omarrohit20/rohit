@@ -141,7 +141,10 @@ def pattern_screener(data, todayInputs, tdchange, historicalInputs, hchange):
     if pattern_recognition['CDLHAMMER'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',HAMMER'
     if pattern_recognition['CDLHANGINGMAN'][0] == -100:
-        technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',HANGINGMAN' 
+        technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',HANGINGMAN'
+        
+    if pattern_recognition['CDLINVERTEDHAMMER'][0] == 100:
+        technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',CDLINVERTEDHAMMER'     
     
     if pattern_recognition['CDLSHOOTINGSTAR'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',SHOOTINGSTAR'    
@@ -396,8 +399,7 @@ def pattern_screener(data, todayInputs, tdchange, historicalInputs, hchange):
     if pattern_recognition['CDLXSIDEGAP3METHODS'][0] == 100:
         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',XSIDEGAP3METHODS'
     if pattern_recognition['CDLXSIDEGAP3METHODS'][0] == -100:
-        technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',XSIDEGAP3METHODS'
-                                                                      
+        technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',XSIDEGAP3METHODS'                                                                  
          
 #     if pattern_recognition[''][0] == 100:
 #         technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ','

@@ -50,15 +50,6 @@ adaBoost = False
 kNeighbours = True
 gradientBoosting = False
 
-forecast_out = 1
-split = .99
-randomForest = False
-mlp = True
-bagging = False
-adaBoost = False
-kNeighbours = True
-gradientBoosting = False
-
 def get_data_frame(df, regressor="None"):
     if (df is not None):
         #dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
@@ -86,6 +77,7 @@ def get_data_frame(df, regressor="None"):
                 addFeaturesEMA21Change(df, dfp, EMA21, dele) 
         dfp['uptrend'] = df['uptrend']
         dfp['downtrend'] = df['downtrend']    
+       
  
         if regressor != 'mlp':      
             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
@@ -223,31 +215,31 @@ def get_data_frame(df, regressor="None"):
 #        dfp['ADOSC'] = ADOSC(df)
 #        dfp['OBV'] = OBV(df)
         dfp = dfp.ix[50:]    
-        forecast_col = 'Low_change1'
+        forecast_col = 'High_change1'
         dfp.dropna(inplace=True)
         dfp['label'] = dfp[forecast_col].shift(-forecast_out) 
         return dfp
 
 def create_csv(regression_data):
-    regression_data_db = db.regressionlow.find_one({'scrip':scrip})
-    if(regression_data_db is not None):
+    regression_data_db = db.regressionhigh.find_one({'scrip':regression_data['scrip']})
+    if(regression_data_db is None):
         json_data = json.loads(json.dumps(regression_data))
-        db.regressionlow.insert_one(json_data)    
-
-def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory):
-    regression_data_db = db.regressionlow.find_one({'scrip':scrip})
-    if(regression_data_db is not None or 'P@[' in str(buy)):
+        db.regressionhigh.insert_one(json_data)    
+    
+def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory):
+    regression_data_db = db.regressionhigh.find_one({'scrip':scrip})
+    if(regression_data_db is not None):
         return
     
     dfp = get_data_frame(df)
     
-    forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'Low_change1'].values[0]
-    forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'Low_change2'].values[0]
-    forecast_day_PCT3_change = dfp.tail(1).loc[-forecast_out:, 'Low_change3'].values[0]
-    forecast_day_PCT4_change = dfp.tail(1).loc[-forecast_out:, 'Low_change4'].values[0]
-    forecast_day_PCT5_change = dfp.tail(1).loc[-forecast_out:, 'Low_change5'].values[0]
-    forecast_day_PCT7_change = dfp.tail(1).loc[-forecast_out:, 'Low_change7'].values[0]
-    forecast_day_PCT10_change = dfp.tail(1).loc[-forecast_out:, 'Low_change10'].values[0]
+    forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'High_change1'].values[0]
+    forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'High_change2'].values[0]
+    forecast_day_PCT3_change = dfp.tail(1).loc[-forecast_out:, 'High_change3'].values[0]
+    forecast_day_PCT4_change = dfp.tail(1).loc[-forecast_out:, 'High_change4'].values[0]
+    forecast_day_PCT5_change = dfp.tail(1).loc[-forecast_out:, 'High_change5'].values[0]
+    forecast_day_PCT7_change = dfp.tail(1).loc[-forecast_out:, 'High_change7'].values[0]
+    forecast_day_PCT10_change = dfp.tail(1).loc[-forecast_out:, 'High_change10'].values[0]
     forecast_day_VOL_change = df.tail(1).loc[-forecast_out:, 'VOL_change'].values[0]
     forecast_day_date = df.tail(1).loc[-forecast_out:, 'date'].values[0]
     PCT_change = df.tail(1).loc[-forecast_out:,'PCT_change'].values[0]
@@ -301,14 +293,13 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
         regression_data['kNeighboursValue'] = float(result[0])
     else:
         regression_data['kNeighboursValue'] = float(0)
-        
+            
     if mlp:
         dfp_mlp = get_data_frame(df, 'mlp')
         result = performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
         regression_data['mlpValue'] = float(result[0])
     else:
         regression_data['mlpValue'] = float(0)
-        
     
-    create_csv(regression_data)   
+    create_csv(regression_data)  
                                                           
