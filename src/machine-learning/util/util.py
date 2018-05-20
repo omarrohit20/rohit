@@ -1,3 +1,4 @@
+import csv
 from openpyxl import Workbook
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.styles import Color, PatternFill, Font, Border
@@ -58,4 +59,20 @@ def no_doji_or_spinning_sell_india(regression_data):
         return True;
     else:
         return False   
-    
+ 
+def scrip_patterns_to_dict(filename):  
+    tempDict = {}
+    count = 0
+    with open(filename) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        for row in readCSV:
+            try:
+                if (count != 0):
+                    dictValue = {}
+                    dictValue['avg'] = row[1]
+                    dictValue['count'] = row[2]
+                    tempDict[row[0]] = dictValue
+                count = count + 1
+            except:
+                pass
+    return tempDict 
