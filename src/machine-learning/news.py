@@ -104,7 +104,8 @@ def result_data(scrip):
          
     start_date = (datetime.datetime.now() - datetime.timedelta(hours=0))
     start_date = datetime.datetime(start_date.year, start_date.month, start_date.day, start_date.hour)
-    end_date = (datetime.datetime.now() - datetime.timedelta(hours=18))
+    end_date = (datetime.datetime.now() - datetime.timedelta(hours=19))
+    #end_date = (datetime.datetime.now() - datetime.timedelta(hours=70))
     end_date = datetime.datetime(end_date.year, end_date.month, end_date.day, end_date.hour)
     
     scrip_newsList = db.news.find_one({'scrip':scrip})
@@ -119,9 +120,11 @@ def result_data(scrip):
             if start_date > news_time > end_date: 
                 if newslink in newsDict:
                     newsDict[newslink]['scrip'] = newsDict[newslink]['scrip'] + ',' + scrip
-                    if(regression_data_high['kNeighboursValue'] > 0 and regression_data_high['mlpValue'] > 0):
+                    if((regression_data_high['kNeighboursValue'] >= 1) or (regression_data_high['mlpValue'] >= 2 and regression_data_high['kNeighboursValue'] >= 0) 
+                        or (regression_data_high['mlpValue'] >= 0 and regression_data_high['kNeighboursValue'] >= 0.5)):
                         newsDict[newslink]['mlindicator'] = newsDict[newslink]['mlindicator'] + ',' + 'Buy:' + scrip
-                    if(regression_data_low['kNeighboursValue'] < 0 and regression_data_low['mlpValue'] < 0):
+                    if((regression_data_low['kNeighboursValue'] <= -1) or (regression_data_low['mlpValue'] <= -2 and regression_data_low['kNeighboursValue'] <= 0)
+                        or (regression_data_low['mlpValue'] <= 0 and regression_data_low['kNeighboursValue'] <= -0.5)):
                         newsDict[newslink]['mlindicator'] = newsDict[newslink]['mlindicator'] + ',' + 'Sell:' + scrip    
                 else:
                     newsValue = {}
@@ -129,9 +132,11 @@ def result_data(scrip):
                     newsValue['newstime'] = newstime
                     newsValue['scrip'] = scrip
                     newsValue['mlindicator'] = ""
-                    if(regression_data_high['kNeighboursValue'] > 0 and regression_data_high['mlpValue'] > 0):
+                    if((regression_data_high['kNeighboursValue'] >= 1) or (regression_data_high['mlpValue'] >= 2 and regression_data_high['kNeighboursValue'] >= 0) 
+                        or (regression_data_high['mlpValue'] >= 0 and regression_data_high['kNeighboursValue'] >= 0.5)):
                         newsValue['mlindicator'] = 'Buy:' + scrip
-                    if(regression_data_low['kNeighboursValue'] < 0 and regression_data_low['mlpValue'] < 0):
+                    if((regression_data_low['kNeighboursValue'] <= -1) or (regression_data_low['mlpValue'] <= -2 and regression_data_low['kNeighboursValue'] <= 0)
+                        or (regression_data_low['mlpValue'] <= 0 and regression_data_low['kNeighboursValue'] <= -0.5)):
                         newsValue['mlindicator'] = newsValue['mlindicator'] + ',' + 'Sell:' + scrip    
                     newsDict[newslink] = newsValue
                 
