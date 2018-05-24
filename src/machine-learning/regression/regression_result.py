@@ -257,7 +257,10 @@ def result_data(scrip):
                 if(((regression_data['kNeighboursValue'] >= 1) or (regression_data['mlpValue'] >= 2 and regression_data['kNeighboursValue'] >= 0) 
                     or (regression_data['mlpValue'] >= 0 and regression_data['kNeighboursValue'] >= 0.5))
                     and 'P@[' not in str(regression_data['sellIndia'])):
-                    if(float(buyPatternsDict[regression_data['buyIndia']]['avg']) > 0.3):
+                    if(float(buyPatternsDict[regression_data['buyIndia']]['avg']) > 0.8 and int(buyPatternsDict[regression_data['buyIndia']]['count']) >= 5):
+                       ws_buyPattern2.append(regressionResult)
+                    elif(float(buyPatternsDict[regression_data['buyIndia']]['avg']) > 0.5 
+                       or (float(buyPatternsDict[regression_data['buyIndia']]['avg']) > 0.3 and (regression_data['forecast_day_PCT10_change'] < -10 or regression_data['yearHighChange'] < -40))):
                         if(regression_data['forecast_day_PCT10_change'] < 0 and regression_data['forecast_day_PCT_change'] >= 0):
                             ws_buyPattern2.append(regressionResult)
                         elif(regression_data['forecast_day_PCT10_change'] > 0):    
@@ -276,10 +279,10 @@ def result_data(scrip):
            and 'P@[' not in str(regression_data['sellIndia'])):
             ws_buyAll.append(regressionResult)
             if(-5 <= regression_data['yearHighChange'] < -1 and regression_data['yearLowChange'] > 30 and no_doji_or_spinning_buy_india(regression_data)
-                and -0.5 < regression_data['PCT_day_change'] < 3 and regression_data['forecast_day_PCT2_change'] <= 5):
+                and -0.5 < regression_data['PCT_day_change'] < 5 and regression_data['forecast_day_PCT2_change'] <= 5):
                 ws_buyYearHigh.append(regressionResult)
             elif(-15 < regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 30 and no_doji_or_spinning_buy_india(regression_data)
-                and -0.5 < regression_data['PCT_day_change'] < 3 and (score == 'up'  or regression_data['forecast_day_PCT_change'] > 0)):
+                and -0.5 < regression_data['PCT_day_change'] < 5 and (score == 'up'  or regression_data['forecast_day_PCT_change'] > 0)):
                 ws_buyYearHigh.append(regressionResult)
                 
             if(1 < regression_data['yearLowChange'] < 10 and regression_data['yearHighChange'] < -30 
@@ -386,7 +389,10 @@ def result_data(scrip):
                 if(((regression_data['kNeighboursValue'] <= -1) or (regression_data['mlpValue'] <= -2 and regression_data['kNeighboursValue'] <= 0)
                     or (regression_data['mlpValue'] <= 0 and regression_data['kNeighboursValue'] <= -0.5))
                     and 'P@[' not in str(regression_data['buyIndia'])):
-                    if(float(sellPatternsDict[regression_data['sellIndia']]['avg']) < -0.3):
+                    if(float(sellPatternsDict[regression_data['sellIndia']]['avg']) < -0.8 and int(sellPatternsDict[regression_data['sellIndia']]['count']) >= 5):
+                        ws_sellPattern2.append(regressionResult)    
+                    if(float(sellPatternsDict[regression_data['sellIndia']]['avg']) < -0.5 
+                        or (float(sellPatternsDict[regression_data['sellIndia']]['avg']) < -0.3 and (regression_data['forecast_day_PCT10_change'] > 10 or regression_data['yearLowChange'] > 40))):
                         if(regression_data['forecast_day_PCT10_change'] > 0 and regression_data['forecast_day_PCT_change'] <= 0):
                             ws_sellPattern2.append(regressionResult)
                         elif(regression_data['forecast_day_PCT10_change'] < 0):    
@@ -412,6 +418,7 @@ def result_data(scrip):
                 
             if(0 < regression_data['yearLowChange'] < 15 and regression_data['yearHighChange'] < -30 
                 and -2 < regression_data['PCT_day_change'] < 0 and regression_data['forecast_day_PCT_change'] < 0
+                and (regression_data['score'] != '1-1' or regression_data['score'] != '10')
                 and all_day_pct_change_negative(regression_data) and no_doji_or_spinning_sell_india(regression_data)):
                 ws_sellYearLow.append(regressionResult)
                 
