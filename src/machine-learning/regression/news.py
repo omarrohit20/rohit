@@ -25,10 +25,12 @@ buyPatternsDict=scrip_patterns_to_dict('../../data-import/nselist/patterns-buy.c
 sellPatternsDict=scrip_patterns_to_dict('../../data-import/nselist/patterns-sell.csv')
 
 directory = '../../output/final'
-logname = '../../output/final' + '/regression-result' + time.strftime("%d%m%y-%H%M%S")
+logname = '../../output/final' + '/news' + time.strftime("%d%m%y-%H%M%S")
 
 newsDict = {}
 wb = Workbook()
+ws = wb.active
+ws.append(["scrip", "timestamps", "summary", "Link", "MLIndicator"])
 ws_buyAll = wb.create_sheet("BuyAll")
 ws_buyAll.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_sellAll = wb.create_sheet("SellAll")
@@ -65,11 +67,42 @@ ws_sellYearHigh = wb.create_sheet("sellYearHigh")
 ws_sellYearHigh.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_buyYearLow = wb.create_sheet("buyYearLow")
 ws_buyYearLow.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
+ws_buyNews = wb.create_sheet("BuyNews")
+ws_buyNews.append(["timestamps", "summary", "Link", "MLIndicator"])
+ws_sellNews = wb.create_sheet("SellNews")
+ws_sellNews.append(["timestamps", "summary", "Link", "MLIndicator"])
 
-def saveReports(run_type=None):
+def saveDailyNews():
+    for newslink,newsValue in newsDict.items():
+        ws.append([newsValue['scrip'], newsValue['newstime'], newsValue['newssummary'], newslink, newsValue['mlindicator']])
+        if(newsValue['mlindicator'] != ''):
+            result_data(newsValue['scrip'])
+
+def saveReports():
     # Add a default style with striped rows and banded columns
     style = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False,
                showLastColumn=False, showRowStripes=True, showColumnStripes=True)
+    
+    count = 0
+    for row in ws.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:E" + str(count))
+    tab.tableStyleInfo = style
+    ws.add_table(tab)
+    
+    count = 0
+    for row in ws_buyNews.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:C" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyNews.add_table(tab)
+    
+    count = 0
+    for row in ws_sellNews.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:C" + str(count))
+    tab.tableStyleInfo = style
+    ws_sellNews.add_table(tab)
     
     count = 0
     for row in ws_buyAll.iter_rows(row_offset=1):
@@ -196,16 +229,32 @@ def saveReports(run_type=None):
     tab = Table(displayName="Table1", ref="A1:Y" + str(count))
     tab.tableStyleInfo = style
     ws_sellDownTrend.add_table(tab)
-      
-    if(run_type == 'broker'):
-        wb.save(logname + "broker_buy.xlsx")
-    elif(run_type == 'result'):
-        wb.save(logname + "result.xlsx")
-    elif(run_type == 'result_declared'):
-        wb.save(logname + "result_declared.xlsx")       
-    else:
-        wb.save(logname + ".xlsx")
-   
+    
+    wb.save(logname + ".xlsx")
+        
+def buy_News(scrip):
+    scrip_newsList = db.news.find_one({'scrip':scrip})
+    ws_buyNews.append([scrip])
+    ws_buyNews.append(["#####################"])
+    if(scrip_newsList is None):
+        print('Missing news for ', scrip)
+        return
+    
+    for scrip_news in scrip_newsList['news']:
+        ws_buyNews.append([scrip_news['timestamp'], scrip_news['summary'], scrip_news['link']])
+    ws_buyNews.append([" "])
+    
+def sell_News(scrip):
+    scrip_newsList = db.news.find_one({'scrip':scrip})
+    ws_sellNews.append([scrip])
+    ws_sellNews.append(["#####################"])
+    if(scrip_newsList is None):
+        print('Missing news for ', scrip)
+        return
+    for scrip_news in scrip_newsList['news']:
+        ws_sellNews.append([scrip_news['timestamp'], scrip_news['summary'], scrip_news['link']])
+    ws_sellNews.append([" "])  
+
 def result_data(scrip):
     resultDeclared = ""
     resultDate = ""
@@ -254,7 +303,7 @@ def result_data(scrip):
             if (abs(float(buyPatternsDict[regression_data['buyIndia']]['avg'])) >= .1):
                 regressionResult.append(buyPatternsDict[regression_data['buyIndia']]['avg'])
                 regressionResult.append(buyPatternsDict[regression_data['buyIndia']]['count'])
-                if(int(buyPatternsDict[regression_data['buyIndia']]['count']) >= 2):
+                if(int(buyPatternsDict[regression_data['buyIndia']]['count']) >= 1):
                     if(((regression_data['kNeighboursValue'] >= 1) or (regression_data['mlpValue'] >= 2 and regression_data['kNeighboursValue'] >= 0) 
                         or (regression_data['mlpValue'] >= 0 and regression_data['kNeighboursValue'] >= 0.5))
                         and 'P@[' not in str(regression_data['sellIndia'])):
@@ -387,7 +436,7 @@ def result_data(scrip):
             if (abs(float(sellPatternsDict[regression_data['sellIndia']]['avg'])) >= .1):
                 regressionResult.append(sellPatternsDict[regression_data['sellIndia']]['avg'])
                 regressionResult.append(sellPatternsDict[regression_data['sellIndia']]['count'])
-                if(int(sellPatternsDict[regression_data['sellIndia']]['count']) >= 2):
+                if(int(sellPatternsDict[regression_data['sellIndia']]['count']) >= 1):
                     if(((regression_data['kNeighboursValue'] <= -1) or (regression_data['mlpValue'] <= -2 and regression_data['kNeighboursValue'] <= 0)
                         or (regression_data['mlpValue'] <= 0 and regression_data['kNeighboursValue'] <= -0.5))
                         and 'P@[' not in str(regression_data['buyIndia'])):
@@ -492,18 +541,77 @@ def result_data(scrip):
                    or ('3OUTSIDE' in str(regression_data['sellIndia']) and 'SPINNINGTOP' not in str(regression_data['sellIndia']) and 'LONGLINE' not in str(regression_data['sellIndia']))
                    ) and ((regression_data['forecast_day_PCT5_change'] >= 5 and regression_data['forecast_day_PCT10_change'] >= 10) or regression_data['yearLowChange'] > 50):
                     ws_sellPattern1.append(regressionResult)                                 
-                          
-def calculateParallel(threads=2, futures=None):
+
+def result_news(scrip):
+    regression_data_high = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    if(regression_data_high['kNeighboursValue'] > 0 and regression_data_high['mlpValue'] > 0):
+        if(regression_data_high is None):
+            print('Missing or very less Data for ', scrip)
+        else:
+            buy_News(scrip)
+            
+    regression_data_low = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    if(regression_data_low['kNeighboursValue'] < 0 and regression_data_low['mlpValue'] < 0):
+        if(regression_data_low is None):
+            print('Missing or very less Data for ', scrip)
+        else:
+            sell_News(scrip)        
+         
+    start_date = (datetime.datetime.now() - datetime.timedelta(hours=0))
+    start_date = datetime.datetime(start_date.year, start_date.month, start_date.day, start_date.hour)
+    end_date = (datetime.datetime.now() - datetime.timedelta(hours=19))
+    #end_date = (datetime.datetime.now() - datetime.timedelta(hours=67))
+    end_date = datetime.datetime(end_date.year, end_date.month, end_date.day, end_date.hour)
+    
+    scrip_newsList = db.news.find_one({'scrip':scrip})
+    if(scrip_newsList is None):
+        return
+    for news in scrip_newsList['news']:
+        newstime = news['timestamp']
+        newssummary = news['summary']
+        newslink = news['link']
+        try:
+            news_time = datetime.datetime.strptime(newstime, "%H:%M:%S %d-%m-%Y")
+            if start_date > news_time > end_date: 
+                if newslink in newsDict:
+                    newsDict[newslink]['scrip'] = newsDict[newslink]['scrip'] + ',' + scrip
+                    if((regression_data_high['kNeighboursValue'] >= 1) or (regression_data_high['mlpValue'] >= 2 and regression_data_high['kNeighboursValue'] >= 0) 
+                        or (regression_data_high['mlpValue'] >= 0 and regression_data_high['kNeighboursValue'] >= 0.5)):
+                        newsDict[newslink]['mlindicator'] = newsDict[newslink]['mlindicator'] + ',' + 'Buy:' + scrip
+                    if((regression_data_low['kNeighboursValue'] <= -1) or (regression_data_low['mlpValue'] <= -2 and regression_data_low['kNeighboursValue'] <= 0)
+                        or (regression_data_low['mlpValue'] <= 0 and regression_data_low['kNeighboursValue'] <= -0.5)):
+                        newsDict[newslink]['mlindicator'] = newsDict[newslink]['mlindicator'] + ',' + 'Sell:' + scrip    
+                else:
+                    newsValue = {}
+                    newsValue['newssummary'] = newssummary
+                    newsValue['newstime'] = newstime
+                    newsValue['scrip'] = scrip
+                    newsValue['mlindicator'] = ""
+                    if((regression_data_high['kNeighboursValue'] >= 1) or (regression_data_high['mlpValue'] >= 2 and regression_data_high['kNeighboursValue'] >= 0) 
+                        or (regression_data_high['mlpValue'] >= 0 and regression_data_high['kNeighboursValue'] >= 0.5)):
+                        newsValue['mlindicator'] = 'Buy:' + scrip
+                    if((regression_data_low['kNeighboursValue'] <= -1) or (regression_data_low['mlpValue'] <= -2 and regression_data_low['kNeighboursValue'] <= 0)
+                        or (regression_data_low['mlpValue'] <= 0 and regression_data_low['kNeighboursValue'] <= -0.5)):
+                        newsValue['mlindicator'] = newsValue['mlindicator'] + ',' + 'Sell:' + scrip    
+                    newsDict[newslink] = newsValue
+                
+                
+        except:
+            pass
+                              
+def calculateParallel(threads=2):
     pool = ThreadPool(threads)
     scrips = []
-    for data in db.scrip.find({'futures':futures}):
+    for data in db.scrip.find({'futures':'Yes'}):
         scrips.append(data['scrip'].replace('&','').replace('-','_'))
     scrips.sort()
-    pool.map(result_data, scrips)       
+    pool.map(result_news, scrips)
+        
                      
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(1, sys.argv[1])
+    calculateParallel(1)
     connection.close()
-    saveReports(sys.argv[1])
+    saveDailyNews()
+    saveReports()
