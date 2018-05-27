@@ -567,7 +567,6 @@ def result_news(scrip):
     start_date = datetime.datetime(start_date.year, start_date.month, start_date.day, start_date.hour, start_date.minute)
     end_date = datetime.datetime(start_date.year, start_date.month, (start_date.day - 2))
     end_date = (end_date + datetime.timedelta(hours=14))
-    #end_date = (datetime.datetime.now() - datetime.timedelta(hours=67))
     end_date = datetime.datetime(end_date.year, end_date.month, end_date.day, end_date.hour)
     
     scrip_newsList = db.news.find_one({'scrip':scrip})
