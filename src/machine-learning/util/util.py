@@ -29,12 +29,12 @@ def all_day_pct_change_negative(regression_data):
     
 def all_day_pct_change_positive(regression_data):
     if(regression_data['forecast_day_PCT_change'] > 0
-        and regression_data['forecast_day_PCT2_change'] > -.5
-        and regression_data['forecast_day_PCT3_change'] > -.5
-        and regression_data['forecast_day_PCT4_change'] > -.5
-        and regression_data['forecast_day_PCT5_change'] > -.5
-        and regression_data['forecast_day_PCT7_change'] > -.5
-        and regression_data['forecast_day_PCT10_change'] > -.5):
+        and regression_data['forecast_day_PCT2_change'] > -0.5
+        and regression_data['forecast_day_PCT3_change'] > -0.5
+        and regression_data['forecast_day_PCT4_change'] > -0.5
+        and regression_data['forecast_day_PCT5_change'] > -0.5
+        and regression_data['forecast_day_PCT7_change'] > -0.5
+        and regression_data['forecast_day_PCT10_change'] > -0.5):
         return True;    
         
 def historical_data(data):
