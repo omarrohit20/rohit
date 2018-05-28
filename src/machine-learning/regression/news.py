@@ -306,8 +306,8 @@ def result_data(scrip):
                 regressionResult.append(buyPatternsDict[regression_data['buyIndia']]['avg'])
                 regressionResult.append(buyPatternsDict[regression_data['buyIndia']]['count'])
                 if(int(buyPatternsDict[regression_data['buyIndia']]['count']) >= 2):
-                    if(((regression_data['kNeighboursValue'] >= 1) or (regression_data['mlpValue'] >= 2 and regression_data['kNeighboursValue'] >= 0) 
-                        or (regression_data['mlpValue'] >= 0 and regression_data['kNeighboursValue'] >= 0.5))
+                    if(((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0) 
+                        or (regression_data['mlpValue'] >= 0 and regression_data['kNeighboursValue'] >= 1))
                         and 'P@[' not in str(regression_data['sellIndia'])):
                         if(float(buyPatternsDict[regression_data['buyIndia']]['avg']) > 0.8 and int(buyPatternsDict[regression_data['buyIndia']]['count']) >= 5):
                            ws_buyPattern2.append(regressionResult)
@@ -326,8 +326,8 @@ def result_data(scrip):
         longTrend = False 
         if(all_day_pct_change_positive(regression_data)):
             longTrend = True     
-        if(((regression_data['kNeighboursValue'] >= 1) or (regression_data['mlpValue'] >= 2 and regression_data['kNeighboursValue'] >= 0) 
-           or (regression_data['mlpValue'] >= 0 and regression_data['kNeighboursValue'] >= 0.5))
+        if(((regression_data['mlpValue'] >= 1 and regression_data['kNeighboursValue'] >= 0) 
+           or (regression_data['mlpValue'] >= 0 and regression_data['kNeighboursValue'] >= 1))
            and 'P@[' not in str(regression_data['sellIndia'])
            and buyIndiaAvg >= -.5):
             ws_buyAll.append(regressionResult)
@@ -442,8 +442,8 @@ def result_data(scrip):
                 regressionResult.append(sellPatternsDict[regression_data['sellIndia']]['avg'])
                 regressionResult.append(sellPatternsDict[regression_data['sellIndia']]['count'])
                 if(int(sellPatternsDict[regression_data['sellIndia']]['count']) >= 2):
-                    if(((regression_data['kNeighboursValue'] <= -1) or (regression_data['mlpValue'] <= -2 and regression_data['kNeighboursValue'] <= 0)
-                        or (regression_data['mlpValue'] <= 0 and regression_data['kNeighboursValue'] <= -0.5))
+                    if(((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= 0)
+                        or (regression_data['mlpValue'] <= 0 and regression_data['kNeighboursValue'] <= -1))
                         and 'P@[' not in str(regression_data['buyIndia'])):
                         if(float(sellPatternsDict[regression_data['sellIndia']]['avg']) < -0.8 and int(sellPatternsDict[regression_data['sellIndia']]['count']) >= 5):
                             ws_sellPattern2.append(regressionResult)    
@@ -463,8 +463,8 @@ def result_data(scrip):
         longTrend = False 
         if(all_day_pct_change_negative(regression_data)):
             longTrend = True       
-        if(((regression_data['kNeighboursValue'] <= -1) or (regression_data['mlpValue'] <= -2 and regression_data['kNeighboursValue'] <= 0)
-           or (regression_data['mlpValue'] <= 0 and regression_data['kNeighboursValue'] <= -0.5))
+        if(((regression_data['mlpValue'] <= -1 and regression_data['kNeighboursValue'] <= 0)
+           or (regression_data['mlpValue'] <= 0 and regression_data['kNeighboursValue'] <= -1))
            and 'P@[' not in str(regression_data['buyIndia'])
            and sellIndiaAvg <= 0.5):
             ws_sellAll.append(regressionResult)

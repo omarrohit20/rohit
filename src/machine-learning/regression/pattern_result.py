@@ -129,9 +129,10 @@ def result_data(scrip):
             if (abs(float(buyPatternsDict[regression_data['buyIndia']]['avg'])) >= .1):
                 regressionResult.append(buyPatternsDict[regression_data['buyIndia']]['avg'])
                 regressionResult.append(buyPatternsDict[regression_data['buyIndia']]['count'])
-                if('P@[' not in str(regression_data['sellIndia'])):
-                    if(float(buyPatternsDict[regression_data['buyIndia']]['avg']) > 0.8):
-                       ws_buyPattern2.append(regressionResult) 
+                if(float(buyPatternsDict[regression_data['buyIndia']]['avg']) > 0.8):
+                    ws_buyPattern2.append(regressionResult)
+                elif(float(buyPatternsDict[regression_data['buyIndia']]['avg']) < -0.8):
+                    ws_sellPattern2.append(regressionResult)
                     
     regression_data = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     if(regression_data is not None):
@@ -164,9 +165,10 @@ def result_data(scrip):
             if (abs(float(sellPatternsDict[regression_data['sellIndia']]['avg'])) >= .1):
                 regressionResult.append(sellPatternsDict[regression_data['sellIndia']]['avg'])
                 regressionResult.append(sellPatternsDict[regression_data['sellIndia']]['count'])
-                if('P@[' not in str(regression_data['buyIndia'])):
-                    if(float(sellPatternsDict[regression_data['sellIndia']]['avg']) < -0.8):
-                        ws_sellPattern2.append(regressionResult)    
+                if(float(sellPatternsDict[regression_data['sellIndia']]['avg']) < -0.8):
+                    ws_sellPattern2.append(regressionResult)  
+                if(float(sellPatternsDict[regression_data['sellIndia']]['avg']) > 0.8): 
+                    ws_buyPattern2.append(regressionResult)           
                                            
 def calculateParallel(threads=2, futures=None):
     pool = ThreadPool(threads)

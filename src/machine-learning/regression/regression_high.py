@@ -296,7 +296,7 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
             
     if mlp:
         dfp_mlp = get_data_frame(df, 'mlp')
-        result = performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
+        result = performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
         regression_data['mlpValue'] = float(result[0])
     else:
         regression_data['mlpValue'] = float(0)
