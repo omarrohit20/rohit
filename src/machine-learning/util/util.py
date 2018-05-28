@@ -10,6 +10,14 @@ import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
 import numpy as np
 
+buyMLP = 1
+buyMLP_MIN = 1
+buyKN = 0.5
+buyKN_MIN = 0
+sellMLP = -1
+sellMLP_MIN = -1
+sellKN = -0.5
+sellKN_MIN = 0
 
 def getScore(vol_change, pct_change):
     try:
