@@ -17,7 +17,7 @@ import time
 import gc
 
 from util.util import getScore, all_day_pct_change_negative, all_day_pct_change_positive, no_doji_or_spinning_buy_india, no_doji_or_spinning_sell_india, scrip_patterns_to_dict
-from util.util import buyMLP, sellMLP, buyKN, sellKN, buyMLP_MIN, sellMLP_MIN, buyKN_MIN, sellKN_MIN
+from util.util import is_algo_buy, is_algo_sell
 
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
@@ -280,7 +280,7 @@ def sell_News(scrip):
     for scrip_news in scrip_newsList['news']:
         ws_sellNews.append([scrip_news['timestamp'], scrip_news['summary'], scrip_news['link']])
     ws_sellNews.append([" "])  
-   
+
 def result_data(scrip):
     resultDeclared = ""
     resultDate = ""
@@ -332,8 +332,7 @@ def result_data(scrip):
                 regressionResult.append(buyPatternsDict[regression_data['buyIndia']]['avg'])
                 regressionResult.append(buyPatternsDict[regression_data['buyIndia']]['count'])
                 if(int(buyPatternsDict[regression_data['buyIndia']]['count']) >= 2):
-                    if(((regression_data['mlpValue'] >= buyMLP and regression_data['kNeighboursValue'] >= buyKN_MIN) 
-                        or (regression_data['mlpValue'] >= buyMLP_MIN and regression_data['kNeighboursValue'] >= buyKN))
+                    if(is_algo_buy(regression_data)
                         and 'P@[' not in str(regression_data['sellIndia'])
                         and -1 < regression_data['PCT_day_change'] < 4):
                         if(float(buyPatternsDict[regression_data['buyIndia']]['avg']) > 0.8 and int(buyPatternsDict[regression_data['buyIndia']]['count']) >= 5):
@@ -353,8 +352,7 @@ def result_data(scrip):
         longTrend = False 
         if(all_day_pct_change_positive(regression_data)):
             longTrend = True     
-        if(((regression_data['mlpValue'] >= buyMLP and regression_data['kNeighboursValue'] >= buyKN_MIN) 
-            or (regression_data['mlpValue'] >= buyMLP_MIN and regression_data['kNeighboursValue'] >= buyKN))
+        if(is_algo_buy(regression_data)
             and 'P@[' not in str(regression_data['sellIndia'])
             and buyIndiaAvg >= -.5):
             ws_buyAll.append(regressionResult)
@@ -477,8 +475,7 @@ def result_data(scrip):
                 regressionResult.append(sellPatternsDict[regression_data['sellIndia']]['avg'])
                 regressionResult.append(sellPatternsDict[regression_data['sellIndia']]['count'])
                 if(int(sellPatternsDict[regression_data['sellIndia']]['count']) >= 2):
-                    if(((regression_data['mlpValue'] <= sellMLP and regression_data['kNeighboursValue'] <= sellKN_MIN)
-                        or (regression_data['mlpValue'] <= sellMLP_MIN and regression_data['kNeighboursValue'] <= sellKN))
+                    if(is_algo_sell(regression_data)
                         and 'P@[' not in str(regression_data['buyIndia'])
                         and -4 < regression_data['PCT_day_change'] < 1):
                         if(float(sellPatternsDict[regression_data['sellIndia']]['avg']) < -0.8 and int(sellPatternsDict[regression_data['sellIndia']]['count']) >= 5):
@@ -499,8 +496,7 @@ def result_data(scrip):
         longTrend = False 
         if(all_day_pct_change_negative(regression_data)):
             longTrend = True       
-        if(((regression_data['mlpValue'] <= sellMLP and regression_data['kNeighboursValue'] <= sellKN_MIN)
-            or (regression_data['mlpValue'] <= sellMLP_MIN and regression_data['kNeighboursValue'] <= sellKN))
+        if(is_algo_sell(regression_data)
             and 'P@[' not in str(regression_data['buyIndia'])
             and sellIndiaAvg <= 0.5):
             ws_sellAll.append(regressionResult)
@@ -593,19 +589,17 @@ def result_data(scrip):
                    or ('3OUTSIDE' in str(regression_data['sellIndia']) and 'SPINNINGTOP' not in str(regression_data['sellIndia']) and 'LONGLINE' not in str(regression_data['sellIndia']))
                    ) and ((regression_data['forecast_day_PCT5_change'] >= 5) or regression_data['yearLowChange'] > 50):
                     ws_sellPattern1.append(regressionResult)                                 
-                         
+                        
 def result_news(scrip):
     regression_data_high = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
-    if((regression_data_high['mlpValue'] >= buyMLP and regression_data_high['kNeighboursValue'] >= buyKN_MIN) 
-        or (regression_data_high['mlpValue'] >= buyMLP_MIN and regression_data_high['kNeighboursValue'] >= buyKN)):
+    if(is_algo_buy(regression_data_high)):
         if(regression_data_high is None):
             print('Missing or very less Data for ', scrip)
         else:
             buy_News(scrip)
             
     regression_data_low = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
-    if((regression_data_low['mlpValue'] <= sellMLP and regression_data_low['kNeighboursValue'] <= sellKN_MIN)
-        or (regression_data_low['mlpValue'] <= sellMLP_MIN and regression_data_low['kNeighboursValue'] <= sellKN)):
+    if(is_algo_sell(regression_data_low)):
         if(regression_data_low is None):
             print('Missing or very less Data for ', scrip)
         else:
@@ -629,11 +623,9 @@ def result_news(scrip):
             if start_date > news_time > end_date: 
                 if newslink in newsDict:
                     newsDict[newslink]['scrip'] = newsDict[newslink]['scrip'] + ',' + scrip
-                    if((regression_data_high['mlpValue'] >= buyMLP and regression_data_high['kNeighboursValue'] >= buyKN_MIN) 
-                        or (regression_data_high['mlpValue'] >= buyMLP_MIN and regression_data_high['kNeighboursValue'] >= buyKN)):
+                    if(is_algo_buy(regression_data_high)):
                         newsDict[newslink]['mlindicator'] = newsDict[newslink]['mlindicator'] + ',' + 'Buy:' + scrip
-                    if((regression_data_low['mlpValue'] <= sellMLP and regression_data_low['kNeighboursValue'] <= sellKN_MIN)
-                        or (regression_data_low['mlpValue'] <= sellMLP_MIN and regression_data_low['kNeighboursValue'] <= sellKN)):
+                    if(is_algo_sell(regression_data_low)):
                         newsDict[newslink]['mlindicator'] = newsDict[newslink]['mlindicator'] + ',' + 'Sell:' + scrip    
                 else:
                     newsValue = {}
@@ -641,11 +633,9 @@ def result_news(scrip):
                     newsValue['newstime'] = newstime
                     newsValue['scrip'] = scrip
                     newsValue['mlindicator'] = ""
-                    if((regression_data_high['mlpValue'] >= buyMLP and regression_data_high['kNeighboursValue'] >= buyKN_MIN) 
-                        or (regression_data_high['mlpValue'] >= buyMLP_MIN and regression_data_high['kNeighboursValue'] >= buyKN)):
+                    if(is_algo_buy(regression_data_high)):
                         newsValue['mlindicator'] = 'Buy:' + scrip
-                    if((regression_data_low['mlpValue'] <= sellMLP and regression_data_low['kNeighboursValue'] <= sellKN_MIN)
-                        or (regression_data_low['mlpValue'] <= sellMLP_MIN and regression_data_low['kNeighboursValue'] <= sellKN)):
+                    if(is_algo_sell(regression_data_low)):
                         newsValue['mlindicator'] = newsValue['mlindicator'] + ',' + 'Sell:' + scrip    
                     newsDict[newslink] = newsValue
                 
