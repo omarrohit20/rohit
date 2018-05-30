@@ -19,6 +19,20 @@ sellMLP_MIN = -1
 sellKN = -0.5
 sellKN_MIN = 0
 
+def is_algo_buy(regression_data):
+    if((regression_data['mlpValue'] >= buyMLP and regression_data['kNeighboursValue'] >= buyKN_MIN) 
+        or (regression_data['mlpValue'] >= buyMLP_MIN and regression_data['kNeighboursValue'] >= buyKN)):
+        return True
+    else:
+        return False   
+    
+def is_algo_sell(regression_data):
+    if((regression_data['mlpValue'] <= sellMLP and regression_data['kNeighboursValue'] <= sellKN_MIN)
+       or (regression_data['mlpValue'] <= sellMLP_MIN and regression_data['kNeighboursValue'] <= sellKN)):   
+        return True
+    else:
+        return False
+
 def getScore(vol_change, pct_change):
     try:
         return float(vol_change)/float(pct_change) 
