@@ -42,10 +42,12 @@ ws_buyFinal = wb.create_sheet("BuyFinal")
 ws_buyFinal.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_buyFinal1 = wb.create_sheet("BuyFinal1")
 ws_buyFinal1.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
-ws_buyPattern2 = wb.create_sheet("buyPattern2")
-ws_buyPattern2.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_buyUpTrend = wb.create_sheet("buyUpTrend")
 ws_buyUpTrend.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
+ws_buyHighIndicators = wb.create_sheet("BuyHighIndicators")
+ws_buyHighIndicators.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
+ws_buyPattern2 = wb.create_sheet("buyPattern2")
+ws_buyPattern2.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_buyPattern = wb.create_sheet("BuyPattern")
 ws_buyPattern.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_buyPattern1 = wb.create_sheet("BuyPattern1")
@@ -63,10 +65,12 @@ ws_sellFinal = wb.create_sheet("SellFinal")
 ws_sellFinal.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_sellFinal1 = wb.create_sheet("SellFinal1")
 ws_sellFinal1.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
-ws_sellPattern2 = wb.create_sheet("sellPattern2")
-ws_sellPattern2.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_sellDownTrend = wb.create_sheet("sellDownTrend")
 ws_sellDownTrend.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
+ws_sellHighIndicators = wb.create_sheet("SellHighIndicators")
+ws_sellHighIndicators.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
+ws_sellPattern2 = wb.create_sheet("sellPattern2")
+ws_sellPattern2.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_sellPattern = wb.create_sheet("SellPattern")
 ws_sellPattern.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_sellPattern1 = wb.create_sheet("SellPattern1")
@@ -216,15 +220,22 @@ def saveReports(run_type=None):
     tab = Table(displayName="Table1", ref="A1:Y" + str(count))
     tab.tableStyleInfo = style
     ws_sellDownTrend.add_table(tab)
+    
+    count = 0
+    for row in ws_buyHighIndicators.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyHighIndicators.add_table(tab)
+    
+    count = 0
+    for row in ws_sellHighIndicators.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab.tableStyleInfo = style
+    ws_sellHighIndicators.add_table(tab)
       
-    if(run_type == 'broker'):
-        wb.save(logname + "broker_buy.xlsx")
-    elif(run_type == 'result'):
-        wb.save(logname + "result.xlsx")
-    elif(run_type == 'result_declared'):
-        wb.save(logname + "result_declared.xlsx")       
-    else:
-        wb.save(logname + ".xlsx")
+    wb.save(logname + ".xlsx")
    
 def result_data(scrip):
     resultDeclared = ""
@@ -313,10 +324,15 @@ def result_data(scrip):
                 and regression_data['forecast_day_PCT10_change'] <= -10 and regression_data['forecast_day_PCT7_change'] < -5 and regression_data['forecast_day_PCT5_change'] < 0.5 and regression_data['forecast_day_PCT4_change'] < 0.5 
                 and regression_data['forecast_day_PCT2_change'] > -0.5 and regression_data['forecast_day_PCT_change'] > 0):
                 ws_buyYearLow.append(regressionResult) 
-            elif(0 < regression_data['yearLowChange'] < 15 and regression_data['yearHighChange'] < -30 
-                and (regression_data['PCT_day_change'] > 0 or regression_data['PCT_change'] > 0)
-                and regression_data['forecast_day_PCT10_change'] <= -5 and regression_data['forecast_day_PCT7_change'] < -3 and regression_data['forecast_day_PCT5_change'] < 0.5 and regression_data['forecast_day_PCT4_change'] < 0.5 ):
+            elif(0 < regression_data['yearLowChange'] < 15 and regression_data['yearHighChange'] < -25 
+                and (regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > -0.5)
+                and regression_data['forecast_day_PCT10_change'] <= -5 and regression_data['forecast_day_PCT7_change'] < -3 and regression_data['forecast_day_PCT5_change'] < 0.5):
                 ws_buyYearLow1.append(regressionResult)
+            elif(0 < regression_data['yearLowChange'] < 15 and regression_data['yearHighChange'] < -25 
+                and (regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > -0.5)
+                and regression_data['forecast_day_PCT10_change'] <= 0 and regression_data['forecast_day_PCT7_change'] < 0 and regression_data['forecast_day_PCT5_change'] < 0
+                and regression_data['forecast_day_PCT2_change'] > 0 and regression_data['forecast_day_PCT1_change'] > 0):
+                ws_buyYearLow1.append(regressionResult)    
                 
             if(longTrend and 0 < regression_data['PCT_day_change'] < 5 and regression_data['yearHighChange'] < -10
                 and regression_data['forecast_day_PCT10_change'] >= regression_data['PCT_change'] + 2
@@ -336,6 +352,12 @@ def result_data(scrip):
                     ws_buyFinal.append(regressionResult) 
                 elif(regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= -1 and regression_data['forecast_day_PCT10_change'] <= -7):
                     ws_buyFinal1.append(regressionResult) 
+                    
+            if(regression_data['mlpValue'] > 2.0 and regression_data['kNeighboursValue'] > 2.0
+               and regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0 and regression_data['forecast_day_PCT_change'] > 0
+               and regression_data['score'] == '10'
+               ):
+                ws_buyHighIndicators.append(regressionResult)
                  
             if(-1 < regression_data['PCT_day_change'] < 4 and regression_data['yearLowChange'] > 5 and regression_data['score'] != '0-1'):
                 if(('MARUBOZU' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= -5)
@@ -449,11 +471,16 @@ def result_data(scrip):
                 and regression_data['forecast_day_PCT10_change'] > 10 and regression_data['forecast_day_PCT7_change'] > 5 and regression_data['forecast_day_PCT5_change'] > -0.5 and regression_data['forecast_day_PCT4_change'] > -0.5
                 and regression_data['forecast_day_PCT2_change'] < 0 and regression_data['forecast_day_PCT_change'] < 0):
                 ws_sellYearHigh.append(regressionResult)
-            elif(-15 < regression_data['yearHighChange'] < 0 and regression_data['yearLowChange'] > 30 
-                and (regression_data['PCT_day_change'] < 0 or regression_data['PCT_change'] < 0)
-                and regression_data['forecast_day_PCT10_change'] > 5 and regression_data['forecast_day_PCT7_change'] > 3 and regression_data['forecast_day_PCT5_change'] > -0.5 and regression_data['forecast_day_PCT4_change'] > -0.5
+            elif(-10 < regression_data['yearHighChange'] < 0 and regression_data['yearLowChange'] > 30 
+                and (regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0.5)
+                and regression_data['forecast_day_PCT10_change'] > 5 and regression_data['forecast_day_PCT7_change'] > 3 and regression_data['forecast_day_PCT5_change'] > -0.5
                 and regression_data['forecast_day_PCT2_change'] < 0 and regression_data['forecast_day_PCT_change'] < 0):
-                ws_sellYearHigh1.append(regressionResult)    
+                ws_sellYearHigh1.append(regressionResult)
+            elif(-10 < regression_data['yearHighChange'] < 0 and regression_data['yearLowChange'] > 30 
+                and (regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0.5)
+                and regression_data['forecast_day_PCT10_change'] > 0 and regression_data['forecast_day_PCT7_change'] > 0 and regression_data['forecast_day_PCT5_change'] > 0
+                and regression_data['forecast_day_PCT2_change'] < 0 and regression_data['forecast_day_PCT_change'] < 0):
+                ws_sellYearHigh1.append(regressionResult)        
                 
             if(0 < regression_data['yearLowChange'] < 15 and regression_data['yearHighChange'] < -30 
                 and -2 < regression_data['PCT_day_change'] < 0 and regression_data['forecast_day_PCT_change'] < 0
@@ -484,7 +511,13 @@ def result_data(scrip):
             if(-4 < regression_data['PCT_day_change'] < 0 and regression_data['yearHighChange'] < -5):
                 if(all_day_pct_change_positive(regression_data) and regression_data['forecast_day_PCT10_change'] > 10 
                    and ('SPINNINGTOP' in str(regression_data['sellIndia']) and 'DOJI' in str(regression_data['sellIndia']))):
-                   ws_sellPattern.append(regressionResult)            
+                   ws_sellPattern.append(regressionResult) 
+                   
+            if(regression_data['mlpValue'] < -2.0 and regression_data['kNeighboursValue'] < -2.0
+               and regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0 and regression_data['forecast_day_PCT_change'] < 0
+               and regression_data['score'] == '0-1'
+               ):
+                ws_sellHighIndicators.append(regressionResult)           
         
             if(-4 < regression_data['PCT_day_change'] < 1 and regression_data['yearHighChange'] < -5 and regression_data['score'] != '10'):
                 if(('HANGINGMAN' in str(regression_data['sellIndia'])

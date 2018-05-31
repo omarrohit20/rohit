@@ -1,2 +1,2 @@
-python ./S2cripHistoryImporter.py update
+python ./S2cripHistoryImporter.py update Yes
 
