@@ -778,6 +778,10 @@ def ta_lib_data(scrip):
 
 def ta_lib_data_df(scrip, df, db_store=False):
     try:
+        stored_data = db.technical.find_one({'dataset_code':scrip})
+        if(stored_data is not None):
+            return stored_data['BuyIndicators'], stored_data['SellIndicators'], stored_data['trend'], stored_data['yearHighChange'], stored_data['yearLowChange']    
+        
         data = db.history.find_one({'dataset_code':scrip})
         if(data is None):
             print('Missing or very less Data for ', scrip) 

@@ -63,22 +63,22 @@ def get_data_frame(df, regressor="None"):
         low = columns[3]
         close = columns[4]
         volume = columns[5]
-        EMA9 = columns[-2]
-        EMA21 = columns[-1]
+        EMA9 = columns[-5]
+        EMA21 = columns[-4]
 #         for dele in range(1, 11):
 #             addFeaturesVolChange(df, dfp, volume, dele)     
         for dele in range(1, 16):
             addFeaturesHighChange(df, dfp, high, dele)
         for dele in range(1, 16):
             addFeaturesLowChange(df, dfp, low, dele) 
-        if regressor != 'mlp':      
-            for dele in range(1, 2):  
-                addFeaturesEMA9Change(df, dfp, EMA9, dele)
-                addFeaturesEMA21Change(df, dfp, EMA21, dele) 
+        
+        if regressor != 'mlp':
+            dfp['EMA9'] = df['EMA9']
+            dfp['EMA21'] = df['EMA21']
+ 
         dfp['uptrend'] = df['uptrend']
         dfp['downtrend'] = df['downtrend']    
        
- 
         if regressor != 'mlp':      
             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
             dfp['ADXR'] = ADXR(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html

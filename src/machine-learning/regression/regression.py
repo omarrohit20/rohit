@@ -80,10 +80,14 @@ def regression_ta_data(scrip):
     df['uptrend'] = np.where((df['bar_high'] >  df['bar_high_pre']) & (df['high'] > df['high_pre']), 1, 0)
     df['downtrend'] = np.where((df['bar_low'] <  df['bar_low_pre']) & (df['low'] < df['low_pre']), -1, 0)
 
+    df['MACD'], df['MACDSIGNAL'], df['MACDHIST'] = MACD(df)
     df['EMA9'] = EMA(df,9)
     df['EMA21'] = EMA(df,21)
+    df['EMA50'] = EMA(df,50)
+    df['EMA100'] = EMA(df,100)
+    df['EMA200'] = EMA(df,200)
     
-    buy, sell, trend, yearHighChange, yearLowChange = ta_lib_data_df(scrip, df, False) 
+    buy, sell, trend, yearHighChange, yearLowChange = ta_lib_data_df(scrip, df, True) 
     process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory)
     process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory)    
 

@@ -72,18 +72,19 @@ def get_data_frame(df, regressor="None"):
         low = columns[3]
         close = columns[4]
         volume = columns[5]
-        EMA9 = columns[-2]
-        EMA21 = columns[-1]
+        EMA21 = columns[-4]
+        EMA9 = columns[-5]
 #         for dele in range(1, 11):
 #             addFeaturesVolChange(df, dfp, volume, dele)     
         for dele in range(1, 16):
             addFeaturesHighChange(df, dfp, high, dele)
         for dele in range(1, 16):
             addFeaturesLowChange(df, dfp, low, dele) 
-        if regressor != 'mlp':      
-            for dele in range(1, 2):  
-                addFeaturesEMA9Change(df, dfp, EMA9, dele)
-                addFeaturesEMA21Change(df, dfp, EMA21, dele) 
+        
+        dfp['EMA9'] = df['EMA9']
+        dfp['EMA21'] = df['EMA21'] 
+        dfp['EMA50'] = df['EMA50'] 
+ 
         dfp['uptrend'] = df['uptrend']
         dfp['downtrend'] = df['downtrend']    
  
