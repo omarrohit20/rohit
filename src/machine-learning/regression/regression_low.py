@@ -18,8 +18,6 @@ from Algorithms.regression_helpers import load_dataset, addFeatures, addFeatures
     mergeDataframes, count_missing, applyTimeLag, performRegression
     
 from util.util import getScore, all_day_pct_change_negative, all_day_pct_change_positive, historical_data    
-    
-from technical import ta_lib_data  
 
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import BaggingRegressor
