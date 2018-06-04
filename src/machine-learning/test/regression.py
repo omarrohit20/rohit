@@ -80,8 +80,12 @@ def regression_ta_data(scrip):
     df['uptrend'] = np.where((df['bar_high'] >  df['bar_high_pre']) & (df['high'] > df['high_pre']), 1, 0)
     df['downtrend'] = np.where((df['bar_low'] <  df['bar_low_pre']) & (df['low'] < df['low_pre']), -1, 0)
 
+    df['MACD'], df['MACDSIGNAL'], df['MACDHIST'] = MACD(df)
     df['EMA9'] = EMA(df,9)
     df['EMA21'] = EMA(df,21)
+    df['EMA50'] = EMA(df,50)
+    df['EMA100'] = EMA(df,100)
+    df['EMA200'] = EMA(df,200)
     
     df.dropna(subset=['Act_PCT_change'], inplace = True)
     size = int(int(np.floor(df.shape[0]))/3)
@@ -109,5 +113,5 @@ def calculateParallel(threads=1):
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(1)
+    calculateParallel(4)
     connection.close()

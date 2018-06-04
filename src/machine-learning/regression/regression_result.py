@@ -79,6 +79,32 @@ ws_sellPattern1 = wb.create_sheet("SellPattern1")
 ws_sellPattern1.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 
 def saveReports(run_type=None):
+    ws_buyAll.append([""])
+    ws_buyYearHigh.append([""])
+    ws_buyYearLow.append([""])
+    ws_buyYearLow1.append([""])
+    ws_buyFinal.append([""])
+    ws_buyFinal1.append([""])
+    ws_buyUpTrend.append([""])
+    ws_buyHighIndicators.append([""])
+    ws_buyPattern2.append([""])
+    ws_buyPattern.append([""])
+    ws_buyPattern1.append([""])
+    ws_threeDayLow.append([""])
+        
+    ws_sellAll.append([""])
+    ws_sellYearLow.append([""])
+    ws_sellYearHigh.append([""])
+    ws_sellYearHigh1.append([""])
+    ws_sellFinal.append([""])
+    ws_sellFinal1.append([""])
+    ws_sellDownTrend.append([""])
+    ws_sellHighIndicators.append([""])
+    ws_sellPattern2.append([""])
+    ws_sellPattern.append([""])
+    ws_sellPattern1.append([""])
+
+    
     # Add a default style with striped rows and banded columns
     style = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False,
                showLastColumn=False, showRowStripes=True, showColumnStripes=True)
@@ -91,18 +117,90 @@ def saveReports(run_type=None):
     ws_buyAll.add_table(tab)
     
     count = 0
-    for row in ws_sellAll.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
-    tab.tableStyleInfo = style
-    ws_sellAll.add_table(tab)
-    
-    count = 0
     for row in ws_buyYearHigh.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:Y" + str(count))
     tab.tableStyleInfo = style
     ws_buyYearHigh.add_table(tab)
+     
+    count = 0
+    for row in ws_buyYearLow.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyYearLow.add_table(tab)
+   
+    count = 0
+    for row in ws_buyYearLow1.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyYearLow1.add_table(tab)
+     
+    count = 0
+    for row in ws_buyFinal.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyFinal.add_table(tab)
+     
+    count = 0
+    for row in ws_buyFinal1.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyFinal1.add_table(tab)
+     
+    count = 0
+    for row in ws_buyPattern.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyPattern.add_table(tab)
+     
+    count = 0
+    for row in ws_buyPattern1.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyPattern1.add_table(tab)
+     
+    count = 0
+    for row in ws_buyPattern2.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyPattern2.add_table(tab)
+     
+    count = 0
+    for row in ws_buyUpTrend.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyUpTrend.add_table(tab)
+     
+    count = 0
+    for row in ws_buyHighIndicators.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyHighIndicators.add_table(tab)
+     
+    count = 0
+    for row in ws_threeDayLow.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab.tableStyleInfo = style
+    ws_threeDayLow.add_table(tab)
+    
+    
+    
+    count = 0
+    for row in ws_sellAll.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab.tableStyleInfo = style
+    ws_sellAll.add_table(tab)
     
     count = 0
     for row in ws_sellYearHigh.iter_rows(row_offset=1):
@@ -119,32 +217,11 @@ def saveReports(run_type=None):
     ws_sellYearHigh1.add_table(tab)
     
     count = 0
-    for row in ws_buyYearLow.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
-    tab.tableStyleInfo = style
-    ws_buyYearLow.add_table(tab)
-    
-    count = 0
-    for row in ws_buyYearLow1.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
-    tab.tableStyleInfo = style
-    ws_buyYearLow1.add_table(tab)
-    
-    count = 0
     for row in ws_sellYearLow.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:Y" + str(count))
     tab.tableStyleInfo = style
     ws_sellYearLow.add_table(tab)
-    
-    count = 0
-    for row in ws_buyFinal.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
-    tab.tableStyleInfo = style
-    ws_buyFinal.add_table(tab)
     
     count = 0
     for row in ws_sellFinal.iter_rows(row_offset=1):
@@ -154,13 +231,6 @@ def saveReports(run_type=None):
     ws_sellFinal.add_table(tab)
     
     count = 0
-    for row in ws_buyFinal1.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
-    tab.tableStyleInfo = style
-    ws_buyFinal1.add_table(tab)
-    
-    count = 0
     for row in ws_sellFinal1.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:Y" + str(count))
@@ -168,25 +238,11 @@ def saveReports(run_type=None):
     ws_sellFinal1.add_table(tab)
     
     count = 0
-    for row in ws_buyPattern.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
-    tab.tableStyleInfo = style
-    ws_buyPattern.add_table(tab)
-    
-    count = 0
     for row in ws_sellPattern.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:Y" + str(count))
     tab.tableStyleInfo = style
     ws_sellPattern.add_table(tab)
-      
-    count = 0
-    for row in ws_buyPattern1.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
-    tab.tableStyleInfo = style
-    ws_buyPattern1.add_table(tab)
     
     count = 0
     for row in ws_sellPattern1.iter_rows(row_offset=1):
@@ -196,25 +252,11 @@ def saveReports(run_type=None):
     ws_sellPattern1.add_table(tab)
     
     count = 0
-    for row in ws_buyPattern2.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
-    tab.tableStyleInfo = style
-    ws_buyPattern2.add_table(tab)
-    
-    count = 0
     for row in ws_sellPattern2.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:Y" + str(count))
     tab.tableStyleInfo = style
     ws_sellPattern2.add_table(tab)
-    
-    count = 0
-    for row in ws_buyUpTrend.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
-    tab.tableStyleInfo = style
-    ws_buyUpTrend.add_table(tab)
     
     count = 0
     for row in ws_sellDownTrend.iter_rows(row_offset=1):
@@ -224,27 +266,14 @@ def saveReports(run_type=None):
     ws_sellDownTrend.add_table(tab)
     
     count = 0
-    for row in ws_buyHighIndicators.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
-    tab.tableStyleInfo = style
-    ws_buyHighIndicators.add_table(tab)
-    
-    count = 0
     for row in ws_sellHighIndicators.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:Y" + str(count))
     tab.tableStyleInfo = style
     ws_sellHighIndicators.add_table(tab)
     
-    count = 0
-    for row in ws_threeDayLow.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
-    tab.tableStyleInfo = style
-    ws_threeDayLow.add_table(tab)
-      
     wb.save(logname + ".xlsx")
+   
    
 def result_data(scrip):
     resultDeclared = ""
@@ -334,13 +363,13 @@ def result_data(scrip):
                 and regression_data['forecast_day_PCT2_change'] > -0.5 and regression_data['forecast_day_PCT_change'] > 0):
                 ws_buyYearLow.append(regressionResult) 
             elif(0 < regression_data['yearLowChange'] < 15 and regression_data['yearHighChange'] < -25 
-                and (5 > regression_data['PCT_day_change'] > 0.75 and regression_data['PCT_change'] > -0.5)
+                and (5 > regression_data['PCT_day_change'] > 0.75 and regression_data['PCT_change'] > -0.5 and regression_data['PCT_day_change'] >= regression_data['PCT_change'])
                 and regression_data['forecast_day_PCT10_change'] <= -5 and regression_data['forecast_day_PCT7_change'] < -3 and regression_data['forecast_day_PCT5_change'] < 0.5):
                 ws_buyYearLow1.append(regressionResult)
             elif(0 < regression_data['yearLowChange'] < 15 and regression_data['yearHighChange'] < -25 
-                and (5 > regression_data['PCT_day_change'] > 0.75 and regression_data['PCT_change'] > -0.5)
+                and (5 > regression_data['PCT_day_change'] > 0.75 and regression_data['PCT_change'] > -0.5 and regression_data['PCT_day_change'] >= regression_data['PCT_change'])
                 and regression_data['forecast_day_PCT10_change'] <= 0 and regression_data['forecast_day_PCT7_change'] < 0 and regression_data['forecast_day_PCT5_change'] < 0
-                and regression_data['forecast_day_PCT2_change'] > 0 and regression_data['forecast_day_PCT1_change'] > 0):
+                and regression_data['forecast_day_PCT2_change'] > 0 and regression_data['forecast_day_PCT_change'] > 0):
                 ws_buyYearLow1.append(regressionResult)    
                 
             if(longTrend and 0 < regression_data['PCT_day_change'] < 5 and regression_data['yearHighChange'] < -10

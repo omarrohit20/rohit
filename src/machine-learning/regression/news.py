@@ -85,6 +85,34 @@ ws_sellNews = wb.create_sheet("SellNews")
 ws_sellNews.append(["timestamps", "summary", "Link", "MLIndicator"])
 
 def saveReports(run_type=None):
+    ws_buyAll.append([""])
+    ws_buyYearHigh.append([""])
+    ws_buyYearLow.append([""])
+    ws_buyYearLow1.append([""])
+    ws_buyFinal.append([""])
+    ws_buyFinal1.append([""])
+    ws_buyUpTrend.append([""])
+    ws_buyHighIndicators.append([""])
+    ws_buyPattern2.append([""])
+    ws_buyPattern.append([""])
+    ws_buyPattern1.append([""])
+    ws_threeDayLow.append([""])
+        
+    ws_sellAll.append([""])
+    ws_sellYearLow.append([""])
+    ws_sellYearHigh.append([""])
+    ws_sellYearHigh1.append([""])
+    ws_sellFinal.append([""])
+    ws_sellFinal1.append([""])
+    ws_sellDownTrend.append([""])
+    ws_sellHighIndicators.append([""])
+    ws_sellPattern2.append([""])
+    ws_sellPattern.append([""])
+    ws_sellPattern1.append([""])
+    
+    ws_buyNews.append([""])
+    ws_sellNews.append([""])
+    
     # Add a default style with striped rows and banded columns
     style = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False,
                showLastColumn=False, showRowStripes=True, showColumnStripes=True)
