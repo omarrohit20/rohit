@@ -92,11 +92,11 @@ end
 # Dry run to get list of test scenario
 File.open('newslink.txt').each do |line|
   symbol = line.split('|')[2].gsub(/\s+/, "")
-  link = line.split('|')[2].gsub(/\s+/, "")
+  newslink = line.split('|')[3].gsub(/\s+/, "")
   count = 0
   client[:news].find({:scrip => symbol}).each{ |row| count = count + 1 }
   if count == 0
-    link = symbol + '@' + link
+    link = symbol + '@' + newslink
     $testcases[link] = RETRYCOUNT
     puts 'News not exist: ' + symbol
   else
