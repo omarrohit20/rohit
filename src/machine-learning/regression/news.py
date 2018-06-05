@@ -96,7 +96,6 @@ def saveReports(run_type=None):
     ws_buyPattern2.append([""])
     ws_buyPattern.append([""])
     ws_buyPattern1.append([""])
-    ws_threeDayLow.append([""])
         
     ws_sellAll.append([""])
     ws_sellYearLow.append([""])

@@ -73,6 +73,10 @@ def get_data_frame(df, regressor="None"):
         if regressor != 'mlp':
             dfp['EMA9'] = df['EMA9']
             dfp['EMA21'] = df['EMA21']
+#         if regressor != 'mlp':      
+#             for dele in range(1, 2):  
+#                 addFeaturesEMA9Change(df, dfp, EMA9, dele)
+#                 addFeaturesEMA21Change(df, dfp, EMA21, dele) 
  
         dfp['uptrend'] = df['uptrend']
         dfp['downtrend'] = df['downtrend']    
