@@ -44,6 +44,8 @@ ws_buyFinal1 = wb.create_sheet("BuyFinal1")
 ws_buyFinal1.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_buyUpTrend = wb.create_sheet("buyUpTrend")
 ws_buyUpTrend.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
+ws_buyDownTrend = wb.create_sheet("buyDownTrend")
+ws_buyDownTrend.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_buyHighIndicators = wb.create_sheet("BuyHighIndicators")
 ws_buyHighIndicators.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_buyPattern2 = wb.create_sheet("buyPattern2")
@@ -69,6 +71,8 @@ ws_sellFinal1 = wb.create_sheet("SellFinal1")
 ws_sellFinal1.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_sellDownTrend = wb.create_sheet("sellDownTrend")
 ws_sellDownTrend.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
+ws_sellUpTrend = wb.create_sheet("sellUpTrend")
+ws_sellUpTrend.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_sellHighIndicators = wb.create_sheet("SellHighIndicators")
 ws_sellHighIndicators.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_sellPattern2 = wb.create_sheet("sellPattern2")
@@ -86,6 +90,7 @@ def saveReports(run_type=None):
     ws_buyFinal.append([""])
     ws_buyFinal1.append([""])
     ws_buyUpTrend.append([""])
+    ws_buyDownTrend.append([""])
     ws_buyHighIndicators.append([""])
     ws_buyPattern2.append([""])
     ws_buyPattern.append([""])
@@ -99,6 +104,7 @@ def saveReports(run_type=None):
     ws_sellFinal.append([""])
     ws_sellFinal1.append([""])
     ws_sellDownTrend.append([""])
+    ws_sellUpTrend.append([""])
     ws_sellHighIndicators.append([""])
     ws_sellPattern2.append([""])
     ws_sellPattern.append([""])
@@ -178,6 +184,13 @@ def saveReports(run_type=None):
     tab = Table(displayName="Table1", ref="A1:Y" + str(count))
     tab.tableStyleInfo = style
     ws_buyUpTrend.add_table(tab)
+    
+    count = 0
+    for row in ws_buyDownTrend.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyDownTrend.add_table(tab)
      
     count = 0
     for row in ws_buyHighIndicators.iter_rows(row_offset=1):
@@ -266,6 +279,13 @@ def saveReports(run_type=None):
     ws_sellDownTrend.add_table(tab)
     
     count = 0
+    for row in ws_sellUpTrend.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab.tableStyleInfo = style
+    ws_sellUpTrend.add_table(tab)
+    
+    count = 0
     for row in ws_sellHighIndicators.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:Y" + str(count))
@@ -273,8 +293,7 @@ def saveReports(run_type=None):
     ws_sellHighIndicators.add_table(tab)
     
     wb.save(logname + ".xlsx")
-   
-   
+      
 def result_data(scrip):
     resultDeclared = ""
     resultDate = ""
@@ -342,10 +361,7 @@ def result_data(scrip):
             score = 'up'    
         dayClose = False
         if(regression_data['PCT_day_change'] > .5 and regression_data['PCT_change'] < .1):
-            dayClose = True
-        longTrend = False 
-        if(all_day_pct_change_positive(regression_data)):
-            longTrend = True     
+            dayClose = True  
         if(is_algo_buy(regression_data)
             and 'P@[' not in str(regression_data['sellIndia'])
             and buyIndiaAvg >= -.5):
@@ -372,7 +388,7 @@ def result_data(scrip):
                 and regression_data['forecast_day_PCT2_change'] > 0 and regression_data['forecast_day_PCT_change'] > 0):
                 ws_buyYearLow1.append(regressionResult)    
                 
-            if(longTrend and 0 < regression_data['PCT_day_change'] < 5 and regression_data['yearHighChange'] < -10
+            if(all_day_pct_change_positive(regression_data) and 0 < regression_data['PCT_day_change'] < 5 and regression_data['yearHighChange'] < -10
                 and regression_data['forecast_day_PCT10_change'] >= regression_data['PCT_change'] + 2
                 and regression_data['forecast_day_PCT10_change'] >= regression_data['PCT_day_change'] + 2
                 and no_doji_or_spinning_buy_india(regression_data)):
@@ -381,6 +397,8 @@ def result_data(scrip):
 #                  and no_doji_or_spinning_buy_india(regression_data)
 #                  and abs(regression_data['PCT_day_change']) == abs(regression_data['PCT_day_change']) and regression_data['forecast_day_VOL_change'] > 25): 
 #                 ws_buyUpTrend.append(regressionResult)  
+            if(all_day_pct_change_negative(regression_data) and 0 < regression_data['PCT_day_change'] < 5 and regression_data['yearHighChange'] < -10):
+                ws_buyDownTrend.append(regressionResult)
                    
             if(regression_data['yearHighChange'] < -10 and regression_data['score'] != '0-1'
                and 3 > regression_data['PCT_day_change'] > 0.50 and 3 > regression_data['PCT_change'] > 0.75):   
@@ -504,10 +522,7 @@ def result_data(scrip):
             score = 'down'
         dayClose = False
         if(regression_data['PCT_day_change'] < -.5 and regression_data['PCT_change'] > -.1):
-            dayClose = True
-        longTrend = False 
-        if(all_day_pct_change_negative(regression_data)):
-            longTrend = True       
+            dayClose = True   
         if(is_algo_sell(regression_data)
             and 'P@[' not in str(regression_data['buyIndia'])
             and sellIndiaAvg <= 0.5):
@@ -533,7 +548,7 @@ def result_data(scrip):
                 and all_day_pct_change_negative(regression_data) and no_doji_or_spinning_sell_india(regression_data)):
                 ws_sellYearLow.append(regressionResult)
                 
-            if(longTrend and -5 < regression_data['PCT_day_change'] < 0 and regression_data['yearLowChange'] > 30
+            if(all_day_pct_change_negative(regression_data) and -5 < regression_data['PCT_day_change'] < 0 and regression_data['yearLowChange'] > 30
                 and regression_data['forecast_day_PCT10_change'] <= regression_data['PCT_change'] - 2
                 and regression_data['forecast_day_PCT10_change'] <= regression_data['PCT_day_change'] - 2
                 and no_doji_or_spinning_sell_india(regression_data)):
@@ -542,6 +557,9 @@ def result_data(scrip):
 #                  and no_doji_or_spinning_sell_india(regression_data)
 #                  and abs(regression_data['PCT_day_change']) == abs(regression_data['PCT_day_change']) and regression_data['forecast_day_VOL_change'] > 25): 
 #                 ws_sellDownTrend.append(regressionResult)         
+            
+            if(all_day_pct_change_positive(regression_data) and -5 < regression_data['PCT_day_change'] < 0 and regression_data['yearLowChange'] > 30):
+                ws_sellUpTrend.append(regressionResult)
             
             if(regression_data['yearLowChange'] > 10 and regression_data['score'] != '10'
                and -3 < regression_data['PCT_day_change'] < -0.50 and -3 < regression_data['PCT_change'] < -0.75):
