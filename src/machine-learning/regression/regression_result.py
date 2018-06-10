@@ -363,6 +363,7 @@ def result_data(scrip):
         if(regression_data['PCT_day_change'] > .5 and regression_data['PCT_change'] < .1):
             dayClose = True  
         if(is_algo_buy(regression_data)
+            and (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low'])
             and 'P@[' not in str(regression_data['sellIndia'])
             and buyIndiaAvg >= -.5):
             ws_buyAll.append(regressionResult)
@@ -524,6 +525,7 @@ def result_data(scrip):
         if(regression_data['PCT_day_change'] < -.5 and regression_data['PCT_change'] > -.1):
             dayClose = True   
         if(is_algo_sell(regression_data)
+            and (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low'])
             and 'P@[' not in str(regression_data['buyIndia'])
             and sellIndiaAvg <= 0.5):
             ws_sellAll.append(regressionResult)

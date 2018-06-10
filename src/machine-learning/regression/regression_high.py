@@ -79,7 +79,9 @@ def get_data_frame(df, regressor="None"):
 #                 addFeaturesEMA21Change(df, dfp, EMA21, dele) 
  
         dfp['uptrend'] = df['uptrend']
-        dfp['downtrend'] = df['downtrend']    
+        dfp['downtrend'] = df['downtrend']
+        dfp['HH'] = df['HH']
+        dfp['LL'] = df['LL']   
        
         if regressor != 'mlp':      
             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
@@ -256,6 +258,12 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     Act_High_change = df.tail(1).loc[-forecast_out:, 'Act_High_change'].values[0]
     Act_Low_change = df.tail(1).loc[-forecast_out:, 'Act_Low_change'].values[0]
     score = df.tail(1).loc[-forecast_out:, 'uptrend'].values[0].astype(str) + '' + df.tail(1).loc[-forecast_out:, 'downtrend'].values[0].astype(str)
+    open = df.tail(1).loc[-forecast_out:, 'open'].values[0]
+    high = df.tail(1).loc[-forecast_out:, 'high'].values[0]
+    low = df.tail(1).loc[-forecast_out:, 'low'].values[0]
+    bar_high = df.tail(1).loc[-forecast_out:, 'bar_high'].values[0]
+    bar_low = df.tail(1).loc[-forecast_out:, 'bar_low'].values[0]
+    close = df.tail(1).loc[-forecast_out:, 'close'].values[0]
     
     regression_data = {}
     regression_data['date'] = forecast_day_date
@@ -288,6 +296,12 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     regression_data['Act_PCT_day_HO'] = float(Act_PCT_day_HO)
     regression_data['Act_High_change'] = float(Act_High_change)
     regression_data['Act_Low_change'] = float(Act_Low_change)
+    regression_data['open'] = float(open)
+    regression_data['high'] = float(high)
+    regression_data['low'] = float(low)
+    regression_data['bar_high'] = float(bar_high)
+    regression_data['bar_low'] = float(bar_low)
+    regression_data['close'] = float(close)
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     if kNeighbours:

@@ -79,6 +79,11 @@ def regression_ta_data(scrip):
     df['bar_low_pre'] = np.where(df['close_pre'] > df['open_pre'], df['open_pre'], df['close_pre'])
     df['uptrend'] = np.where((df['bar_high'] >  df['bar_high_pre']) & (df['high'] > df['high_pre']), 1, 0)
     df['downtrend'] = np.where((df['bar_low'] <  df['bar_low_pre']) & (df['low'] < df['low_pre']), -1, 0)
+    df['bar'] = df['bar_high'] - df['bar_low']
+    df['HH'] = np.where((df['high']-df['bar_high']) > (df['bar_high']-df['bar_low']), 1, 0)
+    df['LL'] = np.where((df['bar_low']-df['low']) > (df['bar_high']-df['bar_low']), 1, 0)
+    df['HHPc'] = ((((df['high']-df['bar_high']) - df['bar'])/df['bar'])*100).astype(float).round(1)
+    df['LLPc'] = ((((df['bar_low']-df['low']) - df['bar'])/df['bar'])*100).astype(float).round(1)
 
     df['MACD'], df['MACDSIGNAL'], df['MACDHIST'] = MACD(df)
     df['EMA9'] = EMA(df,9)
