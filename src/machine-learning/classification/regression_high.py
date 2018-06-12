@@ -15,10 +15,10 @@ from talib.abstract import *
 #from pip.req.req_file import preprocess
 from Algorithms.regression_helpers import load_dataset, addFeatures, addFeaturesVolChange, \
     addFeaturesOpenChange, addFeaturesHighChange, addFeaturesLowChange, addFeaturesEMA9Change, addFeaturesEMA21Change, \
-    mergeDataframes, count_missing, applyTimeLag, performRegression
+    mergeDataframes, count_missing, applyTimeLag, performClassification
     
 from util.util import getScore, all_day_pct_change_negative, all_day_pct_change_positive, historical_data
-from util.util import soft 
+from util.util import soft  
 
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import BaggingRegressor
@@ -41,7 +41,7 @@ connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
 forecast_out = 1
-split = .90
+split = .97
 randomForest = False
 mlp = True
 bagging = False
@@ -62,8 +62,8 @@ def get_data_frame(df, regressor="None"):
         low = columns[3]
         close = columns[4]
         volume = columns[5]
-        EMA21 = columns[-4]
         EMA9 = columns[-5]
+        EMA21 = columns[-4]
 #         for dele in range(1, 11):
 #             addFeaturesVolChange(df, dfp, volume, dele)     
         for dele in range(1, 16):
@@ -71,9 +71,9 @@ def get_data_frame(df, regressor="None"):
         for dele in range(1, 16):
             addFeaturesLowChange(df, dfp, low, dele) 
         
-        dfp['EMA9'] = df['EMA9']
-        dfp['EMA21'] = df['EMA21'] 
-        dfp['EMA50'] = df['EMA50'] 
+#         if regressor != 'mlp':
+#             dfp['EMA9'] = df['EMA9']
+#             dfp['EMA21'] = df['EMA21']
 #         if regressor != 'mlp':      
 #             for dele in range(1, 2):  
 #                 addFeaturesEMA9Change(df, dfp, EMA9, dele)
@@ -84,7 +84,7 @@ def get_data_frame(df, regressor="None"):
         if soft == False:
             dfp['HH'] = df['HH']
             dfp['LL'] = df['LL']   
- 
+       
         if regressor != 'mlp':      
             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
             dfp['ADXR'] = ADXR(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html
@@ -221,31 +221,31 @@ def get_data_frame(df, regressor="None"):
 #        dfp['ADOSC'] = ADOSC(df)
 #        dfp['OBV'] = OBV(df)
         dfp = dfp.ix[50:]    
-        forecast_col = 'Low_change1'
+        forecast_col = 'High_change1'
         dfp.dropna(inplace=True)
         dfp['label'] = dfp[forecast_col].shift(-forecast_out) 
         return dfp
 
 def create_csv(regression_data):
-    regression_data_db = db.regressionlow.find_one({'scrip':regression_data['scrip']})
+    regression_data_db = db.classificationhigh.find_one({'scrip':regression_data['scrip']})
     if(regression_data_db is None):
         json_data = json.loads(json.dumps(regression_data))
-        db.regressionlow.insert_one(json_data)    
-
-def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory):
-    regression_data_db = db.regressionlow.find_one({'scrip':scrip})
+        db.classificationhigh.insert_one(json_data)    
+    
+def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory):
+    regression_data_db = db.classificationhigh.find_one({'scrip':scrip})
     if(regression_data_db is not None):
         return
     
     dfp = get_data_frame(df)
     
-    forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'Low_change1'].values[0]
-    forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'Low_change2'].values[0]
-    forecast_day_PCT3_change = dfp.tail(1).loc[-forecast_out:, 'Low_change3'].values[0]
-    forecast_day_PCT4_change = dfp.tail(1).loc[-forecast_out:, 'Low_change4'].values[0]
-    forecast_day_PCT5_change = dfp.tail(1).loc[-forecast_out:, 'Low_change5'].values[0]
-    forecast_day_PCT7_change = dfp.tail(1).loc[-forecast_out:, 'Low_change7'].values[0]
-    forecast_day_PCT10_change = dfp.tail(1).loc[-forecast_out:, 'Low_change10'].values[0]
+    forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'High_change1'].values[0]
+    forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'High_change2'].values[0]
+    forecast_day_PCT3_change = dfp.tail(1).loc[-forecast_out:, 'High_change3'].values[0]
+    forecast_day_PCT4_change = dfp.tail(1).loc[-forecast_out:, 'High_change4'].values[0]
+    forecast_day_PCT5_change = dfp.tail(1).loc[-forecast_out:, 'High_change5'].values[0]
+    forecast_day_PCT7_change = dfp.tail(1).loc[-forecast_out:, 'High_change7'].values[0]
+    forecast_day_PCT10_change = dfp.tail(1).loc[-forecast_out:, 'High_change10'].values[0]
     forecast_day_VOL_change = df.tail(1).loc[-forecast_out:, 'VOL_change'].values[0]
     forecast_day_date = df.tail(1).loc[-forecast_out:, 'date'].values[0]
     PCT_change = df.tail(1).loc[-forecast_out:,'PCT_change'].values[0]
@@ -305,21 +305,20 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     regression_data['bar_low'] = float(bar_low)
     regression_data['close'] = float(close)
     
-    
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     if kNeighbours:
-        result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1))
+        #result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1, n_neighbors=3))
+        result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(random_state=1, n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1))
         regression_data['kNeighboursValue'] = float(result[0])
     else:
         regression_data['kNeighboursValue'] = float(0)
-        
+            
     if mlp:
         dfp_mlp = get_data_frame(df, 'mlp')
-        result = performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
+        result = performClassification(dfp_mlp, split, scrip, directory, forecast_out, MLPClassifier(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25)))
         regression_data['mlpValue'] = float(result[0])
     else:
         regression_data['mlpValue'] = float(0)
-        
     
-    create_csv(regression_data)   
+    create_csv(regression_data)  
                                                           

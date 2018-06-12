@@ -15,7 +15,7 @@ from talib.abstract import *
 #from pip.req.req_file import preprocess
 from Algorithms.regression_helpers import load_dataset, addFeatures, addFeaturesVolChange, \
     addFeaturesOpenChange, addFeaturesHighChange, addFeaturesLowChange, addFeaturesEMA9Change, addFeaturesEMA21Change, \
-    mergeDataframes, count_missing, applyTimeLag, performRegression
+    mergeDataframes, count_missing, applyTimeLag, performClassification
     
 from util.util import getScore, all_day_pct_change_negative, all_day_pct_change_positive, historical_data
 from util.util import soft 
@@ -41,7 +41,7 @@ connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
 forecast_out = 1
-split = .90
+split = .97
 randomForest = False
 mlp = True
 bagging = False
@@ -71,9 +71,9 @@ def get_data_frame(df, regressor="None"):
         for dele in range(1, 16):
             addFeaturesLowChange(df, dfp, low, dele) 
         
-        dfp['EMA9'] = df['EMA9']
-        dfp['EMA21'] = df['EMA21'] 
-        dfp['EMA50'] = df['EMA50'] 
+#         dfp['EMA9'] = df['EMA9']
+#         dfp['EMA21'] = df['EMA21'] 
+#         dfp['EMA50'] = df['EMA50'] 
 #         if regressor != 'mlp':      
 #             for dele in range(1, 2):  
 #                 addFeaturesEMA9Change(df, dfp, EMA9, dele)
@@ -227,13 +227,13 @@ def get_data_frame(df, regressor="None"):
         return dfp
 
 def create_csv(regression_data):
-    regression_data_db = db.regressionlow.find_one({'scrip':regression_data['scrip']})
+    regression_data_db = db.classificationlow.find_one({'scrip':regression_data['scrip']})
     if(regression_data_db is None):
         json_data = json.loads(json.dumps(regression_data))
-        db.regressionlow.insert_one(json_data)    
+        db.classificationlow.insert_one(json_data)    
 
 def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory):
-    regression_data_db = db.regressionlow.find_one({'scrip':scrip})
+    regression_data_db = db.classificationlow.find_one({'scrip':scrip})
     if(regression_data_db is not None):
         return
     
@@ -308,14 +308,15 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     if kNeighbours:
-        result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1))
+        #result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1, n_neighbors=3))
+        result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(random_state=1, n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1))
         regression_data['kNeighboursValue'] = float(result[0])
     else:
         regression_data['kNeighboursValue'] = float(0)
-        
+            
     if mlp:
         dfp_mlp = get_data_frame(df, 'mlp')
-        result = performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
+        result = performClassification(dfp_mlp, split, scrip, directory, forecast_out, MLPClassifier(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25)))
         regression_data['mlpValue'] = float(result[0])
     else:
         regression_data['mlpValue'] = float(0)
