@@ -76,7 +76,7 @@ def process_container
           $logger.info("#######################################")
           $logger.info(testcase)
           $logger.info(output)
-          #`docker cp #{did}:/opt/saas-shipping-ui/qa-automation/temp ../reports`
+          `docker cp #{did}:/opt/saas-shipping-ui/qa-automation/temp ../reports`
           $users_queue.push(users)
           $FAILED += 1
         end

@@ -17,7 +17,8 @@ from Algorithms.regression_helpers import load_dataset, addFeatures, addFeatures
     addFeaturesOpenChange, addFeaturesHighChange, addFeaturesLowChange, addFeaturesEMA9Change, addFeaturesEMA21Change, \
     mergeDataframes, count_missing, applyTimeLag, performRegression
     
-from util.util import getScore, all_day_pct_change_negative, all_day_pct_change_positive, historical_data    
+from util.util import getScore, all_day_pct_change_negative, all_day_pct_change_positive, historical_data
+from util.util import soft 
 
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import BaggingRegressor
@@ -38,15 +39,6 @@ from sklearn.grid_search import GridSearchCV
 
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
-
-forecast_out = 1
-split = .99
-randomForest = False
-mlp = True
-bagging = False
-adaBoost = False
-kNeighbours = True
-gradientBoosting = False
 
 forecast_out = 1
 split = .99
@@ -89,8 +81,9 @@ def get_data_frame(df, regressor="None"):
  
         dfp['uptrend'] = df['uptrend']
         dfp['downtrend'] = df['downtrend']
-        dfp['HH'] = df['HH']
-        dfp['LL'] = df['LL']   
+        if soft == False:
+            dfp['HH'] = df['HH']
+            dfp['LL'] = df['LL']   
  
         if regressor != 'mlp':      
             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp

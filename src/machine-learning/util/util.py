@@ -10,6 +10,8 @@ import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
 import numpy as np
 
+soft=False
+
 buyMLP = 1
 buyMLP_MIN = 1
 buyKN = 0.5

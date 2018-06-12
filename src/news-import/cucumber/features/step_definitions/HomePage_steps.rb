@@ -3,6 +3,7 @@ And(/^User navigate to (.*)$/) do |url|
 end
 
 And(/^User navigate env link$/) do
+  #home_page_white_box.visit_home_page('https://www.moneycontrol.com/')
   home_page_white_box.visit_env_link
 end
 
