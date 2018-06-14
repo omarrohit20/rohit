@@ -41,7 +41,7 @@ connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
 forecast_out = 1
-split = .90
+split = .98
 randomForest = False
 mlp = True
 bagging = False

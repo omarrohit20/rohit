@@ -24,7 +24,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import BaggingRegressor
 from sklearn.ensemble import AdaBoostRegressor
 from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.neighbors import KNeighborsRegressor
+from sklearn.neighbors import KNeighborsRegressor, RadiusNeighborsClassifier
 from sklearn.neural_network import MLPRegressor
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import neighbors
@@ -41,7 +41,7 @@ connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
 forecast_out = 1
-split = .97
+split = .98
 randomForest = False
 mlp = True
 bagging = False
@@ -309,6 +309,7 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     if kNeighbours:
         #result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1, n_neighbors=3))
         result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(random_state=1, n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1))
+        #result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.RadiusNeighborsClassifier(radius=1.0))
         regression_data['kNeighboursValue'] = float(result[0])
     else:
         regression_data['kNeighboursValue'] = float(0)

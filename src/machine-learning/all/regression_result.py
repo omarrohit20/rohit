@@ -26,7 +26,7 @@ buyPatternsDict=scrip_patterns_to_dict('../../data-import/nselist/patterns-buy.c
 sellPatternsDict=scrip_patterns_to_dict('../../data-import/nselist/patterns-sell.csv')
 
 directory = '../../output/final'
-logname = '../../output/final' + '/classification-result' + time.strftime("%d%m%y-%H%M%S")
+logname = '../../output/final' + '/all-result' + time.strftime("%d%m%y-%H%M%S")
 
 newsDict = {}
 wb = Workbook()
@@ -299,9 +299,10 @@ def result_data(scrip):
         if result_time < start_date: 
             resultDeclared = resultDate 
             resultDate = ""
-       
-    regression_data = db.classificationhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
-    if(regression_data is not None):
+    
+    classification_data = db.classificationhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})   
+    regression_data = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    if(regression_data is not None and classification_data is not None):
         regressionResult = [ ]
         regressionResult.append(regression_data['buyIndia'])
         regressionResult.append(regression_data['sellIndia'])
@@ -326,6 +327,30 @@ def result_data(scrip):
         regressionResult.append(resultDeclared)
         regressionResult.append(resultSentiment)
         regressionResult.append(resultComment)
+        classificationResult = [ ]
+        classificationResult.append(classification_data['buyIndia'])
+        classificationResult.append(classification_data['sellIndia'])
+        classificationResult.append(classification_data['scrip'])
+        classificationResult.append(classification_data['forecast_day_VOL_change'])
+        classificationResult.append(classification_data['forecast_day_PCT_change'])
+        classificationResult.append(classification_data['forecast_day_PCT2_change'])
+        classificationResult.append(classification_data['forecast_day_PCT3_change'])
+        classificationResult.append(classification_data['forecast_day_PCT4_change'])
+        classificationResult.append(classification_data['forecast_day_PCT5_change'])
+        classificationResult.append(classification_data['forecast_day_PCT7_change'])
+        classificationResult.append(classification_data['forecast_day_PCT10_change'])
+        classificationResult.append(classification_data['PCT_day_change'])
+        classificationResult.append(classification_data['PCT_change'])
+        classificationResult.append(classification_data['score'])
+        classificationResult.append(classification_data['mlpValue'])
+        classificationResult.append(classification_data['kNeighboursValue'])
+        classificationResult.append(classification_data['trend'])
+        classificationResult.append(classification_data['yearHighChange'])
+        classificationResult.append(classification_data['yearLowChange'])
+        classificationResult.append(resultDate)
+        classificationResult.append(resultDeclared)
+        classificationResult.append(resultSentiment)
+        classificationResult.append(resultComment)
         
         buyIndiaAvg = 0
         if regression_data['buyIndia'] != '' and regression_data['buyIndia'] in buyPatternsDict:
@@ -351,11 +376,14 @@ def result_data(scrip):
         dayClose = False
         if(regression_data['PCT_day_change'] > .5 and regression_data['PCT_change'] < .1):
             dayClose = True  
-        if(is_algo_buy(regression_data)
+        if(is_algo_buy(regression_data) and is_algo_buy(classification_data)
             and (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low'])
             and 'P@[' not in str(regression_data['sellIndia'])
-            and buyIndiaAvg >= -.5):
+            and buyIndiaAvg >= -.5
+            and regression_data['trend'] != 'up'
+            and -0.5 < regression_data['PCT_day_change'] < 3):
             ws_buyAll.append(regressionResult)
+            ws_buyAll.append(classificationResult)
             if(-10 <= regression_data['yearHighChange'] < -1 and regression_data['yearLowChange'] > 30 and no_doji_or_spinning_buy_india(regression_data)
                 and -0.5 < regression_data['PCT_day_change'] < 5 and regression_data['forecast_day_PCT2_change'] <= 5):
                     ws_buyYearHigh.append(regressionResult)
@@ -453,9 +481,9 @@ def result_data(scrip):
                    ) and 'DOJI' not in str(regression_data['buyIndia']) and ((regression_data['forecast_day_PCT5_change'] <= -5) or regression_data['yearHighChange'] < -50): 
                     ws_buyPattern1.append(regressionResult)
                 
-                    
-    regression_data = db.classificationlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
-    if(regression_data is not None):
+    classification_data = db.classificationlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})                                
+    regression_data = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    if(regression_data is not None and classification_data is not None):
         regressionResult = [ ]
         regressionResult.append(regression_data['buyIndia'])
         regressionResult.append(regression_data['sellIndia'])
@@ -480,6 +508,30 @@ def result_data(scrip):
         regressionResult.append(resultDeclared)
         regressionResult.append(resultSentiment)
         regressionResult.append(resultComment)
+        classificationResult = [ ]
+        classificationResult.append(classification_data['buyIndia'])
+        classificationResult.append(classification_data['sellIndia'])
+        classificationResult.append(classification_data['scrip'])
+        classificationResult.append(classification_data['forecast_day_VOL_change'])
+        classificationResult.append(classification_data['forecast_day_PCT_change'])
+        classificationResult.append(classification_data['forecast_day_PCT2_change'])
+        classificationResult.append(classification_data['forecast_day_PCT3_change'])
+        classificationResult.append(classification_data['forecast_day_PCT4_change'])
+        classificationResult.append(classification_data['forecast_day_PCT5_change'])
+        classificationResult.append(classification_data['forecast_day_PCT7_change'])
+        classificationResult.append(classification_data['forecast_day_PCT10_change'])
+        classificationResult.append(classification_data['PCT_day_change'])
+        classificationResult.append(classification_data['PCT_change'])
+        classificationResult.append(classification_data['score'])
+        classificationResult.append(classification_data['mlpValue'])
+        classificationResult.append(classification_data['kNeighboursValue'])
+        classificationResult.append(classification_data['trend'])
+        classificationResult.append(classification_data['yearHighChange'])
+        classificationResult.append(classification_data['yearLowChange'])
+        classificationResult.append(resultDate)
+        classificationResult.append(resultDeclared)
+        classificationResult.append(resultSentiment)
+        classificationResult.append(resultComment)
         
         sellIndiaAvg = 0
         if regression_data['sellIndia'] != '' and regression_data['sellIndia'] in sellPatternsDict: 
@@ -506,11 +558,14 @@ def result_data(scrip):
         dayClose = False
         if(regression_data['PCT_day_change'] < -.5 and regression_data['PCT_change'] > -.1):
             dayClose = True   
-        if(is_algo_sell(regression_data)
+        if(is_algo_sell(regression_data) and is_algo_sell(classification_data)
             and (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low'])
             and 'P@[' not in str(regression_data['buyIndia'])
-            and sellIndiaAvg <= 0.5):
+            and sellIndiaAvg <= 0.5
+            and regression_data['trend'] != 'down'
+            and -3 < regression_data['PCT_day_change'] < 0.5):
             ws_sellAll.append(regressionResult)
+            ws_sellAll.append(classificationResult)
             if(-10 < regression_data['yearHighChange'] < -1 and regression_data['yearLowChange'] > 30 and -5 < regression_data['PCT_day_change'] < -0.75 
                 and regression_data['forecast_day_PCT10_change'] > 10 and regression_data['forecast_day_PCT7_change'] > 5 and regression_data['forecast_day_PCT5_change'] > -0.5 and regression_data['forecast_day_PCT4_change'] > -0.5
                 and regression_data['forecast_day_PCT2_change'] < 0 and regression_data['forecast_day_PCT_change'] < 0):
