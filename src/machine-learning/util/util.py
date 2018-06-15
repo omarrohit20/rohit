@@ -21,9 +21,6 @@ sellMLP_MIN = -1
 sellKN = -0.5
 sellKN_MIN = 0
 
-buyPatternsDict=scrip_patterns_to_dict('../../data-import/nselist/patterns-buy.csv')
-sellPatternsDict=scrip_patterns_to_dict('../../data-import/nselist/patterns-sell.csv')
-
 def is_algo_buy(regression_data):
     if((regression_data['mlpValue'] >= buyMLP and regression_data['kNeighboursValue'] >= buyKN_MIN) 
         or (regression_data['mlpValue'] >= buyMLP_MIN and regression_data['kNeighboursValue'] >= buyKN)):
@@ -104,7 +101,10 @@ def scrip_patterns_to_dict(filename):
                 pass
     return tempDict 
 
-def get_regressionResult(regression_data, db):
+buyPatternsDict=scrip_patterns_to_dict('../../data-import/nselist/patterns-buy.csv')
+sellPatternsDict=scrip_patterns_to_dict('../../data-import/nselist/patterns-sell.csv')
+
+def get_regressionResult(regression_data, scrip, db):
     resultDeclared = ""
     resultDate = ""
     resultSentiment = ""
@@ -167,15 +167,18 @@ def buy_pattern_from_history(regression_data, regressionResult, ws_buyPattern2):
                             ws_buyPattern2.append(regressionResult)      
     return buyIndiaAvg
 
-def buy_all_rule(regression_data, regressionResult, ws_buyAll):
+def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
     if(is_algo_buy(regression_data)
-    and (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low'])
-    and 'P@[' not in str(regression_data['sellIndia'])
-    and buyIndiaAvg >= -.5):
+        and (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low'])
+        and 'P@[' not in str(regression_data['sellIndia'])
+        and buyIndiaAvg >= -.5):
         ws_buyAll.append(regressionResult)
-        return True
-    else:
-        return False
+        if(0 < regression_data['yearLowChange'] < 10):
+            if(regression_data['PCT_day_change'] < -1):
+                return True
+        else:
+            return True
+    return False
 
 def buy_year_high(regression_data, regressionResult, ws_buyYearHigh):
     if(-10 <= regression_data['yearHighChange'] < -1 and regression_data['yearLowChange'] > 30 and no_doji_or_spinning_buy_india(regression_data)
@@ -208,10 +211,6 @@ def buy_up_trend(regression_data, regressionResult, ws_buyUpTrend):
         and regression_data['forecast_day_PCT10_change'] >= regression_data['PCT_day_change'] + 2
         and regression_data['forecast_day_PCT10_change'] < 10
         and no_doji_or_spinning_buy_india(regression_data)):
-        ws_buyUpTrend.append(regressionResult)
-    elif(longTrend and 5 < regression_data['PCT_day_change'] < 10
-        and no_doji_or_spinning_buy_india(regression_data)
-        and abs(regression_data['PCT_day_change']) == abs(regression_data['PCT_day_change']) and regression_data['forecast_day_VOL_change'] > 25): 
         ws_buyUpTrend.append(regressionResult)  
 
 def buy_down_trend(regression_data, regressionResult, ws_buyDownTrend):
@@ -306,15 +305,18 @@ def sell_pattern_from_history(regression_data, regressionResult, ws_sellPattern2
                             ws_sellPattern2.append(regressionResult) 
     return sellIndiaAvg
 
-def sell_all_rule(regression_data, regressionResult, ws_sellAll):
+def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
     if(is_algo_sell(regression_data)
         and (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low'])
         and 'P@[' not in str(regression_data['buyIndia'])
         and sellIndiaAvg <= 0.5):
         ws_sellAll.append(regressionResult)
-        return True
-    else:
-        return False
+        if(-10 < regression_data['yearHighChange'] < 0):
+            if(regression_data['PCT_day_change'] > 1):
+                return True
+        else:
+            return True
+    return False
         
 def sell_year_high(regression_data, regressionResult, ws_sellYearHigh, ws_sellYearHigh1):
     if(-10 < regression_data['yearHighChange'] < -1 and regression_data['yearLowChange'] > 30 and -5 < regression_data['PCT_day_change'] < -0.75 
