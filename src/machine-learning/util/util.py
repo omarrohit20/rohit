@@ -13,12 +13,12 @@ import numpy as np
 soft=False
 
 buyMLP = 1
-buyMLP_MIN = 1
-buyKN = 0.5
+buyMLP_MIN = 0.5
+buyKN = 1
 buyKN_MIN = 0
 sellMLP = -1
-sellMLP_MIN = -1
-sellKN = -0.5
+sellMLP_MIN = -0.5
+sellKN = -1
 sellKN_MIN = 0
 
 def is_algo_buy(regression_data):
@@ -34,6 +34,20 @@ def is_algo_sell(regression_data):
         return True
     else:
         return False
+    
+def is_algo_buy_classifier(regression_data):
+    if((regression_data['mlpValue'] >= 0 and regression_data['kNeighboursValue'] >= 2) 
+        or (regression_data['mlpValue'] >= 2 and regression_data['kNeighboursValue'] >= 0)):
+        return True
+    else:
+        return False   
+    
+def is_algo_sell_classifier(regression_data):
+    if((regression_data['mlpValue'] <= 0 and regression_data['kNeighboursValue'] <= -2)
+       or (regression_data['mlpValue'] <= -2 and regression_data['kNeighboursValue'] <= 0)):   
+        return True
+    else:
+        return False    
 
 def getScore(vol_change, pct_change):
     try:
@@ -173,6 +187,19 @@ def buy_pattern_from_history(regression_data, regressionResult, ws_buyPattern2):
 
 def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
     if(is_algo_buy(regression_data)
+        and (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low'])
+        and 'P@[' not in str(regression_data['sellIndia'])
+        and buyIndiaAvg >= -.5):
+        ws_buyAll.append(regressionResult) if (ws_buyAll is not None) else False
+        if(0 < regression_data['yearLowChange'] < 10):
+            if(regression_data['PCT_day_change'] < -1):
+                return True
+        else:
+            return True
+    return False
+
+def buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
+    if(is_algo_buy_classifier(regression_data)
         and (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low'])
         and 'P@[' not in str(regression_data['sellIndia'])
         and buyIndiaAvg >= -.5):
@@ -367,6 +394,19 @@ def sell_pattern_from_history(regression_data, regressionResult, ws_sellPattern2
 
 def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
     if(is_algo_sell(regression_data)
+        and (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low'])
+        and 'P@[' not in str(regression_data['buyIndia'])
+        and sellIndiaAvg <= 0.5):
+        ws_sellAll.append(regressionResult) if (ws_sellAll is not None) else False
+        if(-10 < regression_data['yearHighChange'] < 0):
+            if(regression_data['PCT_day_change'] > 1):
+                return True
+        else:
+            return True
+    return False
+
+def sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
+    if(is_algo_sell_classifier(regression_data)
         and (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low'])
         and 'P@[' not in str(regression_data['buyIndia'])
         and sellIndiaAvg <= 0.5):

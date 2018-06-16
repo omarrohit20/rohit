@@ -22,6 +22,7 @@ from util.util import get_regressionResult
 from util.util import buy_pattern_from_history, buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final, buy_high_indicators, buy_pattern
 from util.util import sell_pattern_from_history, sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final, sell_high_indicators, sell_pattern
 from util.util import buy_all_filter, buy_all_common, sell_all_filter, sell_all_common
+from util.util import buy_all_rule_classifier, sell_all_rule_classifier
 
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
@@ -118,13 +119,15 @@ def result_data(scrip):
     ):
         regressionResult = get_regressionResult(regression_data, scrip, db)
         buyIndiaAvg, result = buy_pattern_from_history(regression_data, regressionResult, None)
-        if buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
+        if (buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll)
+            or buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws_buyAll)):
             buy_all_filter(regression_data, regressionResult, ws_buyAllFilter)
             buy_all_common(regression_data, classification_data, regressionResult, ws_buyAllCommon)
         
         regressionResult = get_regressionResult(classification_data, scrip, db)
         buyIndiaAvg, result = buy_pattern_from_history(classification_data, regressionResult, None)
-        if buy_all_rule(classification_data, regressionResult, buyIndiaAvg, ws_buyAll):
+        if (buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll)
+            or buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws_buyAll)):
             buy_all_filter(classification_data, regressionResult, ws_buyAllFilter)
             buy_all_common(regression_data, classification_data, regressionResult, ws_buyAllCommon)
                  
@@ -135,13 +138,15 @@ def result_data(scrip):
     ):
         regressionResult = get_regressionResult(regression_data, scrip, db)
         sellIndiaAvg, result = sell_pattern_from_history(regression_data, regressionResult, None)
-        if sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
+        if (sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll)
+            or sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws_sellAll)):
             sell_all_filter(regression_data, regressionResult, ws_sellAllFilter)
             sell_all_common(regression_data, classification_data, regressionResult, ws_sellAllCommon)
         
         regressionResult = get_regressionResult(classification_data, scrip, db)
         sellIndiaAvg, result = sell_pattern_from_history(classification_data, regressionResult, None)
-        if sell_all_rule(classification_data, regressionResult, sellIndiaAvg, ws_sellAll):
+        if (sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll)
+            or sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws_sellAll)):
             sell_all_filter(classification_data, regressionResult, ws_sellAllFilter)
             sell_all_common(regression_data, classification_data, regressionResult, ws_sellAllCommon)
               
