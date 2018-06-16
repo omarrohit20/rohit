@@ -290,7 +290,7 @@ def result_data(scrip):
     regression_data = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     if(regression_data is not None):
         regressionResult = get_regressionResult(regression_data, scrip, db)
-        buyIndiaAvg = buy_pattern_from_history(regression_data, regressionResult, ws_buyPattern2)
+        buyIndiaAvg, result = buy_pattern_from_history(regression_data, regressionResult, ws_buyPattern2)
         if buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
             buy_year_high(regression_data, regressionResult, ws_buyYearHigh)
             buy_year_low(regression_data, regressionResult, ws_buyYearLow, ws_buyYearLow1)
@@ -303,7 +303,7 @@ def result_data(scrip):
     regression_data = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     if(regression_data is not None):
         regressionResult = get_regressionResult(regression_data, scrip, db)
-        sellIndiaAvg = sell_pattern_from_history(regression_data, regressionResult, ws_sellPattern2)
+        sellIndiaAvg, result = sell_pattern_from_history(regression_data, regressionResult, ws_sellPattern2)
         if sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
             sell_year_high(regression_data, regressionResult, ws_sellYearHigh, ws_sellYearHigh1)
             sell_year_low(regression_data, regressionResult, ws_sellYearLow)
