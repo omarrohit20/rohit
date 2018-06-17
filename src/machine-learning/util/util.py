@@ -36,15 +36,15 @@ def is_algo_sell(regression_data):
         return False
     
 def is_algo_buy_classifier(regression_data):
-    if((regression_data['mlpValue'] >= 0 and regression_data['kNeighboursValue'] >= 2) 
-        or (regression_data['mlpValue'] >= 2 and regression_data['kNeighboursValue'] >= 0)):
+    if((regression_data['mlpValue'] >= 0 and regression_data['kNeighboursValue'] >= 3) 
+        or (regression_data['mlpValue'] >= 3 and regression_data['kNeighboursValue'] >= 0)):
         return True
     else:
         return False   
     
 def is_algo_sell_classifier(regression_data):
-    if((regression_data['mlpValue'] <= 0 and regression_data['kNeighboursValue'] <= -2)
-       or (regression_data['mlpValue'] <= -2 and regression_data['kNeighboursValue'] <= 0)):   
+    if((regression_data['mlpValue'] <= 0 and regression_data['kNeighboursValue'] <= -3)
+       or (regression_data['mlpValue'] <= -3 and regression_data['kNeighboursValue'] <= 0)):   
         return True
     else:
         return False    
