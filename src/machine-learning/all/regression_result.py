@@ -37,18 +37,18 @@ logname = '../../output/final' + '/all-result' + time.strftime("%d%m%y-%H%M%S")
 newsDict = {}
 wb = Workbook()
 ws_buyAll = wb.create_sheet("BuyAll")
-ws_buyAll.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
+ws_buyAll.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_buyAllCommon = wb.create_sheet("BuyAllCommon")
-ws_buyAllCommon.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
+ws_buyAllCommon.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_buyAllFilter = wb.create_sheet("BuyAllFilter")
-ws_buyAllFilter.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
+ws_buyAllFilter.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 
 ws_sellAll = wb.create_sheet("SellAll")
-ws_sellAll.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
+ws_sellAll.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_sellAllCommon = wb.create_sheet("SellAllCommon")
-ws_sellAllCommon.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
+ws_sellAllCommon.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_sellAllFilter = wb.create_sheet("SellAllFilter")
-ws_sellAllFilter.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
+ws_sellAllFilter.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 
 
 
@@ -70,42 +70,42 @@ def saveReports(run_type=None):
     count = 0
     for row in ws_buyAll.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab = Table(displayName="Table1", ref="A1:Z" + str(count))
     tab.tableStyleInfo = style
     ws_buyAll.add_table(tab)
     
     count = 0
     for row in ws_buyAllCommon.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab = Table(displayName="Table1", ref="A1:Z" + str(count))
     tab.tableStyleInfo = style
     ws_buyAllCommon.add_table(tab)
     
     count = 0
     for row in ws_buyAllFilter.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab = Table(displayName="Table1", ref="A1:Z" + str(count))
     tab.tableStyleInfo = style
     ws_buyAllFilter.add_table(tab)
     
     count = 0
     for row in ws_sellAll.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab = Table(displayName="Table1", ref="A1:Z" + str(count))
     tab.tableStyleInfo = style
     ws_sellAll.add_table(tab)
     
     count = 0
     for row in ws_sellAllCommon.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab = Table(displayName="Table1", ref="A1:Z" + str(count))
     tab.tableStyleInfo = style
     ws_sellAllCommon.add_table(tab)
     
     count = 0
     for row in ws_sellAllFilter.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:Y" + str(count))
+    tab = Table(displayName="Table1", ref="A1:Z" + str(count))
     tab.tableStyleInfo = style
     ws_sellAllFilter.add_table(tab)
     
@@ -122,18 +122,24 @@ def result_data(scrip):
             )
     ):
         regressionResult = get_regressionResult(regression_data, scrip, db)
-        buyIndiaAvg, result = buy_pattern_from_history(regression_data, regressionResult, None)
-        if (buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll)
-            or buy_all_rule_classifier(classification_data, regressionResult, buyIndiaAvg, ws_buyAll)):
-            buy_all_filter(regression_data, regressionResult, ws_buyAllFilter)
-            buy_all_common(regression_data, classification_data, regressionResult, ws_buyAllCommon)
-        
-        regressionResult = get_regressionResult(classification_data, scrip, db)
-        buyIndiaAvg, result = buy_pattern_from_history(classification_data, regressionResult, None)
-        if (buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll)
-            or buy_all_rule_classifier(classification_data, regressionResult, buyIndiaAvg, ws_buyAll)):
-            buy_all_filter(classification_data, regressionResult, ws_buyAllFilter)
-            buy_all_common(regression_data, classification_data, regressionResult, ws_buyAllCommon)
+        classificationResult = get_regressionResult(classification_data, scrip, db)
+        buyIndiaAvg, result = buy_pattern_from_history(classification_data, classificationResult, None)
+        if (buy_all_rule(regression_data, classificationResult, buyIndiaAvg, None)
+            or buy_all_rule_classifier(classification_data, classificationResult, buyIndiaAvg, None)):
+            buy_all_filter(classification_data, classificationResult, ws_buyAllFilter)
+            buy_all_common(regression_data, classification_data, classificationResult, ws_buyAllCommon)
+            if (buy_all_rule(regression_data, classificationResult, buyIndiaAvg, ws_buyAll)
+                or buy_all_rule_classifier(classification_data, classificationResult, buyIndiaAvg, ws_buyAll)):
+                print('')
+            
+            buyIndiaAvg, result = buy_pattern_from_history(regression_data, regressionResult, None)
+            if (buy_all_rule(regression_data, regressionResult, buyIndiaAvg, None)
+                or buy_all_rule_classifier(classification_data, regressionResult, buyIndiaAvg, None)):
+                buy_all_filter(regression_data, regressionResult, ws_buyAllFilter)
+                buy_all_common(regression_data, classification_data, regressionResult, ws_buyAllCommon)
+                if (buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll)
+                    or buy_all_rule_classifier(classification_data, regressionResult, buyIndiaAvg, ws_buyAll)):
+                    print('')
                  
     regression_data = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     classification_data = db.classificationlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
@@ -144,20 +150,24 @@ def result_data(scrip):
             )
     ):
         regressionResult = get_regressionResult(regression_data, scrip, db)
-        sellIndiaAvg, result = sell_pattern_from_history(regression_data, regressionResult, None)
-        if (sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll)
-            or sell_all_rule_classifier(classification_data, regressionResult, sellIndiaAvg, ws_sellAll)):
-            sell_all_filter(regression_data, regressionResult, ws_sellAllFilter)
-            sell_all_common(regression_data, classification_data, regressionResult, ws_sellAllCommon)
-        
-        regressionResult = get_regressionResult(classification_data, scrip, db)
-        sellIndiaAvg, result = sell_pattern_from_history(classification_data, regressionResult, None)
-        if (sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll)
-            or sell_all_rule_classifier(classification_data, regressionResult, sellIndiaAvg, ws_sellAll)):
-            sell_all_filter(classification_data, regressionResult, ws_sellAllFilter)
-            sell_all_common(regression_data, classification_data, regressionResult, ws_sellAllCommon)
+        classificationResult = get_regressionResult(classification_data, scrip, db)
+        sellIndiaAvg, result = sell_pattern_from_history(classification_data, classificationResult, None)
+        if (sell_all_rule(regression_data, classificationResult, sellIndiaAvg, None)
+            or sell_all_rule_classifier(classification_data, classificationResult, sellIndiaAvg, None)):
+            sell_all_filter(classification_data, classificationResult, ws_sellAllFilter)
+            sell_all_common(regression_data, classification_data, classificationResult, ws_sellAllCommon)
+            if (sell_all_rule(regression_data, classificationResult, sellIndiaAvg, ws_sellAll)
+                or sell_all_rule_classifier(classification_data, classificationResult, sellIndiaAvg, ws_sellAll)):
+                print('')
               
-                                    
+            sellIndiaAvg, result = sell_pattern_from_history(regression_data, regressionResult, None)
+            if (sell_all_rule(regression_data, regressionResult, sellIndiaAvg, None)
+                or sell_all_rule_classifier(classification_data, regressionResult, sellIndiaAvg, None)):
+                sell_all_filter(regression_data, regressionResult, ws_sellAllFilter)
+                sell_all_common(regression_data, classification_data, regressionResult, ws_sellAllCommon)
+                if (sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll)
+                    or sell_all_rule_classifier(classification_data, regressionResult, sellIndiaAvg, ws_sellAll)):
+                    print('')                           
                           
 def calculateParallel(threads=2, futures=None):
     pool = ThreadPool(threads)

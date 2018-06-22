@@ -1,11 +1,13 @@
 require 'logger'
 require 'socket'
+require 'resolv-replace'
 require 'mongo'
 
 RETRYCOUNT = 3
 CONTAINER = 'rohit_ni'
-IP=IPSocket.getaddress(Socket.gethostname)
-puts IP
+#IP=IPSocket.getaddress(Socket.gethostname)
+ip = Socket.ip_address_list.detect{|intf| intf.ipv4_private?}
+IP=ip.ip_address 
 
 $testcases = Hash.new
 $dids_tc = Hash.new
