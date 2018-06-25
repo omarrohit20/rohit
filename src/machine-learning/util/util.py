@@ -8,7 +8,8 @@ from multiprocessing.dummy import Pool as ThreadPool
 import quandl, math, time
 from nsepy import get_history
 from nsepy.derivatives import get_expiry_date
-from datetime import date   
+from datetime import date
+import datetime   
 import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
 import numpy as np
@@ -106,6 +107,12 @@ def all_day_pct_change_positive(regression_data):
         and regression_data['forecast_day_PCT10_change'] > -0.5):
         return True;    
         
+def historical_data_OI(data):
+    ardate = np.array([str(x) for x in (np.array(data['data'])[:,3][::-1]).tolist()])
+    aroipctchange = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,6][::-1]).tolist()])
+    arcontractpctchange = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,7][::-1]).tolist()])
+    return ardate, aroipctchange, arcontractpctchange
+
 def historical_data(data):
     ardate = np.array([str(x) for x in (np.array(data['data'])[:,0][::-1]).tolist()])
     aropen = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,1][::-1]).tolist()])
@@ -128,6 +135,15 @@ def no_doji_or_spinning_sell_india(regression_data):
         return True;
     else:
         return False   
+
+def get_open_interest_data(regression_data):
+    data = db.historyOpenInterest.find_one({'scrip':regression_data['scrip']})
+    if(data is None or (np.array(data['data'])).size < 1):
+        return '-100000', '-100000'
+    ardate, aroipctchange, arcontractpctchange = historical_data_OI(data)   
+    if(ardate[-1] == regression_data['date']):
+        return str(round(aroipctchange[-1], 2)), str(round(arcontractpctchange[-1], 2))
+    return '-100000', '-100000'
  
 def scrip_patterns_to_dict(filename):  
     tempDict = {}
@@ -147,7 +163,10 @@ def scrip_patterns_to_dict(filename):
     return tempDict 
 
 def get_regressionResult(regression_data, scrip, db):
+    oi, contract = get_open_interest_data(regression_data)
     regression_data['filter'] = " "
+    regression_data['oi'] = float(oi)
+    regression_data['contract'] = float(contract)
     resultDeclared = ""
     resultDate = ""
     resultSentiment = ""
@@ -168,6 +187,8 @@ def get_regressionResult(regression_data, scrip, db):
     regressionResult.append(regression_data['sellIndia'])
     regressionResult.append(regression_data['scrip'])
     regressionResult.append(regression_data['forecast_day_VOL_change'])
+    regressionResult.append(regression_data['oi'])
+    regressionResult.append(regression_data['contract'])
     regressionResult.append(regression_data['forecast_day_PCT_change'])
     regressionResult.append(regression_data['forecast_day_PCT2_change'])
     regressionResult.append(regression_data['forecast_day_PCT3_change'])
@@ -383,6 +404,16 @@ def buy_pattern(regression_data, regressionResult, ws_buyPattern, ws_buyPattern1
             return True
     return False
 
+def buy_oi(regression_data, regressionResult, ws):
+    if(-1 < regression_data['PCT_day_change'] < 4 and -1 < regression_data['PCT_change'] < 4 
+        and all_day_pct_change_negative(regression_data) != True
+        and float(regression_data['forecast_day_VOL_change']) > 0 
+        and float(regression_data['contract']) > 50
+        and float(regression_data['oi']) > -10):
+        add_in_csv(regression_data, regressionResult, ws, 'openInterest')
+        return True
+    return False
+
 def buy_all_common(regression_data, classification_data, regressionResult, ws_buyAllCommon):
     if((regression_data['kNeighboursValue'] >= 1 or (regression_data['mlpValue'] >= 1.5 and classification_data['mlpValue'] >= 1)) 
         #and regression_data['trend'] != 'up'
@@ -414,6 +445,9 @@ def buy_all_filter(regression_data, regressionResult, ws_buyAllFilter):
 #     if buy_pattern(regression_data, regressionResult, None, None):
 #         ws_buyAllFilter.append(regressionResult) if (ws_buyAllFilter is not None) else False
 #         return True
+    if buy_oi(regression_data, regressionResult, None):
+        add_in_csv(regression_data, regressionResult, ws_buyAllFilter, None)
+        return True
     return False
 
 def sell_pattern_without_mlalgo(regression_data, regressionResult, ws_buyPattern2, ws_sellPattern2):
@@ -608,6 +642,16 @@ def sell_pattern(regression_data, regressionResult, ws_sellPattern, ws_sellPatte
             return True
     return False
 
+def sell_oi(regression_data, regressionResult, ws):
+    if(-4 < regression_data['PCT_day_change'] < 1 and -4 < regression_data['PCT_change'] < 1 
+        #and all_day_pct_change_positive(regression_data) != True
+        and float(regression_data['forecast_day_VOL_change']) > 0 
+        and float(regression_data['contract']) > 50
+        and float(regression_data['oi']) > -10):
+        add_in_csv(regression_data, regressionResult, ws, 'openInterest')
+        return True
+    return False
+
 def sell_all_common(regression_data, classification_data, regressionResult, ws_sellAllCommon):
     if((regression_data['kNeighboursValue'] <= -1 or (regression_data['mlpValue'] <= -1.5 and classification_data['mlpValue'] <= 0)) 
         and regression_data['trend'] != 'down'
@@ -639,4 +683,7 @@ def sell_all_filter(regression_data, regressionResult, ws_sellAllFilter):
 #     if sell_pattern(regression_data, regressionResult, None, None):
 #         ws_sellAllFilter.append(regressionResult) if (ws_sellAllFilter is not None) else False
 #         return True
+    if sell_oi(regression_data, regressionResult, None):
+        add_in_csv(regression_data, regressionResult, ws_sellAllFilter, None)
+        return True
     return False
