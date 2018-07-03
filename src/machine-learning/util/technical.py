@@ -105,9 +105,9 @@ def overlap_screener(data, todayInputs, tdchange, historicalInputs, hchange):
     while slow < 100:
         SLOWEMA = 'EMA' + str(slow)
         FASTEMA = 'EMA' + str(fast)
-        if (tdchange > 0) and (tdchange < 10) and (overlap_studies[SLOWEMA][0] > overlap_studies[FASTEMA][0]) and (overlap_studies[SLOWEMA][1] < overlap_studies[FASTEMA][1]): 
+        if (overlap_studies[SLOWEMA][0] > overlap_studies[FASTEMA][0]) and (overlap_studies[SLOWEMA][1] < overlap_studies[FASTEMA][1]): 
             technical_indicators['BuyIndicators'] = technical_indicators['BuyIndicators'] + ',CROSSOVER' + str(slow) 
-        if (tdchange < 0) and (tdchange > -10) and (overlap_studies[SLOWEMA][0] < overlap_studies[FASTEMA][0]) and (overlap_studies[SLOWEMA][1] > overlap_studies[FASTEMA][1]): 
+        if (overlap_studies[SLOWEMA][0] < overlap_studies[FASTEMA][0]) and (overlap_studies[SLOWEMA][1] > overlap_studies[FASTEMA][1]): 
             technical_indicators['SellIndicators'] = technical_indicators['SellIndicators'] + ',CROSSOVER' + str(slow)
         if slow == 50:
             slow = 100

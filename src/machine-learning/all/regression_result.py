@@ -21,10 +21,13 @@ from util.util import is_algo_buy, is_algo_sell
 from util.util import get_regressionResult
 from util.util import buy_pattern_from_history, buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final, buy_high_indicators, buy_pattern
 from util.util import sell_pattern_from_history, sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final, sell_high_indicators, sell_pattern
-from util.util import buy_pattern_without_mlalgo, sell_pattern_without_mlalgo, buy_oi, sell_oi
+from util.util import buy_pattern_without_mlalgo, sell_pattern_without_mlalgo, buy_oi, sell_oi, all_withoutml
+from util.util import morning_star_sell, buy_oi_candidate, morning_star_buy, sell_oi_candidate
 from util.util import buy_all_filter, buy_all_common, sell_all_filter, sell_all_common
 from util.util import buy_all_rule_classifier, sell_all_rule_classifier
 from util.util import is_algo_buy_classifier, is_algo_sell_classifier
+
+
 
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
@@ -124,6 +127,8 @@ def result_data(scrip):
     ):
         regressionResult = get_regressionResult(regression_data, scrip, db)
         classificationResult = get_regressionResult(classification_data, scrip, db)
+        morning_star_sell(classification_data, regressionResult, None)
+        buy_oi_candidate(classification_data, regressionResult, None)
         buyIndiaAvg, result = buy_pattern_from_history(classification_data, classificationResult, None)
         if (buy_all_rule(regression_data, classificationResult, buyIndiaAvg, None)
             or buy_all_rule_classifier(classification_data, classificationResult, buyIndiaAvg, None)):
@@ -133,6 +138,8 @@ def result_data(scrip):
                 or buy_all_rule_classifier(classification_data, classificationResult, buyIndiaAvg, ws_buyAll)):
                 print('')
             
+            morning_star_sell(regression_data, regressionResult, None)
+            buy_oi_candidate(regression_data, regressionResult, None)
             buyIndiaAvg, result = buy_pattern_from_history(regression_data, regressionResult, None)
             if (buy_all_rule(regression_data, regressionResult, buyIndiaAvg, None)
                 or buy_all_rule_classifier(classification_data, regressionResult, buyIndiaAvg, None)):
@@ -152,6 +159,8 @@ def result_data(scrip):
     ):
         regressionResult = get_regressionResult(regression_data, scrip, db)
         classificationResult = get_regressionResult(classification_data, scrip, db)
+        morning_star_buy(classification_data, regressionResult, None)
+        sell_oi_candidate(classification_data, regressionResult, None)
         sellIndiaAvg, result = sell_pattern_from_history(classification_data, classificationResult, None)
         if (sell_all_rule(regression_data, classificationResult, sellIndiaAvg, None)
             or sell_all_rule_classifier(classification_data, classificationResult, sellIndiaAvg, None)):
@@ -162,6 +171,8 @@ def result_data(scrip):
                 print('')
               
             sellIndiaAvg, result = sell_pattern_from_history(regression_data, regressionResult, None)
+            morning_star_buy(regression_data, regressionResult, None)
+            sell_oi_candidate(regression_data, regressionResult, None)
             if (sell_all_rule(regression_data, regressionResult, sellIndiaAvg, None)
                 or sell_all_rule_classifier(classification_data, regressionResult, sellIndiaAvg, None)):
                 sell_all_filter(regression_data, regressionResult, ws_sellAllFilter)

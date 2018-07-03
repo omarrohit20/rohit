@@ -23,7 +23,8 @@ logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=log
 log = logging.getLogger(__name__)
 
 connection = MongoClient('localhost', 27017)
-db = connection.Nsedata
+db = connection.histnse
+dbNsedata = connection.Nsedata
 
 forecast_out = 1
 
@@ -32,7 +33,7 @@ def regression_ta_data(scrip):
     if(data is not None):
         return
     
-    data = db.history.find_one({'dataset_code':scrip})
+    data = dbNsedata.history.find_one({'dataset_code':scrip})
     if(data is None or (np.array(data['data'])).size < 1000):
         print('Missing or very less Data for ', scrip)
         return
@@ -79,6 +80,11 @@ def regression_ta_data(scrip):
     df['bar_low_pre'] = np.where(df['close_pre'] > df['open_pre'], df['open_pre'], df['close_pre'])
     df['uptrend'] = np.where((df['bar_high'] >  df['bar_high_pre']) & (df['high'] > df['high_pre']), 1, 0)
     df['downtrend'] = np.where((df['bar_low'] <  df['bar_low_pre']) & (df['low'] < df['low_pre']), -1, 0)
+    df['bar'] = df['bar_high'] - df['bar_low']
+    df['HH'] = np.where((df['high']-df['bar_high']) > (df['bar_high']-df['bar_low']), 1, 0)
+    df['LL'] = np.where((df['bar_low']-df['low']) > (df['bar_high']-df['bar_low']), 1, 0)
+    df['HHPc'] = ((((df['high']-df['bar_high']) - df['bar'])/df['bar'])*100).astype(float).round(1)
+    df['LLPc'] = ((((df['bar_low']-df['low']) - df['bar'])/df['bar'])*100).astype(float).round(1)
 
     df['MACD'], df['MACDSIGNAL'], df['MACDHIST'] = MACD(df)
     df['EMA9'] = EMA(df,9)
@@ -113,5 +119,5 @@ def calculateParallel(threads=1):
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(2)
+    calculateParallel(3)
     connection.close()

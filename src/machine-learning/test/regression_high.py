@@ -19,6 +19,12 @@ from Algorithms.regression_helpers import load_dataset, addFeatures, addFeatures
     
 from util.util import getScore, all_day_pct_change_negative, all_day_pct_change_positive, no_doji_or_spinning_buy_india, no_doji_or_spinning_sell_india, scrip_patterns_to_dict
 from util.util import is_algo_buy, is_algo_sell
+from util.util import get_regressionResult
+from util.util import buy_pattern_from_history, buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final, buy_high_indicators, buy_pattern
+from util.util import sell_pattern_from_history, sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final, sell_high_indicators, sell_pattern
+from util.util import buy_pattern_without_mlalgo, sell_pattern_without_mlalgo, buy_oi, sell_oi, all_withoutml
+from util.util import morning_star_sell, buy_oi_candidate, morning_star_buy, sell_oi_candidate
+from util.util import soft
     
 from technical import ta_lib_data  
 
@@ -40,7 +46,7 @@ from sklearn.svm import SVC, SVR
 from sklearn.grid_search import GridSearchCV
 
 connection = MongoClient('localhost', 27017)
-db = connection.Nsedata
+db = connection.histnse
 
 forecast_out = 1
 split = .99
@@ -76,9 +82,16 @@ def get_data_frame(df, regressor="None"):
         if regressor != 'mlp':
             dfp['EMA9'] = df['EMA9']
             dfp['EMA21'] = df['EMA21']
+#         if regressor != 'mlp':      
+#             for dele in range(1, 2):  
+#                 addFeaturesEMA9Change(df, dfp, EMA9, dele)
+#                 addFeaturesEMA21Change(df, dfp, EMA21, dele) 
  
         dfp['uptrend'] = df['uptrend']
-        dfp['downtrend'] = df['downtrend']    
+        dfp['downtrend'] = df['downtrend']
+        if soft == False:
+            dfp['HH'] = df['HH']
+            dfp['LL'] = df['LL']   
        
         if regressor != 'mlp':      
             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
@@ -222,146 +235,46 @@ def get_data_frame(df, regressor="None"):
         return dfp
 
 def create_csv(regression_data):
-    json_data = json.loads(json.dumps(regression_data))
     if 'P@[' in str(regression_data['buyIndia']):
-        stored = db.RbuyIndia.find_one({'scrip':regression_data['scrip'], 'date':regression_data['date']})
+        stored = db.RbuyAll.find_one({'scrip':regression_data['scrip'], 'date':regression_data['date']})
         if stored is None:
-            db.RbuyIndia.insert_one(json_data)
-    
-            score = ''
-            if(regression_data['score'] == '10' or regression_data['score'] == '1-1'):
-                score = 'up'    
-            dayClose = False
-            if(regression_data['PCT_day_change'] > .5 and regression_data['PCT_change'] < .1):
-                dayClose = True
-            longTrend = False 
-            if(all_day_pct_change_positive(regression_data)):
-                longTrend = True     
+            db.RbuyAll.insert_one(json.loads(json.dumps(regression_data)))
+            
             if(is_algo_buy(regression_data)
                 and 'P@[' not in str(regression_data['sellIndia'])):
-                stored = db.RbuyAll.find_one({'scrip':regression_data['scrip'], 'date':regression_data['date']})
+                stored = db.RbuyAlgo.find_one({'scrip':regression_data['scrip'], 'date':regression_data['date']})
                 if stored is None:
+                    regressionResult = get_regressionResult(regression_data, regression_data['scrip'], None)
                     if (regression_data['buyIndia'] != ''):
-                        regression_data['patterns'] = 'Other'
-                        
-                    if(-5 <= regression_data['yearHighChange'] < -1 and regression_data['yearLowChange'] > 30 and no_doji_or_spinning_buy_india(regression_data)
-                        and -0.5 < regression_data['PCT_day_change'] < 5 and regression_data['forecast_day_PCT2_change'] <= 5):
-                        regression_data['patterns'] = regression_data['patterns'] + ', buyYearHigh'
-                        db.RbuyYearHigh.insert_one(json_data)
-                    elif(-15 < regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 30 and no_doji_or_spinning_buy_india(regression_data)
-                        and -0.5 < regression_data['PCT_day_change'] < 5 and (score == 'up'  or regression_data['forecast_day_PCT_change'] > 0)):
-                        regression_data['patterns'] = regression_data['patterns'] + ', buyYearHigh1'
-                        db.RbuyYearHigh1.insert_one(json_data)
-                        
-                    if(1 < regression_data['yearLowChange'] < 10 and regression_data['yearHighChange'] < -30 
-                        and 0.75 < regression_data['PCT_day_change'] < 5
-                        and regression_data['forecast_day_PCT10_change'] <= -10 and regression_data['forecast_day_PCT7_change'] < -5 and regression_data['forecast_day_PCT5_change'] < 0.5 and regression_data['forecast_day_PCT4_change'] < 0.5 
-                        and regression_data['forecast_day_PCT2_change'] > -0.5 and regression_data['forecast_day_PCT_change'] > 0):
-                        regression_data['patterns'] = regression_data['patterns'] + ', buyYearLow'
-                        db.RbuyYearLow.insert_one(json_data) 
-                    elif(0 < regression_data['yearLowChange'] < 15 and regression_data['yearHighChange'] < -25 
-                        and (5 > regression_data['PCT_day_change'] > 0.75 and regression_data['PCT_change'] > -0.5 and regression_data['PCT_day_change'] >= regression_data['PCT_change'])
-                        and regression_data['forecast_day_PCT10_change'] <= -5 and regression_data['forecast_day_PCT7_change'] < -3 and regression_data['forecast_day_PCT5_change'] < 0.5):
-                        regression_data['patterns'] = regression_data['patterns'] + ', buyYearLow1'
-                        db.RbuyYearLow1.insert_one(json_data)
-                    elif(0 < regression_data['yearLowChange'] < 15 and regression_data['yearHighChange'] < -25 
-                        and (5 > regression_data['PCT_day_change'] > 0.75 and regression_data['PCT_change'] > -0.5 and regression_data['PCT_day_change'] >= regression_data['PCT_change'])
-                        and regression_data['forecast_day_PCT10_change'] <= 0 and regression_data['forecast_day_PCT7_change'] < 0 and regression_data['forecast_day_PCT5_change'] < 0
-                        and regression_data['forecast_day_PCT2_change'] > 0 and regression_data['forecast_day_PCT_change'] > 0):
-                        regression_data['patterns'] = regression_data['patterns'] + ', buyYearLow1'
-                        db.RbuyYearLow1.insert_one(json_data)   
-                        
-                    if(longTrend and 0 < regression_data['PCT_day_change'] < 5 and regression_data['yearHighChange'] < -10
-                        and regression_data['forecast_day_PCT10_change'] >= regression_data['PCT_change'] + 2
-                        and regression_data['forecast_day_PCT10_change'] >= regression_data['PCT_day_change'] + 2
-                        and no_doji_or_spinning_buy_india(regression_data)):
-                        regression_data['patterns'] = regression_data['patterns'] + ', buyUpTrend'
-                        db.RbuyUpTrend.insert_one(json_data)
-            #             elif(longTrend and 5 < regression_data['PCT_day_change'] < 10
-            #                  and no_doji_or_spinning_buy_india(regression_data)
-            #                  and abs(regression_data['PCT_day_change']) == abs(regression_data['PCT_day_change']) and regression_data['forecast_day_VOL_change'] > 25): 
-            #                 ws_buyUpTrend.append(regressionResult)  
-                           
-                    if(regression_data['yearHighChange'] < -10 and regression_data['score'] != '0-1'
-                       and 3 > regression_data['PCT_day_change'] > 0.50 and 3 > regression_data['PCT_change'] > 0.75):   
-                        if( str(regression_data['sellIndia']) == '' and -90 < regression_data['yearHighChange'] < -10
-                            and regression_data['forecast_day_PCT10_change'] <= -10 and regression_data['forecast_day_PCT7_change'] < -5 and regression_data['forecast_day_PCT5_change'] < 0.5 and regression_data['forecast_day_PCT4_change'] < 0.5 
-                            and regression_data['forecast_day_PCT2_change'] > -0.5 and regression_data['forecast_day_PCT_change'] > 0):
-                            regression_data['patterns'] = regression_data['patterns'] + ', buyFinal'
-                            db.RbuyFinal.insert_one(json_data)
-                        elif(regression_data['forecast_day_PCT5_change'] <= 1 and regression_data['forecast_day_PCT7_change'] <= -1 and regression_data['forecast_day_PCT10_change'] <= -7):
-                            regression_data['patterns'] = regression_data['patterns'] + ', buyFinal1'
-                            db.RbuyFinal1.insert_one(json_data) 
+                        regression_data['filter'] = 'Other,'
+                    
+                    buyIndiaAvg, result = buy_pattern_from_history(regression_data, regressionResult, None)
+                    if buy_all_rule(regression_data, regressionResult, buyIndiaAvg, None):
+                        RbuyYearHigh = buy_year_high(regression_data, regressionResult, None)
+                        RbuyYearLow = buy_year_low(regression_data, regressionResult, None, None)
+                        RbuyUpTrend = buy_up_trend(regression_data, regressionResult, None)
+                        RbuyDownTrend = buy_down_trend(regression_data, regressionResult, None)
+                        RbuyFinal = buy_final(regression_data, regressionResult, None, None)
+                        RbuyHighIndicators = buy_high_indicators(regression_data, regressionResult, None)
+                        RbuyPattern = buy_pattern(regression_data, regressionResult, None, None)
+                        if RbuyYearHigh:
+                            db.RbuyYearHigh.insert_one(json.loads(json.dumps(regression_data)))
+                        if RbuyYearLow:
+                            db.RbuyYearLow.insert_one(json.loads(json.dumps(regression_data)))
+                        if RbuyUpTrend:
+                            db.RbuyUpTrend.insert_one(json.loads(json.dumps(regression_data)))
+                        if RbuyDownTrend:
+                            db.RbuyDownTrend.insert_one(json.loads(json.dumps(regression_data))) 
+                        if RbuyFinal:    
+                            db.RbuyFinal.insert_one(json.loads(json.dumps(regression_data)))
+                        if RbuyHighIndicators:
+                            db.RbuyHighIndicators.insert_one(json.loads(json.dumps(regression_data)))
+                        if RbuyPattern:
+                            db.RbuyPattern.insert_one(json.loads(json.dumps(regression_data)))                
                             
-                    if(regression_data['mlpValue'] > 2.0 and regression_data['kNeighboursValue'] > 2.0
-                       and 2 > regression_data['PCT_day_change'] > 0 and 2 > regression_data['PCT_change'] > 0 
-                       and regression_data['forecast_day_PCT_change'] > 0
-                       and regression_data['score'] == '10'
-                       ):
-                        regression_data['patterns'] = regression_data['patterns'] + ', buyHighIndicators'
-                        db.RbuyHighIndicators.insert_one(json_data)
-                            
-                    if(2 > regression_data['PCT_day_change'] > -0.5 and 2 > regression_data['PCT_change'] > -0.5 
-                       and regression_data['forecast_day_PCT4_change'] > 0 
-                       and regression_data['forecast_day_PCT3_change'] < 0 and regression_data['forecast_day_PCT2_change'] < 0 and regression_data['forecast_day_PCT_change'] < 0 
-                       ):
-                        regression_data['patterns'] = regression_data['patterns'] + ', threeDayLow'
-                        db.RthreeDayLow.insert_one(json_data)  
-                         
-                    if(-1 < regression_data['PCT_day_change'] < 4 and regression_data['yearLowChange'] > 5 and regression_data['score'] != '0-1'):
-                        if(('MARUBOZU' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= -5)
-                           or ('HAMMER' in str(regression_data['buyIndia']) and regression_data['PCT_day_change'] > 0)
-                           #or 'ENGULFING' in str(regression_data['buyIndia'])
-                           #or 'PIERCING' in str(regression_data['buyIndia'])
-                           or ('MORNINGSTAR' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= -5)
-                           #or ':DOJISTAR' in str(regression_data['buyIndia'])
-                           #or 'MORNINGDOJISTAR' in str(regression_data['buyIndia'])
-                           or 'ABANDONEDBABY' in str(regression_data['buyIndia'])
-                           or 'COUNTERATTACK' in str(regression_data['buyIndia'])
-                           or 'KICKING' in str(regression_data['buyIndia'])
-                           or 'BREAKAWAY' in str(regression_data['buyIndia'])
-                           #or 'TRISTAR' in str(regression_data['buyIndia'])
-                           #or '3WHITESOLDIERS' in str(regression_data['buyIndia'])
-                           #or '3INSIDE' in str(regression_data['buyIndia'])
-                           ):
-                            regression_data['patterns'] = regression_data['patterns'] + ', buyPattern'
-                            db.RbuyPattern.insert_one(json_data)
-                        elif(
-                           ('CCI:BOP' in str(regression_data['buyIndia']) and 'BELTHOLD' in str(regression_data['buyIndia']))
-                           or ('AROON:BOP' in str(regression_data['buyIndia']) and 'BELTHOLD' in str(regression_data['buyIndia']) and 'ENGULFING' in str(regression_data['buyIndia']))
-                           or ('BELTHOLD' == str(regression_data['buyIndia']) and score == 'up')
-                           #or ('3OUTSIDE' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
-                           #or ('HARAMI' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and score == 'up')
-                           #or (regression_data['yearHighChange'] <= -35 and 'HARAMI' in str(regression_data['buyIndia']) and 'SHORTLINE' in str(regression_data['buyIndia']) and regression_data['PCT_day_change'] > 0)
-                           or ('DOJI' in str(regression_data['buyIndia']) and 'GRAVESTONEDOJI' in str(regression_data['buyIndia']) and 'LONGLEGGEDDOJI' in str(regression_data['buyIndia']) and regression_data['PCT_day_change'] > 0)
-                           #or ('P@[,HIKKAKE]' == str(regression_data['buyIndia']) and regression_data['PCT_day_change'] < 0)
-                           #or (regression_data['yearHighChange'] <= -35 and 'BELTHOLD' in str(regression_data['buyIndia']) and 'LONGLINE' in str(regression_data['buyIndia']))
-                           #or (regression_data['yearHighChange'] <= -35 and ',CCI:BOP' in str(regression_data['buyIndia']) and 'LONGLINE' in str(regression_data['buyIndia']))
-                           ) and ((regression_data['forecast_day_PCT5_change'] <= -5) or regression_data['yearHighChange'] < -50):
-                            regression_data['patterns'] = regression_data['patterns'] + ', buyPattern1'
-                            db.RbuyPattern1.insert_one(json_data)
-                        elif(
-                           ('MARUBOZU' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 1)
-                           or ('HAMMER' in str(regression_data['buyIndia']) and regression_data['PCT_day_change'] > 0)
-                           or 'ENGULFING' in str(regression_data['buyIndia'])
-                           or 'PIERCING' in str(regression_data['buyIndia'])
-                           or ('MORNINGSTAR' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= 1)
-                           #or ':DOJISTAR' in str(regression_data['buyIndia'])
-                           or 'MORNINGDOJISTAR' in str(regression_data['buyIndia'])
-                           or 'ABANDONEDBABY' in str(regression_data['buyIndia'])
-                           or 'COUNTERATTACK' in str(regression_data['buyIndia'])
-                           or 'KICKING' in str(regression_data['buyIndia'])
-                           or 'BREAKAWAY' in str(regression_data['buyIndia'])
-                           or 'TRISTAR' in str(regression_data['buyIndia'])
-                           or '3WHITESOLDIERS' in str(regression_data['buyIndia'])
-                           or '3INSIDE' in str(regression_data['buyIndia'])
-                           ) and 'DOJI' not in str(regression_data['buyIndia']) and ((regression_data['forecast_day_PCT5_change'] <= -5) or regression_data['yearHighChange'] < -50): 
-                            regression_data['patterns'] = regression_data['patterns'] + ', buyPattern1'
-                            db.RbuyPattern1.insert_one(json_data)
-                            
-                    if regression_data['patterns'] == 'Other':
-                        db.RbuyOthers.insert_one(json_data)
-                    db.RbuyAll.insert_one(json_data)
+                    if regression_data['filter'] == 'Other,':
+                        db.RbuyOthers.insert_one(json.loads(json.dumps(regression_data)))
+                    db.RbuyAlgo.insert_one(json.loads(json.dumps(regression_data)))
     
 def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory):
     if 'P@[' in str(sell):
@@ -389,6 +302,12 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     Act_High_change = df.tail(1).loc[-forecast_out:, 'Act_High_change'].values[0]
     Act_Low_change = df.tail(1).loc[-forecast_out:, 'Act_Low_change'].values[0]
     score = df.tail(1).loc[-forecast_out:, 'uptrend'].values[0].astype(str) + '' + df.tail(1).loc[-forecast_out:, 'downtrend'].values[0].astype(str)
+    open = df.tail(1).loc[-forecast_out:, 'open'].values[0]
+    high = df.tail(1).loc[-forecast_out:, 'high'].values[0]
+    low = df.tail(1).loc[-forecast_out:, 'low'].values[0]
+    bar_high = df.tail(1).loc[-forecast_out:, 'bar_high'].values[0]
+    bar_low = df.tail(1).loc[-forecast_out:, 'bar_low'].values[0]
+    close = df.tail(1).loc[-forecast_out:, 'close'].values[0]
     
     regression_data = {}
     regression_data['date'] = forecast_day_date
@@ -421,12 +340,16 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     regression_data['Act_PCT_day_HO'] = float(Act_PCT_day_HO)
     regression_data['Act_High_change'] = float(Act_High_change)
     regression_data['Act_Low_change'] = float(Act_Low_change)
+    regression_data['open'] = float(open)
+    regression_data['high'] = float(high)
+    regression_data['low'] = float(low)
+    regression_data['bar_high'] = float(bar_high)
+    regression_data['bar_low'] = float(bar_low)
+    regression_data['close'] = float(close)
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     if kNeighbours:
         result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1))
-        if float(result[0]) < .5:
-            return
         regression_data['kNeighboursValue'] = float(result[0])
     else:
         regression_data['kNeighboursValue'] = float(0)

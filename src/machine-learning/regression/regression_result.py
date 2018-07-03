@@ -322,7 +322,7 @@ def result_data(scrip):
             buy_down_trend(regression_data, regressionResult, ws_buyDownTrend)
             buy_final(regression_data, regressionResult, ws_buyFinal, ws_buyFinal1)
             buy_high_indicators(regression_data, regressionResult, ws_buyHighIndicators)
-            buy_pattern(regression_data, regressionResult, ws_buyPattern, ws_buyPattern1)
+            #buy_pattern(regression_data, regressionResult, ws_buyPattern, ws_buyPattern1)
             buy_oi(regression_data, regressionResult, None)
             buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll)
                 
@@ -341,7 +341,7 @@ def result_data(scrip):
             sell_down_trend(regression_data, regressionResult, ws_sellDownTrend)
             sell_final(regression_data, regressionResult, ws_sellFinal, ws_sellFinal1)
             sell_high_indicators(regression_data, regressionResult, ws_sellHighIndicators)
-            sell_pattern(regression_data, regressionResult, ws_sellPattern, ws_sellPattern1)
+            #sell_pattern(regression_data, regressionResult, ws_sellPattern, ws_sellPattern1)
             sell_oi(regression_data, regressionResult, None)
             sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll)                                
                                                   
