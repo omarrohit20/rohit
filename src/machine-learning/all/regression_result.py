@@ -46,6 +46,8 @@ ws_buyAllCommon = wb.create_sheet("BuyAllCommon")
 ws_buyAllCommon.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_buyAllFilter = wb.create_sheet("BuyAllFilter")
 ws_buyAllFilter.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_buyOI = wb.create_sheet("buyOI")
+ws_buyOI.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 
 ws_sellAll = wb.create_sheet("SellAll")
 ws_sellAll.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
@@ -53,6 +55,8 @@ ws_sellAllCommon = wb.create_sheet("SellAllCommon")
 ws_sellAllCommon.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_sellAllFilter = wb.create_sheet("SellAllFilter")
 ws_sellAllFilter.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_sellOI = wb.create_sheet("sellOI")
+ws_sellOI.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 
 
 
@@ -93,6 +97,13 @@ def saveReports(run_type=None):
     ws_buyAllFilter.add_table(tab)
     
     count = 0
+    for row in ws_buyOI.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyOI.add_table(tab)
+    
+    count = 0
     for row in ws_sellAll.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:AD" + str(count))
@@ -113,22 +124,39 @@ def saveReports(run_type=None):
     tab.tableStyleInfo = style
     ws_sellAllFilter.add_table(tab)
     
+    count = 0
+    for row in ws_sellOI.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AD" + str(count))
+    tab.tableStyleInfo = style
+    ws_sellOI.add_table(tab)
+    
     wb.save(logname + ".xlsx")
       
 
 def result_data(scrip):
     regression_data = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     classification_data = db.classificationhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    regressionResult = get_regressionResult(regression_data, scrip, db)
+    classificationResult = get_regressionResult(classification_data, scrip, db)
+    
+    cl_ms = morning_star_sell(classification_data, regressionResult, None)
+    cl_oi = buy_oi_candidate(classification_data, regressionResult, None)
+    re_ms = morning_star_sell(regression_data, regressionResult, None)
+    re_oi = buy_oi_candidate(regression_data, regressionResult, None)
+    if(cl_ms and re_ms):
+        all_withoutml(regression_data, regressionResult, ws_buyOI)
+        all_withoutml(classification_data, classificationResult, ws_buyOI)
+    if(cl_oi and re_oi):
+        all_withoutml(regression_data, regressionResult, ws_buyOI)
+        all_withoutml(classification_data, classificationResult, ws_buyOI)    
+    
     if(regression_data is not None and classification_data is not None
-        and (
-            (is_algo_buy(regression_data) and is_algo_buy(classification_data))
-            or (is_algo_buy(regression_data) and is_algo_buy_classifier(classification_data))
-            )
+    and (
+        (is_algo_buy(regression_data) and is_algo_buy(classification_data))
+        or (is_algo_buy(regression_data) and is_algo_buy_classifier(classification_data))
+        )
     ):
-        regressionResult = get_regressionResult(regression_data, scrip, db)
-        classificationResult = get_regressionResult(classification_data, scrip, db)
-        morning_star_sell(classification_data, regressionResult, None)
-        buy_oi_candidate(classification_data, regressionResult, None)
         buyIndiaAvg, result = buy_pattern_from_history(classification_data, classificationResult, None)
         if (buy_all_rule(regression_data, classificationResult, buyIndiaAvg, None)
             or buy_all_rule_classifier(classification_data, classificationResult, buyIndiaAvg, None)):
@@ -138,8 +166,6 @@ def result_data(scrip):
                 or buy_all_rule_classifier(classification_data, classificationResult, buyIndiaAvg, ws_buyAll)):
                 print('')
             
-            morning_star_sell(regression_data, regressionResult, None)
-            buy_oi_candidate(regression_data, regressionResult, None)
             buyIndiaAvg, result = buy_pattern_from_history(regression_data, regressionResult, None)
             if (buy_all_rule(regression_data, regressionResult, buyIndiaAvg, None)
                 or buy_all_rule_classifier(classification_data, regressionResult, buyIndiaAvg, None)):
@@ -149,18 +175,31 @@ def result_data(scrip):
                     or buy_all_rule_classifier(classification_data, regressionResult, buyIndiaAvg, ws_buyAll)):
                     print('')
                  
+    
+    
     regression_data = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     classification_data = db.classificationlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    regressionResult = get_regressionResult(regression_data, scrip, db)
+    classificationResult = get_regressionResult(classification_data, scrip, db)
+    
+    cl_ms = morning_star_buy(classification_data, regressionResult, None)
+    cl_oi = sell_oi_candidate(classification_data, regressionResult, None)
+    re_ms = morning_star_buy(regression_data, regressionResult, None)
+    re_oi = sell_oi_candidate(regression_data, regressionResult, None)
+    if(cl_ms and re_ms):
+        all_withoutml(regression_data, regressionResult, ws_sellOI)
+        all_withoutml(classification_data, classificationResult, ws_sellOI)
+    if(cl_oi and re_oi):
+        all_withoutml(regression_data, regressionResult, ws_sellOI)
+        all_withoutml(classification_data, classificationResult, ws_sellOI) 
+     
     if(regression_data is not None and classification_data is not None
         and (
             (is_algo_sell(regression_data) and is_algo_sell(classification_data))
             or (is_algo_sell(regression_data) and is_algo_sell_classifier(classification_data))
             )
-    ):
-        regressionResult = get_regressionResult(regression_data, scrip, db)
-        classificationResult = get_regressionResult(classification_data, scrip, db)
-        morning_star_buy(classification_data, regressionResult, None)
-        sell_oi_candidate(classification_data, regressionResult, None)
+    ):    
+        
         sellIndiaAvg, result = sell_pattern_from_history(classification_data, classificationResult, None)
         if (sell_all_rule(regression_data, classificationResult, sellIndiaAvg, None)
             or sell_all_rule_classifier(classification_data, classificationResult, sellIndiaAvg, None)):
@@ -169,10 +208,8 @@ def result_data(scrip):
             if (sell_all_rule(regression_data, classificationResult, sellIndiaAvg, ws_sellAll)
                 or sell_all_rule_classifier(classification_data, classificationResult, sellIndiaAvg, ws_sellAll)):
                 print('')
-              
+    
             sellIndiaAvg, result = sell_pattern_from_history(regression_data, regressionResult, None)
-            morning_star_buy(regression_data, regressionResult, None)
-            sell_oi_candidate(regression_data, regressionResult, None)
             if (sell_all_rule(regression_data, regressionResult, sellIndiaAvg, None)
                 or sell_all_rule_classifier(classification_data, regressionResult, sellIndiaAvg, None)):
                 sell_all_filter(regression_data, regressionResult, ws_sellAllFilter)

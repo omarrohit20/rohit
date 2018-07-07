@@ -300,8 +300,8 @@ def saveReports(run_type=None):
 def saveDailyNews():
     for newslink,newsValue in newsDict.items():
         ws.append([newsValue['scrip'], newsValue['newstime'], newsValue['newssummary'], newslink, newsValue['mlindicator']])
-        if(newsValue['mlindicator'] != ''):
-            result_data(newsValue['scrip'])
+        #if(newsValue['mlindicator'] != ''):
+            #result_data(newsValue['scrip'])
         
 def buy_News(scrip):
     scrip_newsList = db.news.find_one({'scrip':scrip})
