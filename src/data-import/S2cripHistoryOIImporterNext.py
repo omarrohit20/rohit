@@ -52,4 +52,4 @@ if __name__ == "__main__":
             insert_scripdata(scrip, data)
     
 connection.close()
-print('Done Historical')
+print('Done OIimportNext')
