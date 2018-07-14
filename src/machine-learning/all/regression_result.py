@@ -40,14 +40,30 @@ logname = '../../output/final' + '/all-result' + time.strftime("%d%m%y-%H%M%S")
 
 newsDict = {}
 wb = Workbook()
+ws_buyOI = wb.create_sheet("buyOI")
+ws_buyOI.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_buyOIReg = wb.create_sheet("buyOIReg")
+ws_buyOIReg.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_buyOICla = wb.create_sheet("buyOICla")
+ws_buyOICla.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+
+ws_sellOI = wb.create_sheet("sellOI")
+ws_sellOI.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_sellOIReg = wb.create_sheet("sellOIReg")
+ws_sellOIReg.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_sellOICla = wb.create_sheet("sellOICla")
+ws_sellOICla.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+
 ws_buyAll = wb.create_sheet("BuyAll")
 ws_buyAll.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_buyAllCommon = wb.create_sheet("BuyAllCommon")
 ws_buyAllCommon.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_buyAllFilter = wb.create_sheet("BuyAllFilter")
 ws_buyAllFilter.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
-ws_buyOI = wb.create_sheet("buyOI")
-ws_buyOI.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_buyAllReg = wb.create_sheet("BuyAllReg")
+ws_buyAllReg.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_buyAllCla = wb.create_sheet("BuyAllCla")
+ws_buyAllCla.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 
 ws_sellAll = wb.create_sheet("SellAll")
 ws_sellAll.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
@@ -55,21 +71,29 @@ ws_sellAllCommon = wb.create_sheet("SellAllCommon")
 ws_sellAllCommon.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_sellAllFilter = wb.create_sheet("SellAllFilter")
 ws_sellAllFilter.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
-ws_sellOI = wb.create_sheet("sellOI")
-ws_sellOI.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
-
-
+ws_sellAllReg = wb.create_sheet("SellAllReg")
+ws_sellAllReg.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_sellAllCla = wb.create_sheet("SellAllCla")
+ws_sellAllCla.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 
 def saveReports(run_type=None):
     ws_buyAll.append([""])
+    ws_buyOI.append([""])
     ws_buyAllCommon.append([""])
     ws_buyAllFilter.append([""])
+    ws_buyAllReg.append([""])
+    ws_buyOIReg.append([""])
+    ws_buyAllCla.append([""])
+    ws_buyOICla.append([""])
         
     ws_sellAll.append([""])
+    ws_sellOI.append([""])
     ws_sellAllCommon.append([""])
     ws_sellAllFilter.append([""])
-    
-
+    ws_sellAllReg.append([""])
+    ws_sellOIReg.append([""])
+    ws_sellAllCla.append([""])
+    ws_sellOICla.append([""])
     
     # Add a default style with striped rows and banded columns
     style = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False,
@@ -81,6 +105,13 @@ def saveReports(run_type=None):
     tab = Table(displayName="Table1", ref="A1:AE" + str(count))
     tab.tableStyleInfo = style
     ws_buyAll.add_table(tab)
+    
+    count = 0
+    for row in ws_buyOI.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AE" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyOI.add_table(tab)
     
     count = 0
     for row in ws_buyAllCommon.iter_rows(row_offset=1):
@@ -97,11 +128,33 @@ def saveReports(run_type=None):
     ws_buyAllFilter.add_table(tab)
     
     count = 0
-    for row in ws_buyOI.iter_rows(row_offset=1):
+    for row in ws_buyAllReg.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:AE" + str(count))
     tab.tableStyleInfo = style
-    ws_buyOI.add_table(tab)
+    ws_buyAllReg.add_table(tab)
+    
+    count = 0
+    for row in ws_buyOIReg.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AE" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyOIReg.add_table(tab)
+    
+    count = 0
+    for row in ws_buyAllCla.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AE" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyAllCla.add_table(tab)
+    
+    count = 0
+    for row in ws_buyOICla.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AE" + str(count))
+    tab.tableStyleInfo = style
+    ws_buyOICla.add_table(tab)
+    
     
     count = 0
     for row in ws_sellAll.iter_rows(row_offset=1):
@@ -109,6 +162,13 @@ def saveReports(run_type=None):
     tab = Table(displayName="Table1", ref="A1:AE" + str(count))
     tab.tableStyleInfo = style
     ws_sellAll.add_table(tab)
+    
+    count = 0
+    for row in ws_sellOI.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AE" + str(count))
+    tab.tableStyleInfo = style
+    ws_sellOI.add_table(tab)
     
     count = 0
     for row in ws_sellAllCommon.iter_rows(row_offset=1):
@@ -125,15 +185,36 @@ def saveReports(run_type=None):
     ws_sellAllFilter.add_table(tab)
     
     count = 0
-    for row in ws_sellOI.iter_rows(row_offset=1):
+    for row in ws_sellAllReg.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:AE" + str(count))
     tab.tableStyleInfo = style
-    ws_sellOI.add_table(tab)
+    ws_sellAllReg.add_table(tab)
+    
+    count = 0
+    for row in ws_sellOIReg.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AE" + str(count))
+    tab.tableStyleInfo = style
+    ws_sellOIReg.add_table(tab)
+    
+    count = 0
+    for row in ws_sellAllCla.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AE" + str(count))
+    tab.tableStyleInfo = style
+    ws_sellAllCla.add_table(tab)
+    
+    count = 0
+    for row in ws_sellOICla.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:AE" + str(count))
+    tab.tableStyleInfo = style
+    ws_sellOICla.add_table(tab)
+    
     
     wb.save(logname + ".xlsx")
       
-
 def result_data(scrip):
     regression_data = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     classification_data = db.classificationhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
@@ -207,15 +288,91 @@ def result_data(scrip):
                 if (sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll)
                     or sell_all_rule_classifier(classification_data, regressionResult, sellIndiaAvg, ws_sellAll)):
                     print('')                           
-                          
+
+def result_data_reg(scrip):
+    regression_data = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    if(regression_data is not None):
+        regressionResult = get_regressionResult(regression_data, scrip, db)
+        buy_pattern_without_mlalgo(regression_data, regressionResult, None, None)
+        oi = buy_oi_candidate(regression_data, regressionResult, None)
+        if oi:
+            all_withoutml(regression_data, regressionResult, ws_buyOIReg)
+        buyIndiaAvg, result = buy_pattern_from_history(regression_data, regressionResult, None)
+        if buy_all_rule(regression_data, regressionResult, buyIndiaAvg, None):
+            buy_year_high(regression_data, regressionResult, None)
+            buy_year_low(regression_data, regressionResult, None, None)
+            buy_final(regression_data, regressionResult, None, None)
+            buy_high_indicators(regression_data, regressionResult, None)
+            buy_up_trend(regression_data, regressionResult, None)
+            buy_down_trend(regression_data, regressionResult, None)
+            buy_oi(regression_data, regressionResult, None)
+            buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAllReg)
+                
+    regression_data = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    if(regression_data is not None):
+        regressionResult = get_regressionResult(regression_data, scrip, db)
+        sell_pattern_without_mlalgo(regression_data, regressionResult, None, None)
+        oi = sell_oi_candidate(regression_data, regressionResult, None)
+        if oi:
+            all_withoutml(regression_data, regressionResult, ws_sellOIReg)
+        sellIndiaAvg, result = sell_pattern_from_history(regression_data, regressionResult, None)
+        if sell_all_rule(regression_data, regressionResult, sellIndiaAvg, None):
+            sell_year_high(regression_data, regressionResult, None, None)
+            sell_year_low(regression_data, regressionResult, None)
+            sell_final(regression_data, regressionResult, None, None)
+            sell_high_indicators(regression_data, regressionResult, None)
+            sell_up_trend(regression_data, regressionResult, None)
+            sell_down_trend(regression_data, regressionResult, None)
+            sell_oi(regression_data, regressionResult, None)
+            sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAllReg)                                
+ 
+def result_data_cla(scrip):
+    regression_data = db.classificationhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    if(regression_data is not None):
+        regressionResult = get_regressionResult(regression_data, scrip, db)
+        buy_pattern_without_mlalgo(regression_data, regressionResult, None, None)
+        oi = buy_oi_candidate(regression_data, regressionResult, None)
+        if oi:
+            all_withoutml(regression_data, regressionResult, ws_buyOICla)
+        buyIndiaAvg, result = buy_pattern_from_history(regression_data, regressionResult, None)
+        if buy_all_rule(regression_data, regressionResult, buyIndiaAvg, None):
+            buy_year_high(regression_data, regressionResult, None)
+            buy_year_low(regression_data, regressionResult, None, None)
+            buy_final(regression_data, regressionResult, None, None)
+            buy_high_indicators(regression_data, regressionResult, None)
+            buy_up_trend(regression_data, regressionResult, None)
+            buy_down_trend(regression_data, regressionResult, None)
+            buy_oi(regression_data, regressionResult, None)
+            buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAllCla)
+                        
+    regression_data = db.classificationlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    if(regression_data is not None):
+        regressionResult = get_regressionResult(regression_data, scrip, db)
+        sell_pattern_without_mlalgo(regression_data, regressionResult, None, None)
+        oi = sell_oi_candidate(regression_data, regressionResult, None)
+        if oi:
+            all_withoutml(regression_data, regressionResult, ws_sellOICla)
+        sellIndiaAvg, result = sell_pattern_from_history(regression_data, regressionResult, None)
+        if sell_all_rule(regression_data, regressionResult, sellIndiaAvg, None):
+            sell_year_high(regression_data, regressionResult, None, None)
+            sell_year_low(regression_data, regressionResult, None)
+            sell_final(regression_data, regressionResult, None, None)
+            sell_high_indicators(regression_data, regressionResult, None)
+            sell_up_trend(regression_data, regressionResult, None)
+            sell_down_trend(regression_data, regressionResult, None)
+            sell_oi(regression_data, regressionResult, None)
+            sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAllCla)                                 
+                                             
 def calculateParallel(threads=2, futures=None):
     pool = ThreadPool(threads)
     scrips = []
     for data in db.scrip.find({'futures':futures}):
         scrips.append(data['scrip'].replace('&','').replace('-','_'))
     scrips.sort()
-    pool.map(result_data, scrips)       
-                     
+    pool.map(result_data, scrips)
+    pool.map(result_data_reg, scrips)
+    pool.map(result_data_cla, scrips)
+                      
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
