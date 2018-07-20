@@ -1,0 +1,33 @@
+More than 40 points up on following day take opposite call
+
+In all OI calls check for last 2PM to 3PM trend for confirmation
+
+morning star(buyFinal) If market close less than 50 points( better in minus )
+evening star(sellFinal) If market close greater than -50 points( better in positive )
+
+ dayLowVolLow
+ 	* Not due to any negative news
+ 
+ dayHighVolLow
+ 	* Not due to any positive news
+
+in uptrend 
+	* check for downtrend avoid sectoral like oil, IT and banking
+	* check for uptrend and ml sell indicators, day change and pct day change around -1
+
+in downtrend 
+	* check for uptrend avoid sectoral like oil, IT and banking
+	* check for downtrend, high indicators and ml buy indicators, day change and pct day change around 1
+	
+In sideways or uptrend
+	* For year high check for high vol and news and for 1% move only	
+	
+Good result and better than expected
+	* Check for no pre rally and last day no major selling
+	* Not yearly high
+	
+Bad result and worst than expected	
+    * Check for no pre sell rally and last day no major buying
+    * Not yearly low
+		
+	
