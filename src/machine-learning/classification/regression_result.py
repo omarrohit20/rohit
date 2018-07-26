@@ -230,6 +230,8 @@ def saveReports(run_type=None):
      
 def result_data(scrip):
     classification_high = db.classificationhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    classification_low = db.classificationlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})                    
+    
     regression_data = classification_high
     if(regression_data is not None):
         regressionResult = get_regressionResult(regression_data, scrip, db, classification_low['mlpValue'], classification_low['kNeighboursValue'])
@@ -247,7 +249,6 @@ def result_data(scrip):
             buy_oi(regression_data, regressionResult, None)
             buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll)
             
-    classification_low = db.classificationlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})                    
     regression_data = classification_low
     if(regression_data is not None):
         regressionResult = get_regressionResult(regression_data, scrip, db, classification_high['mlpValue'], classification_high['kNeighboursValue'])

@@ -81,6 +81,8 @@ def get_data_frame(df, regressor="None"):
  
         dfp['uptrend'] = df['uptrend']
         dfp['downtrend'] = df['downtrend']
+#         dfp['greentrend'] = df['greentrend']
+#         dfp['redtrend'] = df['redtrend']
         if soft == False:
             dfp['HH'] = df['HH']
             dfp['LL'] = df['LL']   
@@ -266,6 +268,8 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     bar_high = df.tail(1).loc[-forecast_out:, 'bar_high'].values[0]
     bar_low = df.tail(1).loc[-forecast_out:, 'bar_low'].values[0]
     close = df.tail(1).loc[-forecast_out:, 'close'].values[0]
+    greentrend = df.tail(1).loc[-forecast_out:, 'greentrend'].values[0]
+    redtrend = df.tail(1).loc[-forecast_out:, 'redtrend'].values[0]
     
     regression_data = {}
     regression_data['date'] = forecast_day_date
@@ -304,6 +308,8 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     regression_data['bar_high'] = float(bar_high)
     regression_data['bar_low'] = float(bar_low)
     regression_data['close'] = float(close)
+    regression_data['greentrend'] = float(greentrend)
+    regression_data['redtrend'] = float(redtrend)
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     if kNeighbours:
