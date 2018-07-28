@@ -357,19 +357,19 @@ def buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws_b
     return False
 
 def buy_year_high(regression_data, regressionResult, ws_buyYearHigh):
-    if(-5 <= regression_data['yearHighChange'] < -1 and regression_data['yearLowChange'] > 30 and no_doji_or_spinning_buy_india(regression_data)
-        and -0.5 < regression_data['PCT_day_change'] < 3 and regression_data['forecast_day_PCT2_change'] <= 3
-        and float(regression_data['forecast_day_VOL_change']) > 30
-        ):
-        add_in_csv(regression_data, regressionResult, ws_buyYearHigh, 'buyYearHigh')
-        return True
-    elif(-15 < regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 30 and no_doji_or_spinning_buy_india(regression_data)
-        and -0.5 < regression_data['PCT_day_change'] < 5
-        and float(regression_data['forecast_day_VOL_change']) > 30
-        ):
-        if(regression_data['forecast_day_PCT2_change'] > 0 and regression_data['forecast_day_VOL_change'] > 0):
-            add_in_csv(regression_data, regressionResult, ws_buyYearHigh, 'buyYearHigh1')
+    if(float(regression_data['forecast_day_VOL_change']) > 30
+       and no_doji_or_spinning_buy_india(regression_data)
+       ):
+        if(-5 <= regression_data['yearHighChange'] < -1 and regression_data['yearLowChange'] > 30 
+            and -0.5 < regression_data['PCT_day_change'] < 3 and regression_data['forecast_day_PCT2_change'] <= 3
+            ):
+            add_in_csv(regression_data, regressionResult, ws_buyYearHigh, 'buyYearHigh')
             return True
+        elif(-15 < regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 30
+            and -0.5 < regression_data['PCT_day_change'] < 5 and regression_data['forecast_day_PCT2_change'] > 0
+            ):
+                add_in_csv(regression_data, regressionResult, ws_buyYearHigh, 'buyYearHigh1')
+                return True
     return False
 
 def buy_year_low(regression_data, regressionResult, ws_buyYearLow, ws_buyYearLow1):
@@ -397,9 +397,19 @@ def buy_up_trend(regression_data, regressionResult, ws_buyUpTrend):
     if(all_day_pct_change_positive(regression_data) and 0 < regression_data['PCT_day_change'] < 5 and regression_data['yearHighChange'] < -10
         and regression_data['forecast_day_PCT10_change'] >= regression_data['PCT_change'] + 2
         and regression_data['forecast_day_PCT10_change'] >= regression_data['PCT_day_change'] + 2
-        and regression_data['forecast_day_PCT10_change'] < 10
+        and float(regression_data['forecast_day_VOL_change']) > 30 
+        and float(regression_data['contract']) > 10
         and no_doji_or_spinning_buy_india(regression_data)):
         add_in_csv(regression_data, regressionResult, ws_buyUpTrend, 'buyUpTrend')
+        return True
+    if(2 < regression_data['PCT_day_change'] < 3 and 2 < regression_data['forecast_day_PCT_change'] < 3
+       and regression_data['PCT_change'] < regression_data['PCT_day_change'] + .2
+       and regression_data['forecast_day_PCT_change'] < regression_data['PCT_day_change'] + .2
+       and regression_data['forecast_day_PCT10_change'] < 7
+       and regression_data['series_trend'] != 'downTrend'
+       and regression_data['score'] != '0-1' 
+       ):
+        add_in_csv(regression_data, regressionResult, None, 'upTrendCandidate')
         return True
     return False
 
@@ -643,12 +653,12 @@ def buy_all_filter(regression_data, regressionResult, ws_buyAllFilter):
     if buy_year_low(regression_data, regressionResult, None, None):
         add_in_csv(regression_data, regressionResult, ws_buyAllFilter, None)
         return True
-#     if buy_up_trend(regression_data, regressionResult, None):
-#         add_in_csv(regression_data, regressionResult, ws_buyAllFilter, None)
-#         return True
-#     if buy_down_trend(regression_data, regressionResult, None):
-#         add_in_csv(regression_data, regressionResult, ws_buyAllFilter, None)
-#         return True
+    if buy_up_trend(regression_data, regressionResult, None):
+        add_in_csv(regression_data, regressionResult, ws_buyAllFilter, None)
+        return True
+    if buy_down_trend(regression_data, regressionResult, None):
+        add_in_csv(regression_data, regressionResult, ws_buyAllFilter, None)
+        return True
     if buy_final(regression_data, regressionResult, None, None):
         add_in_csv(regression_data, regressionResult, ws_buyAllFilter, None)
         return True
@@ -770,8 +780,19 @@ def sell_down_trend(regression_data, regressionResult, ws_sellDownTrend):
     if(all_day_pct_change_negative(regression_data) and -5 < regression_data['PCT_day_change'] < 0 and regression_data['yearLowChange'] > 30
         and regression_data['forecast_day_PCT10_change'] <= regression_data['PCT_change'] - 2
         and regression_data['forecast_day_PCT10_change'] <= regression_data['PCT_day_change'] - 2
+        and float(regression_data['forecast_day_VOL_change']) > 30
+        and float(regression_data['contract']) > 10
         and no_doji_or_spinning_sell_india(regression_data)):
         add_in_csv(regression_data, regressionResult, ws_sellDownTrend, 'sellDownTrend')
+        return True
+    if(-3 < regression_data['PCT_day_change'] < -2 and -3 < regression_data['forecast_day_PCT_change'] < -2
+       and regression_data['PCT_change'] < regression_data['PCT_day_change'] - 0.2
+       and regression_data['forecast_day_PCT_change'] < regression_data['PCT_day_change'] - 0.2
+       and regression_data['forecast_day_PCT10_change'] > -7
+       and regression_data['series_trend'] != 'upTrend'
+       and regression_data['score'] != '10' 
+       ):
+        add_in_csv(regression_data, regressionResult, None, 'downTrendCandidate')
         return True
     return False
 
@@ -1011,12 +1032,12 @@ def sell_all_filter(regression_data, regressionResult, ws_sellAllFilter):
     if sell_year_low(regression_data, regressionResult, None):
         add_in_csv(regression_data, regressionResult, ws_sellAllFilter, None)
         return True
-#     if sell_up_trend(regression_data, regressionResult, None):
-#         add_in_csv(regression_data, regressionResult, ws_sellAllFilter, None)
-#         return True
-#     if sell_down_trend(regression_data, regressionResult, None):
-#         add_in_csv(regression_data, regressionResult, ws_sellAllFilter, None)
-#         return True
+    if sell_up_trend(regression_data, regressionResult, None):
+        add_in_csv(regression_data, regressionResult, ws_sellAllFilter, None)
+        return True
+    if sell_down_trend(regression_data, regressionResult, None):
+        add_in_csv(regression_data, regressionResult, ws_sellAllFilter, None)
+        return True
     if sell_final(regression_data, regressionResult, None, None):
         add_in_csv(regression_data, regressionResult, ws_sellAllFilter, None)
         return True
