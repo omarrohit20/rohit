@@ -525,6 +525,8 @@ def buy_oi_negative(regression_data, regressionResult, ws):
         and regression_data['forecast_day_PCT_change'] < -0.5
         and regression_data['forecast_day_PCT2_change'] < -0.5
         and regression_data['forecast_day_PCT3_change'] < -0.5
+        and regression_data['forecast_day_PCT4_change'] < -0.5
+        and regression_data['forecast_day_PCT5_change'] < -0.5
         and float(regression_data['forecast_day_VOL_change']) < -30 
         and float(regression_data['contract']) < 0
         and float(regression_data['oi']) < 5
@@ -905,6 +907,8 @@ def sell_oi_negative(regression_data, regressionResult, ws):
         and regression_data['forecast_day_PCT_change'] > 0.5
         and regression_data['forecast_day_PCT2_change'] > 0.5
         and regression_data['forecast_day_PCT3_change'] > 0.5
+        and regression_data['forecast_day_PCT4_change'] > 0.5
+        and regression_data['forecast_day_PCT5_change'] > 0.5
         and float(regression_data['forecast_day_VOL_change']) < -30 
         and float(regression_data['contract']) < 0
         and float(regression_data['oi']) < 5
