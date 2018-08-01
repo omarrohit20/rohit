@@ -250,6 +250,8 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     forecast_day_PCT10_change = dfp.tail(1).loc[-forecast_out:, 'Low_change10'].values[0]
     forecast_day_VOL_change = df.tail(1).loc[-forecast_out:, 'VOL_change'].values[0]
     forecast_day_date = df.tail(1).loc[-forecast_out:, 'date'].values[0]
+    PCT_change_pre = df.tail(1).loc[-forecast_out:,'PCT_change'].values[-1]
+    PCT_day_change_pre = df.tail(1).loc[-forecast_out:,'PCT_day_change'].values[-1]
     PCT_change = df.tail(1).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_day_change = df.tail(1).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_day_OL = df.tail(1).loc[-forecast_out:, 'PCT_day_OL'].values[0]
@@ -267,6 +269,8 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     low = df.tail(1).loc[-forecast_out:, 'low'].values[0]
     bar_high = df.tail(1).loc[-forecast_out:, 'bar_high'].values[0]
     bar_low = df.tail(1).loc[-forecast_out:, 'bar_low'].values[0]
+    bar_high_pre = df.tail(1).loc[-forecast_out:, 'bar_high_pre'].values[0]
+    bar_low_pre = df.tail(1).loc[-forecast_out:, 'bar_low_pre'].values[0]
     close = df.tail(1).loc[-forecast_out:, 'close'].values[0]
     greentrend = df.tail(1).loc[-forecast_out:, 'greentrend'].values[0]
     redtrend = df.tail(1).loc[-forecast_out:, 'redtrend'].values[0]
@@ -291,6 +295,8 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     regression_data['yearHighChange'] = float(yearHighChange) 
     regression_data['yearLowChange'] = float(yearLowChange)
     regression_data['patterns'] = ''
+    regression_data['PCT_change_pre'] = float(PCT_change_pre)
+    regression_data['PCT_day_change_pre'] = float(PCT_day_change_pre)
     regression_data['PCT_change'] = float(PCT_change)
     regression_data['PCT_day_change'] = float(PCT_day_change)
     regression_data['PCT_day_OL'] = float(PCT_day_OL)
@@ -307,6 +313,8 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     regression_data['low'] = float(low)
     regression_data['bar_high'] = float(bar_high)
     regression_data['bar_low'] = float(bar_low)
+    regression_data['bar_high_pre'] = float(bar_high_pre)
+    regression_data['bar_low_pre'] = float(bar_low_pre)
     regression_data['close'] = float(close)
     regression_data['greentrend'] = float(greentrend)
     regression_data['redtrend'] = float(redtrend)
