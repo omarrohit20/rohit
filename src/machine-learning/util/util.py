@@ -536,8 +536,8 @@ def morning_star_sell(regression_data, regressionResult, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, 'msSellCandidate-0')
             return True
-        elif(1 > regression_data['PCT_day_change'] > 0
-            and (regression_data['high']-regression_data['open']) > regression_data['PCT_day_change'] * 2.5
+        elif(1 > regression_data['PCT_day_change'] > 0 and 1 > regression_data['PCT_change'] > 0
+            and (regression_data['high']-regression_data['open']) > regression_data['PCT_day_change'] * 3
             and (regression_data['open']-regression_data['low']) < regression_data['PCT_day_change']
             ):
             add_in_csv(regression_data, regressionResult, ws, 'msSellCandidate-1')
@@ -622,7 +622,7 @@ def buy_oi_candidate(regression_data, regressionResult, ws):
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'oiBuyCandidate-1')
                 return True
-            elif((regression_data['forecast_day_VOL_change'] > 70 and 0.5 < regression_data['PCT_day_change'] < 3 and 0.5 < regression_data['PCT_change'] < 3)
+            elif((regression_data['forecast_day_VOL_change'] > 100 and 0.5 < regression_data['PCT_day_change'] < 3 and 0.5 < regression_data['PCT_change'] < 3)
                 and regression_data['PCT_day_change_pre'] > -0.5
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'oiBuyCandidate-2')
@@ -634,7 +634,7 @@ def buy_oi_candidate(regression_data, regressionResult, ws):
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'oiBuyCandidate-3')
                 return True
-            elif(((regression_data['forecast_day_VOL_change'] > 100 and 0.5 < regression_data['PCT_day_change'] < 3.5 and 0.5 < regression_data['PCT_change'] < 3.5)
+            elif(((regression_data['forecast_day_VOL_change'] > 150 and 0.5 < regression_data['PCT_day_change'] < 3.5 and 0.5 < regression_data['PCT_change'] < 3.5)
                 or (regression_data['forecast_day_VOL_change'] > 200 and 0.5 < regression_data['PCT_day_change'] < 4.5 and 0.5 < regression_data['PCT_change'] < 4.5)
                 )
                 ):
@@ -980,8 +980,8 @@ def morning_star_buy(regression_data, regressionResult, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, 'msBuyCandidate-0')
             return True
-        elif(-1 < regression_data['PCT_day_change'] < 0
-            and (regression_data['low'] - regression_data['open']) < regression_data['PCT_day_change'] * 2.5
+        elif(-1 < regression_data['PCT_day_change'] < 0 and -1 < regression_data['PCT_change'] < 0
+            and (regression_data['low'] - regression_data['open']) < regression_data['PCT_day_change'] * 3
             and (regression_data['open'] - regression_data['high']) > regression_data['PCT_day_change']
             ):
             add_in_csv(regression_data, regressionResult, ws, 'msBuyCandidate-1')
@@ -1064,7 +1064,7 @@ def sell_oi_candidate(regression_data, regressionResult, ws):
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'oiSellCandidate-1')
                 return True
-            elif((regression_data['forecast_day_VOL_change'] > 70 and -3 < regression_data['PCT_day_change'] < -0.5 and -3 < regression_data['PCT_change'] < -0.5)
+            elif((regression_data['forecast_day_VOL_change'] > 100 and -3 < regression_data['PCT_day_change'] < -0.5 and -3 < regression_data['PCT_change'] < -0.5)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'oiSellCandidate-2')
                 return True
@@ -1074,7 +1074,7 @@ def sell_oi_candidate(regression_data, regressionResult, ws):
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'oiSellCandidate-3')
                 return True
-            elif(((regression_data['forecast_day_VOL_change'] > 100 and -3.5 < regression_data['PCT_day_change'] < -0.5 and -3.5 < regression_data['PCT_change'] < -0.5)
+            elif(((regression_data['forecast_day_VOL_change'] > 150 and -3.5 < regression_data['PCT_day_change'] < -0.5 and -3.5 < regression_data['PCT_change'] < -0.5)
                 or (regression_data['forecast_day_VOL_change'] > 200 and -4.5 < regression_data['PCT_day_change'] < -0.5 and -4.5 < regression_data['PCT_change'] < -0.5)
                 )
                 ):
@@ -1098,6 +1098,7 @@ def sell_oi_candidate(regression_data, regressionResult, ws):
                     return True
                 if(-5 < regression_data['PCT_day_change'] < -0.5 and -5 < regression_data['PCT_change'] < -0.5
                    and regression_data['PCT_day_change_pre'] > 0
+                   and regression_data['yearHighChange'] > -30 or regression_data['yearLowChange'] > 30
                     ):
                     add_in_csv(regression_data, regressionResult, ws, 'finalSellCandidate-00')
                     return True
