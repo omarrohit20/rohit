@@ -264,6 +264,10 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     Act_High_change = df.tail(1).loc[-forecast_out:, 'Act_High_change'].values[0]
     Act_Low_change = df.tail(1).loc[-forecast_out:, 'Act_Low_change'].values[0]
     score = df.tail(1).loc[-forecast_out:, 'uptrend'].values[0].astype(str) + '' + df.tail(1).loc[-forecast_out:, 'downtrend'].values[0].astype(str)
+    volume = df.tail(1).loc[-forecast_out:, 'volume'].values[0]
+    volume_pre1 = df.tail(2).loc[-forecast_out:, 'volume'].values[0]
+    volume_pre2 = df.tail(3).loc[-forecast_out:, 'volume'].values[0]
+    volume_pre3 = df.tail(4).loc[-forecast_out:, 'volume'].values[0]
     open = df.tail(1).loc[-forecast_out:, 'open'].values[0]
     high = df.tail(1).loc[-forecast_out:, 'high'].values[0]
     low = df.tail(1).loc[-forecast_out:, 'low'].values[0]
@@ -308,6 +312,10 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     regression_data['Act_PCT_day_HO'] = float(Act_PCT_day_HO)
     regression_data['Act_High_change'] = float(Act_High_change)
     regression_data['Act_Low_change'] = float(Act_Low_change)
+    regression_data['volume'] = float(volume)
+    regression_data['volume_pre1'] = float(volume_pre1)
+    regression_data['volume_pre2'] = float(volume_pre2)
+    regression_data['volume_pre3'] = float(volume_pre3)
     regression_data['open'] = float(open)
     regression_data['high'] = float(high)
     regression_data['low'] = float(low)
