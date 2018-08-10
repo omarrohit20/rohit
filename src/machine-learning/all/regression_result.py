@@ -342,9 +342,9 @@ def result_data_cla(scrip):
     if(regression_data is not None):
         regressionResult = get_regressionResult(regression_data, scrip, db, classification_low['mlpValue'], classification_low['kNeighboursValue'])
         buy_pattern_without_mlalgo(regression_data, regressionResult, None, None)
-        oi = buy_oi_candidate(regression_data, regressionResult, None)
-        if oi:
-            all_withoutml(regression_data, regressionResult, ws_buyOICla)
+#         oi = buy_oi_candidate(regression_data, regressionResult, None)
+#         if oi:
+#             all_withoutml(regression_data, regressionResult, ws_buyOICla)
         buyIndiaAvg, result = buy_pattern_from_history(regression_data, regressionResult, None)
         if buy_all_rule(regression_data, regressionResult, buyIndiaAvg, None):
             buy_year_high(regression_data, regressionResult, None)
