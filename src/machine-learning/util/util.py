@@ -160,7 +160,23 @@ def pct_change_positive_trend(regression_data):
                 trend = False
         return trend
     return False       
-        
+
+def preDayPctChangeUp_orVolHigh(regression_data):
+    if(regression_data['PCT_day_change_pre'] > 0 
+       or (regression_data['volume'] > regression_data['volume_pre2'] and regression_data['volume'] > regression_data['volume_pre3'])
+    ):
+        return True
+    else:
+        return False
+    
+def preDayPctChangeDown_orVolHigh(regression_data):
+    if(regression_data['PCT_day_change_pre'] < 0 
+       or (regression_data['volume'] > regression_data['volume_pre2'] and regression_data['volume'] > regression_data['volume_pre3'])
+    ):
+        return True
+    else:
+        return False    
+            
 def historical_data_OI(data):
     ardate = np.array([str(x) for x in (np.array(data['data'])[:,3][::-1]).tolist()])
     aroipctchange = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,6][::-1]).tolist()])
@@ -665,9 +681,7 @@ def buy_oi_candidate(regression_data, regressionResult, ws):
            and regression_data['forecast_day_PCT4_change'] > 0
            and regression_data['forecast_day_PCT10_change'] < 10
            and regression_data['yearHighChange'] < -2
-           and(regression_data['PCT_day_change_pre'] > 0 
-               or (regression_data['volume'] > regression_data['volume_pre2'] and regression_data['volume'] > regression_data['volume_pre3'])
-               )
+           and preDayPctChangeUp_orVolHigh(regression_data)
            ):
             if((regression_data['forecast_day_VOL_change'] > 70 and 0.75 < regression_data['PCT_day_change'] < 2 and 0.5 < regression_data['PCT_change'] < 2)
                 and float(regression_data['contract']) > 10
@@ -680,7 +694,7 @@ def buy_oi_candidate(regression_data, regressionResult, ws):
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'oiBuyCandidate-1')
                 return True
-            elif((regression_data['forecast_day_VOL_change'] > 100 and 0.75 < regression_data['PCT_day_change'] < 3 and 0.5 < regression_data['PCT_change'] < 3)
+            elif((regression_data['forecast_day_VOL_change'] > 150 and 0.75 < regression_data['PCT_day_change'] < 3 and 0.5 < regression_data['PCT_change'] < 3)
                 #and regression_data['PCT_day_change_pre'] > -0.5
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'oiBuyCandidate-2')
@@ -1136,9 +1150,7 @@ def sell_oi_candidate(regression_data, regressionResult, ws):
             and regression_data['forecast_day_PCT2_change'] < -0.5
             and regression_data['forecast_day_PCT3_change'] < 0
             and regression_data['forecast_day_PCT4_change'] < 0
-            and(regression_data['PCT_day_change_pre'] < 0 
-               or (regression_data['volume'] > regression_data['volume_pre2'] and regression_data['volume'] > regression_data['volume_pre3'])
-               )
+            and preDayPctChangeDown_orVolHigh(regression_data)
             and (regression_data['forecast_day_PCT10_change'] > 0 or regression_data['forecast_day_PCT7_change'] > 0)
             ):
             if((regression_data['forecast_day_VOL_change'] > 70 and -2 < regression_data['PCT_day_change'] < -0.75 and -2 < regression_data['PCT_change'] < -0.5)
@@ -1151,7 +1163,7 @@ def sell_oi_candidate(regression_data, regressionResult, ws):
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'oiSellCandidate-1')
                 return True
-            elif((regression_data['forecast_day_VOL_change'] > 100 and -3 < regression_data['PCT_day_change'] < -0.75 and -3 < regression_data['PCT_change'] < -0.5)
+            elif((regression_data['forecast_day_VOL_change'] > 150 and -3 < regression_data['PCT_day_change'] < -0.75 and -3 < regression_data['PCT_change'] < -0.5)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'oiSellCandidate-2')
                 return True
