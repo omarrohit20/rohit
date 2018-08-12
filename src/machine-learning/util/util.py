@@ -397,17 +397,17 @@ def buy_year_high(regression_data, regressionResult, ws_buyYearHigh):
        and regression_data['PCT_day_change_pre'] > -0.5
        and no_doji_or_spinning_buy_india(regression_data)
        ):
-        if(-5 <= regression_data['yearHighChange'] < -1 and regression_data['yearLowChange'] > 30 
-            and -0.5 < regression_data['PCT_day_change'] < 3 and regression_data['forecast_day_PCT2_change'] <= 3
+        if(-5 <= regression_data['yearHighChange'] < -1 and regression_data['yearLowChange'] > 15 
+            and -0.5 < regression_data['PCT_day_change'] < 2 and regression_data['forecast_day_PCT2_change'] <= 3
             ):
             add_in_csv(regression_data, regressionResult, ws_buyYearHigh, 'buyYearHigh')
             return True
-    if(float(regression_data['forecast_day_VOL_change']) > 30
+    if(float(regression_data['forecast_day_VOL_change']) > 50
        and regression_data['PCT_day_change_pre'] > -0.5
        and no_doji_or_spinning_buy_india(regression_data)
        ):
         if(-15 < regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 30
-            and -0.5 < regression_data['PCT_day_change'] < 3 and regression_data['forecast_day_PCT2_change'] <= 3
+            and -0.5 < regression_data['PCT_day_change'] < 2 and regression_data['forecast_day_PCT2_change'] <= 3
             ):
             add_in_csv(regression_data, regressionResult, ws_buyYearHigh, 'buyYearHigh1')
             return True
