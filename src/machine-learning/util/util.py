@@ -325,6 +325,26 @@ def ten_days_less_than_ten(regression_data):
         return True
     else:
         return False
+    
+def ten_days_more_than_seven(regression_data):
+    if(25 > regression_data['forecast_day_PCT10_change'] > 5
+       and (regression_data['forecast_day_PCT5_change'] > 7
+         or regression_data['forecast_day_PCT7_change'] > 7
+         or regression_data['forecast_day_PCT10_change'] > 7)
+    ):
+        return True
+    else:
+        return False
+        
+def ten_days_less_than_seven(regression_data):
+    if(-25 < regression_data['forecast_day_PCT10_change'] < -5
+       and (regression_data['forecast_day_PCT5_change'] < -7
+         or regression_data['forecast_day_PCT7_change'] < -7
+         or regression_data['forecast_day_PCT10_change'] < -7)
+    ):
+        return True
+    else:
+        return False    
 
 def buy_pattern_without_mlalgo(regression_data, regressionResult, ws_buyPattern2, ws_sellPattern2):
     buyPatternsDict=scrip_patterns_to_dict('../../data-import/nselist/all-buy-filter-by-PCT-Change.csv')
@@ -501,7 +521,7 @@ def buy_up_trend(regression_data, regressionResult, ws_buyUpTrend):
 def buy_down_trend(regression_data, regressionResult, ws_buyDownTrend):
     if(all_day_pct_change_negative(regression_data) 
        and 0 < regression_data['PCT_day_change'] < 5 
-       and ten_days_less_than_ten(regression_data)
+       and ten_days_less_than_seven(regression_data)
        and regression_data['yearHighChange'] < -10):
         add_in_csv(regression_data, regressionResult, ws_buyDownTrend, 'buyDownTrend')
         return True
@@ -641,31 +661,31 @@ def buy_day_low(regression_data, regressionResult, ws):
     if((regression_data['PCT_day_change'] < -6 or regression_data['PCT_change'] < -6)
        and float(regression_data['forecast_day_VOL_change']) < -30
        and ((regression_data['mlpValue'] > 0.3 and regression_data['kNeighboursValue'] > 0.3) or is_algo_buy(regression_data))
-       and regression_data['PCT_day_change_pre'] < 0
+       and regression_data['PCT_day_change'] < regression_data['PCT_day_change_pre'] < 0
        ):
         add_in_csv(regression_data, regressionResult, ws, 'dayLow-ML')
         return True
     if((regression_data['PCT_day_change'] < -6 or regression_data['PCT_change'] < -6)
        and float(regression_data['forecast_day_VOL_change']) < -30
-       and regression_data['PCT_day_change_pre'] < 0
+       and regression_data['PCT_day_change'] < regression_data['PCT_day_change_pre'] < 0
        ):
         add_in_csv(regression_data, regressionResult, ws, 'dayLowVolLow-0')
         return True
     if((regression_data['PCT_day_change'] < -6 or regression_data['PCT_change'] < -6)
        and float(regression_data['forecast_day_VOL_change']) < 100
-       and regression_data['PCT_day_change_pre'] < 0
+       and regression_data['PCT_day_change'] < regression_data['PCT_day_change_pre'] < 0
        ):
         add_in_csv(regression_data, regressionResult, ws, 'dayLowVolLow-00')
         return True
     if((regression_data['PCT_day_change'] < -3 and regression_data['PCT_change'] < -3)
-       and float(regression_data['forecast_day_VOL_change']) < 0
-       and regression_data['PCT_day_change_pre'] < 0
+       and float(regression_data['forecast_day_VOL_change']) < -30
+       and regression_data['PCT_day_change'] < regression_data['PCT_day_change_pre'] < 0
        ):
         add_in_csv(regression_data, regressionResult, ws, 'dayLowVolLow-1')
         return True
     if((regression_data['PCT_day_change'] < -2.5 and regression_data['PCT_change'] < -2)
-       and float(regression_data['forecast_day_VOL_change']) < 0
-       and regression_data['PCT_day_change_pre'] < 0
+       and float(regression_data['forecast_day_VOL_change']) < -30
+       and regression_data['PCT_day_change'] < regression_data['PCT_day_change_pre'] < 0
        ):
         add_in_csv(regression_data, regressionResult, ws, 'dayLowVolLow-2')
         return True
@@ -931,7 +951,7 @@ def sell_year_low(regression_data, regressionResult, ws_sellYearLow):
 def sell_up_trend(regression_data, regressionResult, ws_sellUpTrend):
     if(all_day_pct_change_positive(regression_data) 
        and -5 < regression_data['PCT_day_change'] < 0 
-       and ten_days_more_than_ten(regression_data)
+       and ten_days_more_than_seven(regression_data)
        and regression_data['yearLowChange'] > 30
        ):
         add_in_csv(regression_data, regressionResult, ws_sellUpTrend, 'sellUpTrend')
@@ -1125,25 +1145,25 @@ def sell_day_high(regression_data, regressionResult, ws):
     if((regression_data['PCT_day_change'] > 6 or regression_data['PCT_change'] > 6) 
        and float(regression_data['forecast_day_VOL_change']) < -30  
        and ((regression_data['mlpValue'] < -0.3 and regression_data['kNeighboursValue'] < -0.3) or is_algo_sell(regression_data))
-       and regression_data['PCT_day_change_pre'] > 0
+       and regression_data['PCT_day_change'] > regression_data['PCT_day_change_pre'] > 0
        ):
         add_in_csv(regression_data, regressionResult, ws, 'dayHigh-ML')
         return True
     elif((regression_data['PCT_day_change'] > 6 or regression_data['PCT_change'] > 6)
        and float(regression_data['forecast_day_VOL_change']) < -30
-       and regression_data['PCT_day_change_pre'] > 0
+       and regression_data['PCT_day_change'] > regression_data['PCT_day_change_pre'] > 0
        ):
         add_in_csv(regression_data, regressionResult, ws, 'dayHighVolLow-0')
         return True
     elif((regression_data['PCT_day_change'] > 6 or regression_data['PCT_change'] > 6)
        and float(regression_data['forecast_day_VOL_change']) < 100
-       and regression_data['PCT_day_change_pre'] > 0
+       and regression_data['PCT_day_change'] > regression_data['PCT_day_change_pre'] > 0
        ):
         add_in_csv(regression_data, regressionResult, ws, 'dayHighVolLow-00')
         return True
     if((regression_data['PCT_day_change'] > 3 and regression_data['PCT_change'] > 3) 
-       and float(regression_data['forecast_day_VOL_change']) < 0  
-       and regression_data['PCT_day_change_pre'] > 0
+       and float(regression_data['forecast_day_VOL_change']) < -30  
+       and regression_data['PCT_day_change'] > regression_data['PCT_day_change_pre'] > 0
        ):
         add_in_csv(regression_data, regressionResult, ws, 'dayHighVolLow-1')
         return True
