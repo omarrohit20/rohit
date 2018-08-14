@@ -22,7 +22,7 @@ from util.util import get_regressionResult
 from util.util import buy_pattern_from_history, buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final, buy_high_indicators, buy_pattern
 from util.util import sell_pattern_from_history, sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final, sell_high_indicators, sell_pattern
 from util.util import buy_pattern_without_mlalgo, sell_pattern_without_mlalgo, buy_oi, sell_oi, all_withoutml
-from util.util import morning_star_sell, buy_oi_candidate, morning_star_buy, sell_oi_candidate
+from util.util import evening_star_sell, buy_oi_candidate, morning_star_buy, sell_oi_candidate
 
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
