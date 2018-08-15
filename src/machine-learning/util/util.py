@@ -859,6 +859,13 @@ def buy_all_common(regression_data, classification_data, regressionResult, ws_bu
     if((regression_data['kNeighboursValue'] >= 1 or (regression_data['mlpValue'] >= 1.5 and classification_data['mlpValue'] >= 1)) 
         #and regression_data['trend'] != 'up'
         and -1 < regression_data['PCT_change'] < 4
+        and regression_data['forecast_day_PCT_change'] < 5
+        and regression_data['forecast_day_PCT2_change'] < 5
+        and regression_data['forecast_day_PCT3_change'] < 5
+        and regression_data['forecast_day_PCT4_change'] < 5
+        and regression_data['forecast_day_PCT5_change'] < 5
+        and regression_data['forecast_day_PCT7_change'] < 5
+        and regression_data['forecast_day_PCT10_change'] < 5
     ):
         add_in_csv(regression_data, regressionResult, ws_buyAllCommon, None)
         return True
@@ -1358,7 +1365,13 @@ def sell_oi(regression_data, regressionResult, ws):
 def sell_all_common(regression_data, classification_data, regressionResult, ws_sellAllCommon):
     if((regression_data['kNeighboursValue'] <= -1 or (regression_data['mlpValue'] <= -1.5 and classification_data['mlpValue'] <= 0)) 
         and regression_data['trend'] != 'down'
-        #and -4 < regression_data['PCT_change'] < 1
+        and regression_data['forecast_day_PCT_change'] > -5
+        and regression_data['forecast_day_PCT2_change'] > -5
+        and regression_data['forecast_day_PCT3_change'] > -5
+        and regression_data['forecast_day_PCT4_change'] > -5
+        and regression_data['forecast_day_PCT5_change'] > -5
+        and regression_data['forecast_day_PCT7_change'] > -5
+        and regression_data['forecast_day_PCT10_change'] > -5
         ):
         add_in_csv(regression_data, regressionResult, ws_sellAllCommon, None)
         return True
