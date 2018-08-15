@@ -1,0 +1,7 @@
+crontab -l
+50	18	*	*	1,2,3,4	cd /Users/rohit/Google\ Drive/git/rohit/src/data-import && /Users/rohit/Google\ Drive/git/rohit/src/data-import/importer-historyOI.sh
+08	19	*	*	1,2,3,4	cd /Users/rohit/Google\ Drive/git/rohit/src/data-import && /Users/rohit/Google\ Drive/git/rohit/src/data-import/importer.sh
+20	19	*	*	1,2,3,4	cd /Users/rohit/Google\ Drive/git/rohit/src/machine-learning/regression && /Users/rohit/Google\ Drive/git/rohit/src/machine-learning/regression/regression_run_futures.sh
+21	19	*	*	1,2,3,4	cd /Users/rohit/Google\ Drive/git/rohit/src/machine-learning/classification && /Users/rohit/Google\ Drive/git/rohit/src/machine-learning/classification/regression_run_futures.sh
+30	20	*	*	1,2,3,4	cd /Users/rohit/Google\ Drive/git/rohit/src/data-import && python /Users/rohit/Google\ Drive/git/rohit/src/data-import/S3cripResultImporter.py
+50	20	*	*	1,2,3,4	cd /Users/rohit/Google\ Drive/git/rohit/src/machine-learning/all && /Users/rohit/Google\ Drive/git/rohit/src/machine-learning/all/regression_run_futures.sh
