@@ -805,6 +805,18 @@ def buy_day_low(regression_data, regressionResult, ws):
 #         return True
     return False
 
+def buy_year_high_oi(regression_data, regressionResult, ws):
+    if((-1 < regression_data['PCT_day_change'] < 0 and -1 < regression_data['PCT_change'] < 0)
+       and float(regression_data['forecast_day_VOL_change']) < 0
+       and -5 < regression_data['forecast_day_PCT_change'] < 1
+       and -5 < regression_data['forecast_day_PCT2_change'] < 1
+       and -5 < regression_data['forecast_day_PCT3_change'] < 1
+       and -5 < regression_data['forecast_day_PCT7_change'] < 5
+       and regression_data['yearHighChange'] > -5
+       ):
+        add_in_csv(regression_data, regressionResult, ws, '##yearHighBuy-0')
+        return True
+
 def buy_oi_candidate(regression_data, regressionResult, ws):
     bar = regression_data['close'] - regression_data['open']
     bar_high = regression_data['high'] - regression_data['close']
@@ -813,6 +825,8 @@ def buy_oi_candidate(regression_data, regressionResult, ws):
     if buy_oi_negative(regression_data, regressionResult, ws):
         return True
     if buy_day_low(regression_data, regressionResult, ws):
+        return True
+    if buy_year_high_oi(regression_data, regressionResult, ws):
         return True
 #     if(bar_high != 0):
 #         bar_pct_change = float(((bar-bar_high)/bar_high)*100)
@@ -1334,6 +1348,18 @@ def sell_day_high(regression_data, regressionResult, ws):
 #         return True
     return False
 
+def sell_year_low_oi(regression_data, regressionResult, ws):
+    if((0 < regression_data['PCT_day_change'] < 1 and 0 < regression_data['PCT_change'] < 1)
+       and float(regression_data['forecast_day_VOL_change']) < 0
+       and 5 > regression_data['forecast_day_PCT_change'] > -1
+       and 5 > regression_data['forecast_day_PCT2_change'] > -1
+       and 5 > regression_data['forecast_day_PCT3_change'] > -1
+       and 5 > regression_data['forecast_day_PCT7_change'] > -5
+       and regression_data['yearLowChange'] < 5
+       ):
+        add_in_csv(regression_data, regressionResult, ws, '##yearLowSell-0')
+        return True
+
 def sell_oi_candidate(regression_data, regressionResult, ws):
     bar = regression_data['open'] - regression_data['close']
     bar_low = regression_data['close'] - regression_data['low']
@@ -1342,6 +1368,8 @@ def sell_oi_candidate(regression_data, regressionResult, ws):
     if sell_oi_negative(regression_data, regressionResult, ws):
         return True
     if sell_day_high(regression_data, regressionResult, ws):
+        return True
+    if sell_year_low_oi(regression_data, regressionResult, ws):
         return True
 #     if(bar_low != 0):
 #         bar_pct_change = float(((bar - bar_low)/bar_low)*100)
