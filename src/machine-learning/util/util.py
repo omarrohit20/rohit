@@ -624,10 +624,10 @@ def buy_down_trend(regression_data, regressionResult, ws_buyDownTrend):
             ):
             add_in_csv(regression_data, regressionResult, ws_buyDownTrend, 'buyDownTrend-0')
             return True
-#         elif(regression_data['forecast_day_PCT10_change'] > -10
-#             ):
-#             add_in_csv(regression_data, regressionResult, ws_buyDownTrend, '##buyDownTrend-1')
-#             return True
+        elif(regression_data['forecast_day_PCT10_change'] > -10
+            ):
+            #add_in_csv(regression_data, regressionResult, ws_buyDownTrend, '##buyDownTrend-1')
+            return False
     elif(all_day_pct_change_negative_except_today(regression_data) 
         and 0 < regression_data['PCT_day_change'] < 5 and 0 < regression_data['PCT_change']
         and regression_data['forecast_day_PCT10_change'] > -10
@@ -1117,15 +1117,15 @@ def sell_up_trend(regression_data, regressionResult, ws_sellUpTrend):
             ):
             add_in_csv(regression_data, regressionResult, ws_sellUpTrend, 'sellUpTrend-0')
             return True
-#         elif(regression_data['forecast_day_PCT10_change'] < 10
-#             ):
-#             add_in_csv(regression_data, regressionResult, ws_sellUpTrend, '##sellUpTrend-1')
-#             return True
+        elif(regression_data['forecast_day_PCT10_change'] < 10
+            ):
+            #add_in_csv(regression_data, regressionResult, ws_sellUpTrend, '##sellUpTrend-1')
+            return False
     elif(all_day_pct_change_positive_except_today(regression_data) 
         and -5 < regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0
         and regression_data['forecast_day_PCT10_change'] < 10
         ):
-        add_in_csv(regression_data, regressionResult, ws_sellUpTrend, '##sellUpTrend-2')
+        add_in_csv(regression_data, regressionResult, ws_sellUpTrend, '##sellUpTrend-1')
         return True
     return False
 
