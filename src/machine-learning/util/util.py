@@ -504,14 +504,14 @@ def buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws_b
     return False
 
 def buy_year_high(regression_data, regressionResult, ws_buyYearHigh):
-    if(float(regression_data['forecast_day_VOL_change']) > 50
+    if(float(regression_data['forecast_day_VOL_change']) > 100
        and regression_data['PCT_day_change_pre'] > -0.5
        and no_doji_or_spinning_buy_india(regression_data)
        ):
-        if(-5 <= regression_data['yearHighChange'] < -1 and regression_data['yearLowChange'] > 15 
+        if(-15 < regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 30
             and -0.5 < regression_data['PCT_day_change'] < 2 and regression_data['forecast_day_PCT2_change'] <= 3
             ):
-            add_in_csv(regression_data, regressionResult, ws_buyYearHigh, 'buyYearHigh')
+            add_in_csv(regression_data, regressionResult, ws_buyYearHigh, 'buyYearHigh-0')
             return True
     if(float(regression_data['forecast_day_VOL_change']) > 50
        and regression_data['PCT_day_change_pre'] > -0.5
@@ -520,8 +520,18 @@ def buy_year_high(regression_data, regressionResult, ws_buyYearHigh):
         if(-15 < regression_data['yearHighChange'] < -5 and regression_data['yearLowChange'] > 30
             and -0.5 < regression_data['PCT_day_change'] < 2 and regression_data['forecast_day_PCT2_change'] <= 3
             ):
-            add_in_csv(regression_data, regressionResult, ws_buyYearHigh, 'buyYearHigh1')
+            add_in_csv(regression_data, regressionResult, ws_buyYearHigh, 'buyYearHigh-1')
             return True
+    if(float(regression_data['forecast_day_VOL_change']) > 50
+       and regression_data['PCT_day_change_pre'] > -0.5
+       and no_doji_or_spinning_buy_india(regression_data)
+       ):
+        if(-5 <= regression_data['yearHighChange'] < -1 and regression_data['yearLowChange'] > 15 
+            and -0.5 < regression_data['PCT_day_change'] < 2 and regression_data['forecast_day_PCT2_change'] <= 3
+            ):
+            add_in_csv(regression_data, regressionResult, ws_buyYearHigh, 'buyYearHigh-2')
+            return True
+    
     return False
 
 def buy_year_low(regression_data, regressionResult, ws_buyYearLow, ws_buyYearLow1):
@@ -557,7 +567,8 @@ def buy_up_trend(regression_data, regressionResult, ws_buyUpTrend):
        and regression_data['forecast_day_PCT2_change'] > 0
        and regression_data['forecast_day_PCT3_change'] > 0
        ):
-        if(2 < regression_data['PCT_day_change'] < 3 and 2 < regression_data['forecast_day_PCT_change'] < 3
+        if(abs(regression_data['yearHighChange']) > abs(regression_data['yearLowChange'])
+           and 2 < regression_data['PCT_day_change'] < 3 and 2 < regression_data['forecast_day_PCT_change'] < 3
            and regression_data['PCT_change'] < regression_data['PCT_day_change'] + .2
            and regression_data['forecast_day_PCT_change'] < regression_data['PCT_day_change'] + .2
            and regression_data['series_trend'] != 'downTrend'
@@ -566,7 +577,9 @@ def buy_up_trend(regression_data, regressionResult, ws_buyUpTrend):
            ):
             add_in_csv(regression_data, regressionResult, None, 'buyUpTrend-0')
             return True
-        if(2 < regression_data['PCT_day_change'] < 3 and 2 < regression_data['forecast_day_PCT_change'] < 3
+        if(abs(regression_data['yearHighChange']) > abs(regression_data['yearLowChange'])
+           and regression_data['yearHighChange'] < -10
+           and 2 < regression_data['PCT_day_change'] < 3 and 2 < regression_data['forecast_day_PCT_change'] < 3
            and regression_data['PCT_change'] < regression_data['PCT_day_change'] + .2
            and regression_data['forecast_day_PCT_change'] < regression_data['PCT_day_change'] + .2
            and regression_data['series_trend'] != 'downTrend'
@@ -575,7 +588,9 @@ def buy_up_trend(regression_data, regressionResult, ws_buyUpTrend):
            ):
             add_in_csv(regression_data, regressionResult, None, 'buyUpTrend-00')
             return True
-        if(2 < regression_data['PCT_day_change'] < 3 and regression_data['PCT_change'] < 4
+        if(abs(regression_data['yearHighChange']) > abs(regression_data['yearLowChange'])
+           and regression_data['yearHighChange'] < -10
+           and 2 < regression_data['PCT_day_change'] < 3 and regression_data['PCT_change'] < 4
            and regression_data['forecast_day_PCT_change'] < regression_data['PCT_change']
            and regression_data['series_trend'] != 'downTrend'
            and regression_data['score'] != '0-1'
@@ -587,10 +602,18 @@ def buy_up_trend(regression_data, regressionResult, ws_buyUpTrend):
            and regression_data['forecast_day_PCT_change'] < regression_data['PCT_change']
            and regression_data['series_trend'] != 'downTrend'
            and regression_data['score'] != '0-1'
+           and (regression_data['forecast_day_PCT7_change'] < 5 and regression_data['forecast_day_PCT10_change'] < 7)
+           ):
+            add_in_csv(regression_data, regressionResult, None, '##buyUpTrend-checkBase')
+            return True
+        if(2 < regression_data['PCT_day_change'] < 3 and regression_data['PCT_change'] < 4
+           and regression_data['forecast_day_PCT_change'] < regression_data['PCT_change']
+           and regression_data['series_trend'] != 'downTrend'
+           and regression_data['score'] != '0-1'
            and (regression_data['forecast_day_PCT7_change'] < 10 and regression_data['forecast_day_PCT10_change'] < 10)
            ):
-            add_in_csv(regression_data, regressionResult, None, 'buyUpTrend-1-onlyNews')
-            return True
+            #add_in_csv(regression_data, regressionResult, None, 'buyUpTrend-onlyNews')
+            return False
     elif((regression_data['yearHighChange'] < -9 or regression_data['yearLowChange'] < 15)
        and regression_data['forecast_day_PCT_change'] > 0
        and regression_data['forecast_day_PCT2_change'] > 0
@@ -602,8 +625,8 @@ def buy_up_trend(regression_data, regressionResult, ws_buyUpTrend):
                and regression_data['score'] != '0-1'
                and (regression_data['forecast_day_PCT7_change'] < 5 or regression_data['forecast_day_PCT10_change'] < 7)
                ):
-                add_in_csv(regression_data, regressionResult, None, 'buyUpTrend-1-YearHigh')
-                return True    
+                ##add_in_csv(regression_data, regressionResult, None, '##buyUpTrend-1-YearHigh')
+                return False    
     if(all_day_pct_change_positive(regression_data) and 0 < regression_data['PCT_day_change'] < 5 and regression_data['yearHighChange'] < -10
         and regression_data['forecast_day_PCT10_change'] >= regression_data['PCT_change'] + 2
         and regression_data['forecast_day_PCT10_change'] >= regression_data['PCT_day_change'] + 2
@@ -611,7 +634,7 @@ def buy_up_trend(regression_data, regressionResult, ws_buyUpTrend):
         and regression_data['PCT_day_change_pre'] > -0.5 
         and float(regression_data['contract']) > 10
         and no_doji_or_spinning_buy_india(regression_data)):
-        add_in_csv(regression_data, regressionResult, ws_buyUpTrend, 'buyUpTrend-Risky')
+        add_in_csv(regression_data, regressionResult, ws_buyUpTrend, '##buyUpTrend-Risky')
         return True
     return False
 
@@ -630,7 +653,8 @@ def buy_down_trend(regression_data, regressionResult, ws_buyDownTrend):
             return False
     elif(all_day_pct_change_negative_except_today(regression_data) 
         and 0 < regression_data['PCT_day_change'] < 5 and 0 < regression_data['PCT_change']
-        and regression_data['forecast_day_PCT10_change'] > -10
+        and regression_data['forecast_day_PCT7_change'] < -4
+        and regression_data['forecast_day_PCT10_change'] < -4
         ):
         add_in_csv(regression_data, regressionResult, ws_buyDownTrend, '##buyDownTrend-2')
         return True
@@ -811,8 +835,10 @@ def buy_year_high_oi(regression_data, regressionResult, ws):
        and -5 < regression_data['forecast_day_PCT_change'] < 1
        and -5 < regression_data['forecast_day_PCT2_change'] < 1
        and -5 < regression_data['forecast_day_PCT3_change'] < 1
+       and -5 < regression_data['forecast_day_PCT4_change'] < 1
+       and -5 < regression_data['forecast_day_PCT5_change'] < 1
        and -5 < regression_data['forecast_day_PCT7_change'] < 5
-       and regression_data['yearHighChange'] > -5
+       and regression_data['yearHighChange'] > -7
        ):
         add_in_csv(regression_data, regressionResult, ws, '##yearHighBuy-0')
         return True
@@ -868,7 +894,7 @@ def buy_oi_candidate(regression_data, regressionResult, ws):
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'buyOI-3')
                 return True
-            elif((regression_data['forecast_day_VOL_change'] > 50 and 0.75 < regression_data['PCT_day_change'] < 5 and 0.5 < regression_data['PCT_change'] < 5)
+            elif((regression_data['forecast_day_VOL_change'] > 300 and 0.75 < regression_data['PCT_day_change'] < 5 and 0.5 < regression_data['PCT_change'] < 5)
                 and float(regression_data['contract']) > 50 
                 and regression_data['forecast_day_PCT10_change'] < -8 or regression_data['forecast_day_PCT7_change'] < -8
                 ):
@@ -906,10 +932,15 @@ def buy_oi_candidate(regression_data, regressionResult, ws):
                     add_in_csv(regression_data, regressionResult, ws, 'buyFinalCandidate-2')
                     return True
             elif(regression_data['forecast_day_PCT_change'] > 0
-                 and regression_data['forecast_day_VOL_change'] < -40
+                 and regression_data['forecast_day_VOL_change'] <= -40
                 ):
                     add_in_csv(regression_data, regressionResult, ws, '##finalSellContinue-0')
                     return True
+            elif(regression_data['forecast_day_PCT_change'] > 0
+                 and regression_data['forecast_day_VOL_change'] <= -30
+                ):
+                    add_in_csv(regression_data, regressionResult, ws, '##finalSellContinue-1')
+                    return True    
             if((((regression_data['close'] - regression_data['open']) * 1.5 > regression_data['high'] - regression_data['low']) or (regression_data['forecast_day_PCT_change'] > 0 and regression_data['PCT_day_change'] > 1))
                 and regression_data['yearHighChange'] < -30 or regression_data['yearLowChange'] < 30
                 ):
@@ -1123,7 +1154,8 @@ def sell_up_trend(regression_data, regressionResult, ws_sellUpTrend):
             return False
     elif(all_day_pct_change_positive_except_today(regression_data) 
         and -5 < regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0
-        and regression_data['forecast_day_PCT10_change'] < 10
+        and regression_data['forecast_day_PCT7_change'] > 4
+        and regression_data['forecast_day_PCT10_change'] > 4
         ):
         add_in_csv(regression_data, regressionResult, ws_sellUpTrend, '##sellUpTrend-1')
         return True
@@ -1153,7 +1185,9 @@ def sell_down_trend(regression_data, regressionResult, ws_sellDownTrend):
            ):
             add_in_csv(regression_data, regressionResult, None, 'sellDownTrend-00')
             return True
-        elif(-3 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['forecast_day_PCT_change'] 
+        if(abs(regression_data['yearHighChange']) < abs(regression_data['yearLowChange'])
+           and regression_data['yearHighChange'] < -10 
+           and -3 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['forecast_day_PCT_change'] 
            and regression_data['forecast_day_PCT_change'] > regression_data['PCT_change']
            and regression_data['series_trend'] != 'upTrend'
            and regression_data['score'] != '10'
@@ -1161,23 +1195,31 @@ def sell_down_trend(regression_data, regressionResult, ws_sellDownTrend):
            ):
             add_in_csv(regression_data, regressionResult, None, 'sellDownTrend-1')
             return True
-        elif(-3 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['forecast_day_PCT_change'] 
+        if(-3 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['forecast_day_PCT_change'] 
+           and regression_data['forecast_day_PCT_change'] > regression_data['PCT_change']
+           and regression_data['series_trend'] != 'upTrend'
+           and regression_data['score'] != '10'
+           and (regression_data['forecast_day_PCT7_change'] > -5 and regression_data['forecast_day_PCT10_change'] > -7) 
+           ):
+            add_in_csv(regression_data, regressionResult, None, '##sellDownTrend-checkBase')
+            return True
+        if(-3 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['forecast_day_PCT_change'] 
            and regression_data['forecast_day_PCT_change'] > regression_data['PCT_change']
            and regression_data['series_trend'] != 'upTrend'
            and regression_data['score'] != '10'
            and (regression_data['forecast_day_PCT7_change'] > -10 and regression_data['forecast_day_PCT10_change'] > -10) 
            ):
-            add_in_csv(regression_data, regressionResult, None, 'sellDownTrend-2-onlyNews')
-            return True
-#     if(all_day_pct_change_negative(regression_data) and -5 < regression_data['PCT_day_change'] < 0 and regression_data['yearLowChange'] > 30
-#         and regression_data['forecast_day_PCT10_change'] <= regression_data['PCT_change'] - 2
-#         and regression_data['forecast_day_PCT10_change'] <= regression_data['PCT_day_change'] - 2
-#         and float(regression_data['forecast_day_VOL_change']) > 30
-#         and regression_data['PCT_day_change_pre'] < 0.5
-#         and float(regression_data['contract']) > 10
-#         and no_doji_or_spinning_sell_india(regression_data)):
-#         add_in_csv(regression_data, regressionResult, ws_sellDownTrend, 'sellDownTrend')
-#         return True
+            #add_in_csv(regression_data, regressionResult, None, 'sellDownTrend-2-onlyNews')
+            return False
+    if(all_day_pct_change_negative(regression_data) and -5 < regression_data['PCT_day_change'] < 0 and regression_data['yearLowChange'] > 30
+        and regression_data['forecast_day_PCT10_change'] <= regression_data['PCT_change'] - 2
+        and regression_data['forecast_day_PCT10_change'] <= regression_data['PCT_day_change'] - 2
+        and float(regression_data['forecast_day_VOL_change']) > 30
+        and regression_data['PCT_day_change_pre'] < 0.5
+        and float(regression_data['contract']) > 10
+        and no_doji_or_spinning_sell_india(regression_data)):
+        add_in_csv(regression_data, regressionResult, ws_sellDownTrend, '##sellDownTrend-Risky')
+        return True
     return False
 
 def sell_final(regression_data, regressionResult, ws_sellFinal, ws_sellFinal1):
@@ -1351,11 +1393,13 @@ def sell_day_high(regression_data, regressionResult, ws):
 def sell_year_low_oi(regression_data, regressionResult, ws):
     if((0 < regression_data['PCT_day_change'] < 1 and 0 < regression_data['PCT_change'] < 1)
        and float(regression_data['forecast_day_VOL_change']) < 0
-       and 5 > regression_data['forecast_day_PCT_change'] > -1
-       and 5 > regression_data['forecast_day_PCT2_change'] > -1
-       and 5 > regression_data['forecast_day_PCT3_change'] > -1
+       and 5 > regression_data['forecast_day_PCT_change'] > 0
+       and 5 > regression_data['forecast_day_PCT2_change'] > 0
+       and 5 > regression_data['forecast_day_PCT3_change'] > 0
+       and 5 > regression_data['forecast_day_PCT4_change'] > 0
+       and 5 > regression_data['forecast_day_PCT5_change'] > 0
        and 5 > regression_data['forecast_day_PCT7_change'] > -5
-       and regression_data['yearLowChange'] < 5
+       and regression_data['yearLowChange'] < 7
        ):
         add_in_csv(regression_data, regressionResult, ws, '##yearLowSell-0')
         return True
@@ -1408,7 +1452,7 @@ def sell_oi_candidate(regression_data, regressionResult, ws):
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'oiSell-3')
                 return True
-            elif((regression_data['forecast_day_VOL_change'] > 50 and -5 < regression_data['PCT_day_change'] < -0.75 and -5 < regression_data['PCT_change'] < -0.5)
+            elif((regression_data['forecast_day_VOL_change'] > 300 and -5 < regression_data['PCT_day_change'] < -0.75 and -5 < regression_data['PCT_change'] < -0.5)
                 and float(regression_data['contract']) > 50
                 and (regression_data['forecast_day_PCT10_change'] > 8 or regression_data['forecast_day_PCT7_change'] > 8)
                 ):
@@ -1447,9 +1491,14 @@ def sell_oi_candidate(regression_data, regressionResult, ws):
                     add_in_csv(regression_data, regressionResult, ws, 'sellFinalCandidate-2')
                     return True
             elif(regression_data['forecast_day_PCT_change'] < 0
-                 and regression_data['forecast_day_VOL_change'] < -40
+                 and regression_data['forecast_day_VOL_change'] <= -40
                 ):
                     add_in_csv(regression_data, regressionResult, ws, '##finalBuyContinue-0')
+                    return True
+            elif(regression_data['forecast_day_PCT_change'] < 0
+                 and regression_data['forecast_day_VOL_change'] <= -30
+                ):
+                    add_in_csv(regression_data, regressionResult, ws, '##finalBuyContinue-1')
                     return True
             if((((regression_data['open'] - regression_data['close']) * 1.5 > regression_data['high'] - regression_data['low']) or (regression_data['forecast_day_PCT_change'] < 0 and regression_data['PCT_day_change'] < -1))
                 and regression_data['yearHighChange'] > -30 or regression_data['yearLowChange'] > 30
