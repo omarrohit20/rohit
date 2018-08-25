@@ -990,14 +990,14 @@ def buy_oi_candidate(regression_data, regressionResult, ws):
                  and abs(regression_data['PCT_day_change']) > abs(regression_data['PCT_day_change_pre1'])
                  and regression_data['forecast_day_VOL_change'] <= -30
                 ):
-                if(1 < regression_data['PCT_day_change'] < 3 and 1 < regression_data['PCT_change'] < 3
+                if(1 < regression_data['PCT_day_change'] < 5 and 1 < regression_data['PCT_change'] < 5
                    and regression_data['forecast_day_VOL_change'] <= -40
                    ):
                     add_in_csv(regression_data, regressionResult, ws, '##finalSellContinue-00')
                     return True
-                if(1 < regression_data['PCT_day_change'] < 5 and 1 < regression_data['PCT_change'] < 5
+                if(3 < regression_data['PCT_day_change'] < 5 and 3 < regression_data['PCT_change'] < 5
                     ):
-                    add_in_csv(regression_data, regressionResult, ws, '##finalSellContinue-01')
+                    add_in_csv(regression_data, regressionResult, ws, '##finalSellContinue-01-checkMorningTrend')
                     return True
 #             elif(regression_data['forecast_day_PCT_change'] > 0
 #                  and regression_data['forecast_day_VOL_change'] <= -30
@@ -1612,14 +1612,14 @@ def sell_oi_candidate(regression_data, regressionResult, ws):
                  and abs(regression_data['PCT_day_change']) > abs(regression_data['PCT_day_change_pre1'])
                  and regression_data['forecast_day_VOL_change'] <= -30
                 ):
-                if(-3 < regression_data['PCT_day_change'] < -1 and -3 < regression_data['PCT_change'] < -1
+                if(-5 < regression_data['PCT_day_change'] < -1 and -5 < regression_data['PCT_change'] < -1
                    and regression_data['forecast_day_VOL_change'] <= -40
                   ):
                     add_in_csv(regression_data, regressionResult, ws, '##finalBuyContinue-00')
                     return True
                 if(-5 < regression_data['PCT_day_change'] < -1 and -5 < regression_data['PCT_change'] < -1
                   ):
-                    add_in_csv(regression_data, regressionResult, ws, '##finalBuyContinue-01')
+                    add_in_csv(regression_data, regressionResult, ws, '##finalBuyContinue-01-checkMorningTrend')
                     return True
 #             elif(regression_data['forecast_day_PCT_change'] < 0
 #                  and regression_data['forecast_day_VOL_change'] <= -30
