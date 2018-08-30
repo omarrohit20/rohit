@@ -1081,6 +1081,18 @@ def buy_trend_reversal(regression_data, regressionResult, ws):
                return True
     return False            
 
+def buy_trend_break(regression_data, regressionResult, ws):
+   if(ten_days_less_than_minus_five(regression_data)
+      and regression_data['yearHighChange'] < -30
+    ):
+       if(regression_data['forecast_day_PCT_change'] > 2 and regression_data['PCT_day_change'] > 2 and regression_data['PCT_day_change_pre1'] < 0
+           and abs(regression_data['PCT_day_change']) > abs(regression_data['PCT_day_change_pre1'])
+           and regression_data['open'] == regression_data['low']
+           and regression_data['forecast_day_VOL_change'] >= -20
+           ):
+               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutBuy-test')
+               return True 
+
 def buy_oi_candidate(regression_data, regressionResult, ws):
     bar = regression_data['close'] - regression_data['open']
     bar_high = regression_data['high'] - regression_data['close']
@@ -1102,7 +1114,8 @@ def buy_oi_candidate(regression_data, regressionResult, ws):
         return True
     if buy_trend_reversal(regression_data, regressionResult, ws):
         return True
-        
+    if buy_trend_break(regression_data, regressionResult, ws):
+        return True    
     return False
 
 def buy_oi(regression_data, regressionResult, ws):
@@ -1765,6 +1778,18 @@ def sell_trend_reversal(regression_data, regressionResult, ws):
                 return True 
     return False   
 
+def sell_trend_break(regression_data, regressionResult, ws):
+   if(ten_days_more_than_five(regression_data)
+      and regression_data['yearLowChange'] < 10
+    ):
+       if(regression_data['forecast_day_PCT_change'] < -2 and regression_data['PCT_day_change'] < -2 and regression_data['PCT_day_change_pre1'] > 0
+           and abs(regression_data['PCT_day_change']) > abs(regression_data['PCT_day_change_pre1'])
+           and regression_data['open'] == regression_data['high']
+           and regression_data['forecast_day_VOL_change'] >= -20
+           ):
+               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutSell-test')
+               return True
+
 def sell_oi_candidate(regression_data, regressionResult, ws):
     bar = regression_data['open'] - regression_data['close']
     bar_low = regression_data['close'] - regression_data['low']
@@ -1786,6 +1811,8 @@ def sell_oi_candidate(regression_data, regressionResult, ws):
     if sell_vol_contract(regression_data, regressionResult, ws):
         return True
     if sell_trend_reversal(regression_data, regressionResult, ws):
+        return True
+    if sell_trend_break(regression_data, regressionResult, ws):
         return True
     return False
 
