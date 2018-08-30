@@ -31,6 +31,12 @@ sellKN_MIN = 0
 def add_in_csv(regression_data, regressionResult, ws, filter):
     if ((filter is not None) and (filter not in regression_data['filter'])):
         regression_data['filter'] = regression_data['filter'] + filter + ','
+        if ('P@[' in str(regression_data['sellIndia'])) and (('buy' or 'Buy') in regression_data['filter']):
+            if '***SELLPATTERN***' not in regression_data['filter']:
+               regression_data['filter'] = regression_data['filter'] + '***SELLPATTERN***' + ','
+        if ('P@[' in str(regression_data['buyIndia'])) and (('sell' or 'Sell') in regression_data['filter']):
+            if '***BUYPATTERN***' not in regression_data['filter']:
+               regression_data['filter'] = regression_data['filter'] + '***BUYPATTERN***' + ','
     tempRegressionResult = regressionResult.copy() 
     tempRegressionResult.append(regression_data['filter'])
     ws.append(tempRegressionResult) if (ws is not None) else False
@@ -518,8 +524,7 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
         and (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low'])
         and 'P@[' not in str(regression_data['sellIndia'])
         and buyIndiaAvg >= -.70):
-        if(regression_data['forecast_day_VOL_change'] > 20
-           and regression_data['yearLowChange'] > 10 and regression_data['yearHighChange'] < -10
+        if(regression_data['yearLowChange'] > 10 and regression_data['yearHighChange'] < -10
            and 0 < regression_data['PCT_day_change'] < 2.5
            and 0 < regression_data['PCT_change'] < 2.5
            ):
@@ -1233,8 +1238,7 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
         and (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low'])
         and 'P@[' not in str(regression_data['buyIndia'])
         and sellIndiaAvg <= 0.70):
-        if(regression_data['forecast_day_VOL_change'] > 20
-           and regression_data['yearLowChange'] > 10 and regression_data['yearHighChange'] < -10
+        if(regression_data['yearLowChange'] > 10 and regression_data['yearHighChange'] < -10
            and -2.5 < regression_data['PCT_day_change'] < 0
            and -2.5 < regression_data['PCT_change'] < 0
            ):
