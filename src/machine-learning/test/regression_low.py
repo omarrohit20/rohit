@@ -236,7 +236,7 @@ def get_data_frame(df, regressor="None"):
         dfp['label'] = dfp[forecast_col].shift(-forecast_out) 
         return dfp
 
-def create_csv(regression_data):
+def create_csv(regression_data, regressionResult):
     if (regression_data['sellIndia'] != ''):
         regression_data['filter'] = 'Other,'
     sellIndiaAvg, result = sell_pattern_from_history(regression_data, regressionResult, None)
@@ -265,7 +265,7 @@ def create_csv(regression_data):
             db.RsellOthers.insert_one(json.loads(json.dumps(regression_data)))
         db.RsellAlgo.insert_one(json.loads(json.dumps(regression_data)))
             
-def create_csv_non_ml(regression_data):
+def create_csv_non_ml(regression_data, regressionResult):
     RsellOICandidate = buy_oi_candidate(regression_data, regressionResult, None)
     if RsellOICandidate:
         db.RsellOICandidate.insert_one(json.loads(json.dumps(regression_data)))
