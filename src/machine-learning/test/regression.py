@@ -61,6 +61,7 @@ def regression_ta_data(scrip):
     df['PCT_change'] = (((df['close'] - df['close_pre'])/df['close_pre'])*100)
     df['Act_PCT_change'] = df['PCT_change'].shift(-forecast_out)
     df['PCT_day_change'] = (((df['close'] - df['open'])/df['open'])*100)
+    df['PCT_day_change_pre'] = (((df['close_pre'] - df['open_pre'])/df['open_pre'])*100)
     df['Act_PCT_day_change'] = df['PCT_day_change'].shift(-forecast_out)
     df['PCT_day_LH'] = (((df['high'] - df['low'])/df['low'])*100).astype(float)
     df['PCT_day_LC'] = (((df['close'] - df['low'])/df['low'])*100).astype(float)
@@ -80,6 +81,8 @@ def regression_ta_data(scrip):
     df['bar_low_pre'] = np.where(df['close_pre'] > df['open_pre'], df['open_pre'], df['close_pre'])
     df['uptrend'] = np.where((df['bar_high'] >  df['bar_high_pre']) & (df['high'] > df['high_pre']), 1, 0)
     df['downtrend'] = np.where((df['bar_low'] <  df['bar_low_pre']) & (df['low'] < df['low_pre']), -1, 0)
+    df['greentrend'] = np.where((df['PCT_day_change'] > 0) & (df['PCT_day_change_pre'] > 0), 1, 0)
+    df['redtrend'] = np.where((df['PCT_day_change'] < 0) & (df['PCT_day_change_pre'] < 0), -1, 0)
     df['bar'] = df['bar_high'] - df['bar_low']
     df['HH'] = np.where((df['high']-df['bar_high']) > (df['bar_high']-df['bar_low']), 1, 0)
     df['LL'] = np.where((df['bar_low']-df['low']) > (df['bar_high']-df['bar_low']), 1, 0)
@@ -119,5 +122,5 @@ def calculateParallel(threads=1):
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(3)
+    calculateParallel(2)
     connection.close()

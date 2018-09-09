@@ -1,4 +1,4 @@
-import os, logging, sys, json, csv
+import json, datetime, time, copy, sys, csv, logging
 sys.path.insert(0, '../')
 
 from openpyxl import Workbook
@@ -23,7 +23,7 @@ from util.util import get_regressionResult
 from util.util import buy_pattern_from_history, buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final, buy_high_indicators, buy_pattern
 from util.util import sell_pattern_from_history, sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final, sell_high_indicators, sell_pattern
 from util.util import buy_pattern_without_mlalgo, sell_pattern_without_mlalgo, buy_oi, sell_oi, all_withoutml
-from util.util import morning_star_sell, buy_oi_candidate, morning_star_buy, sell_oi_candidate  
+from util.util import buy_oi_candidate, sell_oi_candidate  
 from util.util import soft
     
 from technical import ta_lib_data  
@@ -89,6 +89,8 @@ def get_data_frame(df, regressor="None"):
  
         dfp['uptrend'] = df['uptrend']
         dfp['downtrend'] = df['downtrend']
+#         dfp['greentrend'] = df['greentrend']
+#         dfp['redtrend'] = df['redtrend']
         if soft == False:
             dfp['HH'] = df['HH']
             dfp['LL'] = df['LL']   
@@ -235,50 +237,62 @@ def get_data_frame(df, regressor="None"):
         return dfp
 
 def create_csv(regression_data):
-    if 'P@[' in str(regression_data['sellIndia']):
-        stored = db.RsellAll.find_one({'scrip':regression_data['scrip'], 'date':regression_data['date']})
-        if stored is None:
-            db.RsellAll.insert_one(json.loads(json.dumps(regression_data)))
-            
-            if(is_algo_sell(regression_data)
-                and 'P@[' not in str(regression_data['buyIndia'])):
-                stored = db.RsellAlgo.find_one({'scrip':regression_data['scrip'], 'date':regression_data['date']})
-                if stored is None:
-                    regressionResult = get_regressionResult(regression_data, regression_data['scrip'], None)
-                    if (regression_data['sellIndia'] != ''):
-                        regression_data['filter'] = 'Other,'
-                    sellIndiaAvg, result = sell_pattern_from_history(regression_data, regressionResult, None)
-                    if sell_all_rule(regression_data, regressionResult, sellIndiaAvg, None):
-                        RsellYearHigh = sell_year_high(regression_data, regressionResult, None, None)
-                        RsellYearLow = sell_year_low(regression_data, regressionResult, None)
-                        RsellUpTrend = sell_up_trend(regression_data, regressionResult, None)
-                        RsellDownTrend =  sell_down_trend(regression_data, regressionResult, None)
-                        RsellFinal = sell_final(regression_data, regressionResult, None, None)
-                        RsellHighIndicators = sell_high_indicators(regression_data, regressionResult, None)
-                        RsellPattern = sell_pattern(regression_data, regressionResult, None, None)
-                        if RsellYearHigh:
-                            db.RsellYearHigh.insert_one(json.loads(json.dumps(regression_data)))
-                        if RsellYearLow:    
-                            db.RsellYearLow.insert_one(json.loads(json.dumps(regression_data)))
-                        if RsellUpTrend:
-                            db.RsellUpTrend.insert_one(json.loads(json.dumps(regression_data))) 
-                        if RsellDownTrend:
-                            db.RsellDownTrend.insert_one(json.loads(json.dumps(regression_data)))
-                        if RsellFinal:
-                            db.RsellFinal.insert_one(json.loads(json.dumps(regression_data)))
-                        if RsellHighIndicators:
-                            db.RsellHighIndicators.insert_one(json.loads(json.dumps(regression_data)))
-                        if RsellPattern:
-                            db.RsellPattern.insert_one(json.loads(json.dumps(regression_data)))
-                            
-                    if regression_data['filter'] == 'Other,':
-                        db.RsellOthers.insert_one(json.loads(json.dumps(regression_data)))
-                    db.RsellAlgo.insert_one(json.loads(json.dumps(regression_data))) 
-
+    stored = db.RsellAll.find_one({'scrip':regression_data['scrip'], 'date':regression_data['date']})
+    if stored is None:
+        regressionResult = get_regressionResult(regression_data, regression_data['scrip'], None, 0, 0)
+        
+        if (regression_data['sellIndia'] != ''):
+            regression_data['filter'] = 'Other,'
+        sellIndiaAvg, result = sell_pattern_from_history(regression_data, regressionResult, None)
+        RsellOICandidate = buy_oi_candidate(regression_data, regressionResult, None)
+        if sell_all_rule(regression_data, regressionResult, sellIndiaAvg, None):
+            stored = db.RsellAlgo.find_one({'scrip':regression_data['scrip'], 'date':regression_data['date']})
+            if stored is None:
+                RsellYearHigh = sell_year_high(regression_data, regressionResult, None, None)
+                RsellYearLow = sell_year_low(regression_data, regressionResult, None)
+                RsellUpTrend = sell_up_trend(regression_data, regressionResult, None)
+                RsellDownTrend =  sell_down_trend(regression_data, regressionResult, None)
+                RsellFinal = sell_final(regression_data, regressionResult, None, None)
+                RsellHighIndicators = sell_high_indicators(regression_data, regressionResult, None)
+                RsellPattern = sell_pattern(regression_data, regressionResult, None, None)
+                if RsellYearHigh:
+                    db.RsellYearHigh.insert_one(json.loads(json.dumps(regression_data)))
+                if RsellYearLow:    
+                    db.RsellYearLow.insert_one(json.loads(json.dumps(regression_data)))
+                if RsellUpTrend:
+                    db.RsellUpTrend.insert_one(json.loads(json.dumps(regression_data))) 
+                if RsellDownTrend:
+                    db.RsellDownTrend.insert_one(json.loads(json.dumps(regression_data)))
+                if RsellFinal:
+                    db.RsellFinal.insert_one(json.loads(json.dumps(regression_data)))
+                if RsellHighIndicators:
+                    db.RsellHighIndicators.insert_one(json.loads(json.dumps(regression_data)))
+                
+                if regression_data['filter'] == 'Other,':
+                    db.RsellOthers.insert_one(json.loads(json.dumps(regression_data)))
+                db.RsellAlgo.insert_one(json.loads(json.dumps(regression_data)))
+        if RsellOICandidate:
+            db.RsellOICandidate.insert_one(json.loads(json.dumps(regression_data)))
+        db.RsellAll.insert_one(json.loads(json.dumps(regression_data)))
+        
 def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory):
     if 'P@[' in str(buy):
         return
     dfp = get_data_frame(df)
+    
+    regression_data = {}
+    if kNeighbours:
+        result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1))
+        regression_data['kNeighboursValue'] = float(result[0])
+    else:
+        regression_data['kNeighboursValue'] = float(0)
+        
+    if mlp:
+        dfp_mlp = get_data_frame(df, 'mlp')
+        result = performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
+        regression_data['mlpValue'] = float(result[0])
+    else:
+        regression_data['mlpValue'] = float(0)
     
     forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'Low_change1'].values[0]
     forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'Low_change2'].values[0]
@@ -289,6 +303,16 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     forecast_day_PCT10_change = dfp.tail(1).loc[-forecast_out:, 'Low_change10'].values[0]
     forecast_day_VOL_change = df.tail(1).loc[-forecast_out:, 'VOL_change'].values[0]
     forecast_day_date = df.tail(1).loc[-forecast_out:, 'date'].values[0]
+    PCT_change_pre1 = df.tail(2).loc[-forecast_out:,'PCT_change'].values[0]
+    PCT_change_pre2 = df.tail(3).loc[-forecast_out:,'PCT_change'].values[0]
+    PCT_change_pre3 = df.tail(4).loc[-forecast_out:,'PCT_change'].values[0]
+    PCT_change_pre4 = df.tail(5).loc[-forecast_out:,'PCT_change'].values[0]
+    PCT_change_pre5 = df.tail(6).loc[-forecast_out:,'PCT_change'].values[0]
+    PCT_day_change_pre1 = df.tail(2).loc[-forecast_out:,'PCT_day_change'].values[0]
+    PCT_day_change_pre2 = df.tail(3).loc[-forecast_out:,'PCT_day_change'].values[0]
+    PCT_day_change_pre3 = df.tail(4).loc[-forecast_out:,'PCT_day_change'].values[0]
+    PCT_day_change_pre4 = df.tail(5).loc[-forecast_out:,'PCT_day_change'].values[0]
+    PCT_day_change_pre5 = df.tail(6).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_change = df.tail(1).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_day_change = df.tail(1).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_day_OL = df.tail(1).loc[-forecast_out:, 'PCT_day_OL'].values[0]
@@ -301,14 +325,36 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     Act_High_change = df.tail(1).loc[-forecast_out:, 'Act_High_change'].values[0]
     Act_Low_change = df.tail(1).loc[-forecast_out:, 'Act_Low_change'].values[0]
     score = df.tail(1).loc[-forecast_out:, 'uptrend'].values[0].astype(str) + '' + df.tail(1).loc[-forecast_out:, 'downtrend'].values[0].astype(str)
+    volume = df.tail(1).loc[-forecast_out:, 'volume'].values[0]
+    volume_pre1 = df.tail(2).loc[-forecast_out:, 'volume'].values[0]
+    volume_pre2 = df.tail(3).loc[-forecast_out:, 'volume'].values[0]
+    volume_pre3 = df.tail(4).loc[-forecast_out:, 'volume'].values[0]
     open = df.tail(1).loc[-forecast_out:, 'open'].values[0]
     high = df.tail(1).loc[-forecast_out:, 'high'].values[0]
     low = df.tail(1).loc[-forecast_out:, 'low'].values[0]
     bar_high = df.tail(1).loc[-forecast_out:, 'bar_high'].values[0]
     bar_low = df.tail(1).loc[-forecast_out:, 'bar_low'].values[0]
+    bar_high_pre = df.tail(1).loc[-forecast_out:, 'bar_high_pre'].values[0]
+    bar_low_pre = df.tail(1).loc[-forecast_out:, 'bar_low_pre'].values[0]
     close = df.tail(1).loc[-forecast_out:, 'close'].values[0]
+    greentrend = df.tail(1).loc[-forecast_out:, 'greentrend'].values[0]
+    redtrend = df.tail(1).loc[-forecast_out:, 'redtrend'].values[0]
     
-    regression_data = {}
+    today_date = datetime.datetime.strptime(forecast_day_date, '%Y-%m-%d').date()
+    start_date = (today_date - datetime.timedelta(weeks=52)).strftime('%Y-%m-%d')
+    df = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
+    yearHigh = df['high'].max()
+    yearLow = df['low'].min()
+    yearHighChange = (close - yearHigh)*100/yearHigh
+    yearLowChange = (close - yearLow)*100/yearLow
+    
+    start_date = (datetime.date.today() - datetime.timedelta(weeks=104)).strftime('%Y-%m-%d')
+    df = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
+    yearHigh = df['high'].max()
+    yearLow = df['low'].min()
+    yearHigh2Change = (close - yearHigh)*100/yearHigh
+    yearLow2Change = (close - yearLow)*100/yearLow
+    
     regression_data['date'] = forecast_day_date
     regression_data['scrip'] = str(scrip)
     regression_data['buyIndia'] = str(buy)
@@ -327,7 +373,19 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     regression_data['trend'] = trend 
     regression_data['yearHighChange'] = float(yearHighChange) 
     regression_data['yearLowChange'] = float(yearLowChange)
+    regression_data['yearHigh2Change'] = float(yearHigh2Change) 
+    regression_data['yearLow2Change'] = float(yearLow2Change)
     regression_data['patterns'] = ''
+    regression_data['PCT_change_pre1'] = float(PCT_change_pre1)
+    regression_data['PCT_change_pre2'] = float(PCT_change_pre2)
+    regression_data['PCT_change_pre3'] = float(PCT_change_pre3)
+    regression_data['PCT_change_pre4'] = float(PCT_change_pre4)
+    regression_data['PCT_change_pre5'] = float(PCT_change_pre5)
+    regression_data['PCT_day_change_pre1'] = float(PCT_day_change_pre1)
+    regression_data['PCT_day_change_pre2'] = float(PCT_day_change_pre2)
+    regression_data['PCT_day_change_pre3'] = float(PCT_day_change_pre3)
+    regression_data['PCT_day_change_pre4'] = float(PCT_day_change_pre4)
+    regression_data['PCT_day_change_pre5'] = float(PCT_day_change_pre5)
     regression_data['PCT_change'] = float(PCT_change)
     regression_data['PCT_day_change'] = float(PCT_day_change)
     regression_data['PCT_day_OL'] = float(PCT_day_OL)
@@ -339,27 +397,21 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     regression_data['Act_PCT_day_HO'] = float(Act_PCT_day_HO)
     regression_data['Act_High_change'] = float(Act_High_change)
     regression_data['Act_Low_change'] = float(Act_Low_change)
+    regression_data['volume'] = float(volume)
+    regression_data['volume_pre1'] = float(volume_pre1)
+    regression_data['volume_pre2'] = float(volume_pre2)
+    regression_data['volume_pre3'] = float(volume_pre3)
     regression_data['open'] = float(open)
     regression_data['high'] = float(high)
     regression_data['low'] = float(low)
     regression_data['bar_high'] = float(bar_high)
     regression_data['bar_low'] = float(bar_low)
+    regression_data['bar_high_pre'] = float(bar_high_pre)
+    regression_data['bar_low_pre'] = float(bar_low_pre)
     regression_data['close'] = float(close)
+    regression_data['greentrend'] = float(greentrend)
+    regression_data['redtrend'] = float(redtrend)
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
-    if kNeighbours:
-        result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1))
-        regression_data['kNeighboursValue'] = float(result[0])
-    else:
-        regression_data['kNeighboursValue'] = float(0)
-        
-    if mlp:
-        dfp_mlp = get_data_frame(df, 'mlp')
-        result = performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
-        regression_data['mlpValue'] = float(result[0])
-    else:
-        regression_data['mlpValue'] = float(0)
-        
-    
-    create_csv(regression_data)   
+    create_csv(regression_data)  
                                                           

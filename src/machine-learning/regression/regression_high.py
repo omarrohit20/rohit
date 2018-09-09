@@ -1,4 +1,4 @@
-import os, logging, sys, json, csv
+import json, datetime, time, copy, sys, csv, logging
 sys.path.insert(0, '../')
 
 from openpyxl import Workbook
@@ -241,6 +241,20 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     
     dfp = get_data_frame(df)
     
+    regression_data = {}
+    if kNeighbours:
+        result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1))
+        regression_data['kNeighboursValue'] = float(result[0])
+    else:
+        regression_data['kNeighboursValue'] = float(0)
+            
+    if mlp:
+        dfp_mlp = get_data_frame(df, 'mlp')
+        result = performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
+        regression_data['mlpValue'] = float(result[0])
+    else:
+        regression_data['mlpValue'] = float(0)
+    
     forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'High_change1'].values[0]
     forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'High_change2'].values[0]
     forecast_day_PCT3_change = dfp.tail(1).loc[-forecast_out:, 'High_change3'].values[0]
@@ -254,10 +268,12 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     PCT_change_pre2 = df.tail(3).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_change_pre3 = df.tail(4).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_change_pre4 = df.tail(5).loc[-forecast_out:,'PCT_change'].values[0]
+    PCT_change_pre5 = df.tail(6).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_day_change_pre1 = df.tail(2).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_day_change_pre2 = df.tail(3).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_day_change_pre3 = df.tail(4).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_day_change_pre4 = df.tail(5).loc[-forecast_out:,'PCT_day_change'].values[0]
+    PCT_day_change_pre5 = df.tail(6).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_change = df.tail(1).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_day_change = df.tail(1).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_day_OL = df.tail(1).loc[-forecast_out:, 'PCT_day_OL'].values[0]
@@ -285,7 +301,21 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     greentrend = df.tail(1).loc[-forecast_out:, 'greentrend'].values[0]
     redtrend = df.tail(1).loc[-forecast_out:, 'redtrend'].values[0]
     
-    regression_data = {}
+    today_date = datetime.datetime.strptime(forecast_day_date, '%Y-%m-%d').date()
+    start_date = (today_date - datetime.timedelta(weeks=52)).strftime('%Y-%m-%d')
+    df = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
+    yearHigh = df['high'].max()
+    yearLow = df['low'].min()
+    yearHighChange = (close - yearHigh)*100/yearHigh
+    yearLowChange = (close - yearLow)*100/yearLow
+    
+    start_date = (datetime.date.today() - datetime.timedelta(weeks=104)).strftime('%Y-%m-%d')
+    df = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
+    yearHigh = df['high'].max()
+    yearLow = df['low'].min()
+    yearHigh2Change = (close - yearHigh)*100/yearHigh
+    yearLow2Change = (close - yearLow)*100/yearLow
+    
     regression_data['date'] = forecast_day_date
     regression_data['scrip'] = str(scrip)
     regression_data['buyIndia'] = str(buy)
@@ -304,15 +334,19 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     regression_data['trend'] = trend 
     regression_data['yearHighChange'] = float(yearHighChange) 
     regression_data['yearLowChange'] = float(yearLowChange)
+    regression_data['yearHigh2Change'] = float(yearHigh2Change) 
+    regression_data['yearLow2Change'] = float(yearLow2Change)
     regression_data['patterns'] = ''
     regression_data['PCT_change_pre1'] = float(PCT_change_pre1)
     regression_data['PCT_change_pre2'] = float(PCT_change_pre2)
     regression_data['PCT_change_pre3'] = float(PCT_change_pre3)
     regression_data['PCT_change_pre4'] = float(PCT_change_pre4)
+    regression_data['PCT_change_pre5'] = float(PCT_change_pre5)
     regression_data['PCT_day_change_pre1'] = float(PCT_day_change_pre1)
     regression_data['PCT_day_change_pre2'] = float(PCT_day_change_pre2)
     regression_data['PCT_day_change_pre3'] = float(PCT_day_change_pre3)
     regression_data['PCT_day_change_pre4'] = float(PCT_day_change_pre4)
+    regression_data['PCT_day_change_pre5'] = float(PCT_day_change_pre5)
     regression_data['PCT_change'] = float(PCT_change)
     regression_data['PCT_day_change'] = float(PCT_day_change)
     regression_data['PCT_day_OL'] = float(PCT_day_OL)
@@ -340,18 +374,5 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     regression_data['redtrend'] = float(redtrend)
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
-    if kNeighbours:
-        result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1))
-        regression_data['kNeighboursValue'] = float(result[0])
-    else:
-        regression_data['kNeighboursValue'] = float(0)
-            
-    if mlp:
-        dfp_mlp = get_data_frame(df, 'mlp')
-        result = performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
-        regression_data['mlpValue'] = float(result[0])
-    else:
-        regression_data['mlpValue'] = float(0)
-    
     create_csv(regression_data)  
                                                           
