@@ -237,43 +237,39 @@ def get_data_frame(df, regressor="None"):
         return dfp
 
 def create_csv(regression_data):
-    stored = db.RsellAll.find_one({'scrip':regression_data['scrip'], 'date':regression_data['date']})
-    if stored is None:
-        regressionResult = get_regressionResult(regression_data, regression_data['scrip'], None, 0, 0)
+    if (regression_data['sellIndia'] != ''):
+        regression_data['filter'] = 'Other,'
+    sellIndiaAvg, result = sell_pattern_from_history(regression_data, regressionResult, None)
+    if sell_all_rule(regression_data, regressionResult, sellIndiaAvg, None):
+        RsellYearHigh = sell_year_high(regression_data, regressionResult, None, None)
+        RsellYearLow = sell_year_low(regression_data, regressionResult, None)
+        RsellUpTrend = sell_up_trend(regression_data, regressionResult, None)
+        RsellDownTrend =  sell_down_trend(regression_data, regressionResult, None)
+        RsellFinal = sell_final(regression_data, regressionResult, None, None)
+        RsellHighIndicators = sell_high_indicators(regression_data, regressionResult, None)
+        RsellPattern = sell_pattern(regression_data, regressionResult, None, None)
+        if RsellYearHigh:
+            db.RsellYearHigh.insert_one(json.loads(json.dumps(regression_data)))
+        if RsellYearLow:    
+            db.RsellYearLow.insert_one(json.loads(json.dumps(regression_data)))
+        if RsellUpTrend:
+            db.RsellUpTrend.insert_one(json.loads(json.dumps(regression_data))) 
+        if RsellDownTrend:
+            db.RsellDownTrend.insert_one(json.loads(json.dumps(regression_data)))
+        if RsellFinal:
+            db.RsellFinal.insert_one(json.loads(json.dumps(regression_data)))
+        if RsellHighIndicators:
+            db.RsellHighIndicators.insert_one(json.loads(json.dumps(regression_data)))
         
-        if (regression_data['sellIndia'] != ''):
-            regression_data['filter'] = 'Other,'
-        sellIndiaAvg, result = sell_pattern_from_history(regression_data, regressionResult, None)
-        RsellOICandidate = buy_oi_candidate(regression_data, regressionResult, None)
-        if sell_all_rule(regression_data, regressionResult, sellIndiaAvg, None):
-            stored = db.RsellAlgo.find_one({'scrip':regression_data['scrip'], 'date':regression_data['date']})
-            if stored is None:
-                RsellYearHigh = sell_year_high(regression_data, regressionResult, None, None)
-                RsellYearLow = sell_year_low(regression_data, regressionResult, None)
-                RsellUpTrend = sell_up_trend(regression_data, regressionResult, None)
-                RsellDownTrend =  sell_down_trend(regression_data, regressionResult, None)
-                RsellFinal = sell_final(regression_data, regressionResult, None, None)
-                RsellHighIndicators = sell_high_indicators(regression_data, regressionResult, None)
-                RsellPattern = sell_pattern(regression_data, regressionResult, None, None)
-                if RsellYearHigh:
-                    db.RsellYearHigh.insert_one(json.loads(json.dumps(regression_data)))
-                if RsellYearLow:    
-                    db.RsellYearLow.insert_one(json.loads(json.dumps(regression_data)))
-                if RsellUpTrend:
-                    db.RsellUpTrend.insert_one(json.loads(json.dumps(regression_data))) 
-                if RsellDownTrend:
-                    db.RsellDownTrend.insert_one(json.loads(json.dumps(regression_data)))
-                if RsellFinal:
-                    db.RsellFinal.insert_one(json.loads(json.dumps(regression_data)))
-                if RsellHighIndicators:
-                    db.RsellHighIndicators.insert_one(json.loads(json.dumps(regression_data)))
-                
-                if regression_data['filter'] == 'Other,':
-                    db.RsellOthers.insert_one(json.loads(json.dumps(regression_data)))
-                db.RsellAlgo.insert_one(json.loads(json.dumps(regression_data)))
-        if RsellOICandidate:
-            db.RsellOICandidate.insert_one(json.loads(json.dumps(regression_data)))
-        db.RsellAll.insert_one(json.loads(json.dumps(regression_data)))
+        if regression_data['filter'] == 'Other,':
+            db.RsellOthers.insert_one(json.loads(json.dumps(regression_data)))
+        db.RsellAlgo.insert_one(json.loads(json.dumps(regression_data)))
+            
+def create_csv_non_ml(regression_data):
+    RsellOICandidate = buy_oi_candidate(regression_data, regressionResult, None)
+    if RsellOICandidate:
+        db.RsellOICandidate.insert_one(json.loads(json.dumps(regression_data)))
+
         
 def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory):
     if 'P@[' in str(buy):
@@ -413,5 +409,8 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     regression_data['redtrend'] = float(redtrend)
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
-    create_csv(regression_data)  
+    regressionResult = get_regressionResult(regression_data, regression_data['scrip'], None, 0, 0)
+    create_csv(regression_data, regressionResult)
+    create_csv_non_ml(regression_data, regressionResult) 
+     
                                                           
