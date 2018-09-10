@@ -234,7 +234,7 @@ def create_csv(regression_data):
         json_data = json.loads(json.dumps(regression_data))
         db.classificationlow.insert_one(json_data)    
 
-def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory):
+def process_regression_low(scrip, df, buy, sell, trend, short_term, long_term, consolidation, directory):
     regression_data_db = db.classificationlow.find_one({'scrip':scrip})
     if(regression_data_db is not None):
         return
@@ -374,6 +374,9 @@ def process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowC
     regression_data['close'] = float(close)
     regression_data['greentrend'] = float(greentrend)
     regression_data['redtrend'] = float(redtrend)
+    regression_data['short_term'] = float(short_term)
+    regression_data['long_term'] = float(long_term)
+    regression_data['consolidation'] = float(consolidation)
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     create_csv(regression_data)  

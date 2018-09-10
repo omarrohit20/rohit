@@ -118,16 +118,33 @@ def overlap_screener(data, todayInputs, tdchange, historicalInputs, hchange):
         elif slow == 9:
             slow = 21
             fast = 50                          
-                
+    
+    short_term = 0
+    if(overlap_studies['0-EMA6'] > overlap_studies['0-EMA16'] > overlap_studies['0-EMA26'] > overlap_studies['0-MA50']):
+        short_term = 1
+    if(overlap_studies['0-EMA6'] < overlap_studies['0-EMA16'] < overlap_studies['0-EMA26'] < overlap_studies['0-MA50']):
+        short_term = -1
+    long_term = 0
+    if((overlap_studies['0-MA50'] > overlap_studies['0-MA200']) and (overlap_studies['1-MA50'] < overlap_studies['1-MA200'])):
+        long_term = 1
+    if((overlap_studies['0-MA50'] < overlap_studies['0-MA200']) and (overlap_studies['1-MA50'] > overlap_studies['1-MA200'])):
+        long_term = -1
+    consolidation = 0
+    EMA6Change = ((float(overlap_studies['0-EMA6'])-float(overlap_studies['5-EMA6']))/float(overlap_studies['5-EMA6']))*100
+    EMA11Change = ((float(overlap_studies['0-EMA6'])-float(overlap_studies['10-EMA6']))/float(overlap_studies['10-EMA6']))*100
+    
+    if((0 < abs(EMA6Change) < 1) and (0 < abs(EMA11Change) < 1)):
+        consolidation = 1
+               
     json_data = json.loads(json.dumps(technical_indicators))
     if technical_indicators['BuyIndicators'] != '' and technical_indicators['SellIndicators'] == '':
         #db.buy.overlap.insert_one(json_data) 
-        return 'buy', 'O@[' + technical_indicators['BuyIndicators'] + ']'
+        return 'buy', 'O@[' + technical_indicators['BuyIndicators'] + ']', short_term, long_term, consolidation
     elif technical_indicators['SellIndicators'] != '' and technical_indicators['BuyIndicators'] == '':
         #db.sell.overlap.insert_one(json_data)
-        return 'sell', 'O@[' + technical_indicators['SellIndicators'] + ']'
+        return 'sell', 'O@[' + technical_indicators['SellIndicators'] + ']', short_term, long_term, consolidation
     else:
-        return '', ''
+        return '', '', short_term, long_term, consolidation
                        
 def pattern_screener(data, todayInputs, tdchange, historicalInputs, hchange):
     technical_indicators = copy.deepcopy(data)
@@ -779,10 +796,10 @@ def ta_lib_data(scrip):
 def ta_lib_data_df(scrip, df, db_store=False):
     try:
         if db_store:
-            stored_data = db.technical.find_one({'dataset_code':scrip})
-            if(stored_data is not None):
-                return stored_data['BuyIndicators'], stored_data['SellIndicators'], stored_data['trend'], stored_data['yearHighChange'], stored_data['yearLowChange']    
-            
+            technical_indicators = db.technical.find_one({'dataset_code':scrip})
+            if(technical_indicators is not None):
+                return technical_indicators['BuyIndicators'], technical_indicators['SellIndicators'], technical_indicators['trend'], technical_indicators['short_term'], technical_indicators['long_term'], technical_indicators['consolidation'] 
+                
         data = db.history.find_one({'dataset_code':scrip})
         if(data is None):
             print('Missing or very less Data for ', scrip) 
@@ -840,6 +857,9 @@ def ta_lib_data_df(scrip, df, db_store=False):
         technical_indicators['SellIndicators'] = ''
         technical_indicators['BuyIndicatorsCount'] = 0
         technical_indicators['SellIndicatorsCount'] = 0
+        technical_indicators['short_term'] = 0
+        technical_indicators['long_term'] = 0
+        technical_indicators['consolidation'] = 0
         
         momentum_indicators={}
         #Momentum Indicators
@@ -886,7 +906,20 @@ def ta_lib_data_df(scrip, df, db_store=False):
         overlap_studies['BBANDSMIDDLE'] = (overlap_studies['BBANDSMIDDLE']).tolist()[::-1]
         overlap_studies['BBANDSLOWER'] = (overlap_studies['BBANDSLOWER']).tolist()[::-1]
         
-#            overlap_studies['DEMA'] = DEMA(historicalInputs).tolist()[::-1]
+        overlap_studies['0-EMA6'] = EMA(historicalInputs, 6).tolist()[::-1][0]
+        overlap_studies['0-EMA16'] = EMA(historicalInputs, 16).tolist()[::-1][0]
+        overlap_studies['0-EMA26'] = EMA(historicalInputs, 26).tolist()[::-1][0]
+        overlap_studies['0-MA50'] = MA(historicalInputs, 50).tolist()[::-1][0]
+        overlap_studies['0-MA200'] = MA(historicalInputs, 200).tolist()[::-1][0]
+        overlap_studies['1-EMA6'] = EMA(historicalInputs, 6).tolist()[::-1][1]
+        overlap_studies['1-EMA16'] = EMA(historicalInputs, 16).tolist()[::-1][1]
+        overlap_studies['1-EMA26'] = EMA(historicalInputs, 26).tolist()[::-1][1]
+        overlap_studies['1-MA50'] = MA(historicalInputs, 50).tolist()[::-1][1]
+        overlap_studies['1-MA200'] = MA(historicalInputs, 200).tolist()[::-1][1]
+        overlap_studies['5-EMA6'] = EMA(historicalInputs, 6).tolist()[::-1][5]
+        overlap_studies['10-EMA6'] = EMA(historicalInputs, 6).tolist()[::-1][10]     
+        
+#       overlap_studies['DEMA'] = DEMA(historicalInputs).tolist()[::-1]
         overlap_studies['EMA9'] = EMA(historicalInputs, 9).tolist()[::-1]
         overlap_studies['EMA21'] = EMA(historicalInputs, 21).tolist()[::-1]
         overlap_studies['EMA25'] = EMA(historicalInputs, 25).tolist()[::-1]
@@ -1010,7 +1043,7 @@ def ta_lib_data_df(scrip, df, db_store=False):
         if call == 'sell':  
             all_sell_indicators = all_sell_indicators + indicators 
         
-        call, indicators = overlap_screener(technical_indicators, todayInputs, tdchange, historicalInputs, hchange)
+        call, indicators, short_term, long_term, consolidation = overlap_screener(technical_indicators, todayInputs, tdchange, historicalInputs, hchange)
         if call == 'buy':
             all_buy_indicators = all_buy_indicators + indicators
         if call == 'sell':  
@@ -1027,7 +1060,10 @@ def ta_lib_data_df(scrip, df, db_store=False):
             technical_indicators['BuyIndicators'] = all_buy_indicators
         if all_sell_indicators != '':
             technical_indicators['SellIndicatorsCount'] = all_sell_indicators.count(',') 
-            technical_indicators['SellIndicators'] = all_sell_indicators   
+            technical_indicators['SellIndicators'] = all_sell_indicators 
+        technical_indicators['short_term'] = short_term
+        technical_indicators['long_term'] = long_term
+        technical_indicators['consolidation'] = consolidation
         
         if technical_indicators['BuyIndicatorsCount'] > 0:
             log.info('%s Buy: %s', data['dataset_code'], technical_indicators['BuyIndicators'])
@@ -1038,7 +1074,7 @@ def ta_lib_data_df(scrip, df, db_store=False):
         json_data = json.loads(json.dumps(technical_indicators))
         if db_store: 
             db.technical.insert_one(json_data) 
-        return technical_indicators['BuyIndicators'], technical_indicators['SellIndicators'], technical_indicators['trend'], technical_indicators['yearHighChange'], technical_indicators['yearLowChange']  
+        return technical_indicators['BuyIndicators'], technical_indicators['SellIndicators'], technical_indicators['trend'], technical_indicators['short_term'], technical_indicators['long_term'], technical_indicators['consolidation'] 
             
     except Exception:
         print(Exception)

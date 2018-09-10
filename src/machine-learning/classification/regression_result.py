@@ -36,42 +36,42 @@ logname = '../../output/final' + '/classification-result' + time.strftime("%d%m%
 newsDict = {}
 wb = Workbook()
 ws_buyAll = wb.create_sheet("BuyAll")
-ws_buyAll.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_buyAll.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_buyYearHigh = wb.create_sheet("buyYearHigh")
-ws_buyYearHigh.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_buyYearHigh.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_buyYearLow = wb.create_sheet("buyYearLow")
-ws_buyYearLow.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_buyYearLow.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_buyYearLow1 = wb.create_sheet("buyYearLow1")
-ws_buyYearLow1.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_buyYearLow1.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_buyFinal = wb.create_sheet("BuyFinal")
-ws_buyFinal.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_buyFinal.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_buyFinal1 = wb.create_sheet("BuyFinal1")
-ws_buyFinal1.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_buyFinal1.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_buyHighIndicators = wb.create_sheet("BuyHighIndicators")
-ws_buyHighIndicators.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_buyHighIndicators.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_buyPattern2 = wb.create_sheet("buyPattern2")
-ws_buyPattern2.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_buyPattern2.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_buyOI = wb.create_sheet("buyOI")
-ws_buyOI.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_buyOI.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 
 ws_sellAll = wb.create_sheet("SellAll")
-ws_sellAll.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_sellAll.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_sellYearLow = wb.create_sheet("sellYearLow")
-ws_sellYearLow.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_sellYearLow.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_sellYearHigh = wb.create_sheet("sellYearHigh")
-ws_sellYearHigh.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_sellYearHigh.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_sellYearHigh1 = wb.create_sheet("sellYearHigh1")
-ws_sellYearHigh1.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_sellYearHigh1.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_sellFinal = wb.create_sheet("SellFinal")
-ws_sellFinal.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_sellFinal.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_sellFinal1 = wb.create_sheet("SellFinal1")
-ws_sellFinal1.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_sellFinal1.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_sellHighIndicators = wb.create_sheet("SellHighIndicators")
-ws_sellHighIndicators.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_sellHighIndicators.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_sellPattern2 = wb.create_sheet("sellPattern2")
-ws_sellPattern2.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_sellPattern2.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 ws_sellOI = wb.create_sheet("sellOI")
-ws_sellOI.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
+ws_sellOI.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHighChange", "yLowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Filter", "Avg", "Count"])
 
 def saveReports(run_type=None):
     ws_buyAll.append([""])
@@ -102,63 +102,63 @@ def saveReports(run_type=None):
     count = 0
     for row in ws_buyAll.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_buyAll.add_table(tab)
     
     count = 0
     for row in ws_buyYearHigh.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_buyYearHigh.add_table(tab)
      
     count = 0
     for row in ws_buyYearLow.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_buyYearLow.add_table(tab)
    
     count = 0
     for row in ws_buyYearLow1.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_buyYearLow1.add_table(tab)
      
     count = 0
     for row in ws_buyFinal.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_buyFinal.add_table(tab)
      
     count = 0
     for row in ws_buyFinal1.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_buyFinal1.add_table(tab)
      
     count = 0
     for row in ws_buyPattern2.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_buyPattern2.add_table(tab)
     
     count = 0
     for row in ws_buyOI.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_buyOI.add_table(tab)
      
     count = 0
     for row in ws_buyHighIndicators.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_buyHighIndicators.add_table(tab)
     
@@ -166,63 +166,63 @@ def saveReports(run_type=None):
     count = 0
     for row in ws_sellAll.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_sellAll.add_table(tab)
     
     count = 0
     for row in ws_sellYearHigh.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_sellYearHigh.add_table(tab)
     
     count = 0
     for row in ws_sellYearHigh1.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_sellYearHigh1.add_table(tab)
     
     count = 0
     for row in ws_sellYearLow.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_sellYearLow.add_table(tab)
     
     count = 0
     for row in ws_sellFinal.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_sellFinal.add_table(tab)
     
     count = 0
     for row in ws_sellFinal1.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_sellFinal1.add_table(tab)
     
     count = 0
     for row in ws_sellPattern2.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_sellPattern2.add_table(tab)
     
     count = 0
     for row in ws_sellOI.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_sellOI.add_table(tab)
     
     count = 0
     for row in ws_sellHighIndicators.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AG" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AJ" + str(count))
     tab.tableStyleInfo = style
     ws_sellHighIndicators.add_table(tab)
     
