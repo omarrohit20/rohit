@@ -1249,7 +1249,7 @@ def buy_trend_break(regression_data, regressionResult, ws):
            and (regression_data['open'] == regression_data['low'] or regression_data['forecast_day_VOL_change'] >= 0)
            and regression_data['forecast_day_VOL_change'] >= -50
            ):
-               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutBuyContinue-0test-atYearLow')
+               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutBuyContinue-00-test-atYearLow')
                return True
        if(regression_data['forecast_day_PCT_change'] > 0 and regression_data['PCT_day_change'] > 0
            and regression_data['PCT_day_change_pre1'] > 0 and regression_data['PCT_day_change_pre2'] > 0 and regression_data['PCT_day_change_pre3'] > 0
@@ -1257,7 +1257,7 @@ def buy_trend_break(regression_data, regressionResult, ws):
            and (regression_data['open'] == regression_data['low'] or regression_data['forecast_day_VOL_change'] >= 0)
            and regression_data['forecast_day_VOL_change'] >= -50
            ):
-               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutBuyContinue-00-test-atYearLow')
+               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutBuyContinue-0-test-atYearLow')
                return True    
     if(regression_data['yearLowChange'] < 15):
        if(regression_data['forecast_day_PCT_change'] > 2 and regression_data['PCT_day_change'] > 2
@@ -1265,7 +1265,7 @@ def buy_trend_break(regression_data, regressionResult, ws):
            #and regression_data['open'] == regression_data['low']
            and regression_data['forecast_day_VOL_change'] >= 0
            ):
-               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutBuyContinue-1test-atYearLow')
+               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutBuyContinue-11-test-atYearLow')
                return True
        if(regression_data['forecast_day_PCT_change'] > 0 and regression_data['PCT_day_change'] > 0
            and regression_data['PCT_day_change_pre1'] > 0 and regression_data['PCT_day_change_pre2'] > 0 and regression_data['PCT_day_change_pre3'] > 0
@@ -1273,7 +1273,7 @@ def buy_trend_break(regression_data, regressionResult, ws):
            #and regression_data['open'] == regression_data['low']
            and regression_data['forecast_day_VOL_change'] >= 0
            ):
-               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutBuyContinue-11-test-atYearLow')
+               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutBuyContinue-1-test-atYearLow')
                return True    
            
 def buy_oi_candidate(regression_data, regressionResult, ws):
@@ -2084,7 +2084,7 @@ def sell_trend_break(regression_data, regressionResult, ws):
            and (regression_data['open'] == regression_data['high'] or regression_data['forecast_day_VOL_change'] >= 0)
            and regression_data['forecast_day_VOL_change'] >= -50
            ):
-               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutSellContinue-0test-atYearHigh')
+               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutSellContinue-00-test-atYearHigh')
                return True
        if(regression_data['forecast_day_PCT_change'] < 0 and regression_data['PCT_day_change'] < 0
            and regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre2'] < 0 and regression_data['PCT_day_change_pre3'] < 0
@@ -2092,7 +2092,7 @@ def sell_trend_break(regression_data, regressionResult, ws):
            and (regression_data['open'] == regression_data['high'] or regression_data['forecast_day_VOL_change'] >= 0)
            and regression_data['forecast_day_VOL_change'] >= -50
            ):
-               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutSellContinue-00-test-atYearHigh')
+               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutSellContinue-0-test-atYearHigh')
                return True
     if(regression_data['yearHighChange'] > -15
     ):
@@ -2101,7 +2101,7 @@ def sell_trend_break(regression_data, regressionResult, ws):
            #and regression_data['open'] == regression_data['high']
            and regression_data['forecast_day_VOL_change'] >= 0
            ):
-               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutSellContinue-1test-atYearHigh')
+               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutSellContinue-11-test-atYearHigh')
                return True
        if(regression_data['forecast_day_PCT_change'] < 0 and regression_data['PCT_day_change'] < 0
            and regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre2'] < 0 and regression_data['PCT_day_change_pre3'] < 0
@@ -2109,7 +2109,7 @@ def sell_trend_break(regression_data, regressionResult, ws):
            #and regression_data['open'] == regression_data['high']
            and regression_data['forecast_day_VOL_change'] >= 0
            ):
-               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutSellContinue-11-test-atYearHigh')
+               add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutSellContinue-1-test-atYearHigh')
                return True
     
 def sell_oi_candidate(regression_data, regressionResult, ws):
