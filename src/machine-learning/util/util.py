@@ -832,7 +832,7 @@ def buy_final(regression_data, regressionResult, ws_buyFinal, ws_buyFinal1):
             or last_5_day_all_down_except_today(regression_data)
             )
        and regression_data['yearLowChange'] > 5 and regression_data['yearHighChange'] < -5
-       and abs(regression_data['PCT_day_CH']) < 0.5
+       #and abs(regression_data['PCT_day_CH']) < 0.5
     ):
        if(regression_data['forecast_day_PCT_change'] > 0
           and regression_data['bar_high'] > regression_data['bar_high_pre']
@@ -1707,7 +1707,7 @@ def sell_final(regression_data, regressionResult, ws_sellFinal, ws_sellFinal1):
     if(regression_data['yearLowChange'] > 10 and regression_data['score'] != '10'
        and -4 < regression_data['PCT_day_change'] < -1 and -4 < regression_data['PCT_change'] < -1
        and regression_data['forecast_day_VOL_change'] > 0
-       #and abs(regression_data['PCT_day_LC']) < 0.3
+       and abs(regression_data['PCT_day_LC']) < 0.3
        ):
         if(str(regression_data['buyIndia']) == '' and -90 < regression_data['yearHighChange'] < -10
             and (ten_days_more_than_ten(regression_data)
