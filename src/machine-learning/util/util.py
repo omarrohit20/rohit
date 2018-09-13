@@ -302,7 +302,8 @@ def last_4_day_all_up(regression_data):
         and regression_data['PCT_day_change_pre1'] > 0
         and regression_data['PCT_day_change_pre2'] > 0
         and regression_data['PCT_day_change_pre3'] > 0
-        and regression_data['PCT_day_change_pre4'] > 0): 
+        and regression_data['PCT_day_change_pre4'] > 0
+        ): 
         return True
     else:
         return False 
@@ -312,7 +313,34 @@ def last_4_day_all_down(regression_data):
         and regression_data['PCT_day_change_pre1'] < 0
         and regression_data['PCT_day_change_pre2'] < 0
         and regression_data['PCT_day_change_pre3'] < 0
-        and regression_data['PCT_day_change_pre4'] < 0): 
+        and regression_data['PCT_day_change_pre4'] < 0
+        ): 
+        return True
+    else:
+        return False      
+
+def last_7_day_all_up(regression_data):
+    if(regression_data['PCT_day_change'] > 0
+        and regression_data['PCT_day_change_pre1'] > 0
+        and regression_data['PCT_day_change_pre2'] > 0
+        and regression_data['PCT_day_change_pre3'] > 0
+        and regression_data['PCT_day_change_pre4'] > 0
+        and regression_data['PCT_day_change_pre5'] > 0
+        and regression_data['PCT_day_change_pre6'] > 0
+        ): 
+        return True
+    else:
+        return False 
+    
+def last_7_day_all_down(regression_data):
+    if(regression_data['PCT_day_change'] < 0
+        and regression_data['PCT_day_change_pre1'] < 0
+        and regression_data['PCT_day_change_pre2'] < 0
+        and regression_data['PCT_day_change_pre3'] < 0
+        and regression_data['PCT_day_change_pre4'] < 0
+        and regression_data['PCT_day_change_pre5'] < 0
+        and regression_data['PCT_day_change_pre6'] < 0
+        ): 
         return True
     else:
         return False      
@@ -1280,9 +1308,21 @@ def buy_trend_reversal(regression_data, regressionResult, ws):
     return False            
 
 def buy_trend_break(regression_data, regressionResult, ws):
+    if(regression['consolidate'] == 1
+       and regression_data['forecast_day_PCT_change'] > 2 and regression_data['forecast_PCT_change'] > 2
+       ):
+        add_in_csv(regression_data, regressionResult, ws, '##TestBreakOutBuyConsolidate-0')
+        return True
+    
     if(ten_days_less_than_minus_five(regression_data)
-      and regression_data['yearHighChange'] < -30
-    ):
+       and last_7_day_all_down(regression_data)
+       ):
+        add_in_csv(regression_data, regressionResult, ws, '##TestBreakOutBuyCandidate-checkEarly10MinuteTrend')
+        return True
+    
+    if(ten_days_less_than_minus_five(regression_data)
+       and regression_data['yearHighChange'] < -30
+       ):
        if(regression_data['forecast_day_PCT_change'] > 2 and regression_data['PCT_day_change'] > 2 and regression_data['PCT_day_change_pre1'] < 0
            and abs(regression_data['PCT_day_change']) > abs(regression_data['PCT_day_change_pre1'])
            #and regression_data['open'] == regression_data['low']
@@ -2181,6 +2221,18 @@ def sell_trend_reversal(regression_data, regressionResult, ws):
     return False   
 
 def sell_trend_break(regression_data, regressionResult, ws):
+    if(regression['consolidate'] == 1
+       and regression_data['forecast_day_PCT_change'] < -2 and regression_data['forecast_PCT_change'] < -2
+       ):
+        add_in_csv(regression_data, regressionResult, ws, '##TestBreakOutSellConsolidate-0')
+        return True
+    
+    if(ten_days_more_than_five(regression_data)
+       and last_7_day_all_up(regression_data)
+       ):
+        add_in_csv(regression_data, regressionResult, ws, '##TestBreakOutBuyCandidate-checkEarly10MinuteTrend')
+        return True
+    
     if(ten_days_more_than_five(regression_data)
       and regression_data['yearLowChange'] > 30
     ):
