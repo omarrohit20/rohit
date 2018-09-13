@@ -130,10 +130,10 @@ def overlap_screener(data, todayInputs, tdchange, historicalInputs, hchange):
     if((overlap_studies['0-MA50'] < overlap_studies['0-MA200']) and (overlap_studies['1-MA50'] > overlap_studies['1-MA200'])):
         long_term = -1
     consolidation = 0
-    EMA6Change = ((float(overlap_studies['0-EMA6'])-float(overlap_studies['5-EMA6']))/float(overlap_studies['5-EMA6']))*100
-    EMA11Change = ((float(overlap_studies['0-EMA6'])-float(overlap_studies['10-EMA6']))/float(overlap_studies['10-EMA6']))*100
+    EMA5Change = ((float(overlap_studies['0-EMA30'])-float(overlap_studies['5-EMA30']))/float(overlap_studies['5-EMA30']))*100
+    EMA10Change = ((float(overlap_studies['0-EMA30'])-float(overlap_studies['10-EMA30']))/float(overlap_studies['10-EMA30']))*100
     
-    if((0 < abs(EMA6Change) < 1) and (0 < abs(EMA11Change) < 1)):
+    if((0 < abs(EMA5Change) < 1) and (0 < abs(EMA10Change) < 1)):
         consolidation = 1
                
     json_data = json.loads(json.dumps(technical_indicators))
@@ -916,8 +916,9 @@ def ta_lib_data_df(scrip, df, db_store=False):
         overlap_studies['1-EMA26'] = EMA(historicalInputs, 26).tolist()[::-1][1]
         overlap_studies['1-MA50'] = MA(historicalInputs, 50).tolist()[::-1][1]
         overlap_studies['1-MA200'] = MA(historicalInputs, 200).tolist()[::-1][1]
-        overlap_studies['5-EMA6'] = EMA(historicalInputs, 6).tolist()[::-1][5]
-        overlap_studies['10-EMA6'] = EMA(historicalInputs, 6).tolist()[::-1][10]     
+        overlap_studies['0-EMA30'] = EMA(historicalInputs, 6).tolist()[::-1][0]
+        overlap_studies['5-EMA30'] = EMA(historicalInputs, 6).tolist()[::-1][5]
+        overlap_studies['10-EMA30'] = EMA(historicalInputs, 6).tolist()[::-1][10]     
         
 #       overlap_studies['DEMA'] = DEMA(historicalInputs).tolist()[::-1]
         overlap_studies['EMA9'] = EMA(historicalInputs, 9).tolist()[::-1]
