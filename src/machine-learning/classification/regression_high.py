@@ -271,13 +271,14 @@ def process_regression_high(scrip, df, buy, sell, trend, short_term, long_term, 
     PCT_change_pre3 = df.tail(4).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_change_pre4 = df.tail(5).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_change_pre5 = df.tail(6).loc[-forecast_out:,'PCT_change'].values[0]
-    PCT_change_pre6 = df.tail(7).loc[-forecast_out:,'PCT_change'].values[0]
-    PCT_change_pre7 = df.tail(8).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_day_change_pre1 = df.tail(2).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_day_change_pre2 = df.tail(3).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_day_change_pre3 = df.tail(4).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_day_change_pre4 = df.tail(5).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_day_change_pre5 = df.tail(6).loc[-forecast_out:,'PCT_day_change'].values[0]
+    PCT_day_change_pre6 = df.tail(7).loc[-forecast_out:,'PCT_day_change'].values[0]
+    PCT_day_change_pre7 = df.tail(8).loc[-forecast_out:,'PCT_day_change'].values[0]
+    PCT_day_change_pre8 = df.tail(9).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_change = df.tail(1).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_day_change = df.tail(1).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_day_OL = df.tail(1).loc[-forecast_out:, 'PCT_day_OL'].values[0]
@@ -354,6 +355,7 @@ def process_regression_high(scrip, df, buy, sell, trend, short_term, long_term, 
     regression_data['PCT_day_change_pre5'] = float(PCT_day_change_pre5)
     regression_data['PCT_day_change_pre6'] = float(PCT_day_change_pre6)
     regression_data['PCT_day_change_pre7'] = float(PCT_day_change_pre7)
+    regression_data['PCT_day_change_pre8'] = float(PCT_day_change_pre8)
     regression_data['PCT_change'] = float(PCT_change)
     regression_data['PCT_day_change'] = float(PCT_day_change)
     regression_data['PCT_day_OL'] = float(PCT_day_OL)
