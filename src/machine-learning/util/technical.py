@@ -119,21 +119,36 @@ def overlap_screener(data, todayInputs, tdchange, historicalInputs, hchange):
             slow = 21
             fast = 50                          
     
-    short_term = 0
+    
+    today_short_term = "0"
+    yesterday_short_term = "0"
     if(overlap_studies['0-EMA6'] > overlap_studies['0-EMA16'] > overlap_studies['0-EMA26'] > overlap_studies['0-MA50']):
-        short_term = 1
+        today_short_term = "1"
     if(overlap_studies['0-EMA6'] < overlap_studies['0-EMA16'] < overlap_studies['0-EMA26'] < overlap_studies['0-MA50']):
-        short_term = -1
-    long_term = 0
-    if((overlap_studies['0-MA50'] > overlap_studies['0-MA200']) and (overlap_studies['1-MA50'] < overlap_studies['1-MA200'])):
-        long_term = 1
-    if((overlap_studies['0-MA50'] < overlap_studies['0-MA200']) and (overlap_studies['1-MA50'] > overlap_studies['1-MA200'])):
-        long_term = -1
+        today_short_term = "-1"
+    if(overlap_studies['1-EMA6'] > overlap_studies['1-EMA16'] > overlap_studies['1-EMA26'] > overlap_studies['1-MA50']):
+        yesterday_short_term = "1"
+    if(overlap_studies['1-EMA6'] < overlap_studies['1-EMA16'] < overlap_studies['1-EMA26'] < overlap_studies['1-MA50']):
+        yesterday_short_term = "-1"
+    short_term = yesterday_short_term + today_short_term
+    
+    today_long_term = "0"
+    yesterday_long_term = "0"
+    if(overlap_studies['0-MA50'] > overlap_studies['0-MA200']):
+        today_long_term = "1"
+    if(overlap_studies['0-MA50'] < overlap_studies['0-MA200']):
+        today_long_term = "-1"
+    if(overlap_studies['1-MA50'] > overlap_studies['1-MA200']):
+        today_long_term = "1"
+    if(overlap_studies['1-MA50'] < overlap_studies['1-MA200']):
+        today_long_term = "-1"
+    long_term = yesterday_long_term + today_long_term
+    
     consolidation = 0
     EMA5Change = ((float(overlap_studies['0-EMA30'])-float(overlap_studies['5-EMA30']))/float(overlap_studies['5-EMA30']))*100
     EMA10Change = ((float(overlap_studies['0-EMA30'])-float(overlap_studies['10-EMA30']))/float(overlap_studies['10-EMA30']))*100
     
-    if((0 < abs(EMA5Change) < 1) and (0 < abs(EMA10Change) < 1)):
+    if((0 < abs(EMA5Change) < 0.5) and (0 < abs(EMA10Change) < 0.5)):
         consolidation = 1
                
     json_data = json.loads(json.dumps(technical_indicators))
