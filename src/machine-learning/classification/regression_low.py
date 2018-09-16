@@ -382,8 +382,8 @@ def process_regression_low(scrip, df, buy, sell, trend, short_term, long_term, c
     regression_data['close'] = float(close)
     regression_data['greentrend'] = float(greentrend)
     regression_data['redtrend'] = float(redtrend)
-    regression_data['short_term'] = float(short_term)
-    regression_data['long_term'] = float(long_term)
+    regression_data['short_term'] = short_term
+    regression_data['long_term'] = long_term
     regression_data['consolidation'] = float(consolidation)
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
