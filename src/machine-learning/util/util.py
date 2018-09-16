@@ -664,7 +664,7 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
         and 'P@[' not in str(regression_data['sellIndia'])
         and buyIndiaAvg >= -.70
         and (BUY_VERY_LESS_DATA or (last_4_day_all_up(regression_data) == False)) #Uncomment0 If very less data
-        and high_tail_pct(regression_data) < 0.7
+        and (BUY_VERY_LESS_DATA or high_tail_pct(regression_data) < 0.7)
         ):
         tail_pct_filter(regression_data, regressionResult)
         buy_all_rule_filter(regression_data, regressionResult, None)
@@ -683,7 +683,7 @@ def buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws_b
         and 'P@[' not in str(regression_data['sellIndia'])
         and buyIndiaAvg >= -.5
         and (BUY_VERY_LESS_DATA or (last_4_day_all_up(regression_data) == False)) #Uncomment0 If very less data
-        and high_tail_pct(regression_data) < 0.7
+        and (BUY_VERY_LESS_DATA or high_tail_pct(regression_data) < 0.7)
         ):
         tail_pct_filter(regression_data, regressionResult)
         buy_all_rule_filter(regression_data, regressionResult, None)
@@ -1016,7 +1016,7 @@ def buy_pattern(regression_data, regressionResult, ws_buyPattern, ws_buyPattern1
 def buy_morning_star_buy(regression_data, regressionResult, ws):
     if(-5 < regression_data['forecast_day_PCT_change'] < -2
         and regression_data['PCT_day_change_pre1'] < 0
-        and ten_days_less_than_minus_seven(regression_data)
+        and (BUY_VERY_LESS_DATA or ten_days_less_than_minus_seven(regression_data))
         and regression_data['yearHighChange'] < -20
         and high_tail_pct(regression_data) < 0.5
         ):
@@ -1047,7 +1047,7 @@ def buy_morning_star_buy(regression_data, regressionResult, ws):
 def buy_evening_star_sell(regression_data, regressionResult, ws):
     if(5 > regression_data['forecast_day_PCT_change'] > 2
         and regression_data['PCT_day_change_pre1'] > 0
-        and (SELL_VERY_LESS_DATA and ten_days_more_than_seven(regression_data))
+        and (SELL_VERY_LESS_DATA or ten_days_more_than_seven(regression_data))
         and regression_data['yearLowChange'] > 20
         and low_tail_pct(regression_data) < 0.5
         ):
@@ -1630,7 +1630,7 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
         and 'P@[' not in str(regression_data['buyIndia'])
         and sellIndiaAvg <= 0.70
         and (SELL_VERY_LESS_DATA or (last_4_day_all_down(regression_data) == False)) #Uncomment0 If very less data
-        and low_tail_pct(regression_data) < 0.7
+        and (SELL_VERY_LESS_DATA or low_tail_pct(regression_data) < 0.7)
         ):
         tail_pct_filter(regression_data, regressionResult)
         sell_all_rule_filter(regression_data, regressionResult, None)
@@ -1649,7 +1649,7 @@ def sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws
         and 'P@[' not in str(regression_data['buyIndia'])
         and sellIndiaAvg <= 0.5
         and (SELL_VERY_LESS_DATA or (last_4_day_all_down(regression_data) == False)) #Uncomment0 If very less data
-        and low_tail_pct(regression_data) < 0.7
+        and (SELL_VERY_LESS_DATA or low_tail_pct(regression_data) < 0.7)
         ):
         tail_pct_filter(regression_data, regressionResult)
         sell_all_rule_filter(regression_data, regressionResult, None)
@@ -1819,7 +1819,7 @@ def sell_final(regression_data, regressionResult, ws_sellFinal, ws_sellFinal1):
         and (ten_days_more_than_ten(regression_data)
              or last_5_day_all_up_except_today(regression_data)
              )
-        #and abs(regression_data['PCT_day_LC']) < 0.5
+        and low_tail_pct(regression_data) < 0.5
         ):  
         if(regression_data['forecast_day_PCT_change'] < 0
             and regression_data['bar_low'] < regression_data['bar_low_pre']
@@ -1988,7 +1988,7 @@ def sell_morning_star_buy(regression_data, regressionResult, ws):
 def sell_evening_star_sell(regression_data, regressionResult, ws):
     if(5 > regression_data['forecast_day_PCT_change'] > 2
         and regression_data['PCT_day_change_pre1'] > 0
-        and ten_days_more_than_seven(regression_data)
+        and (SELL_VERY_LESS_DATA or ten_days_more_than_seven(regression_data))
         and regression_data['yearLowChange'] > 20
         and low_tail_pct(regression_data) < 0.5
         ):
