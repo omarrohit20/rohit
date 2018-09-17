@@ -660,11 +660,12 @@ def buy_pattern_from_history(regression_data, regressionResult, ws_buyPattern2):
 def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
     if(is_algo_buy(regression_data)
         and (BUY_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] < 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
-        and (BUY_VERY_LESS_DATA or (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low']))
+        #and (BUY_VERY_LESS_DATA or (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low']))
         and 'P@[' not in str(regression_data['sellIndia'])
         and buyIndiaAvg >= -.70
         and (BUY_VERY_LESS_DATA or (last_4_day_all_up(regression_data) == False)) #Uncomment0 If very less data
         and (BUY_VERY_LESS_DATA or high_tail_pct(regression_data) < 0.7)
+        and regression_data['close'] > 50
         ):
         tail_pct_filter(regression_data, regressionResult)
         buy_all_rule_filter(regression_data, regressionResult, None)
@@ -679,11 +680,12 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
 def buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
     if(is_algo_buy_classifier(regression_data)
         and (BUY_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] < 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
-        and (BUY_VERY_LESS_DATA or (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low']))
+        #and (BUY_VERY_LESS_DATA or (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low']))
         and 'P@[' not in str(regression_data['sellIndia'])
         and buyIndiaAvg >= -.5
         and (BUY_VERY_LESS_DATA or (last_4_day_all_up(regression_data) == False)) #Uncomment0 If very less data
         and (BUY_VERY_LESS_DATA or high_tail_pct(regression_data) < 0.7)
+        and regression_data['close'] > 50
         ):
         tail_pct_filter(regression_data, regressionResult)
         buy_all_rule_filter(regression_data, regressionResult, None)
@@ -1626,11 +1628,12 @@ def sell_pattern_from_history(regression_data, regressionResult, ws_sellPattern2
 def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
     if(is_algo_sell(regression_data)
         and (SELL_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] > 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
-        and (SELL_VERY_LESS_DATA or (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low']))
+        #and (SELL_VERY_LESS_DATA or (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low']))
         and 'P@[' not in str(regression_data['buyIndia'])
         and sellIndiaAvg <= 0.70
         and (SELL_VERY_LESS_DATA or (last_4_day_all_down(regression_data) == False)) #Uncomment0 If very less data
         and (SELL_VERY_LESS_DATA or low_tail_pct(regression_data) < 0.7)
+        and regression_data['close'] > 50
         ):
         tail_pct_filter(regression_data, regressionResult)
         sell_all_rule_filter(regression_data, regressionResult, None)
@@ -1644,12 +1647,13 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
 
 def sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
     if(is_algo_sell_classifier(regression_data)
-        and (SELL_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] > 0) or (regression_data['forecast_day_VOL_change'] > 0)))
-        and (SELL_VERY_LESS_DATA or (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low']))
+        and (SELL_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] > 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
+        #and (SELL_VERY_LESS_DATA or (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low']))
         and 'P@[' not in str(regression_data['buyIndia'])
         and sellIndiaAvg <= 0.5
         and (SELL_VERY_LESS_DATA or (last_4_day_all_down(regression_data) == False)) #Uncomment0 If very less data
         and (SELL_VERY_LESS_DATA or low_tail_pct(regression_data) < 0.7)
+        and regression_data['close'] > 50
         ):
         tail_pct_filter(regression_data, regressionResult)
         sell_all_rule_filter(regression_data, regressionResult, None)
