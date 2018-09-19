@@ -326,26 +326,26 @@ def last_4_day_all_down(regression_data):
         return False      
 
 def last_7_day_all_up(regression_data):
-    if(regression_data['PCT_day_change'] > 0
-        and regression_data['PCT_day_change_pre1'] > 0
+    if(regression_data['PCT_day_change_pre1'] > 0
         and regression_data['PCT_day_change_pre2'] > 0
         and regression_data['PCT_day_change_pre3'] > 0
         and regression_data['PCT_day_change_pre4'] > 0
         and regression_data['PCT_day_change_pre5'] > 0
         and regression_data['PCT_day_change_pre6'] > 0
+        and regression_data['PCT_day_change_pre7'] > 0
         ): 
         return True
     else:
         return False 
     
 def last_7_day_all_down(regression_data):
-    if(regression_data['PCT_day_change'] < 0
-        and regression_data['PCT_day_change_pre1'] < 0
+    if(regression_data['PCT_day_change_pre1'] < 0
         and regression_data['PCT_day_change_pre2'] < 0
         and regression_data['PCT_day_change_pre3'] < 0
         and regression_data['PCT_day_change_pre4'] < 0
         and regression_data['PCT_day_change_pre5'] < 0
         and regression_data['PCT_day_change_pre6'] < 0
+        and regression_data['PCT_day_change_pre7'] < 0
         ): 
         return True
     else:
@@ -370,6 +370,10 @@ def low_tail_pct(regression_data):
         return (((regression_data['bar_low'] - regression_data['low'])/regression_data['bar_low'])*100)
 
 def tail_pct_filter(regression_data, regressionResult):
+    if(high_tail_pct(regression_data) < 0.3):
+        add_in_csv(regression_data, regressionResult, None, None, None, 'NoHighTail-0.3')
+    if(low_tail_pct(regression_data) < 0.3):
+        add_in_csv(regression_data, regressionResult, None, None, None, 'NoLowTail-0.3')
     if(high_tail_pct(regression_data) < 0.1):
         add_in_csv(regression_data, regressionResult, None, None, None, 'NoHighTail-0.1')
     if(low_tail_pct(regression_data) < 0.1):
@@ -660,7 +664,7 @@ def buy_pattern_from_history(regression_data, regressionResult, ws_buyPattern2):
 def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
     if(is_algo_buy(regression_data)
         and (BUY_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] < 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
-        #and (BUY_VERY_LESS_DATA or (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low']))
+        and (BUY_VERY_LESS_DATA or (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low']))
         and 'P@[' not in str(regression_data['sellIndia'])
         and buyIndiaAvg >= -.70
         and (BUY_VERY_LESS_DATA or (last_4_day_all_up(regression_data) == False)) #Uncomment0 If very less data
@@ -680,7 +684,7 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
 def buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
     if(is_algo_buy_classifier(regression_data)
         and (BUY_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] < 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
-        #and (BUY_VERY_LESS_DATA or (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low']))
+        and (BUY_VERY_LESS_DATA or (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low']))
         and 'P@[' not in str(regression_data['sellIndia'])
         and buyIndiaAvg >= -.5
         and (BUY_VERY_LESS_DATA or (last_4_day_all_up(regression_data) == False)) #Uncomment0 If very less data
@@ -1628,7 +1632,7 @@ def sell_pattern_from_history(regression_data, regressionResult, ws_sellPattern2
 def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
     if(is_algo_sell(regression_data)
         and (SELL_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] > 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
-        #and (SELL_VERY_LESS_DATA or (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low']))
+        and (SELL_VERY_LESS_DATA or (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low']))
         and 'P@[' not in str(regression_data['buyIndia'])
         and sellIndiaAvg <= 0.70
         and (SELL_VERY_LESS_DATA or (last_4_day_all_down(regression_data) == False)) #Uncomment0 If very less data
@@ -1648,7 +1652,7 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
 def sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
     if(is_algo_sell_classifier(regression_data)
         and (SELL_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] > 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
-        #and (SELL_VERY_LESS_DATA or (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low']))
+        and (SELL_VERY_LESS_DATA or (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low']))
         and 'P@[' not in str(regression_data['buyIndia'])
         and sellIndiaAvg <= 0.5
         and (SELL_VERY_LESS_DATA or (last_4_day_all_down(regression_data) == False)) #Uncomment0 If very less data
