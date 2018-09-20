@@ -85,7 +85,7 @@ def get_data_frame(df, regressor="None"):
 #         dfp['redtrend'] = df['redtrend']
         if soft == False:
             dfp['HH'] = df['HH']
-            dfp['LL'] = df['LL']   
+            dfp['LL'] = df['LL'] 
  
         if regressor != 'mlp':      
             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
@@ -243,7 +243,7 @@ def process_regression_low(scrip, df, buy, sell, trend, short_term, long_term, c
     
     regression_data = {}
     if kNeighbours:
-        result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1, n_neighbors=3))
+        result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1, n_neighbors=3, weights='distance'))
         #result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(random_state=1, n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1))
         #result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.RadiusNeighborsClassifier(radius=1.0))
         regression_data['kNeighboursValue'] = float(result[0])

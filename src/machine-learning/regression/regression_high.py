@@ -85,7 +85,7 @@ def get_data_frame(df, regressor="None"):
 #         dfp['redtrend'] = df['redtrend']
         if soft == False:
             dfp['HH'] = df['HH']
-            dfp['LL'] = df['LL']   
+            dfp['LL'] = df['LL']  
        
         if regressor != 'mlp':      
             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
@@ -243,7 +243,7 @@ def process_regression_high(scrip, df, buy, sell, trend, short_term, long_term, 
     
     regression_data = {}
     if kNeighbours:
-        result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1))
+        result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1, weights='distance'))
         regression_data['kNeighboursValue'] = float(result[0])
     else:
         regression_data['kNeighboursValue'] = float(0)
