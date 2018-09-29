@@ -559,8 +559,14 @@ def get_regressionResult(regression_data, scrip, db, mlp_o, kneighbours_o):
     regressionResult.append(mlp_o)
     regressionResult.append(kneighbours_o)
     regressionResult.append(regression_data['trend'])
+    regressionResult.append(regression_data['yearHigh2Change'])
+    regressionResult.append(regression_data['yearLow2Change'])
     regressionResult.append(regression_data['yearHighChange'])
     regressionResult.append(regression_data['yearLowChange'])
+    regressionResult.append(regression_data['month6HighChange'])
+    regressionResult.append(regression_data['month6LowChange'])
+    regressionResult.append(regression_data['month3HighChange'])
+    regressionResult.append(regression_data['month3LowChange'])
     regressionResult.append(regression_data['series_trend'])
     regressionResult.append(regression_data['short_term'])
     regressionResult.append(regression_data['long_term'])
@@ -569,6 +575,7 @@ def get_regressionResult(regression_data, scrip, db, mlp_o, kneighbours_o):
     regressionResult.append(resultDeclared)
     regressionResult.append(resultSentiment)
     regressionResult.append(resultComment)
+    regressionResult.append(regression_data['scrip'])
     return regressionResult
 
 def all_withoutml(regression_data, regressionResult, ws):

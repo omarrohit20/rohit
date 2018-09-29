@@ -18,7 +18,7 @@ def futures_data(scrip):
                             start = datetime.date.today() - datetime.timedelta(days=7),
                             end = datetime.date.today(),
                             futures=True,
-                            expiry_date=get_expiry_date(datetime.date.today().year, datetime.date.today().month))
+                            expiry_date=get_expiry_date(datetime.date.today().year, datetime.date.today().month + 1))
     return stock_fut
 
 def insert_scripdata(scrip, data):

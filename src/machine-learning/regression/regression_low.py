@@ -317,18 +317,33 @@ def process_regression_low(scrip, df, buy, sell, trend, short_term, long_term, c
     
     today_date = datetime.datetime.strptime(forecast_day_date, '%Y-%m-%d').date()
     start_date = (today_date - datetime.timedelta(weeks=52)).strftime('%Y-%m-%d')
-    df = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
-    yearHigh = df['high'].max()
-    yearLow = df['low'].min()
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
+    yearHigh = dftemp['high'].max()
+    yearLow = dftemp['low'].min()
     yearHighChange = (close - yearHigh)*100/yearHigh
     yearLowChange = (close - yearLow)*100/yearLow
     
     start_date = (datetime.date.today() - datetime.timedelta(weeks=104)).strftime('%Y-%m-%d')
-    df = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
-    yearHigh = df['high'].max()
-    yearLow = df['low'].min()
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
+    yearHigh = dftemp['high'].max()
+    yearLow = dftemp['low'].min()
     yearHigh2Change = (close - yearHigh)*100/yearHigh
     yearLow2Change = (close - yearLow)*100/yearLow
+    
+    forecast_day_date = (datetime.date.today() - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
+    start_date = (datetime.date.today() - datetime.timedelta(weeks=26)).strftime('%Y-%m-%d')
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
+    m6high = dftemp['high'].max()
+    m6low = dftemp['low'].min()
+    month6HighChange = (close - m6high)*100/close
+    month6LowChange = (close - m6low)*100/close
+    
+    start_date = (datetime.date.today() - datetime.timedelta(weeks=13)).strftime('%Y-%m-%d')
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
+    m3high = dftemp['high'].max()
+    m3low = dftemp['low'].min()
+    month3HighChange = (close - m3high)*100/close
+    month3LowChange = (close - m3low)*100/close
     
     regression_data['date'] = forecast_day_date
     regression_data['scrip'] = str(scrip)
@@ -350,6 +365,10 @@ def process_regression_low(scrip, df, buy, sell, trend, short_term, long_term, c
     regression_data['yearLowChange'] = float(yearLowChange)
     regression_data['yearHigh2Change'] = float(yearHigh2Change) 
     regression_data['yearLow2Change'] = float(yearLow2Change)
+    regression_data['month6HighChange'] = float(month6HighChange) 
+    regression_data['month6LowChange'] = float(month6LowChange)
+    regression_data['month3HighChange'] = float(month3HighChange) 
+    regression_data['month3LowChange'] = float(month3LowChange)
     regression_data['patterns'] = ''
     regression_data['PCT_change_pre1'] = float(PCT_change_pre1)
     regression_data['PCT_change_pre2'] = float(PCT_change_pre2)
