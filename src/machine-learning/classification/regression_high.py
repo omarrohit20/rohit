@@ -317,31 +317,31 @@ def process_regression_high(scrip, df, buy, sell, trend, short_term, long_term, 
     greentrend = df.tail(1).loc[-forecast_out:, 'greentrend'].values[0]
     redtrend = df.tail(1).loc[-forecast_out:, 'redtrend'].values[0]
     
-    today_date = datetime.datetime.strptime(forecast_day_date, '%Y-%m-%d').date()
-    start_date = (today_date - datetime.timedelta(weeks=52)).strftime('%Y-%m-%d')
-    dftemp = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
+    end_date = forecast_day_date
+    start_date = (datetime.date.today() - datetime.timedelta(weeks=52)).strftime('%Y-%m-%d')
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     yearHigh = dftemp['high'].max()
     yearLow = dftemp['low'].min()
     yearHighChange = (close - yearHigh)*100/yearHigh
     yearLowChange = (close - yearLow)*100/yearLow
     
     start_date = (datetime.date.today() - datetime.timedelta(weeks=104)).strftime('%Y-%m-%d')
-    dftemp = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     yearHigh = dftemp['high'].max()
     yearLow = dftemp['low'].min()
     yearHigh2Change = (close - yearHigh)*100/yearHigh
     yearLow2Change = (close - yearLow)*100/yearLow
     
-    forecast_day_date = (datetime.date.today() - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
+    end_date = (datetime.date.today() - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
     start_date = (datetime.date.today() - datetime.timedelta(weeks=26)).strftime('%Y-%m-%d')
-    dftemp = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     m6high = dftemp['high'].max()
     m6low = dftemp['low'].min()
     month6HighChange = (close - m6high)*100/close
     month6LowChange = (close - m6low)*100/close
     
     start_date = (datetime.date.today() - datetime.timedelta(weeks=13)).strftime('%Y-%m-%d')
-    dftemp = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     m3high = dftemp['high'].max()
     m3low = dftemp['low'].min()
     month3HighChange = (close - m3high)*100/close

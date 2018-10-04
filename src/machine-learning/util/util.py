@@ -18,7 +18,7 @@ connection = MongoClient('localhost',27017)
 db = connection.Nsedata
 
 soft=False
-NIFTY_HIGH = True
+NIFTY_HIGH = False
 NIFTY_LOW = False
 BUY_VERY_LESS_DATA=True
 SELL_VERY_LESS_DATA=True
