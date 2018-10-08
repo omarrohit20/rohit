@@ -422,6 +422,8 @@ def process_regression_high(scrip, df, buy, sell, trend, short_term, long_term, 
     regression_data['short_term'] = short_term
     regression_data['long_term'] = long_term
     regression_data['consolidation'] = float(consolidation)
+    regression_data['mlpValue_other'] = 0
+    regression_data['kNeighboursValue_other'] = 0
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     create_csv(regression_data)
