@@ -1183,7 +1183,7 @@ def buy_morning_star_buy(regression_data, regressionResult, ws):
         and high_tail_pct(regression_data) < 0.5
         and low_tail_pct(regression_data) > 3
         ):
-        if(-3 < regression_data['PCT_day_change'] < -1 and -3 < regression_data['PCT_change'] < -1
+        if(-4 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['PCT_change'] < -1
             and (regression_data['close'] - regression_data['low']) > ((regression_data['open'] - regression_data['close']))
             and (regression_data['close'] - regression_data['low']) >= ((regression_data['high'] - regression_data['open']) * 3)
             ):
@@ -1234,7 +1234,7 @@ def buy_evening_star_sell(regression_data, regressionResult, ws):
         and low_tail_pct(regression_data) < 0.5
         and high_tail_pct(regression_data) > 3
         ):
-        if(3 > regression_data['PCT_day_change'] > 1 and 3 > regression_data['PCT_change'] > 1
+        if(4 > regression_data['PCT_day_change'] > 2 and 4 > regression_data['PCT_change'] > 1
             and (regression_data['high']-regression_data['close']) > ((regression_data['close']-regression_data['open']))
             and (regression_data['high']-regression_data['close']) >= ((regression_data['open']-regression_data['low'])*3)
             ):
@@ -2485,7 +2485,7 @@ def sell_morning_star_buy(regression_data, regressionResult, ws):
         and high_tail_pct(regression_data) < 0.5
         and low_tail_pct(regression_data) > 3
         ):
-        if(-3 < regression_data['PCT_day_change'] < -1 and -3 < regression_data['PCT_change'] < -1
+        if(-4 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['PCT_change'] < -1
             and (regression_data['close'] - regression_data['low']) > ((regression_data['open'] - regression_data['close']))
             and (regression_data['close'] - regression_data['low']) >= ((regression_data['high'] - regression_data['open']) * 3)
             ):
@@ -2534,7 +2534,7 @@ def sell_evening_star_sell(regression_data, regressionResult, ws):
         and low_tail_pct(regression_data) < 0.5
         and high_tail_pct(regression_data) > 3
         ):
-        if(3 > regression_data['PCT_day_change'] > 1 and 3 > regression_data['PCT_change'] > 1
+        if(4 > regression_data['PCT_day_change'] > 2 and 4 > regression_data['PCT_change'] > 1
             and (regression_data['high']-regression_data['close']) >= ((regression_data['close']-regression_data['open']))
             and (regression_data['high']-regression_data['close']) >= ((regression_data['open']-regression_data['low'])*3)
             ):
