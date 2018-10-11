@@ -325,25 +325,32 @@ def process_regression_high(scrip, df, buy, sell, trend, short_term, long_term, 
     
     start_date = (datetime.date.today() - datetime.timedelta(weeks=104)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
-    yearHigh = dftemp['high'].max()
-    yearLow = dftemp['low'].min()
-    yearHigh2Change = (close - yearHigh)*100/yearHigh
-    yearLow2Change = (close - yearLow)*100/yearLow
+    year2High = dftemp['high'].max()
+    year2Low = dftemp['low'].min()
+    year2HighChange = (close - year2High)*100/year2High
+    year2LowChange = (close - year2Low)*100/year2Low
+    
+    start_date = (datetime.date.today() - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
+    weekHigh = dftemp['high'].max()
+    weekLow = dftemp['low'].min()
+    weekHighChange = (close - weekHigh)*100/weekHigh
+    weekLowChange = (close - weekLow)*100/weekLow
     
     end_date = (datetime.date.today() - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
     start_date = (datetime.date.today() - datetime.timedelta(weeks=26)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
-    m6high = dftemp['high'].max()
-    m6low = dftemp['low'].min()
-    month6HighChange = (close - m6high)*100/close
-    month6LowChange = (close - m6low)*100/close
+    month6High = dftemp['high'].max()
+    month6Low = dftemp['low'].min()
+    month6HighChange = (close - month6High)*100/close
+    month6LowChange = (close - month6Low)*100/close
     
     start_date = (datetime.date.today() - datetime.timedelta(weeks=13)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
-    m3high = dftemp['high'].max()
-    m3low = dftemp['low'].min()
-    month3HighChange = (close - m3high)*100/close
-    month3LowChange = (close - m3low)*100/close
+    month3High = dftemp['high'].max()
+    month3Low = dftemp['low'].min()
+    month3HighChange = (close - month3High)*100/close
+    month3LowChange = (close - month3Low)*100/close
     
     regression_data['date'] = forecast_day_date
     regression_data['scrip'] = str(scrip)
@@ -360,15 +367,27 @@ def process_regression_high(scrip, df, buy, sell, trend, short_term, long_term, 
     regression_data['score'] = score
     #regression_data['mlpValue'] = mlpValue
     #regression_data['kNeighboursValue'] = kNeighboursValue
-    regression_data['trend'] = trend 
+    regression_data['trend'] = trend
+    regression_data['year2HighChange'] = float(year2HighChange) 
+    regression_data['year2LowChange'] = float(year2LowChange)
     regression_data['yearHighChange'] = float(yearHighChange) 
     regression_data['yearLowChange'] = float(yearLowChange)
-    regression_data['yearHigh2Change'] = float(yearHigh2Change) 
-    regression_data['yearLow2Change'] = float(yearLow2Change)
     regression_data['month6HighChange'] = float(month6HighChange) 
     regression_data['month6LowChange'] = float(month6LowChange)
     regression_data['month3HighChange'] = float(month3HighChange) 
     regression_data['month3LowChange'] = float(month3LowChange)
+    regression_data['weekHighChange'] = float(weekHighChange) 
+    regression_data['weekLowChange'] = float(weekLowChange)
+    regression_data['year2High'] = float(year2High) 
+    regression_data['year2Low'] = float(year2Low)
+    regression_data['yearHigh'] = float(yearHigh) 
+    regression_data['yearLow'] = float(yearLow)
+    regression_data['month6High'] = float(month6High) 
+    regression_data['month6Low'] = float(month6Low)
+    regression_data['month3High'] = float(month3High) 
+    regression_data['month3Low'] = float(month3Low)
+    regression_data['weekHigh'] = float(weekHigh) 
+    regression_data['weekLow'] = float(weekLow)
     regression_data['patterns'] = ''
     regression_data['PCT_change_pre1'] = float(PCT_change_pre1)
     regression_data['PCT_change_pre2'] = float(PCT_change_pre2)
