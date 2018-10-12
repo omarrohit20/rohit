@@ -1162,7 +1162,12 @@ def buy_base_line_buy(regression_data, regressionResult, ws):
     elif(0 < regression_data['month3HighChange'] < 5):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'month3HighBreak')
     
-    if(0 < regression_data['yearLowChange'] < 7.5):
+    if(0 < regression_data['year2LowChange'] < 7.5):
+        if(regression_data['weekLow'] < regression_data['year2Low']):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'year2LowReversal(Confirm)')
+        else:
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'nearYearLow')
+    elif(0 < regression_data['yearLowChange'] < 7.5):
         if(regression_data['weekLow'] < regression_data['yearLow']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'yearLowReversal(Confirm)')
         else:
@@ -1176,7 +1181,61 @@ def buy_base_line_buy(regression_data, regressionResult, ws):
         if(regression_data['weekLow'] < regression_data['month3Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'month3LowReversal(Confirm)')
         else:
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'nearMonth3Low')   
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'nearMonth3Low') 
+    
+    if(is_algo_buy(regression_data)
+        and high_tail_pct(regression_data) < 2
+        ):
+        if(-1 < regression_data['PCT_day_change'] < 4 and regression_data['PCT_change'] < 4):
+            if(0 < regression_data['year2LowChange'] < 7.5):
+                return False
+            elif(0 < regression_data['yearLowChange'] < 7.5):
+                return False
+            elif(0 < regression_data['month6LowChange'] < 7.5):
+                add_in_csv(regression_data, regressionResult, ws, 'Test:buyMonth6LowReversalML')
+                return True
+            elif(0 < regression_data['month3LowChange'] < 7.5):
+                add_in_csv(regression_data, regressionResult, ws, 'Test:buyMonth3LowReversalML')
+                return True
+    
+    if(0 < regression_data['PCT_day_change'] < 4.5 and regression_data['PCT_change'] < 4
+        and high_tail_pct(regression_data) < 2.5
+        ):
+        if(0 < regression_data['year2LowChange'] < 7.5):
+            if(regression_data['weekLow'] < regression_data['year2Low']):
+                add_in_csv(regression_data, regressionResult, ws, 'Test:year2LowReversal-1')
+                return True
+            else:
+                return False
+        elif(0 < regression_data['yearLowChange'] < 7.5):
+            if(regression_data['weekLow'] < regression_data['yearLow']):
+                add_in_csv(regression_data, regressionResult, ws, 'Test:yearLowReversal-1')
+                return True
+            else:
+                return False
+        elif(0 < regression_data['month6LowChange'] < 7.5):
+            if(regression_data['weekLow'] < regression_data['month6Low']):
+                add_in_csv(regression_data, regressionResult, ws, 'Test:month6LowReversal-1')
+                return True
+            else:
+                return False
+        elif(0 < regression_data['month3LowChange'] < 7.5):
+            if(regression_data['weekLow'] < regression_data['month3Low']
+                and regression_data['PCT_day_change'] > 0
+                ):
+                add_in_csv(regression_data, regressionResult, ws, 'Test:month3LowReversal-1')
+                return True
+            else:
+                return False
+        
+    if(0 < regression_data['PCT_day_change'] < 4 and regression_data['PCT_change'] < 4):
+        if(0 < regression_data['month6LowChange'] < 7.5):
+            return False
+        elif(0 < regression_data['month3LowChange'] < 7.5
+            and regression_data['weekLow'] < regression_data['month3Low']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'Test:buyMonth3LowReversal-2')
+            return True
     return False
 
 def buy_morning_star_buy(regression_data, regressionResult, ws):
@@ -1734,9 +1793,9 @@ def buy_final_candidate(regression_data, regressionResult, ws_buyFinal):
 def buy_oi_candidate(regression_data, regressionResult, ws):
     tail_pct_filter(regression_data, regressionResult)
     flag = False
+    if buy_base_line_buy(regression_data, regressionResult, ws):
+        flag = True
     if(breakout_or_no_consolidation(regression_data) == True):
-        if buy_base_line_buy(regression_data, regressionResult, ws):
-            flag = True
         if buy_evening_star_sell(regression_data, regressionResult, ws):
             flag = True
         if buy_morning_star_buy(regression_data, regressionResult, ws):
@@ -2337,7 +2396,12 @@ def sell_base_line_sell(regression_data, regressionResult, ws):
     elif(-5 < regression_data['month3LowChange'] < 0):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'month3LowBreak')
     
-    if(-7.5 < regression_data['yearHighChange'] < 0):
+    if(-7.5 < regression_data['year2HighChange'] < 0):
+        if(regression_data['weekHigh'] >= regression_data['year2High']):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'year2HighReversal(Confirm)')
+        else:
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'nearYearHigh')
+    elif(-7.5 < regression_data['yearHighChange'] < 0):
         if(regression_data['weekHigh'] >= regression_data['yearHigh']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'yearHighReversal(Confirm)')
         else:
@@ -3076,11 +3140,11 @@ def sell_final_candidate(regression_data, regressionResult, ws_sellFinal):
 def sell_oi_candidate(regression_data, regressionResult, ws):
     tail_pct_filter(regression_data, regressionResult)
     flag = False
+    if sell_base_line_sell(regression_data, regressionResult, ws):
+        flag = True
+    if sell_base_line_buy(regression_data, regressionResult, ws):
+        flag = True
     if(breakout_or_no_consolidation(regression_data) == True):
-        if sell_base_line_sell(regression_data, regressionResult, ws):
-            flag = True
-        if sell_base_line_buy(regression_data, regressionResult, ws):
-            flag = True
         if sell_morning_star_buy(regression_data, regressionResult, ws): 
             flag = True
         if sell_evening_star_sell(regression_data, regressionResult, ws): 
