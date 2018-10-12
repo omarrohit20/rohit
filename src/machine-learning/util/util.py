@@ -787,7 +787,8 @@ def buy_pattern_from_history(regression_data, regressionResult, ws_buyPattern2):
 
 def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
     if(is_algo_buy(regression_data)
-        and regression_data['PCT_day_change'] > -1 and regression_data['PCT_change'] > -1
+        and regression_data['PCT_day_change'] > -1 
+        and (BUY_VERY_LESS_DATA or regression_data['PCT_change'] > -1)
         and (BUY_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] < 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
         and (BUY_VERY_LESS_DATA or (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low']))
         and 'P@[' not in str(regression_data['sellIndia'])
@@ -802,16 +803,13 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
         tail_reversal_filter(regression_data, regressionResult)
         buy_all_rule_filter(regression_data, regressionResult, None)
         add_in_csv(regression_data, regressionResult, ws_buyAll, None)
-        if(0 < regression_data['yearLowChange'] < 10):
-            if(regression_data['PCT_day_change'] < -1):
-                return True
-        else:
-            return True
+        return True
     return False
 
 def buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
     if(is_algo_buy_classifier(regression_data)
-        and regression_data['PCT_day_change'] > -1 and regression_data['PCT_change'] > -1
+        and regression_data['PCT_day_change'] > -1 
+        and (BUY_VERY_LESS_DATA or regression_data['PCT_change'] > -1)
         and (BUY_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] < 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
         and (BUY_VERY_LESS_DATA or (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low']))
         and 'P@[' not in str(regression_data['sellIndia'])
@@ -826,11 +824,7 @@ def buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws_b
         tail_reversal_filter(regression_data, regressionResult)
         buy_all_rule_filter(regression_data, regressionResult, None)
         add_in_csv(regression_data, regressionResult, ws_buyAll, None)
-        if(0 < regression_data['yearLowChange'] < 10):
-            if(regression_data['PCT_day_change'] < -1):
-                return True
-        else:
-            return True
+        return True
     return False
 
 def buy_year_high(regression_data, regressionResult, ws_buyYearHigh):
@@ -1992,7 +1986,8 @@ def sell_pattern_from_history(regression_data, regressionResult, ws_sellPattern2
 
 def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
     if(is_algo_sell(regression_data)
-        and regression_data['PCT_day_change'] < 1 and regression_data['PCT_change'] < 1
+        and regression_data['PCT_day_change'] < 1 
+        and (SELL_VERY_LESS_DATA or regression_data['PCT_change'] < 1)
         and (SELL_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] > 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
         and (SELL_VERY_LESS_DATA or (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low']))
         and 'P@[' not in str(regression_data['buyIndia'])
@@ -2007,16 +2002,13 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
         tail_reversal_filter(regression_data, regressionResult)
         sell_all_rule_filter(regression_data, regressionResult, None)
         add_in_csv(regression_data, regressionResult, ws_sellAll, None)
-        if(-10 < regression_data['yearHighChange'] < 0):
-            if(regression_data['PCT_day_change'] > 1):    
-                return True
-        else:
-            return True
+        return True
     return False
 
 def sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
     if(is_algo_sell_classifier(regression_data)
-        and regression_data['PCT_day_change'] < 1 and regression_data['PCT_change'] < 1
+        and regression_data['PCT_day_change'] < 1 
+        and (SELL_VERY_LESS_DATA or regression_data['PCT_change'] < 1)
         and (SELL_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] > 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
         and (SELL_VERY_LESS_DATA or (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low']))
         and 'P@[' not in str(regression_data['buyIndia'])
@@ -2031,11 +2023,7 @@ def sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws
         tail_reversal_filter(regression_data, regressionResult)
         sell_all_rule_filter(regression_data, regressionResult, None)
         add_in_csv(regression_data, regressionResult, ws_sellAll, None)
-        if(-10 < regression_data['yearHighChange'] < 0):
-            if(regression_data['PCT_day_change'] > 1):
-                return True
-        else:
-            return True
+        return True
     return False
         
 def sell_year_high(regression_data, regressionResult, ws_sellYearHigh, ws_sellYearHigh1):
