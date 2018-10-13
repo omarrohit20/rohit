@@ -416,51 +416,59 @@ def breakout_or_no_consolidation(regression_data):
 
 def high_tail_pct_filter(regression_data, regressionResult):
     if((-0.5 < regression_data['PCT_day_change'] < 0.5 and -0.5 < regression_data['PCT_change'] < 0.5)
-       or (0 < regression_data['PCT_day_change'] < 1 and 0 < regression_data['PCT_change'] < 1)
+       or (0 < regression_data['PCT_day_change'] < 1)
        ):
-        if(low_tail_pct(regression_data) > 2):
-            add_in_csv(regression_data, regressionResult, None, None, None, 'LowTail-2pc')
+        if(low_tail_pct(regression_data) > 3):
+            add_in_csv(regression_data, regressionResult, None, None, None, 'GLowTail-3pc')
+        elif(low_tail_pct(regression_data) > 2):
+            add_in_csv(regression_data, regressionResult, None, None, None, 'GLowTail-2pc')
         elif(low_tail_pct(regression_data) > 1):
-            add_in_csv(regression_data, regressionResult, None, None, None, 'LowTail-1pc')
+            add_in_csv(regression_data, regressionResult, None, None, None, 'GLowTail-1pc')
     
     if((-0.5 < regression_data['PCT_day_change'] < 0.5 and -0.5 < regression_data['PCT_change'] < 0.5)
-       or (-1 < regression_data['PCT_day_change'] < 0 and -1 < regression_data['PCT_change'] < 0)
+       or (-1 < regression_data['PCT_day_change'] < 0)
         ):
-        if(high_tail_pct(regression_data) > 2):
-            add_in_csv(regression_data, regressionResult, None, None, None, 'HighTail-2pc')
-        elif(high_tail_pct(regression_data) > 1):
-            add_in_csv(regression_data, regressionResult, None, None, None, 'HighTail-1pc')
-            
-    if(1 < regression_data['PCT_day_change'] < 4 and 1 < regression_data['PCT_change'] < 4):
         if(high_tail_pct(regression_data) > 3):
-            add_in_csv(regression_data, regressionResult, None, None, None, 'HighTail-3pc')
+            add_in_csv(regression_data, regressionResult, None, None, None, 'GHighTail-3pc')
+        elif(high_tail_pct(regression_data) > 2):
+            add_in_csv(regression_data, regressionResult, None, None, None, 'GHighTail-2pc')
+        elif(high_tail_pct(regression_data) > 1):
+            add_in_csv(regression_data, regressionResult, None, None, None, 'GHighTail-1pc')
+            
+    if(1 < regression_data['PCT_day_change'] < 4):
+        if(high_tail_pct(regression_data) > 3):
+            add_in_csv(regression_data, regressionResult, None, None, None, 'GHighTail-3pc')
+        elif(high_tail_pct(regression_data) > 2):
+            add_in_csv(regression_data, regressionResult, None, None, None, 'GHighTail-2pc')
         elif(high_tail_pct(regression_data) > 1.5):
-            add_in_csv(regression_data, regressionResult, None, None, None, 'HighTail-1.5pc')
-    if(-4 < regression_data['PCT_day_change'] < -1 and -4 < regression_data['PCT_change'] < -1):
+            add_in_csv(regression_data, regressionResult, None, None, None, 'GHighTail-1.5pc')
+    if(-4 < regression_data['PCT_day_change'] < -1):
         if(low_tail_pct(regression_data) > 3):
-            add_in_csv(regression_data, regressionResult, None, None, None, 'LowTail-3pc')
+            add_in_csv(regression_data, regressionResult, None, None, None, 'GLowTail-3pc')
+        elif(low_tail_pct(regression_data) > 2):
+            add_in_csv(regression_data, regressionResult, None, None, None, 'GLowTail-2pc')
         elif(low_tail_pct(regression_data) > 1.5):
-            add_in_csv(regression_data, regressionResult, None, None, None, 'LowTail-1.5pc')
+            add_in_csv(regression_data, regressionResult, None, None, None, 'GLowTail-1.5pc')
 
 def tail_pct_filter(regression_data, regressionResult):
     if(regression_data['PCT_day_change'] > 0):
         if(high_tail_pct(regression_data) < 0.1):
-            add_in_csv(regression_data, regressionResult, None, None, None, 'NoHighTail-0.1pc')
+            add_in_csv(regression_data, regressionResult, None, None, None, 'HighTailLessThan-0.1pc')
         if(high_tail_pct(regression_data) < 0.3):
-            add_in_csv(regression_data, regressionResult, None, None, None, 'NoHighTail-0.3pc')
+            add_in_csv(regression_data, regressionResult, None, None, None, 'HighTailLessThan-0.3pc')
             if(low_tail_pct(regression_data) < 0.1):
-                add_in_csv(regression_data, regressionResult, None, None, None, 'NoLowTail-0.1pc')
+                add_in_csv(regression_data, regressionResult, None, None, None, 'LowTailLessThan-0.1pc')
             if(low_tail_pct(regression_data) < 0.3):
-                add_in_csv(regression_data, regressionResult, None, None, None, 'NoLowTail-0.3pc')
+                add_in_csv(regression_data, regressionResult, None, None, None, 'LowTailLessThan-0.3pc')
     if(regression_data['PCT_day_change'] < 0):
         if(low_tail_pct(regression_data) < 0.1):
-            add_in_csv(regression_data, regressionResult, None, None, None, 'NoLowTail-0.1pc')
+            add_in_csv(regression_data, regressionResult, None, None, None, 'LowTailLessThan-0.1pc')
         if(low_tail_pct(regression_data) < 0.3):
-            add_in_csv(regression_data, regressionResult, None, None, None, 'NoLowTail-0.3pc')
+            add_in_csv(regression_data, regressionResult, None, None, None, 'LowTailLessThan-0.3pc')
             if(high_tail_pct(regression_data) < 0.1):
-                add_in_csv(regression_data, regressionResult, None, None, None, 'NoHighTail-0.1pc')
+                add_in_csv(regression_data, regressionResult, None, None, None, 'HighTailLessThan-0.1pc')
             if(high_tail_pct(regression_data) < 0.3):
-                add_in_csv(regression_data, regressionResult, None, None, None, 'NoHighTail-0.3pc')
+                add_in_csv(regression_data, regressionResult, None, None, None, 'HighTailLessThan-0.3pc')
     high_tail_pct_filter(regression_data, regressionResult)
 
 def tail_reversal_filter(regression_data, regressionResult):
