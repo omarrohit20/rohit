@@ -1161,12 +1161,12 @@ def buy_base_line_buy(regression_data, regressionResult, ws):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'month6HighBreak')
     elif(0 < regression_data['month3HighChange'] < 5):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'month3HighBreak')
-    
+        
     if(0 < regression_data['year2LowChange'] < 7.5):
         if(regression_data['weekLow'] < regression_data['year2Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'year2LowReversal(Confirm)')
         else:
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'nearYearLow')
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'near2YearLow')
     elif(0 < regression_data['yearLowChange'] < 7.5):
         if(regression_data['weekLow'] < regression_data['yearLow']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'yearLowReversal(Confirm)')
@@ -1181,7 +1181,23 @@ def buy_base_line_buy(regression_data, regressionResult, ws):
         if(regression_data['weekLow'] < regression_data['month3Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'month3LowReversal(Confirm)')
         else:
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'nearMonth3Low') 
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'nearMonth3Low')
+    elif(regression_data['year2LowChange'] < 0):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**2YearLow')
+    elif(regression_data['yearLowChange'] < 0):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**YearLow')
+    elif(regression_data['month6LowChange'] < 0):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**Month6Low')
+    elif(regression_data['month3LowChange'] < 0):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**Month3Low')
+    elif(regression_data['year2HighChange'] > 5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**year2High')
+    elif(regression_data['yearHighChange'] > 5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**YearHigh')
+    elif(regression_data['month6HighChange'] > 5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**Month6High')
+    elif(regression_data['month3HighChange'] > 5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**Month3High') 
     
     if(is_algo_buy(regression_data)
         and high_tail_pct(regression_data) < 2
@@ -2416,6 +2432,23 @@ def sell_base_line_sell(regression_data, regressionResult, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'month3HighReversal(Confirm)')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'nearMonth3High')
+    elif(regression_data['year2HighChange'] > 0):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**year2High')
+    elif(regression_data['yearHighChange'] > 0):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**YearHigh')
+    elif(regression_data['month6HighChange'] > 0):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**Month6High')
+    elif(regression_data['month3HighChange'] > 0):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**Month3High')
+    elif(regression_data['year2LowChange'] < -5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**2YearLow')
+    elif(regression_data['yearLowChange'] < -5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**YearLow')
+    elif(regression_data['month6LowChange'] < -5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**Month6Low')
+    elif(regression_data['month3LowChange'] < -5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, '**Month3Low')
+    
     
     if(is_algo_sell(regression_data)
         and low_tail_pct(regression_data) < 2
