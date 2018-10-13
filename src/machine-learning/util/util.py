@@ -475,19 +475,19 @@ def tail_reversal_filter(regression_data, regressionResult):
     if(-4 < regression_data['PCT_day_change'] < -1.5 and -4 < regression_data['PCT_change'] < -1.5
         ):
         if(low_tail_pct(regression_data) > 2):
-            add_in_csv(regression_data, regressionResult, None, None, '(MayBuyCheckChart-Strong)', None)
+            add_in_csv(regression_data, regressionResult, None, None, '(MayBuyCheckChart-Strong(MarketNotUp2-3))', None)
     elif(-4 < regression_data['PCT_day_change'] < 1 and -4 < regression_data['PCT_change'] < 1
         ):
         if(low_tail_pct(regression_data) > 2):
-            add_in_csv(regression_data, regressionResult, None, None, '(MayBuyCheckChart)', None)
+            add_in_csv(regression_data, regressionResult, None, None, '(MayBuyCheckChart(MarketNotUp2-3))', None)
     if(1.5 < regression_data['PCT_day_change'] < 4 and 1.5 < regression_data['PCT_change'] < 4
         ):
         if(high_tail_pct(regression_data) > 2):
-            add_in_csv(regression_data, regressionResult, None, None, '(MaySellCheckChart-Strong)', None)
+            add_in_csv(regression_data, regressionResult, None, None, '(MaySellCheckChart-Strong(MarketNotDown2-3))', None)
     elif(-1 < regression_data['PCT_day_change'] < 4 and -1 < regression_data['PCT_change'] < 4
         ):
         if(high_tail_pct(regression_data) > 2):
-            add_in_csv(regression_data, regressionResult, None, None, '(MaySellCheckChart)', None)
+            add_in_csv(regression_data, regressionResult, None, None, '(MaySellCheckChart(MarketNotDown2-3))', None)
             
 def historical_data(data):
     ardate = np.array([str(x) for x in (np.array(data['data'])[:,0][::-1]).tolist()])
