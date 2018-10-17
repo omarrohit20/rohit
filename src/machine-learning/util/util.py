@@ -798,7 +798,11 @@ def buy_pattern_from_history(regression_data, regressionResult, ws_buyPattern2):
 def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
     buy_all_rule_filter(regression_data, regressionResult, None)
     if(is_algo_buy(regression_data)
-        and regression_data['PCT_day_change'] > -1 
+        and ((regression_data['PCT_day_change'] > 1 and high_tail_pct(regression_data) < 2) 
+             or (low_tail_pct(regression_data) > 1.5 
+                 and (high_tail_pct(regression_data) < low_tail_pct(regression_data))
+                )
+            )
         and (BUY_VERY_LESS_DATA or regression_data['PCT_change'] > -1)
         and (BUY_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] < 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
         and (BUY_VERY_LESS_DATA or (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low']))
@@ -806,9 +810,6 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
         and buyIndiaAvg >= -.70
         and (last_7_day_all_up(regression_data) == False)
         and (BUY_VERY_LESS_DATA or (last_4_day_all_up(regression_data) == False)) #Uncomment0 If very less data
-        and ((regression_data['PCT_change'] < 4 and high_tail_pct(regression_data) < 2)
-             or (regression_data['PCT_change'] > 4 and high_tail_pct(regression_data) < 3)
-             or high_tail_pct(regression_data) < low_tail_pct(regression_data))
         and breakout_or_no_consolidation(regression_data) == True
         and regression_data['close'] > 50
         ):
@@ -819,17 +820,18 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
 def buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
     buy_all_rule_filter(regression_data, regressionResult, None)
     if(is_algo_buy_classifier(regression_data)
-        and regression_data['PCT_day_change'] > -1 
+        and ((regression_data['PCT_day_change'] > 1 and high_tail_pct(regression_data) < 2) 
+             or (low_tail_pct(regression_data) > 1.5 
+                 and (high_tail_pct(regression_data) < low_tail_pct(regression_data))
+                )
+            )
         and (BUY_VERY_LESS_DATA or regression_data['PCT_change'] > -1)
         and (BUY_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] < 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
         and (BUY_VERY_LESS_DATA or (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low']))
         and 'P@[' not in str(regression_data['sellIndia'])
-        and buyIndiaAvg >= -.5
+        and buyIndiaAvg >= -.7
         and (last_7_day_all_up(regression_data) == False)
         and (BUY_VERY_LESS_DATA or (last_4_day_all_up(regression_data) == False)) #Uncomment0 If very less data
-        and ((regression_data['PCT_change'] < 4 and high_tail_pct(regression_data) < 2)
-             or (regression_data['PCT_change'] > 4 and high_tail_pct(regression_data) < 3)
-             or high_tail_pct(regression_data) < low_tail_pct(regression_data))
         and breakout_or_no_consolidation(regression_data) == True
         and regression_data['close'] > 50
         ):
@@ -1093,7 +1095,7 @@ def buy_high_indicators(regression_data, regressionResult, ws_buyHighIndicators)
     if(regression_data['mlpValue'] >= 2.0 and regression_data['kNeighboursValue'] >= 1.0
        and regression_data['yearHighChange'] < -10
        and regression_data['yearLowChange'] > 10
-       and (high_tail_pct(regression_data) < 1.5 or high_tail_pct(regression_data) < low_tail_pct(regression_data))
+       and (high_tail_pct(regression_data) < 1.5 or (high_tail_pct(regression_data) < low_tail_pct(regression_data)))
        ):
         if(2.5 > regression_data['PCT_day_change'] > 1 and 2.5 > regression_data['PCT_change'] > -0.5
            and regression_data['forecast_day_PCT_change'] > 0
@@ -1110,8 +1112,8 @@ def buy_pattern(regression_data, regressionResult, ws_buyPattern, ws_buyPattern1
     if(str(regression_data['score']) == '10' or str(regression_data['score']) == '1-1'):
         score = 'up'
     if(-1 < regression_data['PCT_day_change'] < 4 and regression_data['yearLowChange'] > 5 and str(regression_data['score']) != '0-1'
-        #and regression_data['trend'] != 'up'
-    ):
+        and (high_tail_pct(regression_data) < 1.5 or (high_tail_pct(regression_data) < low_tail_pct(regression_data)))
+        ):
         if(('MARUBOZU' in str(regression_data['buyIndia']) and regression_data['forecast_day_PCT5_change'] <= 0 and regression_data['forecast_day_PCT10_change'] <= -5)
            or ('HAMMER' in str(regression_data['buyIndia']) and regression_data['PCT_day_change'] > 0)
            #or 'ENGULFING' in str(regression_data['buyIndia'])
@@ -1225,10 +1227,10 @@ def buy_base_line_buy(regression_data, regressionResult, ws):
                     return False
                 elif(0 < regression_data['month6LowChange'] < 7.5):
                     add_in_csv(regression_data, regressionResult, ws, 'Test:buyMonth6LowReversalML')
-                    return True
+                    return False
                 elif(0 < regression_data['month3LowChange'] < 7.5):
                     add_in_csv(regression_data, regressionResult, ws, None)
-                    return True
+                    return False
         
         if(0 < regression_data['PCT_day_change'] < 4.5 and regression_data['PCT_change'] < 2
             and (regression_data['PCT_day_change'] > 1 or regression_data['PCT_change'] > 1)
@@ -1237,13 +1239,13 @@ def buy_base_line_buy(regression_data, regressionResult, ws):
             if(0 < regression_data['year2LowChange'] < 7.5):
                 if(regression_data['weekLow'] < regression_data['year2Low']):
                     add_in_csv(regression_data, regressionResult, ws, 'Test:year2LowReversal-1')
-                    return True
+                    return False
                 else:
                     return False
             elif(0 < regression_data['yearLowChange'] < 7.5):
                 if(regression_data['weekLow'] < regression_data['yearLow']):
                     add_in_csv(regression_data, regressionResult, ws, 'Test:yearLowReversal-1')
-                    return True
+                    return False
                 else:
                     return False
             elif(0 < regression_data['month6LowChange'] < 7.5
@@ -1251,7 +1253,7 @@ def buy_base_line_buy(regression_data, regressionResult, ws):
                 ):
                 if(regression_data['weekLow'] < regression_data['month6Low']):
                     add_in_csv(regression_data, regressionResult, ws, 'Test:month6LowReversal-1')
-                    return True
+                    return False
                 else:
                     return False
             elif(0 < regression_data['month3LowChange'] < 5
@@ -1261,7 +1263,7 @@ def buy_base_line_buy(regression_data, regressionResult, ws):
                     and regression_data['PCT_day_change'] > 0
                     ):
                     add_in_csv(regression_data, regressionResult, ws, None)
-                    return True
+                    return False
                 else:
                     return False
             
@@ -1275,7 +1277,7 @@ def buy_base_line_buy(regression_data, regressionResult, ws):
                 and regression_data['weekLow'] < regression_data['month3Low']
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None)
-                return True
+                return False
     return False
 
 def buy_morning_star_buy(regression_data, regressionResult, ws):
@@ -1462,6 +1464,7 @@ def buy_year_high_oi(regression_data, regressionResult, ws):
        and 0 < regression_data['forecast_day_PCT7_change'] < 5
        and 1 < regression_data['forecast_day_PCT10_change']
        and regression_data['yearHighChange'] > -7
+       and (high_tail_pct(regression_data) < 1.5 or (high_tail_pct(regression_data) < low_tail_pct(regression_data)))
        ):
         if(regression_data['forecast_day_PCT2_change'] < -1
            or regression_data['forecast_day_PCT3_change'] < -1
@@ -1583,6 +1586,7 @@ def buy_vol_contract_contrarian(regression_data, regressionResult, ws):
         and regression_data['mlpValue'] >= 0
         and is_recent_consolidation(regression_data) == False
         and str(regression_data['score']) == '10'
+        and (high_tail_pct(regression_data) < 1.5 or (high_tail_pct(regression_data) < low_tail_pct(regression_data)))
         ):
             if((regression_data['PCT_day_change'] > 0 or regression_data['PCT_change'] > 0)
                and regression_data['forecast_day_PCT_change'] > 0 
@@ -1711,6 +1715,7 @@ def buy_trend_break(regression_data, regressionResult, ws):
     
     if(ten_days_less_than_minus_five(regression_data)
        and last_7_day_all_down(regression_data)
+       and regression_data['PCT_day_change'] < 0.5
        and regression_data['forecast_day_PCT10_change'] > -20
        and abs_yearHigh_less_than_yearLow(regression_data) == True
        ):
@@ -1853,7 +1858,7 @@ def buy_oi_candidate(regression_data, regressionResult, ws):
     if(regression_data['close'] > 50
         and ((regression_data['PCT_change'] < 4 and high_tail_pct(regression_data) < 2)
             or (regression_data['PCT_change'] > 4 and high_tail_pct(regression_data) < 3)
-            or high_tail_pct(regression_data) < low_tail_pct(regression_data))
+            or (high_tail_pct(regression_data) < low_tail_pct(regression_data)))
         ):
         if(buy_base_line_buy(regression_data, regressionResult, ws)):
             flag = True
@@ -1930,6 +1935,7 @@ def buy_other_indicator(regression_data, regressionResult, ws):
     if(-1 < regression_data['PCT_change'] < 4
         and (last_7_day_all_up(regression_data) == False)
         and (BUY_VERY_LESS_DATA or (last_4_day_all_up(regression_data) == False)) #Uncomment0 If very less data
+        and (high_tail_pct(regression_data) < 1.5 or (high_tail_pct(regression_data) < low_tail_pct(regression_data)))
         ):
         if((1 < regression_data['PCT_day_change'] < 3 and 0.5 < regression_data['PCT_change'] < 3)
             and regression_data['yearLowChange'] > 10
@@ -2111,7 +2117,11 @@ def sell_pattern_from_history(regression_data, regressionResult, ws_sellPattern2
 def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
     sell_all_rule_filter(regression_data, regressionResult, None)
     if(is_algo_sell(regression_data)
-        and regression_data['PCT_day_change'] < 1 
+        and ((regression_data['PCT_day_change'] < -1 and low_tail_pct(regression_data) < 2) 
+             or (high_tail_pct(regression_data) > 1.5 
+                 and (low_tail_pct(regression_data) < high_tail_pct(regression_data))
+                )
+            )
         and (SELL_VERY_LESS_DATA or regression_data['PCT_change'] < 1)
         and (SELL_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] > 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
         and (SELL_VERY_LESS_DATA or (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low']))
@@ -2119,9 +2129,6 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
         and sellIndiaAvg <= 0.70
         and (last_7_day_all_down(regression_data) == False)
         and (SELL_VERY_LESS_DATA or (last_4_day_all_down(regression_data) == False)) #Uncomment0 If very less data
-        and ((regression_data['PCT_change'] > -4 and low_tail_pct(regression_data) < 2)
-             or (regression_data['PCT_change'] < -4 and low_tail_pct(regression_data) < 3)
-             or low_tail_pct(regression_data) < high_tail_pct(regression_data))
         and breakout_or_no_consolidation(regression_data) == True
         and regression_data['close'] > 50
         ):
@@ -2132,17 +2139,18 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
 def sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
     sell_all_rule_filter(regression_data, regressionResult, None)
     if(is_algo_sell_classifier(regression_data)
-        and regression_data['PCT_day_change'] < 1 
+        and ((regression_data['PCT_day_change'] < -1 and low_tail_pct(regression_data) < 2) 
+             or (high_tail_pct(regression_data) > 1.5 
+                 and (low_tail_pct(regression_data) < high_tail_pct(regression_data))
+                )
+            ) 
         and (SELL_VERY_LESS_DATA or regression_data['PCT_change'] < 1)
         and (SELL_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] > 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
         and (SELL_VERY_LESS_DATA or (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low']))
         and 'P@[' not in str(regression_data['buyIndia'])
-        and sellIndiaAvg <= 0.5
+        and sellIndiaAvg <= 0.7
         and (last_7_day_all_down(regression_data) == False)
         and (SELL_VERY_LESS_DATA or (last_4_day_all_down(regression_data) == False)) #Uncomment0 If very less data
-        and ((regression_data['PCT_change'] > -4 and low_tail_pct(regression_data) < 2)
-             or (regression_data['PCT_change'] < -4 and low_tail_pct(regression_data) < 3)
-             or low_tail_pct(regression_data) < high_tail_pct(regression_data))
         and breakout_or_no_consolidation(regression_data) == True
         and regression_data['close'] > 50
         ):
@@ -2381,6 +2389,7 @@ def sell_high_indicators(regression_data, regressionResult, ws_sellHighIndicator
     if(regression_data['mlpValue'] <= -2.0 and regression_data['kNeighboursValue'] <= -1.0 
        and regression_data['yearHighChange'] < -10 
        and regression_data['yearLowChange'] > 10
+       and (low_tail_pct(regression_data) < 1.5 or (low_tail_pct(regression_data) < high_tail_pct(regression_data)))
        ):
         if(-2.5 < regression_data['PCT_day_change'] < -1 and -2.5 < regression_data['PCT_change'] < 0.5
            and regression_data['forecast_day_PCT_change'] < 0
@@ -2398,6 +2407,7 @@ def sell_pattern(regression_data, regressionResult, ws_sellPattern, ws_sellPatte
         score = 'down'
     if(-4 < regression_data['PCT_day_change'] < 1 and regression_data['yearHighChange'] < -5 and str(regression_data['score']) != '10'
         and regression_data['trend'] != 'down'
+        and (low_tail_pct(regression_data) < 1.5 or (low_tail_pct(regression_data) < high_tail_pct(regression_data)))
         ):
         if(('HANGINGMAN' in str(regression_data['sellIndia'])
            #or 'MARUBOZU' in str(regression_data['sellIndia'])
@@ -2861,6 +2871,7 @@ def sell_year_low_oi(regression_data, regressionResult, ws):
        and -5 < regression_data['forecast_day_PCT7_change'] < 0
        and regression_data['forecast_day_PCT10_change'] < -1
        and regression_data['yearLowChange'] < 7
+       and (low_tail_pct(regression_data) < 1.5 or (low_tail_pct(regression_data) < high_tail_pct(regression_data)))
        ):
         if(regression_data['forecast_day_PCT2_change'] > 1
            or regression_data['forecast_day_PCT3_change'] > 1
@@ -2977,6 +2988,7 @@ def sell_vol_contract_contrarian(regression_data, regressionResult, ws):
         and regression_data['mlpValue'] <= 0
         and is_recent_consolidation(regression_data) == False
         and str(regression_data['score']) != '10'
+        and (low_tail_pct(regression_data) < 1.5 or (low_tail_pct(regression_data) < high_tail_pct(regression_data)))
         ):
             add_in_csv(regression_data, regressionResult, ws, 'Reversal(Test):sellReversalKNeighbours(upTrend)(upLastDay)')
             return True        
@@ -3099,6 +3111,7 @@ def sell_trend_break(regression_data, regressionResult, ws):
     
     if(ten_days_more_than_five(regression_data)
        and last_7_day_all_up(regression_data)
+       and regression_data['PCT_day_change'] > -0.5
        and regression_data['forecast_day_PCT10_change'] < 20
        ):
         add_in_csv(regression_data, regressionResult, ws, '##TEST:BreakOutSellCandidate(last_7_day_all_up)-(openAroundLastCloseAnd10MinuteChart)')
@@ -3251,7 +3264,7 @@ def sell_oi_candidate(regression_data, regressionResult, ws):
     if(regression_data['close'] > 50
         and ((regression_data['PCT_change'] > -4 and low_tail_pct(regression_data) < 2)
              or (regression_data['PCT_change'] < -4 and low_tail_pct(regression_data) < 3)
-             or low_tail_pct(regression_data) < high_tail_pct(regression_data))
+             or (low_tail_pct(regression_data) < high_tail_pct(regression_data)))
         ):
         if sell_base_line_sell(regression_data, regressionResult, ws):
             flag = True
@@ -3300,6 +3313,7 @@ def sell_oi(regression_data, regressionResult, ws):
         and regression_data['open'] > 50
         and (last_4_day_all_down(regression_data) == False) #Uncomment0 If very less data
         and (low_tail_pct(regression_data) < 1)
+        and (low_tail_pct(regression_data) < 1.5 or (low_tail_pct(regression_data) < high_tail_pct(regression_data)))
         ):
         if(-3 < regression_data['PCT_day_change'] < -1 and -3 < regression_data['PCT_change'] < -1 
             ):
@@ -3333,6 +3347,7 @@ def sell_other_indicator(regression_data, regressionResult, ws):
     if(-4 < regression_data['PCT_change'] < 1
         and (last_7_day_all_down(regression_data) == False)
         and (SELL_VERY_LESS_DATA or (last_4_day_all_down(regression_data) == False)) #Uncomment0 If very less data
+        and (low_tail_pct(regression_data) < 1.5 or (low_tail_pct(regression_data) < high_tail_pct(regression_data)))
         ):
         if(all_between_zero_and_five_down_score(regression_data)
             and regression_data['yearLowChange'] > 20 and regression_data['yearHighChange'] < -10
@@ -3416,6 +3431,7 @@ def sell_all_common(regression_data, regressionResult, ws):
     if(-4 < regression_data['PCT_change'] < 1
         and (last_7_day_all_down(regression_data) == False)
         and (SELL_VERY_LESS_DATA or (last_4_day_all_down(regression_data) == False)) #Uncomment0 If very less data
+        and low_tail_pct(regression_data) < 1
         ):
         
         if((-4 < regression_data['PCT_day_change'] < -1 and -4 < regression_data['PCT_change'] < -1)
