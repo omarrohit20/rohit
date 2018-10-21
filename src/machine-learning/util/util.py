@@ -1120,6 +1120,7 @@ def buy_high_indicators(regression_data, regressionResult, ws_buyHighIndicators)
        ):
         if(2.5 > regression_data['PCT_day_change'] > 1 and 2.5 > regression_data['PCT_change'] > -0.5
            and regression_data['forecast_day_PCT_change'] > 0
+           and high_tail_pct(regression_data) < 1
            ):
             add_in_csv(regression_data, regressionResult, ws_buyHighIndicators, 'buyHighIndicators(shouldNotOpenInMinus)')
             return True
@@ -1495,7 +1496,7 @@ def buy_vol_contract(regression_data, regressionResult, ws):
        and preDayPctChangeUp_orVolHigh(regression_data)
        and regression_data['open'] > 50
        and last_4_day_all_up(regression_data) == False
-       and (BUY_VERY_LESS_DATA or high_tail_pct(regression_data) < 0.7)
+       and high_tail_pct(regression_data) < 1
        ):
         if((regression_data['forecast_day_VOL_change'] > 70 and 0.75 < regression_data['PCT_day_change'] < 2 and 0.5 < regression_data['PCT_change'] < 2)
             and float(regression_data['contract']) > 10
@@ -1873,8 +1874,6 @@ def buy_oi_candidate(regression_data, regressionResult, ws):
         if buy_oi_negative(regression_data, regressionResult, ws):
             flag = True
         if buy_day_low(regression_data, regressionResult, ws):
-            flag = True
-        if buy_year_high_oi(regression_data, regressionResult, ws):
             flag = True
         if buy_vol_contract(regression_data, regressionResult, ws):
             flag = True
@@ -2405,6 +2404,7 @@ def sell_high_indicators(regression_data, regressionResult, ws_sellHighIndicator
        ):
         if(-2.5 < regression_data['PCT_day_change'] < -1 and -2.5 < regression_data['PCT_change'] < 0.5
            and regression_data['forecast_day_PCT_change'] < 0
+           and low_tail_pct(regression_data) < 1
            ):
             add_in_csv(regression_data, regressionResult, ws_sellHighIndicators, 'sellHighIndicators')
             return True
@@ -2892,7 +2892,7 @@ def sell_vol_contract(regression_data, regressionResult, ws):
         and preDayPctChangeDown_orVolHigh(regression_data)
         and regression_data['open'] > 50
         and last_4_day_all_down(regression_data) == False
-        and (SELL_VERY_LESS_DATA or low_tail_pct(regression_data) < 0.7)
+        and low_tail_pct(regression_data) < 1
         ):
         if((regression_data['forecast_day_VOL_change'] > 70 and -2 < regression_data['PCT_day_change'] < -0.75 and -2 < regression_data['PCT_change'] < -0.5)
             and float(regression_data['contract']) > 10
@@ -3280,8 +3280,6 @@ def sell_oi_candidate(regression_data, regressionResult, ws):
         if sell_oi_negative(regression_data, regressionResult, ws):
             flag = True
         if sell_day_high(regression_data, regressionResult, ws):
-            flag = True
-        if sell_year_low_oi(regression_data, regressionResult, ws):
             flag = True
         if sell_vol_contract(regression_data, regressionResult, ws):
             flag = True
