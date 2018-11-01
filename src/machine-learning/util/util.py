@@ -1528,7 +1528,7 @@ def buy_day_low(regression_data, regressionResult, ws):
             return True
         if((regression_data['PCT_day_change'] < -3 and regression_data['PCT_change'] < -3)
            and abs_yearHigh_less_than_yearLow(regression_data)
-           and float(regression_data['forecast_day_VOL_change']) < -30
+           and float(regression_data['forecast_day_VOL_change']) < -50
            and regression_data['PCT_day_change'] < regression_data['PCT_day_change_pre1'] < 0
            and regression_data['PCT_day_change_pre2'] > 1
            ):
@@ -1807,7 +1807,7 @@ def buy_trend_break(regression_data, regressionResult, ws):
            and high_tail_pct(regression_data) < 0.5
            ):
                add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutBuy-1test-atYearLow')
-               flag = True
+               flag = False
     if(5 < regression_data['yearLowChange'] < 10 and abs_yearHigh_more_than_yearLow(regression_data)
        and regression_data['forecast_day_PCT10_change'] < 10
        and last_7_day_all_up(regression_data) == False
@@ -1819,7 +1819,7 @@ def buy_trend_break(regression_data, regressionResult, ws):
            and regression_data['forecast_day_VOL_change'] >= -50
            ):
                add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutBuyContinue-00-test-atYearLow')
-               flag = True
+               flag = False
        if(2 > regression_data['forecast_day_PCT_change'] > 0 and 2 > regression_data['PCT_day_change'] > 0
            and regression_data['PCT_day_change_pre1'] > 0 and regression_data['PCT_day_change_pre2'] > 0 and regression_data['PCT_day_change_pre3'] > 0
            and (regression_data['forecast_day_PCT_change'] > 0.75 or regression_data['PCT_day_change_pre1'] > 0.75 or regression_data['PCT_day_change_pre2'] > 0.75 or regression_data['PCT_day_change_pre3'] > 0.75)
@@ -1827,7 +1827,7 @@ def buy_trend_break(regression_data, regressionResult, ws):
            and regression_data['forecast_day_VOL_change'] >= -50
            ):
                add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutBuyContinue-0-test-atYearLow')
-               flag = True    
+               flag = False    
     if(5 < regression_data['yearLowChange'] < 12 and abs_yearHigh_more_than_yearLow(regression_data)
        and regression_data['forecast_day_PCT10_change'] < 10
        and last_7_day_all_up(regression_data) == False
@@ -1839,7 +1839,7 @@ def buy_trend_break(regression_data, regressionResult, ws):
            and regression_data['forecast_day_VOL_change'] >= 0
            ):
                add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutBuyContinue-11-test-atYearLow')
-               flag = True
+               flag = False
        if(2 > regression_data['forecast_day_PCT_change'] > 0 and 2 > regression_data['PCT_day_change'] > 0
            and regression_data['PCT_day_change_pre1'] > 0 and regression_data['PCT_day_change_pre2'] > 0 and regression_data['PCT_day_change_pre3'] > 0
            and (regression_data['forecast_day_PCT_change'] > 0.75 or regression_data['PCT_day_change_pre1'] > 0.75 or regression_data['PCT_day_change_pre2'] > 0.75 or regression_data['PCT_day_change_pre3'] > 0.75)
@@ -1847,7 +1847,7 @@ def buy_trend_break(regression_data, regressionResult, ws):
            and regression_data['forecast_day_VOL_change'] >= 0
            ):
                add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutBuyContinue-1-test-atYearLow')
-               flag = True
+               flag = False
     return flag   
      
 def buy_final_candidate(regression_data, regressionResult, ws_buyFinal):
@@ -2994,7 +2994,7 @@ def sell_day_high(regression_data, regressionResult, ws):
             return True
         elif((regression_data['PCT_day_change'] > 3 and regression_data['PCT_change'] > 3) 
            and abs_yearHigh_more_than_yearLow(regression_data)
-           and float(regression_data['forecast_day_VOL_change']) < -30  
+           and float(regression_data['forecast_day_VOL_change']) < -50  
            and regression_data['PCT_day_change'] > regression_data['PCT_day_change_pre1'] > 0
            and regression_data['PCT_day_change_pre2'] < -1
            ):
@@ -3266,7 +3266,7 @@ def sell_trend_break(regression_data, regressionResult, ws):
            and regression_data['forecast_day_VOL_change'] >= -20
            ):
                add_in_csv(regression_data, regressionResult, ws, '##TEST:finalBreakOutSell-0')
-               flag = True
+               flag = False
     if(regression_data['yearHighChange'] > -5
     ):
        if(regression_data['forecast_day_PCT_change'] < -3 and regression_data['PCT_day_change'] < -3
@@ -3275,7 +3275,7 @@ def sell_trend_break(regression_data, regressionResult, ws):
            and low_tail_pct(regression_data) < 0.5
            ):
                add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutSell-1test-atYearHigh')
-               flag = True
+               flag = False
     if(-5 > regression_data['yearHighChange'] > -10 and abs_yearHigh_less_than_yearLow(regression_data)
        and regression_data['forecast_day_PCT10_change'] > -10
        and last_7_day_all_down(regression_data) == False
@@ -3287,7 +3287,7 @@ def sell_trend_break(regression_data, regressionResult, ws):
            and regression_data['forecast_day_VOL_change'] >= -50
            ):
                add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutSellContinue-00-test-atYearHigh')
-               flag = True
+               flag = False
        if(-2 < regression_data['forecast_day_PCT_change'] < 0 and -2 < regression_data['PCT_day_change'] < 0
            and regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre2'] < 0 and regression_data['PCT_day_change_pre3'] < 0
            and (regression_data['forecast_day_PCT_change'] < -0.75 or regression_data['PCT_day_change_pre1'] < -0.75 or regression_data['PCT_day_change_pre2'] < -0.75 or regression_data['PCT_day_change_pre3'] < -0.75)
@@ -3295,7 +3295,7 @@ def sell_trend_break(regression_data, regressionResult, ws):
            and regression_data['forecast_day_VOL_change'] >= -50
            ):
                add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutSellContinue-0-test-atYearHigh')
-               flag = True
+               flag = False
     if(-5 > regression_data['yearHighChange'] > -12 and abs_yearHigh_less_than_yearLow(regression_data)
        and regression_data['forecast_day_PCT10_change'] > -10
        and last_7_day_all_down(regression_data) == False
@@ -3307,7 +3307,7 @@ def sell_trend_break(regression_data, regressionResult, ws):
            and regression_data['forecast_day_VOL_change'] >= 0
            ):
                add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutSellContinue-11-test-atYearHigh')
-               flag = True
+               flag = False
        if(-2 < regression_data['forecast_day_PCT_change'] < 0 and -2 < regression_data['PCT_day_change'] < 0
            and regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre2'] < 0 and regression_data['PCT_day_change_pre3'] < 0
            and (regression_data['forecast_day_PCT_change'] < -0.75 or regression_data['PCT_day_change_pre1'] < -0.75 or regression_data['PCT_day_change_pre2'] < -0.75 or regression_data['PCT_day_change_pre3'] < -0.75)
@@ -3315,7 +3315,7 @@ def sell_trend_break(regression_data, regressionResult, ws):
            and regression_data['forecast_day_VOL_change'] >= 0
            ):
                add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutSellContinue-1-test-atYearHigh')
-               flag = True
+               flag = False
     return flag
     
 def sell_final_candidate(regression_data, regressionResult, ws_sellFinal):
