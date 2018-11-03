@@ -42,35 +42,35 @@ logname = '../../output/final' + '/all-result' + time.strftime("%d%m%y-%H%M%S")
 newsDict = {}
 wb = Workbook()
 ws_buyAll = wb.create_sheet("BuyAllBoth")
-ws_buyAll.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
+ws_buyAll.append(["BuyIndicators", "SellIndicators", "Symbol", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
 ws_buyAllReg = wb.create_sheet("BuyAllReg")
-ws_buyAllReg.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
+ws_buyAllReg.append(["BuyIndicators", "SellIndicators", "Symbol", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
 ws_buyOI = wb.create_sheet("BuyOIBoth")
-ws_buyOI.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
+ws_buyOI.append(["BuyIndicators", "SellIndicators", "Symbol", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
 ws_buyOIReg = wb.create_sheet("BuyOIReg")
-ws_buyOIReg.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
+ws_buyOIReg.append(["BuyIndicators", "SellIndicators", "Symbol", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
 
 ws_sellAll = wb.create_sheet("SellAllBoth")
-ws_sellAll.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
+ws_sellAll.append(["BuyIndicators", "SellIndicators", "Symbol", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
 ws_sellAllReg = wb.create_sheet("SellAllReg")
-ws_sellAllReg.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
+ws_sellAllReg.append(["BuyIndicators", "SellIndicators", "Symbol", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
 ws_sellOI = wb.create_sheet("SellOIBoth")
-ws_sellOI.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
+ws_sellOI.append(["BuyIndicators", "SellIndicators", "Symbol", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
 ws_sellOIReg = wb.create_sheet("SellOIReg")
-ws_sellOIReg.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
+ws_sellOIReg.append(["BuyIndicators", "SellIndicators", "Symbol", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
 
 ws_buyAllCla = wb.create_sheet("BuyAllCla")
-ws_buyAllCla.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
+ws_buyAllCla.append(["BuyIndicators", "SellIndicators", "Symbol", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
 ws_buyOICla = wb.create_sheet("BuyOICla")
-ws_buyOICla.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
+ws_buyOICla.append(["BuyIndicators", "SellIndicators", "Symbol", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
 ws_sellAllCla = wb.create_sheet("SellAllCla")
-ws_sellAllCla.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
+ws_sellAllCla.append(["BuyIndicators", "SellIndicators", "Symbol", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
 ws_sellOICla = wb.create_sheet("SellOICla")
-ws_sellOICla.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
+ws_sellOICla.append(["BuyIndicators", "SellIndicators", "Symbol", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
 ws_highAll = wb.create_sheet("HighAll")
-ws_highAll.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
+ws_highAll.append(["BuyIndicators", "SellIndicators", "Symbol", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
 ws_lowAll = wb.create_sheet("LowAll")
-ws_lowAll.append(["BuyIndicators", "SellIndicators", "Symbol", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10","Score", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "trend", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
+ws_lowAll.append(["BuyIndicators", "SellIndicators", "Symbol", "seriesTrend", "short_term", "long_term", "consolidation", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP", "KNeighbors", "MLP_Other", "KNeighbors_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter", "Filter1", "Filter2", "Filter3"])
 
 def saveReports(run_type=None):
     ws_buyAll.append([""])
@@ -96,49 +96,49 @@ def saveReports(run_type=None):
     count = 0
     for row in ws_buyAll.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AR" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AT" + str(count))
     tab.tableStyleInfo = style
     ws_buyAll.add_table(tab)
     
     count = 0
     for row in ws_buyOI.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AR" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AT" + str(count))
     tab.tableStyleInfo = style
     ws_buyOI.add_table(tab)
     
     count = 0
     for row in ws_buyAllReg.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AR" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AT" + str(count))
     tab.tableStyleInfo = style
     ws_buyAllReg.add_table(tab)
     
     count = 0
     for row in ws_buyOIReg.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AR" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AT" + str(count))
     tab.tableStyleInfo = style
     ws_buyOIReg.add_table(tab)
     
     count = 0
     for row in ws_buyAllCla.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AR" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AT" + str(count))
     tab.tableStyleInfo = style
     ws_buyAllCla.add_table(tab)
     
     count = 0
     for row in ws_buyOICla.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AR" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AT" + str(count))
     tab.tableStyleInfo = style
     ws_buyOICla.add_table(tab)
     
     count = 0
     for row in ws_highAll.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AR" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AT" + str(count))
     tab.tableStyleInfo = style
     ws_highAll.add_table(tab)
     
@@ -146,49 +146,49 @@ def saveReports(run_type=None):
     count = 0
     for row in ws_sellAll.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AR" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AT" + str(count))
     tab.tableStyleInfo = style
     ws_sellAll.add_table(tab)
     
     count = 0
     for row in ws_sellOI.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AR" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AT" + str(count))
     tab.tableStyleInfo = style
     ws_sellOI.add_table(tab)
     
     count = 0
     for row in ws_sellAllReg.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AR" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AT" + str(count))
     tab.tableStyleInfo = style
     ws_sellAllReg.add_table(tab)
     
     count = 0
     for row in ws_sellOIReg.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AR" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AT" + str(count))
     tab.tableStyleInfo = style
     ws_sellOIReg.add_table(tab)
     
     count = 0
     for row in ws_sellAllCla.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AR" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AT" + str(count))
     tab.tableStyleInfo = style
     ws_sellAllCla.add_table(tab)
     
     count = 0
     for row in ws_sellOICla.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AR" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AT" + str(count))
     tab.tableStyleInfo = style
     ws_sellOICla.add_table(tab)
     
     count = 0
     for row in ws_lowAll.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:AR" + str(count))
+    tab = Table(displayName="Table1", ref="A1:AT" + str(count))
     tab.tableStyleInfo = style
     ws_lowAll.add_table(tab)
     
