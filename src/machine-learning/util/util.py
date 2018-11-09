@@ -2770,7 +2770,7 @@ def sell_base_line_sell(regression_data, regressionResult, ws):
                 if('month3LowBreak' in regression_data['filter3']):
                     add_in_csv(regression_data, regressionResult, ws, 'Test:sellMonth3LowBreakML(Check2-3Down)')
                     return True
-        if(-5 < regression_data['PCT_day_change'] < -1.5 and -5 < regression_data['PCT_change'] < -1.5
+        if(-5 < regression_data['PCT_day_change'] < 0 and -5 < regression_data['PCT_change'] < 0
             ):
             if(-6.5 < regression_data['year2HighChange'] < 0
                 and (regression_data['year2LowChange'] > 40)
