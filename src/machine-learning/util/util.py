@@ -1805,6 +1805,13 @@ def buy_trend_reversal(regression_data, regressionResult, ws):
         elif((regression_data['PCT_day_change'] < 2) and low_tail_pct(regression_data) < 0.3):
             add_in_csv(regression_data, regressionResult, ws, "Test:buyHighTailLessThan0.3-2(checkHillUp)")
         return True
+    if((-0.5 < regression_data['PCT_day_change'] < 0.5)
+        and (-0.5 < regression_data['PCT_change'] < 0.5)
+        and high_tail_pct(regression_data) < 0.3
+        and (0.6 < low_tail_pct(regression_data) < 0.9)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, "Test:buyHighTailLessThan0.3-3(checkHillUp)")
+        
     return False            
 
 def buy_trend_break(regression_data, regressionResult, ws):
@@ -3357,6 +3364,12 @@ def sell_trend_reversal(regression_data, regressionResult, ws):
         elif ((-2 < regression_data['PCT_day_change']) and high_tail_pct(regression_data) < 0.3):
             add_in_csv(regression_data, regressionResult, ws, "Test:sellLowTailLessThan0.3-2(checkHillDown)")
         return True
+#     if((-0.5 < regression_data['PCT_day_change'] < 0.5)
+#         and (-0.5 < regression_data['PCT_change'] < 0.5)
+#         and low_tail_pct(regression_data) < 0.3
+#         and (0.6 < high_tail_pct(regression_data) < 0.9)
+#         ):
+#         add_in_csv(regression_data, regressionResult, ws, "Test:sellLowTailLessThan0.3-3(checkHillUp)")
     return False   
 
 def sell_trend_break(regression_data, regressionResult, ws):
