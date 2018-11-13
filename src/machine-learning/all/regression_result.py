@@ -278,6 +278,7 @@ def result_data_reg(scrip):
             buy_up_trend(regression_data, regressionResult, None)
             buy_down_trend(regression_data, regressionResult, None)
             buy_oi(regression_data, regressionResult, None)
+            buy_high_indicators(regression_data, regressionResult, None)
             buy_pattern(regression_data, regressionResult, None, None)
             buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAllReg)
         all_withoutml(regression_data, regressionResult, ws_highAll)
@@ -297,6 +298,7 @@ def result_data_reg(scrip):
             sell_up_trend(regression_data, regressionResult, None)
             #sell_down_trend(regression_data, regressionResult, None)
             sell_oi(regression_data, regressionResult, None)
+            sell_high_indicators(regression_data, regressionResult, None)
             sell_pattern(regression_data, regressionResult, None, None)
             sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAllReg)                                
         all_withoutml(regression_data, regressionResult, ws_lowAll)
@@ -320,6 +322,7 @@ def result_data_cla(scrip):
             buy_up_trend(regression_data, regressionResult, None)
             buy_down_trend(regression_data, regressionResult, None)
             #buy_oi(regression_data, regressionResult, None)
+            buy_high_indicators(regression_data, regressionResult, None)
             buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAllCla)
                         
     regression_data = classification_low
@@ -337,6 +340,7 @@ def result_data_cla(scrip):
             sell_up_trend(regression_data, regressionResult, None)
             #sell_down_trend(regression_data, regressionResult, None)
             #sell_oi(regression_data, regressionResult, None)
+            sell_high_indicators(regression_data, regressionResult, None)
             sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAllCla)                                 
                                              
 def calculateParallel(threads=2, futures=None):

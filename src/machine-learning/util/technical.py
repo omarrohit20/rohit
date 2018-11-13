@@ -669,6 +669,12 @@ def ta_lib_data(scrip):
         overlap_studies['SAREXT'] = SAREXT(historicalInputs).tolist()[::-1]
         overlap_studies['SMA'] = SMA(historicalInputs).tolist()[::-1]
         overlap_studies['SMA9'] = SMA(historicalInputs, 9).tolist()[::-1]
+        overlap_studies['SMA50'] = SMA(historicalInputs, 50).tolist()[::-1]
+        overlap_studies['SMA100'] = SMA(historicalInputs, 100).tolist()[::-1]
+        overlap_studies['SMA200'] = SMA(historicalInputs, 200).tolist()[::-1]
+        changeSMA50 = (hsclose[-1]-overlap_studies['SMA50'])*100/overlap_studies['SMA50']
+        changeSMA100 = (hsclose[-1]-overlap_studies['SMA100'])*100/overlap_studies['SMA100']
+        changeSMA200 = (hsclose[-1]-overlap_studies['SMA200'])*100/overlap_studies['SMA200']
         overlap_studies['T3'] = T3(historicalInputs).tolist()[::-1]
         overlap_studies['TEMA'] = TEMA(historicalInputs).tolist()[::-1]
         overlap_studies['TRIMA'] = TRIMA(historicalInputs).tolist()[::-1]
@@ -813,7 +819,7 @@ def ta_lib_data_df(scrip, df, db_store=False):
         if db_store:
             technical_indicators = db.technical.find_one({'dataset_code':scrip})
             if(technical_indicators is not None):
-                return technical_indicators['BuyIndicators'], technical_indicators['SellIndicators'], technical_indicators['trend'], technical_indicators['short_term'], technical_indicators['long_term'], technical_indicators['consolidation'] 
+                return technical_indicators['BuyIndicators'], technical_indicators['SellIndicators'], technical_indicators['trend'], technical_indicators['changeSMA50'], technical_indicators['changeSMA100'], technical_indicators['changeSMA200'] 
                 
         data = db.history.find_one({'dataset_code':scrip})
         if(data is None):
@@ -875,6 +881,9 @@ def ta_lib_data_df(scrip, df, db_store=False):
         technical_indicators['short_term'] = 0
         technical_indicators['long_term'] = 0
         technical_indicators['consolidation'] = 0
+        technical_indicators['changeSMA50'] = 0
+        technical_indicators['changeSMA100'] = 0
+        technical_indicators['changeSMA200'] = 0
         
         momentum_indicators={}
         #Momentum Indicators
@@ -953,6 +962,12 @@ def ta_lib_data_df(scrip, df, db_store=False):
         overlap_studies['SAREXT'] = SAREXT(historicalInputs).tolist()[::-1]
         overlap_studies['SMA'] = SMA(historicalInputs).tolist()[::-1]
         overlap_studies['SMA9'] = SMA(historicalInputs, 9).tolist()[::-1]
+        overlap_studies['SMA50'] = SMA(historicalInputs, 50).tolist()[::-1]
+        overlap_studies['SMA100'] = SMA(historicalInputs, 100).tolist()[::-1]
+        overlap_studies['SMA200'] = SMA(historicalInputs, 200).tolist()[::-1]
+        technical_indicators['changeSMA50'] = (hsclose[-1]-overlap_studies['SMA50'][0])*100/overlap_studies['SMA50'][0]
+        technical_indicators['changeSMA100'] = (hsclose[-1]-overlap_studies['SMA100'][0])*100/overlap_studies['SMA100'][0]
+        technical_indicators['changeSMA200'] = (hsclose[-1]-overlap_studies['SMA200'][0])*100/overlap_studies['SMA200'][0]
         overlap_studies['T3'] = T3(historicalInputs).tolist()[::-1]
         overlap_studies['TEMA'] = TEMA(historicalInputs).tolist()[::-1]
         overlap_studies['TRIMA'] = TRIMA(historicalInputs).tolist()[::-1]
@@ -1090,7 +1105,7 @@ def ta_lib_data_df(scrip, df, db_store=False):
         json_data = json.loads(json.dumps(technical_indicators))
         if db_store: 
             db.technical.insert_one(json_data) 
-        return technical_indicators['BuyIndicators'], technical_indicators['SellIndicators'], technical_indicators['trend'], technical_indicators['short_term'], technical_indicators['long_term'], technical_indicators['consolidation'] 
+        return technical_indicators['BuyIndicators'], technical_indicators['SellIndicators'], technical_indicators['trend'], technical_indicators['changeSMA50'], technical_indicators['changeSMA100'], technical_indicators['changeSMA200'] 
             
     except Exception:
         print(Exception)
