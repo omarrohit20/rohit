@@ -1301,6 +1301,26 @@ def buy_base_line_buy(regression_data, regressionResult, ws):
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'nearMonth3High')
         
+    if((-5 < regression_data['year2LowChange'] < 0 ) 
+        and (regression_data['year2HighChange'] < -40)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Year2LowBreak')
+    elif((-5 < regression_data['yearLowChange'] < 0) 
+        and (regression_data['year2LowChange'] > 7.5)
+        and (regression_data['yearHighChange'] < -30)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'YearLowBreak')
+    elif((-5 < regression_data['month6LowChange'] < 0)
+        and (regression_data['yearLowChange'] > 7.5)
+        and (regression_data['month6HighChange'] < -25)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'month6LowBreak')
+    elif((-5 < regression_data['month3LowChange'] < 0)
+        and (regression_data['month6LowChange'] > 7.5)
+        and (regression_data['month3HighChange'] < -15)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'month3LowBreak')
+    
     if((0 < regression_data['year2LowChange'] < 7.5) 
        and (regression_data['year2HighChange'] < -40)
        ):
@@ -1353,6 +1373,9 @@ def buy_base_line_buy(regression_data, regressionResult, ws):
         and (((2 < regression_data['PCT_change'] < 6) and (2 < regression_data['PCT_day_change'] < 6)) or ((-4 < regression_data['PCT_day_change'] < 0.5) and (-4 < regression_data['PCT_change'] < 0.5)))
         ):
         if(is_algo_buy(regression_data)
+            and regression_data['mlpValue_other'] > -0.5
+            and regression_data['kNeighboursValue_other'] > -0.5
+            and (regression_data['mlpValue_other'] > 0.5 or regression_data['kNeighboursValue_other'] > 0.5)
             and high_tail_pct(regression_data) < 2
             and regression_data['year2HighChange'] > -50
             and regression_data['month3HighChange'] < -20
@@ -2104,6 +2127,7 @@ def buy_other_indicator(regression_data, regressionResult, ws):
                  and (-4 < regression_data['PCT_change'] < 0.5)
                  and regression_data['mlpValue_other'] > -0.5
                  and regression_data['kNeighboursValue_other'] > -0.5
+                 and (regression_data['mlpValue_other'] > 0.5 or regression_data['kNeighboursValue_other'] > 0.5)
                  ))
         ):
         if(('year2LowReversal(Confirm)' in regression_data['filter3']) and (regression_data['year2HighChange'] < -40)):
@@ -2263,21 +2287,43 @@ def buy_all_common(regression_data, regressionResult, ws):
             ):
                 add_in_csv(regression_data, regressionResult, ws, '##Common:NotM3HighLow') 
                 
-#     if(-1 < regression_data['PCT_change'] < 4
-#         and (last_7_day_all_up(regression_data) == False)
-#         and (BUY_VERY_LESS_DATA or (last_4_day_all_up(regression_data) == False)) #Uncomment0 If very less data
-#         and high_tail_pct(regression_data) < 1
-#         ):
-#         if((1 < regression_data['PCT_day_change'] < 3 and 1 < regression_data['PCT_change'] < 3)
-#             and (2 < regression_data['PCT_day_change'] or 2 < regression_data['PCT_change'])
-#             and abs(regression_data['yearHighChange']) > abs(regression_data['yearLowChange'])*3
-#             and regression_data['yearHighChange'] < -30
-#             and (last_4_day_all_up(regression_data) == False)
-#             ):
-#             if(regression_data['yearLowChange'] > 5):
-#                 add_in_csv(regression_data, regressionResult, ws, '##(Uptrend)buyAroundYearLow-0')
-#             else:
-#                 add_in_csv(regression_data, regressionResult, ws, '##(Uptrend)buyYearLow-0')
+    if(regression_data['mlpValue'] > 0
+        and regression_data['kNeighboursValue'] > 0
+        and ('P@' not in regression_data['sellIndia'])
+        and (((2 < regression_data['PCT_change'] < 6) and (2 < regression_data['PCT_day_change'] < 6))
+             or ((-4 < regression_data['PCT_day_change'] < 0) 
+                 and (-4 < regression_data['PCT_change'] < 0.5)
+                 and regression_data['mlpValue_other'] > -0.5
+                 and regression_data['kNeighboursValue_other'] > -0.5
+                 and (regression_data['mlpValue_other'] > 0.5 or regression_data['kNeighboursValue_other'] > 0.5)
+                 ))
+        ):
+        if(('year2LowReversal(Confirm)' in regression_data['filter3']) and (regression_data['year2HighChange'] < -40)):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:buyYear2LowReversal(Confirm)')
+        if(('yearLowReversal(Confirm)' in regression_data['filter3']) and (regression_data['yearHighChange'] < -30)):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:buyYearLowReversal(Confirm)')
+        if(('month6LowReversal(Confirm)' in regression_data['filter3']) and (regression_data['month6HighChange'] < -25)):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:buyMonth6LowReversal(Confirm)')
+            
+        if(('nearYear2Low' in regression_data['filter3']) and (regression_data['year2HighChange'] < -40)):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:buyYear2Low')
+        if(('nearYearLow' in regression_data['filter3']) and (regression_data['yearHighChange'] < -30)):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:buyYearLow')
+        if(('nearMonth6Low' in regression_data['filter3']) and (regression_data['month6HighChange'] < -25)):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:buyMonth6Low')
+        
+    if(regression_data['mlpValue'] > 0
+        and regression_data['kNeighboursValue'] > 0
+        and ('P@' not in regression_data['sellIndia'])
+        and (((1 < regression_data['PCT_change'] < 4) and (1 < regression_data['PCT_day_change'] < 4))
+            )
+        ):    
+        if('yearHighBreak' in regression_data['filter3']):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:buyYearHighBreak')
+        if('month6HighBreak' in regression_data['filter3']):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:buyMonth6HighBreak')
+        if('month3HighBreak' in regression_data['filter3']):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:buyMonth3HighBreak')
     return False
 
 def buy_all_filter(regression_data, regressionResult, ws_buyAllFilter):
@@ -2779,7 +2825,24 @@ def sell_base_line_sell(regression_data, regressionResult, ws):
         if(regression_data['weekLow'] < regression_data['month3Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'month3LowReversal(Confirm)')
         else:
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'nearMonth3Low')    
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'nearMonth3Low')  
+            
+    if((0 < regression_data['year2HighChange'] < 5) 
+        and (regression_data['year2LowChange'] > 40)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Year2HighBreak')
+    elif((0 < regression_data['yearHighChange'] < 5) 
+        and (regression_data['yearLowChange'] > 30)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'YearHighBreak')
+    elif((0 < regression_data['month6HighChange'] < 5)
+        and (regression_data['month6LowChange'] > 25)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'month6HighBreak')
+    elif((0 < regression_data['month3HighChange'] < 5) 
+        and (regression_data['month3LowChange'] > 15)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'month3HighBreak')  
     
     if((-7.5 < regression_data['year2HighChange'] < 0) 
         and (regression_data['year2LowChange'] > 40)
@@ -2787,7 +2850,7 @@ def sell_base_line_sell(regression_data, regressionResult, ws):
         if(regression_data['weekHigh'] >= regression_data['year2High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'year2HighReversal(Confirm)')
         else:
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'nearYearHigh')
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'nearYear2High')
     elif((-7.5 < regression_data['yearHighChange'] < 0) 
         and (regression_data['yearLowChange'] > 30)
         ):
@@ -2828,6 +2891,9 @@ def sell_base_line_sell(regression_data, regressionResult, ws):
     
     
     if(is_algo_sell(regression_data)
+        and regression_data['mlpValue_other'] < 0.5
+        and regression_data['kNeighboursValue_other'] < 0.5
+        and (regression_data['mlpValue_other'] < -0.5 or regression_data['kNeighboursValue_other'] < -0.5)
         and regression_data['buyIndia'] == ''
         and low_tail_pct(regression_data) < 2
         ):
@@ -2870,17 +2936,26 @@ def sell_base_line_sell(regression_data, regressionResult, ws):
                 if('year2HighReversal(Confirm)' in regression_data['filter3']):
                     add_in_csv(regression_data, regressionResult, ws, 'Test:sellYear2HighReversalML-(downTrend)(checkBase)')
                     return False
+                if('nearYear2High' in regression_data['filter3']):
+                    add_in_csv(regression_data, regressionResult, ws, 'Test:sellYear2HighML-(downTrend)(checkBase)')
+                    return False
             if(-6.5 < regression_data['yearHighChange'] < 0
                 and (regression_data['yearLowChange'] > 30)
                 ):
                 if('yearHighReversal(Confirm)' in regression_data['filter3']):
                     add_in_csv(regression_data, regressionResult, ws, 'Test:sellYearHighReversalML-(downTrend)(checkBase)')
                     return True
+                if('nearYearHigh' in regression_data['filter3']):
+                    add_in_csv(regression_data, regressionResult, ws, 'Test:sellYearHighML-(downTrend)(checkBase)')
+                    return True
             if(-6.5 < regression_data['month6HighChange'] < 0
                 and (regression_data['month6LowChange'] > 20)
                 ):
                 if('month6HighReversal(Confirm)' in regression_data['filter3']):
                     add_in_csv(regression_data, regressionResult, ws, 'Test:sellMonth6HighReversalML-(downTrend)(checkBase)')
+                    return True
+                if('nearMonth6High' in regression_data['filter3']):
+                    add_in_csv(regression_data, regressionResult, ws, 'Test:sellMonth6HighML-(downTrend)(checkBase)')
                     return True
 #             if(-6.5 < regression_data['month3HighChange'] < 0
 #                 and (regression_data['month3LowChange'] > 15)
@@ -3696,10 +3771,10 @@ def sell_other_indicator(regression_data, regressionResult, ws):
         else:
             add_in_csv(regression_data, regressionResult, ws, '##ALL:sellDayReversalCandidate-1')
     
-    if(regression_data['mlpValue'] < 0
-        and regression_data['kNeighboursValue'] < 0
+    if(is_algo_sell(regression_data)
         and regression_data['mlpValue_other'] < 0.5
         and regression_data['kNeighboursValue_other'] < 0.5
+        and (regression_data['mlpValue_other'] < -0.5 or regression_data['kNeighboursValue_other'] < -0.5)
         and ('P@' not in regression_data['buyIndia'])
         #and (((-5 < regression_data['PCT_change'] < -2) and (-5 < regression_data['PCT_day_change'] < -2)) or ((-0.5 < regression_data['PCT_day_change'] < 4) and (-0.5 < regression_data['PCT_change'] < 4)))
         ):
@@ -3711,7 +3786,7 @@ def sell_other_indicator(regression_data, regressionResult, ws):
             add_in_csv(regression_data, regressionResult, ws, '##ALL:sellMonth6HighReversal(Confirm)')
 #         if(('month3HighReversal(Confirm)' in regression_data['filter3'])):
 #             add_in_csv(regression_data, regressionResult, ws, '##ALL:sellMonth3HighReversal(Confirm)')
-        if(regression_data['month3HighChange'] > 15 and (regression_data['month6HighChange'] > 20 or regression_data['month6HighChange'] > 30)
+        if(regression_data['month3LowChange'] > 15 and (regression_data['month6LowChange'] > 20 or regression_data['yearLowChange'] > 30)
             ):
             if(('nearYear2High' in regression_data['filter3'])):
                 add_in_csv(regression_data, regressionResult, ws, '##ALL:sellYear2High')
@@ -3853,7 +3928,33 @@ def sell_all_common(regression_data, regressionResult, ws):
             and regression_data['trend'] != 'down'
             ):
                 add_in_csv(regression_data, regressionResult, ws, '##Common:NotM3HighLow') 
-                
+    
+    if(is_algo_sell(regression_data)
+        and regression_data['mlpValue_other'] < 0.5
+        and regression_data['kNeighboursValue_other'] < 0.5
+        and (regression_data['mlpValue_other'] < -0.5 or regression_data['kNeighboursValue_other'] < -0.5)
+        and ('P@' not in regression_data['buyIndia'])
+        #and (((-5 < regression_data['PCT_change'] < -2) and (-5 < regression_data['PCT_day_change'] < -2)) or ((-0.5 < regression_data['PCT_day_change'] < 4) and (-0.5 < regression_data['PCT_change'] < 4)))
+        ):
+        if(('year2HighReversal(Confirm)' in regression_data['filter3'])):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:sellYear2HighReversal(Confirm)')
+        if(('yearHighReversal(Confirm)' in regression_data['filter3'])):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:sellYearHighReversal(Confirm)')
+        if(('month6HighReversal(Confirm)' in regression_data['filter3'])):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:sellMonth6HighReversal(Confirm)')
+        if(('nearYear2High' in regression_data['filter3'])):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:sellYear2High')
+        if(('nearYearHigh' in regression_data['filter3'])):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:sellYearHigh')
+        if(('nearMonth6High' in regression_data['filter3'])):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:sellMonth6High')
+        if('yearLowBreak' in regression_data['filter3']):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:sellYearLowBreak')
+        if('month6LowBreak' in regression_data['filter3']):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:sellMonth6LowBreak')
+        if('month3LowBreak' in regression_data['filter3']):
+            add_in_csv(regression_data, regressionResult, ws, '##Common:sellMonth3LowBreak')  
+                      
     if(-4 < regression_data['PCT_change'] < 1
         and (last_7_day_all_down(regression_data) == False)
         and (SELL_VERY_LESS_DATA or (last_4_day_all_down(regression_data) == False)) #Uncomment0 If very less data
