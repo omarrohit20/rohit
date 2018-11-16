@@ -1649,8 +1649,8 @@ def buy_vol_contract(regression_data, regressionResult, ws):
        and (regression_data['PCT_day_change'] > 1 or regression_data['PCT_change'] > 1)
        and regression_data['forecast_day_PCT_change'] > 0.5
        and regression_data['forecast_day_PCT2_change'] > 0.5
-       #and regression_data['forecast_day_PCT3_change'] > 0
-       #and regression_data['forecast_day_PCT4_change'] > 0
+       and regression_data['forecast_day_PCT3_change'] > 0
+       and regression_data['forecast_day_PCT4_change'] > 0
        and (regression_data['PCT_day_change'] < 0
             or regression_data['PCT_day_change_pre1'] < 0
             or regression_data['PCT_day_change_pre2'] < 0
@@ -3320,8 +3320,8 @@ def sell_vol_contract(regression_data, regressionResult, ws):
         and (regression_data['PCT_day_change'] < -1 or regression_data['PCT_change'] < -1)
         and regression_data['forecast_day_PCT_change'] < -0.5
         and regression_data['forecast_day_PCT2_change'] < -0.5
-        #and regression_data['forecast_day_PCT3_change'] < 0
-        #and regression_data['forecast_day_PCT4_change'] < 0
+        and regression_data['forecast_day_PCT3_change'] < 0
+        and regression_data['forecast_day_PCT4_change'] < 0
         and (regression_data['PCT_day_change'] > 0
             or regression_data['PCT_day_change_pre1'] > 0
             or regression_data['PCT_day_change_pre2'] > 0
