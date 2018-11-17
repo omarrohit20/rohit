@@ -642,9 +642,10 @@ def get_regressionResult(regression_data, scrip, db, mlp_o, kneighbours_o):
     regressionResult.append(regression_data['sellIndia'])
     regressionResult.append(regression_data['scrip'])
     regressionResult.append(regression_data['series_trend'])
-    regressionResult.append(regression_data['short_term'])
-    regressionResult.append(regression_data['long_term'])
-    regressionResult.append(regression_data['consolidation'])
+    regressionResult.append(regression_data['SMA25'])
+    regressionResult.append(regression_data['SMA50'])
+    regressionResult.append(regression_data['SMA100'])
+    regressionResult.append(regression_data['SMA200'])
     regressionResult.append(resultDate)
     regressionResult.append(resultDeclared)
     regressionResult.append(resultSentiment)
@@ -1112,7 +1113,7 @@ def buy_final(regression_data, regressionResult, ws_buyFinal, ws_buyFinal1):
             )
        and regression_data['yearLowChange'] > 5 and regression_data['yearHighChange'] < -5
        and high_tail_pct(regression_data) < 1
-       and regression_data['short_term'] < 0
+       and regression_data['SMA50'] < 0
     ):
        if(regression_data['forecast_day_PCT_change'] > 0
           and regression_data['bar_high'] > regression_data['bar_high_pre1']
@@ -1871,7 +1872,7 @@ def buy_trend_reversal(regression_data, regressionResult, ws):
     return False            
 
 def buy_trend_break(regression_data, regressionResult, ws):
-#     if(regression_data['consolidation'] == 1
+#     if(regression_data['SMA200'] == 1
 #        and regression_data['PCT_day_change'] > 2 and regression_data['PCT_change'] > 2
 #        ):
 #         add_in_csv(regression_data, regressionResult, ws, '##TestBreakOutBuyConsolidate-0')
@@ -1984,7 +1985,7 @@ def buy_final_candidate(regression_data, regressionResult, ws_buyFinal):
             )
        and regression_data['yearLowChange'] > 5 and regression_data['yearHighChange'] < -5
        and high_tail_pct(regression_data) < 1
-       and regression_data['short_term'] > 0
+       and regression_data['SMA50'] > 0
     ):
        if(regression_data['forecast_day_PCT_change'] > 0
           and regression_data['bar_high'] > regression_data['bar_high_pre1']
@@ -2231,16 +2232,16 @@ def buy_other_indicator(regression_data, regressionResult, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, '##ALL:buyHighKNeighbours(Risky)')  
     
-    if(0 < regression_data['short_term'] < 10
-        and regression_data['consolidation'] < regression_data['long_term'] < 0
-        and -70 < regression_data['consolidation'] < -25
+    if(0 < regression_data['SMA50'] < 10
+        and regression_data['SMA200'] < regression_data['SMA100'] < 0
+        and -70 < regression_data['SMA200'] < -25
         and regression_data['PCT_day_change'] < -1.5
         and regression_data['PCT_change'] < -1.5
         ):
         add_in_csv(regression_data, regressionResult, ws, '##ALL:buyRisingMA')
-    elif(0 < regression_data['short_term'] < 10
-        and regression_data['consolidation'] < regression_data['long_term'] < 0
-        and -70 < regression_data['consolidation'] < -10
+    elif(0 < regression_data['SMA50'] < 10
+        and regression_data['SMA200'] < regression_data['SMA100'] < 0
+        and -70 < regression_data['SMA200'] < -10
         and regression_data['PCT_day_change'] < -1.5
         and regression_data['PCT_change'] < -1.5
         ):
@@ -2657,7 +2658,7 @@ def sell_final(regression_data, regressionResult, ws_sellFinal, ws_sellFinal1):
                 )
              )
         and low_tail_pct(regression_data) < 1
-        and regression_data['short_term'] > 0
+        and regression_data['SMA50'] > 0
         ):  
         if(regression_data['forecast_day_PCT_change'] < 0
             and regression_data['bar_low'] < regression_data['bar_low_pre1']
@@ -3547,7 +3548,7 @@ def sell_trend_reversal(regression_data, regressionResult, ws):
     return False   
 
 def sell_trend_break(regression_data, regressionResult, ws):
-#     if(regression_data['consolidation'] == 1
+#     if(regression_data['SMA200'] == 1
 #        and regression_data['PCT_day_change'] < -2 and regression_data['PCT_change'] < -2
 #        ):
 #         add_in_csv(regression_data, regressionResult, ws, '##TestBreakOutSellConsolidate-0')
@@ -3659,7 +3660,7 @@ def sell_final_candidate(regression_data, regressionResult, ws_sellFinal):
                 )
              )
         and low_tail_pct(regression_data) < 1
-        and regression_data['short_term'] > 0
+        and regression_data['SMA50'] > 0
         ):  
         if(regression_data['forecast_day_PCT_change'] < 0
             and regression_data['bar_low'] < regression_data['bar_low_pre1']
@@ -3903,16 +3904,16 @@ def sell_other_indicator(regression_data, regressionResult, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, '##ALL:sellHighKNeighbours(Risky)')
     
-    if(-10 < regression_data['short_term'] < 0
-        and 0 < regression_data['long_term'] < regression_data['consolidation']
-        and 25 < regression_data['consolidation'] < 70
+    if(-10 < regression_data['SMA50'] < 0
+        and 0 < regression_data['SMA100'] < regression_data['SMA200']
+        and 25 < regression_data['SMA200'] < 70
         and regression_data['PCT_day_change'] > 1
         and regression_data['PCT_change'] > 1
         ):
         add_in_csv(regression_data, regressionResult, ws, '##ALL:sellDowningMA')
-    elif(-10 < regression_data['short_term'] < 0
-        and 0 < regression_data['long_term'] < regression_data['consolidation']
-        and 10 < regression_data['consolidation'] < 70
+    elif(-10 < regression_data['SMA50'] < 0
+        and 0 < regression_data['SMA100'] < regression_data['SMA200']
+        and 10 < regression_data['SMA200'] < 70
         and regression_data['PCT_day_change'] > 1
         and regression_data['PCT_change'] > 1
         ):

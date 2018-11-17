@@ -95,9 +95,9 @@ def regression_ta_data(scrip):
     df['EMA100'] = EMA(df,100)
     df['EMA200'] = EMA(df,200)
     
-    buy, sell, trend, short_term, long_term, consolidation = ta_lib_data_df(scrip, df, True) 
-    process_regression_high(scrip, df, buy, sell, trend, short_term, long_term, consolidation, directory)
-    process_regression_low(scrip, df, buy, sell, trend, short_term, long_term, consolidation, directory)    
+    ta_lib_data_df(scrip, df, True) 
+    process_regression_high(scrip, df, directory)
+    process_regression_low(scrip, df, directory)    
 
 def calculateParallel(threads=1, futures='Yes'):
     pool = ThreadPool(threads)

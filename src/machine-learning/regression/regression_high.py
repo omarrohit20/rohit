@@ -234,7 +234,7 @@ def create_csv(regression_data):
         json_data = json.loads(json.dumps(regression_data))
         db.regressionhigh.insert_one(json_data)    
     
-def process_regression_high(scrip, df, buy, sell, trend, short_term, long_term, consolidation, directory):
+def process_regression_high(scrip, df, directory):
     regression_data_db = db.regressionhigh.find_one({'scrip':scrip})
     if(regression_data_db is not None):
         return
@@ -352,10 +352,11 @@ def process_regression_high(scrip, df, buy, sell, trend, short_term, long_term, 
     month3HighChange = (close - month3High)*100/close
     month3LowChange = (close - month3Low)*100/close
     
+    technical = db.technical.find_one({'dataset_code':scrip})
     regression_data['date'] = forecast_day_date
     regression_data['scrip'] = str(scrip)
-    regression_data['buyIndia'] = str(buy)
-    regression_data['sellIndia'] = str(sell)
+    regression_data['buyIndia'] = str(technical['BuyIndicators'])
+    regression_data['sellIndia'] = str(technical['SellIndicators'])
     regression_data['forecast_day_VOL_change'] = float(forecast_day_VOL_change)
     regression_data['forecast_day_PCT_change'] = float(forecast_day_PCT_change)
     regression_data['forecast_day_PCT2_change'] = float(forecast_day_PCT2_change)
@@ -367,7 +368,7 @@ def process_regression_high(scrip, df, buy, sell, trend, short_term, long_term, 
     regression_data['score'] = score
     #regression_data['mlpValue'] = mlpValue
     #regression_data['kNeighboursValue'] = kNeighboursValue
-    regression_data['trend'] = trend
+    regression_data['trend'] = technical['trend']
     regression_data['year2HighChange'] = float(year2HighChange) 
     regression_data['year2LowChange'] = float(year2LowChange)
     regression_data['yearHighChange'] = float(yearHighChange) 
@@ -438,9 +439,10 @@ def process_regression_high(scrip, df, buy, sell, trend, short_term, long_term, 
     regression_data['bar_low_pre2'] = float(bar_low_pre2)
     regression_data['greentrend'] = float(greentrend)
     regression_data['redtrend'] = float(redtrend)
-    regression_data['short_term'] = short_term
-    regression_data['long_term'] = long_term
-    regression_data['consolidation'] = float(consolidation)
+    regression_data['SMA25'] = (float(close)-technical['overlap_studies']['SMA25'][0])*100/technical['overlap_studies']['SMA25'][0]
+    regression_data['SMA50'] = (float(close)-technical['overlap_studies']['SMA50'][0])*100/technical['overlap_studies']['SMA50'][0]
+    regression_data['SMA100'] = (float(close)-technical['overlap_studies']['SMA100'][0])*100/technical['overlap_studies']['SMA100'][0]
+    regression_data['SMA200'] = (float(close)-technical['overlap_studies']['SMA200'][0])*100/technical['overlap_studies']['SMA200'][0]
     regression_data['mlpValue_other'] = 0
     regression_data['kNeighboursValue_other'] = 0
     
