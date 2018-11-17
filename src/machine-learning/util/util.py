@@ -642,6 +642,7 @@ def get_regressionResult(regression_data, scrip, db, mlp_o, kneighbours_o):
     regressionResult.append(regression_data['sellIndia'])
     regressionResult.append(regression_data['scrip'])
     regressionResult.append(regression_data['series_trend'])
+    regressionResult.append(regression_data['SMA9'])
     regressionResult.append(regression_data['SMA25'])
     regressionResult.append(regression_data['SMA50'])
     regressionResult.append(regression_data['SMA100'])

@@ -441,6 +441,7 @@ def process_regression_high(scrip, df, directory):
     regression_data['bar_low_pre2'] = float(bar_low_pre2)
     regression_data['greentrend'] = float(greentrend)
     regression_data['redtrend'] = float(redtrend)
+    regression_data['SMA9'] = (float(close)-technical['overlap_studies']['SMA9'][0])*100/technical['overlap_studies']['SMA9'][0]
     regression_data['SMA25'] = (float(close)-technical['overlap_studies']['SMA25'][0])*100/technical['overlap_studies']['SMA25'][0]
     regression_data['SMA50'] = (float(close)-technical['overlap_studies']['SMA50'][0])*100/technical['overlap_studies']['SMA50'][0]
     regression_data['SMA100'] = (float(close)-technical['overlap_studies']['SMA100'][0])*100/technical['overlap_studies']['SMA100'][0]
