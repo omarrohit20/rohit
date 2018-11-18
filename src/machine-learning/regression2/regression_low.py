@@ -49,7 +49,7 @@ adaBoost = False
 kNeighbours = True
 gradientBoosting = False
 
-def get_data_frame(df, regressor="None", type="None"):
+def get_data_frame(df, regressor="None", type="reg"):
     if (df is not None):
         #dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
         dfp = df[['PCT_day_change']]
@@ -71,7 +71,7 @@ def get_data_frame(df, regressor="None", type="None"):
         for dele in range(1, 16):
             addFeaturesLowChange(df, dfp, low, dele) 
         
-        if type != 'classification':
+        if type == "reg":
             dfp['EMA9'] = df['EMA9']
             dfp['EMA21'] = df['EMA21'] 
             dfp['EMA50'] = df['EMA50'] 
@@ -250,14 +250,14 @@ def process_regression_low(scrip, df, directory):
         regression_data['kNeighboursValue_reg'] = float(0)
         
     if mlp:
-        dfp_mlp = get_data_frame(df, 'mlp')
-        result = performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
+        dfp = get_data_frame(df, 'mlp')
+        result = performRegression(dfp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
         regression_data['mlpValue_reg'] = float(result[0])
     else:
         regression_data['mlpValue_reg'] = float(0)
         
     if kNeighbours:
-        dfp_mlp = get_data_frame(df, None, 'classification')
+        dfp = get_data_frame(df, None, 'classification')
         result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1, n_neighbors=3, weights='distance'))
         #result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(random_state=1, n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1))
         #result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.RadiusNeighborsClassifier(radius=1.0))
@@ -266,8 +266,8 @@ def process_regression_low(scrip, df, directory):
         regression_data['kNeighboursValue_cla'] = float(0)
             
     if mlp:
-        dfp_mlp = get_data_frame(df, 'mlp', 'classification')
-        result = performClassification(dfp_mlp, split, scrip, directory, forecast_out, MLPClassifier(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25)))
+        dfp = get_data_frame(df, 'mlp', 'classification')
+        result = performClassification(dfp, split, scrip, directory, forecast_out, MLPClassifier(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25)))
         regression_data['mlpValue_cla'] = float(result[0])
     else:
         regression_data['mlpValue_cla'] = float(0)
