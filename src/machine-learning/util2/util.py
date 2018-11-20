@@ -1618,14 +1618,14 @@ def buy_vol_contract(regression_data, regressionResult, reg, ws):
     if((ten_days_more_than_ten(regression_data) == False
         or ten_days_more_than_fifteen(regression_data) == True
         or (regression_data['forecast_day_PCT5_change'] < 5 and regression_data['forecast_day_PCT7_change'] < 5)) 
-       and ((mlpValue >= 0.3 and kNeighboursValue >= 0.3) or is_algo_buy(regression_data))
+       #and ((mlpValue >= 0.3 and kNeighboursValue >= 0.3) or is_algo_buy(regression_data))
        and (float(regression_data['contract']) != 0 or float(regression_data['oi']) != 0)
        and float(regression_data['contract']) > 10
        and (regression_data['PCT_day_change'] > 1 or regression_data['PCT_change'] > 1)
        and regression_data['forecast_day_PCT_change'] > 0.5
        and regression_data['forecast_day_PCT2_change'] > 0.5
-       and regression_data['forecast_day_PCT3_change'] > 0
-       and regression_data['forecast_day_PCT4_change'] > 0
+       #and regression_data['forecast_day_PCT3_change'] > 0
+       #and regression_data['forecast_day_PCT4_change'] > 0
        and (regression_data['PCT_day_change'] < 0
             or regression_data['PCT_day_change_pre1'] < 0
             or regression_data['PCT_day_change_pre2'] < 0
@@ -1638,8 +1638,11 @@ def buy_vol_contract(regression_data, regressionResult, reg, ws):
        and last_4_day_all_up(regression_data) == False
        and high_tail_pct(regression_data) < 1.5
        and regression_data['month3HighChange'] < -7.5
+       and regression_data['PCT_day_change_pre1'] > 0
+       and (((regression_data['volume'] - regression_data['volume_pre2'])*100)/regression_data['volume_pre2']) > 0
+       and (((regression_data['volume'] - regression_data['volume_pre3'])*100)/regression_data['volume_pre3']) > 0
        ):
-        if((regression_data['forecast_day_VOL_change'] > 70 and 1 < regression_data['PCT_day_change'] < 2 and 1 < regression_data['PCT_change'] < 2)
+        if((regression_data['forecast_day_VOL_change'] > 70 and 0.5 < regression_data['PCT_day_change'] < 2 and 1 < regression_data['PCT_change'] < 2)
             and float(regression_data['contract']) > 10
             ):
             if((mlpValue >= 0.3 and kNeighboursValue >= 0.3) or is_algo_buy(regression_data)):
@@ -1647,7 +1650,7 @@ def buy_vol_contract(regression_data, regressionResult, reg, ws):
                 return True
             else:
                 return False
-        elif((regression_data['forecast_day_VOL_change'] > 35 and 1 < regression_data['PCT_day_change'] < 2 and 1 < regression_data['PCT_change'] < 2)
+        elif((regression_data['forecast_day_VOL_change'] > 35 and 0.5 < regression_data['PCT_day_change'] < 2 and 1 < regression_data['PCT_change'] < 2)
             and float(regression_data['contract']) > 20
             #and regression_data['PCT_day_change_pre1'] > -0.5
             ):
@@ -2162,12 +2165,20 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         if('month3HighBreak' in regression_data['filter3']):
             add_in_csv(regression_data, regressionResult, ws, '##ALL:buyMonth3HighBreak')
     
-#     if((('nearMonth3High' in regression_data['filter3']) or ('month3HighBreak' in regression_data['filter3']))
-#         and (regression_data['month3LowChange'] > 20)
-#         and ((-2 < regression_data['PCT_change'] < 0) and (-2 < regression_data['PCT_day_change'] < 0))
-#         #and ('P@' not in regression_data['sellIndia'])
-#         ):
-#         add_in_csv(regression_data, regressionResult, ws, '##ALL:buyMonth3High-InMinus')
+    if((('nearMonth3High' in regression_data['filter3']) or ('month3HighBreak' in regression_data['filter3']))
+        and (regression_data['month3LowChange'] > 20)
+        and ((-2 < regression_data['PCT_change'] < 0) and (-2 < regression_data['PCT_day_change'] < 0))
+        and regression_data['series_trend'] != "downTrend"
+        and all_day_pct_change_negative_except_today(regression_data) != True
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '##ALL:buyMonth3High-InMinus')
+    elif((('nearMonth6High' in regression_data['filter3']))
+        and (regression_data['month6LowChange'] > 20)
+        and ((-2 < regression_data['PCT_change'] < 0) and (-2 < regression_data['PCT_day_change'] < 0))
+        and regression_data['series_trend'] != "downTrend"
+        and all_day_pct_change_negative_except_today(regression_data) != True
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '##ALL:buyMonth6High-InMinus')
     
     if((-0.5 < regression_data['PCT_change'] < 0.5)
         and (-1 < regression_data['PCT_day_change'] < 0.5)
@@ -2244,6 +2255,16 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         and all_day_pct_change_negative_except_today(regression_data) != True
         ):
         add_in_csv(regression_data, regressionResult, ws, '##ALL:buyRisingMA-Risky-1')
+    elif(-1 < regression_data['SMA9'] < 5
+        and -1 < regression_data['SMA25'] < 5
+        and regression_data['SMA50'] < 0
+        and regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50']
+        and 2 < regression_data['PCT_day_change'] < 4
+        and 2 < regression_data['PCT_change'] < 4
+        and regression_data['series_trend'] != "downTrend"
+        and all_day_pct_change_negative_except_today(regression_data) != True
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '##ALL:buyRisingMA-uptrend')
     
     if(-1 < regression_data['PCT_change'] < 4
         and (last_7_day_all_up(regression_data) == False)
@@ -3331,14 +3352,14 @@ def sell_vol_contract(regression_data, regressionResult, reg, ws):
     if((ten_days_less_than_minus_ten(regression_data) == False
         or ten_days_less_than_minus_fifteen(regression_data) == True
         or (regression_data['forecast_day_PCT5_change'] > -5 and regression_data['forecast_day_PCT7_change'] > -5))
-        and ((mlpValue <= -0.3 and kNeighboursValue <= -0.3) or is_algo_sell(regression_data))
+        #and ((mlpValue <= -0.3 and kNeighboursValue <= -0.3) or is_algo_sell(regression_data))
         and (float(regression_data['contract']) != 0 or float(regression_data['oi']) != 0)
         and float(regression_data['contract']) > 10
         and (regression_data['PCT_day_change'] < -1 or regression_data['PCT_change'] < -1)
         and regression_data['forecast_day_PCT_change'] < -0.5
         and regression_data['forecast_day_PCT2_change'] < -0.5
-        and regression_data['forecast_day_PCT3_change'] < 0
-        and regression_data['forecast_day_PCT4_change'] < 0
+        #and regression_data['forecast_day_PCT3_change'] < 0
+        #and regression_data['forecast_day_PCT4_change'] < 0
         and (regression_data['PCT_day_change'] > 0
             or regression_data['PCT_day_change_pre1'] > 0
             or regression_data['PCT_day_change_pre2'] > 0
@@ -3350,8 +3371,11 @@ def sell_vol_contract(regression_data, regressionResult, reg, ws):
         and last_4_day_all_down(regression_data) == False
         and low_tail_pct(regression_data) < 1.5
         and regression_data['month3LowChange'] > 7.5
+        and regression_data['PCT_day_change_pre1'] < 0
+        and (((regression_data['volume'] - regression_data['volume_pre2'])*100)/regression_data['volume_pre2']) > 0
+        and (((regression_data['volume'] - regression_data['volume_pre3'])*100)/regression_data['volume_pre3']) > 0
         ):
-        if((regression_data['forecast_day_VOL_change'] > 70 and -2 < regression_data['PCT_day_change'] < -1 and -2 < regression_data['PCT_change'] < -1)
+        if((regression_data['forecast_day_VOL_change'] > 70 and -2 < regression_data['PCT_day_change'] < -0.5 and -2 < regression_data['PCT_change'] < -1)
             and float(regression_data['contract']) > 10
             ):
             if((mlpValue <= -0.3 and kNeighboursValue <= -0.3) or is_algo_sell(regression_data)):
@@ -3359,7 +3383,7 @@ def sell_vol_contract(regression_data, regressionResult, reg, ws):
                 return True
             else:
                 return False
-        elif((regression_data['forecast_day_VOL_change'] > 35 and -2 < regression_data['PCT_day_change'] < -1 and -2 < regression_data['PCT_change'] < -1)
+        elif((regression_data['forecast_day_VOL_change'] > 35 and -2 < regression_data['PCT_day_change'] < -0.5 and -2 < regression_data['PCT_change'] < -1)
             and ((mlpValue <= -0.3 and kNeighboursValue <= -0.3) or is_algo_sell(regression_data))
             and float(regression_data['contract']) > 20
             ):
@@ -3877,12 +3901,20 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         if('month3LowBreak' in regression_data['filter3']):
             add_in_csv(regression_data, regressionResult, ws, '##ALL:sellMonth3LowBreak')
             
-#     if((('nearMonth3Low' in regression_data['filter3']) or ('month3LowBreak' in regression_data['filter3']))
-#         and (regression_data['month3HighChange'] < -20)
-#         and ((0 < regression_data['PCT_change'] < 2) and (0 < regression_data['PCT_day_change'] < 2))
-#         #and ('P@' not in regression_data['buyIndia'])
-#         ):
-#         add_in_csv(regression_data, regressionResult, ws, '##ALL:sellMonth3Low-InPlus')
+    if((('nearMonth3Low' in regression_data['filter3']) or ('month3LowBreak' in regression_data['filter3']))
+        and (regression_data['month3HighChange'] < -20)
+        and ((0 < regression_data['PCT_change'] < 2) and (0 < regression_data['PCT_day_change'] < 2))
+        and regression_data['series_trend'] != "upTrend"
+        and all_day_pct_change_positive_except_today(regression_data) == False
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '##ALL:sellMonth3Low-InPlus')
+    elif((('nearMonth6Low' in regression_data['filter3']))
+        and (regression_data['month6HighChange'] < -20)
+        and ((0 < regression_data['PCT_change'] < 2) and (0 < regression_data['PCT_day_change'] < 2))
+        and regression_data['series_trend'] != "upTrend"
+        and all_day_pct_change_positive_except_today(regression_data) == False
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '##ALL:sellMonth6Low-InPlus')
     
     if((-0.5 < regression_data['PCT_change'] < 0.5)
         and (-0.5 < regression_data['PCT_day_change'] < 1)
@@ -3959,6 +3991,16 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         and all_day_pct_change_positive_except_today(regression_data) == False
         ):
         add_in_csv(regression_data, regressionResult, ws, '##ALL:sellDowningMA-Risky-1')
+    elif(regression_data['SMA9'] < 0
+        and regression_data['SMA25'] < 0
+        and regression_data['SMA50'] > 0
+        and regression_data['SMA50'] < regression_data['SMA100'] < regression_data['SMA200']
+        and -2 < regression_data['PCT_day_change'] < -4
+        and -2 < regression_data['PCT_change'] < -4
+        and regression_data['series_trend'] != "upTrend"
+        and all_day_pct_change_positive_except_today(regression_data) == False
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '##ALL:sellDowningMA-downTrend')
        
     if(-4 < regression_data['PCT_change'] < 1
         and (last_7_day_all_down(regression_data) == False)
