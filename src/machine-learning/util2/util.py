@@ -1442,6 +1442,7 @@ def buy_morning_star_buy(regression_data, regressionResult, reg, ws):
     if(-8 < regression_data['forecast_day_PCT_change'] < -5
         and regression_data['PCT_day_change_pre1'] < -4
         and regression_data['yearHighChange'] < -20
+        and ((regression_data['yearLowChange'] > 15) or (regression_data['yearLowChange'] < 2))
         and high_tail_pct(regression_data) < 0.5
         and low_tail_pct(regression_data) > 3
         ):
@@ -1455,6 +1456,7 @@ def buy_morning_star_buy(regression_data, regressionResult, reg, ws):
         and regression_data['PCT_day_change_pre1'] < 0
         and (ten_days_less_than_minus_seven(regression_data))
         and regression_data['yearHighChange'] < -20
+        and ((regression_data['yearLowChange'] > 15) or (regression_data['yearLowChange'] < 2))
         ):
         if(regression_data['forecast_day_PCT_change'] < -4
             and (high_tail_pct(regression_data) < 0.5 or (regression_data['forecast_day_PCT_change'] < -6 and high_tail_pct(regression_data) < 1))
@@ -1494,6 +1496,7 @@ def buy_evening_star_sell(regression_data, regressionResult, reg, ws):
     if(8 > regression_data['forecast_day_PCT_change'] > 5
         and regression_data['PCT_day_change_pre1'] > 4
         and regression_data['yearLowChange'] > 20
+        and ((regression_data['yearHighChange'] < -15) or (regression_data['yearHighChange'] > -2))
         and low_tail_pct(regression_data) < 0.5
         and high_tail_pct(regression_data) > 3
         ):
@@ -1507,6 +1510,7 @@ def buy_evening_star_sell(regression_data, regressionResult, reg, ws):
         and regression_data['PCT_day_change_pre1'] > 0
         and (ten_days_more_than_seven(regression_data))
         and regression_data['yearLowChange'] > 20
+        and ((regression_data['yearHighChange'] < -15) or (regression_data['yearHighChange'] > -2))
         ):
         if(regression_data['forecast_day_PCT_change'] > 4
             and (low_tail_pct(regression_data) < 0.5 or (regression_data['forecast_day_PCT_change'] > 6 and low_tail_pct(regression_data) < 1))
@@ -2299,6 +2303,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
             and -1 < regression_data['SMA25'] < 5
             and regression_data['SMA50'] < 0
             and regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50']
+            #and regression_data['SMA200'] < -25
             and 2 < regression_data['PCT_day_change'] < 4
             and 2 < regression_data['PCT_change'] < 4
             and regression_data['series_trend'] != "downTrend"
@@ -3195,6 +3200,7 @@ def sell_morning_star_buy(regression_data, regressionResult, reg, ws):
     if(-8 < regression_data['forecast_day_PCT_change'] < -5
         and regression_data['PCT_day_change_pre1'] < -4
         and regression_data['yearHighChange'] < -20
+        and ((regression_data['yearLowChange'] > 15) or (regression_data['yearLowChange'] < 2))
         and high_tail_pct(regression_data) < 0.5
         and low_tail_pct(regression_data) > 3
         ):
@@ -3208,6 +3214,7 @@ def sell_morning_star_buy(regression_data, regressionResult, reg, ws):
         and regression_data['PCT_day_change_pre1'] < 0
         and ten_days_less_than_minus_seven(regression_data)
         and regression_data['yearHighChange'] < -20
+        and ((regression_data['yearLowChange'] > 15) or (regression_data['yearLowChange'] < 2))
         ):
         if(regression_data['forecast_day_PCT_change'] < -4
             and (high_tail_pct(regression_data) < 0.5 or (regression_data['forecast_day_PCT_change'] < -6 and high_tail_pct(regression_data) < 1))
@@ -3245,6 +3252,7 @@ def sell_evening_star_sell(regression_data, regressionResult, reg, ws):
     if(8 > regression_data['forecast_day_PCT_change'] > 5
         and regression_data['PCT_day_change_pre1'] > 4
         and regression_data['yearLowChange'] > 20
+        and ((regression_data['yearHighChange'] < -15) or (regression_data['yearHighChange'] > -2))
         and low_tail_pct(regression_data) < 0.5
         and high_tail_pct(regression_data) > 3
         ):
@@ -3258,6 +3266,7 @@ def sell_evening_star_sell(regression_data, regressionResult, reg, ws):
         and regression_data['PCT_day_change_pre1'] > 0
         and (ten_days_more_than_seven(regression_data))
         and regression_data['yearLowChange'] > 20
+        and ((regression_data['yearHighChange'] < -15) or (regression_data['yearHighChange'] > -2))
         ):
         if(regression_data['forecast_day_PCT_change'] > 4
             and (low_tail_pct(regression_data) < 0.5 or (regression_data['forecast_day_PCT_change'] > 6 and low_tail_pct(regression_data) < 1))
@@ -4054,6 +4063,7 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
             and regression_data['SMA25'] < 0
             and regression_data['SMA50'] > 0
             and regression_data['SMA50'] < regression_data['SMA100'] < regression_data['SMA200']
+            #and regression_data['SMA200'] > 25
             and -2 < regression_data['PCT_day_change'] < -4
             and -2 < regression_data['PCT_change'] < -4
             and regression_data['series_trend'] != "upTrend"
