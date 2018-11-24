@@ -2303,13 +2303,18 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
             and -1 < regression_data['SMA25'] < 5
             and regression_data['SMA50'] < 0
             and regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50']
-            #and regression_data['SMA200'] < -25
+            and regression_data['SMA200'] < -10
             and 2 < regression_data['PCT_day_change'] < 4
             and 2 < regression_data['PCT_change'] < 4
             and regression_data['series_trend'] != "downTrend"
             and all_day_pct_change_negative_except_today(regression_data) != True
             ):
             add_in_csv(regression_data, regressionResult, ws, '##ALL:buyRisingMA-uptrend')
+        elif(regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50'] < regression_data['SMA25'] < regression_data['SMA9']
+            and regression_data['series_trend'] != "downTrend"
+            and all_day_pct_change_negative_except_today(regression_data) != True
+            ):
+            add_in_csv(regression_data, regressionResult, ws, '$$(Study)$$:RisingMA-uptrend-1')
         return True
     return False
 
@@ -4063,13 +4068,18 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
             and regression_data['SMA25'] < 0
             and regression_data['SMA50'] > 0
             and regression_data['SMA50'] < regression_data['SMA100'] < regression_data['SMA200']
-            #and regression_data['SMA200'] > 25
+            and regression_data['SMA200'] > 10
             and -2 < regression_data['PCT_day_change'] < -4
             and -2 < regression_data['PCT_change'] < -4
             and regression_data['series_trend'] != "upTrend"
             and all_day_pct_change_positive_except_today(regression_data) == False
             ):
             add_in_csv(regression_data, regressionResult, ws, '##ALL:sellDowningMA-downTrend')
+        elif(regression_data['SMA100'] < regression_data['SMA50'] < regression_data['SMA25']
+            and regression_data['series_trend'] != "upTrend"
+            and all_day_pct_change_positive_except_today(regression_data) == False
+            ):
+            add_in_csv(regression_data, regressionResult, ws, '$$(Study)$$:DowningMA-Downtrend-1')
         return True
     return False
 
