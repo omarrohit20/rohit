@@ -15,7 +15,7 @@ from talib.abstract import *
 #from pip.req.req_file import preprocess
 from Algorithms.regression_helpers import load_dataset, addFeatures, addFeaturesVolChange, \
     addFeaturesOpenChange, addFeaturesHighChange, addFeaturesLowChange, addFeaturesEMA9Change, addFeaturesEMA21Change, \
-    mergeDataframes, count_missing, applyTimeLag, performRegression
+    mergeDataframes, count_missing, applyTimeLag, performRegression, performClassification
     
 from util.util import getScore, all_day_pct_change_negative, all_day_pct_change_positive, historical_data
 from util.util import soft 
@@ -49,7 +49,7 @@ adaBoost = False
 kNeighbours = True
 gradientBoosting = False
 
-def get_data_frame(df, regressor="None"):
+def get_data_frame(df, regressor="None", type="reg"):
     if (df is not None):
         #dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
         dfp = df[['PCT_day_change']]
@@ -71,9 +71,10 @@ def get_data_frame(df, regressor="None"):
         for dele in range(1, 16):
             addFeaturesLowChange(df, dfp, low, dele) 
         
-        dfp['EMA9'] = df['EMA9']
-        dfp['EMA21'] = df['EMA21'] 
-        dfp['EMA50'] = df['EMA50'] 
+        if type == "reg":
+            dfp['EMA9'] = df['EMA9']
+            dfp['EMA21'] = df['EMA21'] 
+            dfp['EMA50'] = df['EMA50'] 
 #         if regressor != 'mlp':      
 #             for dele in range(1, 2):  
 #                 addFeaturesEMA9Change(df, dfp, EMA9, dele)
@@ -244,16 +245,32 @@ def process_regression_low(scrip, df, directory):
     regression_data = {}
     if kNeighbours:
         result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1, weights='distance'))
-        regression_data['kNeighboursValue'] = float(result[0])
+        regression_data['kNeighboursValue_reg'] = float(result[0])
     else:
-        regression_data['kNeighboursValue'] = float(0)
+        regression_data['kNeighboursValue_reg'] = float(0)
         
     if mlp:
-        dfp_mlp = get_data_frame(df, 'mlp')
-        result = performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
-        regression_data['mlpValue'] = float(result[0])
+        dfp = get_data_frame(df, 'mlp')
+        result = performRegression(dfp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
+        regression_data['mlpValue_reg'] = float(result[0])
     else:
-        regression_data['mlpValue'] = float(0)
+        regression_data['mlpValue_reg'] = float(0)
+        
+    if kNeighbours:
+        dfp = get_data_frame(df, None, 'classification')
+        result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1, n_neighbors=3, weights='distance'))
+        #result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(random_state=1, n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1))
+        #result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.RadiusNeighborsClassifier(radius=1.0))
+        regression_data['kNeighboursValue_cla'] = float(result[0])
+    else:
+        regression_data['kNeighboursValue_cla'] = float(0)
+            
+    if mlp:
+        dfp = get_data_frame(df, 'mlp', 'classification')
+        result = performClassification(dfp, split, scrip, directory, forecast_out, MLPClassifier(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25)))
+        regression_data['mlpValue_cla'] = float(result[0])
+    else:
+        regression_data['mlpValue_cla'] = float(0)
     
     forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'Low_change1'].values[0]
     forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'Low_change2'].values[0]
@@ -444,8 +461,10 @@ def process_regression_low(scrip, df, directory):
     regression_data['SMA50'] = (float(close)-technical['overlap_studies']['SMA50'][0])*100/technical['overlap_studies']['SMA50'][0]
     regression_data['SMA100'] = (float(close)-technical['overlap_studies']['SMA100'][0])*100/technical['overlap_studies']['SMA100'][0]
     regression_data['SMA200'] = (float(close)-technical['overlap_studies']['SMA200'][0])*100/technical['overlap_studies']['SMA200'][0]
-    regression_data['mlpValue_other'] = 0
-    regression_data['kNeighboursValue_other'] = 0
+    regression_data['mlpValue_reg_other'] = 0
+    regression_data['kNeighboursValue_reg_other'] = 0
+    regression_data['mlpValue_cla_other'] = 0
+    regression_data['kNeighboursValue_cla_other'] = 0
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     create_csv(regression_data)
