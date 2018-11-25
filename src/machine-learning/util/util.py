@@ -632,6 +632,8 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regression_data['filter3'] = " "
     regression_data['filter4'] = " "
     regression_data['series_trend'] = "NA"
+    regression_data['highTail'] = high_tail_pct(regression_data)
+    regression_data['lowTail'] = low_tail_pct(regression_data)
     if pct_change_negative_trend(regression_data):
         regression_data['series_trend'] = "downTrend"
     if pct_change_positive_trend(regression_data):
@@ -2280,7 +2282,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
             and all_day_pct_change_negative_except_today(regression_data) != True
             ):
             add_in_csv(regression_data, regressionResult, ws, '##ALL:buyRisingMA')
-        elif(0 < regression_data['SMA50'] < 10
+        elif(2 < regression_data['SMA50'] < 10
             and regression_data['SMA200'] < regression_data['SMA100'] < 0
             and -70 < regression_data['SMA200'] < -10
             and regression_data['PCT_day_change'] < -1.5
@@ -2289,8 +2291,9 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
             and all_day_pct_change_negative_except_today(regression_data) != True
             ):
             add_in_csv(regression_data, regressionResult, ws, '##ALL:buyRisingMA-Risky')
-        elif(regression_data['SMA25'] > 0
-            and -1 < regression_data['SMA50'] < 3
+        elif(regression_data['SMA9'] > 1
+            and regression_data['SMA25'] > 1
+            and 1 < regression_data['SMA50'] < 3
             and regression_data['SMA200'] < regression_data['SMA100'] < -1
             and -70 < regression_data['SMA200'] < -15
             and regression_data['PCT_day_change'] < 0
@@ -2304,8 +2307,8 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
             and regression_data['SMA50'] < 0
             and regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50']
             and regression_data['SMA200'] < -10
-            and 2 < regression_data['PCT_day_change'] < 4
-            and 2 < regression_data['PCT_change'] < 4
+            and 2 < regression_data['PCT_day_change'] < 3
+            and 1.5 < regression_data['PCT_change'] < 4
             and regression_data['series_trend'] != "downTrend"
             and all_day_pct_change_negative_except_today(regression_data) != True
             ):
