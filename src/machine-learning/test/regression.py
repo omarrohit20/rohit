@@ -16,6 +16,7 @@ from regression_low import process_regression_low
 from technical import ta_lib_data_df
 from util.util import historical_data
 from talib.abstract import *
+from regression_result import result_data_reg, result_data_cla, result_data
 
 directory = '../../output' + '/regression/' + time.strftime("%d%m%y-%H%M%S")
 logname = '../../output' + '/regression/mllog' + time.strftime("%d%m%y-%H%M%S")
@@ -35,7 +36,7 @@ def regression_ta_data(scrip):
     
     data = dbNsedata.history.find_one({'dataset_code':scrip})
     if(data is None or (np.array(data['data'])).size < 1000):
-        print('Missing or very less Data for ', scrip)
+        print('Main Missing or very less Data for ', scrip)
         return
         
     hsdate, hsopen, hshigh, hslow, hslast, hsclose, hsquantity, hsturnover = historical_data(data)   
@@ -97,11 +98,15 @@ def regression_ta_data(scrip):
     df['EMA200'] = EMA(df,200)
     
     df.dropna(subset=['Act_PCT_change'], inplace = True)
-    size = int(int(np.floor(df.shape[0]))/3)
+    size = int(int(np.floor(df.shape[0]))/4)
     for x in range(size):
-        buy, sell, trend, yearHighChange, yearLowChange = ta_lib_data_df(scrip, df, False) 
-        process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory)
-        process_regression_low(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory)
+        db.technical.delete_many({'dataset_code':scrip})
+        ta_lib_data_df(scrip, df, True) 
+        regression_high = process_regression_high(scrip, df, directory)
+        regression_low = process_regression_low(scrip, df, directory)
+        result_data_reg(regression_high, regression_low, scrip)
+        result_data_cla(regression_high, regression_low, scrip)
+        result_data(regression_high, regression_low, scrip)
         df = df[:-1]
         
     db.regressionHistoryScrip.insert_one({
@@ -122,5 +127,5 @@ def calculateParallel(threads=1):
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(10)
+    calculateParallel(5)
     connection.close()

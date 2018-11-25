@@ -15,18 +15,10 @@ from talib.abstract import *
 #from pip.req.req_file import preprocess
 from Algorithms.regression_helpers import load_dataset, addFeatures, addFeaturesVolChange, \
     addFeaturesOpenChange, addFeaturesHighChange, addFeaturesLowChange, addFeaturesEMA9Change, addFeaturesEMA21Change, \
-    mergeDataframes, count_missing, applyTimeLag, performRegression
+    mergeDataframes, count_missing, applyTimeLag, performRegression, performClassification
     
-from util.util import getScore, all_day_pct_change_negative, all_day_pct_change_positive, no_doji_or_spinning_buy_india, no_doji_or_spinning_sell_india, scrip_patterns_to_dict
-from util.util import is_algo_buy, is_algo_sell
-from util.util import get_regressionResult
-from util.util import buy_pattern_from_history, buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final, buy_high_indicators, buy_pattern
-from util.util import sell_pattern_from_history, sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final, sell_high_indicators, sell_pattern
-from util.util import buy_pattern_without_mlalgo, sell_pattern_without_mlalgo, buy_oi, sell_oi, all_withoutml
-from util.util import buy_oi_candidate, sell_oi_candidate
-from util.util import soft
-    
-from technical import ta_lib_data  
+from util.util import getScore, all_day_pct_change_negative, all_day_pct_change_positive, historical_data
+from util.util import soft  
 
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import BaggingRegressor
@@ -49,15 +41,15 @@ connection = MongoClient('localhost', 27017)
 db = connection.histnse
 
 forecast_out = 1
-split = .99
+split = .98
 randomForest = False
-mlp = True
+mlp = False
 bagging = False
 adaBoost = False
-kNeighbours = True
+kNeighbours = False
 gradientBoosting = False
 
-def get_data_frame(df, regressor="None"):
+def get_data_frame(df, regressor="None", type="reg"):
     if (df is not None):
         #dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
         dfp = df[['PCT_day_change']]
@@ -79,9 +71,10 @@ def get_data_frame(df, regressor="None"):
         for dele in range(1, 16):
             addFeaturesLowChange(df, dfp, low, dele) 
         
-        if regressor != 'mlp':
-            dfp['EMA9'] = df['EMA9']
-            dfp['EMA21'] = df['EMA21']
+        if type == "reg":
+            if regressor != 'mlp':
+                dfp['EMA9'] = df['EMA9']
+                dfp['EMA21'] = df['EMA21']
 #         if regressor != 'mlp':      
 #             for dele in range(1, 2):  
 #                 addFeaturesEMA9Change(df, dfp, EMA9, dele)
@@ -93,7 +86,7 @@ def get_data_frame(df, regressor="None"):
 #         dfp['redtrend'] = df['redtrend']
         if soft == False:
             dfp['HH'] = df['HH']
-            dfp['LL'] = df['LL']   
+            dfp['LL'] = df['LL']  
        
         if regressor != 'mlp':      
             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
@@ -236,58 +229,38 @@ def get_data_frame(df, regressor="None"):
         dfp['label'] = dfp[forecast_col].shift(-forecast_out) 
         return dfp
 
-def create_csv(regression_data, regressionResult):
-    if (regression_data['buyIndia'] != ''):
-        regression_data['filter'] = 'Other,'
-    buyIndiaAvg, result = buy_pattern_from_history(regression_data, regressionResult, None)
-    if buy_all_rule(regression_data, regressionResult, buyIndiaAvg, None):
-        RbuyYearHigh = buy_year_high(regression_data, regressionResult, None)
-        RbuyYearLow = buy_year_low(regression_data, regressionResult, None, None)
-        RbuyUpTrend = buy_up_trend(regression_data, regressionResult, None)
-        RbuyDownTrend = buy_down_trend(regression_data, regressionResult, None)
-        RbuyFinal = buy_final(regression_data, regressionResult, None, None)
-        RbuyHighIndicators = buy_high_indicators(regression_data, regressionResult, None)
-        RbuyPattern = buy_pattern(regression_data, regressionResult, None, None)
-        if RbuyYearHigh:
-            db.RbuyYearHigh.insert_one(json.loads(json.dumps(regression_data)))
-        if RbuyYearLow:
-            db.RbuyYearLow.insert_one(json.loads(json.dumps(regression_data)))
-        if RbuyUpTrend:
-            db.RbuyUpTrend.insert_one(json.loads(json.dumps(regression_data)))
-        if RbuyDownTrend:
-            db.RbuyDownTrend.insert_one(json.loads(json.dumps(regression_data))) 
-        if RbuyFinal:    
-            db.RbuyFinal.insert_one(json.loads(json.dumps(regression_data)))
-        if RbuyHighIndicators:
-            db.RbuyHighIndicators.insert_one(json.loads(json.dumps(regression_data)))      
-        
-        if regression_data['filter'] == 'Other,':
-            db.RbuyOthers.insert_one(json.loads(json.dumps(regression_data)))
-        db.RbuyAlgo.insert_one(json.loads(json.dumps(regression_data)))
-            
-def create_csv_non_ml(regression_data, regressionResult):
-    RbuyOICandidate = buy_oi_candidate(regression_data, regressionResult, None)
-    if RbuyOICandidate:
-        db.RbuyOICandidate.insert_one(json.loads(json.dumps(regression_data)))
-       
-def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLowChange, directory):
-    if 'P@[' in str(sell):
-        return
+def process_regression_high(scrip, df, directory):
     dfp = get_data_frame(df)
     
     regression_data = {}
     if kNeighbours:
-        result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1))
-        regression_data['kNeighboursValue'] = float(result[0])
+        result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1, weights='distance'))
+        regression_data['kNeighboursValue_reg'] = float(result[0])
     else:
-        regression_data['kNeighboursValue'] = float(0)
+        regression_data['kNeighboursValue_reg'] = float(0)
             
     if mlp:
-        dfp_mlp = get_data_frame(df, 'mlp')
-        result = performRegression(dfp_mlp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
-        regression_data['mlpValue'] = float(result[0])
+        dfp = get_data_frame(df, 'mlp')
+        result = performRegression(dfp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
+        regression_data['mlpValue_reg'] = float(result[0])
     else:
-        regression_data['mlpValue'] = float(0)
+        regression_data['mlpValue_reg'] = float(0)
+        
+    if kNeighbours:
+        dfp = get_data_frame(df, None, 'classification')
+        result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1, n_neighbors=3, weights='distance'))
+        #result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(random_state=1, n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1))
+        #result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.RadiusNeighborsClassifier(radius=1.0))
+        regression_data['kNeighboursValue_cla'] = float(result[0])
+    else:
+        regression_data['kNeighboursValue_cla'] = float(0)
+            
+    if mlp:
+        dfp = get_data_frame(df, 'mlp', 'classification')
+        result = performClassification(dfp, split, scrip, directory, forecast_out, MLPClassifier(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25)))
+        regression_data['mlpValue_cla'] = float(result[0])
+    else:
+        regression_data['mlpValue_cla'] = float(0)
     
     forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'High_change1'].values[0]
     forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'High_change2'].values[0]
@@ -308,11 +281,15 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     PCT_day_change_pre3 = df.tail(4).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_day_change_pre4 = df.tail(5).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_day_change_pre5 = df.tail(6).loc[-forecast_out:,'PCT_day_change'].values[0]
+    PCT_day_change_pre6 = df.tail(7).loc[-forecast_out:,'PCT_day_change'].values[0]
+    PCT_day_change_pre7 = df.tail(8).loc[-forecast_out:,'PCT_day_change'].values[0]
+    PCT_day_change_pre8 = df.tail(9).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_change = df.tail(1).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_day_change = df.tail(1).loc[-forecast_out:,'PCT_day_change'].values[0]
     PCT_day_OL = df.tail(1).loc[-forecast_out:, 'PCT_day_OL'].values[0]
     PCT_day_HO = df.tail(1).loc[-forecast_out:, 'PCT_day_HO'].values[0]
     PCT_day_CH = df.tail(1).loc[-forecast_out:, 'PCT_day_CH'].values[0]
+    PCT_day_LC = df.tail(1).loc[-forecast_out:, 'PCT_day_LC'].values[0]
     Act_PCT_change = df.tail(1).loc[-forecast_out:,'Act_PCT_change'].values[0]
     Act_PCT_day_change = df.tail(1).loc[-forecast_out:,'Act_PCT_day_change'].values[0]
     Act_PCT_day_OL = df.tail(1).loc[-forecast_out:, 'Act_PCT_day_OL'].values[0]
@@ -325,35 +302,68 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     volume_pre2 = df.tail(3).loc[-forecast_out:, 'volume'].values[0]
     volume_pre3 = df.tail(4).loc[-forecast_out:, 'volume'].values[0]
     open = df.tail(1).loc[-forecast_out:, 'open'].values[0]
+    open_pre1 = df.tail(2).loc[-forecast_out:, 'open'].values[0]
+    open_pre2 = df.tail(3).loc[-forecast_out:, 'open'].values[0]
     high = df.tail(1).loc[-forecast_out:, 'high'].values[0]
+    high_pre1 = df.tail(2).loc[-forecast_out:, 'high'].values[0]
+    high_pre2 = df.tail(3).loc[-forecast_out:, 'high'].values[0]
     low = df.tail(1).loc[-forecast_out:, 'low'].values[0]
-    bar_high = df.tail(1).loc[-forecast_out:, 'bar_high'].values[0]
-    bar_low = df.tail(1).loc[-forecast_out:, 'bar_low'].values[0]
-    bar_high_pre = df.tail(1).loc[-forecast_out:, 'bar_high_pre'].values[0]
-    bar_low_pre = df.tail(1).loc[-forecast_out:, 'bar_low_pre'].values[0]
+    low_pre1 = df.tail(2).loc[-forecast_out:, 'low'].values[0]
+    low_pre2 = df.tail(3).loc[-forecast_out:, 'low'].values[0]
     close = df.tail(1).loc[-forecast_out:, 'close'].values[0]
+    close_pre1 = df.tail(2).loc[-forecast_out:, 'close'].values[0]
+    close_pre2 = df.tail(3).loc[-forecast_out:, 'close'].values[0]
+    bar_high = df.tail(1).loc[-forecast_out:, 'bar_high'].values[0]
+    bar_high_pre1 = df.tail(2).loc[-forecast_out:, 'bar_high'].values[0]
+    bar_high_pre2 = df.tail(3).loc[-forecast_out:, 'bar_high'].values[0]
+    bar_low = df.tail(1).loc[-forecast_out:, 'bar_low'].values[0]
+    bar_low_pre1 = df.tail(2).loc[-forecast_out:, 'bar_low'].values[0]
+    bar_low_pre2 = df.tail(3).loc[-forecast_out:, 'bar_low'].values[0]
     greentrend = df.tail(1).loc[-forecast_out:, 'greentrend'].values[0]
     redtrend = df.tail(1).loc[-forecast_out:, 'redtrend'].values[0]
     
-    today_date = datetime.datetime.strptime(forecast_day_date, '%Y-%m-%d').date()
-    start_date = (today_date - datetime.timedelta(weeks=52)).strftime('%Y-%m-%d')
-    df = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
-    yearHigh = df['high'].max()
-    yearLow = df['low'].min()
+    end_date = forecast_day_date
+    start_date = (datetime.date.today() - datetime.timedelta(weeks=52)).strftime('%Y-%m-%d')
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
+    yearHigh = dftemp['high'].max()
+    yearLow = dftemp['low'].min()
     yearHighChange = (close - yearHigh)*100/yearHigh
     yearLowChange = (close - yearLow)*100/yearLow
     
     start_date = (datetime.date.today() - datetime.timedelta(weeks=104)).strftime('%Y-%m-%d')
-    df = df[(df['date'] >= start_date) & (df['date'] <= forecast_day_date)]
-    yearHigh = df['high'].max()
-    yearLow = df['low'].min()
-    yearHigh2Change = (close - yearHigh)*100/yearHigh
-    yearLow2Change = (close - yearLow)*100/yearLow
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
+    year2High = dftemp['high'].max()
+    year2Low = dftemp['low'].min()
+    year2HighChange = (close - year2High)*100/year2High
+    year2LowChange = (close - year2Low)*100/year2Low
     
+    start_date = (datetime.date.today() - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
+    weekHigh = dftemp['high'].max()
+    weekLow = dftemp['low'].min()
+    weekHighChange = (close - weekHigh)*100/weekHigh
+    weekLowChange = (close - weekLow)*100/weekLow
+    
+    end_date = (datetime.date.today() - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
+    start_date = (datetime.date.today() - datetime.timedelta(weeks=26)).strftime('%Y-%m-%d')
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
+    month6High = dftemp['high'].max()
+    month6Low = dftemp['low'].min()
+    month6HighChange = (close - month6High)*100/close
+    month6LowChange = (close - month6Low)*100/close
+    
+    start_date = (datetime.date.today() - datetime.timedelta(weeks=13)).strftime('%Y-%m-%d')
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
+    month3High = dftemp['high'].max()
+    month3Low = dftemp['low'].min()
+    month3HighChange = (close - month3High)*100/close
+    month3LowChange = (close - month3Low)*100/close
+    
+    technical = db.technical.find_one({'dataset_code':scrip})
     regression_data['date'] = forecast_day_date
     regression_data['scrip'] = str(scrip)
-    regression_data['buyIndia'] = str(buy)
-    regression_data['sellIndia'] = str(sell)
+    regression_data['buyIndia'] = str(technical['BuyIndicators'])
+    regression_data['sellIndia'] = str(technical['SellIndicators'])
     regression_data['forecast_day_VOL_change'] = float(forecast_day_VOL_change)
     regression_data['forecast_day_PCT_change'] = float(forecast_day_PCT_change)
     regression_data['forecast_day_PCT2_change'] = float(forecast_day_PCT2_change)
@@ -365,11 +375,27 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     regression_data['score'] = score
     #regression_data['mlpValue'] = mlpValue
     #regression_data['kNeighboursValue'] = kNeighboursValue
-    regression_data['trend'] = trend 
+    regression_data['trend'] = technical['trend']
+    regression_data['year2HighChange'] = float(year2HighChange) 
+    regression_data['year2LowChange'] = float(year2LowChange)
     regression_data['yearHighChange'] = float(yearHighChange) 
     regression_data['yearLowChange'] = float(yearLowChange)
-    regression_data['yearHigh2Change'] = float(yearHigh2Change) 
-    regression_data['yearLow2Change'] = float(yearLow2Change)
+    regression_data['month6HighChange'] = float(month6HighChange) 
+    regression_data['month6LowChange'] = float(month6LowChange)
+    regression_data['month3HighChange'] = float(month3HighChange) 
+    regression_data['month3LowChange'] = float(month3LowChange)
+    regression_data['weekHighChange'] = float(weekHighChange) 
+    regression_data['weekLowChange'] = float(weekLowChange)
+    regression_data['year2High'] = float(year2High) 
+    regression_data['year2Low'] = float(year2Low)
+    regression_data['yearHigh'] = float(yearHigh) 
+    regression_data['yearLow'] = float(yearLow)
+    regression_data['month6High'] = float(month6High) 
+    regression_data['month6Low'] = float(month6Low)
+    regression_data['month3High'] = float(month3High) 
+    regression_data['month3Low'] = float(month3Low)
+    regression_data['weekHigh'] = float(weekHigh) 
+    regression_data['weekLow'] = float(weekLow)
     regression_data['patterns'] = ''
     regression_data['PCT_change_pre1'] = float(PCT_change_pre1)
     regression_data['PCT_change_pre2'] = float(PCT_change_pre2)
@@ -381,11 +407,15 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     regression_data['PCT_day_change_pre3'] = float(PCT_day_change_pre3)
     regression_data['PCT_day_change_pre4'] = float(PCT_day_change_pre4)
     regression_data['PCT_day_change_pre5'] = float(PCT_day_change_pre5)
+    regression_data['PCT_day_change_pre6'] = float(PCT_day_change_pre6)
+    regression_data['PCT_day_change_pre7'] = float(PCT_day_change_pre7)
+    regression_data['PCT_day_change_pre8'] = float(PCT_day_change_pre8)
     regression_data['PCT_change'] = float(PCT_change)
     regression_data['PCT_day_change'] = float(PCT_day_change)
     regression_data['PCT_day_OL'] = float(PCT_day_OL)
     regression_data['PCT_day_HO'] = float(PCT_day_HO)
     regression_data['PCT_day_CH'] = float(PCT_day_CH)
+    regression_data['PCT_day_LC'] = float(PCT_day_LC)
     regression_data['Act_PCT_change'] = float(Act_PCT_change)
     regression_data['Act_PCT_day_change'] = float(Act_PCT_day_change)
     regression_data['Act_PCT_day_OL'] = float(Act_PCT_day_OL)
@@ -397,19 +427,35 @@ def process_regression_high(scrip, df, buy, sell, trend, yearHighChange, yearLow
     regression_data['volume_pre2'] = float(volume_pre2)
     regression_data['volume_pre3'] = float(volume_pre3)
     regression_data['open'] = float(open)
+    regression_data['open_pre1'] = float(open_pre1)
+    regression_data['open_pre2'] = float(open_pre2)
     regression_data['high'] = float(high)
+    regression_data['high_pre1'] = float(high_pre1)
+    regression_data['high_pre2'] = float(high_pre2)
     regression_data['low'] = float(low)
-    regression_data['bar_high'] = float(bar_high)
-    regression_data['bar_low'] = float(bar_low)
-    regression_data['bar_high_pre'] = float(bar_high_pre)
-    regression_data['bar_low_pre'] = float(bar_low_pre)
+    regression_data['low_pre1'] = float(low_pre1)
+    regression_data['low_pre2'] = float(low_pre2)
     regression_data['close'] = float(close)
+    regression_data['close_pre1'] = float(close_pre1)
+    regression_data['close_pre2'] = float(close_pre2)
+    regression_data['bar_high'] = float(bar_high)
+    regression_data['bar_high_pre1'] = float(bar_high_pre1)
+    regression_data['bar_high_pre2'] = float(bar_high_pre2)
+    regression_data['bar_low'] = float(bar_low)
+    regression_data['bar_low_pre1'] = float(bar_low_pre1)
+    regression_data['bar_low_pre2'] = float(bar_low_pre2)
     regression_data['greentrend'] = float(greentrend)
     regression_data['redtrend'] = float(redtrend)
+    regression_data['SMA9'] = (float(close)-technical['overlap_studies']['SMA9'][0])*100/technical['overlap_studies']['SMA9'][0]
+    regression_data['SMA25'] = (float(close)-technical['overlap_studies']['SMA25'][0])*100/technical['overlap_studies']['SMA25'][0]
+    regression_data['SMA50'] = (float(close)-technical['overlap_studies']['SMA50'][0])*100/technical['overlap_studies']['SMA50'][0]
+    regression_data['SMA100'] = (float(close)-technical['overlap_studies']['SMA100'][0])*100/technical['overlap_studies']['SMA100'][0]
+    regression_data['SMA200'] = (float(close)-technical['overlap_studies']['SMA200'][0])*100/technical['overlap_studies']['SMA200'][0]
+    regression_data['mlpValue_reg_other'] = 0
+    regression_data['kNeighboursValue_reg_other'] = 0
+    regression_data['mlpValue_cla_other'] = 0
+    regression_data['kNeighboursValue_cla_other'] = 0
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
-    regressionResult = get_regressionResult(regression_data, regression_data['scrip'], None, 0, 0)
-    create_csv(regression_data, regressionResult)
-    create_csv_non_ml(regression_data, regressionResult) 
-    
-                                                          
+    #create_csv(regression_data)
+    return regression_data
