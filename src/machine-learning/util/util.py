@@ -632,8 +632,6 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regression_data['filter3'] = " "
     regression_data['filter4'] = " "
     regression_data['series_trend'] = "NA"
-    regression_data['highTail'] = high_tail_pct(regression_data)
-    regression_data['lowTail'] = low_tail_pct(regression_data)
     if pct_change_negative_trend(regression_data):
         regression_data['series_trend'] = "downTrend"
     if pct_change_positive_trend(regression_data):
@@ -1976,7 +1974,7 @@ def buy_final_candidate(regression_data, regressionResult, reg, ws_buyFinal):
             )
        and regression_data['yearLowChange'] > 5 and regression_data['yearHighChange'] < -5
        and high_tail_pct(regression_data) < 1
-       and regression_data['SMA50'] > 0
+       and regression_data['SMA25'] > 0
     ):
        if(regression_data['forecast_day_PCT_change'] > 0
           and regression_data['bar_high'] > regression_data['bar_high_pre1']
@@ -2231,8 +2229,11 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
             and (low_tail_pct(regression_data) - high_tail_pct(regression_data)) >= 0.6
             #and (regression_data['score'] == '10')
             and (regression_data['PCT_day_change_pre1'] > 1)
-            ): 
-            add_in_csv(regression_data, regressionResult, ws, '##ALL:MayBuyCheckChart-AroundLastClose') 
+            ):
+            if(('P@' or 'M@') not in regression_data['sellIndia']):
+                add_in_csv(regression_data, regressionResult, ws, '##ALL:MayBuyCheckChart-AroundLastClose')
+            else:
+                add_in_csv(regression_data, regressionResult, ws, '##ALL(Risky):MayBuyCheckChart-AroundLastClose')
         elif((((mlpValue > 0) and (kNeighboursValue > 0) and ((mlpValue_other > 0) or (kNeighboursValue_other > 0)))
                  or ((mlpValue_other > 0) and (kNeighboursValue_other > 0) and ((mlpValue > 0) or (kNeighboursValue > 0))))
             and (-2.5 < regression_data['PCT_day_change'] <= -0.5)
@@ -3743,7 +3744,7 @@ def sell_final_candidate(regression_data, regressionResult, reg, ws_sellFinal):
                 )
              )
         and low_tail_pct(regression_data) < 1
-        and regression_data['SMA50'] > 0
+        and regression_data['SMA25'] > 0
         ):  
         if(regression_data['forecast_day_PCT_change'] < 0
             and regression_data['bar_low'] < regression_data['bar_low_pre1']
@@ -3998,7 +3999,11 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
             and (high_tail_pct(regression_data) - low_tail_pct(regression_data)) > 0.6
             and regression_data['PCT_day_change_pre1'] < -1
             ): 
-            add_in_csv(regression_data, regressionResult, ws, '##ALL:MaySellCheckChart-AroundLastClose')
+            if(regression_data['forecast_day_PCT4_change'] < -2):
+                add_in_csv(regression_data, regressionResult, ws, '##ALL:MaySellCheckChart-AroundLastClose')
+            else:
+                add_in_csv(regression_data, regressionResult, ws, '##ALL(Risky):MaySellCheckChart-AroundLastClose')
+            
         elif((((mlpValue < 0) and (kNeighboursValue < 0) and ((mlpValue_other < 0) or (kNeighboursValue_other < 0)))
                 or ((mlpValue_other < 0) and (kNeighboursValue_other < 0) and ((mlpValue < 0) or (kNeighboursValue < 0))))
             and (0.5 <= regression_data['PCT_day_change'] < 2.5)
@@ -4078,7 +4083,7 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
             and all_day_pct_change_positive_except_today(regression_data) == False
             ):
             add_in_csv(regression_data, regressionResult, ws, '##ALL:sellDowningMA-downTrend')
-        elif(regression_data['SMA100'] < regression_data['SMA50'] < regression_data['SMA25']
+        elif(regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50'] < regression_data['SMA25'] < regression_data['SMA9']
             and regression_data['series_trend'] != "upTrend"
             and all_day_pct_change_positive_except_today(regression_data) == False
             ):

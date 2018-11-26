@@ -332,37 +332,38 @@ def process_regression_high(scrip, df, directory):
     greentrend = df.tail(1).loc[-forecast_out:, 'greentrend'].values[0]
     redtrend = df.tail(1).loc[-forecast_out:, 'redtrend'].values[0]
     
+    today_date = datetime.datetime.strptime(forecast_day_date, "%Y-%m-%d").date()
     end_date = forecast_day_date
-    start_date = (datetime.date.today() - datetime.timedelta(weeks=52)).strftime('%Y-%m-%d')
+    start_date = (today_date - datetime.timedelta(weeks=52)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     yearHigh = dftemp['high'].max()
     yearLow = dftemp['low'].min()
     yearHighChange = (close - yearHigh)*100/yearHigh
     yearLowChange = (close - yearLow)*100/yearLow
     
-    start_date = (datetime.date.today() - datetime.timedelta(weeks=104)).strftime('%Y-%m-%d')
+    start_date = (today_date - datetime.timedelta(weeks=104)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     year2High = dftemp['high'].max()
     year2Low = dftemp['low'].min()
     year2HighChange = (close - year2High)*100/year2High
     year2LowChange = (close - year2Low)*100/year2Low
     
-    start_date = (datetime.date.today() - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
+    start_date = (today_date - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     weekHigh = dftemp['high'].max()
     weekLow = dftemp['low'].min()
     weekHighChange = (close - weekHigh)*100/weekHigh
     weekLowChange = (close - weekLow)*100/weekLow
     
-    end_date = (datetime.date.today() - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
-    start_date = (datetime.date.today() - datetime.timedelta(weeks=26)).strftime('%Y-%m-%d')
+    end_date = (today_date - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
+    start_date = (today_date - datetime.timedelta(weeks=26)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     month6High = dftemp['high'].max()
     month6Low = dftemp['low'].min()
     month6HighChange = (close - month6High)*100/close
     month6LowChange = (close - month6Low)*100/close
     
-    start_date = (datetime.date.today() - datetime.timedelta(weeks=13)).strftime('%Y-%m-%d')
+    start_date = (today_date - datetime.timedelta(weeks=13)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     month3High = dftemp['high'].max()
     month3Low = dftemp['low'].min()
@@ -465,6 +466,30 @@ def process_regression_high(scrip, df, directory):
     regression_data['kNeighboursValue_reg_other'] = 0
     regression_data['mlpValue_cla_other'] = 0
     regression_data['kNeighboursValue_cla_other'] = 0
+    regression_data['highTail'] = 0
+    regression_data['lowTail'] = 0
+    if(regression_data['high'] - regression_data['bar_high'] == 0):
+        regression_data['highTail'] = 0
+    else:
+        regression_data['highTail'] = (((regression_data['high'] - regression_data['bar_high'])/regression_data['bar_high'])*100)
+    
+    if((regression_data['bar_low'] - regression_data['low']) == 0):
+        regression_data['lowTail'] = 0
+    else:
+        regression_data['lowTail'] = (((regression_data['bar_low'] - regression_data['low'])/regression_data['bar_low'])*100)
+        
+    regression_data['highTail_pre1'] = 0
+    regression_data['lowTail_pre1'] = 0
+    if(regression_data['high_pre1'] - regression_data['bar_high_pre1'] == 0):
+        regression_data['highTail_pre1'] = 0
+    else:
+        regression_data['highTail_pre1'] = (((regression_data['high_pre1'] - regression_data['bar_high_pre1'])/regression_data['bar_high_pre1'])*100)
+    
+    if((regression_data['bar_low_pre1'] - regression_data['low_pre1']) == 0):
+        regression_data['lowTail_pre1'] = 0
+    else:
+        regression_data['lowTail_pre1'] = (((regression_data['bar_low_pre1'] - regression_data['low_pre1'])/regression_data['bar_low_pre1'])*100)
+
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     create_csv(regression_data)
