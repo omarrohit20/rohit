@@ -98,7 +98,7 @@ def regression_ta_data(scrip):
     df['EMA200'] = EMA(df,200)
     
     df.dropna(subset=['Act_PCT_change'], inplace = True)
-    size = int(int(np.floor(df.shape[0]))/4)
+    size = int(int(np.floor(df.shape[0]))/3)
     for x in range(size):
         db.technical.delete_many({'dataset_code':scrip})
         ta_lib_data_df(scrip, df, True) 
@@ -127,5 +127,5 @@ def calculateParallel(threads=1):
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(3)
+    calculateParallel(4)
     connection.close()

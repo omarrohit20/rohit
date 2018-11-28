@@ -213,8 +213,8 @@ def calculateParallel(threads=2, futures=None):
         scrips.append(data['scrip'].replace('&','').replace('-','_'))
     scrips.sort()
     pool.map(result_data, scrips)
-    pool.map(result_data_reg, scrips)
     pool.map(result_data_cla, scrips)
+    pool.map(result_data_reg, scrips)
                       
 if __name__ == "__main__":
     if not os.path.exists(directory):
