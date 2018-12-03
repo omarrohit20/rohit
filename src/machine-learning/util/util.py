@@ -2144,6 +2144,9 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
                 and (1.5 < regression_data['PCT_day_change'] < 6)
                 and regression_data['close'] > regression_data['bar_high_pre1']
                 )
+            and regression_data['SMA4_2daysBack'] > -1
+            and regression_data['SMA4'] > -1
+            and regression_data['SMA9'] > -10
             ):
             if(('year2LowReversal(Confirm)' in regression_data['filter3']) and (regression_data['year2HighChange'] < -40)):
                 add_in_csv(regression_data, regressionResult, ws, '##UPTREND:buyYear2LowReversal(Confirm)')
@@ -2191,10 +2194,13 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
             and regression_data['series_trend'] == "upTrend"
             ):
             if(((-3 < regression_data['PCT_change'] < 0) and (-3 < regression_data['PCT_day_change'] < 0))
+                and regression_data['SMA4'] > 0.5
+                and regression_data['SMA25'] > -10
+                and ('P@' or 'M@') not in regression_data['sellIndia']
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '##ALL:(Test)buyBottomReversal-0')
-            elif(regression_data['PCT_day_change_pre2'] < 0 and (regression_data['PCT_day_change'] > 1.5)):
-                add_in_csv(regression_data, regressionResult, ws, '##ALL:(Test)buyBottomReversal-1')
+#             elif(regression_data['PCT_day_change_pre2'] < 0 and (regression_data['PCT_day_change'] > 1.5)):
+#                 add_in_csv(regression_data, regressionResult, ws, '##ALL:(Test)buyBottomReversal-1')
         
         if(regression_data['series_trend'] == "upTrend"
             and (0 < regression_data['forecast_day_PCT4_change'] < 15)
