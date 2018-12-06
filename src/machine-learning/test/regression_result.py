@@ -41,6 +41,7 @@ logname = '../../output/final' + '/all-result' + time.strftime("%d%m%y-%H%M%S")
       
 def result_data(regression_high, regression_low, scrip):
     regression_data = regression_high
+    buyIndiaAvgReg, result = buy_pattern_from_history(regression_data, None)
     regressionResult = get_regressionResult(regression_data, scrip, db, 
                                             regression_low['mlpValue_reg'], 
                                             regression_low['kNeighboursValue_reg'],
@@ -52,7 +53,6 @@ def result_data(regression_high, regression_low, scrip):
     if(cl_oi and re_oi):
         all_withoutml(regression_data, regressionResult, None)   
     
-    buyIndiaAvgReg, result = buy_pattern_from_history(regression_data, regressionResult, None)
     if (buy_all_rule(regression_data, regressionResult, buyIndiaAvgReg, None)
         and buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvgReg, None)
         ):
@@ -67,6 +67,7 @@ def result_data(regression_high, regression_low, scrip):
             #print('')
     
     regression_data = regression_low
+    sellIndiaAvgReg, result = sell_pattern_from_history(regression_data, None)
     regressionResult = get_regressionResult(regression_data, scrip, db, 
                                             regression_high['mlpValue_reg'], 
                                             regression_high['kNeighboursValue_reg'],
@@ -78,7 +79,6 @@ def result_data(regression_high, regression_low, scrip):
     if(cl_oi and re_oi):
         all_withoutml(regression_data, regressionResult, None)
      
-    sellIndiaAvgReg, result = sell_pattern_from_history(regression_data, regressionResult, None)
     if (sell_all_rule(regression_data, regressionResult, sellIndiaAvgReg, None)
         and sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvgReg, None)
         ):
@@ -95,6 +95,7 @@ def result_data(regression_high, regression_low, scrip):
 def result_data_reg(regression_high, regression_low, scrip):
     regression_data = regression_high
     if(regression_data is not None):
+        buyIndiaAvg, result = buy_pattern_from_history(regression_data, None)
         regressionResult = get_regressionResult(regression_data, scrip, db, 
                                             regression_low['mlpValue_reg'], 
                                             regression_low['kNeighboursValue_reg'],
@@ -107,7 +108,6 @@ def result_data_reg(regression_high, regression_low, scrip):
             all_withoutml(regression_data, regressionResult, None)
             if(len(regression_high['filter']) > 3):
                 db.ws_buyOIReg.insert_one(json.loads(json.dumps(regression_high))) 
-        buyIndiaAvg, result = buy_pattern_from_history(regression_data, regressionResult, None)
         if buy_all_rule(regression_data, regressionResult, buyIndiaAvg, None):
             buy_year_high(regression_data, regressionResult, True, None)
             buy_year_low(regression_data, regressionResult, True, None, None)
@@ -125,6 +125,7 @@ def result_data_reg(regression_high, regression_low, scrip):
                 
     regression_data = regression_low
     if(regression_data is not None):
+        sellIndiaAvg, result = sell_pattern_from_history(regression_data, None)
         regressionResult = get_regressionResult(regression_data, scrip, db, 
                                             regression_high['mlpValue_reg'], 
                                             regression_high['kNeighboursValue_reg'],
@@ -137,7 +138,6 @@ def result_data_reg(regression_high, regression_low, scrip):
             all_withoutml(regression_data, regressionResult, None)
             if(len(regression_low['filter']) > 3):
                 db.ws_sellOIReg.insert_one(json.loads(json.dumps(regression_low))) 
-        sellIndiaAvg, result = sell_pattern_from_history(regression_data, regressionResult, None)
         if sell_all_rule(regression_data, regressionResult, sellIndiaAvg, None):
             sell_year_high(regression_data, regressionResult, True, None, None)
             sell_year_low(regression_data, regressionResult, True, None)
@@ -156,6 +156,7 @@ def result_data_reg(regression_high, regression_low, scrip):
 def result_data_cla(regression_high, regression_low, scrip):
     regression_data = regression_high
     if(regression_data is not None):
+        buyIndiaAvg, result = buy_pattern_from_history(regression_data, None)
         regressionResult = get_regressionResult(regression_data, scrip, db, 
                                             regression_low['mlpValue_reg'], 
                                             regression_low['kNeighboursValue_reg'],
@@ -166,7 +167,6 @@ def result_data_cla(regression_high, regression_low, scrip):
         oi = buy_oi_candidate(regression_data, regressionResult, False, None)
         if oi:
             all_withoutml(regression_data, regressionResult, None)
-        buyIndiaAvg, result = buy_pattern_from_history(regression_data, regressionResult, None)
         if buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, None):
             buy_year_high(regression_data, regressionResult, False, None)
             buy_year_low(regression_data, regressionResult, False, None, None)
@@ -182,6 +182,7 @@ def result_data_cla(regression_high, regression_low, scrip):
                 
     regression_data = regression_low
     if(regression_data is not None):
+        sellIndiaAvg, result = sell_pattern_from_history(regression_data, None)
         regressionResult = get_regressionResult(regression_data, scrip, db, 
                                             regression_high['mlpValue_reg'], 
                                             regression_high['kNeighboursValue_reg'],
@@ -192,7 +193,6 @@ def result_data_cla(regression_high, regression_low, scrip):
         oi = sell_oi_candidate(regression_data, regressionResult, False, None)
         if oi:
             all_withoutml(regression_data, regressionResult, None) 
-        sellIndiaAvg, result = sell_pattern_from_history(regression_data, regressionResult, None)
         if sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, None):
             sell_year_high(regression_data, regressionResult, False, None, None)
             sell_year_low(regression_data, regressionResult, False, None)
