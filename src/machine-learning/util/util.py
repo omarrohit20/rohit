@@ -1831,7 +1831,7 @@ def buy_trend_reversal(regression_data, regressionResult, reg, ws):
            if(3 < regression_data['PCT_day_change'] < 5 and 3 < regression_data['PCT_change'] < 5):
                add_in_csv(regression_data, regressionResult, ws, '##finalSellContinue-test')
                return True
-    if((-2.5 < regression_data['PCT_day_change'] <= -0.75)
+    if((-2.5 < regression_data['PCT_day_change'] <= -1)
         and (regression_data['PCT_change'] <= -0.75)
         and high_tail_pct(regression_data) < 1
         and 3 > low_tail_pct(regression_data) > 2
@@ -1851,7 +1851,7 @@ def buy_trend_reversal(regression_data, regressionResult, reg, ws):
         and ('Reversal' not in regression_data['filter3'])
         and high_tail_pct(regression_data) < 0.5
         and mlpValue > 0 and kNeighboursValue > 0
-        and ((((-2 <= regression_data['PCT_day_change'] < -0.75) and (-2 <= regression_data['PCT_change'] < 0))
+        and ((((-2 <= regression_data['PCT_day_change'] < -1) and (-2 <= regression_data['PCT_change'] < 0))
                 and 3 > low_tail_pct(regression_data) > 1.8
                 )
              or
@@ -3748,7 +3748,7 @@ def sell_trend_reversal(regression_data, regressionResult, reg, ws):
                 add_in_csv(regression_data, regressionResult, ws, '##finalBuyContinue-test')
                 return True 
     
-    if((0.75 < regression_data['PCT_day_change'] < 3) 
+    if((1 < regression_data['PCT_day_change'] < 3) 
         and (0.75 < regression_data['PCT_change'] < 3)
         and -75 < regression_data['year2HighChange'] < -25
         and low_tail_pct(regression_data) < 1
@@ -3769,7 +3769,7 @@ def sell_trend_reversal(regression_data, regressionResult, reg, ws):
         and ('Reversal' not in regression_data['filter3'])
         and low_tail_pct(regression_data) < 0.5
         and mlpValue < 0 and kNeighboursValue < 0
-        and ((((0.75 < regression_data['PCT_day_change'] <= 2) and (0 < regression_data['PCT_change'] <= 2))
+        and ((((1 < regression_data['PCT_day_change'] <= 2) and (0 < regression_data['PCT_change'] <= 2))
                 and 3 > high_tail_pct(regression_data) > 1.8
                 )
              or
