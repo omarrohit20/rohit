@@ -2316,7 +2316,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
             or ('month3HighReversal(Confirm)' in regression_data['filter3'])
             ):
             if(regression_data['month3LowChange'] > 15
-                and ((-2 < regression_data['PCT_change']) and (-2 < regression_data['PCT_day_change'] < 0))
+                and ((-2 < regression_data['PCT_change']) and (-2 < regression_data['PCT_day_change'] < -1))
                 and regression_data['close'] > regression_data['bar_low_pre1']
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '##(Check-chart-sell):month3High-InMinus')
@@ -2324,7 +2324,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
             or ('month6HighReversal(Confirm)' in regression_data['filter3'])
             ):
             if(regression_data['month6LowChange'] > 20
-                and ((-2 < regression_data['PCT_change']) and (-2 < regression_data['PCT_day_change'] < 0))
+                and ((-2 < regression_data['PCT_change']) and (-2 < regression_data['PCT_day_change'] < -1))
                 and regression_data['close'] > regression_data['bar_low_pre1']
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '##(Check-chart-sell):month6High-InMinus')
@@ -3683,6 +3683,7 @@ def sell_trend_reversal(regression_data, regressionResult, reg, ws):
     if((1 < regression_data['PCT_day_change'] < 3) 
         and (0.75 < regression_data['PCT_change'] < 3)
         and -75 < regression_data['year2HighChange'] < -25
+        and regression_data['year2LowChange'] > 10
         and low_tail_pct(regression_data) < 1
         and ('MaySellCheckChart' in regression_data['filter1']) 
         and ('Reversal' not in regression_data['filter3'])
@@ -3699,6 +3700,7 @@ def sell_trend_reversal(regression_data, regressionResult, reg, ws):
     
     if(('MaySellCheckChart' in regression_data['filter1'])
         and ('Reversal' not in regression_data['filter3'])
+        and regression_data['year2LowChange'] > 10
         and low_tail_pct(regression_data) < 0.5
         and mlpValue < 0 and kNeighboursValue < 0
         and ((((1 < regression_data['PCT_day_change'] <= 2) and (0 < regression_data['PCT_change'] <= 2))
@@ -3716,6 +3718,7 @@ def sell_trend_reversal(regression_data, regressionResult, reg, ws):
     if((regression_data['PCT_day_change'] > -2 and high_tail_pct(regression_data) > 4)
         #and regression_data['PCT_change'] >= 0
         and -75 < regression_data['year2HighChange'] < -25
+        and regression_data['year2LowChange'] > 10
         and low_tail_pct(regression_data) < 1
         and ('MaySellCheckChart' in regression_data['filter1']) 
         and ('Reversal' not in regression_data['filter3'])
@@ -4185,7 +4188,7 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
             or ('month3LowReversal(Confirm)' in regression_data['filter3'])
             ):
             if(regression_data['month3HighChange'] < -15
-                and ((regression_data['PCT_change'] < 2) and (0 < regression_data['PCT_day_change'] < 2))
+                and ((regression_data['PCT_change'] < 2) and (1 < regression_data['PCT_day_change'] < 2))
                 and regression_data['close'] < regression_data['bar_high_pre1']
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '##(Check-chart-buy):month3Low-InPlus')
@@ -4193,7 +4196,7 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
             or ('month6LowReversal(Confirm)' in regression_data['filter3'])
             ):
             if(regression_data['month6LowChange'] < -20
-                and ((regression_data['PCT_change'] < 2) and (0 < regression_data['PCT_day_change'] < 2))
+                and ((regression_data['PCT_change'] < 2) and (1 < regression_data['PCT_day_change'] < 2))
                 and regression_data['close'] < regression_data['bar_high_pre1']
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '##(Check-chart-buy):month6Low-InPlus')        
