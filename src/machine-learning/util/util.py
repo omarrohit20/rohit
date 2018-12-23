@@ -2567,6 +2567,20 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
             and all_day_pct_change_negative_except_today(regression_data) != True
             ):
             add_in_csv(regression_data, regressionResult, ws, '$$(Study)$$:RisingMA-uptrend-1')
+            if(-3 < regression_data['PCT_change'] < -2):
+                add_in_csv(regression_data, regressionResult, ws, 'ALL(Test):RisingMA-uptrend')
+            if(-5 < regression_data['SMA25'] < 0):
+                add_in_csv(regression_data, regressionResult, ws, '##LONGTERM:NearSMA25')
+            elif(0 < regression_data['SMA25'] < 5):
+                add_in_csv(regression_data, regressionResult, ws, '##LONGTERM:CrossoverSMA25')
+            elif(-5 < regression_data['SMA50'] < 0):
+                add_in_csv(regression_data, regressionResult, ws, '##MEDIUMTERM:NearSMA50')
+            elif(0 < regression_data['SMA50'] < 5):
+                add_in_csv(regression_data, regressionResult, ws, '##MEDIUMTERM:CrossoverSMA50')
+            elif(-5 < regression_data['SMA100'] < 0):
+                add_in_csv(regression_data, regressionResult, ws, '##SHORTTERM:NearSMA100')
+            elif(0 < regression_data['SMA100'] < 5):
+                add_in_csv(regression_data, regressionResult, ws, '##SHORTTERM:CrossoverSMA100')
             
         if(0 < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change']
             and regression_data['forecast_day_PCT5_change'] > 5
@@ -2923,7 +2937,8 @@ def sell_down_trend(regression_data, regressionResult, reg, ws_sellDownTrend):
        and regression_data['forecast_day_PCT3_change'] < 0
        and (regression_data['PCT_day_change_pre1'] > 0 or regression_data['PCT_day_change_pre2'] > 0)
        ):
-        if(-4 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['forecast_day_PCT_change'] < -2
+        if(abs_yearHigh_less_than_yearLow(regression_data)
+           and -4 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['forecast_day_PCT_change'] < -2
            and regression_data['PCT_change'] < regression_data['PCT_day_change'] - 0.2
            and regression_data['forecast_day_PCT_change'] < regression_data['PCT_day_change'] - 0.2
            and regression_data['series_trend'] != 'upTrend'
@@ -2932,7 +2947,8 @@ def sell_down_trend(regression_data, regressionResult, reg, ws_sellDownTrend):
            ):
             add_in_csv(regression_data, regressionResult, None, 'sellDownTrend-0')
             return True
-        if(-4 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['forecast_day_PCT_change'] < -2
+        if(abs_yearHigh_less_than_yearLow(regression_data)
+           and -4 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['forecast_day_PCT_change'] < -2
            and regression_data['PCT_change'] < regression_data['PCT_day_change'] - 0.2
            and regression_data['forecast_day_PCT_change'] < regression_data['PCT_day_change'] - 0.2
            and regression_data['series_trend'] != 'upTrend'
@@ -2942,10 +2958,10 @@ def sell_down_trend(regression_data, regressionResult, reg, ws_sellDownTrend):
             add_in_csv(regression_data, regressionResult, None, 'sellDownTrend-00')
             return True
         if(abs_yearHigh_less_than_yearLow(regression_data)
-           and regression_data['yearHighChange'] < -10 
+           and regression_data['yearLowChange'] > 10 
            and -4 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['forecast_day_PCT_change'] < -2
-           and regression_data['PCT_day_change_pre1'] > 0
            and regression_data['forecast_day_PCT_change'] > regression_data['PCT_change']
+           and regression_data['PCT_day_change_pre1'] > 0
            and regression_data['series_trend'] != 'upTrend'
            and str(regression_data['score']) != '10'
            and regression_data['forecast_day_PCT5_change'] > -3
@@ -2954,7 +2970,7 @@ def sell_down_trend(regression_data, regressionResult, reg, ws_sellDownTrend):
             add_in_csv(regression_data, regressionResult, None, '##Test:longDownTrend-0-IndexNotDownLastDay(checkBase)')
             return True
         if(abs_yearHigh_less_than_yearLow(regression_data)
-           and regression_data['yearHighChange'] < -10 
+           and regression_data['yearLowChange'] > 10 
            and -4 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['forecast_day_PCT_change'] 
            and regression_data['forecast_day_PCT_change'] > regression_data['PCT_change']
            and regression_data['series_trend'] != 'upTrend'
@@ -4547,6 +4563,8 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
             and all_day_pct_change_positive_except_today(regression_data) == False
             ):
             add_in_csv(regression_data, regressionResult, ws, '$$(Study)$$:DowningMA-Downtrend-1')
+            if(1.5 < regression_data['PCT_change'] < 3):
+                add_in_csv(regression_data, regressionResult, ws, 'ALL(Test):DowningMA-Downtrend')
         
         if(0 > regression_data['forecast_day_PCT2_change'] > regression_data['forecast_day_PCT3_change'] > regression_data['forecast_day_PCT4_change'] > regression_data['forecast_day_PCT5_change']
             and regression_data['forecast_day_PCT5_change'] < -5
