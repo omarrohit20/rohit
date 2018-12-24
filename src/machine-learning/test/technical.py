@@ -17,7 +17,7 @@ logging.basicConfig(filename=logname, filemode='a', level=logging.INFO)
 log = logging.getLogger(__name__)
 
 connection = MongoClient('localhost',27017)
-db = connection.histnse
+db = connection.histnse1
 dbNsedata = connection.Nsedata
 # db.drop_collection('technical')
 # db.drop_collection('buy.overlap')

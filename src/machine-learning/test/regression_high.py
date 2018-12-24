@@ -38,7 +38,7 @@ from sklearn.svm import SVC, SVR
 from sklearn.grid_search import GridSearchCV
 
 connection = MongoClient('localhost', 27017)
-db = connection.histnse
+db = connection.histnse1
 
 forecast_out = 1
 split = .98

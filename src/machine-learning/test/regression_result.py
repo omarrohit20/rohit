@@ -31,7 +31,7 @@ from util.util import sell_oi_negative, sell_day_high, buy_oi_negative, buy_day_
 
 
 connection = MongoClient('localhost', 27017)
-db = connection.histnse
+db = connection.histnse1
 
 buyPatternsDict=scrip_patterns_to_dict('../../data-import/nselist/patterns-buy.csv')
 sellPatternsDict=scrip_patterns_to_dict('../../data-import/nselist/patterns-sell.csv')
@@ -143,7 +143,7 @@ def result_data_reg(regression_high, regression_low, scrip):
             sell_year_low(regression_data, regressionResult, True, None)
             sell_final(regression_data, regressionResult, True, None, None)
             sell_up_trend(regression_data, regressionResult, True, None)
-            #sell_down_trend(regression_data, regressionResult, None)
+            sell_down_trend(regression_data, regressionResult, True, None)
             sell_oi(regression_data, regressionResult, True, None)
             sell_high_indicators(regression_data, regressionResult, True, None)
             sell_pattern(regression_data, regressionResult, True, None, None)
@@ -198,7 +198,7 @@ def result_data_cla(regression_high, regression_low, scrip):
             sell_year_low(regression_data, regressionResult, False, None)
             sell_final(regression_data, regressionResult, False, None, None)
             sell_up_trend(regression_data, regressionResult, False, None)
-            #sell_down_trend(regression_data, regressionResult, None)
+            sell_down_trend(regression_data, regressionResult, False, None)
             sell_oi(regression_data, regressionResult, False, None)
             sell_high_indicators(regression_data, regressionResult, False, None)
             sell_pattern(regression_data, regressionResult, False, None, None)
