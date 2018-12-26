@@ -2568,7 +2568,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, '$$(Study)$$:RisingMA-uptrend-1')
             if(-3 < regression_data['PCT_change'] < -2):
-                add_in_csv(regression_data, regressionResult, ws, 'ALL(Test):RisingMA-uptrend')
+                add_in_csv(regression_data, regressionResult, ws, 'ALL(Test):buyRisingMA-uptrend')
             if(-5 < regression_data['SMA25'] < 0):
                 add_in_csv(regression_data, regressionResult, ws, '##LONGTERM:NearSMA25')
             elif(0 < regression_data['SMA25'] < 5):
@@ -2581,6 +2581,15 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
                 add_in_csv(regression_data, regressionResult, ws, '##SHORTTERM:NearSMA100')
             elif(0 < regression_data['SMA100'] < 5):
                 add_in_csv(regression_data, regressionResult, ws, '##SHORTTERM:CrossoverSMA100')
+        elif(regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50'] < regression_data['SMA25']
+            and regression_data['SMA25'] > 0
+            and regression_data['SMA100'] < 0
+            and regression_data['SMA200'] < 0
+            and regression_data['series_trend'] != "downTrend"
+            and all_day_pct_change_negative_except_today(regression_data) != True
+            ):
+            if(-2 < regression_data['PCT_change'] < 0):
+                add_in_csv(regression_data, regressionResult, ws, 'ALL(Test):buyRisingMA-uptrend')
             
         if(0 < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change']
             and regression_data['forecast_day_PCT5_change'] > 5
@@ -4570,7 +4579,7 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, '$$(Study)$$:DowningMA-Downtrend-1')
             if(1.5 < regression_data['PCT_change'] < 3):
-                add_in_csv(regression_data, regressionResult, ws, 'ALL(Test):DowningMA-Downtrend')
+                add_in_csv(regression_data, regressionResult, ws, 'ALL(Test):sellDowningMA-Downtrend')
         
         if(0 > regression_data['forecast_day_PCT2_change'] > regression_data['forecast_day_PCT3_change'] > regression_data['forecast_day_PCT4_change'] > regression_data['forecast_day_PCT5_change']
             and regression_data['forecast_day_PCT5_change'] < -5
