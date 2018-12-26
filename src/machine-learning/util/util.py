@@ -1179,13 +1179,13 @@ def buy_down_trend(regression_data, regressionResult, reg, ws_buyDownTrend):
             and regression_data['forecast_day_PCT7_change'] < -4
             and regression_data['forecast_day_PCT10_change'] < -4
             ):
-            add_in_csv(regression_data, regressionResult, ws_buyDownTrend, 'buyDownTrend-1(Risky)')
+            add_in_csv(regression_data, regressionResult, ws_buyDownTrend, 'buyDownTrend-1')
             return True
-#         elif(regression_data['forecast_day_PCT7_change'] < -4
-#             and regression_data['forecast_day_PCT10_change'] < -4
-#             ):
-#             add_in_csv(regression_data, regressionResult, ws_buyDownTrend, 'buyDownTrend-2(Risky)')
-#             return True
+        elif(regression_data['forecast_day_PCT7_change'] < -4
+            and regression_data['forecast_day_PCT10_change'] < -4
+            ):
+            add_in_csv(regression_data, regressionResult, ws_buyDownTrend, 'buyDownTrend-2(Risky)')
+            return True
         
     return False
 
@@ -2942,13 +2942,13 @@ def sell_up_trend(regression_data, regressionResult, reg, ws_sellUpTrend):
             and regression_data['forecast_day_PCT7_change'] > 4
             and regression_data['forecast_day_PCT10_change'] > 4
             ):
-            add_in_csv(regression_data, regressionResult, ws_sellUpTrend, 'sellUpTrend-1(Risky)')
+            add_in_csv(regression_data, regressionResult, ws_sellUpTrend, 'sellUpTrend-1')
             return True
-#         elif(regression_data['forecast_day_PCT7_change'] > 4
-#             and regression_data['forecast_day_PCT10_change'] > 4
-#             ):
-#             add_in_csv(regression_data, regressionResult, ws_sellUpTrend, 'sellUpTrend-2(Risky)')
-#             return True
+        elif(regression_data['forecast_day_PCT7_change'] > 4
+            and regression_data['forecast_day_PCT10_change'] > 4
+            ):
+            add_in_csv(regression_data, regressionResult, ws_sellUpTrend, 'sellUpTrend-2(Risky)')
+            return True
     return False
 
 def sell_down_trend(regression_data, regressionResult, reg, ws_sellDownTrend):
