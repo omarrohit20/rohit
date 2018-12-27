@@ -979,10 +979,12 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_buyAll):
                 ):
                 add_in_csv(regression_data, regressionResult, None, 'MLBuy-0')
             elif(regression_data['PCT_day_change'] < 2.5 and regression_data['PCT_change'] < 0.5
+                and (regression_data['PCT_day_change'] < 0 or regression_data['PCT_day_change_pre1'] < 0)
                 and regression_data['month3HighChange'] < -5
                 ):
                 add_in_csv(regression_data, regressionResult, None, 'UPTREND:MLBuy-1')
             elif(regression_data['PCT_day_change'] < 2.5 and regression_data['PCT_change'] < 1
+                and (regression_data['PCT_day_change'] < 0 or regression_data['PCT_day_change_pre1'] < 0)
                 and regression_data['month3HighChange'] < -5
                 ):
                 add_in_csv(regression_data, regressionResult, None, 'UPTREND:MLBuy-2(Risky)')
@@ -2322,7 +2324,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
                 and (regression_data['forecast_day_PCT7_change'] < 0)
                 and ((regression_data['forecast_day_PCT_change'] > 0 and (2 < regression_data['PCT_change'] < 3) and (2 < regression_data['PCT_day_change'] < 3))
                      or (regression_data['series_trend'] == "downTrend" and (1.5 < regression_data['PCT_change'] < 3) and (1.5 < regression_data['PCT_day_change'] < 3)))
-                #and regression_data['series_trend'] != "upTrend"
+                and regression_data['high'] > regression_data['high_pre1']
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '##ALL:buyMonth3High-Continue(InUpTrend)')
 #             elif(is_algo_buy(regression_data)
@@ -2354,7 +2356,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
                 and (regression_data['forecast_day_PCT7_change'] < 0)
                 and ((regression_data['forecast_day_PCT_change'] > 0 and (2 < regression_data['PCT_change'] < 3) and (2 < regression_data['PCT_day_change'] < 3))
                      or (regression_data['series_trend'] == "downTrend" and (1.5 < regression_data['PCT_change'] < 3) and (1.5 < regression_data['PCT_day_change'] < 3)))
-                #and regression_data['series_trend'] != "upTrend"
+                and regression_data['high'] > regression_data['high_pre1']
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '##ALL:buyMonth6High-Continue(InUpTrend)')
             elif(regression_data['month6LowChange'] > 20
@@ -2844,10 +2846,12 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_sellAll):
                 ):
                 add_in_csv(regression_data, regressionResult, None, 'MLSell-0')
             elif(regression_data['PCT_day_change'] > -2.5 and regression_data['PCT_change'] > -0.5
+                and (regression_data['PCT_day_change'] > 0 or regression_data['PCT_day_change_pre1'] > 0)
                 and regression_data['month3LowChange'] > 5
                 ):
                 add_in_csv(regression_data, regressionResult, None, 'DOWNTREND:MLSell-1')
             elif(regression_data['PCT_day_change'] > -2.5 and regression_data['PCT_change'] > -1
+                and (regression_data['PCT_day_change'] > 0 or regression_data['PCT_day_change_pre1'] > 0)
                 and regression_data['month3LowChange'] > 5
                 ):
                 add_in_csv(regression_data, regressionResult, None, 'DOWNTREND:MLSell-2')
@@ -4292,6 +4296,9 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
             )
             and regression_data['SMA200'] > regression_data['SMA100'] > regression_data['SMA50'] > regression_data['SMA25'] > regression_data['SMA9']
             and regression_data['series_trend'] == "downTrend"
+            and ((abs(regression_data['PCT_day_change']) > abs(regression_data['PCT_day_change_pre1']))
+                or regression_data['PCT_change'] > 2
+                )
             ):
             if(((0 < regression_data['PCT_change'] < 3) and (0 < regression_data['PCT_day_change'] < 3))
             ):
@@ -4342,6 +4349,7 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
                 and ((regression_data['forecast_day_PCT_change'] < 0 and (-4 < regression_data['PCT_change'] < -2) and (-4 < regression_data['PCT_day_change'] < -2))
                      or (regression_data['series_trend'] == "upTrend" and (-4 < regression_data['PCT_change'] < -1) and (-4 < regression_data['PCT_day_change'] < 1)))
                 and ('P@' or 'M@') not in regression_data['buyIndia']
+                and regression_data['low'] < regression_data['low_pre1']
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '##ALL:sellMonth3Low-Continue(InUpTrend)')
 #             elif((regression_data['month3HighChange'] < -15)
