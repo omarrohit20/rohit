@@ -2693,7 +2693,7 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
         and regression_data['month3HighChange'] < -10
         and regression_data['month3LowChange'] > 10
         ):    
-        if((regression_data['SMA9'] > 1 or regression_data['SMA25'] > 1)
+        if((regression_data['SMA9'] > 1 or regression_data['SMA25'] > 0)
             ):
             add_in_csv(regression_data, regressionResult, ws, '##Common:buyNotM3HighLow') 
         else:
@@ -3198,7 +3198,7 @@ def sell_high_indicators(regression_data, regressionResult, reg, ws_sellHighIndi
        and regression_data['yearLowChange'] > 10
        and (low_tail_pct(regression_data) < 1.5 and (low_tail_pct(regression_data) < high_tail_pct(regression_data)))
        ):
-        if(-3 < regression_data['PCT_day_change'] < -1.5 and -3 < regression_data['PCT_change'] < 0.5
+        if(-4 < regression_data['PCT_day_change'] < -1.5 and -4 < regression_data['PCT_change'] < 0.5
            and regression_data['forecast_day_PCT_change'] < 0
            and low_tail_pct(regression_data) < 1
            ):
@@ -4706,7 +4706,7 @@ def sell_all_common(regression_data, regressionResult, reg, ws):
         and regression_data['month3LowChange'] > 10
         and regression_data['trend'] != 'down'
         ):    
-        if((regression_data['SMA9'] < -1 or regression_data['SMA25'] < -1)
+        if((regression_data['SMA9'] < -1 or regression_data['SMA25'] < 0)
             ):
             add_in_csv(regression_data, regressionResult, ws, '##Common:sellNotM3HighLow') 
         else:
