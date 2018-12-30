@@ -2600,6 +2600,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, '$$(Study)$$:RisingMA-uptrend-1')
             if((-3 < regression_data['PCT_change'] < -2
                 or regression_data['PCT_day_change'] < -2
+                or (regression_data['PCT_change'] + regression_data['PCT_change_pre1'])  < -5
                 or (regression_data['PCT_change'] + regression_data['PCT_change_pre1'] + regression_data['PCT_change_pre2'])  < -5
                 )
                 and -2.5 < regression_data['SMA9'] < 2
