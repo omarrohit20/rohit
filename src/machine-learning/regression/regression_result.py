@@ -198,6 +198,8 @@ def saveReports(run_type=None):
 def result_data(scrip):
     regression_high = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     regression_low = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    if(regression_high is None or regression_low is None):
+        return
     
     regression_data = regression_high
     buyIndiaAvgReg, result = buy_pattern_from_history(regression_data, None)
@@ -249,6 +251,9 @@ def result_data(scrip):
 def result_data_reg(scrip):
     regression_high = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     regression_low = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    if(regression_high is None or regression_low is None):
+        return
+    
     regression_data = regression_high
     if(regression_data is not None):
         buyIndiaAvg, result = buy_pattern_from_history(regression_data, None)
@@ -302,6 +307,9 @@ def result_data_reg(scrip):
 def result_data_cla(scrip):
     regression_high = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
     regression_low = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    if(regression_high is None or regression_low is None):
+        return
+    
     regression_data = regression_high
     if(regression_data is not None):
         buyIndiaAvg, result = buy_pattern_from_history(regression_data, None)

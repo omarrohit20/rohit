@@ -235,7 +235,7 @@ def create_csv(regression_data):
         json_data = json.loads(json.dumps(regression_data))
         db.regressionlow.insert_one(json_data)    
 
-def process_regression_low(scrip, df, directory):
+def process_regression_low(scrip, df, directory, run_ml_algo):
     regression_data_db = db.regressionlow.find_one({'scrip':scrip})
     if(regression_data_db is not None):
         return
@@ -243,20 +243,20 @@ def process_regression_low(scrip, df, directory):
     dfp = get_data_frame(df)
     
     regression_data = {}
-    if kNeighbours:
+    if (kNeighbours and run_ml_algo):
         result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1, weights='distance'))
         regression_data['kNeighboursValue_reg'] = float(result[0])
     else:
         regression_data['kNeighboursValue_reg'] = float(0)
         
-    if mlp:
+    if (mlp and run_ml_algo):
         dfp = get_data_frame(df, 'mlp')
         result = performRegression(dfp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
         regression_data['mlpValue_reg'] = float(result[0])
     else:
         regression_data['mlpValue_reg'] = float(0)
         
-    if kNeighbours:
+    if (kNeighbours and run_ml_algo):
         dfp = get_data_frame(df, None, 'classification')
         result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1, n_neighbors=3, weights='distance'))
         #result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(random_state=1, n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1))
@@ -265,7 +265,7 @@ def process_regression_low(scrip, df, directory):
     else:
         regression_data['kNeighboursValue_cla'] = float(0)
             
-    if mlp:
+    if (mlp and run_ml_algo):
         dfp = get_data_frame(df, 'mlp', 'classification')
         result = performClassification(dfp, split, scrip, directory, forecast_out, MLPClassifier(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25)))
         regression_data['mlpValue_cla'] = float(result[0])

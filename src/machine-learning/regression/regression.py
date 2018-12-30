@@ -26,6 +26,7 @@ connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
 forecast_out = 1
+run_ml_algo = True
 
 def regression_ta_data(scrip):
     regression_data_db = db.regressionlow.find_one({'scrip':scrip})
@@ -96,10 +97,13 @@ def regression_ta_data(scrip):
     df['EMA200'] = EMA(df,200)
     
     ta_lib_data_df(scrip, df, True) 
-    process_regression_high(scrip, df, directory)
-    process_regression_low(scrip, df, directory)    
+    process_regression_high(scrip, df, directory, run_ml_algo)
+    process_regression_low(scrip, df, directory, run_ml_algo)    
 
-def calculateParallel(threads=1, futures='Yes'):
+def calculateParallel(threads=1, futures='Yes', ml_algo='Yes'):
+    global run_ml_algo
+    if(ml_algo != 'Yes'):
+        run_ml_algo = False 
     pool = ThreadPool(threads)
     scrips = []
     for data in db.scrip.find({'futures':futures}):
@@ -110,5 +114,5 @@ def calculateParallel(threads=1, futures='Yes'):
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(3, sys.argv[1])
+    calculateParallel(3, sys.argv[1], sys.argv[2])
     connection.close()
