@@ -1078,7 +1078,8 @@ def buy_year_low(regression_data, regressionResult, reg, ws_buyYearLow, ws_buyYe
 
 def buy_up_trend(regression_data, regressionResult, reg, ws_buyUpTrend):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
-    if((regression_data['yearHighChange'] < -10 and (regression_data['yearLowChange'] > 15 or regression_data['month3LowChange'] > 10))
+    if((regression_data['yearLowChange'] > 20 and regression_data['month3LowChange'] > 15)
+       and (regression_data['yearHighChange'] < -15 or regression_data['month3HighChange'] < -10)
        and regression_data['forecast_day_PCT_change'] > 0
        and regression_data['forecast_day_PCT2_change'] > 0
        and regression_data['forecast_day_PCT3_change'] > 0
@@ -1258,7 +1259,7 @@ def buy_pattern(regression_data, regressionResult, reg, ws_buyPattern, ws_buyPat
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     score = ''
     if(regression_data['yearLowChange'] > 10):
-        if(regression_data['buyIndia_avg'] > 0.8 and high_tail_pct(regression_data) < 1.5):
+        if(regression_data['buyIndia_avg'] > 1.5 and high_tail_pct(regression_data) < 1.5):
             add_in_csv(regression_data, regressionResult, ws_buyPattern, 'buyPatternsML')
             return True   
 
@@ -2630,7 +2631,8 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
             if(-2 < regression_data['PCT_change'] < -0.5
                 and -2 < regression_data['PCT_change'] < -1
                 ):
-                add_in_csv(regression_data, regressionResult, ws, 'ALL(Test):buyRisingMA-uptrend-SMA25gt0')
+                #add_in_csv(regression_data, regressionResult, ws, 'ALL(Test):buyRisingMA-uptrend-SMA25gt0')
+                add_in_csv(regression_data, regressionResult, ws, None)
             
         if(0 < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change']
             and regression_data['forecast_day_PCT5_change'] > 5
@@ -3005,7 +3007,8 @@ def sell_up_trend(regression_data, regressionResult, reg, ws_sellUpTrend):
 
 def sell_down_trend(regression_data, regressionResult, reg, ws_sellDownTrend):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
-    if((regression_data['yearLowChange'] > 10 and (regression_data['yearHighChange'] < -15 or regression_data['month3HighChange'] < -10))
+    if((regression_data['yearHighChange'] < -20 and regression_data['month3HighChange'] < -15)
+       and (regression_data['yearLowChange'] > 15 or regression_data['month3LowChange'] > 10)
        and regression_data['forecast_day_PCT_change'] < 0
        and regression_data['forecast_day_PCT2_change'] < 0
        and regression_data['forecast_day_PCT3_change'] < 0
@@ -3218,7 +3221,7 @@ def sell_high_indicators(regression_data, regressionResult, reg, ws_sellHighIndi
 def sell_pattern(regression_data, regressionResult, reg, ws_sellPattern, ws_sellPattern1):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     if(regression_data['yearHighChange'] < -10):
-        if(regression_data['sellIndia_avg'] < -0.8 and low_tail_pct(regression_data) < 1.5):
+        if(regression_data['sellIndia_avg'] < -1.5 and low_tail_pct(regression_data) < 1.5):
             add_in_csv(regression_data, regressionResult, ws_sellPattern, 'sellPatternsML')
             return True
 
