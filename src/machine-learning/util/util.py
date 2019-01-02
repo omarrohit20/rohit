@@ -34,43 +34,70 @@ sellKN = -0.1
 sellKN_MIN = 0
 
 def add_in_csv(regression_data, regressionResult, ws=None, filter=None, filter1=None, filter2=None, filter3=None, filter4=None):
-    if ((filter is not None) and (filter not in regression_data['filter'])):
-        regression_data['filter'] = regression_data['filter'] + filter + ','
-        if ('P@[' in str(regression_data['sellIndia'])) and (('buy' or 'Buy') in regression_data['filter']):
-            if '***SELLPATTERN***' not in regression_data['filter']:
-               regression_data['filter'] = regression_data['filter'] + '***SELLPATTERN***' + ','
-        if ('P@[' in str(regression_data['buyIndia'])) and (('sell' or 'Sell') in regression_data['filter']):
-            if '***BUYPATTERN***' not in regression_data['filter']:
-               regression_data['filter'] = regression_data['filter'] + '***BUYPATTERN***' + ','
-    if ((filter1 is not None) and (filter1 not in regression_data['filter1'])):
-        regression_data['filter1'] = regression_data['filter1'] + filter1 + ','
-    if ((filter2 is not None) and (filter2 not in regression_data['filter2'])):
-        regression_data['filter2'] = regression_data['filter2'] + filter2 + ',' 
-    if ((filter3 is not None) and (filter3 not in regression_data['filter3'])):
-        regression_data['filter3'] = regression_data['filter3'] + filter3 + ','
-    if ((filter4 is not None) and (filter4 not in regression_data['filter4'])):
-        regression_data['filter4'] = regression_data['filter4'] + filter4 + ','   
-    tempRegressionResult = regressionResult.copy() 
-    tempRegressionResult.append(regression_data['filter'])
-    tempRegressionResult.append(regression_data['filter1'])
-    tempRegressionResult.append(regression_data['filter2'])
-    tempRegressionResult.append(regression_data['filter3'])
-    tempRegressionResult.append(regression_data['filter4'])
-    ws.append(tempRegressionResult) if (ws is not None) else False
-    if(db.resultScripFutures.find_one({'scrip':regression_data['scrip']}) is None):
-        db.resultScripFutures.insert_one({
-            "scrip": regression_data['scrip'],
-            "date": regression_data['date']
-            })
-
+    if(TEST != True):
+        if ((filter is not None) and (filter not in regression_data['filter'])):
+            regression_data['filter'] = regression_data['filter'] + filter + ','
+            if ('P@[' in str(regression_data['sellIndia'])) and (('buy' or 'Buy') in regression_data['filter']):
+                if '***SELLPATTERN***' not in regression_data['filter']:
+                   regression_data['filter'] = regression_data['filter'] + '***SELLPATTERN***' + ','
+            if ('P@[' in str(regression_data['buyIndia'])) and (('sell' or 'Sell') in regression_data['filter']):
+                if '***BUYPATTERN***' not in regression_data['filter']:
+                   regression_data['filter'] = regression_data['filter'] + '***BUYPATTERN***' + ','
+        if ((filter1 is not None) and (filter1 not in regression_data['filter1'])):
+            regression_data['filter1'] = regression_data['filter1'] + filter1 + ','
+        if ((filter2 is not None) and (filter2 not in regression_data['filter2'])):
+            regression_data['filter2'] = regression_data['filter2'] + filter2 + ',' 
+        if ((filter3 is not None) and (filter3 not in regression_data['filter3'])):
+            regression_data['filter3'] = regression_data['filter3'] + filter3 + ','
+        if ((filter4 is not None) and (filter4 not in regression_data['filter4'])):
+            regression_data['filter4'] = regression_data['filter4'] + filter4 + ','   
+        tempRegressionResult = regressionResult.copy() 
+        tempRegressionResult.append(regression_data['filter'])
+        tempRegressionResult.append(regression_data['filter1'])
+        tempRegressionResult.append(regression_data['filter2'])
+        tempRegressionResult.append(regression_data['filter3'])
+        tempRegressionResult.append(regression_data['filter4'])
+        ws.append(tempRegressionResult) if (ws is not None) else False
+        if(db.resultScripFutures.find_one({'scrip':regression_data['scrip']}) is None):
+            db.resultScripFutures.insert_one({
+                "scrip": regression_data['scrip'],
+                "date": regression_data['date']
+                })
+    else:
+        if ((filter is not None) and (filter not in regression_data['filterTest'])):
+            regression_data['filterTest'] = regression_data['filterTest'] + filter + ','
+            if ('P@[' in str(regression_data['sellIndia'])) and (('buy' or 'Buy') in regression_data['filterTest']):
+                if '***SELLPATTERN***' not in regression_data['filterTest']:
+                   regression_data['filterTest'] = regression_data['filterTest'] + '***SELLPATTERN***' + ','
+            if ('P@[' in str(regression_data['buyIndia'])) and (('sell' or 'Sell') in regression_data['filterTest']):
+                if '***BUYPATTERN***' not in regression_data['filterTest']:
+                   regression_data['filterTest'] = regression_data['filterTest'] + '***BUYPATTERN***' + ','
+        if ((filter1 is not None) and (filter1 not in regression_data['filter1'])):
+            regression_data['filter1'] = regression_data['filter1'] + filter1 + ','
+        if ((filter2 is not None) and (filter2 not in regression_data['filter2'])):
+            regression_data['filter2'] = regression_data['filter2'] + filter2 + ',' 
+        if ((filter3 is not None) and (filter3 not in regression_data['filter3'])):
+            regression_data['filter3'] = regression_data['filter3'] + filter3 + ','
+        if ((filter4 is not None) and (filter4 not in regression_data['filter4'])):
+            regression_data['filter4'] = regression_data['filter4'] + filter4 + ','   
+        
 def add_in_csv_hist_pattern(regression_data, regressionResult, ws, filter, avg, count):
-    if ((filter is not None) and (filter not in regression_data['filter'])):
-        regression_data['filter'] = regression_data['filter'] + filter + ','
-    tempRegressionResult = regressionResult.copy() 
-    tempRegressionResult.append(regression_data['filter'])
-    tempRegressionResult.append(avg)
-    tempRegressionResult.append(count)
-    ws.append(tempRegressionResult) if (ws is not None) else False
+    if(TEST != True):
+        if ((filter is not None) and (filter not in regression_data['filter'])):
+            regression_data['filter'] = regression_data['filter'] + filter + ','
+        tempRegressionResult = regressionResult.copy() 
+        tempRegressionResult.append(regression_data['filter'])
+        tempRegressionResult.append(avg)
+        tempRegressionResult.append(count)
+        ws.append(tempRegressionResult) if (ws is not None) else False
+    else:
+        if ((filter is not None) and (filter not in regression_data['filterTest'])):
+            regression_data['filterTest'] = regression_data['filterTest'] + filter + ','
+        tempRegressionResult = regressionResult.copy() 
+        tempRegressionResult.append(regression_data['filterTest'])
+        tempRegressionResult.append(avg)
+        tempRegressionResult.append(count)
+        ws.append(tempRegressionResult) if (ws is not None) else False
 
 def is_algo_buy(regression_data):
     if((regression_data['mlpValue_reg'] >= -1) and (regression_data['kNeighboursValue_reg'] >= -1)
@@ -157,24 +184,30 @@ def is_algo_sell_classifier(regression_data):
     return False
 
 def get_reg_or_cla(regression_data, reg=True):
-    if reg:
-        mlpValue = regression_data['mlpValue_reg']
-        kNeighboursValue = regression_data['kNeighboursValue_reg']
-        return mlpValue, kNeighboursValue
+    if(TEST != True):
+        if reg:
+            mlpValue = regression_data['mlpValue_reg']
+            kNeighboursValue = regression_data['kNeighboursValue_reg']
+            return mlpValue, kNeighboursValue
+        else:
+            mlpValue = regression_data['mlpValue_cla']
+            kNeighboursValue = regression_data['kNeighboursValue_cla']
+            return mlpValue, kNeighboursValue
     else:
-        mlpValue = regression_data['mlpValue_cla']
-        kNeighboursValue = regression_data['kNeighboursValue_cla']
-        return mlpValue, kNeighboursValue
+        return 0, 0
     
 def get_reg_or_cla_other(regression_data, reg=True):
-    if reg:
-        mlpValue_other = regression_data['mlpValue_reg_other']
-        kNeighboursValue_other = regression_data['kNeighboursValue_reg_other']
-        return mlpValue_other, kNeighboursValue_other
+    if(TEST != True):
+        if reg:
+            mlpValue_other = regression_data['mlpValue_reg_other']
+            kNeighboursValue_other = regression_data['kNeighboursValue_reg_other']
+            return mlpValue_other, kNeighboursValue_other
+        else:
+            mlpValue_other = regression_data['mlpValue_cla_other']
+            kNeighboursValue_other = regression_data['kNeighboursValue_cla_other']
+            return mlpValue_other, kNeighboursValue_other
     else:
-        mlpValue_other = regression_data['mlpValue_cla_other']
-        kNeighboursValue_other = regression_data['kNeighboursValue_cla_other']
-        return mlpValue_other, kNeighboursValue_other
+        return 0, 0
 
 def getScore(vol_change, pct_change):
     try:
