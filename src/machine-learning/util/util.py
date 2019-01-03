@@ -22,7 +22,7 @@ NIFTY_HIGH = False
 NIFTY_LOW = False
 BUY_VERY_LESS_DATA=True
 SELL_VERY_LESS_DATA=True
-TEST = True
+TEST = False
 
 buyMLP = 0.1
 buyMLP_MIN = 0
