@@ -16,7 +16,7 @@ from util.util import is_algo_buy_classifier, is_algo_sell_classifier
 from util.util import sell_oi_negative, sell_day_high, buy_oi_negative, buy_day_low
 
 connection = MongoClient('localhost', 27017)
-db = connection.histnse1
+db = connection.histnse
 dbresult = connection.result
 
 # dbresult.drop_collection('buy_other_indicator')
