@@ -32,7 +32,7 @@ newsDict = {}
 wb = Workbook()
 wb1 = Workbook()
 ws = wb1.active
-ws.append(["scrip", "timestamps", "summary", "Link", "MLIndicator"])
+ws.append(["SMA4_2daysBack","SMA4","SMA9_2daysBack","SMA9","SMA25", "High_PCT3_change", "Low_PCT3_change", "MLIndicator", "scrip", "timestamps", "summary", "Link"])
 ws_buyAll = wb.create_sheet("BuyAll")
 ws_buyAll.append(["BuyIndicators", "SellIndicators","Symbol", "VOL_change", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "PCT_Day_Change", "PCT_Change","Score", "MLP", "KNeighbors", "trend", "yHighChange","yLowChange", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "Avg", "Count"])
 ws_buyYearHigh = wb.create_sheet("buyYearHigh")
@@ -119,7 +119,7 @@ def saveReports(run_type=None):
     count = 0
     for row in ws.iter_rows(row_offset=1):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:E" + str(count))
+    tab = Table(displayName="Table1", ref="A1:L" + str(count))
     tab.tableStyleInfo = style
     ws.add_table(tab)
     
@@ -299,9 +299,14 @@ def saveReports(run_type=None):
  
 def saveDailyNews():
     for newslink,newsValue in newsDict.items():
-        ws.append([newsValue['scrip'], newsValue['newstime'], newsValue['newssummary'], newslink, newsValue['mlindicator']])
+        ws.append([newsValue['SMA4_2daysBack'], newsValue['SMA4'], newsValue['SMA9_2daysBack'], newsValue['SMA9'], newsValue['SMA25'], 
+                   newsValue['High_PCT3_change'], newsValue['Low_PCT3_change'], newsValue['mlindicator'], 
+                   newsValue['scrip'], newsValue['newstime'], newsValue['newssummary'], newslink]
+                  )
         #if(newsValue['mlindicator'] != ''):
             #result_data(newsValue['scrip'])
+        
+        
         
 def buy_News(scrip):
     scrip_newsList = db.news.find_one({'scrip':scrip})
@@ -699,20 +704,39 @@ def result_news(scrip):
                     if(is_algo_buy(regression_data_high)):
                         newsDict[newslink]['mlindicator'] = newsDict[newslink]['mlindicator'] + ',' + 'Buy:' + scrip
                     if(is_algo_sell(regression_data_low)):
-                        newsDict[newslink]['mlindicator'] = newsDict[newslink]['mlindicator'] + ',' + 'Sell:' + scrip    
+                        newsDict[newslink]['mlindicator'] = newsDict[newslink]['mlindicator'] + ',' + 'Sell:' + scrip 
+                    newsDict[newslink]['SMA4']=newsDict[newslink]['SMA4'] + ',' + regression_data_high['SMA4']
+                    newsDict[newslink]['SMA9']=newsDict[newslink]['SMA9'] + ',' + regression_data_high['SMA9']
+                    newsDict[newslink]['SMA25']=newsDict[newslink]['SMA25'] + ',' + regression_data_high['SMA25']
+                    newsDict[newslink]['SMA4_2daysBack']=newsDict[newslink]['SMA4_2daysBack'] + ',' + regression_data_high['SMA4_2daysBack']
+                    newsDict[newslink]['SMA9_2daysBack']=newsDict[newslink]['SMA9_2daysBack'] + ',' + regression_data_high['SMA9_2daysBack']
+                    newsDict[newslink]['High_PCT3_change']=newsDict[newslink]['High_PCT3_change'] + ',' + regression_data_high['forecast_day_PCT3_change']
+                    newsDict[newslink]['Low_PCT3_change']=newsDict[newslink]['Low_PCT3_change'] + ',' + regression_data_low['forecast_day_PCT3_change']   
                 else:
                     newsValue = {}
                     newsValue['newssummary'] = newssummary
                     newsValue['newstime'] = newstime
                     newsValue['scrip'] = scrip
                     newsValue['mlindicator'] = ""
+                    newsValue['SMA4']=""
+                    newsValue['SMA9']=""
+                    newsValue['SMA25']=""
+                    newsValue['SMA4_2daysBack']=""
+                    newsValue['SMA9_2daysBack']=""
+                    newsValue['High_PCT3_change']=""
+                    newsValue['Low_PCT3_change']=""
                     if(is_algo_buy(regression_data_high)):
                         newsValue['mlindicator'] = 'Buy:' + scrip
                     if(is_algo_sell(regression_data_low)):
-                        newsValue['mlindicator'] = newsValue['mlindicator'] + ',' + 'Sell:' + scrip    
+                        newsValue['mlindicator'] = newsValue['mlindicator'] + ',' + 'Sell:' + scrip
+                    newsValue['SMA4']=regression_data_high['SMA4']
+                    newsValue['SMA9']=regression_data_high['SMA9']
+                    newsValue['SMA25']=regression_data_high['SMA25']
+                    newsValue['SMA4_2daysBack']=regression_data_high['SMA4_2daysBack']
+                    newsValue['SMA9_2daysBack']=regression_data_high['SMA9_2daysBack']
+                    newsValue['High_PCT3_change']=regression_data_high['forecast_day_PCT3_change']
+                    newsValue['Low_PCT3_change']=regression_data_low['forecast_day_PCT3_change']     
                     newsDict[newslink] = newsValue
-                
-                
         except:
             pass
                               
