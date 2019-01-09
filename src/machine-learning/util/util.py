@@ -2876,8 +2876,7 @@ def buy_test(regression_data, regressionResult, reg, ws):
     if(regression_data['close'] > 50
         ):
 #         flag = buy_risingMA(regression_data, regressionResult, reg, ws)
-#         return flag     
-        
+#         return flag            
         return True
     return False    
 
@@ -4831,6 +4830,8 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
             if(abs_month3High_less_than_month3Low(regression_data)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '##ALL(Check-chart):MaySellCheckChart-(|_|`|)')
+            else:
+                add_in_csv(regression_data, regressionResult, ws, '##ALL(Check-chart):MaySellCheckChart-(Risky)-(|_|`|)')
         elif(
             (((mlpValue < -0.3) and (kNeighboursValue < -0.3) and ((mlpValue_other < 0) or (kNeighboursValue_other < 0)))
                  or ((mlpValue_other < -0.3) and (kNeighboursValue_other < -0.3) and ((mlpValue < 0) or (kNeighboursValue < 0))))
@@ -4934,6 +4935,47 @@ def sell_test(regression_data, regressionResult, reg, ws):
         ):
 #         flag = sell_supertrend(regression_data, regressionResult, reg, ws)
 #         return flag
+        if((('nearYear2Low' in regression_data['filter3']) 
+            or ('year2LowReversal(Confirm)' in regression_data['filter3'])
+            or ('year2LowBreak' in regression_data['filter3'])
+            )):    
+            if(regression_data['year2HighChange'] < -50
+                and regression_data['year2LowChange'] < 1
+                and ((regression_data['PCT_change'] < -1) and (regression_data['PCT_day_change'] < -1))
+                and regression_data['close'] < regression_data['bar_low_pre1']
+                ):
+                if(regression_data['PCT_change'] < -4
+                    #and ('year2LowBreak' in regression_data['filter3'])
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, '##(Test)(Check-chart-buy):year2Low-InMinus')
+                elif(regression_data['PCT_change'] < -2.5 and regression_data['PCT_day_change'] < -2.5
+                    and ('nearYear2Low' in regression_data['filter3'])
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, '##(Test)(Check-chart-sell):year2Low-InMinus')
+                else:
+                    add_in_csv(regression_data, regressionResult, ws, '##(Test)(Check-chart):year2Low-InMinus')
+            elif(regression_data['year2HighChange'] < -50
+                and ((regression_data['PCT_change'] > 1) and (regression_data['PCT_day_change'] > 1))
+                ):
+                if(regression_data['PCT_change'] > 4):
+                    add_in_csv(regression_data, regressionResult, ws, '##(Test)(Check-chart):year2Low-InPlus')
+                   
+        elif((('nearYearLow' in regression_data['filter3'])
+            or ('yearLowReversal(Confirm)' in regression_data['filter3'])
+            or ('yearLowBreak' in regression_data['filter3'])
+            )):
+            if(regression_data['yearHighChange'] < -40
+                and regression_data['yearLowChange'] < 1
+                and ((regression_data['PCT_change'] < -1) and (regression_data['PCT_day_change'] < -1))
+                and regression_data['close'] < regression_data['bar_low_pre1']
+                ):
+                if(regression_data['PCT_change'] < -3
+                    #and ('yearLowBreak' in regression_data['filter3'])
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, '##(Test)(Check-chart-sell):yearLow-InMinus')
+                else:
+                    add_in_csv(regression_data, regressionResult, ws, '##(Test)(Check-chart):yearLow-InMinus')
+        
         return True
     return False
 
