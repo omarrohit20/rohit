@@ -9,9 +9,9 @@ connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 API_KEY="hni7BykTJ6oEzMs3pwz_" #guptanikrohit@gmail.com
 
-def insert_scripdata(scripdata, futures): 
+def insert_scripdata(scrip, scripdata, futures): 
     data = {}
-    data['dataset_code'] = scripdata['dataset']['dataset_code']
+    data['dataset_code'] = scrip
     data['name'] = scripdata['dataset']['name']
     data['end_date'] = scripdata['dataset']['end_date']
     data['column_names'] = scripdata['dataset']['column_names']
@@ -31,16 +31,16 @@ if __name__ == "__main__":
         futures = data['futures']
         scrip = data['scrip'].replace('&','').replace('-','_')
         try:
-            data = db.history.find_one({'dataset_code':scrip})
+            data = db.history.find_one({'dataset_code':data['scrip']})
             if(data is None):
                 scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
-                insert_scripdata(scripdata, futures)
+                insert_scripdata(data['scrip'], scripdata, futures)
             print(scrip)      
         except:
             time.sleep(2)
             try:
                 scripdata = json.loads(urlopen("https://www.quandl.com/api/v3/datasets/NSE/"+scrip+".json?api_key="+API_KEY+"&start_date="+start_date+"&end_date="+end_date).read().decode())
-                insert_scripdata(scripdata, futures)
+                insert_scripdata(data['scrip'], scripdata, futures)
                 print(scrip)
             except:
                 print('historical fail', str(data['scrip'])) 

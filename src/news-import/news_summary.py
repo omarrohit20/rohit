@@ -20,7 +20,7 @@ if __name__ == "__main__":
     
     for data in db.news.find():
         newslist = data['news']
-        scrip = data['scrip'].replace('&','').replace('-','_')
+        scrip = data['scrip']
         
         for news in newslist:
             newstime = news['timestamp']

@@ -1129,7 +1129,7 @@ def calculateParallel(threads=2, run_type=None, futures=None):
             readCSV = csv.reader(csvfile, delimiter=',')
             for row in readCSV:
                 if (count != 0):
-                    scrips.append(row[0].replace('&','').replace('-','_'))
+                    scrips.append(row[0])
                 count = count + 1
                 
             scrips.sort()
@@ -1138,7 +1138,7 @@ def calculateParallel(threads=2, run_type=None, futures=None):
             readCSV = csv.reader(csvfile, delimiter=',')
             for row in readCSV:
                 if (count != 0):
-                    scrips.append(row[0].replace('&','').replace('-','_'))
+                    scrips.append(row[0])
                 count = count + 1
                 
             scrips.sort()
@@ -1150,7 +1150,7 @@ def calculateParallel(threads=2, run_type=None, futures=None):
             readCSV = csv.reader(csvfile, delimiter=',')
             for row in readCSV:
                 if (count != 0):
-                    scrips.append(row[0].replace('&','').replace('-','_'))
+                    scrips.append(row[0])
                 count = count + 1
                 
             scrips.sort()
@@ -1162,7 +1162,7 @@ def calculateParallel(threads=2, run_type=None, futures=None):
             readCSV = csv.reader(csvfile, delimiter=',')
             for row in readCSV:
                 if (count != 0):
-                    scrips.append(row[0].replace('&','').replace('-','_'))
+                    scrips.append(row[0])
                 count = count + 1
                 
             scrips.sort()
@@ -1170,7 +1170,7 @@ def calculateParallel(threads=2, run_type=None, futures=None):
     else:
         scrips = []
         for data in db.scrip.find({'futures':futures}):
-            scrips.append(data['scrip'].replace('&','').replace('-','_'))
+            scrips.append(data['scrip'])
         scrips.sort()
         pool.map(ta_lib_data, scrips)     
                

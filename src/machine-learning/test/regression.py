@@ -121,7 +121,7 @@ def calculateParallel(threads=1):
         readCSV = csv.reader(csvfile, delimiter=',')
         scrips = []
         for row in readCSV:
-            scrips.append(row[0].replace('&','').replace('-','_'))   
+            scrips.append(row[0])   
         scrips.sort()
         pool.map(regression_ta_data, scrips)   
                      

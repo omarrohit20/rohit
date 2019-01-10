@@ -196,8 +196,8 @@ def saveReports(run_type=None):
     wb.save(logname + ".xlsx")
       
 def result_data(scrip):
-    regression_high = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
-    regression_low = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    regression_high = db.regressionhigh.find_one({'scrip':scrip})
+    regression_low = db.regressionlow.find_one({'scrip':scrip})
     if(regression_high is None or regression_low is None):
         return
     
@@ -249,8 +249,8 @@ def result_data(scrip):
      
                                   
 def result_data_reg(scrip):
-    regression_high = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
-    regression_low = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    regression_high = db.regressionhigh.find_one({'scrip':scrip})
+    regression_low = db.regressionlow.find_one({'scrip':scrip})
     if(regression_high is None or regression_low is None):
         return
     
@@ -305,8 +305,8 @@ def result_data_reg(scrip):
             all_withoutml(regression_data, regressionResult, ws_sellOIReg)
         
 def result_data_cla(scrip):
-    regression_high = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
-    regression_low = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    regression_high = db.regressionhigh.find_one({'scrip':scrip})
+    regression_low = db.regressionlow.find_one({'scrip':scrip})
     if(regression_high is None or regression_low is None):
         return
     
@@ -362,7 +362,7 @@ def calculateParallel(threads=2, futures=None):
     pool = ThreadPool(threads)
     scrips = []
     for data in db.scrip.find({'futures':futures}):
-        scrips.append(data['scrip'].replace('&','').replace('-','_'))
+        scrips.append(data['scrip'])
     scrips.sort()
     pool.map(result_data, scrips)
     pool.map(result_data_cla, scrips)

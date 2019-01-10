@@ -336,7 +336,7 @@ def result_data(scrip):
     resultDate = ""
     resultSentiment = ""
     resultComment = ""
-    result_data = db.scrip_result.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    result_data = db.scrip_result.find_one({'scrip':scrip})
     if(result_data is not None):
         resultDate = result_data['result_date'].strip()
         resultSentiment = result_data['result_sentiment']
@@ -348,7 +348,7 @@ def result_data(scrip):
             resultDeclared = resultDate 
             resultDate = ""
        
-    regression_data = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    regression_data = db.regressionhigh.find_one({'scrip':scrip})
     if(regression_data is not None):
         regressionResult = [ ]
         regressionResult.append(regression_data['buyIndia'])
@@ -509,7 +509,7 @@ def result_data(scrip):
                     ws_buyPattern1.append(regressionResult)
                 
                     
-    regression_data = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    regression_data = db.regressionlow.find_one({'scrip':scrip})
     if(regression_data is not None):
         regressionResult = [ ]
         regressionResult.append(regression_data['buyIndia'])
@@ -670,14 +670,14 @@ def result_data(scrip):
                     ws_sellPattern1.append(regressionResult)
                         
 def result_news(scrip):
-    regression_data_high = db.regressionhigh.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    regression_data_high = db.regressionhigh.find_one({'scrip':scrip})
     if(is_algo_buy(regression_data_high)):
         if(regression_data_high is None):
             print('Missing or very less Data for ', scrip)
         else:
             buy_News(scrip)
             
-    regression_data_low = db.regressionlow.find_one({'scrip':scrip.replace('&','').replace('-','_')})
+    regression_data_low = db.regressionlow.find_one({'scrip':scrip})
     if(is_algo_sell(regression_data_low)):
         if(regression_data_low is None):
             print('Missing or very less Data for ', scrip)
@@ -744,7 +744,7 @@ def calculateParallel(threads=2):
     pool = ThreadPool(threads)
     scrips = []
     for data in db.scrip.find({'futures':'Yes'}):
-        scrips.append(data['scrip'].replace('&','').replace('-','_'))
+        scrips.append(data['scrip'])
     scrips.sort()
     pool.map(result_news, scrips)
                         

@@ -210,7 +210,7 @@ def calculateParallel(threads=2, futures=None):
     pool = ThreadPool(threads)
     scrips = []
     for data in db.scrip.find({'futures':futures}):
-        scrips.append(data['scrip'].replace('&','').replace('-','_'))
+        scrips.append(data['scrip'])
     scrips.sort()
     pool.map(result_data, scrips)
     pool.map(result_data_cla, scrips)

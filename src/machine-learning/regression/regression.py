@@ -107,7 +107,7 @@ def calculateParallel(threads=1, futures='Yes', ml_algo='Yes'):
     pool = ThreadPool(threads)
     scrips = []
     for data in db.scrip.find({'futures':futures}):
-        scrips.append(data['scrip'].replace('&','').replace('-','_'))
+        scrips.append(data['scrip'])
     scrips.sort()
     pool.map(regression_ta_data, scrips)   
                      
