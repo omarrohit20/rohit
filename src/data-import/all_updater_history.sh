@@ -1,4 +1,4 @@
 #!/bin/bash 
 . ~/.bash_profile
-python ./S2cripHistoryImporter.py update No
+python ./S2cripHistoryImporterNsePy.py update No
 
