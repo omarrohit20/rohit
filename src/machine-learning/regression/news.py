@@ -671,17 +671,17 @@ def result_data(scrip):
                         
 def result_news(scrip):
     regression_data_high = db.regressionhigh.find_one({'scrip':scrip})
-    if(is_algo_buy(regression_data_high)):
-        if(regression_data_high is None):
-            print('Missing or very less Data for ', scrip)
-        else:
+    if(regression_data_high is None):
+        print('Missing or very less Data for ', scrip)
+    else:
+        if(is_algo_buy(regression_data_high)):
             buy_News(scrip)
             
     regression_data_low = db.regressionlow.find_one({'scrip':scrip})
-    if(is_algo_sell(regression_data_low)):
-        if(regression_data_low is None):
-            print('Missing or very less Data for ', scrip)
-        else:
+    if(regression_data_low is None):
+        print('Missing or very less Data for ', scrip)
+    else:
+        if(is_algo_sell(regression_data_low)):
             sell_News(scrip)        
          
     start_date = datetime.datetime.now()
