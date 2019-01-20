@@ -35,6 +35,12 @@ sellKN_MIN = 0
 
 def add_in_csv(regression_data, regressionResult, ws=None, filter=None, filter1=None, filter2=None, filter3=None, filter4=None):
     if(TEST != True):
+        if(is_algo_buy(regression_data) and (filter is not None)):
+            if '[MLBuy]' not in regression_data['filter']:
+                regression_data['filter'] = regression_data['filter'] + '[MLBuy]' + ':'
+        if(is_algo_sell(regression_data) and (filter is not None)):
+            if '[MLSell]' not in regression_data['filter']:
+                regression_data['filter'] = regression_data['filter'] + '[MLSell]' + ':'
         if ((filter is not None) and (filter not in regression_data['filter'])):
             regression_data['filter'] = regression_data['filter'] + filter + ','
             if ('P@[' in str(regression_data['sellIndia'])) and (('buy' or 'Buy') in regression_data['filter']):
@@ -100,6 +106,8 @@ def add_in_csv_hist_pattern(regression_data, regressionResult, ws, filter, avg, 
         ws.append(tempRegressionResult) if (ws is not None) else False
 
 def is_algo_buy(regression_data):
+    if TEST:
+        return True
     if((regression_data['mlpValue_reg'] >= -1) and (regression_data['kNeighboursValue_reg'] >= -1)
         and (regression_data['mlpValue_reg_other'] >= -1) and (regression_data['kNeighboursValue_reg_other'] >= -1)
         and ((regression_data['PCT_day_change'] > 1 
@@ -140,6 +148,8 @@ def is_algo_buy(regression_data):
     return False   
     
 def is_algo_sell(regression_data):
+    if TEST:
+        return True
     if((regression_data['mlpValue_reg'] <= 1) and (regression_data['kNeighboursValue_reg'] <= 1)
         and (regression_data['mlpValue_reg_other'] <= 1) and (regression_data['kNeighboursValue_reg_other'] <= 1)
         and ((regression_data['PCT_day_change'] < -1 
@@ -1270,7 +1280,7 @@ def buy_down_trend(regression_data, regressionResult, reg, ws_buyDownTrend):
         
     return False
 
-def buy_final(regression_data, regressionResult, reg, ws_buyFinal, ws_buyFinal1):
+def buy_final(regression_data, regressionResult, reg, ws, ws1):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     if(regression_data['yearHighChange'] < -10 
         and regression_data['yearLowChange'] > 5
@@ -1293,7 +1303,7 @@ def buy_final(regression_data, regressionResult, reg, ws_buyFinal, ws_buyFinal1)
             and 5 > regression_data['forecast_day_PCT2_change'] > -0.5 
             and regression_data['forecast_day_PCT_change'] > 0
             ):
-            add_in_csv(regression_data, regressionResult, ws_buyFinal, 'buyFinal')
+            add_in_csv(regression_data, regressionResult, ws, 'buyFinal')
         elif(str(regression_data['sellIndia']) == '' and -90 < regression_data['yearHighChange'] < -10
             and(ten_days_less_than_minus_ten(regression_data)
                  or (last_5_day_all_down_except_today(regression_data)
@@ -1305,7 +1315,7 @@ def buy_final(regression_data, regressionResult, reg, ws_buyFinal, ws_buyFinal1)
             and regression_data['forecast_day_PCT2_change'] > 0 
             and regression_data['forecast_day_PCT_change'] > 0
             ):
-            add_in_csv(regression_data, regressionResult, ws_buyFinal, 'buyFinal1')
+            add_in_csv(regression_data, regressionResult, ws, 'buyFinal1')
     return False
 
 def buy_high_indicators(regression_data, regressionResult, reg, ws_buyHighIndicators):
@@ -2157,78 +2167,117 @@ def buy_trend_break(regression_data, regressionResult, reg, ws):
 #                flag = False
     return flag   
      
-def buy_final_candidate(regression_data, regressionResult, reg, ws_buyFinal):
+def buy_final_candidate(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     if(regression_data['forecast_day_PCT4_change'] <= 0.5
-       and regression_data['forecast_day_PCT5_change'] <= 0.5
-       and regression_data['forecast_day_PCT7_change'] <= 0.5
-       and (ten_days_less_than_minus_ten(regression_data)
-            or (last_5_day_all_down_except_today(regression_data)
-                and ten_days_less_than_minus_seven(regression_data)
-                )
-            )
-       and regression_data['yearLowChange'] > 5 and regression_data['yearHighChange'] < -5
-       and regression_data['month3LowChange'] > 3
-       and high_tail_pct(regression_data) < 1
-       and regression_data['SMA25'] > 0
-    ):
-       if(regression_data['forecast_day_PCT_change'] > 0
-          and regression_data['bar_high'] > regression_data['bar_high_pre1']
-          and regression_data['forecast_day_VOL_change'] > 0
-          ):
-           if(2 < regression_data['PCT_day_change'] < 4 and 2 < regression_data['PCT_change'] < 4
-               and regression_data['PCT_day_change_pre1'] < 0
-            ):
-               add_in_csv(regression_data, regressionResult, ws_buyFinal, 'buyFinalCandidate-0')
-               return True
-           if(2 < regression_data['PCT_day_change'] < 5 and 2 < regression_data['PCT_change'] < 3
-               and regression_data['PCT_day_change_pre1'] < 0
-            ):
-               add_in_csv(regression_data, regressionResult, ws_buyFinal, 'buyFinalCandidate-00')
-               return False
-           if(2 < regression_data['PCT_day_change'] < 6.5 and 2 < regression_data['PCT_change'] < 6.5
-               and regression_data['PCT_day_change_pre1'] < 0
-            ):
-               add_in_csv(regression_data, regressionResult, ws_buyFinal, 'buyFinalCandidate-00HighChange')
-               return False
-           if(1 < regression_data['PCT_day_change'] < 2.5 and 1 < regression_data['PCT_change'] < 2.5
-               and regression_data['PCT_day_change_pre1'] > 0
-               and (mlpValue >= 1 or kNeighboursValue >= 1)
-            ):
-               add_in_csv(regression_data, regressionResult, ws_buyFinal, 'buyFinalCandidate-1')
-               return True
-           if(1 < regression_data['PCT_day_change'] < 4 and 1 < regression_data['PCT_change'] < 4
-               and no_doji_or_spinning_buy_india(regression_data)
-               and regression_data['PCT_day_change_pre1'] > 0
-               and (mlpValue >= 1 or kNeighboursValue >= 1)
-            ):
-               add_in_csv(regression_data, regressionResult, ws_buyFinal, 'buyFinalCandidate-2')
-               return True
-           if(0.5 < regression_data['PCT_day_change'] < 2.5 and 0.5 < regression_data['PCT_change'] < 2.5
-               and regression_data['PCT_day_change_pre1'] > 0
-               and (mlpValue >= 1 or kNeighboursValue >= 1)
-            ):
-               add_in_csv(regression_data, regressionResult, ws_buyFinal, '##buyFinalCandidate-2-test')
-               return True
-       if((((regression_data['close'] - regression_data['open']) * 1.5 > regression_data['high'] - regression_data['low']) or (regression_data['forecast_day_PCT_change'] > 0 and regression_data['PCT_day_change'] > 1))
-           and (regression_data['yearHighChange'] < -30 or regression_data['yearLowChange'] < 30)
+        and regression_data['forecast_day_PCT5_change'] <= 0.5
+        and regression_data['forecast_day_PCT7_change'] <= 0.5
+        and (ten_days_less_than_minus_ten(regression_data)
+             or (last_5_day_all_down_except_today(regression_data)
+                 and ten_days_less_than_minus_seven(regression_data)
+                 )
+             )
+        and regression_data['yearLowChange'] > 15 and regression_data['yearHighChange'] < -15
+        and regression_data['month3LowChange'] > 3
+        ):
+        if(regression_data['forecast_day_PCT_change'] > 0
+           and regression_data['bar_high'] > regression_data['bar_high_pre1']
+           #and regression_data['forecast_day_VOL_change'] > 0
            ):
-           if(1 < regression_data['PCT_day_change'] < 2.5 and 1 < regression_data['PCT_change'] < 2.5 
-               and no_doji_or_spinning_sell_india(regression_data) and no_doji_or_spinning_buy_india(regression_data)
-               ):
-               if(((mlpValue >= 0.5 and kNeighboursValue >= 0.5) or is_algo_buy(regression_data))
-                   and regression_data['forecast_day_VOL_change'] > -20
-                   ):
-                   add_in_csv(regression_data, regressionResult, ws_buyFinal, 'buyFinalCandidate-3')
-                   return True
-           if(1 < regression_data['PCT_day_change'] < 5 and 1 < regression_data['PCT_change'] < 5 
-               and no_doji_or_spinning_sell_india(regression_data) and no_doji_or_spinning_buy_india(regression_data)
-               ):
-               if(((mlpValue >= 0.5 and kNeighboursValue >= 0.5) or is_algo_buy(regression_data))
-                   and regression_data['forecast_day_VOL_change'] > 0 
-                   ):
-                   add_in_csv(regression_data, regressionResult, ws_buyFinal, '##buyFinalCandidate-4')
-                   return True
+            if(2 < regression_data['PCT_day_change'] < 4 and 2 < regression_data['PCT_change'] < 4
+                and regression_data['PCT_day_change_pre1'] < 0
+                and regression_data['forecast_day_PCT10_change'] > -20
+                and regression_data['month3HighChange'] < -15
+                and regression_data['SMA4'] > 0
+                and regression_data['SMA9'] > -3
+                and high_tail_pct(regression_data) < 1.5
+                ):
+                add_in_csv(regression_data, regressionResult, ws, 'buyFinalCandidate-(lastDayDown)')
+                return True
+            elif(2 < regression_data['PCT_day_change'] < 4 and 2 < regression_data['PCT_change'] < 4
+                and no_doji_or_spinning_buy_india(regression_data)
+                and regression_data['PCT_day_change_pre1'] > 0
+                and regression_data['forecast_day_PCT10_change'] > -20
+                and regression_data['month3HighChange'] < -15
+                and regression_data['forecast_day_VOL_change'] > -20
+                and high_tail_pct(regression_data) < 1.5
+                ):
+                if(is_algo_buy(regression_data)):
+                    add_in_csv(regression_data, regressionResult, ws, 'MLbuyFinalCandidate-(lastDayUp)')    
+                    return True
+                return False
+            elif(1 < regression_data['PCT_day_change'] < 4 and 1 < regression_data['PCT_change'] < 4
+                and no_doji_or_spinning_buy_india(regression_data)
+                and regression_data['PCT_day_change_pre1'] > 0
+                and regression_data['forecast_day_VOL_change'] < -20
+                ):
+                add_in_csv(regression_data, regressionResult, ws, 'sellFinalContinue-(lastDayUp)-(volLow)')
+                return True
+            elif(1 < regression_data['PCT_day_change'] < 4 and 1 < regression_data['PCT_change'] < 4
+                and regression_data['PCT_day_change_pre1'] < 0
+                ):
+                if(is_algo_sell(regression_data)):
+                    add_in_csv(regression_data, regressionResult, ws, 'MLsellFinalContinue-(lastDayDown)-1')
+                    return True
+                return False
+            elif(1 < regression_data['PCT_day_change'] < 4 and 1 < regression_data['PCT_change'] < 4
+                and regression_data['PCT_day_change_pre1'] > 0
+                ):
+                if('P@[' in regression_data['sellIndia']):
+                    add_in_csv(regression_data, regressionResult, ws, 'buyFinalCandidate-(lastDayUp)-(sellPattern)')
+                    return True
+                elif('P@[' not in regression_data['buyIndia']):
+                    add_in_csv(regression_data, regressionResult, ws, 'sellFinalContinue-(lastDayUp)-1')
+                    return True
+                return False
+            elif(0.5 < regression_data['PCT_day_change'] < 2.5 and 0.5 < regression_data['PCT_change'] < 2.5
+                and regression_data['PCT_day_change_pre1'] < 0
+                ):
+                if(is_algo_sell(regression_data)):
+                    add_in_csv(regression_data, regressionResult, ws, 'MLsellFinalContinue-(lastDayDown)-2')
+                    return True
+                return False
+            elif(0.5 < regression_data['PCT_day_change'] < 2.5 and 0.5 < regression_data['PCT_change'] < 2.5
+                and regression_data['PCT_day_change_pre1'] > 0
+                ):
+                if('P@[' in regression_data['sellIndia']):
+                    add_in_csv(regression_data, regressionResult, ws, 'buyFinalCandidate-(lastDayUp)-(sellPattern)')
+                    return True
+                elif(is_algo_sell(regression_data)):
+                    add_in_csv(regression_data, regressionResult, ws, 'MLsellFinalContinue-(lastDayUp)-2')
+                    return True
+                return False
+        if((((regression_data['close'] - regression_data['open']) * 1.5 > regression_data['high'] - regression_data['low']) or (regression_data['forecast_day_PCT_change'] > 0 and regression_data['PCT_day_change'] > 1))
+            and (regression_data['yearHighChange'] < -30 or regression_data['yearLowChange'] < 30)
+            ):
+            if(1 < regression_data['PCT_day_change'] < 2.5 and 1 < regression_data['PCT_change'] < 2.5 
+                and no_doji_or_spinning_sell_india(regression_data) and no_doji_or_spinning_buy_india(regression_data)
+                ):
+                if(regression_data['forecast_day_VOL_change'] > -20
+                    and is_algo_buy(regression_data)
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, 'MLbuyFinalCandidate-2')
+                    return True
+                elif(regression_data['forecast_day_VOL_change'] < -30
+                    and is_algo_sell(regression_data)
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, 'MLsellFinalContinue-2')
+                    return True
+                return False
+            if(1 < regression_data['PCT_day_change'] < 4 and 1 < regression_data['PCT_change'] < 4 
+                and no_doji_or_spinning_sell_india(regression_data) and no_doji_or_spinning_buy_india(regression_data)
+                ):
+                if(regression_data['forecast_day_VOL_change'] < -30
+                    and is_algo_buy(regression_data)
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, 'MLbuyFinalCandidate-3')
+                    return True
+                elif(regression_data['forecast_day_VOL_change'] > 0
+                    and is_algo_sell(regression_data)
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, 'MLsellFinalContinue-3')
+                    return True
+                return False
     return False
            
 def buy_oi_candidate(regression_data, regressionResult, reg, ws):
@@ -2929,8 +2978,8 @@ def buy_test(regression_data, regressionResult, reg, ws):
     
     if(regression_data['close'] > 50
         ):
-#         flag = buy_risingMA(regression_data, regressionResult, reg, ws)
-#         return flag
+        flag = buy_final_candidate(regression_data, regressionResult, reg, ws)
+        return flag
         
         return True
     return False    
@@ -3363,7 +3412,7 @@ def sell_down_trend(regression_data, regressionResult, reg, ws_sellDownTrend):
         return True
     return False
 
-def sell_final(regression_data, regressionResult, reg, ws_sellFinal, ws_sellFinal1):
+def sell_final(regression_data, regressionResult, reg, ws, ws1):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     if(regression_data['yearLowChange'] > 10
        and regression_data['yearHighChange'] < -5
@@ -3385,7 +3434,7 @@ def sell_final(regression_data, regressionResult, reg, ws_sellFinal, ws_sellFina
             and regression_data['forecast_day_PCT4_change'] > -0.5
             and regression_data['forecast_day_PCT2_change'] < 0 
             and regression_data['forecast_day_PCT_change'] < 0):
-            add_in_csv(regression_data, regressionResult, ws_sellFinal, 'sellFinal')
+            add_in_csv(regression_data, regressionResult, ws, 'sellFinal')
         elif(str(regression_data['buyIndia']) == '' and -90 < regression_data['yearHighChange'] < -10
             and (ten_days_more_than_ten(regression_data)
                  or (last_5_day_all_up_except_today(regression_data)
@@ -3398,7 +3447,7 @@ def sell_final(regression_data, regressionResult, reg, ws_sellFinal, ws_sellFina
             and regression_data['forecast_day_PCT_change'] < 0
             and regression_data['trend'] != 'down'
             ):
-            add_in_csv(regression_data, regressionResult, ws_sellFinal1, 'sellFinal1')
+            add_in_csv(regression_data, regressionResult, ws1, 'sellFinal1')
     if(regression_data['forecast_day_PCT4_change'] >= -0.5
         and regression_data['forecast_day_PCT5_change'] >= -0.5
         and regression_data['forecast_day_PCT7_change'] >= -0.5
@@ -3419,39 +3468,39 @@ def sell_final(regression_data, regressionResult, reg, ws_sellFinal, ws_sellFina
             if(-4 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['PCT_change'] < -2
                and regression_data['PCT_day_change_pre1'] > 0
                 ):
-                #add_in_csv(regression_data, regressionResult, ws_sellFinal, 'sellFinalCandidate-0')
-                add_in_csv(regression_data, regressionResult, ws_sellFinal, None)
+                #add_in_csv(regression_data, regressionResult, ws, 'sellFinalCandidate-0')
+                add_in_csv(regression_data, regressionResult, ws, None)
                 return True
             if(-5 < regression_data['PCT_day_change'] < -2 and -5 < regression_data['PCT_change'] < -2
                and regression_data['PCT_day_change_pre1'] > 0
                and (regression_data['yearHighChange'] > -30 or regression_data['yearLowChange'] > 30)
                 ):
-                add_in_csv(regression_data, regressionResult, ws_sellFinal, 'sellFinalCandidate-00')
+                add_in_csv(regression_data, regressionResult, ws, 'sellFinalCandidate-00')
                 return True
             if(-6.5 < regression_data['PCT_day_change'] < -2 and -6.5 < regression_data['PCT_change'] < -2
                and regression_data['PCT_day_change_pre1'] > 0
                and (regression_data['yearHighChange'] > -30 or regression_data['yearLowChange'] > 30)
                 ):
-                add_in_csv(regression_data, regressionResult, ws_sellFinal, 'sellFinalCandidate-00HighChange')
+                add_in_csv(regression_data, regressionResult, ws, 'sellFinalCandidate-00HighChange')
                 return True
             if(-2.5 < regression_data['PCT_day_change'] < -1 and -2.5 < regression_data['PCT_change'] < -1
                 and regression_data['PCT_day_change_pre1'] < 0
                 and (mlpValue <= -1 or kNeighboursValue <= -1)
                 ):
-                add_in_csv(regression_data, regressionResult, ws_sellFinal, 'sellFinalCandidate-1')
+                add_in_csv(regression_data, regressionResult, ws, 'sellFinalCandidate-1')
                 return True
             if(-4 < regression_data['PCT_day_change'] < -1 and -4 < regression_data['PCT_change'] < -1 
                 and no_doji_or_spinning_sell_india(regression_data)
                 and regression_data['PCT_day_change_pre1'] < 0
                 and (mlpValue <= -1 or kNeighboursValue <= -1)
                 ):   
-                add_in_csv(regression_data, regressionResult, ws_sellFinal, 'sellFinalCandidate-2')
+                add_in_csv(regression_data, regressionResult, ws, 'sellFinalCandidate-2')
                 return True
             if(-2.5 < regression_data['PCT_day_change'] < -0.5 and -2.5 < regression_data['PCT_change'] < -0.5
                 and regression_data['PCT_day_change_pre1'] < 0
                 and (mlpValue <= -1 or kNeighboursValue <= -1)
                 ):
-                add_in_csv(regression_data, regressionResult, ws_sellFinal, '##sellFinalCandidate-2-test')
+                add_in_csv(regression_data, regressionResult, ws, '##sellFinalCandidate-2-test')
                 return True
         if((((regression_data['open'] - regression_data['close']) * 1.5 > regression_data['high'] - regression_data['low']) or (regression_data['forecast_day_PCT_change'] < 0 and regression_data['PCT_day_change'] < -1))
             and (regression_data['yearHighChange'] > -30 or regression_data['yearLowChange'] > 30)
@@ -3462,7 +3511,7 @@ def sell_final(regression_data, regressionResult, reg, ws_sellFinal, ws_sellFina
                 if(((mlpValue <= -0.5 and kNeighboursValue <= -0.5) or is_algo_sell(regression_data))
                     and regression_data['forecast_day_VOL_change'] > -20
                     ):    
-                    add_in_csv(regression_data, regressionResult, ws_sellFinal, 'sellFinalCandidate-3')
+                    add_in_csv(regression_data, regressionResult, ws, 'sellFinalCandidate-3')
                     return True
             if(-5 < regression_data['PCT_day_change'] < -1 and -5 < regression_data['PCT_change'] < -1 
                 and no_doji_or_spinning_sell_india(regression_data) and no_doji_or_spinning_buy_india(regression_data)
@@ -3470,13 +3519,13 @@ def sell_final(regression_data, regressionResult, reg, ws_sellFinal, ws_sellFina
                 if(((mlpValue <= -0.5 and kNeighboursValue <= -0.5) or is_algo_sell(regression_data))
                     and regression_data['forecast_day_VOL_change'] > 0
                     ):    
-                    add_in_csv(regression_data, regressionResult, ws_sellFinal, '##sellFinalCandidate-4')
+                    add_in_csv(regression_data, regressionResult, ws, '##sellFinalCandidate-4')
                     return True
 #         if(-1 < regression_data['PCT_day_change'] < 0 and -1 < regression_data['PCT_change'] < 0 
 #             and no_doji_or_spinning_sell_india(regression_data) and no_doji_or_spinning_buy_india(regression_data)
 #             and (mlpValue <= -1 or kNeighboursValue <= -1)
 #             ):   
-#             add_in_csv(regression_data, regressionResult, ws_sellFinal, '##sellFinalCandidate-5-(upLastDayOrDown2to3)')
+#             add_in_csv(regression_data, regressionResult, ws, '##sellFinalCandidate-5-(upLastDayOrDown2to3)')
 #             return True
     return False
 
@@ -4394,60 +4443,66 @@ def sell_trend_break(regression_data, regressionResult, reg, ws):
                    flag = False
     return flag
     
-def sell_final_candidate(regression_data, regressionResult, reg, ws_sellFinal):
+def sell_final_candidate(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     if(regression_data['forecast_day_PCT4_change'] >= -0.5
         and regression_data['forecast_day_PCT5_change'] >= -0.5
         and regression_data['forecast_day_PCT7_change'] >= -0.5
-        and regression_data['yearLowChange'] > 5 and regression_data['yearHighChange'] < -5
+        and regression_data['yearLowChange'] > 15 and regression_data['yearHighChange'] < -15
         and regression_data['month3HighChange'] < -3
         and (ten_days_more_than_ten(regression_data)
              or (last_5_day_all_up_except_today(regression_data)
                 and ten_days_more_than_seven(regression_data)
                 )
              )
-        and low_tail_pct(regression_data) < 1
-        and regression_data['SMA25'] > 0
         ):  
         if(regression_data['forecast_day_PCT_change'] < 0
-            and regression_data['bar_low'] < regression_data['bar_low_pre1']
-            and regression_data['forecast_day_VOL_change'] > 0
+            #and regression_data['bar_low'] < regression_data['bar_low_pre1']
+            #and regression_data['forecast_day_VOL_change'] > 0
             ):
             if(-4 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['PCT_change'] < -2
-               and regression_data['PCT_day_change_pre1'] > 0
+                and regression_data['PCT_day_change_pre1'] > 0
                 ):
-                add_in_csv(regression_data, regressionResult, ws_sellFinal, 'sellFinalCandidate-0')
-                return True
+                if(regression_data['SMA25'] > 0 and regression_data['SMA50'] > 0
+                    and is_algo_sell(regression_data)
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, 'MLsellFinalCandidate-(lastDayUp)')
+                    return True
+                elif(regression_data['SMA25'] < 0 and regression_data['SMA50'] < 0
+                    and is_algo_buy(regression_data)
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, 'MLbuyFinalContinue-(lastDayUp)')
+                    return True
+                elif(
+                    is_algo_sell(regression_data)
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, 'MLsellFinalCandidate-1-(lastDayUp)')
+                    return True
+                return False
             if(-5 < regression_data['PCT_day_change'] < -2 and -5 < regression_data['PCT_change'] < -2
-               and regression_data['PCT_day_change_pre1'] > 0
-               and (regression_data['yearHighChange'] > -30 or regression_data['yearLowChange'] > 30)
+                and regression_data['PCT_day_change_pre1'] > 0
+                and (regression_data['yearHighChange'] > -30 or regression_data['yearLowChange'] > 30)
+                and regression_data['forecast_day_PCT7_change'] > 5
+                and regression_data['forecast_day_PCT10_change'] > 10
                 ):
-                add_in_csv(regression_data, regressionResult, ws_sellFinal, 'sellFinalCandidate-00')
-                return False
-            if(-6.5 < regression_data['PCT_day_change'] < -2 and -6.5 < regression_data['PCT_change'] < -2
-               and regression_data['PCT_day_change_pre1'] > 0
-               and (regression_data['yearHighChange'] > -30 or regression_data['yearLowChange'] > 30)
-                ):
-                add_in_csv(regression_data, regressionResult, ws_sellFinal, 'sellFinalCandidate-00HighChange')
-                return False
-            if(-2.5 < regression_data['PCT_day_change'] < -1 and -2.5 < regression_data['PCT_change'] < -1
-                and regression_data['PCT_day_change_pre1'] < 0
-                and (mlpValue <= -1 or kNeighboursValue <= -1)
-                ):
-                add_in_csv(regression_data, regressionResult, ws_sellFinal, 'sellFinalCandidate-1')
+                add_in_csv(regression_data, regressionResult, ws, 'sellFinalCandidate-(lastDayUp)-(highChange)')
                 return True
-            if(-4 < regression_data['PCT_day_change'] < -1 and -4 < regression_data['PCT_change'] < -1 
-                and no_doji_or_spinning_sell_india(regression_data)
-                and regression_data['PCT_day_change_pre1'] < 0
-                and (mlpValue <= -1 or kNeighboursValue <= -1)
-                ):   
-                add_in_csv(regression_data, regressionResult, ws_sellFinal, 'sellFinalCandidate-2')
-                return True
-            if(-2.5 < regression_data['PCT_day_change'] < -0.5 and -2.5 < regression_data['PCT_change'] < -0.5
-                and regression_data['PCT_day_change_pre1'] < 0
-                and (mlpValue <= -1 or kNeighboursValue <= -1)
+            elif(regression_data['PCT_day_change'] < -2 and regression_data['PCT_change'] < -2
+                and regression_data['PCT_day_change_pre1'] > 0
+                and (regression_data['yearHighChange'] > -30 or regression_data['yearLowChange'] > 30)
+                and (regression_data['forecast_day_PCT7_change'] < 5 or regression_data['forecast_day_PCT10_change'] < 10)
                 ):
-                add_in_csv(regression_data, regressionResult, ws_sellFinal, '##sellFinalCandidate-2-test')
+                if(('P@[' not in regression_data['sellIndia'])):
+                    add_in_csv(regression_data, regressionResult, ws, 'buyFinalContinue-(lastDayUp)-(highChange)')
+                    return True
+                else:
+                    add_in_csv(regression_data, regressionResult, ws, 'sellFinalCandidate-(lastDayUp)-(highChange)')
+                    return True
+            if(-4 < regression_data['PCT_day_change'] < -0.5 and -4 < regression_data['PCT_change'] < -0.5
+                and regression_data['PCT_day_change_pre1'] < 0
+                and 'P@[' in regression_data['buyIndia']
+                ):
+                add_in_csv(regression_data, regressionResult, ws, 'sellFinalCandidate-(lastDayDown)-(buyPattern)')
                 return True
         if((((regression_data['open'] - regression_data['close']) * 1.5 > regression_data['high'] - regression_data['low']) or (regression_data['forecast_day_PCT_change'] < 0 and regression_data['PCT_day_change'] < -1))
             and (regression_data['yearHighChange'] > -30 or regression_data['yearLowChange'] > 30)
@@ -4455,19 +4510,33 @@ def sell_final_candidate(regression_data, regressionResult, reg, ws_sellFinal):
             if(-2.5 < regression_data['PCT_day_change'] < -1 and -2.5 < regression_data['PCT_change'] < -1 
                 and no_doji_or_spinning_sell_india(regression_data) and no_doji_or_spinning_buy_india(regression_data)
                 ):
-                if(((mlpValue <= -0.5 and kNeighboursValue <= -0.5) or is_algo_sell(regression_data))
-                    and regression_data['forecast_day_VOL_change'] > -20
+                if(regression_data['forecast_day_VOL_change'] > -20
+                    and is_algo_sell(regression_data)
                     ):    
-                    add_in_csv(regression_data, regressionResult, ws_sellFinal, 'sellFinalCandidate-3')
+                    add_in_csv(regression_data, regressionResult, ws, 'MLsellFinalCandidate-3')
                     return True
+                elif(regression_data['forecast_day_VOL_change'] < -30
+                    and is_algo_buy(regression_data)
+                    and ('[' in regression_data['sellIndia'])
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, 'MLbuyFinalContinue-3')
+                    return True
+                return False
             if(-5 < regression_data['PCT_day_change'] < -1 and -5 < regression_data['PCT_change'] < -1 
                 and no_doji_or_spinning_sell_india(regression_data) and no_doji_or_spinning_buy_india(regression_data)
                 ):
-                if(((mlpValue <= -0.5 and kNeighboursValue <= -0.5) or is_algo_sell(regression_data))
-                    and regression_data['forecast_day_VOL_change'] > 0
+                if(regression_data['forecast_day_VOL_change'] < -30
+                    and is_algo_sell(regression_data)
                     ):    
-                    add_in_csv(regression_data, regressionResult, ws_sellFinal, '##sellFinalCandidate-4')
+                    add_in_csv(regression_data, regressionResult, ws, 'MLsellFinalCandidate-4')
                     return True
+                elif(regression_data['forecast_day_VOL_change'] > -20
+                    and is_algo_buy(regression_data)
+                    and ('[' in regression_data['sellIndia'])
+                    ):    
+                    add_in_csv(regression_data, regressionResult, ws, 'MLbuyFinalContinue-4')
+                    return True
+                return False
     return False            
     
 def sell_oi_candidate(regression_data, regressionResult, reg, ws):
@@ -4936,9 +5005,8 @@ def sell_test(regression_data, regressionResult, reg, ws):
     
     if(regression_data['close'] > 50
         ):
-#         flag = sell_supertrend(regression_data, regressionResult, reg, ws)
-#         return flag
-        
+        flag = sell_final_candidate(regression_data, regressionResult, reg, ws)
+        return flag
         return True
     return False
 
