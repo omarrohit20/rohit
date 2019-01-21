@@ -54,4 +54,4 @@ for data in curs:
     if(flag):
         del data['_id']
         dbresult.sell_test.insert_one(json.loads(json.dumps(data)))
-    
+     
