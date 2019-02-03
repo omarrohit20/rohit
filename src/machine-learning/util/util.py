@@ -1571,41 +1571,39 @@ def buy_base_line_buy(regression_data, regressionResult, reg, ws):
 
 def buy_morning_star_buy(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
-    if(-8 < regression_data['forecast_day_PCT_change'] < -5
-        and regression_data['PCT_day_change_pre1'] < -4
-        and regression_data['yearHighChange'] < -20
+    if(-8 < regression_data['forecast_day_PCT_change'] < -3
         and ((regression_data['yearLowChange'] > 15) or (regression_data['yearLowChange'] < 2))
         and high_tail_pct(regression_data) < 0.5
         and low_tail_pct(regression_data) > 3
+        and regression_data['forecast_day_PCT10_change'] < -10
         ):
-        if(-4 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['PCT_change'] < -1
+        if(-6 < regression_data['PCT_day_change'] < -2 and -6 < regression_data['PCT_change'] < -1
             and (regression_data['close'] - regression_data['low']) > ((regression_data['open'] - regression_data['close']))
             and (regression_data['close'] - regression_data['low']) >= ((regression_data['high'] - regression_data['open']) * 3)
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-2(Check2-3MidCapCross)')
+            add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-HighLowerTail')
             return True
-    if(-10 < regression_data['forecast_day_PCT_change'] < -2
+    elif(-10 < regression_data['forecast_day_PCT_change'] < -2
         and regression_data['PCT_day_change_pre1'] < 0
         and (ten_days_less_than_minus_seven(regression_data))
-        and regression_data['yearHighChange'] < -20
-        and ((regression_data['yearLowChange'] > 15) or (regression_data['yearLowChange'] < 2))
+        and high_tail_pct(regression_data) < 0.5
+        and 2 < low_tail_pct(regression_data) < 3.5
         ):
-        if(regression_data['forecast_day_PCT_change'] < -4
-            and (high_tail_pct(regression_data) < 0.5 or (regression_data['forecast_day_PCT_change'] < -6 and high_tail_pct(regression_data) < 1))
-            and 2 < low_tail_pct(regression_data) < 3.5
+        if(-3 < regression_data['PCT_day_change'] < 0 and -3 < regression_data['PCT_change'] < 0
+            and (regression_data['close'] - regression_data['low']) >= ((regression_data['open'] - regression_data['close']) * 3)
+            and (regression_data['close'] - regression_data['low']) >= ((regression_data['high'] - regression_data['open']) * 3)
+            and regression_data['forecast_day_PCT10_change'] < -10
+            and regression_data['SMA25'] < -8.5
             ):
-            if(-1.5 < regression_data['PCT_day_change'] < 0 and -1.5 < regression_data['PCT_change'] < 0
-                and (regression_data['close'] - regression_data['low']) >= ((regression_data['open'] - regression_data['close']) * 3)
-                and (regression_data['close'] - regression_data['low']) >= ((regression_data['high'] - regression_data['open']) * 3)
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-0(Check2-3MidCapCross)')
-                return True
-            if(0 < regression_data['PCT_day_change'] < 1
-                and (regression_data['open'] - regression_data['low']) >= ((regression_data['open'] - regression_data['close']) * 3)
-                and (regression_data['open'] - regression_data['low']) >= ((regression_data['high'] - regression_data['close']) * 3)
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-1(Check2-3MidCapCross)')
-                return True
+            add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-dayDown')
+            return True
+        if(0.3 < regression_data['PCT_day_change'] < 1
+            and (regression_data['open'] - regression_data['low']) >= ((regression_data['open'] - regression_data['close']) * 3)
+            and (regression_data['open'] - regression_data['low']) >= ((regression_data['high'] - regression_data['close']) * 3)
+            and regression_data['year2HighChange'] > -50
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-dayUp')
+            return True
 #         if(high_tail_pct(regression_data) < 1.5
 #            and low_tail_pct(regression_data) > 2
 #            ):
@@ -2993,59 +2991,39 @@ def buy_test(regression_data, regressionResult, reg, ws):
         return False
     #flag = buy_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
     #return flag
-    if(8 > regression_data['forecast_day_PCT_change'] > 5
-        and regression_data['yearLowChange'] > 15
-        and low_tail_pct(regression_data) < 0.5
-        and high_tail_pct(regression_data) > 3
+    if(-8 < regression_data['forecast_day_PCT_change'] < -3
+        and ((regression_data['yearLowChange'] > 15) or (regression_data['yearLowChange'] < 2))
+        and high_tail_pct(regression_data) < 0.5
+        and low_tail_pct(regression_data) > 3
+        and regression_data['forecast_day_PCT10_change'] < -10
         ):
-        if(5 > regression_data['PCT_day_change'] > 2 and 5 > regression_data['PCT_change'] > 1
-            and (regression_data['high']-regression_data['close']) > ((regression_data['close']-regression_data['open']))
-            and (regression_data['high']-regression_data['close']) >= ((regression_data['open']-regression_data['low'])*3)
-            and ((regression_data['yearHighChange'] < -15) or (regression_data['yearHighChange'] > -2))
-            and regression_data['forecast_day_PCT5_change'] < 10
+        if(-6 < regression_data['PCT_day_change'] < -2 and -6 < regression_data['PCT_change'] < -1
+            and (regression_data['close'] - regression_data['low']) > ((regression_data['open'] - regression_data['close']))
+            and (regression_data['close'] - regression_data['low']) >= ((regression_data['high'] - regression_data['open']) * 3)
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'eveningStarBuy-0')
+            add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-HighLowerTail')
             return True
-        elif(4 > regression_data['PCT_day_change'] > 2 and 4 > regression_data['PCT_change'] > 2
-            and -15 < regression_data['yearHighChange'] 
-            and regression_data['PCT_day_change_pre3'] > -1
-            and regression_data['PCT_day_change_pre1'] > -1
-            and regression_data['PCT_change_pre1'] > -1
-            and regression_data['PCT_change_pre2'] > -1
-            ):
-            add_in_csv(regression_data, regressionResult, ws, 'eveningStarSell-0')
-            return True
-        elif(5 > regression_data['PCT_day_change'] > 2 and 5 > regression_data['PCT_change'] > 2
-            and (regression_data['high']-regression_data['close']) > ((regression_data['close']-regression_data['open']))
-            and (regression_data['high']-regression_data['close']) >= ((regression_data['open']-regression_data['low'])*3)
-            and -15 < regression_data['yearHighChange']
-            and is_algo_buy(regression_data)
-            ):
-            add_in_csv(regression_data, regressionResult, ws, 'ML:EveningStarBuy-1(Check2-3MidCapCross)')
-            return True
-    elif(
-        regression_data['PCT_day_change_pre1'] > 0
-        and (ten_days_more_than_seven(regression_data))
+    elif(-10 < regression_data['forecast_day_PCT_change'] < -2
+        and regression_data['PCT_day_change_pre1'] < 0
+        and (ten_days_less_than_minus_seven(regression_data))
+        and high_tail_pct(regression_data) < 0.5
+        and 2 < low_tail_pct(regression_data) < 3.5
         ):
-        if(low_tail_pct(regression_data) < 1.5
-            and high_tail_pct(regression_data) > 1.5
+        if(-3 < regression_data['PCT_day_change'] < 0 and -3 < regression_data['PCT_change'] < 0
+            and (regression_data['close'] - regression_data['low']) >= ((regression_data['open'] - regression_data['close']) * 3)
+            and (regression_data['close'] - regression_data['low']) >= ((regression_data['high'] - regression_data['open']) * 3)
+            and regression_data['forecast_day_PCT10_change'] < -10
+            and regression_data['SMA25'] < -8.5
             ):
-            if(1.5 > regression_data['PCT_day_change'] > 0.5 and 1.5 > regression_data['PCT_change'] > 0
-                and (regression_data['high']-regression_data['close']) >= ((regression_data['close']-regression_data['open']) * 3)
-                and (regression_data['high']-regression_data['close']) >= ((regression_data['open']-regression_data['low'])*3)
-                and is_algo_sell(regression_data)
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'ML:eveningStarSell-1(Check2-3MidCapCross)')
-                return True
-        elif((low_tail_pct(regression_data) < 0.5 or (regression_data['forecast_day_PCT_change'] > 6 and low_tail_pct(regression_data) < 1))
-            and 2 < high_tail_pct(regression_data) < 3.5
-            and low_tail_pct(regression_data) < 0.5
+            add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-dayDown')
+            return True
+        if(0.3 < regression_data['PCT_day_change'] < 1
+            and (regression_data['open'] - regression_data['low']) >= ((regression_data['open'] - regression_data['close']) * 3)
+            and (regression_data['open'] - regression_data['low']) >= ((regression_data['high'] - regression_data['close']) * 3)
+            and regression_data['year2HighChange'] > -50
             ):
-            if(2 > regression_data['PCT_day_change'] > 0.5 and 2 > regression_data['PCT_change'] > 0
-                and is_algo_sell(regression_data)
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'ML:eveningStarSell-Risky-3(Check2-3MidCapCross)')
-                return True
+            add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-dayUp')
+            return True
     return False    
 
 def buy_all_common(regression_data, regressionResult, reg, ws):
@@ -3972,40 +3950,55 @@ def sell_base_line_buy(regression_data, regressionResult, reg, ws):
 def sell_morning_star_buy(regression_data, regressionResult, reg, ws):
     return False
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
-    if(-8 < regression_data['forecast_day_PCT_change'] < -5
-        and regression_data['PCT_day_change_pre1'] < -4
-        and regression_data['yearHighChange'] < -20
+    if(-8 < regression_data['forecast_day_PCT_change'] < -3
         and ((regression_data['yearLowChange'] > 15) or (regression_data['yearLowChange'] < 2))
         and high_tail_pct(regression_data) < 0.5
         and low_tail_pct(regression_data) > 3
+        and regression_data['forecast_day_PCT10_change'] < -10
         ):
-        if(-4 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['PCT_change'] < -1
-            and (regression_data['close'] - regression_data['low']) > ((regression_data['open'] - regression_data['close']))
+        if(-6 < regression_data['PCT_day_change'] < -2 and -6 < regression_data['PCT_change'] < -1
+            and (regression_data['close'] - regression_data['low']) >= ((regression_data['open'] - regression_data['close']) * 3)
             and (regression_data['close'] - regression_data['low']) >= ((regression_data['high'] - regression_data['open']) * 3)
+            and regression_data['forecast_day_PCT10_change'] < -10
+            and regression_data['SMA25'] < -8.5
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-2(Check2-3MidCapCross)')
+            add_in_csv(regression_data, regressionResult, ws, None)
             return True
     if(-10 < regression_data['forecast_day_PCT_change'] < -2
         and regression_data['PCT_day_change_pre1'] < 0
-        and ten_days_less_than_minus_seven(regression_data)
-        and regression_data['yearHighChange'] < -20
-        and ((regression_data['yearLowChange'] > 15) or (regression_data['yearLowChange'] < 2))
+        and (ten_days_less_than_minus_seven(regression_data))
+        and high_tail_pct(regression_data) < 0.5
+        and 1.5 < low_tail_pct(regression_data) < 4
         ):
-        if(regression_data['forecast_day_PCT_change'] < -4
-            and (high_tail_pct(regression_data) < 0.5 or (regression_data['forecast_day_PCT_change'] < -6 and high_tail_pct(regression_data) < 1))
-            and 2 < low_tail_pct(regression_data) < 3.5
+        if(-3 < regression_data['PCT_day_change'] < 0 and -3 < regression_data['PCT_change'] < 0
+            and (regression_data['close'] - regression_data['low']) >= ((regression_data['open'] - regression_data['close']) * 3)
+            and (regression_data['close'] - regression_data['low']) >= ((regression_data['high'] - regression_data['open']) * 3)
+            and regression_data['forecast_day_PCT10_change'] < -10
+            and regression_data['SMA25'] < -8.5
             ):
-            if(-1.5 < regression_data['PCT_day_change'] < 0 and -1.5 < regression_data['PCT_change'] < 0
-                and (regression_data['close'] - regression_data['low']) >= ((regression_data['open'] - regression_data['close']) * 3)
-                and (regression_data['close'] - regression_data['low']) >= ((regression_data['high'] - regression_data['open']) * 3)
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-0(Check2-3MidCapCross)')
-                return True
-            if(0 < regression_data['PCT_day_change'] < 1 and 0 < regression_data['PCT_change'] < 1 
-                and kNeighboursValue >= 0
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-1(Check2-3MidCapCross)')
-                return True
+            add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-dayDown')
+            return True
+        if(0.3 < regression_data['PCT_day_change'] < 1
+            and (regression_data['open'] - regression_data['low']) >= ((regression_data['open'] - regression_data['close']) * 3)
+            and (regression_data['open'] - regression_data['low']) >= ((regression_data['high'] - regression_data['close']) * 3)
+            and 2 < low_tail_pct(regression_data) < 3.5
+            and is_algo_buy(regression_data)
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-Risky-dayUp')
+            return True
+    if(-10 < regression_data['forecast_day_PCT_change'] < -2
+        and regression_data['PCT_day_change_pre1'] < 0
+        and (ten_days_less_than_minus_seven(regression_data))
+        and high_tail_pct(regression_data) < 0.5
+        and 1.5 < low_tail_pct(regression_data) < 7
+        ):
+        if(0.3 < regression_data['PCT_day_change'] < 1
+            and (regression_data['open'] - regression_data['low']) >= ((regression_data['open'] - regression_data['close']) * 3)
+            and (regression_data['open'] - regression_data['low']) >= ((regression_data['high'] - regression_data['close']) * 3)
+            and regression_data['year2HighChange'] > -50
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'morningStarSell-dayUp')
+            return True
 #         if(high_tail_pct(regression_data) < 1.5
 #            and low_tail_pct(regression_data) > 1.5
 #            ):
@@ -4998,48 +4991,55 @@ def sell_test(regression_data, regressionResult, reg, ws):
         return False
     #flag = sell_final_candidate(regression_data, regressionResult, reg, ws)
     #return flag
-    if(8 > regression_data['forecast_day_PCT_change'] > 4
-        and regression_data['month3HighChange'] > -50
-        and low_tail_pct(regression_data) < 0.8
-        and high_tail_pct(regression_data) > 2.5
-        and regression_data['yearHighChange'] < -4
+    if(-8 < regression_data['forecast_day_PCT_change'] < -3
+        and ((regression_data['yearLowChange'] > 15) or (regression_data['yearLowChange'] < 2))
+        and high_tail_pct(regression_data) < 0.5
+        and low_tail_pct(regression_data) > 3
+        and regression_data['forecast_day_PCT10_change'] < -10
         ):
-        if(6 > regression_data['PCT_day_change'] > 1.5 and 6 > regression_data['PCT_change'] > 1
-            and (regression_data['high']-regression_data['close']) > ((regression_data['close']-regression_data['open']))
-            and (regression_data['high']-regression_data['close']) >= ((regression_data['open']-regression_data['low'])*3)
-            #and ((regression_data['yearHighChange'] < -15) or (regression_data['yearHighChange'] > -2))
-            #and regression_data['forecast_day_PCT5_change'] < 10
+        if(-6 < regression_data['PCT_day_change'] < -2 and -6 < regression_data['PCT_change'] < -1
+            and (regression_data['close'] - regression_data['low']) >= ((regression_data['open'] - regression_data['close']) * 3)
+            and (regression_data['close'] - regression_data['low']) >= ((regression_data['high'] - regression_data['open']) * 3)
+            and regression_data['forecast_day_PCT10_change'] < -10
+            and regression_data['SMA25'] < -8.5
             ):
-            if(regression_data['year2HighChange'] < -80
-            ):
-                add_in_csv(regression_data, regressionResult, ws, 'eveningStarBuy-0(Buy-After-1pc-down)')
-                return True
-            else:
-                add_in_csv(regression_data, regressionResult, ws, 'eveningStarSell-0')
-                return True
-    elif(
-        regression_data['PCT_day_change_pre1'] > 0
-        and (ten_days_more_than_seven(regression_data))
+            add_in_csv(regression_data, regressionResult, ws, None)
+            return True
+    if(-10 < regression_data['forecast_day_PCT_change'] < -2
+        and regression_data['PCT_day_change_pre1'] < 0
+        and (ten_days_less_than_minus_seven(regression_data))
+        and high_tail_pct(regression_data) < 0.5
+        and 1.5 < low_tail_pct(regression_data) < 4
         ):
-        if(low_tail_pct(regression_data) < 1.5
-            and high_tail_pct(regression_data) > 1.5
+        if(-3 < regression_data['PCT_day_change'] < 0 and -3 < regression_data['PCT_change'] < 0
+            and (regression_data['close'] - regression_data['low']) >= ((regression_data['open'] - regression_data['close']) * 3)
+            and (regression_data['close'] - regression_data['low']) >= ((regression_data['high'] - regression_data['open']) * 3)
+            and regression_data['forecast_day_PCT10_change'] < -10
+            and regression_data['SMA25'] < -8.5
             ):
-            if(1.5 > regression_data['PCT_day_change'] > 0.5 and 1.5 > regression_data['PCT_change'] > 0
-                and (regression_data['high']-regression_data['close']) >= ((regression_data['close']-regression_data['open']) * 3)
-                and (regression_data['high']-regression_data['close']) >= ((regression_data['open']-regression_data['low'])*3)
-                and is_algo_sell(regression_data)
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'ML:eveningStarSell-1(Check2-3MidCapCross)')
-                return True
-        elif((low_tail_pct(regression_data) < 0.5 or (regression_data['forecast_day_PCT_change'] > 6 and low_tail_pct(regression_data) < 1))
-            and 2 < high_tail_pct(regression_data) < 3.5
-            and low_tail_pct(regression_data) < 0.5
+            add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-dayDown')
+            return True
+        if(0.3 < regression_data['PCT_day_change'] < 1
+            and (regression_data['open'] - regression_data['low']) >= ((regression_data['open'] - regression_data['close']) * 3)
+            and (regression_data['open'] - regression_data['low']) >= ((regression_data['high'] - regression_data['close']) * 3)
+            and 2 < low_tail_pct(regression_data) < 3.5
+            and is_algo_buy(regression_data)
             ):
-            if(2 > regression_data['PCT_day_change'] > 0.5 and 2 > regression_data['PCT_change'] > 0
-                and is_algo_sell(regression_data)
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'ML:eveningStarSell-Risky-3(Check2-3MidCapCross)')
-                return True
+            add_in_csv(regression_data, regressionResult, ws, 'morningStarBuy-Risky-dayUp')
+            return True
+    if(-10 < regression_data['forecast_day_PCT_change'] < -2
+        and regression_data['PCT_day_change_pre1'] < 0
+        and (ten_days_less_than_minus_seven(regression_data))
+        and high_tail_pct(regression_data) < 0.5
+        and 1.5 < low_tail_pct(regression_data) < 7
+        ):
+        if(0.3 < regression_data['PCT_day_change'] < 1
+            and (regression_data['open'] - regression_data['low']) >= ((regression_data['open'] - regression_data['close']) * 3)
+            and (regression_data['open'] - regression_data['low']) >= ((regression_data['high'] - regression_data['close']) * 3)
+            and regression_data['year2HighChange'] > -50
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'morningStarSell-dayUp')
+            return True
     return False
 
 def sell_all_common(regression_data, regressionResult, reg, ws):
