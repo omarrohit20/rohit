@@ -37,21 +37,21 @@ dbresult = connection.result
 #         del data['_id']
 #         dbresult.sell_other_indicator.insert_one(json.loads(json.dumps(data))) 
         
-# dbresult.drop_collection('buy_test')
-# curs = db.ws_highAll.find({})
-# for data in curs:
-#     data['filterTest'] = ''
-#     flag = buy_test(data, data, True, None)
-#     if(flag):
-#         del data['_id']
-#         dbresult.buy_test.insert_one(json.loads(json.dumps(data))) 
- 
-dbresult.drop_collection('sell_test')        
-curs = db.ws_lowAll.find({})
+dbresult.drop_collection('buy_test')
+curs = db.ws_highAll.find({})
 for data in curs:
     data['filterTest'] = ''
-    flag = sell_test(data, data, True, None)
+    flag = buy_test(data, data, True, None)
     if(flag):
         del data['_id']
-        dbresult.sell_test.insert_one(json.loads(json.dumps(data)))
-      
+        dbresult.buy_test.insert_one(json.loads(json.dumps(data))) 
+ 
+# dbresult.drop_collection('sell_test')        
+# curs = db.ws_lowAll.find({})
+# for data in curs:
+#     data['filterTest'] = ''
+#     flag = sell_test(data, data, True, None)
+#     if(flag):
+#         del data['_id']
+#         dbresult.sell_test.insert_one(json.loads(json.dumps(data)))
+#       
