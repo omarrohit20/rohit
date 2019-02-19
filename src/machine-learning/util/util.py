@@ -3146,6 +3146,17 @@ def buy_risingMA(regression_data, regressionResult, reg, ws):
 def buy_study_risingMA(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
+    if(regression_data['EMA6'] < regression_data['EMA14']
+       and regression_data['EMA6_1daysBack'] >= regression_data['EMA14_1daysBack']
+       and regression_data['EMA6_2daysBack'] > regression_data['EMA14_2daysBack']
+       ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:EMA6<EMA14')
+    elif(regression_data['EMA6'] > regression_data['EMA14']
+       and regression_data['EMA6_1daysBack'] <= regression_data['EMA14_1daysBack']
+       and regression_data['EMA6_2daysBack'] < regression_data['EMA14_2daysBack']
+       ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:EMA6>EMA14')
+    
     if(regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50'] < regression_data['SMA25'] < regression_data['SMA9']
     ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:RisingMA')
@@ -3255,7 +3266,7 @@ def buy_study_risingMA(regression_data, regressionResult, reg, ws):
            
        ):  
        add_in_csv(regression_data, regressionResult, ws, "##(Test)(check-chart-sell)-SMADownTrend")
-       return True  
+       return True
 
 def buy_test(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)

@@ -949,7 +949,9 @@ def ta_lib_data_df(scrip, df, db_store=False):
         overlap_studies['10-EMA30'] = EMA(historicalInputs, 6).tolist()[::-1][10]     
         
 #       overlap_studies['DEMA'] = DEMA(historicalInputs).tolist()[::-1]
+        overlap_studies['EMA6'] = EMA(historicalInputs, 6).tolist()[::-1]
         overlap_studies['EMA9'] = EMA(historicalInputs, 9).tolist()[::-1]
+        overlap_studies['EMA14'] = EMA(historicalInputs, 14).tolist()[::-1]
         overlap_studies['EMA21'] = EMA(historicalInputs, 21).tolist()[::-1]
         overlap_studies['EMA25'] = EMA(historicalInputs, 25).tolist()[::-1]
         overlap_studies['EMA50'] = EMA(historicalInputs, 50).tolist()[::-1]

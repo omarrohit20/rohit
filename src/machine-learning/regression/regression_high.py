@@ -457,6 +457,12 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     regression_data['bar_low_pre2'] = float(bar_low_pre2)
     regression_data['greentrend'] = float(greentrend)
     regression_data['redtrend'] = float(redtrend)
+    regression_data['EMA6'] = technical['overlap_studies']['EMA6'][0]
+    regression_data['EMA14'] = technical['overlap_studies']['EMA14'][0]
+    regression_data['EMA6_1daysBack'] = technical['overlap_studies']['EMA6'][1]
+    regression_data['EMA14_1daysBack'] = technical['overlap_studies']['EMA14'][1]
+    regression_data['EMA6_2daysBack'] = technical['overlap_studies']['EMA6'][2]
+    regression_data['EMA14_2daysBack'] = technical['overlap_studies']['EMA14'][2]
     regression_data['SMA4_2daysBack'] = (float(close)-technical['overlap_studies']['SMA4'][2])*100/technical['overlap_studies']['SMA4'][2]
     regression_data['SMA9_2daysBack'] = (float(close)-technical['overlap_studies']['SMA9'][2])*100/technical['overlap_studies']['SMA9'][2]
     regression_data['SMA4'] = (float(close)-technical['overlap_studies']['SMA4'][0])*100/technical['overlap_studies']['SMA4'][0]
