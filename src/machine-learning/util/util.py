@@ -3146,16 +3146,48 @@ def buy_risingMA(regression_data, regressionResult, reg, ws):
 def buy_study_risingMA(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
-    if(regression_data['EMA6'] < regression_data['EMA14']
-       and regression_data['EMA6_1daysBack'] >= regression_data['EMA14_1daysBack']
-       and regression_data['EMA6_2daysBack'] > regression_data['EMA14_2daysBack']
-       ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:EMA6<EMA14')
-    elif(regression_data['EMA6'] > regression_data['EMA14']
-       and regression_data['EMA6_1daysBack'] <= regression_data['EMA14_1daysBack']
-       and regression_data['EMA6_2daysBack'] < regression_data['EMA14_2daysBack']
+    
+    ema_diff = (((regression_data['EMA6'] - regression_data['EMA14'])/regression_data['EMA14'])*100)
+    ema_diff_pre1 = (((regression_data['EMA6_1daysBack'] - regression_data['EMA14_1daysBack'])/regression_data['EMA14_1daysBack'])*100)
+    ema_diff_pre2 = (((regression_data['EMA6_2daysBack'] - regression_data['EMA14_2daysBack'])/regression_data['EMA14_2daysBack'])*100)  
+    
+    if(ema_diff > 0
+       and ema_diff_pre1 < 0
+       and ema_diff_pre2 < 0
+       and ema_diff_pre2 < ema_diff_pre1
        ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:EMA6>EMA14')
+    if(ema_diff < 0
+       and ema_diff_pre1 > 0
+       and ema_diff_pre2 > 0
+       and ema_diff_pre2 > ema_diff_pre1
+       ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:EMA6<EMA14')
+        
+    if(((regression_data['EMA6'] < regression_data['EMA6_1daysBack'] < regression_data['EMA6_2daysBack'])
+       or (regression_data['EMA14'] < regression_data['EMA14_1daysBack'] < regression_data['EMA14_2daysBack']))
+       and ema_diff < ema_diff_pre1 < ema_diff_pre2
+       and 0 < ema_diff < 0.30
+       and ema_diff_pre2 > 3*ema_diff
+       and (regression_data['PCT_day_change'] > 0
+             or regression_data['PCT_day_change_pre1'] > 0
+             or regression_data['PCT_day_change_pre2'] > 0
+             or regression_data['PCT_day_change_pre3'] > 0
+            )
+       ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:EMA6&EMA14>')
+    if(((regression_data['EMA6'] > regression_data['EMA6_1daysBack'] > regression_data['EMA6_2daysBack'])
+       or (regression_data['EMA14'] > regression_data['EMA14_1daysBack'] > regression_data['EMA14_2daysBack']))
+       and ema_diff_pre2 < ema_diff_pre1 < ema_diff
+       and -0.30 < ema_diff < 0
+       and ema_diff_pre2 < 3*ema_diff
+       and (regression_data['PCT_day_change'] < 0
+             or regression_data['PCT_day_change_pre1'] < 0
+             or regression_data['PCT_day_change_pre2'] < 0
+             or regression_data['PCT_day_change_pre3'] < 0
+            )
+       ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:EMA6&EMA14<')
     
     if(regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50'] < regression_data['SMA25'] < regression_data['SMA9']
     ):
