@@ -35,7 +35,7 @@ sellMLP_MIN = 0
 sellKN = -0.1
 sellKN_MIN = 0
 
-def add_in_csv(regression_data, regressionResult, ws=None, filter=None, filter1=None, filter2=None, filter3=None, filter4=None):
+def add_in_csv(regression_data, regressionResult, ws=None, filter=None, filter1=None, filter2=None, filter3=None, filter4=None, filter5=None):
     if(TEST != True):
         if(is_algo_buy(regression_data) and (filter is not None)):
             if '[MLBuy]' not in regression_data['filter']:
@@ -58,13 +58,16 @@ def add_in_csv(regression_data, regressionResult, ws=None, filter=None, filter1=
         if ((filter3 is not None) and (filter3 not in regression_data['filter3'])):
             regression_data['filter3'] = regression_data['filter3'] + filter3 + ','
         if ((filter4 is not None) and (filter4 not in regression_data['filter4'])):
-            regression_data['filter4'] = regression_data['filter4'] + filter4 + ','   
+            regression_data['filter4'] = regression_data['filter4'] + filter4 + ','  
+        if ((filter5 is not None) and (filter5 not in regression_data['filter5'])):
+            regression_data['filter5'] = regression_data['filter5'] + filter5 + ','  
         tempRegressionResult = regressionResult.copy() 
         tempRegressionResult.append(regression_data['filter'])
         tempRegressionResult.append(regression_data['filter1'])
         tempRegressionResult.append(regression_data['filter2'])
         tempRegressionResult.append(regression_data['filter3'])
         tempRegressionResult.append(regression_data['filter4'])
+        tempRegressionResult.append(regression_data['filter5'])
         ws.append(tempRegressionResult) if (ws is not None) else False
         if(db.resultScripFutures.find_one({'scrip':regression_data['scrip']}) is None):
             db.resultScripFutures.insert_one({
@@ -806,6 +809,7 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regression_data['filter2'] = " "
     regression_data['filter3'] = " "
     regression_data['filter4'] = " "
+    regression_data['filter5'] = " "
     regression_data['series_trend'] = "NA"
     if pct_change_negative_trend(regression_data):
         regression_data['series_trend'] = "downTrend"
@@ -3147,6 +3151,23 @@ def buy_study_risingMA(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
     
+    if(2 < regression_data['PCT_day_change'] < 4
+       and -2 < regression_data['PCT_change'] < 4.5
+       and regression_data['PCT_day_change_pre1'] < 0
+       and regression_data['forecast_day_PCT_change'] > 0
+       and high_tail_pct(regression_data) < 1
+       and low_tail_pct(regression_data) < 1
+       ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, "UP")
+    elif(-4 < regression_data['PCT_day_change'] < -2
+       and -4.5 < regression_data['PCT_change'] < 2
+       and regression_data['PCT_day_change_pre1'] > 0
+       and regression_data['forecast_day_PCT_change'] < 0
+       and high_tail_pct(regression_data) < 1
+       and low_tail_pct(regression_data) < 1
+       ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, "DOWN")
+    
     ema_diff = (((regression_data['EMA6'] - regression_data['EMA14'])/regression_data['EMA14'])*100)
     ema_diff_pre1 = (((regression_data['EMA6_1daysBack'] - regression_data['EMA14_1daysBack'])/regression_data['EMA14_1daysBack'])*100)
     ema_diff_pre2 = (((regression_data['EMA6_2daysBack'] - regression_data['EMA14_2daysBack'])/regression_data['EMA14_2daysBack'])*100)  
@@ -5078,6 +5099,24 @@ def sell_downingMA(regression_data, regressionResult, reg, ws):
 def sell_study_downingMA(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
+    
+    if(2 < regression_data['PCT_day_change'] < 4
+       and -2 < regression_data['PCT_change'] < 4.5
+       and regression_data['PCT_day_change_pre1'] < 0
+       and regression_data['forecast_day_PCT_change'] > 0
+       and high_tail_pct(regression_data) < 1
+       and low_tail_pct(regression_data) < 1
+       ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, "UP")
+    elif(-4 < regression_data['PCT_day_change'] < -2
+       and -4.5 < regression_data['PCT_change'] < 2
+       and regression_data['PCT_day_change_pre1'] > 0
+       and regression_data['forecast_day_PCT_change'] < 0
+       and high_tail_pct(regression_data) < 1
+       and low_tail_pct(regression_data) < 1
+       ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, "DOWN")
+    
     if(regression_data['SMA200'] > regression_data['SMA100'] > regression_data['SMA50'] > regression_data['SMA25'] > regression_data['SMA9']
         and regression_data['series_trend'] != "upTrend"
         and all_day_pct_change_positive_except_today(regression_data) == False
