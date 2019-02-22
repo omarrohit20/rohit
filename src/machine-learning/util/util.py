@@ -3174,9 +3174,9 @@ def buy_study_risingMA(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, "DOWN")
     
     if(TEST == False):
-        ema_diff = (((regression_data['EMA6'] - regression_data['EMA14'])/regression_data['EMA14'])*100)
-        ema_diff_pre1 = (((regression_data['EMA6_1daysBack'] - regression_data['EMA14_1daysBack'])/regression_data['EMA14_1daysBack'])*100)
-        ema_diff_pre2 = (((regression_data['EMA6_2daysBack'] - regression_data['EMA14_2daysBack'])/regression_data['EMA14_2daysBack'])*100)  
+        ema_diff = regression_data['ema6-14']
+        ema_diff_pre1 = regression_data['ema6-14_pre1']
+        ema_diff_pre2 = regression_data['ema6-14_pre2']
         
         if(ema_diff > 0
            and ema_diff_pre1 < 0
