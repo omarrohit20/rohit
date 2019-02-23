@@ -3173,20 +3173,72 @@ def buy_study_risingMA(regression_data, regressionResult, reg, ws):
     
     if(2 < regression_data['PCT_day_change'] < 4
        and -2 < regression_data['PCT_change'] < 4.5
-       and regression_data['PCT_day_change_pre1'] < 0
        and regression_data['forecast_day_PCT_change'] > 0
+       and regression_data['PCT_day_change_pre1'] < 0
+       #and regression_data['PCT_day_change_pre2'] < 0.75
        and high_tail_pct(regression_data) < 1
        and low_tail_pct(regression_data) < 1
+       #and low_tail_pct_pre1(regression_data) < 1.5
        ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, "UP")
-    elif(-4 < regression_data['PCT_day_change'] < -2
-       and -4.5 < regression_data['PCT_change'] < 2
-       and regression_data['PCT_day_change_pre1'] > 0
-       and regression_data['forecast_day_PCT_change'] < 0
+    elif(2 < regression_data['PCT_day_change'] < 4
+       and -2 < regression_data['PCT_change'] < 4.5
+       and regression_data['forecast_day_PCT_change'] > 0
+       and regression_data['forecast_day_PCT2_change'] > 0
+       and regression_data['PCT_day_change_pre1'] < 0.75
+       and regression_data['PCT_day_change_pre2'] < 0.5
+       and regression_data['PCT_day_change_pre3'] > 0
        and high_tail_pct(regression_data) < 1
        and low_tail_pct(regression_data) < 1
+       and low_tail_pct_pre1(regression_data) < 1
+       ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, "UP-1")
+    elif(2 < regression_data['PCT_day_change'] < 4
+       and -2 < regression_data['PCT_change'] < 4.5
+       and regression_data['forecast_day_PCT_change'] > 0
+       and regression_data['forecast_day_PCT2_change'] > 0
+       and regression_data['PCT_day_change_pre1'] < 0.75
+       and regression_data['PCT_day_change_pre2'] < 0.5
+       #and regression_data['PCT_day_change_pre3'] > 0
+       and high_tail_pct(regression_data) < 1
+       and low_tail_pct(regression_data) < 1
+       and low_tail_pct_pre1(regression_data) < 1
+       ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, "UP-2")
+    elif(-4 < regression_data['PCT_day_change'] < -2
+       and -4.5 < regression_data['PCT_change'] < 2
+       and regression_data['forecast_day_PCT_change'] < 0
+       and regression_data['PCT_day_change_pre1'] > 0
+       #and regression_data['PCT_day_change_pre2'] > -0.75
+       and low_tail_pct(regression_data) < 1
+       and high_tail_pct(regression_data) < 1
+       #and high_tail_pct_pre1(regression_data) < 1.5
        ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, "DOWN")
+    elif(-4 < regression_data['PCT_day_change'] < -2
+       and -4.5 < regression_data['PCT_change'] < 2
+       and regression_data['forecast_day_PCT_change'] < 0
+       and regression_data['forecast_day_PCT2_change'] < 0
+       and regression_data['PCT_day_change_pre1'] > -0.75
+       and regression_data['PCT_day_change_pre2'] > -0.5
+       and regression_data['PCT_day_change_pre3'] < 0
+       and low_tail_pct(regression_data) < 1
+       and high_tail_pct(regression_data) < 1
+       and high_tail_pct_pre1(regression_data) < 1
+       ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, "DOWN-1")
+    elif(-4 < regression_data['PCT_day_change'] < -2
+       and -4.5 < regression_data['PCT_change'] < 2
+       and regression_data['forecast_day_PCT_change'] < 0
+       and regression_data['forecast_day_PCT2_change'] < 0
+       and regression_data['PCT_day_change_pre1'] > -0.75
+       and regression_data['PCT_day_change_pre2'] > -0.5
+       #and regression_data['PCT_day_change_pre3'] < 0
+       and low_tail_pct(regression_data) < 1
+       and high_tail_pct(regression_data) < 1
+       and high_tail_pct_pre1(regression_data) < 1
+       ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, "DOWN-3")
     
     if(TEST == False):
         ema_diff = regression_data['ema6-14']
