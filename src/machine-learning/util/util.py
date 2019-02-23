@@ -2126,23 +2126,50 @@ def buy_trend_break(regression_data, regressionResult, reg, ws):
 #                 add_in_csv(regression_data, regressionResult, ws, '##BreakOutBuyCandidate(notUpLastDay)-1')
 #                 return True
         
-    
+#     if(0.5 < regression_data['forecast_day_PCT10_change'] < 2
+#         and regression_data['forecast_day_PCT_change'] > 1
+#         and 2 < regression_data['PCT_day_change'] < 5.5
+#         and 2 < regression_data['PCT_change'] < 5.5
+#         and regression_data['PCT_day_change_pre1'] > -0.5
+#         and 0.5 < high_tail_pct(regression_data) < 2
+#         and regression_data['buyIndia_avg'] > -0.75
+#         and regression_data['sellIndia_avg'] > -0.75
+#         and regression_data['month3LowChange'] > 4
+#         and ('P@[' not in regression_data['sellIndia'])
+#         and abs_month3High_more_than_month3Low(regression_data)
+#         and (abs(regression_data['month6HighChange']) > abs(regression_data['month6LowChange']))
+#         ):
+#         add_in_csv(regression_data, regressionResult, ws, 'buy-2week-breakoutup')
+#     elif(0.5 < regression_data['forecast_day_PCT10_change'] < 3
+#         #and regression_data['forecast_day_PCT_change'] > 1
+#         and 2 < regression_data['PCT_day_change']
+#         and 2 < regression_data['PCT_change']
+#         and regression_data['PCT_day_change_pre1'] > -0.5
+#         and 0.5 < high_tail_pct(regression_data) < 2
+#         #and regression_data['buyIndia_avg'] > -0.75
+#         #and regression_data['sellIndia_avg'] > -0.75
+#         #and regression_data['month3LowChange'] > 4
+#         #and ('P@[' not in regression_data['sellIndia'])
+#         and abs_month3High_more_than_month3Low(regression_data)
+#         and (abs(regression_data['month6HighChange']) > abs(regression_data['month6LowChange']))
+#         ):
+#         add_in_csv(regression_data, regressionResult, ws, 'sell-2week-breakoutup')
     if(0.5 < regression_data['forecast_day_PCT10_change'] < 3
         and regression_data['forecast_day_PCT_change'] > 1
         and 2 < regression_data['PCT_day_change'] < 5.5
         and 2 < regression_data['PCT_change'] < 5.5
         and high_tail_pct(regression_data) < 2.5
-        #and regression_data['buyIndia_avg'] > -0.75
-        #and regression_data['sellIndia_avg'] > -0.75
+        and regression_data['buyIndia_avg'] > -0.75
+        and regression_data['sellIndia_avg'] > -0.75
         and regression_data['month3LowChange'] > 4
         and ('P@[' not in regression_data['sellIndia'])
         and abs_month3High_more_than_month3Low(regression_data)
         ):
         if(is_algo_buy(regression_data)):
-            add_in_csv(regression_data, regressionResult, ws, 'ML:buy-2week-breakoutup')
+            add_in_csv(regression_data, regressionResult, ws, '(check-chart):ML:buy-2week-breakoutup')
             return True
         elif(is_algo_sell(regression_data)):
-            add_in_csv(regression_data, regressionResult, ws, 'ML:sell-2week-breakoutup')
+            add_in_csv(regression_data, regressionResult, ws, '(check-chart):ML:sell-2week-breakoutup')
             return True
     elif(0.5 < regression_data['forecast_day_PCT10_change'] < 3
         and regression_data['forecast_day_PCT_change'] > 1
