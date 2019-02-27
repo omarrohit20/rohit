@@ -715,24 +715,53 @@ def tail_pct_filter(regression_data, regressionResult):
     high_tail_pct_filter(regression_data, regressionResult)
 
 def tail_reversal_filter(regression_data, regressionResult):
-    if(3 > low_tail_pct(regression_data) > 1.8
+    if(3 > low_tail_pct(regression_data) > 2
             and high_tail_pct(regression_data) < 1
             and low_tail_pct_pre1(regression_data) < 1.5
             #and regression_data['SMA9'] < 0
             #and 'MayBuyCheckChart' in regression_data['filter1'] 
             and -3 < regression_data['PCT_day_change_pre1'] < -1
             and -3 < regression_data['PCT_day_change'] < -1
+            and (regression_data['PCT_day_change_pre2'] > 0
+                or regression_data['PCT_day_change_pre3'] > 0
+                )
             ):
             add_in_csv(regression_data, regressionResult, None, '(Check-chart-market2to3down)MayBuy-LastDayDown', None)
-    if(3 > high_tail_pct(regression_data) > 1.8
+    elif(3 > low_tail_pct(regression_data) > 1.8
+            and high_tail_pct(regression_data) < 1
+            and low_tail_pct_pre1(regression_data) < 1.5
+            #and regression_data['SMA9'] < 0
+            #and 'MayBuyCheckChart' in regression_data['filter1'] 
+            and -3 < regression_data['PCT_day_change_pre1'] < -1
+            and -3 < regression_data['PCT_day_change'] < -1
+            and regression_data['PCT_day_change_pre2'] < 0
+            and regression_data['PCT_day_change_pre3'] < 0
+            ):
+            add_in_csv(regression_data, regressionResult, None, 'MaySell-downTrend', None)
+    if(3 > high_tail_pct(regression_data) > 2
             and low_tail_pct(regression_data) < 1
             and high_tail_pct_pre1(regression_data) < 1.5
             #and regression_data['SMA9'] > 0
             #and 'MaySellCheckChart' in regression_data['filter1'] 
             and 3 > regression_data['PCT_day_change_pre1'] > 1
             and 3 > regression_data['PCT_day_change'] > 1
+            and (regression_data['PCT_day_change_pre2'] < 0
+                or regression_data['PCT_day_change_pre3'] < 0
+                )
             ):
             add_in_csv(regression_data, regressionResult, None, '(Check-chart-market2to3up)MaySell-LastDayUp', None)
+    elif(3 > high_tail_pct(regression_data) > 1.8
+            and low_tail_pct(regression_data) < 1
+            and high_tail_pct_pre1(regression_data) < 1.5
+            #and regression_data['SMA9'] > 0
+            #and 'MaySellCheckChart' in regression_data['filter1'] 
+            and 3 > regression_data['PCT_day_change_pre1'] > 1
+            and 3 > regression_data['PCT_day_change'] > 1
+            and regression_data['PCT_day_change_pre2'] > 0
+            and regression_data['PCT_day_change_pre3'] > 0
+            ):
+            add_in_csv(regression_data, regressionResult, None, 'MayBuy-upTrend', None)
+    
     if(-4 < regression_data['PCT_day_change'] < -1.5 and -4 < regression_data['PCT_change'] < -1.5
         ):
         if(3.5 > low_tail_pct(regression_data) > 1.8):
