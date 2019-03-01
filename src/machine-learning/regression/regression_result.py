@@ -23,7 +23,7 @@ from util.util import buy_pattern_from_history, buy_all_rule, buy_year_high, buy
 from util.util import sell_pattern_from_history, sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final, sell_high_indicators, sell_pattern
 from util.util import buy_pattern_without_mlalgo, sell_pattern_without_mlalgo, buy_oi, sell_oi, all_withoutml
 from util.util import buy_oi_candidate, sell_oi_candidate
-from util.util import buy_all_filter, buy_all_common, sell_all_filter, sell_all_common
+from util.util import buy_other_indicator, buy_all_common, sell_other_indicator, sell_all_common
 from util.util import buy_all_rule_classifier, sell_all_rule_classifier
 from util.util import is_algo_buy_classifier, is_algo_sell_classifier
 from util.util import sell_oi_negative, sell_day_high, buy_oi_negative, buy_day_low
@@ -250,22 +250,20 @@ def result_data(scrip):
                                             regression_low['mlpValue_cla'], 
                                             regression_low['kNeighboursValue_cla'],
                                             )
-    re_oi = buy_oi_candidate(regression_data, regressionResult, True, None)
-    cl_oi = buy_oi_candidate(regression_data, regressionResult, False, None)
     if (buy_all_rule(regression_data, regressionResult, buyIndiaAvgReg, None)
         and buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvgReg, None)
         ):
-        buy_all_filter(regression_data, regressionResult, True, None)
+        buy_other_indicator(regression_data, regressionResult, True, None)
         buy_all_common(regression_data, regressionResult, True, None)
-        buy_all_filter(regression_data, regressionResult, False, None)
+        buy_other_indicator(regression_data, regressionResult, False, None)
         buy_all_common(regression_data, regressionResult, False, None)
     if (sell_all_rule(regression_data, regressionResult, buyIndiaAvgReg, None)
         and sell_all_rule_classifier(regression_data, regressionResult, buyIndiaAvgReg, None)
         ):
-        buy_all_filter(regression_data, regressionResult, True, None)
-        buy_all_common(regression_data, regressionResult, True, None)
-        buy_all_filter(regression_data, regressionResult, False, None)
-        buy_all_common(regression_data, regressionResult, False, None)
+        sell_other_indicator(regression_data, regressionResult, True, None)
+        sell_all_common(regression_data, regressionResult, True, None)
+        sell_other_indicator(regression_data, regressionResult, False, None)
+        sell_all_common(regression_data, regressionResult, False, None)
     
     if (buy_all_rule(regression_data, regressionResult, buyIndiaAvgReg, None)
         and buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvgReg, None)
@@ -287,22 +285,20 @@ def result_data(scrip):
                                             regression_high['mlpValue_cla'], 
                                             regression_high['kNeighboursValue_cla']
                                             )
-    re_oi = sell_oi_candidate(regression_data, regressionResult, True, None)
-    cl_oi = sell_oi_candidate(regression_data, regressionResult, False, None)
     if (sell_all_rule(regression_data, regressionResult, sellIndiaAvgReg, None)
         and sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvgReg, None)
         ):
-        sell_all_filter(regression_data, regressionResult, True, None)
+        sell_other_indicator(regression_data, regressionResult, True, None)
         sell_all_common(regression_data, regressionResult, True, None)
-        sell_all_filter(regression_data, regressionResult, False, None)
+        sell_other_indicator(regression_data, regressionResult, False, None)
         sell_all_common(regression_data, regressionResult, False, None)
     if (buy_all_rule(regression_data, regressionResult, buyIndiaAvgReg, None)
         and buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvgReg, None)
         ):
-        sell_all_filter(regression_data, regressionResult, True, None)
-        sell_all_common(regression_data, regressionResult, True, None)
-        sell_all_filter(regression_data, regressionResult, False, None)
-        sell_all_common(regression_data, regressionResult, False, None) 
+        buy_other_indicator(regression_data, regressionResult, True, None)
+        buy_all_common(regression_data, regressionResult, True, None)
+        buy_other_indicator(regression_data, regressionResult, False, None)
+        buy_all_common(regression_data, regressionResult, False, None) 
     
     if (sell_all_rule(regression_data, regressionResult, sellIndiaAvgReg, None)
         and sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvgReg, None)
@@ -333,28 +329,13 @@ def result_data_reg(scrip):
                                             regression_low['kNeighboursValue_cla'],
                                             )
         buy_pattern_without_mlalgo(regression_data, regressionResult, None, None)
-        oi = buy_oi_candidate(regression_data, regressionResult, True, None)
+        buy_other_indicator(regression_data, regressionResult, True, None)
         if buy_all_rule(regression_data, regressionResult, buyIndiaAvg, None):
-            buy_year_high(regression_data, regressionResult, True, None)
-            buy_year_low(regression_data, regressionResult, True, None, None)
-            buy_final(regression_data, regressionResult, True, None, None)
-            buy_up_trend(regression_data, regressionResult, True, None)
-            buy_down_trend(regression_data, regressionResult, True, None)
-            buy_oi(regression_data, regressionResult, True, None)
-            buy_high_indicators(regression_data, regressionResult, True, None)
-            buy_pattern(regression_data, regressionResult, True, None, None)
             buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_highBuyReg)
         if sell_all_rule(regression_data, regressionResult, buyIndiaAvg, None):
-            buy_year_high(regression_data, regressionResult, True, None)
-            buy_year_low(regression_data, regressionResult, True, None, None)
-            buy_final(regression_data, regressionResult, True, None, None)
-            buy_up_trend(regression_data, regressionResult, True, None)
-            buy_down_trend(regression_data, regressionResult, True, None)
-            buy_oi(regression_data, regressionResult, True, None)
-            buy_high_indicators(regression_data, regressionResult, True, None)
-            buy_pattern(regression_data, regressionResult, True, None, None)
             sell_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_highSellReg)
         all_withoutml(regression_data, regressionResult, ws_high)
+        oi = buy_oi_candidate(regression_data, regressionResult, True, None)
         if oi:
             all_withoutml(regression_data, regressionResult, ws_highOIReg)
                 
@@ -368,28 +349,13 @@ def result_data_reg(scrip):
                                             regression_high['kNeighboursValue_cla']
                                             )
         sell_pattern_without_mlalgo(regression_data, regressionResult, None, None)
-        oi = sell_oi_candidate(regression_data, regressionResult, True, None)
+        sell_other_indicator(regression_data, regressionResult, True, None)
         if sell_all_rule(regression_data, regressionResult, sellIndiaAvg, None):
-            sell_year_high(regression_data, regressionResult, True, None, None)
-            sell_year_low(regression_data, regressionResult, True, None)
-            sell_final(regression_data, regressionResult, True, None, None)
-            sell_up_trend(regression_data, regressionResult, True, None)
-            sell_down_trend(regression_data, regressionResult, True, None)
-            sell_oi(regression_data, regressionResult, True, None)
-            sell_high_indicators(regression_data, regressionResult, True, None)
-            sell_pattern(regression_data, regressionResult, True, None, None)
             sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_lowSellReg) 
         if buy_all_rule(regression_data, regressionResult, sellIndiaAvg, None):
-            sell_year_high(regression_data, regressionResult, True, None, None)
-            sell_year_low(regression_data, regressionResult, True, None)
-            sell_final(regression_data, regressionResult, True, None, None)
-            sell_up_trend(regression_data, regressionResult, True, None)
-            sell_down_trend(regression_data, regressionResult, True, None)
-            sell_oi(regression_data, regressionResult, True, None)
-            sell_high_indicators(regression_data, regressionResult, True, None)
-            sell_pattern(regression_data, regressionResult, True, None, None)
             buy_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_lowBuyReg)                                
         all_withoutml(regression_data, regressionResult, ws_low)
+        oi = sell_oi_candidate(regression_data, regressionResult, True, None)
         if oi:
             all_withoutml(regression_data, regressionResult, ws_lowOIReg)
         
@@ -411,14 +377,7 @@ def result_data_cla(scrip):
         buy_pattern_without_mlalgo(regression_data, regressionResult, None, None)
         oi = buy_oi_candidate(regression_data, regressionResult, False, None)
         if buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, None):
-            buy_year_high(regression_data, regressionResult, False, None)
-            buy_year_low(regression_data, regressionResult, False, None, None)
-            buy_final(regression_data, regressionResult, False, None, None)
-            buy_up_trend(regression_data, regressionResult, False, None)
-            buy_down_trend(regression_data, regressionResult, False, None)
-            buy_oi(regression_data, regressionResult, False, None)
-            buy_high_indicators(regression_data, regressionResult, False, None)
-            buy_pattern(regression_data, regressionResult, False, None, None)
+            buy_other_indicator(regression_data, regressionResult, True, None)
             buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws_highBuyCla)
         if oi:
             all_withoutml(regression_data, regressionResult, ws_highOICla)
@@ -435,14 +394,7 @@ def result_data_cla(scrip):
         sell_pattern_without_mlalgo(regression_data, regressionResult, None, None)
         oi = sell_oi_candidate(regression_data, regressionResult, False, None)
         if sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, None):
-            sell_year_high(regression_data, regressionResult, False, None, None)
-            sell_year_low(regression_data, regressionResult, False, None)
-            sell_final(regression_data, regressionResult, False, None, None)
-            sell_up_trend(regression_data, regressionResult, False, None)
-            sell_down_trend(regression_data, regressionResult, False, None)
-            sell_oi(regression_data, regressionResult, False, None)
-            sell_high_indicators(regression_data, regressionResult, False, None)
-            sell_pattern(regression_data, regressionResult, False, None, None)
+            sell_other_indicator(regression_data, regressionResult, True, None)
             sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws_lowSellCla)
         if oi:
             all_withoutml(regression_data, regressionResult, ws_lowOICla)                                 
