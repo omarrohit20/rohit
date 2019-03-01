@@ -1471,7 +1471,10 @@ def buy_study_risingMA(regression_data, regressionResult, reg, ws):
                ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Test)Sell-1-EMA6-LT-May-MT-EMA14')
     
-    if(regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50'] < regression_data['SMA25'] < regression_data['SMA9']
+    if(regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50'] < regression_data['SMA25']
+       and regression_data['SMA100'] < -5
+       and (regression_data['SMA9'] > 1 or regression_data['SMA4'] > 1)
+       and (regression_data['SMA9'] > 0 and regression_data['SMA4'] > 0)
     ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:RisingMA')
         if(-5 < regression_data['SMA25'] < 0):
@@ -1552,7 +1555,19 @@ def buy_study_risingMA(regression_data, regressionResult, reg, ws):
            ):
             add_in_csv(regression_data, regressionResult, ws, "##RisingMA(Test)(check-chart-sell)-1DayUp")
             return True
-    
+    elif(regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50'] < regression_data['SMA25'] < 0
+         and regression_data['SMA9'] < 0
+         and regression_data['SMA4'] < 0
+    ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:AllNegativeMA')
+    elif(regression_data['SMA200'] > 0
+         and regression_data['SMA100'] > 0 
+         and regression_data['SMA50'] > 0
+         and regression_data['SMA9'] < 1
+         and regression_data['SMA4'] < 1
+         ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:DowningMA')
+        
     if(regression_data['SMA9'] < 0 
        and regression_data['SMA4'] < 0
        and regression_data['forecast_day_PCT_change'] < -0.5
