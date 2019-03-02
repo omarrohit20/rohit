@@ -1832,9 +1832,10 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
     return False
 
 def buy_other_indicator(regression_data, regressionResult, reg, ws):
+    tail_pct_filter(regression_data, regressionResult)
     buy_base_line(regression_data, regressionResult, True, None)
     buy_study_risingMA(regression_data, regressionResult, True, None)
-    
+    tail_reversal_filter(regression_data, regressionResult)
     if(regression_data['close'] > 50
         ):
         buy_year_high(regression_data, regressionResult, reg, ws)
@@ -4064,9 +4065,10 @@ def sell_all_common(regression_data, regressionResult, reg, ws):
     return False
 
 def sell_other_indicator(regression_data, regressionResult, reg, ws):
+    tail_pct_filter(regression_data, regressionResult)
     sell_base_line(regression_data, regressionResult, True, None)
     sell_study_downingMA(regression_data, regressionResult, True, None)
-    
+    tail_reversal_filter(regression_data, regressionResult)
     if(regression_data['close'] > 50
         ):
         sell_up_trend(regression_data, regressionResult, reg, ws)
