@@ -370,6 +370,13 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     month3HighChange = (close - month3High)*100/close
     month3LowChange = (close - month3Low)*100/close
     
+    start_date = (today_date - datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
+    monthHigh = dftemp['high'].max()
+    monthLow = dftemp['low'].min()
+    monthHighChange = (close - monthHigh)*100/close
+    monthLowChange = (close - monthLow)*100/close
+    
     technical = db.technical.find_one({'dataset_code':scrip})
     regression_data['date'] = forecast_day_date
     regression_data['scrip'] = str(scrip)
@@ -395,6 +402,8 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     regression_data['month6LowChange'] = float(month6LowChange)
     regression_data['month3HighChange'] = float(month3HighChange) 
     regression_data['month3LowChange'] = float(month3LowChange)
+    regression_data['monthHighChange'] = float(monthHighChange) 
+    regression_data['monthLowChange'] = float(monthLowChange)
     regression_data['weekHighChange'] = float(weekHighChange) 
     regression_data['weekLowChange'] = float(weekLowChange)
     regression_data['year2High'] = float(year2High) 

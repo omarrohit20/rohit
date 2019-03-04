@@ -24,7 +24,7 @@ logging.basicConfig(filename=logname, filemode='a', stream=sys.stdout, level=log
 log = logging.getLogger(__name__)
 
 connection = MongoClient('localhost', 27017)
-db = connection.histnse1
+db = connection.nsehistnew
 dbNsedata = connection.Nsedata
 
 forecast_out = 1
