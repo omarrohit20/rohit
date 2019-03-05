@@ -1508,6 +1508,7 @@ def buy_study_risingMA(regression_data, regressionResult, reg, ws):
        and regression_data['SMA100'] < -5
        and (regression_data['SMA9'] > 1 or regression_data['SMA4'] > 1)
        and (regression_data['SMA9'] > 0 and regression_data['SMA4'] > 0)
+       and (regression_data['SMA100'] < -10 or regression_data['SMA200'] < -10)
     ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:RisingMA')
         if(-5 < regression_data['SMA25'] < 0):
@@ -1596,8 +1597,8 @@ def buy_study_risingMA(regression_data, regressionResult, reg, ws):
     elif(regression_data['SMA200'] > 0
          and regression_data['SMA100'] > 0 
          and regression_data['SMA50'] > 0
-         and regression_data['SMA9'] < 1
-         and regression_data['SMA4'] < 1
+         and regression_data['SMA9'] < -1
+         and regression_data['SMA4'] < 0
          ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:DowningMA')
         
@@ -1803,7 +1804,7 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
             
     if((((mlpValue > 0.3) and (kNeighboursValue > 0.3) and ((mlpValue_other > 0) or (kNeighboursValue_other > 0)))
              or ((mlpValue_other > 0.3) and (kNeighboursValue_other > 0.3) and ((mlpValue > 0) or (kNeighboursValue > 0))))
-        and (1 < regression_data['PCT_day_change'] < 4.5) and (1 < regression_data['PCT_change'] < 4.5)
+        and (2 < regression_data['PCT_day_change'] < 4.5) and (1 < regression_data['PCT_change'] < 4.5)
         and ((regression_data['PCT_day_change_pre1'] < 0 and regression_data['forecast_day_PCT_change'] > 0)
              or regression_data['PCT_day_change_pre2'] < 0
             )
