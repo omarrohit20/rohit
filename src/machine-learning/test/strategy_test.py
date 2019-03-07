@@ -16,7 +16,7 @@ from util.util import is_algo_buy_classifier, is_algo_sell_classifier
 from util.util import sell_oi_negative, sell_day_high, buy_oi_negative, buy_day_low
 
 connection = MongoClient('localhost', 27017)
-db = connection.histnse
+db = connection.nsehistnew
 dbresult = connection.result
 
 # dbresult.drop_collection('buy_other_indicator')
@@ -38,7 +38,7 @@ dbresult = connection.result
 #         dbresult.sell_other_indicator.insert_one(json.loads(json.dumps(data))) 
         
 dbresult.drop_collection('buy_test')
-curs = db.ws_highAll.find({})
+curs = db.ws_high.find({})
 for data in curs:
     data['filterTest'] = ''
     flag = buy_test(data, data, True, None)
@@ -46,12 +46,12 @@ for data in curs:
         del data['_id']
         dbresult.buy_test.insert_one(json.loads(json.dumps(data))) 
  
-dbresult.drop_collection('sell_test')        
-curs = db.ws_lowAll.find({})
-for data in curs:
-    data['filterTest'] = ''
-    flag = sell_test(data, data, True, None)
-    if(flag):
-        del data['_id']
-        dbresult.sell_test.insert_one(json.loads(json.dumps(data)))
+# dbresult.drop_collection('sell_test')        
+# curs = db.ws_lowAll.find({})
+# for data in curs:
+#     data['filterTest'] = ''
+#     flag = sell_test(data, data, True, None)
+#     if(flag):
+#         del data['_id']
+#         dbresult.sell_test.insert_one(json.loads(json.dumps(data)))
        
