@@ -50,7 +50,7 @@ dbresult.drop_collection('sell_test')
 curs = db.ws_low.find({})
 for data in curs:
     data['filterTest'] = ''
-    flag = buy_test(data, data, True, None)
+    flag = sell_test(data, data, True, None)
     if(flag):
         del data['_id']
         dbresult.sell_test.insert_one(json.loads(json.dumps(data))) 
