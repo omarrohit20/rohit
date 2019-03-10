@@ -3721,7 +3721,7 @@ def buy_study_risingMA(regression_data, regressionResult, reg, ws):
        and regression_data['forecast_day_PCT5_change'] < -0.5
        and regression_data['forecast_day_PCT7_change'] > -10
        and abs(regression_data['PCT_day_change_pre1']) > 2* (regression_data['PCT_day_change'])
-       and ((0 < regression_data['PCT_day_change'] < 1.5
+       and ((0 < regression_data['PCT_day_change'] < 2
                and regression_data['PCT_day_change_pre1'] < -2
                and regression_data['PCT_day_change_pre2'] < 1.5
                and regression_data['PCT_day_change_pre3'] < 1.5
@@ -3732,7 +3732,7 @@ def buy_study_risingMA(regression_data, regressionResult, reg, ws):
                and regression_data['forecast_day_PCT5_change'] > -5
                and high_tail_pct(regression_data) > 1
             )
-            or(-1.5 < regression_data['PCT_day_change'] < 0 
+            or(-2 < regression_data['PCT_day_change'] < 0 
                 and regression_data['PCT_day_change_pre1'] < -1.5
                 and (regression_data['month3LowChange'] < 0 or regression_data['month3LowChange'] > 5)
                 and regression_data['yearLowChange'] > 5
@@ -3741,10 +3741,17 @@ def buy_study_risingMA(regression_data, regressionResult, reg, ws):
                 and (high_tail_pct(regression_data) < 1)
             )
         )
-        and (low_tail_pct(regression_data) < 1.5)  
-       ):  
-       add_in_csv(regression_data, regressionResult, ws, "##(Test)(check-chart-sell)-SMADownTrend")
-       return True
+        ):  
+        add_in_csv(regression_data, regressionResult, ws, "##(Test)(check-chart)-SMADownTrend")
+        if(0 < regression_data['PCT_day_change'] < 2
+           and regression_data['PCT_day_change_pre1'] < 0
+           and (regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0)
+           and (regression_data['PCT_day_change_pre2'] > 0 or regression_data['PCT_day_change_pre3'] > 0)
+           and (low_tail_pct(regression_data) < 1.5)  
+           ):
+           add_in_csv(regression_data, regressionResult, ws, "##(Test)-buy-SMADownTrend")
+           
+        return True
 
 def buy_test(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
