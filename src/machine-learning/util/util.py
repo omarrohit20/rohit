@@ -24,7 +24,7 @@ BUY_VERY_LESS_DATA=True
 SELL_VERY_LESS_DATA=True
 MARKET_IN_UPTREND=False
 MARKET_IN_DOWNTREND=False
-TEST = False
+TEST = True
 
 buyMLP = 0.1
 buyMLP_MIN = 0
@@ -2993,12 +2993,13 @@ def buy_heavy_uptrend_reversal(regression_data, regressionResult, reg, ws):
             ):
                 if(regression_data['month6HighChange'] > -5
                     and (3 < regression_data['PCT_change'] or 3 < regression_data['PCT_day_change'])
+                    and('BELTHOLD' and 'LONGLINE' not in regression_data['buyIndia'])
                     ):
                     add_in_csv(regression_data, regressionResult, ws, 'sellHeavyUpTrend-Reversal')
                 else:
                     if(regression_data['forecast_day_VOL_change'] < 0):
                         add_in_csv(regression_data, regressionResult, ws, 'buyHeavyUpTrend-Reversal-(Risky)')
-                    else:
+                    elif('P@' in regression_data['buyIndia']):
                         add_in_csv(regression_data, regressionResult, ws, 'sellHeavyUpTrend-Reversal-(Risky)')
         
 def buy_supertrend(regression_data, regressionResult, reg, ws):
