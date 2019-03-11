@@ -3015,141 +3015,154 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
             and -0.75 < regression_data['PCT_day_change'] < 0.5
             and regression_data['yearHighChange'] < -5
             and regression_data['yearLowChange'] > 15
-            and regression_data['month3LowChange'] > 10    
+            and regression_data['month3LowChange'] > 10 
             #and regression_data['low'] > regression_data['low_pre1']
             ):
             add_in_csv(regression_data, regressionResult, ws, 'set1')
-            if(-0.75 < regression_data['PCT_day_change_pre1'] < 0
+            if(regression_data['PCT_day_change_pre1'] < 0
                 and -0.75 < regression_data['PCT_day_change'] < 0):
-                add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-00')
-            elif(0 < regression_data['PCT_day_change_pre1'] < 0.75
+                add_in_csv(regression_data, regressionResult, ws, '--')
+            elif(regression_data['PCT_day_change_pre1'] > 0
                 and 0 < regression_data['PCT_day_change'] < 0.75):
-                add_in_csv(regression_data, regressionResult, ws, 'buySuperTrend-00')
-                
-            if((regression_data['forecast_day_PCT_change'] < 0
-                    and regression_data['PCT_day_change'] < 0
-                    and regression_data['SMA4'] < 1.5
-                    and high_tail_pct(regression_data) < 1.5
+                add_in_csv(regression_data, regressionResult, ws, '++')
+            elif(regression_data['PCT_day_change_pre1'] < 0
+                and 0 < regression_data['PCT_day_change'] < 0.75):
+                add_in_csv(regression_data, regressionResult, ws, '-+')
+            elif(regression_data['PCT_day_change_pre1'] > 0
+                and -0.75 < regression_data['PCT_day_change'] < 0):
+                add_in_csv(regression_data, regressionResult, ws, '+-')
+            if((regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change'] < 0)
+                or (regression_data['PCT_day_change_pre1'] > 0 and regression_data['PCT_day_change'] > 0)):    
+                if((regression_data['forecast_day_PCT_change'] < 0
+                        and regression_data['PCT_day_change'] < 0
+                        and regression_data['SMA4'] < 1.5
+                        and high_tail_pct(regression_data) < 1.5
+                        and regression_data['low'] > regression_data['low_pre1']
+                    )
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, 'buySuperTrend-0')
+                elif('SPINNINGTOP' in regression_data['sellIndia']
                     and regression_data['low'] > regression_data['low_pre1']
-                )
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'buySuperTrend-0')
-            elif('SPINNINGTOP' in regression_data['sellIndia']
-                and regression_data['low'] > regression_data['low_pre1']
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-0')
-            elif(regression_data['PCT_day_change_pre2'] > 2
-                and regression_data['PCT_change_pre2'] > 2
-                and regression_data['low'] < regression_data['low_pre1']
-                ):
-                if(is_algo_buy(regression_data)):
-                   add_in_csv(regression_data, regressionResult, ws, 'ML:buySuperTrend-2')
-                   return True
-                return False
-            elif(regression_data['PCT_day_change_pre2'] < 0.5
-                and regression_data['PCT_change_pre2'] < 0.5
-                and regression_data['low'] < regression_data['low_pre1']
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-1')
-            elif((('P@' or 'M@') in regression_data['sellIndia'])
-                 or(regression_data['month3HighChange'] > 1
-                    and 'Break' in regression_data['filter3']
-                    and regression_data['forecast_day_PCT_change'] > 0.35
-                    )
-                 or(regression_data['month3HighChange'] < -25
-                    and regression_data['month6HighChange'] < -30
-                    )
-                 or('P@[,SPINNINGTOP]' in regression_data['buyIndia']
-                    and regression_data['month3HighChange'] < 0
-                    and regression_data['yearHighChange'] < -20
-                    )
-                 or('[' not in regression_data['buyIndia']
-                    and -20 < regression_data['month3HighChange'] < -10
-                    and 5 < regression_data['forecast_day_PCT7_change'] < 12
-                    )
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-2')
-            elif(5 > regression_data['month3HighChange'] > 0.45
-                or (regression_data['PCT_day_change'] < 0
-                   and regression_data['month3LowChange'] < 25
-                   and regression_data['year2HighChange'] < -10
-                   and regression_data['year2HighChange'] < -30
-                   )
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'buySuperTrend-1')
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-0')
+                elif(regression_data['PCT_day_change_pre2'] > 2
+                    and regression_data['PCT_change_pre2'] > 2
+                    and regression_data['low'] < regression_data['low_pre1']
+                    ):
+                    if(is_algo_buy(regression_data)):
+                       add_in_csv(regression_data, regressionResult, ws, 'ML:buySuperTrend-2')
+                       return True
+                    return False
+                elif(regression_data['PCT_day_change_pre2'] < 0.5
+                    and regression_data['PCT_change_pre2'] < 0.5
+                    and regression_data['low'] < regression_data['low_pre1']
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-1')
+                elif((('P@' or 'M@') in regression_data['sellIndia'])
+                     or(regression_data['month3HighChange'] > 1
+                        and 'Break' in regression_data['filter3']
+                        and regression_data['forecast_day_PCT_change'] > 0.35
+                        )
+                     or(regression_data['month3HighChange'] < -25
+                        and regression_data['month6HighChange'] < -30
+                        )
+                     or('P@[,SPINNINGTOP]' in regression_data['buyIndia']
+                        and regression_data['month3HighChange'] < 0
+                        and regression_data['yearHighChange'] < -20
+                        )
+                     or('[' not in regression_data['buyIndia']
+                        and -20 < regression_data['month3HighChange'] < -10
+                        and 5 < regression_data['forecast_day_PCT7_change'] < 12
+                        )
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-2')
+                elif(5 > regression_data['month3HighChange'] > 0.45
+                    or (regression_data['PCT_day_change'] < 0
+                       and regression_data['month3LowChange'] < 25
+                       and regression_data['year2HighChange'] < -10
+                       and regression_data['year2HighChange'] < -30
+                       )
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, 'buySuperTrend-1')
         elif(0 < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change']
             and regression_data['forecast_day_PCT5_change'] > 5
             and -0.75 < regression_data['PCT_day_change_pre1'] < 2.5
             and -0.75 < regression_data['PCT_day_change'] < 0.5
-            and ((regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change'] < 0)
-                 or (regression_data['PCT_day_change_pre1'] > 0 and regression_data['PCT_day_change'] > 0)
-            )
             and regression_data['yearHighChange'] < -5
             and regression_data['yearLowChange'] > 15
-            and regression_data['month3LowChange'] > 10    
+            and regression_data['month3LowChange'] > 10   
             #and regression_data['low'] > regression_data['low_pre1']
             ):
             add_in_csv(regression_data, regressionResult, ws, 'set2')
-            if(-0.75 < regression_data['PCT_day_change_pre1'] < 0
+            if(regression_data['PCT_day_change_pre1'] < 0
                 and -0.75 < regression_data['PCT_day_change'] < 0):
-                add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-00')
-            elif(0 < regression_data['PCT_day_change_pre1'] < 0.75
+                add_in_csv(regression_data, regressionResult, ws, '--')
+            elif(regression_data['PCT_day_change_pre1'] > 0
                 and 0 < regression_data['PCT_day_change'] < 0.75):
-                add_in_csv(regression_data, regressionResult, ws, 'buySuperTrend-00')
-            if('SPINNINGTOP' in regression_data['sellIndia']
-                and regression_data['year2LowChange'] > 50
-                and regression_data['low'] > regression_data['low_pre1']
+                add_in_csv(regression_data, regressionResult, ws, '++')
+            elif(regression_data['PCT_day_change_pre1'] < 0
+                and 0 < regression_data['PCT_day_change'] < 0.75):
+                add_in_csv(regression_data, regressionResult, ws, '-+')
+            elif(regression_data['PCT_day_change_pre1'] > 0
+                and -0.75 < regression_data['PCT_day_change'] < 0):
+                add_in_csv(regression_data, regressionResult, ws, '+-')
+            if((regression_data['PCT_day_change_pre1'] > 0 and regression_data['PCT_day_change'] > 0)
+                 or (regression_data['PCT_day_change_pre1'] > 0 and regression_data['PCT_day_change'] < 0)
                 ):
-                add_in_csv(regression_data, regressionResult, ws, 'buySuperTrend-0')
-            elif(regression_data['PCT_day_change_pre2'] > 2
-                and regression_data['PCT_change_pre2'] > 2
-                and regression_data['yearHighChange'] < -20
-                and regression_data['low'] < regression_data['low_pre1']
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'buySuperTrend-1')
-            elif(((('P@' or 'M@') in regression_data['sellIndia'])
-                 or(regression_data['month3HighChange'] > 1
-                    and 'Break' in regression_data['filter3']
-                    and regression_data['forecast_day_PCT_change'] > 0.35
-                    )
-                 or(regression_data['month3HighChange'] < -25
-                    and regression_data['month6HighChange'] < -30
-                    )
-                 )
-                 and regression_data['PCT_day_change_pre1'] < 1
-                 and ('P@' or 'M@') in regression_data['buyIndia']
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-0')
-            elif((regression_data['PCT_day_change'] < 0
-                   and regression_data['PCT_change_pre1'] > 1
-                   and regression_data['month3LowChange'] < 25
-                   and regression_data['year2HighChange'] < -10
-                   and regression_data['year2HighChange'] < -30
-                   )
-                ):
-                add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-1')  
-            elif(0 < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change']
-                and regression_data['forecast_day_PCT5_change'] > 5
-                and regression_data['forecast_day_PCT10_change'] > regression_data['forecast_day_PCT5_change']
-                and regression_data['forecast_day_PCT10_change'] > regression_data['forecast_day_PCT7_change']
-                and -0.5 < regression_data['PCT_day_change_pre1'] < 1.5
-                and -0.5 < regression_data['PCT_day_change'] < 0.5
-                and regression_data['yearHighChange'] < -5
-                ):
-                if(regression_data['forecast_day_PCT_change'] < 0
-                    and regression_data['month3HighChange'] < 0
-                    and ('P@' or 'M@') in regression_data['buyIndia']
+                if('SPINNINGTOP' in regression_data['sellIndia']
+                    and regression_data['year2LowChange'] > 50
+                    and regression_data['low'] > regression_data['low_pre1']
                     ):
-                    add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-1')
-                elif(regression_data['PCT_day_change'] < 0
+                    add_in_csv(regression_data, regressionResult, ws, 'buySuperTrend-0')
+                elif(regression_data['PCT_day_change_pre2'] > 2
+                    and regression_data['PCT_change_pre2'] > 2
+                    and regression_data['yearHighChange'] < -20
                     and regression_data['low'] < regression_data['low_pre1']
                     ):
-                    add_in_csv(regression_data, regressionResult, ws, None)
-                elif(regression_data['PCT_day_change'] < 0
+                    add_in_csv(regression_data, regressionResult, ws, 'buySuperTrend-1')
+                elif(((('P@' or 'M@') in regression_data['sellIndia'])
+                     or(regression_data['month3HighChange'] > 1
+                        and 'Break' in regression_data['filter3']
+                        and regression_data['forecast_day_PCT_change'] > 0.35
+                        )
+                     or(regression_data['month3HighChange'] < -25
+                        and regression_data['month6HighChange'] < -30
+                        )
+                     )
+                     and regression_data['PCT_day_change_pre1'] < 1
+                     and ('P@' or 'M@') in regression_data['buyIndia']
                     ):
-                    add_in_csv(regression_data, regressionResult, ws, None)
-                elif(('[') not in regression_data['buyIndia']):
-                    add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-1')
+                    add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-0')
+                elif((regression_data['PCT_day_change'] < 0
+                       and regression_data['PCT_change_pre1'] > 1
+                       and regression_data['month3LowChange'] < 25
+                       and regression_data['year2HighChange'] < -10
+                       and regression_data['year2HighChange'] < -30
+                       )
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-1')  
+                elif(0 < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change']
+                    and regression_data['forecast_day_PCT5_change'] > 5
+                    and regression_data['forecast_day_PCT10_change'] > regression_data['forecast_day_PCT5_change']
+                    and regression_data['forecast_day_PCT10_change'] > regression_data['forecast_day_PCT7_change']
+                    and -0.5 < regression_data['PCT_day_change_pre1'] < 1.5
+                    and -0.5 < regression_data['PCT_day_change'] < 0.5
+                    and regression_data['yearHighChange'] < -5
+                    ):
+                    if(regression_data['forecast_day_PCT_change'] < 0
+                        and regression_data['month3HighChange'] < 0
+                        and ('P@' or 'M@') in regression_data['buyIndia']
+                        ):
+                        add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-1')
+                    elif(regression_data['PCT_day_change'] < 0
+                        and regression_data['low'] < regression_data['low_pre1']
+                        ):
+                        add_in_csv(regression_data, regressionResult, ws, None)
+                    elif(regression_data['PCT_day_change'] < 0
+                        ):
+                        add_in_csv(regression_data, regressionResult, ws, None)
+                    elif(('[') not in regression_data['buyIndia']):
+                        add_in_csv(regression_data, regressionResult, ws, 'sellSuperTrend-1')
         return True
     return False
 
