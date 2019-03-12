@@ -62,12 +62,14 @@ def add_in_csv(regression_data, regressionResult, ws=None, filter=None, filter1=
         if ((filter5 is not None) and (filter5 not in regression_data['filter5'])):
             regression_data['filter5'] = regression_data['filter5'] + filter5 + ','  
         tempRegressionResult = regressionResult.copy() 
-        tempRegressionResult.append(regression_data['filter'])
         tempRegressionResult.append(regression_data['filter1'])
         tempRegressionResult.append(regression_data['filter2'])
         tempRegressionResult.append(regression_data['filter3'])
         tempRegressionResult.append(regression_data['filter4'])
         tempRegressionResult.append(regression_data['filter5'])
+        tempRegressionResult.append(regression_data['filter'])
+        tempRegressionResult.append(regression_data['filter_avg'])
+        tempRegressionResult.append(regression_data['filter_count'])
         ws.append(tempRegressionResult) if (ws is not None) else False
         if(db.resultScripFutures.find_one({'scrip':regression_data['scrip']}) is None):
             db.resultScripFutures.insert_one({
@@ -113,6 +115,14 @@ def add_in_csv_hist_pattern(regression_data, regressionResult, ws, filter, avg, 
         tempRegressionResult.append(avg)
         tempRegressionResult.append(count)
         ws.append(tempRegressionResult) if (ws is not None) else False
+
+def add_in_csv_filter_avg(regression_data, regressionResult, avg, count):
+    if(TEST != True):
+        if (filter is not None):
+            tempRegressionResult = regressionResult.copy() 
+            tempRegressionResult.append(avg)
+            tempRegressionResult.append(count)
+
 
 def is_algo_buy(regression_data):
     if TEST:
@@ -996,6 +1006,8 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regression_data['filter4'] = " "
     regression_data['filter5'] = " "
     regression_data['filter6'] = " "
+    regression_data['filter_avg'] = 0
+    regression_data['filter_count'] = 0
     regression_data['series_trend'] = "NA"
     if pct_change_negative_trend(regression_data):
         regression_data['series_trend'] = "downTrend"
@@ -1269,6 +1281,8 @@ def buy_pattern_from_history(regression_data, ws):
     regression_data['buyIndia_count'] = 0
     regression_data['sellIndia_avg'] = 0
     regression_data['sellIndia_count'] = 0
+    regression_data['filter_avg'] = 0
+    regression_data['filter_count'] = 0
     flag = False
     if regression_data['buyIndia'] != '' and regression_data['buyIndia'] in buyPatternsDict:
         regression_data['buyIndia_avg'] = float(buyPatternsDict[regression_data['buyIndia']]['avg'])
@@ -2994,13 +3008,29 @@ def buy_heavy_uptrend_reversal(regression_data, regressionResult, reg, ws):
                 if(regression_data['month6HighChange'] > -5
                     and (3 < regression_data['PCT_change'] or 3 < regression_data['PCT_day_change'])
                     and('BELTHOLD' and 'LONGLINE' not in regression_data['buyIndia'])
+                    and regression_data['year2HighChange'] > -20
                     ):
                     add_in_csv(regression_data, regressionResult, ws, 'sellHeavyUpTrend-Reversal')
                 else:
                     if(regression_data['forecast_day_VOL_change'] < 0):
                         add_in_csv(regression_data, regressionResult, ws, 'buyHeavyUpTrend-Reversal-(Risky)')
-                    elif('P@' in regression_data['buyIndia']):
+                    elif('P@' in regression_data['buyIndia']
+                        and regression_data['year2HighChange'] > -20
+                        ):
                         add_in_csv(regression_data, regressionResult, ws, 'sellHeavyUpTrend-Reversal-(Risky)')
+            elif((2 < regression_data['PCT_change'] < 7) and (3 < regression_data['PCT_day_change'] < 7)
+                #and ten_days_more_than_seven(regression_data)
+                and (('nearMonth3High' in regression_data['filter3']) 
+                      or ('month3HighBreak' in regression_data['filter3'])
+                      or ('nearMonth6High' in regression_data['filter3'])
+                      or ('month6HighBreak' in regression_data['filter3'])
+                    )
+                and regression_data['year2HighChange'] < -20
+                and regression_data['yearHighChange'] > -50
+                ):
+                add_in_csv(regression_data, regressionResult, ws, '(Test)sellHeavyUpTrend-Reversal-1')
+            
+            
         
 def buy_supertrend(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
@@ -3937,6 +3967,14 @@ def buy_all_filter(regression_data, regressionResult, reg, ws):
         flag = True
     return flag
 
+def buy_filter_accuracy(regression_data, regressionResult, reg, ws):
+    filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-buy.csv')
+    if regression_data['filter'] != '':
+        filter = regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+        if filter != '' and filter in filtersDict:
+            regression_data['filter_avg'] = float(filtersDict[filter]['avg'])
+            regression_data['filter_count'] = float(filtersDict[filter]['count'])
+            
 def sell_pattern_without_mlalgo(regression_data, regressionResult, ws2, ws):
     if(regression_data['sellIndia_avg'] < -0.9 and regression_data['sellIndia_count'] > 1
         and regression_data['SMA9'] < 0 and regression_data['SMA4'] < 0
@@ -4148,6 +4186,8 @@ def sell_pattern_from_history(regression_data, ws):
     regression_data['buyIndia_count'] = 0
     regression_data['sellIndia_avg'] = 0
     regression_data['sellIndia_count'] = 0
+    regression_data['filter_avg'] = 0
+    regression_data['filter_count'] = 0
     flag = False
     if regression_data['sellIndia'] != '' and regression_data['sellIndia'] in sellPatternsDict: 
         regression_data['sellIndia_avg'] = float(sellPatternsDict[regression_data['sellIndia']]['avg'])
@@ -5886,3 +5926,11 @@ def sell_all_filter(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, None)
         flag = True
     return flag
+
+def sell_filter_accuracy(regression_data, regressionResult, reg, ws):
+    filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-sell.csv')
+    if regression_data['filter'] != '':
+        filter = regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+        if filter != '' and filter in filtersDict:
+            regression_data['filter_avg'] = float(filtersDict[filter]['avg'])
+            regression_data['filter_count'] = float(filtersDict[filter]['count'])
