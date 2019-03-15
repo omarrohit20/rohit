@@ -1749,6 +1749,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         buy_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
         buy_trend_reversal(regression_data, regressionResult, reg, ws)
         buy_trend_break(regression_data, regressionResult, reg, ws)
+        buy_consolidation_breakout(regression_data, regressionResult, reg, ws)
         buy_final_candidate(regression_data, regressionResult, reg, ws)
         buy_oi(regression_data, regressionResult, reg, ws)
         buy_up_trend(regression_data, regressionResult, reg, ws)
@@ -2470,7 +2471,8 @@ def buy_trend_break(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, '(check-chart)buy-2week-breakoutup(|-|-| or --|)')
         return True
             
-        
+    
+          
     #     if(regression_data['yearLowChange'] < 5):
 #        if(regression_data['forecast_day_PCT_change'] > 3 and regression_data['PCT_day_change'] > 3
 #            and abs(regression_data['PCT_day_change']) > abs(regression_data['PCT_day_change_pre1'])
@@ -2521,6 +2523,36 @@ def buy_trend_break(regression_data, regressionResult, reg, ws):
 #                add_in_csv(regression_data, regressionResult, ws, '##finalBreakOutBuyContinue-1-test-atYearLow')
 #                flag = False
     return flag   
+
+def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
+    if(regression_data['forecast_day_PCT_change'] > 0
+        and regression_data['PCT_day_change'] > 2.5
+        and -1.5 < regression_data['PCT_day_change_pre1'] < 0
+        and -1.5 < regression_data['PCT_day_change_pre2'] < 0
+        and -1.5 < regression_data['PCT_day_change_pre3'] < 1.5 
+        and (regression_data['yearHighChange'] < -10 or regression_data['PCT_day_change_pre3'] < 0)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '(check-chart)buyConsolidationBreakout-0')
+        return True
+    elif(regression_data['forecast_day_PCT_change'] > 0
+        and regression_data['PCT_day_change'] > 2.5
+        and -1.5 < regression_data['PCT_day_change_pre1'] < 0
+        and -1.5 < regression_data['PCT_day_change_pre2'] < 1.5
+        and -1.5 < regression_data['PCT_day_change_pre3'] < 1.5 
+        and regression_data['yearHighChange'] < -10
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '(check-chart)buyConsolidationBreakout-1')
+        return True
+    elif(regression_data['forecast_day_PCT_change'] > 0
+        and regression_data['PCT_day_change'] > 2.5
+        and regression_data['PCT_day_change_pre1'] > 2.5
+        and -1.5 < regression_data['PCT_day_change_pre2'] < 0
+        and -1.5 < regression_data['PCT_day_change_pre3'] < 0
+        and -1.5 < regression_data['PCT_day_change_pre4'] < 0
+        and regression_data['yearHighChange'] < -10
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '(check-chart)buyConsolidationBreakoutLastDay-Risky')
+        return True
      
 def buy_final_candidate(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
@@ -3057,9 +3089,7 @@ def buy_heavy_uptrend_reversal(regression_data, regressionResult, reg, ws):
                 and regression_data['yearHighChange'] > -50
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '(Test)sellHeavyUpTrend-Reversal-1')
-            
-            
-        
+                   
 def buy_supertrend(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
@@ -4597,6 +4627,7 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         sell_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
         sell_trend_reversal(regression_data, regressionResult, reg, ws)
         sell_trend_break(regression_data, regressionResult, reg, ws)
+        sell_consolidation_breakdown(regression_data, regressionResult, reg, ws)
         sell_final_candidate(regression_data, regressionResult, reg, ws)
         sell_oi(regression_data, regressionResult, reg, ws)
         sell_downingMA(regression_data, regressionResult, reg, ws)
@@ -5478,7 +5509,34 @@ def sell_trend_break(regression_data, regressionResult, reg, ws):
                 add_in_csv(regression_data, regressionResult, ws, 'finalBreakOutSell-0')
                 flag = True
     return flag
-    
+
+def sell_consolidation_breakdown(regression_data, regressionResult, reg, ws):
+    if(regression_data['forecast_day_PCT_change'] < 0
+        and regression_data['PCT_day_change'] < -2.5
+        and 0 < regression_data['PCT_day_change_pre1'] < 1.5
+        and 0 < regression_data['PCT_day_change_pre2'] < 1.5
+        and -1.5 < regression_data['PCT_day_change_pre3'] < 1.5 
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '(check-chart)sellConsolidationBreakdown-0')
+        return True
+    elif(regression_data['forecast_day_PCT_change'] < 0
+        and regression_data['PCT_day_change'] < -2.5
+        and 0 < regression_data['PCT_day_change_pre1'] < 1.5
+        and -1.5 < regression_data['PCT_day_change_pre2'] < 1.5
+        and -1.5 < regression_data['PCT_day_change_pre3'] < 1.5 
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '(check-chart)sellConsolidationBreakdown-1')
+        return True
+    elif(regression_data['forecast_day_PCT_change'] < 0
+        and regression_data['PCT_day_change'] < -2.5
+        and regression_data['PCT_day_change_pre1'] < -2.5
+        and 0 < regression_data['PCT_day_change_pre2'] < 1.5
+        and 0 < regression_data['PCT_day_change_pre3'] < 1.5
+        and 0 < regression_data['PCT_day_change_pre4'] < 1.5 
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '(check-chart)sellConsolidationBreakdownLastDay-Risky')
+        return True
+  
 def sell_final_candidate(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     if(regression_data['forecast_day_PCT4_change'] >= -0.5
