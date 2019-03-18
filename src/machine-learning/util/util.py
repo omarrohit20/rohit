@@ -1019,13 +1019,14 @@ def filterMA(regression_data, regressionResult):
               or (regression_data['SMA9'] < 0 or regression_data['SMA4'] < 0))
          ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:DowningMA')
-    elif(regression_data['SMA100'] > 0 
-         and regression_data['SMA50'] > 0
-         and regression_data['SMA25'] > 0
-         and regression_data['SMA9'] > 0
-         and regression_data['SMA4'] > 0
-         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:AllPositiveMA')
+#     elif(regression_data['SMA200'] > 0 
+#          and regression_data['SMA100'] > 0
+#          and regression_data['SMA50'] > 0
+#          and regression_data['SMA25'] > 0
+#          and regression_data['SMA9'] > 0
+#          and regression_data['SMA4'] > 0
+#          ):
+#         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:AllPositiveMA')
                    
 def historical_data(data):
     ardate = np.array([str(x) for x in (np.array(data['data'])[:,0][::-1]).tolist()])
@@ -3348,7 +3349,8 @@ def buy_risingMA(regression_data, regressionResult, reg, ws):
         elif(regression_data['PCT_day_change_pre1'] > 4.5
             and regression_data['PCT_day_change'] > 4.5):
             add_in_csv(regression_data, regressionResult, ws, '(Test)ML:AllMAPositive_Uptrend_(GT+4.5)')
-        return True
+        else:
+            add_in_csv(regression_data, regressionResult, ws, '(Test)ML:AllMAPositive_Uptrend')
     
     if(regression_data['close'] > 50
         ):        
@@ -3673,6 +3675,19 @@ def buy_study_risingMA(regression_data, regressionResult, reg, ws):
        and high_tail_pct_pre1(regression_data) < 1
        ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, "DOWN-3")
+    
+    
+    if(('EMA6-MT-May-LT-EMA14' in regression_data['filter4'])
+        and -4 < regression_data['PCT_day_change'] < -2
+        and -4.5 < regression_data['PCT_change'] < 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '(Test)EMA6-MT-May-LT-EMA14_PCTChangeLT-2')
+    elif(('EMA6-LT-May-MT-EMA14' in regression_data['filter4'])
+        and 2 < regression_data['PCT_day_change'] < 4
+        and 0 < regression_data['PCT_change'] < 4.5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '(Test)EMA6-LT-May-MT-EMA14_PCTChangeLT+2')
+    
     
     ema_diff = regression_data['ema6-14']
     ema_diff_pre1 = regression_data['ema6-14_pre1']
