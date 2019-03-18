@@ -54,6 +54,7 @@ def result_data(regression_high, regression_low, scrip):
                                             regression_low['mlpValue_cla'], 
                                             regression_low['kNeighboursValue_cla'],
                                             )
+    buy_pattern_without_mlalgo(regression_data, regressionResult, None, None)
     if (buy_all_rule(regression_data, regressionResult, buyIndiaAvgReg, None)
         and buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvgReg, None)
         ):
@@ -86,6 +87,7 @@ def result_data(regression_high, regression_low, scrip):
                                             regression_high['mlpValue_cla'], 
                                             regression_high['kNeighboursValue_cla']
                                             )
+    sell_pattern_without_mlalgo(regression_data, regressionResult, None, None)
     if (sell_all_rule(regression_data, regressionResult, sellIndiaAvgReg, None)
         and sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvgReg, None)
         ):
@@ -177,13 +179,6 @@ def result_data_cla(regression_high, regression_low, scrip):
             sell_other_indicator(regression_data, regressionResult, True, None)
             db.ws_lowSellCla.insert_one(json.loads(json.dumps(regression_low)))
                                          
-
-
-
-
-
-
-
 
 def calculateParallel(threads=2, futures=None):
     pool = ThreadPool(threads)
