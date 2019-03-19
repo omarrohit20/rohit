@@ -1018,7 +1018,10 @@ def filterMA(regression_data, regressionResult):
          and (regression_data['SMA9'] < -1 or regression_data['SMA4'] < -1
               or (regression_data['SMA9'] < 0 or regression_data['SMA4'] < 0))
          ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:DowningMA')
+        if(regression_data['SMA9'] < -1 or regression_data['SMA4'] < -1):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:DowningMA')
+        else:
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:DowningMA-Risky')
 #     elif(regression_data['SMA200'] > 0 
 #          and regression_data['SMA100'] > 0
 #          and regression_data['SMA50'] > 0
@@ -1688,10 +1691,25 @@ def buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws):
     return False
 
 def buy_all_common(regression_data, regressionResult, reg, ws):
-    mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
-    mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
-    buy_other_indicator(regression_data, regressionResult, reg, ws)
-
+    mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, True)
+    mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, True)
+    mlpValue_cla, kNeighboursValue_cla = get_reg_or_cla(regression_data, False)
+    mlpValue_other_cla, kNeighboursValue_other_cla = get_reg_or_cla_other(regression_data, False)
+    
+    if((mlpValue_other >= 1 
+       and kNeighboursValue_other >= 1
+       and mlpValue_other_cla >= 1
+       and kNeighboursValue_other_cla >= 2
+       and kNeighboursValue_cla >= 2)
+       or 
+       (mlpValue_other >= 2
+       and kNeighboursValue_other >= 2
+       and mlpValue_other_cla >= 2
+       and kNeighboursValue_other_cla >= 2
+       and kNeighboursValue_cla >= 0)
+       ):
+        add_in_csv(regression_data, regressionResult, ws, '##Common:(Test)HighIndicators')
+    
     if((-5 < regression_data['PCT_day_change'] < -3) and (regression_data['PCT_change'] < -1.5)
         and regression_data['PCT_day_change'] < regression_data['PCT_change']
         and (((mlpValue > 0.3) and (kNeighboursValue > 0.3) and ((mlpValue_other > 0) or (kNeighboursValue_other > 0)))
@@ -4568,9 +4586,24 @@ def sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws
     return False
 
 def sell_all_common(regression_data, regressionResult, reg, ws):
-    mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
-    mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
-    sell_other_indicator(regression_data, regressionResult, reg, ws)
+    mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, True)
+    mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, True)
+    mlpValue_cla, kNeighboursValue_cla = get_reg_or_cla(regression_data, False)
+    mlpValue_other_cla, kNeighboursValue_other_cla = get_reg_or_cla_other(regression_data, False)
+    
+    if((mlpValue_other < -1 
+       and kNeighboursValue_other <= -1
+       and mlpValue_other_cla <= -1
+       and kNeighboursValue_other_cla <= -2
+       and kNeighboursValue_cla <= -2)
+       or 
+       (mlpValue_other <= -2
+       and kNeighboursValue_other <= -2
+       and mlpValue_other_cla <= -2
+       and kNeighboursValue_other_cla <= -2
+       and kNeighboursValue_cla <= 0)
+       ):
+        add_in_csv(regression_data, regressionResult, ws, '##Common:(Test)HighIndicators')
     
     if((5 > regression_data['PCT_day_change'] > 3) and (regression_data['PCT_change'] > 1.5)
         and (((mlpValue < -0.3) and (kNeighboursValue < -0.3) and ((mlpValue_other < 0.2) and (kNeighboursValue_other < 0)))
