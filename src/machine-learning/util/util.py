@@ -767,6 +767,15 @@ def tail_reversal_filter(regression_data, regressionResult):
 #             ):
 #             add_in_csv(regression_data, regressionResult, None, 'MayBuy-upTrend', None)
     
+    if(-5 < regression_data['PCT_day_change'] < -1.5
+        ):
+        if(3 > low_tail_pct(regression_data) > 1.5 and high_tail_pct(regression_data) < 0.5):
+            add_in_csv(regression_data, regressionResult, None, None, '(May-1-BuyCheckChart)', None)
+    elif(1.5 < regression_data['PCT_day_change'] < 5
+        ):
+        if(3 > high_tail_pct(regression_data) > 1.5 and low_tail_pct(regression_data) < 0.5):
+            add_in_csv(regression_data, regressionResult, None, None, '(May-1-SellCheckChart)', None)
+    
     if(-4 < regression_data['PCT_day_change'] < -1.5 and -4 < regression_data['PCT_change'] < -1.5
         ):
         if(3.5 > low_tail_pct(regression_data) > 1.8):
@@ -779,6 +788,7 @@ def tail_reversal_filter(regression_data, regressionResult):
             add_in_csv(regression_data, regressionResult, None, None, '(MayBuyCheckChart(check-chart-MarketNotUp2-3))', None)
         elif(low_tail_pct(regression_data) > 1.8 and regression_data['PCT_day_change'] < -2):
             add_in_csv(regression_data, regressionResult, None, None, '(MayBuyCheckChart(check-chart-MarketNotUp2-3))', None)
+    
     if(1.5 < regression_data['PCT_day_change'] < 4 and 1.5 < regression_data['PCT_change'] < 4
         ):
         if(3.5 > high_tail_pct(regression_data) > 1.8):
@@ -791,6 +801,7 @@ def tail_reversal_filter(regression_data, regressionResult):
             add_in_csv(regression_data, regressionResult, None, None, '(MaySellCheckChart(check-chart-MarketNotDown2-3))', None)
         elif(high_tail_pct(regression_data) > 1.8 and regression_data['PCT_day_change'] > 2):
             add_in_csv(regression_data, regressionResult, None, None, '(MaySellCheckChart(check-chart-MarketNotDown2-3))', None)
+    
 
 def filterMA(regression_data, regressionResult):
     ws = None
@@ -3346,6 +3357,8 @@ def buy_risingMA(regression_data, regressionResult, reg, ws):
         and regression_data['SMA200'] > 10
         and regression_data['year2HighChange'] < -5
         and regression_data['yearHighChange'] < -5
+        and (regression_data['PCT_day_change_pre1'] < 0.5
+             or -0.5 < regression_data['PCT_day_change'] < 0.5)
         ):
         if(regression_data['PCT_change'] < -4.5
             and regression_data['PCT_day_change'] < -4.5):

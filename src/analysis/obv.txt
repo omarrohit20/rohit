@@ -40,7 +40,18 @@ BuyCommon
 Sell Common
 	* PCT_Day_change -2 to -3
 	* series downTrend
-	* PCT should be less or around PCT_Day_change	
+	* PCT should be less or around PCT_Day_change
+	
+	
+Common:(Test)HighIndicators	
+	* Buy last day midcap red
+	* Sell last day midcap green
+	
+HighTail > 1.5
+	* Sell last day midcap green, 1.4 < PCT_DAY_Change < 5
+	
+LowTail > 1.5
+	* Buy last day midcap red, -5 < PCT_DAY_Change < -1.4
 	
 	    
 		
