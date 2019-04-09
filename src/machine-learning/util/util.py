@@ -769,12 +769,21 @@ def tail_reversal_filter(regression_data, regressionResult):
     
     if(-5 < regression_data['PCT_day_change'] < -1.5
         ):
-        if(3 > low_tail_pct(regression_data) > 1.5 and high_tail_pct(regression_data) < 0.5):
+        if(3 > low_tail_pct(regression_data) >= 1.49 and high_tail_pct(regression_data) <= 0.8):
             add_in_csv(regression_data, regressionResult, None, None, '(May-1-BuyCheckChart)', None)
     elif(1.5 < regression_data['PCT_day_change'] < 5
         ):
-        if(3 > high_tail_pct(regression_data) > 1.5 and low_tail_pct(regression_data) < 0.5):
-            add_in_csv(regression_data, regressionResult, None, None, '(May-1-SellCheckChart)', None)
+        if(3 > high_tail_pct(regression_data) >= 1.49 and low_tail_pct(regression_data) <= 0.8):
+            add_in_csv(regression_data, regressionResult, None, None, '(May-1-SellCheckChart)', None)   
+    
+    if(-6 < regression_data['PCT_day_change'] < -1.5
+        ):
+        if(3 > low_tail_pct(regression_data) >= 0.99 and high_tail_pct(regression_data) <= 0.6):
+            add_in_csv(regression_data, regressionResult, None, None, '(May-2-BuyCheckChart)', None)
+    elif(1.5 < regression_data['PCT_day_change'] < 6
+        ):
+        if(3 > high_tail_pct(regression_data) >= 0.99 and low_tail_pct(regression_data) <= 0.6):
+            add_in_csv(regression_data, regressionResult, None, None, '(May-2-SellCheckChart)', None)
     
     if(-4 < regression_data['PCT_day_change'] < -1.5 and -4 < regression_data['PCT_change'] < -1.5
         ):
@@ -1591,11 +1600,11 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
                 and regression_data['month3HighChange'] < -15  
                 ):
                 add_in_csv(regression_data, regressionResult, None, 'ML:buy-0')
-        elif(-5 < regression_data['PCT_day_change'] < -2
-            and -5 < regression_data['PCT_change'] < -2
-            and low_tail_pct(regression_data) > 1.5
-            and high_tail_pct(regression_data) < 1):
-            add_in_csv(regression_data, regressionResult, None, 'ML:buy-1')
+#         elif(-5 < regression_data['PCT_day_change'] < -2
+#             and -5 < regression_data['PCT_change'] < -2
+#             and low_tail_pct(regression_data) > 1.5
+#             and high_tail_pct(regression_data) < 1):
+#             add_in_csv(regression_data, regressionResult, None, 'ML:buy-1')
 #             elif(regression_data['PCT_day_change'] < 2.5 and regression_data['PCT_change'] < 0.5
 #                 and (regression_data['PCT_day_change'] < 0 or regression_data['PCT_day_change_pre1'] < 0)
 #                 and regression_data['month3HighChange'] < -5
@@ -1661,14 +1670,14 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
         and breakout_or_no_consolidation(regression_data) == True
         and regression_data['close'] > 50
         ):
-        if(high_tail_pct(regression_data) < 2.5
-           and regression_data['low'] < regression_data['low_pre1']
-           ):
-            if(regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0
-                and regression_data['month3LowChange'] > 15  
-                ):
-                add_in_csv(regression_data, regressionResult, None, 'ML:sell-0')
-        elif(2 < regression_data['PCT_day_change'] < 5
+#         if(high_tail_pct(regression_data) < 2.5
+#            and regression_data['low'] < regression_data['low_pre1']
+#            ):
+#             if(regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0
+#                 and regression_data['month3LowChange'] > 15  
+#                 ):
+#                 add_in_csv(regression_data, regressionResult, None, 'ML:sell-0')
+        if(2 < regression_data['PCT_day_change'] < 5
             and  2 < regression_data['PCT_change'] < 5
             and high_tail_pct(regression_data) > 1.5
             and low_tail_pct(regression_data) < 1):
@@ -4483,11 +4492,11 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
                 and regression_data['month3LowChange'] > 15  
                 ):
                 add_in_csv(regression_data, regressionResult, None, 'ML:sell-0')
-        elif(2 < regression_data['PCT_day_change'] < 5
-            and  2 < regression_data['PCT_change'] < 5
-            and high_tail_pct(regression_data) > 1.5
-            and low_tail_pct(regression_data) < 1):
-            add_in_csv(regression_data, regressionResult, None, 'ML:sell-1')
+#         elif(2 < regression_data['PCT_day_change'] < 5
+#             and  2 < regression_data['PCT_change'] < 5
+#             and high_tail_pct(regression_data) > 1.5
+#             and low_tail_pct(regression_data) < 1):
+#             add_in_csv(regression_data, regressionResult, None, 'ML:sell-1')
             
         if((1 < regression_data['PCT_day_change'] < 3) 
             and (0.75 < regression_data['PCT_change'] < 3)
@@ -4559,14 +4568,14 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
         and breakout_or_no_consolidation(regression_data) == True
         and regression_data['close'] > 50
         ):
-        if(low_tail_pct(regression_data) < 2.5
-           and regression_data['low'] > regression_data['low_pre1']
-        ):
-            if(regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0
-                and regression_data['month3HighChange'] < -15  
-                ):
-                add_in_csv(regression_data, regressionResult, None, 'ML:buy-0')
-        elif(-5 < regression_data['PCT_day_change'] < -2
+#         if(low_tail_pct(regression_data) < 2.5
+#            and regression_data['low'] > regression_data['low_pre1']
+#         ):
+#             if(regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0
+#                 and regression_data['month3HighChange'] < -15  
+#                 ):
+#                 add_in_csv(regression_data, regressionResult, None, 'ML:buy-0')
+        if(-5 < regression_data['PCT_day_change'] < -2
             and -5 < regression_data['PCT_change'] < -2
             and low_tail_pct(regression_data) > 1.5
             and high_tail_pct(regression_data) < 1):

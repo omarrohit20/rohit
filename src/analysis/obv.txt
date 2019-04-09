@@ -23,14 +23,7 @@ in downtrend - for buy
 In sideways or uptrend
 	* For year high check for high vol and news and for 1% move only	
 	
-Good result and better than expected
-	* Check for no pre rally and last day no major selling
-	* Not yearly high
-	
-Bad result and worst than expected	
-    * Check for no pre sell rally and last day no major buying
-    * Not yearly low
-    
+
 BuyCommon
 	* PCT_Day_change 2 to 3
 	* series upTrend
@@ -41,8 +34,30 @@ Sell Common
 	* PCT_Day_change -2 to -3
 	* series downTrend
 	* PCT should be less or around PCT_Day_change
+
+
+
+Good result and better than expected
+	* Check for no pre rally and last day no major selling
+	* Not yearly high
 	
+Bad result and worst than expected	
+    * Check for no pre sell rally and last day no major buying
+    * Not yearly low
+    	
 	
+Rising MA
+	Check for lows in upward direction /
+	Give preferences for PCT_Day_change negative
+	Give preferences for [MLBuy]
+	If last-day up try after 9:30
+
+Downing MA
+    Check for highs in upward direction \
+	Give preferences for [MLSell]
+	If last-day down try after 9:30
+	
+
 Common:(Test)HighIndicators	
 	* Buy last day midcap red
 	* Sell last day midcap green
