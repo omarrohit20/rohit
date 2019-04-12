@@ -1,5 +1,5 @@
 filterTest,avg,count
-,-0.129403368891165,26096
+,-0.12943020207086317,26108
 "##(Check-chart):MaySellCheckChart-(Risky)-(|_|`|),",0.49872266893623857,22
 "##(Check-chart):MaySellCheckChart-(|_|`|),",-0.8744643137454222,6
 "##(Check-chart-sell)Month3Low-Continue(InUpTrend),",-0.06388599710491424,5
@@ -29,8 +29,6 @@ filterTest,avg,count
 "ML:sellFinalCandidate-1-(lastDayUp),",1.8978469119946508,3
 "ML:sellFinalCandidate-3,",-0.2761715172503016,4
 "RSISellCandidate(yearLow)-lessThanMinus5,",-0.027453095435976738,2
-"Reversal(Test):buyReversalOI-2,",0.012307034846084428,6
-"Reversal(Test):buyReversalOI-2,***SELLPATTERN***,",-0.38787388188767763,6
 "buyDayHighVolLow-0,***SELLPATTERN***,",-6.761177753544169,1
 "buyEveningStar-0(Buy-After-1pc-down),",0.18044459276378433,2
 "finalBreakOutSell-0,",1.2841530054644776,1
