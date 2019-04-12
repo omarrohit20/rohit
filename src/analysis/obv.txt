@@ -44,8 +44,30 @@ Good result and better than expected
 Bad result and worst than expected	
     * Check for no pre sell rally and last day no major buying
     * Not yearly low
-    	
+
+##############################################################
+EMA6-LT-May-MT-EMA14 Buy
+	Check for 2.5 < PCT_Day_Change < 4 and 2 < PCT_Day_Change 
+	Last 3 days at-least 2 day up	
+
+EMA6-MT-May-LT-EMA14 Sell
+	Check for -4 < PCT_Day_Change < -2.5 and PCT_Day_Change < -2
+	Last 3 days at-least 2 day down
+##############################################################	
+
+##############################################################
+EMA6<EMA14 Buy
+	Check for -4 < PCT_Day_Change < -2.5 and PCT_Day_Change < -2
+	Last 3 days at-least 2 day down
+	Buy after 11, Buy in the morning If last 4 days down
 	
+EMA6>EMA14 Sell
+	Check for 2.5 < PCT_Day_Change < 4 and 2 < PCT_Day_Change 
+	Last 3 days at-least 2 day up
+	Sell after 11, Sell in the morning If last 4 days up
+##############################################################    	
+	
+##############################################################	
 Rising MA
 	Check for lows in upward direction /
 	Give preferences for PCT_Day_change negative
@@ -56,17 +78,24 @@ Downing MA
     Check for highs in upward direction \
 	Give preferences for [MLSell]
 	If last-day down try after 9:30
+##############################################################
 	
-
+##############################################################
 Common:(Test)HighIndicators	
-	* Buy last day midcap red
-	* Sell last day midcap green
-	
+	* Buy last day midcap red, PCT_day_change greater than 2
+	* Sell last day midcap green, PCT_day_change less than -2
+##############################################################	
+
+##############################################################	
 HighTail > 1.5
-	* Sell last day midcap green, 1.4 < PCT_DAY_Change < 5
+	1 - Sell last day midcap green, 1.4 < PCT_DAY_Change < 5
+	2 - uptrend, PCT_day_change and PCT_change greater than -3 and less than 0, PCT_day_change_pre greater than 1
+	
 	
 LowTail > 1.5
-	* Buy last day midcap red, -5 < PCT_DAY_Change < -1.4
+	1 - Buy last day midcap red, -5 < PCT_DAY_Change < -1.4
+	2 - downtrend, PCT_day_change and PCT_change greater than 0 and less than 3, PCT_day_change_pre less than 1
+##############################################################	
 	
 	    
 		
