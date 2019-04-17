@@ -1708,13 +1708,15 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
     mlpValue_other_cla, kNeighboursValue_other_cla = get_reg_or_cla_other(regression_data, False)
     
     if((regression_data['PCT_day_change'] < 4.5)
-       and ((mlpValue_other >= 1 
+       and ((regression_data['PCT_day_change'] > 2
+           and mlpValue_other >= 1 
            and kNeighboursValue_other >= 1
            and mlpValue_other_cla >= 1
            and kNeighboursValue_other_cla >= 2
            and kNeighboursValue_cla >= 2)
            or 
-           (mlpValue_other >= 2
+           (regression_data['PCT_day_change'] > 1
+           and mlpValue_other >= 2
            and kNeighboursValue_other >= 2
            and mlpValue_other_cla >= 2
            and kNeighboursValue_other_cla >= 2
@@ -1810,7 +1812,7 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
             
     if((((mlpValue > 0.3) and (kNeighboursValue > 0.3) and ((mlpValue_other > 0) or (kNeighboursValue_other > 0)))
              or ((mlpValue_other > 0.3) and (kNeighboursValue_other > 0.3) and ((mlpValue > 0) or (kNeighboursValue > 0))))
-        and (2 < regression_data['PCT_day_change'] < 4.5) and (1 < regression_data['PCT_change'] < 4.5)
+        and (2 < regression_data['PCT_day_change'] < 4) and (1 < regression_data['PCT_change'] < 4)
         and ((regression_data['PCT_day_change_pre1'] < 0 and regression_data['forecast_day_PCT_change'] > 0)
              or regression_data['PCT_day_change_pre2'] < 0
             )
@@ -3385,8 +3387,10 @@ def buy_risingMA(regression_data, regressionResult, reg, ws):
         else:
             add_in_csv(regression_data, regressionResult, ws, '(Test)ML:AllMAPositive_Uptrend')
     
-    if(regression_data['year2HighChange'] < -50):
-        if(1 < regression_data['PCT_day_change'] < 4
+    if(regression_data['year2HighChange'] < -50
+        ):
+        if(regression_data['yearHighChange'] < -30
+            and 2 < regression_data['PCT_day_change'] < 4
             #and regression_data['forecast_day_PCT_change'] < 1
             and regression_data['forecast_day_PCT_change'] > regression_data['forecast_day_PCT4_change']
             and regression_data['forecast_day_PCT2_change'] < 1
@@ -3398,10 +3402,11 @@ def buy_risingMA(regression_data, regressionResult, reg, ws):
             and high_tail_pct(regression_data) < 1
             ):
             add_in_csv(regression_data, regressionResult, ws, 'buyYear2LowBreakingUp')
-        elif(-1 < regression_data['PCT_day_change'] < -0.3
+        elif(regression_data['yearHighChange'] < -20
+            and -1.5 < regression_data['PCT_day_change'] < -0.3
             and -2 < regression_data['PCT_change'] < 1 
             and regression_data['PCT_day_change_pre1'] < 0
-            and (((regression_data['bar_low'] - regression_data['bar_low_pre1'])/regression_data['bar_low'])*100) > 0.3
+            and (((regression_data['bar_low'] - regression_data['bar_low_pre1'])/regression_data['bar_low'])*100) > 0
             ):
             add_in_csv(regression_data, regressionResult, ws, 'buyMayYear2LowBreakingUp')
             
@@ -4620,13 +4625,15 @@ def sell_all_common(regression_data, regressionResult, reg, ws):
     mlpValue_other_cla, kNeighboursValue_other_cla = get_reg_or_cla_other(regression_data, False)
     
     if((regression_data['PCT_day_change'] > -4.5)
-       and ((mlpValue_other < -1 
+       and ((regression_data['PCT_day_change'] < -2
+           and mlpValue_other < -1 
            and kNeighboursValue_other <= -1
            and mlpValue_other_cla <= -1
            and kNeighboursValue_other_cla <= -2
            and kNeighboursValue_cla <= -2)
            or 
-           (mlpValue_other <= -2
+           (regression_data['PCT_day_change'] < -1
+           and mlpValue_other <= -2
            and kNeighboursValue_other <= -2
            and mlpValue_other_cla <= -2
            and kNeighboursValue_other_cla <= -2

@@ -88,13 +88,17 @@ Common:(Test)HighIndicators
 
 ##############################################################	
 HighTail > 1.5
-	1 - Sell last day midcap green, 1.4 < PCT_DAY_Change < 5
-	2 - uptrend, PCT_day_change and PCT_change greater than -3 and less than 0, PCT_day_change_pre greater than 1
+	1 - Sell => last day midcap green, 1.4 < PCT_DAY_Change < 5
+	2 - Sell => uptrend, PCT_day_change and PCT_change greater than -3 and less than 0, PCT_day_change_pre greater than 1
+	3 - Sell => PCT_DAY_Change and PCT_Change greater than 0, PCT_day_change_pre < 0, 'bar_high' < -1
+	4 - Buy => PCT_DAY_Change and PCT_Change greater than 0, PCT_day_change_pre < 0, 'bar_high' > 0
 	
 	
 LowTail > 1.5
-	1 - Buy last day midcap red, -5 < PCT_DAY_Change < -1.4
-	2 - downtrend, PCT_day_change and PCT_change greater than 0 and less than 3, PCT_day_change_pre less than 1
+	1 - Buy => last day midcap red, -5 < PCT_DAY_Change < -1.4
+	2 - Buy => downtrend, PCT_day_change and PCT_change greater than 0 and less than 3, PCT_day_change_pre less than 1
+	3 - Buy => PCT_DAY_Change and PCT_Change less than 0, PCT_day_change_pre > 0, 'bar_low' > 1
+	4 - Sell => PCT_DAY_Change and PCT_Change less than 0, PCT_day_change_pre > 0, 'bar_low' < 0
 ##############################################################	
 	
 	    
