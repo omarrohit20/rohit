@@ -1867,6 +1867,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
     tail_reversal_filter(regression_data, regressionResult)
     if(regression_data['close'] > 50
         ):
+        buy_tail_reversal_filter(regression_data, regressionResult, reg, ws)
         buy_year_high(regression_data, regressionResult, reg, ws)
         buy_year_low(regression_data, regressionResult, reg, ws, ws)
         buy_down_trend(regression_data, regressionResult, reg, ws)
@@ -1893,6 +1894,9 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         buy_risingMA(regression_data, regressionResult, reg, ws)
         buy_study_risingMA(regression_data, regressionResult, reg, ws)
         return True
+    return False
+
+def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
     return False
 
 def buy_year_high(regression_data, regressionResult, reg, ws):
@@ -4036,8 +4040,7 @@ def sell_pattern_without_mlalgo(regression_data, regressionResult):
                 add_in_csv(regression_data, regressionResult, None, 'buyPatterns-GT1.5-SMAGT0')
             elif(regression_data['sellIndia_avg'] > 0.9
                 ):
-                add_in_csv(regression_data, regressionResult, None, 'buyPatterns-Risky-GT0.9-SMAGT0')
-                
+                add_in_csv(regression_data, regressionResult, None, 'buyPatterns-Risky-GT0.9-SMAGT0')              
             #add_in_csv(regression_data, regressionResult, None, 'buyPatterns-1-Risky')   
 #     sellPatternsDict=scrip_patterns_to_dict('../../data-import/nselist/all-buy-filter-by-PCT-Change.csv')
 #     if regression_data['sellIndia'] != '' and regression_data['sellIndia'] in sellPatternsDict:
@@ -4569,6 +4572,7 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
     tail_reversal_filter(regression_data, regressionResult)
     if(regression_data['close'] > 50
         ):
+        sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
         sell_up_trend(regression_data, regressionResult, reg, ws)
         sell_down_trend(regression_data, regressionResult, reg, ws)
         sell_final(regression_data, regressionResult, reg, ws, ws)
@@ -4593,6 +4597,9 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         sell_heavy_downtrend(regression_data, regressionResult, reg, ws)
         sell_check_chart(regression_data, regressionResult, reg, ws)
         return True
+    return False
+
+def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
     return False
 
 def sell_year_high(regression_data, regressionResult, reg, ws, ws1):
