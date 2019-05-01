@@ -1,10 +1,9 @@
 filterTest,avg,count
-,-0.1277280623195954,26034
+,-0.12788333033038368,25978
 "##(Check-chart):MaySellCheckChart-(Risky)-(|_|`|),",0.49872266893623857,22
 "##(Check-chart):MaySellCheckChart-(|_|`|),",-0.8744643137454222,6
 "##(Check-chart-sell)Month3Low-Continue(InUpTrend),",-0.06388599710491424,5
-"##(Test)(Check-chart-buy):month3Low-InPlus-PCTChangeLessThan2,",-0.15028329239961216,7
-"##(Test)(Check-chart-buy):month3Low-InPlus-PCTChangeLessThan2,***SELLPATTERN***,",-1.68174755506808,1
+"##(Test)(Check-chart-buy):month3Low-InPlus-PCTChangeLessThan2,",-0.40164799890850417,6
 "##(Test)(Check-chart-sell):month3Low-InPlus,",1.1306612654162542,13
 "##(Test)(Check-chart-sell):month3Low-InPlus,***BUYPATTERN***,",-0.12526558351523404,27
 "##(Test)(check-chart)-SMAUpTrend,",-0.2742145147393664,64
@@ -28,6 +27,9 @@ filterTest,avg,count
 "ML:sellFinalCandidate-(lastDayUp),",0.40965888497788416,10
 "ML:sellFinalCandidate-1-(lastDayUp),",1.8978469119946508,3
 "ML:sellFinalCandidate-3,",-0.2761715172503016,4
+"MaySell-CheckChart(downTrend-lastDayUp),",-0.055700341172136604,56
+"MaySell-CheckChart(downTrend-lastDayUp),##(Test)(Check-chart-buy):month3Low-InPlus-PCTChangeLessThan2,",1.3579049466537398,1
+"MaySell-CheckChart(downTrend-lastDayUp),##(Test)(Check-chart-buy):month3Low-InPlus-PCTChangeLessThan2,***SELLPATTERN***,",-1.68174755506808,1
 "RSISellCandidate(yearLow)-lessThanMinus5,",-0.027453095435976738,2
 "buyDayHighVolLow-0,***SELLPATTERN***,",-6.761177753544169,1
 "buyEveningStar-0(Buy-After-1pc-down),",0.18044459276378433,2
