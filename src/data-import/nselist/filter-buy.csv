@@ -1,5 +1,5 @@
 filterTest,avg,count
-,-0.13261138249055854,24448
+,-0.13353272553753495,24397
 "##(Check-chart):MayBuyCheckChart-(|`|_|),",-0.13460160836750637,14
 "##(Check-chart)ML:buyMonth3High-Continue,",0.05850212082393154,5
 "##(Check-chart-buy):YearHigh-InMinus,",0.0876885528168841,12
@@ -13,8 +13,8 @@ filterTest,avg,count
 "##(Check-chart-buy):month6High-InMinus,***SELLPATTERN***,(check-chart)maySell-EMA6-MT-May-LT-EMA14,",-0.28869159940057687,5
 "##(Check-chart-sell):month3High-InMinus-PCTChangeLessThan(-2),",0.10454564932570684,8
 "##(Check-chart-sell):month6High-InMinus-PCTChangeLessThan(-2),",-0.008015673977150185,11
-"##(Test)(check-chart)-SMADownTrend,",-0.39176558419865176,114
-"##(Test)(check-chart)-SMADownTrend,##(Test)ML:buySMADownTrend,",0.7608425434997842,36
+"##(Test)(check-chart)-SMADownTrend,",-0.3671164592375293,113
+"##(Test)(check-chart)-SMADownTrend,##(Test)ML:buySMADownTrend,",0.784663367524809,35
 "##RisingMA(Test)(check-chart-buy)-1DayUp,",-0.5469832303485902,55
 "##RisingMA(Test)(check-chart-buy)-2DayUp,",-0.5237103424561592,16
 "##RisingMA(check-chart-buy)-MayBuyCheckChart,***SELLPATTERN***,",-0.07826110784870083,4
@@ -114,6 +114,10 @@ filterTest,avg,count
 "ML:sellRisingMAuptrend-1,***BUYPATTERN***,",-0.4953428354370353,3
 "ML:sellRisingMAuptrend-1,***BUYPATTERN***,(Test)sell-UP,",0.60283687943262,1
 "ML:sellRisingMAuptrend-1,***BUYPATTERN***,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,",0.5847953216374269,1
+"MayBuy-CheckChart(downTrend-mayReverse)-0,",-0.33272877519975713,22
+"MayBuy-CheckChart(downTrend-mayReverse)-1,",0.7943054780848762,29
+"MayBuy-CheckChart(downTrend-mayReverse)-1,##(Test)(check-chart)-SMADownTrend,",-3.177116704805495,1
+"MayBuy-CheckChart(downTrend-mayReverse)-1,##(Test)(check-chart)-SMADownTrend,##(Test)ML:buySMADownTrend,",-0.07288629737608916,1
 "MayBuy-CheckChart(upTrend-lastDayDown),",-0.05091479966702275,65
 "MayBuy-CheckChart(upTrend-lastDayDown),##(Check-chart-buy):month3High-InMinus,***SELLPATTERN***,",-2.999999999999994,1
 "MayBuy-CheckChart(upTrend-lastDayDown),##(Check-chart-buy):month6High-InMinus,***SELLPATTERN***,",0.6164058795637661,1
