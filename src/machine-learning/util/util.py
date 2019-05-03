@@ -1770,6 +1770,15 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
         else:
             add_in_csv(regression_data, regressionResult, ws, None)
             
+    if(ten_days_less_than_minus_ten(regression_data)
+        and regression_data['forecast_day_PCT2_change'] < 0
+        and regression_data['forecast_day_PCT3_change'] < 0
+        and regression_data['forecast_day_PCT5_change'] < 0
+        and regression_data['forecast_day_PCT7_change'] < 0
+        and regression_data['forecast_day_PCT7_change'] < 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '##Common:Breakout-tenDaysLessThanMinusTen')
+            
 #     if(mlpValue > 0
 #         and kNeighboursValue > 0
 #         and ('P@' not in regression_data['sellIndia'])
@@ -4419,6 +4428,15 @@ def sell_all_common(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None) 
         else:
             add_in_csv(regression_data, regressionResult, ws, None)
+            
+    if(ten_days_more_than_ten(regression_data)
+        and regression_data['forecast_day_PCT2_change'] > 0
+        and regression_data['forecast_day_PCT3_change'] > 0
+        and regression_data['forecast_day_PCT5_change'] > 0
+        and regression_data['forecast_day_PCT7_change'] > 0
+        and regression_data['forecast_day_PCT7_change'] > 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '##Common:Breakdown-tenDaysMoreThanTen')
                          
 #     if(-4 < regression_data['PCT_change'] < 1
 #         and (last_7_day_all_down(regression_data) == False)
