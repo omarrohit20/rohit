@@ -119,8 +119,8 @@ def add_in_csv_hist_pattern(regression_data, regressionResult, ws, filter, avg, 
 def is_algo_buy(regression_data, not_from_rule=False):
     if TEST:
         return True
-    if not_from_rule == False:
-        return True
+#     if not_from_rule == False:
+#         return True
     if((regression_data['mlpValue_reg'] >= -1.5) and (regression_data['kNeighboursValue_reg'] >= -1.5)
         and (regression_data['mlpValue_reg_other'] >= -1.5) and (regression_data['kNeighboursValue_reg_other'] >= -1.5)
         and (regression_data['mlpValue_cla'] >= -1) and (regression_data['kNeighboursValue_cla'] >= -1)
@@ -165,8 +165,8 @@ def is_algo_buy(regression_data, not_from_rule=False):
 def is_algo_sell(regression_data, not_from_rule=False):
     if TEST:
         return True
-    if not_from_rule == False:
-        return True
+#     if not_from_rule == False:
+#         return True
     if((regression_data['mlpValue_reg'] <= 1.5) and (regression_data['kNeighboursValue_reg'] <= 1.5)
         and (regression_data['mlpValue_reg_other'] <= 1.5) and (regression_data['kNeighboursValue_reg_other'] <= 1.5)
         and (regression_data['mlpValue_cla'] <= 1) and (regression_data['kNeighboursValue_cla'] <= 1)
@@ -1390,6 +1390,10 @@ def buy_pattern_without_mlalgo(regression_data, regressionResult):
     if(regression_data['buyIndia_avg'] > 0.9 and regression_data['buyIndia_count'] > 1
         and (regression_data['SMA9'] > 0 or regression_data['SMA4'] > 1.5)
         ):
+        if(regression_data['SMA9'] > 0):
+            add_in_csv(regression_data, regressionResult, None, '(SMA9GT0)')
+        elif(regression_data['SMA4'] > 1.5):
+            add_in_csv(regression_data, regressionResult, None, '(SMA4GT(1.5))')
         if(regression_data['yearLowChange'] > 10 and regression_data['buyIndia_count'] > 1):
             if(regression_data['buyIndia_avg'] > 1.5):
                 add_in_csv(regression_data, regressionResult, None, 'buyPattern-GT1.5-SMAGT0')
@@ -1401,6 +1405,10 @@ def buy_pattern_without_mlalgo(regression_data, regressionResult):
     elif(regression_data['buyIndia_avg'] < -0.9 and regression_data['buyIndia_count'] > 1
         and (regression_data['SMA9'] < 0 or regression_data['SMA4'] < -1.5)
         ):
+        if(regression_data['SMA9'] < 0):
+            add_in_csv(regression_data, regressionResult, None, '(SMA9LT0)')
+        elif(regression_data['SMA4'] < -1.5):
+            add_in_csv(regression_data, regressionResult, None, '(SMA4LT(-1.5))')
         if(regression_data['yearLowChange'] > 10 and regression_data['buyIndia_count'] > 1):
             if(regression_data['buyIndia_avg'] < -1.5):
                 add_in_csv(regression_data, regressionResult, None, 'sellPattern-LT-1.5-SMALT0')
@@ -4012,9 +4020,12 @@ def sell_pattern_without_mlalgo(regression_data, regressionResult):
     if(regression_data['sellIndia_avg'] < -1.8):
         add_in_csv(regression_data, regressionResult, None, 'maySellFromSellPattern-LT-1.8')
     if(regression_data['sellIndia_avg'] < -0.9 and regression_data['sellIndia_count'] > 1
-        and (regression_data['SMA9'] < 0)
+        and (regression_data['SMA9'] < 0 or regression_data['SMA4'] < -1.5)
         ):
-        add_in_csv(regression_data, regressionResult, None, 'sellPatterns-(SMA9LT-1)')
+        if(regression_data['SMA9'] < 0):
+            add_in_csv(regression_data, regressionResult, None, '(SMA9LT0)')
+        elif(regression_data['SMA4'] < -1.5):
+            add_in_csv(regression_data, regressionResult, None, '(SMA4LT(-1.5))')
         if(regression_data['yearHighChange'] < -10 and regression_data['sellIndia_count'] > 1):
             if(regression_data['sellIndia_avg'] < -1.5):
                 add_in_csv(regression_data, regressionResult, None, 'sellPatterns-LT-1.5-SMALT0')
@@ -4022,8 +4033,12 @@ def sell_pattern_without_mlalgo(regression_data, regressionResult):
                 ):
                 add_in_csv(regression_data, regressionResult, None, 'sellPatterns-Risky-LT-0.9-SMALT0')   
     elif(regression_data['sellIndia_avg'] > 0.9 and regression_data['sellIndia_count'] > 1
-        and (regression_data['SMA9'] > 0)
+        and (regression_data['SMA9'] > 0 or regression_data['SMA4'] > 1.5)
         ):
+        if(regression_data['SMA9'] > 0):
+            add_in_csv(regression_data, regressionResult, None, '(SMA9GT0)')
+        elif(regression_data['SMA4'] > 1.5):
+            add_in_csv(regression_data, regressionResult, None, '(SMA4GT(1.5))')
         if(regression_data['yearLowChange'] < -10 and regression_data['sellIndia_count'] > 1):
             if(regression_data['sellIndia_avg'] > 1.5):
                 add_in_csv(regression_data, regressionResult, None, 'buyPatterns-GT1.5-SMAGT0')
