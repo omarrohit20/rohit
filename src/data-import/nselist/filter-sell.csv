@@ -1,5 +1,5 @@
 filterTest,avg,count
-,-0.1275054251999043,25903
+,-0.12408878261709178,25487
 "##(Check-chart):MaySellCheckChart-(Risky)-(|_|`|),",0.49872266893623857,22
 "##(Check-chart):MaySellCheckChart-(|_|`|),",-0.8744643137454222,6
 "##(Check-chart-sell)Month3Low-Continue(InUpTrend),",-0.06388599710491424,5
@@ -21,9 +21,16 @@ filterTest,avg,count
 "(SMA9LT0),",-1.4194388092677173,9
 "(SMA9LT0),sellPatterns-LT-1.5-SMALT0,",-1.0957281409639412,1
 "(SMA9LT0),sellPatterns-LT-1.5-SMALT0,sellPatternsML,",0.7115259430627701,3
-"(SMA9LT0),sellPatterns-Risky-LT-0.9-SMALT0,",-1.2579322557895205,34
+"(SMA9LT0),sellPatterns-Risky-LT-0.9-SMALT0,",-1.313959166776571,33
 "(SMA9LT0),sellPatterns-Risky-LT-0.9-SMALT0,##DOWNTREND:sellMonth3LowBreak,",-2.951191827468779,1
 "(SMA9LT0),sellPatterns-Risky-LT-0.9-SMALT0,***BUYPATTERN***,",-0.03675163031379154,2
+"(check-chart):sellMonthLowBreak,",-0.1804974757788062,149
+"(check-chart):sellMonthLowBreak,***BUYPATTERN***,",-2.291957617527685,4
+"(check-chart):sellMonthLowBreak-checkATRBuyBreak,",-0.37321831603508565,258
+"(check-chart):sellMonthLowBreak-checkATRBuyBreak,(SMA9LT0),sellPatterns-Risky-LT-0.9-SMALT0,",0.5909558067831479,1
+"(check-chart):sellMonthLowBreak-checkATRBuyBreak,***BUYPATTERN***,",-1.5539892986181967,5
+"(check-chart):sellMonthLowBreak-checkATRBuyBreak,maySellFromSellPattern-LT-1.8,(SMA9LT0),sellPatterns-LT-1.5-SMALT0,sellPatternsML,",-2.123893805309731,1
+"(check-chart):sellMonthLowBreak-checkATRBuyBreak,maySellFromSellPattern-LT-1.8,sellPatternsML,",-3.1213872832369973,1
 "++,",0.0015151515151570272,1
 "+-,",-0.24608223988838596,2
 "-+,",1.8735835214841121,3
@@ -53,8 +60,8 @@ filterTest,avg,count
 "mayBuyFromSellPattern-GT1.8,(SMA9GT0),",2.418749156658854,3
 "maySellFromSellPattern-LT-1.8,",-2.9672751027941517,10
 "maySellFromSellPattern-LT-1.8,(SMA9LT0),sellPatterns-LT-1.5-SMALT0,",-0.36452004860267545,1
-"maySellFromSellPattern-LT-1.8,(SMA9LT0),sellPatterns-LT-1.5-SMALT0,sellPatternsML,",-1.4880492632022952,13
-"maySellFromSellPattern-LT-1.8,sellPatternsML,",-2.7131678037492657,7
+"maySellFromSellPattern-LT-1.8,(SMA9LT0),sellPatterns-LT-1.5-SMALT0,sellPatternsML,",-1.4350622180266752,12
+"maySellFromSellPattern-LT-1.8,sellPatternsML,",-2.645131223834644,6
 "sellDayHighVolLow-0,***BUYPATTERN***,",2.095631641086176,1
 "sellDayHighVolLow-01-checkMorningTrend(.5SL),",-1.5584962394357529,2
 "sellEveningStar-0,",-0.19685368706007975,3

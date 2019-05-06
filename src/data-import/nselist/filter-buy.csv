@@ -1,5 +1,5 @@
 filterTest,avg,count
-,-0.13553671433490366,24243
+,-0.13446357698322667,23888
 "##(Check-chart):MayBuyCheckChart-(|`|_|),",-0.13460160836750637,14
 "##(Check-chart)ML:buyMonth3High-Continue,",0.05850212082393154,5
 "##(Check-chart-buy):YearHigh-InMinus,",0.0876885528168841,12
@@ -18,7 +18,7 @@ filterTest,avg,count
 "##ML:(check-chart-2-3MidCapCross)MayBuyCheckChart-1,",-0.25625768428995643,44
 "##ML:MayBuyCheckChart-last3DayDown,",-0.3487221004301324,12
 "##RisingMA(Test)(check-chart-buy)-1DayUp,",-0.5469832303485902,55
-"##RisingMA(Test)(check-chart-buy)-2DayUp,",-0.5237103424561592,16
+"##RisingMA(Test)(check-chart-buy)-2DayUp,",-0.6724217838065937,13
 "##RisingMA(check-chart-buy)-MayBuyCheckChart,***SELLPATTERN***,",-0.07826110784870083,4
 "##RisingMA(check-chart-sell)-MaySellCheckChart,",-0.7663397845454861,9
 "##RisingMA(check-chart-sell)-MaySellCheckChart,***BUYPATTERN***,",1.5820203793698606,3
@@ -26,9 +26,9 @@ filterTest,avg,count
 "##UPTREND:buyMonth3LowReversal(Confirm),",-0.431463926684159,33
 "##UPTREND:buyMonth3LowReversal(Confirm),##RisingMA(Test)(check-chart-buy)-2DayUp,",1.52872215709261,1
 "##UPTREND:buyMonth3LowReversal(Confirm),sell-UP,",0.7801418439716339,1
-"##UPTREND:buyMonth6Low,",-0.03538578871819098,21
+"##UPTREND:buyMonth6Low,",0.17522393355690613,19
 "##UPTREND:buyMonth6Low,sell-UP,",-1.6947211725638331,1
-"##UPTREND:buyMonth6LowReversal(Confirm),",-0.29182743212401674,49
+"##UPTREND:buyMonth6LowReversal(Confirm),",-0.2188303193091996,48
 "##UPTREND:buyMonth6LowReversal(Confirm),##RisingMA(check-chart-sell)-MaySellCheckChart,",1.2468827930174564,1
 "##UPTREND:buyMonth6LowReversal(Confirm),##RisingMA(check-chart-sell)-MaySellCheckChart,***BUYPATTERN***,",0.7985480943738616,1
 "##UPTREND:buyMonth6LowReversal(Confirm),(Test)sell-UP,",0.3714710252600297,1
@@ -54,41 +54,71 @@ filterTest,avg,count
 "(Test)ML:AllMAPositive_Uptrend,(check-chart)maySell-EMA6>EMA14,",-0.09900990099009901,1
 "(Test)ML:AllMAPositive_Uptrend_(BT+1-1),",-0.12895674310047406,93
 "(Test)ML:AllMAPositive_Uptrend_(BT+1-1),buyMayYear2LowBreakingUp,",-0.8623567375097363,1
-"(Test)ML:AllMAPositive_Uptrend_(GT+2),",-0.5062011160035728,81
-"(Test)ML:AllMAPositive_Uptrend_(GT+2),sell-UP,",-2.1372549019607874,1
-"(Test)ML:AllMAPositive_Uptrend_(GT+4.5),",0.1411059883804209,13
-"(Test)ML:AllMAPositive_Uptrend_(GT0),",0.38250961087631685,69
+"(Test)ML:AllMAPositive_Uptrend_(GT+2),",-0.4986093496229584,80
+"(Test)ML:AllMAPositive_Uptrend_(GT+4.5),",-0.09913466426792153,11
+"(Test)ML:AllMAPositive_Uptrend_(GT0),",0.41785615199014936,67
 "(Test)ML:AllMAPositive_Uptrend_(LT-2),",-2.194249649368857,1
 "(Test)ML:AllMAPositive_Uptrend_(LT0),",-0.4454778441762145,42
 "(Test)buy-UP,",2.032022658498784,2
-"(Test)sell-UP,",-0.4871866773230207,3
-"(Test)sell-UP,***BUYPATTERN***,",-2.1810489810796967,9
+"(Test)sell-UP,",-0.45269027856541527,2
+"(Test)sell-UP,***BUYPATTERN***,",-2.1464386592071905,8
 "(Test)sellHeavyUpTrend-Reversal-1,",-1.7155598108403758,5
 "(Test)sellHeavyUpTrend-Reversal-1,***BUYPATTERN***,",-1.5261480987440752,4
-"(Test)sellHeavyUpTrend-Reversal-1,***BUYPATTERN***,(check-chart)maySell-EMA6>EMA14,",-0.559179869524683,1
-"(check-chart):ML:buy-2week-breakoutup,",1.0520146636403023,65
+"(check-chart):ML:buy-2week-breakoutup,",0.6450829814873744,57
 "(check-chart):ML:buy-2week-breakoutup,##RisingMA(Test)(check-chart-buy)-2DayUp,",1.7233009708737919,1
 "(check-chart):ML:buy-2week-breakoutup,##UPTREND:buyMonth3Low,",0.3864734299516963,1
 "(check-chart):ML:buy-2week-breakoutup,##UPTREND:buyMonth3LowReversal(Confirm),",-1.483324510322926,1
 "(check-chart):ML:buy-2week-breakoutup,##UPTREND:buyMonth6LowReversal(Confirm),",1.8907193247171332,2
-"(check-chart):ML:buy-2week-breakoutup,##UPTREND:buyMonth6LowReversal(Confirm),(check-chart)maySell-EMA6>EMA14,",-4.110191222800215,1
 "(check-chart):ML:buy-2week-breakoutup,##UPTREND:buyMonth6LowReversal(Confirm),sell-UP,",-2.5014459224985637,1
 "(check-chart):ML:buy-2week-breakoutup,##UPTREND:buyYear2Low,",1.052631578947363,1
 "(check-chart):ML:buy-2week-breakoutup,##UPTREND:buyYear2Low,(Test)buy-UP,",0.14415156507413274,1
-"(check-chart):ML:buy-2week-breakoutup,##UPTREND:buyYear2Low,ML:sellRisingMAuptrend-1,***BUYPATTERN***,",-2.7008032128514032,1
 "(check-chart):ML:buy-2week-breakoutup,##UPTREND:buyYearLow,",-0.6176084099868653,1
 "(check-chart):ML:buy-2week-breakoutup,##UPTREND:buyYearLow,(Test)sell-UP,***BUYPATTERN***,",-2.2311579455194916,2
 "(check-chart):ML:buy-2week-breakoutup,(Test)sell-UP,***BUYPATTERN***,",0.2818224518553285,1
 "(check-chart):ML:buy-2week-breakoutup,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,",4.114478804338949,2
-"(check-chart):ML:buy-2week-breakoutup,(check-chart)maySell-EMA6>EMA14,",-0.43228353696713295,8
+"(check-chart):ML:buy-2week-breakoutup,(check-chart)maySell-EMA6>EMA14,",-0.3658524467859879,5
 "(check-chart):ML:buy-2week-breakoutup,ML:buyRisingMAuptrend-Risky,",-0.25910804020100503,1
 "(check-chart):ML:buy-2week-breakoutup,ML:sellRisingMAuptrend-1,***BUYPATTERN***,",-3.2470879290794765,1
-"(check-chart):ML:buy-2week-breakoutup,buy-1-UP,",-0.7236878523920659,3
-"(check-chart):ML:buy-2week-breakoutup,sell-UP,",-2.0541401273885316,1
-"(check-chart)buy-2week-breakoutup(|-|-| or --|),",-0.2308222009170414,54
+"(check-chart):ML:buy-2week-breakoutup,buy-1-UP,",-0.12710683485749424,1
+"(check-chart):buyMonthHighBreak,",-0.039809749142488214,40
+"(check-chart):buyMonthHighBreak,##UPTREND:buyMonth6Low,",-2.0361781503316134,2
+"(check-chart):buyMonthHighBreak,##UPTREND:buyMonth6LowReversal(Confirm),",-3.795688847235236,1
+"(check-chart):buyMonthHighBreak,(check-chart):ML:buy-2week-breakoutup,##UPTREND:buyMonth6LowReversal(Confirm),(check-chart)maySell-EMA6>EMA14,",-4.110191222800215,1
+"(check-chart):buyMonthHighBreak,(check-chart):ML:buy-2week-breakoutup,##UPTREND:buyYear2Low,ML:sellRisingMAuptrend-1,***BUYPATTERN***,",-2.7008032128514032,1
+"(check-chart):buyMonthHighBreak,(check-chart):ML:buy-2week-breakoutup,(check-chart)maySell-EMA6>EMA14,",-0.6675522594120061,2
+"(check-chart):buyMonthHighBreak,(check-chart)buy-2week-breakoutup(|-|-| or --|),",0.9077545020213089,1
+"(check-chart):buyMonthHighBreak,(check-chart)buy-2week-breakoutup(|-|-| or --|),(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,",-1.0868519765316875,1
+"(check-chart):buyMonthHighBreak,(check-chart)maySell-EMA6>EMA14,",-0.7073155939098481,5
+"(check-chart):buyMonthHighBreak,ML:sellRisingMAuptrend-1,***BUYPATTERN***,",1.0705431597926527,1
+"(check-chart):buyMonthHighBreak,buyRisingMAuptrend-(Risky),(check-chart)maySell-EMA6>EMA14,",2.102272727272721,1
+"(check-chart):buyMonthHighBreak,mayBuyFromBuyPattern-GT1.8,buyPatternsML,(check-chart)buy-2week-breakoutup(|-|-| or --|),",1.9767227046000448,1
+"(check-chart):buyMonthHighBreak,maySellFromBuyPattern-LT-1.8,ML:sellRisingMAuptrend-1,***BUYPATTERN***,(check-chart)maySell-EMA6>EMA14,",-5.5859375,1
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,",-0.20367612526605253,300
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,##RisingMA(Test)(check-chart-buy)-2DayUp,",0.12070590339572362,3
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,(Test)ML:AllMAPositive_Uptrend_(GT+2),",-1.1135424264527154,1
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,(Test)ML:AllMAPositive_Uptrend_(GT+2),sell-UP,",-2.1372549019607874,1
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,(Test)ML:AllMAPositive_Uptrend_(GT+4.5),",1.4624295779463046,2
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,(Test)ML:AllMAPositive_Uptrend_(GT0),",-0.8015995164370722,2
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,(Test)sell-UP,",-0.5561794748382315,1
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,(Test)sell-UP,***BUYPATTERN***,",-2.457931556059747,1
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,(Test)sellHeavyUpTrend-Reversal-1,***BUYPATTERN***,(check-chart)maySell-EMA6>EMA14,",-0.559179869524683,1
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,(check-chart):ML:buy-2week-breakoutup,",3.9514028989799144,8
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,(check-chart):ML:buy-2week-breakoutup,(check-chart)maySell-EMA6>EMA14,",-0.2939015429831118,1
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,(check-chart):ML:buy-2week-breakoutup,buy-1-UP,",-1.0219783611593518,2
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,(check-chart):ML:buy-2week-breakoutup,sell-UP,",-2.0541401273885316,1
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,(check-chart)buy-2week-breakoutup(|-|-| or --|),",-0.2874490651138134,16
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,(check-chart)buy-2week-breakoutup(|-|-| or --|),(check-chart)maySell-EMA6>EMA14,",1.9555591467356113,2
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,(check-chart)maySell-EMA6>EMA14,",-0.6378031829192116,17
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,***SELLPATTERN***,",-0.5021676843423141,20
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,***SELLPATTERN***,buyUpTrend-1-YearHigh,",-0.2777777777777778,1
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,ML:sellEveningStar-2(Check2-3MidCapCross),",-1.4642857142857224,1
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,buy-1-UP,",-2.005741270241316,2
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,maySellFromBuyPattern-LT-1.8,sell-UP,***BUYPATTERN***,",-5.921558574724435,1
+"(check-chart):buyMonthHighBreak-checkATRBuyBreak,sell-UP,***BUYPATTERN***,",-2.158291457286434,2
+"(check-chart)buy-2week-breakoutup(|-|-| or --|),",-0.2371072516140684,37
 "(check-chart)buy-2week-breakoutup(|-|-| or --|),(Test)ML:AllMAPositive_Uptrend_(GT+4.5),(check-chart)maySell-EMA6>EMA14,",-1.269456662013755,1
-"(check-chart)buy-2week-breakoutup(|-|-| or --|),(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,",-1.4646902355212772,2
-"(check-chart)buy-2week-breakoutup(|-|-| or --|),(check-chart)maySell-EMA6>EMA14,",0.2926163583078762,6
+"(check-chart)buy-2week-breakoutup(|-|-| or --|),(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,",-1.842528494510867,1
+"(check-chart)buy-2week-breakoutup(|-|-| or --|),(check-chart)maySell-EMA6>EMA14,",-0.5388550359059914,4
 "(check-chart)buy-2week-breakoutup(|-|-| or --|),***SELLPATTERN***,",0.9837962962962897,1
 "(check-chart)buy-2week-breakoutup(|-|-| or --|),***SELLPATTERN***,buyUpTrend-1-YearHigh,",-5.169830169830168,1
 "(check-chart)buy-2week-breakoutup(|-|-| or --|),buyUpTrend-1,(Test)ML:AllMAPositive_Uptrend_(GT+2),",1.2104620227800587,1
@@ -96,7 +126,7 @@ filterTest,avg,count
 "(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,",-0.0953455911736507,12
 "(check-chart)mayBuy-EMA6<EMA14,",-0.20543127072452788,119
 "(check-chart)maySell-EMA6-MT-May-LT-EMA14,",0.15099348864099885,23
-"(check-chart)maySell-EMA6>EMA14,",-0.25615363516029166,87
+"(check-chart)maySell-EMA6>EMA14,",-0.12163283353491601,65
 "ML:BuyRisingMA-Risky-0,",-0.4363566665360347,24
 "ML:BuyRisingMA-Risky-1,",-1.087965676668103,10
 "ML:BuyRisingMA-Risky-2,",-0.3183108222996107,17
@@ -110,7 +140,7 @@ filterTest,avg,count
 "ML:buyRisingMA-down-Risky,***SELLPATTERN***,(check-chart)mayBuy-EMA6<EMA14,",-2.500000000000007,1
 "ML:buyRisingMAuptrend-Risky,",1.9166666666666645,1
 "ML:dayLowBuy,",2.003235996609908,1
-"ML:sellEveningStar-2(Check2-3MidCapCross),",-0.7052242360110961,4
+"ML:sellEveningStar-2(Check2-3MidCapCross),",-0.4522037432528873,3
 "ML:sellFinalContinue-(lastDayDown)-1,",0.49084088464078623,5
 "ML:sellFinalContinue-(lastDayDown)-1,##UPTREND:buyMonth3LowReversal(Confirm),",2.1726915152650355,1
 "ML:sellFinalContinue-(lastDayDown)-1,***BUYPATTERN***,",-1.1616563830605608,4
@@ -122,10 +152,10 @@ filterTest,avg,count
 "ML:sellFinalContinue-(lastDayUp)-2,***BUYPATTERN***,",-1.0069713400464757,1
 "ML:sellRisingMA-down-(Risky),",-1.0296582071854716,7
 "ML:sellRisingMA-down-(Risky),(check-chart)maySell-EMA6-MT-May-LT-EMA14,",-0.06863417982155373,1
-"ML:sellRisingMAuptrend-1,***BUYPATTERN***,",-0.4953428354370353,3
+"ML:sellRisingMAuptrend-1,***BUYPATTERN***,",-1.2782858330518794,2
 "ML:sellRisingMAuptrend-1,***BUYPATTERN***,(Test)sell-UP,",0.60283687943262,1
 "ML:sellRisingMAuptrend-1,***BUYPATTERN***,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,",0.5847953216374269,1
-"MayBuy-CheckChart(downTrend-mayReverseAtMonth3High)-0,",-0.33272877519975713,22
+"MayBuy-CheckChart(downTrend-mayReverseAtMonth3High)-0,",-0.4901229686929741,17
 "MayBuy-CheckChart(downTrend-mayReverseLast4DaysDown)-1,",0.9984354916171583,25
 "MayBuy-CheckChart(downTrend-mayReverseLast4DaysDown)-1,##(Test)(check-chart)-SMADownTrend,",-3.177116704805495,1
 "MayBuy-CheckChart(downTrend-mayReverseLast4DaysDown)-1,##(Test)(check-chart)-SMADownTrend,##(Test)ML:buySMADownTrend,",-0.07288629737608916,1
@@ -142,7 +172,7 @@ filterTest,avg,count
 "MayBuy-CheckChart(upTrend-lastDayDown),(SMA9GT0),buyPattern-Risky-GT0.9-SMAGT0,",2.827677977378576,1
 "MayBuy-CheckChart(upTrend-lastDayDown),ML:BuyRisingMA-Risky-1,",5.412541254125405,1
 "MayBuy-CheckChart(upTrend-lastDayDown),ML:BuyRisingMA-Risky-2,",1.8973214285714284,1
-"buy-1-UP,",-0.35556191661916303,17
+"buy-1-UP,",-0.1355380028028758,15
 "buyDayLowVolLow-0,***SELLPATTERN***,",0.20080321285140235,1
 "buyFinalCandidate-(lastDayDown),",0.4879749041477986,1
 "buyFinalCandidate-(lastDayDown),buyYear2LowBreakingUp,(Test)sell-UP,***BUYPATTERN***,",1.8871315600287561,1
@@ -159,10 +189,9 @@ filterTest,avg,count
 "buyPatternsML,##RisingMA(Test)(check-chart-buy)-2DayUp,",-2.3973316656243484,1
 "buyRisingMA-1,",4.185152369974202,3
 "buyRisingMAuptrend-(Risky),",0.6906307205857842,1
-"buyRisingMAuptrend-(Risky),(check-chart)maySell-EMA6>EMA14,",2.102272727272721,1
 "buyUpTrend-0,##(Check-chart)buyMonth3High-Continue,",1.1631152879873452,1
 "buyUpTrend-1,",1.1452287583597969,3
-"buyUpTrend-1-YearHigh,***SELLPATTERN***,",-1.0322595243631054,4
+"buyUpTrend-1-YearHigh,***SELLPATTERN***,",-1.283753439891548,3
 "buyUpTrend-1-YearHigh,***SELLPATTERN***,(Test)sell-UP,",1.1251758087201287,1
 "buyUpTrend-1-YearHigh,***SELLPATTERN***,(check-chart)maySell-EMA6>EMA14,",1.7391304347826086,1
 "buyYear2LowBreakingUp,",0.4942507097368238,36
@@ -174,16 +203,14 @@ filterTest,avg,count
 "mayBuyFromBuyPattern-GT1.8,(SMA9GT0),",2.0239897714316433,2
 "mayBuyFromBuyPattern-GT1.8,(SMA9GT0),buyPattern-GT1.5-SMAGT0,buyPatternsML,",1.9248775794367514,7
 "mayBuyFromBuyPattern-GT1.8,buyPatternsML,",2.5173996550405646,11
-"mayBuyFromBuyPattern-GT1.8,buyPatternsML,(check-chart)buy-2week-breakoutup(|-|-| or --|),",2.066428266798166,2
+"mayBuyFromBuyPattern-GT1.8,buyPatternsML,(check-chart)buy-2week-breakoutup(|-|-| or --|),",2.156133828996287,1
 "maySellFromBuyPattern-LT-1.8,",-2.001256156028367,21
 "maySellFromBuyPattern-LT-1.8,##UPTREND:buyMonth6LowReversal(Confirm),",-0.07479431563201197,1
 "maySellFromBuyPattern-LT-1.8,(SMA9LT0),",-1.666687818638097,4
 "maySellFromBuyPattern-LT-1.8,(SMA9LT0),sellPattern-LT-1.5-SMALT0,***BUYPATTERN***,",-2.0704709896025095,2
 "maySellFromBuyPattern-LT-1.8,(check-chart)maySell-EMA6>EMA14,",-1.4650919419943123,1
-"maySellFromBuyPattern-LT-1.8,ML:sellRisingMAuptrend-1,***BUYPATTERN***,(check-chart)maySell-EMA6>EMA14,",-5.5859375,1
-"maySellFromBuyPattern-LT-1.8,sell-UP,***BUYPATTERN***,",-5.921558574724435,1
 "sell-UP,",-0.13742055090556926,12
-"sell-UP,***BUYPATTERN***,",-0.6192569707408672,6
+"sell-UP,***BUYPATTERN***,",0.1502602725319161,4
 "sellDayLowVolLow-0,",-0.6757990867579992,1
 "sellDayLowVolLow-01,",-0.8788314839757746,2
 "sellDayLowVolLow-02-checkMorningTrend(.5SL),ML:sellRisingMA-down-(Risky),",-6.8688845401174214,1
