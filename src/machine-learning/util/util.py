@@ -1582,7 +1582,7 @@ def buy_base_line(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, '**Month3High')
     
     if(-1 < regression_data['monthHighChange'] < 3
-        and regression_data['month3HighChange'] < -4
+        and regression_data['month3HighChange'] < -5
         and regression_data['PCT_day_change'] > 1
         and (regression_data['PCT_day_change_pre2'] < 0.5
              or regression_data['PCT_day_change_pre3'] < 0.5
@@ -1592,11 +1592,16 @@ def buy_base_line(regression_data, regressionResult, reg, ws):
             and regression_data['year2LowChange'] < 25  
             and regression_data['yearLowChange'] < 15
             ):
-            add_in_csv(regression_data, regressionResult, ws, '(check-chart):buyMonthHighBreak')
+            add_in_csv(regression_data, regressionResult, ws, '(check-chart):buyMonthHighBreak-atNearYearLow')
+        elif(abs(regression_data['year2HighChange']) < abs(regression_data['year2LowChange'])
+            and regression_data['high'] > regression_data['high_pre1']
+            and regression_data['bar_high'] > regression_data['bar_high_pre1']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, '(check-chart):buyMonthHighBreak-checkATRSellBreak')
         elif(regression_data['high'] > regression_data['high_pre1']
             and regression_data['bar_high'] > regression_data['bar_high_pre1']
             ):
-            add_in_csv(regression_data, regressionResult, ws, '(check-chart):buyMonthHighBreak-checkATRBuyBreak')
+            add_in_csv(regression_data, regressionResult, ws, '(check-chart):buyMonthHighBreak-checkATRSellBreak-Risky')
         
 #     if(mlpValue > 0
 #         and kNeighboursValue > 0
@@ -1650,7 +1655,7 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
         and low_tail_pct(regression_data) < 2.5
         and regression_data['low'] > regression_data['low_pre1']
         ):
-        if(regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0
+        if(regression_data['PCT_day_change'] < -0.75 and regression_data['PCT_change'] < 0
             and regression_data['month3HighChange'] < -15  
             ):
             add_in_csv(regression_data, regressionResult, None, 'ML:buy-0')
@@ -1863,6 +1868,15 @@ def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, 'MayBuy-CheckChart(upTrend-lastDayDown)')
     
     if(('MayBuy-CheckChart' in regression_data['filter1']) or ('MayBuyCheckChart' in regression_data['filter1'])):
+#         if(-3 < regression_data['PCT_day_change'] < -1
+#             and -3 < regression_data['PCT_change'] < 0
+#             and regression_data['forecast_day_PCT_change'] < 0
+#             and regression_data['month3HighChange'] > -5
+#             and regression_data['month6HighChange'] > -5
+#             and regression_data['yearHighChange'] > -5
+#             and regression_data['year2HighChange'] > -5
+#             ):
+#             add_in_csv(regression_data, regressionResult, ws, 'sell(MayBuy-CheckChart)(downTrendstart-yearHigh)')
         if(-1 < regression_data['PCT_day_change'] < 0
             and -1 < regression_data['PCT_change'] < 0
             and regression_data['PCT_day_change_pre1'] < 0
@@ -4217,7 +4231,7 @@ def sell_base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, '##Common:DOWNTREND:sellMonth3LowBreak')
             
     if(-3 < regression_data['monthLowChange'] < 1
-        and regression_data['month3LowChange'] > 4
+        and regression_data['month3LowChange'] > 5
         and regression_data['PCT_day_change'] < -1
         and (regression_data['PCT_day_change_pre2'] > -0.5
              or regression_data['PCT_day_change_pre3'] > -0.5
@@ -4225,13 +4239,21 @@ def sell_base_line(regression_data, regressionResult, reg, ws):
         ):
         if(abs(regression_data['year2HighChange']) < abs(regression_data['year2LowChange'])
             and regression_data['year2HighChange'] > -25  
-            and regression_data['yearHighChange'] > -15                                            
+            and regression_data['yearHighChange'] > -15  
+            and (regression_data['PCT_day_change_pre2'] > 0
+                 or regression_data['PCT_day_change_pre1'] > 0
+                )                                      
             ):
-            add_in_csv(regression_data, regressionResult, ws, '(check-chart):sellMonthLowBreak')
-        elif(regression_data['low'] < regression_data['low_pre1']
+            add_in_csv(regression_data, regressionResult, ws, '(check-chart):sellMonthLowBreak-atNearYearHigh')
+        elif(abs(regression_data['year2HighChange']) > abs(regression_data['year2LowChange'])
+            and regression_data['low'] < regression_data['low_pre1']
             and regression_data['bar_low'] < regression_data['bar_low_pre1']
             ):
             add_in_csv(regression_data, regressionResult, ws, '(check-chart):sellMonthLowBreak-checkATRBuyBreak')
+        elif(regression_data['low'] < regression_data['low_pre1']
+            and regression_data['bar_low'] < regression_data['bar_low_pre1']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, '(check-chart):sellMonthLowBreak-checkATRBuyBreak-Risky')
 
 def sell_study_downingMA(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
@@ -4334,7 +4356,7 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
         and high_tail_pct(regression_data) < 2.5
         and regression_data['low'] < regression_data['low_pre1']
         ):
-        if(regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0
+        if(regression_data['PCT_day_change'] > 0.75 and regression_data['PCT_change'] > 0
             and regression_data['month3LowChange'] > 15  
             ):
             add_in_csv(regression_data, regressionResult, None, 'ML:sell-0')

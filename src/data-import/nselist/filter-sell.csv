@@ -1,5 +1,5 @@
 filterTest,avg,count
-,-0.12408878261709178,25487
+,-0.12464121985810094,25529
 "##(Check-chart):MaySellCheckChart-(Risky)-(|_|`|),",0.49872266893623857,22
 "##(Check-chart):MaySellCheckChart-(|_|`|),",-0.8744643137454222,6
 "##(Check-chart-sell)Month3Low-Continue(InUpTrend),",-0.06388599710491424,5
@@ -24,13 +24,15 @@ filterTest,avg,count
 "(SMA9LT0),sellPatterns-Risky-LT-0.9-SMALT0,",-1.313959166776571,33
 "(SMA9LT0),sellPatterns-Risky-LT-0.9-SMALT0,##DOWNTREND:sellMonth3LowBreak,",-2.951191827468779,1
 "(SMA9LT0),sellPatterns-Risky-LT-0.9-SMALT0,***BUYPATTERN***,",-0.03675163031379154,2
-"(check-chart):sellMonthLowBreak,",-0.1804974757788062,149
-"(check-chart):sellMonthLowBreak,***BUYPATTERN***,",-2.291957617527685,4
-"(check-chart):sellMonthLowBreak-checkATRBuyBreak,",-0.37321831603508565,258
+"(check-chart):sellMonthLowBreak-atNearYearHigh,",-0.16830654894264274,84
+"(check-chart):sellMonthLowBreak-atNearYearHigh,***BUYPATTERN***,",-2.291957617527685,4
+"(check-chart):sellMonthLowBreak-checkATRBuyBreak,",-0.4657518366584416,143
 "(check-chart):sellMonthLowBreak-checkATRBuyBreak,(SMA9LT0),sellPatterns-Risky-LT-0.9-SMALT0,",0.5909558067831479,1
-"(check-chart):sellMonthLowBreak-checkATRBuyBreak,***BUYPATTERN***,",-1.5539892986181967,5
+"(check-chart):sellMonthLowBreak-checkATRBuyBreak,***BUYPATTERN***,",-0.25888137201790823,3
 "(check-chart):sellMonthLowBreak-checkATRBuyBreak,maySellFromSellPattern-LT-1.8,(SMA9LT0),sellPatterns-LT-1.5-SMALT0,sellPatternsML,",-2.123893805309731,1
 "(check-chart):sellMonthLowBreak-checkATRBuyBreak,maySellFromSellPattern-LT-1.8,sellPatternsML,",-3.1213872832369973,1
+"(check-chart):sellMonthLowBreak-checkATRBuyBreak-Risky,",-0.20512217975974914,139
+"(check-chart):sellMonthLowBreak-checkATRBuyBreak-Risky,***BUYPATTERN***,",-1.6106068695497338,1
 "++,",0.0015151515151570272,1
 "+-,",-0.24608223988838596,2
 "-+,",1.8735835214841121,3
