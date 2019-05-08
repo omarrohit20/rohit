@@ -1592,16 +1592,16 @@ def buy_base_line(regression_data, regressionResult, reg, ws):
             and regression_data['year2LowChange'] < 25  
             and regression_data['yearLowChange'] < 15
             ):
-            add_in_csv(regression_data, regressionResult, ws, '(check-chart):buyMonthHighBreak-atNearYearLow')
+            add_in_csv(regression_data, regressionResult, ws, None, None, '(check-chart):buyMonthHighBreak-atNearYearLow')
         elif(abs(regression_data['year2HighChange']) < abs(regression_data['year2LowChange'])
             and regression_data['high'] > regression_data['high_pre1']
             and regression_data['bar_high'] > regression_data['bar_high_pre1']
             ):
-            add_in_csv(regression_data, regressionResult, ws, '(check-chart):buyMonthHighBreak-checkATRSellBreak')
+            add_in_csv(regression_data, regressionResult, ws, None, None, '(check-chart):buyMonthHighBreak-checkATRSellBreak')
         elif(regression_data['high'] > regression_data['high_pre1']
             and regression_data['bar_high'] > regression_data['bar_high_pre1']
             ):
-            add_in_csv(regression_data, regressionResult, ws, '(check-chart):buyMonthHighBreak-checkATRSellBreak-Risky')
+            add_in_csv(regression_data, regressionResult, ws, None, None, '(check-chart):buyMonthHighBreak-checkATRSellBreak-Risky')
         
 #     if(mlpValue > 0
 #         and kNeighboursValue > 0
@@ -1864,6 +1864,8 @@ def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
         if(regression_data['PCT_day_change_pre1'] > 2
             and is_ema14_sliding_up(regression_data)
             and (last_5_day_all_up_except_today(regression_data) != True)
+            and regression_data['bar_low'] >  regression_data['bar_low_pre1']
+            and regression_data['low'] >  regression_data['low_pre1']
             ):
             add_in_csv(regression_data, regressionResult, ws, 'MayBuy-CheckChart(upTrend-lastDayDown)')
     
@@ -4244,16 +4246,16 @@ def sell_base_line(regression_data, regressionResult, reg, ws):
                  or regression_data['PCT_day_change_pre1'] > 0
                 )                                      
             ):
-            add_in_csv(regression_data, regressionResult, ws, '(check-chart):sellMonthLowBreak-atNearYearHigh')
+            add_in_csv(regression_data, regressionResult, ws, None, None, '(check-chart):sellMonthLowBreak-atNearYearHigh')
         elif(abs(regression_data['year2HighChange']) > abs(regression_data['year2LowChange'])
             and regression_data['low'] < regression_data['low_pre1']
             and regression_data['bar_low'] < regression_data['bar_low_pre1']
             ):
-            add_in_csv(regression_data, regressionResult, ws, '(check-chart):sellMonthLowBreak-checkATRBuyBreak')
+            add_in_csv(regression_data, regressionResult, ws, None, None, '(check-chart):sellMonthLowBreak-checkATRBuyBreak')
         elif(regression_data['low'] < regression_data['low_pre1']
             and regression_data['bar_low'] < regression_data['bar_low_pre1']
             ):
-            add_in_csv(regression_data, regressionResult, ws, '(check-chart):sellMonthLowBreak-checkATRBuyBreak-Risky')
+            add_in_csv(regression_data, regressionResult, ws, None, None, '(check-chart):sellMonthLowBreak-checkATRBuyBreak-Risky')
 
 def sell_study_downingMA(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
@@ -4572,6 +4574,8 @@ def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
         if(regression_data['PCT_day_change_pre1'] < -2
             and is_ema14_sliding_down(regression_data)
             and (last_5_day_all_down_except_today(regression_data) != True)
+            and regression_data['bar_high'] <  regression_data['bar_high_pre1']
+            and regression_data['high'] <  regression_data['high_pre1']
             ):
             add_in_csv(regression_data, regressionResult, ws, 'MaySell-CheckChart(downTrend-lastDayUp)')
     if(('MaySell-CheckChart' in regression_data['filter1']) or ('MaySellCheckChart' in regression_data['filter1'])):
