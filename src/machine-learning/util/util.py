@@ -1791,6 +1791,10 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
         and regression_data['forecast_day_PCT5_change'] < 0
         and regression_data['forecast_day_PCT7_change'] < 0
         and regression_data['forecast_day_PCT7_change'] < 0
+        and regression_data['PCT_day_change'] > 2
+        and regression_data['PCT_change'] > 2
+        and regression_data['PCT_day_change_pre2'] < 0
+        and regression_data['PCT_day_change_pre3'] < 0
         ):
         add_in_csv(regression_data, regressionResult, ws, '##Common:Breakout-tenDaysLessThanMinusTen')
             
@@ -4533,6 +4537,10 @@ def sell_all_common(regression_data, regressionResult, reg, ws):
         and regression_data['forecast_day_PCT5_change'] > 0
         and regression_data['forecast_day_PCT7_change'] > 0
         and regression_data['forecast_day_PCT7_change'] > 0
+        and regression_data['PCT_day_change'] < -2
+        and regression_data['PCT_change'] < -2
+        and regression_data['PCT_day_change_pre2'] > 0
+        and regression_data['PCT_day_change_pre3'] > 0
         ):
         add_in_csv(regression_data, regressionResult, ws, '##Common:Breakdown-tenDaysMoreThanTen')
                          
