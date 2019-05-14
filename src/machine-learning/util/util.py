@@ -1988,8 +1988,26 @@ def buy_year_low(regression_data, regressionResult, reg, ws, ws1):
     return False
 
 def buy_down_trend(regression_data, regressionResult, reg, ws):
-    return False
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
+    if(('year2LowBreak' in regression_data['filter3']) and (regression_data['year2HighChange'] < -40)
+        and high_tail_pct(regression_data) < 1
+        and low_tail_pct(regression_data) > 1.1
+        and regression_data['PCT_day_change'] < -1
+        and regression_data['PCT_day_change_pre1'] < -2
+        and regression_data['PCT_day_change_pre2'] < -2
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'buyYear2Low')
+        return True
+    if(('nearYear2Low' in regression_data['filter3']) and (regression_data['year2HighChange'] < -40)
+        and high_tail_pct(regression_data) < 1
+        and low_tail_pct(regression_data) > 1.1
+        and regression_data['PCT_day_change'] < -1
+        and regression_data['PCT_day_change_pre1'] < -2
+        and regression_data['PCT_day_change_pre2'] < -2
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'buyYear2Low')
+        return True
+    return False
     if(all_day_pct_change_negative_except_today(regression_data) 
         and regression_data['forecast_day_PCT_change'] > 0 
         and 0 < regression_data['PCT_day_change'] < 4 and 0 < regression_data['PCT_change']
@@ -3959,10 +3977,9 @@ def buy_test(regression_data, regressionResult, reg, ws):
 #         ):
 #         return False
     
-    flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
-    #flag = buy_all_common(regression_data, regressionResult, reg, ws)
+    buy_other_indicator(regression_data, regressionResult, reg, ws)
+    #buy_all_common(regression_data, regressionResult, reg, ws)
     return flag
-    
     
 #     if(((regression_data['EMA6'] < regression_data['EMA6_1daysBack'] < regression_data['EMA6_2daysBack'])
 #        or (regression_data['EMA14'] < regression_data['EMA14_1daysBack'] < regression_data['EMA14_2daysBack']))
