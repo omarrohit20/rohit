@@ -271,16 +271,7 @@ def result_data(scrip):
         if (sell_all_rule(regression_data, regressionResult, sellIndiaAvgReg, ws_lowBothSell)
             or sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvgReg, ws_lowBothSell)):
             print('')
-            
-    if (is_algo_buy(regression_high)
-        and is_algo_buy(regression_low)
-        ):
-        all_withoutml(regression_data, regressionResult, ws_highBothBuyAll)
-    if (is_algo_sell(regression_high)
-        and is_algo_sell(regression_low)
-        ):
-        all_withoutml(regression_data, regressionResult, ws_lowBothSellAll)
-        
+                
                                     
 def result_data_reg(scrip):
     regression_high = db.regressionhigh.find_one({'scrip':scrip})
@@ -323,6 +314,15 @@ def result_data_reg(scrip):
         if buy_all_rule(regression_data, regressionResult, sellIndiaAvg, None):
             buy_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_lowBuyReg)                                
         all_withoutml(regression_data, regressionResult, ws_low)
+    
+    if (is_algo_buy(regression_high)
+        and is_algo_buy(regression_low)
+        ):
+        all_withoutml(regression_data, regressionResult, ws_highBothBuyAll)
+    if (is_algo_sell(regression_high)
+        and is_algo_sell(regression_low)
+        ):
+        all_withoutml(regression_data, regressionResult, ws_lowBothSellAll)
         
 def result_data_cla(scrip):
     regression_high = db.regressionhigh.find_one({'scrip':scrip})
