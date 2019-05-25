@@ -1067,8 +1067,8 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalHighYear2')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearHighYear2')
-        if(regression_data['year2High'] != regression_data['high_year2']):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
+#         if(regression_data['year2High'] != regression_data['high_year2']):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
     elif((-7.5 < regression_data['yearHighChange'] < 0) 
         and (regression_data['yearLowChange'] > 30)
         ):
@@ -1076,8 +1076,8 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalHighYear')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearHighYear')
-        if(regression_data['yearHigh'] != regression_data['high_year']):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
+#         if(regression_data['yearHigh'] != regression_data['high_year']):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
     elif((-7.5 < regression_data['month6HighChange'] < 0) 
         and (regression_data['month6LowChange'] > 25)
         ):
@@ -1085,8 +1085,8 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalHighMonth6')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearHighMonth6')
-        if(regression_data['month6High'] != regression_data['high_month6']):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
+#         if(regression_data['month6High'] != regression_data['high_month6']):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
     elif((-7.5 < regression_data['month3HighChange'] < 0) 
         and (regression_data['month3LowChange'] > 15)
         ):
@@ -1094,8 +1094,8 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalHighMonth3')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearHighMonth3')
-        if(regression_data['month3High'] != regression_data['high_month3']):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
+#         if(regression_data['month3High'] != regression_data['high_month3']):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
     elif((-7.5 < regression_data['monthHighChange'] < 0) 
         and (regression_data['monthLowChange'] > 15)
         ):
@@ -1138,8 +1138,8 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalLowYear2')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearLowYear2')
-        if(regression_data['year2Low'] != regression_data['low_year2']):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
+#         if(regression_data['year2Low'] != regression_data['low_year2']):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
     elif((0 < regression_data['yearLowChange'] < 7.5)
         and (regression_data['year2LowChange'] > 7.5)
         and (regression_data['yearHighChange'] < -30)
@@ -1148,8 +1148,8 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalLowYear')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearLowYear')
-        if(regression_data['yearLow'] != regression_data['low_year']):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
+#         if(regression_data['yearLow'] != regression_data['low_year']):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
     elif((0 < regression_data['month6LowChange'] < 7.5)
         and (regression_data['yearLowChange'] > 7.5)
         and (regression_data['month6HighChange'] < -25)
@@ -1158,8 +1158,8 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalLowMonth6')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearLowMonth6')
-        if(regression_data['month6Low'] != regression_data['low_month6']):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
+#         if(regression_data['month6Low'] != regression_data['low_month6']):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
     elif((0 < regression_data['month3LowChange'] < 7.5)
         and (regression_data['month6LowChange'] > 7.5)
         and (regression_data['month3HighChange'] < -15)
@@ -1168,8 +1168,8 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalLowMonth3')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearLowMonth3')
-        if(regression_data['month3Low'] != regression_data['low_month3']):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
+#         if(regression_data['month3Low'] != regression_data['low_month3']):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
     elif((0 < regression_data['monthLowChange'] < 7.5)
         and (regression_data['month3LowChange'] > 7.5)
         and (regression_data['monthHighChange'] < -10)
@@ -1777,18 +1777,6 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, '##Common:Breakout-tenDaysLessThanMinusTen')
             
-#     if(mlpValue > 0
-#         and kNeighboursValue > 0
-#         and ('P@' not in regression_data['sellIndia'])
-#         and (((1 < regression_data['PCT_change'] < 4) and (1 < regression_data['PCT_day_change'] < 4))
-#             )
-#         ):    
-#         if('BreakHighYear' in regression_data['filter3']):
-#             add_in_csv(regression_data, regressionResult, ws, '##Common:buyYearHighBreak')
-#         if('BreakHighMonth6' in regression_data['filter3']):
-#             add_in_csv(regression_data, regressionResult, ws, '##Common:buyMonth6HighBreak')
-#         if('BreakHighMonth3' in regression_data['filter3']):
-#             add_in_csv(regression_data, regressionResult, ws, '##Common:buyMonth3HighBreak')
     return False
 
 def buy_other_indicator(regression_data, regressionResult, reg, ws):
