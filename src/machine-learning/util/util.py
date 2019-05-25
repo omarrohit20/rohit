@@ -24,7 +24,7 @@ BUY_VERY_LESS_DATA=True
 SELL_VERY_LESS_DATA=True
 MARKET_IN_UPTREND=False
 MARKET_IN_DOWNTREND=False
-TEST = False
+TEST = True
 
 buyMLP = 0.1
 buyMLP_MIN = 0
@@ -773,6 +773,23 @@ def tail_reversal_filter(regression_data, regressionResult):
             add_in_csv(regression_data, regressionResult, None, None, '(MaySellCheckChart(check-chart-MarketNotDown2-3))', None)
         elif(high_tail_pct(regression_data) > 1.8 and regression_data['PCT_day_change'] > 2):
             add_in_csv(regression_data, regressionResult, None, None, '(MaySellCheckChart(check-chart-MarketNotDown2-3))', None)
+        
+    if(('MayBuy-CheckChart' in regression_data['filter1']) 
+        or ('MayBuyCheckChart' in regression_data['filter1'])
+        ):
+        if(
+            (low_tail_pct(regression_data) > 1.8)
+            and low_tail_pct(regression_data) < abs(regression_data['PCT_change'])
+            ):
+            add_in_csv(regression_data, regressionResult, None, None, 'Strong', None)
+    if(('MaySell-CheckChart' in regression_data['filter1']) 
+        or ('MaySellCheckChart' in regression_data['filter1'])
+        ):
+        if(
+            (high_tail_pct(regression_data) > 1.8)
+            and high_tail_pct(regression_data) < abs(regression_data['PCT_change'])
+            ):
+            add_in_csv(regression_data, regressionResult, None, None, 'Strong', None)
 
 def filterMA(regression_data, regressionResult):
     ws = None
@@ -1310,8 +1327,6 @@ def buy_pattern_without_mlalgo(regression_data, regressionResult):
         and regression_data['year2LowChange'] > 5):
         if(regression_data['buyIndia_avg'] > 1.8):
             add_in_csv(regression_data, regressionResult, None, 'mayBuyFromBuyPattern-GT1.8')
-        if(regression_data['buyIndia_avg'] < -1.8):
-            add_in_csv(regression_data, regressionResult, None, 'maySellFromBuyPattern-LT-1.8')
         if(regression_data['buyIndia_avg'] > 0.9 and regression_data['buyIndia_count'] > 1
             and (regression_data['SMA9'] > 0 or regression_data['SMA4'] > 1.5)
             ):
@@ -1326,8 +1341,13 @@ def buy_pattern_without_mlalgo(regression_data, regressionResult):
                     ):
                     add_in_csv(regression_data, regressionResult, None, 'buyPattern-Risky-GT0.9-SMAGT0')
                 #add_in_csv(regression_data, regressionResult, None, 'buyPatterns-1-Risky')
-            
-        elif(regression_data['buyIndia_avg'] < -0.9 and regression_data['buyIndia_count'] > 1
+
+    if(regression_data['PCT_day_change'] < 3.5
+        and regression_data['year2LowChange'] > 5
+        and regression_data['year2HighChange'] < -5):
+        if(regression_data['buyIndia_avg'] < -1.8):
+            add_in_csv(regression_data, regressionResult, None, 'maySellFromBuyPattern-LT-1.8')
+        if(regression_data['buyIndia_avg'] < -0.9 and regression_data['buyIndia_count'] > 1
             and (regression_data['SMA9'] < 0 or regression_data['SMA4'] < -1.5)
             ):
             if(regression_data['SMA9'] < 0):
@@ -1843,8 +1863,19 @@ def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, "##ML:(Test)MayBuyCheckChart-PCTDayChangeLT(-3)BigHighTail")        
                 
 def buy_year_high(regression_data, regressionResult, reg, ws):
-    return False
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
+    if(is_algo_buy(regression_data, True)
+        and last_4_day_all_up(regression_data) == False
+        and regression_data['year2HighChange'] > -10
+        and regression_data['yearLowChange'] > 20
+        and ((0 < regression_data['PCT_day_change'] < 1.5)
+             or (-1 < regression_data['PCT_day_change'] < 0 and regression_data['forecast_day_PCT_change'] > 0)
+            )
+        and -1 < regression_data['PCT_change'] < 1.75
+        ):
+            add_in_csv(regression_data, regressionResult, ws, 'ML:buyYear2High')
+            return True
+    return False
     if(float(regression_data['forecast_day_VOL_change']) > 70
        and regression_data['PCT_day_change_pre1'] > -0.5
        and no_doji_or_spinning_buy_india(regression_data)
@@ -3969,8 +4000,6 @@ def buy_filter_accuracy(regression_data, regressionResult, reg, ws):
 def sell_pattern_without_mlalgo(regression_data, regressionResult):
     if(regression_data['PCT_day_change'] > -3.5
         and regression_data['year2HighChange'] < -5):
-        if(regression_data['sellIndia_avg'] > 1.8):
-            add_in_csv(regression_data, regressionResult, None, 'mayBuyFromSellPattern-GT1.8')
         if(regression_data['sellIndia_avg'] < -1.8):
             add_in_csv(regression_data, regressionResult, None, 'maySellFromSellPattern-LT-1.8')
         if(regression_data['sellIndia_avg'] < -0.9 and regression_data['sellIndia_count'] > 1
@@ -3986,7 +4015,13 @@ def sell_pattern_without_mlalgo(regression_data, regressionResult):
                 elif(regression_data['sellIndia_avg'] < -0.9
                     ):
                     add_in_csv(regression_data, regressionResult, None, 'sellPatterns-Risky-LT-0.9-SMALT0')   
-        elif(regression_data['sellIndia_avg'] > 0.9 and regression_data['sellIndia_count'] > 1
+                    
+    if(regression_data['PCT_day_change'] > -3.5
+        and regression_data['year2HighChange'] < -5
+        and regression_data['year2LowChange'] > 5):
+        if(regression_data['sellIndia_avg'] > 1.8):
+            add_in_csv(regression_data, regressionResult, None, 'mayBuyFromSellPattern-GT1.8')
+        if(regression_data['sellIndia_avg'] > 0.9 and regression_data['sellIndia_count'] > 1
             and (regression_data['SMA9'] > 0 or regression_data['SMA4'] > 1.5)
             ):
             if(regression_data['SMA9'] > 0):
@@ -3998,7 +4033,7 @@ def sell_pattern_without_mlalgo(regression_data, regressionResult):
                     add_in_csv(regression_data, regressionResult, None, 'buyPatterns-GT1.5-SMAGT0')
                 elif(regression_data['sellIndia_avg'] > 0.9
                     ):
-                    add_in_csv(regression_data, regressionResult, None, 'buyPatterns-Risky-GT0.9-SMAGT0')              
+                    add_in_csv(regression_data, regressionResult, None, 'buyPatterns-Risky-GT0.9-SMAGT0')                          
             #add_in_csv(regression_data, regressionResult, None, 'buyPatterns-1-Risky')   
 #     sellPatternsDict=scrip_patterns_to_dict('../../data-import/nselist/all-buy-filter-by-PCT-Change.csv')
 #     if regression_data['sellIndia'] != '' and regression_data['sellIndia'] in sellPatternsDict:
