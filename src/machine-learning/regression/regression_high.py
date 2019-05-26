@@ -334,7 +334,7 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     
     today_date = datetime.datetime.strptime(forecast_day_date, "%Y-%m-%d").date()
     
-    end_date = (today_date - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
+    end_date = (today_date - datetime.timedelta(weeks=2)).strftime('%Y-%m-%d')
     start_date = (today_date - datetime.timedelta(weeks=104)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     year2High = dftemp['high'].max()
@@ -371,6 +371,7 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     high_month3 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_month3 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
+    end_date = forecast_day_date
     start_date = (today_date - datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     monthHigh = dftemp['high'].max()
@@ -380,7 +381,6 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     high_month = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_month = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
-    end_date = forecast_day_date
     start_date = (today_date - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     weekHigh = dftemp['high'].max()
