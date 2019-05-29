@@ -23,7 +23,7 @@ from util.util import buy_pattern_from_history, buy_all_rule, buy_year_high, buy
 from util.util import sell_pattern_from_history, sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final, sell_high_indicators, sell_pattern
 from util.util import buy_pattern_without_mlalgo, sell_pattern_without_mlalgo, buy_oi, sell_oi, all_withoutml
 from util.util import buy_oi_candidate, sell_oi_candidate
-from util.util import buy_other_indicator, buy_all_common, sell_other_indicator, sell_all_common
+from util.util import buy_other_indicator, buy_all_common, buy_all_common_High_Low, sell_other_indicator, sell_all_common, sell_all_common_High_Low
 from util.util import buy_all_rule_classifier, sell_all_rule_classifier
 from util.util import is_algo_buy_classifier, is_algo_sell_classifier
 from util.util import sell_oi_negative, sell_day_high, buy_oi_negative, buy_day_low
@@ -292,12 +292,13 @@ def result_data_reg(scrip):
         buy_filter_accuracy(regression_data, regressionResult, False, None)
         if buy_all_rule(regression_data, regressionResult, buyIndiaAvg, None):
             buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_highBuyReg)
-        all_withoutml(regression_data, regressionResult, ws_high)
         if (is_algo_buy(regression_high) and is_algo_buy(regression_low)):
+            buy_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_highBuyAll) 
         if (is_algo_buy(regression_high, True) and is_algo_buy(regression_low, True)):
-            #buy_all_common(regression_data, regressionResult, True, None)
+            buy_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_highBothBuyAll) 
+        all_withoutml(regression_data, regressionResult, ws_high)
           
                 
     regression_data = regression_low
@@ -314,12 +315,13 @@ def result_data_reg(scrip):
         sell_filter_accuracy(regression_data, regressionResult, False, None)
         if sell_all_rule(regression_data, regressionResult, sellIndiaAvg, None):
             sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_lowSellReg)                               
-        all_withoutml(regression_data, regressionResult, ws_low)
         if (is_algo_sell(regression_high) and is_algo_sell(regression_low)):
+            sell_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_lowSellAll)
         if (is_algo_sell(regression_high, True) and is_algo_sell(regression_low, True)):
-            #sell_all_common(regression_data, regressionResult, True, None)
+            sell_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_lowBothSellAll)
+        all_withoutml(regression_data, regressionResult, ws_low)
         
 def result_data_cla(scrip):
     regression_high = db.regressionhigh.find_one({'scrip':scrip})

@@ -334,7 +334,7 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     
     today_date = datetime.datetime.strptime(forecast_day_date, "%Y-%m-%d").date()
     
-    end_date = (today_date - datetime.timedelta(weeks=2)).strftime('%Y-%m-%d')
+    end_date = (today_date - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
     start_date = (today_date - datetime.timedelta(weeks=104)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     year2High = dftemp['high'].max()
