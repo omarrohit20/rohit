@@ -1841,7 +1841,7 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:buyRisingMA')
     if('ReversalLow' in regression_data['filter3'] 
         ):
-        add_in_csv(regression_data, regressionResult, ws, regression_data['filter3'])
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:UPTREND'+regression_data['filter3'])
         
     if(last_4_day_all_up(regression_data) == False
         and regression_data['year2HighChange'] > -10
@@ -2014,8 +2014,17 @@ def buy_year_high(regression_data, regressionResult, reg, ws):
     return False
 
 def buy_year_low(regression_data, regressionResult, reg, ws, ws1):
-    return False
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
+    if((-1.5 < regression_data['PCT_day_change'] < 0) and (-2 < regression_data['PCT_change'] < 0)
+        and regression_data['year2HighChange'] < -50
+        and regression_data['yearHighChange'] < -30
+        and regression_data['month3LowChange'] > 10
+        and regression_data['monthLowChange'] > 10
+        and 0 < regression_data['SMA4'] < 10
+        and 2 < regression_data['SMA9'] < 10
+        ):   
+        add_in_csv(regression_data, regressionResult, ws, 'buyYear2LowMovingSMA')
+    return False
     if(1 < regression_data['yearLowChange'] < 5 and regression_data['yearHighChange'] < -30 
         and 2 < regression_data['PCT_day_change'] < 6 and 2 < regression_data['PCT_day_change'] < 6
         and regression_data['forecast_day_PCT2_change'] > 0 and regression_data['forecast_day_PCT_change'] > 0
@@ -4076,6 +4085,7 @@ def buy_random_filters(regression_data, regressionResult, reg, ws):
         and regression_data['SMA4'] > regression_data['SMA4_2daysBack']
         ):
         add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakUp')
+        
 
 def buy_test(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
@@ -4475,7 +4485,7 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:buyDowningMA')
     if('ReversalHigh' in regression_data['filter3'] 
         ):
-        add_in_csv(regression_data, regressionResult, ws, regression_data['filter3'])
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:DOWNTREND'+regression_data['filter3'])
 
 def sell_other_indicator(regression_data, regressionResult, reg, ws):
     tail_pct_filter(regression_data, regressionResult)
