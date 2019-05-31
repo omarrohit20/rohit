@@ -1830,8 +1830,9 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
 
 def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
     if((-1.5 < regression_data['PCT_day_change'] < 0) and (-1.5 < regression_data['PCT_change'] < 0.5)
-        and high_tail_pct(regression_data) < 1
-        and low_tail_pct(regression_data) > 1.2
+        and ((high_tail_pct(regression_data) < 1 and low_tail_pct(regression_data) > 1.2)
+             or (high_tail_pct(regression_data) <= 0.3 and low_tail_pct(regression_data) >= 1)
+             )
         ):   
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuy-CheckChart')
     if('RisingMA-Risky' not in regression_data['filter4'] 
@@ -1839,9 +1840,21 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and (-1 < regression_data['PCT_day_change'] < 0.5) and (-1.5 < regression_data['PCT_change'] < 0.75)
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:buyRisingMA')
-    if('ReversalLow' in regression_data['filter3'] 
+    elif(regression_data['SMA4'] > 0 and regression_data['SMA4_2daysBack'] > 0
+        and regression_data['SMA4'] > regression_data['SMA4_2daysBack'] 
+        and regression_data['SMA4'] > regression_data['SMA9'] > regression_data['SMA25']
+        and (-1 < regression_data['PCT_day_change'] < 1) and (-1.5 < regression_data['PCT_change'] < 1)
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:UPTREND'+regression_data['filter3'])
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:buyRisingMAShortTerm')
+    elif(regression_data['SMA4'] > regression_data['SMA4_2daysBack']  
+        and regression_data['SMA9'] < -2 < regression_data['SMA4'] < 0
+        and regression_data['SMA25'] < -2 < regression_data['SMA4'] < 0 
+        and (-3 < regression_data['PCT_day_change'] < 1) and (-3 < regression_data['PCT_change'] < 1)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:buyRisingMAShortTerm-Risky')
+#     if('ReversalLow' in regression_data['filter3'] 
+#         ):
+#         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:UPTREND'+regression_data['filter3'])
         
     if(last_4_day_all_up(regression_data) == False
         and regression_data['year2HighChange'] > -10
@@ -4482,10 +4495,22 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and 'DowningMA' in regression_data['filter4'] 
         and (-0.5 < regression_data['PCT_day_change'] < 1) and (-0.75 < regression_data['PCT_change'] < 1.5)
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:buyDowningMA')
-    if('ReversalHigh' in regression_data['filter3'] 
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:sellDowningMA')
+    elif(regression_data['SMA4'] < 0 and regression_data['SMA4_2daysBack'] < 0
+        and regression_data['SMA4'] < regression_data['SMA4_2daysBack'] 
+        and regression_data['SMA4'] < regression_data['SMA9'] < regression_data['SMA25']
+        and (-1 < regression_data['PCT_day_change'] < 1) and (-1 < regression_data['PCT_change'] < 1)
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:DOWNTREND'+regression_data['filter3'])
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:sellDowningMAShortTerm')
+    elif(regression_data['SMA4'] < regression_data['SMA4_2daysBack']  
+        and regression_data['SMA9'] > 2 > regression_data['SMA4'] > 0
+        and regression_data['SMA25'] > 2 > regression_data['SMA4'] > 0 
+        and (-1 < regression_data['PCT_day_change'] < 3) and (-1 < regression_data['PCT_change'] < 3)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:sellRisingMAShortTerm-Risky')
+#     if('ReversalHigh' in regression_data['filter3'] 
+#         ):
+#         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:DOWNTREND'+regression_data['filter3'])
 
 def sell_other_indicator(regression_data, regressionResult, reg, ws):
     tail_pct_filter(regression_data, regressionResult)
