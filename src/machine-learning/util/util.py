@@ -4090,6 +4090,17 @@ def buy_random_filters(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, '(Test)check10DayLowReversal')
         
+    if('RisingMA-Risky' not in regression_data['filter4'] 
+        and 'RisingMA' in regression_data['filter4']
+        and (regression_data['low'] > regression_data['low_pre1']) 
+        and (-2 < regression_data['PCT_day_change'] < 0) and (-2 < regression_data['PCT_change'] < 0)
+        and (regression_data['forecast_day_PCT5_change'] > 3
+             or regression_data['forecast_day_PCT7_change'] > 3
+             or regression_data['forecast_day_PCT10_change'] > 3
+            )
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '(Test):buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)')
+    
     if(1.5 < regression_data['PCT_day_change'] < 6
         and regression_data['PCT_change'] < 6
         and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0)
@@ -6058,6 +6069,17 @@ def sell_random_filter(regression_data, regressionResult, reg, ws):
         and regression_data['PCT_day_change_pre2'] < -1
         ):
         add_in_csv(regression_data, regressionResult, ws, '(Test)buyMay5DayFloorReversal')
+        
+    if('DowningMA-Risky' not in regression_data['filter4'] 
+        and 'DowningMA' in regression_data['filter4']
+        and (regression_data['high'] < regression_data['high_pre1']) 
+        and (-2 < regression_data['PCT_day_change'] < 0) and (-2 < regression_data['PCT_change'] < 0)
+        and (regression_data['forecast_day_PCT5_change'] < -3
+             or regression_data['forecast_day_PCT7_change'] < -3
+             or regression_data['forecast_day_PCT10_change'] < -3
+            )
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend)')
     
     if(-6 < regression_data['PCT_day_change'] < -1.5
         and regression_data['PCT_change'] < -1.5
