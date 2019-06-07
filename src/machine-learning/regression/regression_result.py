@@ -220,19 +220,16 @@ def result_data(scrip):
         and buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvgReg, None)
         ):
         buy_other_indicator(regression_data, regressionResult, True, None)
-        buy_all_common(regression_data, regressionResult, True, None)
         buy_other_indicator(regression_data, regressionResult, False, None)
-        buy_all_common(regression_data, regressionResult, False, None)
         buy_filter_accuracy(regression_data, regressionResult, False, None)
+        buy_all_common(regression_data, regressionResult, True, None)
     if (sell_all_rule(regression_data, regressionResult, buyIndiaAvgReg, None)
         and sell_all_rule_classifier(regression_data, regressionResult, buyIndiaAvgReg, None)
         ):
         sell_other_indicator(regression_data, regressionResult, True, None)
-        sell_all_common(regression_data, regressionResult, True, None)
         sell_other_indicator(regression_data, regressionResult, False, None)
-        sell_all_common(regression_data, regressionResult, False, None)
         sell_filter_accuracy(regression_data, regressionResult, False, None)
-    
+        sell_all_common(regression_data, regressionResult, True, None)
     if (buy_all_rule(regression_data, regressionResult, buyIndiaAvgReg, None)
         and buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvgReg, None)
         ):
@@ -252,19 +249,16 @@ def result_data(scrip):
         and sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvgReg, None)
         ):
         sell_other_indicator(regression_data, regressionResult, True, None)
-        sell_all_common(regression_data, regressionResult, True, None)
         sell_other_indicator(regression_data, regressionResult, False, None)
-        sell_all_common(regression_data, regressionResult, False, None)
         sell_filter_accuracy(regression_data, regressionResult, False, None)
+        sell_all_common(regression_data, regressionResult, True, None)
     if (buy_all_rule(regression_data, regressionResult, buyIndiaAvgReg, None)
         and buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvgReg, None)
         ):
         buy_other_indicator(regression_data, regressionResult, True, None)
-        buy_all_common(regression_data, regressionResult, True, None)
         buy_other_indicator(regression_data, regressionResult, False, None)
-        buy_all_common(regression_data, regressionResult, False, None)
         buy_filter_accuracy(regression_data, regressionResult, False, None) 
-    
+        buy_all_common(regression_data, regressionResult, True, None)
     if (sell_all_rule(regression_data, regressionResult, sellIndiaAvgReg, None)
         and sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvgReg, None)
         ):
