@@ -381,12 +381,21 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     high_month = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_month = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
+    start_date = (today_date - datetime.timedelta(weeks=2)).strftime('%Y-%m-%d')
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
+    week2High = dftemp['high'].max()
+    week2Low = dftemp['low'].min()
+    week2HighChange = (high - week2High)*100/high
+    week2LowChange = (low - week2Low)*100/low
+    high_week2 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
+    low_week2 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
+    
     start_date = (today_date - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     weekHigh = dftemp['high'].max()
     weekLow = dftemp['low'].min()
-    weekHighChange = (close - weekHigh)*100/weekHigh
-    weekLowChange = (close - weekLow)*100/weekLow
+    weekHighChange = (high - weekHigh)*100/high
+    weekLowChange = (low - weekLow)*100/low
     high_week = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_week = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
@@ -417,6 +426,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     regression_data['month3LowChange'] = float(month3LowChange)
     regression_data['monthHighChange'] = float(monthHighChange) 
     regression_data['monthLowChange'] = float(monthLowChange)
+    regression_data['week2HighChange'] = float(week2HighChange) 
+    regression_data['week2LowChange'] = float(week2LowChange)
     regression_data['weekHighChange'] = float(weekHighChange) 
     regression_data['weekLowChange'] = float(weekLowChange)
     regression_data['year2High'] = float(year2High) 
@@ -428,9 +439,11 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     regression_data['month3High'] = float(month3High) 
     regression_data['month3Low'] = float(month3Low)
     regression_data['monthHigh'] = float(monthHigh) 
-    regression_data['monthLow'] = float(monthLow) 
+    regression_data['monthLow'] = float(monthLow)
+    regression_data['week2High'] = float(week2High) 
+    regression_data['week2Low'] = float(week2Low) 
     regression_data['weekHigh'] = float(weekHigh) 
-    regression_data['weekLow'] = float(weekLow)
+    regression_data['weekLow'] = float(weekLow)  
     regression_data['patterns'] = ''
     regression_data['PCT_change_pre1'] = float(PCT_change_pre1)
     regression_data['PCT_change_pre2'] = float(PCT_change_pre2)
