@@ -317,9 +317,13 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     high = df.tail(1).loc[-forecast_out:, 'high'].values[0]
     high_pre1 = df.tail(2).loc[-forecast_out:, 'high'].values[0]
     high_pre2 = df.tail(3).loc[-forecast_out:, 'high'].values[0]
+    high_pre3 = df.tail(4).loc[-forecast_out:, 'high'].values[0]
+    high_pre4 = df.tail(5).loc[-forecast_out:, 'high'].values[0]
     low = df.tail(1).loc[-forecast_out:, 'low'].values[0]
     low_pre1 = df.tail(2).loc[-forecast_out:, 'low'].values[0]
     low_pre2 = df.tail(3).loc[-forecast_out:, 'low'].values[0]
+    low_pre3 = df.tail(4).loc[-forecast_out:, 'low'].values[0]
+    low_pre4 = df.tail(5).loc[-forecast_out:, 'low'].values[0]
     close = df.tail(1).loc[-forecast_out:, 'close'].values[0]
     close_pre1 = df.tail(2).loc[-forecast_out:, 'close'].values[0]
     close_pre2 = df.tail(3).loc[-forecast_out:, 'close'].values[0]
@@ -480,6 +484,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     regression_data['high'] = float(high)
     regression_data['high_pre1'] = float(high_pre1)
     regression_data['high_pre2'] = float(high_pre2)
+    regression_data['high_pre3'] = float(high_pre3)
+    regression_data['high_pre4'] = float(high_pre4)
     regression_data['high_year2'] = float(high_year2) 
     regression_data['high_year'] = float(high_year) 
     regression_data['high_month6'] = float(high_month6) 
@@ -489,6 +495,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     regression_data['low'] = float(low)
     regression_data['low_pre1'] = float(low_pre1)
     regression_data['low_pre2'] = float(low_pre2)
+    regression_data['low_pre3'] = float(low_pre3)
+    regression_data['low_pre4'] = float(low_pre4)
     regression_data['low_year2'] = float(low_year2)
     regression_data['low_year'] = float(low_year)
     regression_data['low_month6'] = float(low_month6)

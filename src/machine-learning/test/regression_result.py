@@ -54,22 +54,21 @@ def result_data(regression_high, regression_low, scrip):
                                             regression_low['mlpValue_cla'], 
                                             regression_low['kNeighboursValue_cla'],
                                             )
-    buy_pattern_without_mlalgo(regression_data, regressionResult, None, None)
+    buy_pattern_without_mlalgo(regression_data, regressionResult)
     if (buy_all_rule(regression_data, regressionResult, buyIndiaAvgReg, None)
         and buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvgReg, None)
         ):
         buy_other_indicator(regression_data, regressionResult, True, None)
-        buy_all_common(regression_data, regressionResult, True, None)
         buy_other_indicator(regression_data, regressionResult, False, None)
-        buy_all_common(regression_data, regressionResult, False, None)
+        buy_filter_accuracy(regression_data, regressionResult, False, None)
+        buy_all_common(regression_data, regressionResult, True, None)
     if (sell_all_rule(regression_data, regressionResult, buyIndiaAvgReg, None)
         and sell_all_rule_classifier(regression_data, regressionResult, buyIndiaAvgReg, None)
         ):
         sell_other_indicator(regression_data, regressionResult, True, None)
-        sell_all_common(regression_data, regressionResult, True, None)
         sell_other_indicator(regression_data, regressionResult, False, None)
-        sell_all_common(regression_data, regressionResult, False, None)
-    
+        sell_filter_accuracy(regression_data, regressionResult, False, None)
+        sell_all_common(regression_data, regressionResult, True, None)
     if (buy_all_rule(regression_data, regressionResult, buyIndiaAvgReg, None)
         and buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvgReg, None)
         ):
@@ -87,21 +86,21 @@ def result_data(regression_high, regression_low, scrip):
                                             regression_high['mlpValue_cla'], 
                                             regression_high['kNeighboursValue_cla']
                                             )
-    sell_pattern_without_mlalgo(regression_data, regressionResult, None, None)
+    sell_pattern_without_mlalgo(regression_data, regressionResult)
     if (sell_all_rule(regression_data, regressionResult, sellIndiaAvgReg, None)
         and sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvgReg, None)
         ):
         sell_other_indicator(regression_data, regressionResult, True, None)
-        sell_all_common(regression_data, regressionResult, True, None)
         sell_other_indicator(regression_data, regressionResult, False, None)
-        sell_all_common(regression_data, regressionResult, False, None)
+        sell_filter_accuracy(regression_data, regressionResult, False, None)
+        sell_all_common(regression_data, regressionResult, True, None)
     if (buy_all_rule(regression_data, regressionResult, buyIndiaAvgReg, None)
         and buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvgReg, None)
         ):
         buy_other_indicator(regression_data, regressionResult, True, None)
-        buy_all_common(regression_data, regressionResult, True, None)
         buy_other_indicator(regression_data, regressionResult, False, None)
-        buy_all_common(regression_data, regressionResult, False, None) 
+        buy_filter_accuracy(regression_data, regressionResult, False, None) 
+        buy_all_common(regression_data, regressionResult, True, None)
     
     if (sell_all_rule(regression_data, regressionResult, sellIndiaAvgReg, None)
         and sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvgReg, None)
@@ -125,10 +124,9 @@ def result_data_reg(regression_high, regression_low, scrip):
                                             regression_low['mlpValue_cla'], 
                                             regression_low['kNeighboursValue_cla'],
                                             )
-        buy_pattern_without_mlalgo(regression_data, regressionResult, None, None)
+        buy_pattern_without_mlalgo(regression_data, regressionResult)
         buy_other_indicator(regression_data, regressionResult, True, None)
         buy_all_rule(regression_data, regressionResult, buyIndiaAvg, None)
-        sell_all_rule(regression_data, regressionResult, buyIndiaAvg, None)
         db.ws_high.insert_one(json.loads(json.dumps(regression_high)))
                 
     regression_data = regression_low
@@ -140,10 +138,9 @@ def result_data_reg(regression_high, regression_low, scrip):
                                             regression_high['mlpValue_cla'], 
                                             regression_high['kNeighboursValue_cla']
                                             )
-        sell_pattern_without_mlalgo(regression_data, regressionResult, None, None)
+        sell_pattern_without_mlalgo(regression_data, regressionResult)
         sell_other_indicator(regression_data, regressionResult, True, None)
         sell_all_rule(regression_data, regressionResult, sellIndiaAvg, None) 
-        buy_all_rule(regression_data, regressionResult, sellIndiaAvg, None)                               
         db.ws_low.insert_one(json.loads(json.dumps(regression_low)))
         
 def result_data_cla(regression_high, regression_low, scrip):
@@ -159,7 +156,7 @@ def result_data_cla(regression_high, regression_low, scrip):
                                             regression_low['mlpValue_cla'], 
                                             regression_low['kNeighboursValue_cla'],
                                             )
-        buy_pattern_without_mlalgo(regression_data, regressionResult, None, None)
+        buy_pattern_without_mlalgo(regression_data, regressionResult)
         if buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, None):
             buy_other_indicator(regression_data, regressionResult, True, None)
             db.ws_highBuyCla.insert_one(json.loads(json.dumps(regression_high)))
@@ -174,7 +171,7 @@ def result_data_cla(regression_high, regression_low, scrip):
                                             regression_high['mlpValue_cla'], 
                                             regression_high['kNeighboursValue_cla']
                                             )
-        sell_pattern_without_mlalgo(regression_data, regressionResult, None, None)
+        sell_pattern_without_mlalgo(regression_data, regressionResult)
         if sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, None):
             sell_other_indicator(regression_data, regressionResult, True, None)
             db.ws_lowSellCla.insert_one(json.loads(json.dumps(regression_low)))
