@@ -1883,9 +1883,10 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:DOWNTREND:buyYear2High')
         return True
     if((2 < regression_data['PCT_day_change'] < 3.25) and (1.5 < regression_data['PCT_change'] < 3.25)
-        and (regression_data['PCT_day_change_pre1'] < 0.5 or regression_data['PCT_day_change_pre2'] < 0.5)
+        and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < -2)
         and regression_data['year2HighChange'] < -50
         and regression_data['yearHighChange'] < -30
+        and regression_data['bar_high'] > regression_data['bar_high_pre1']
         ):   
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:UPTREND:buyYear2LowLT-50')  
        
@@ -4045,22 +4046,27 @@ def buy_random_filters(regression_data, regressionResult, reg, ws):
             ):
             if(2 < regression_data['PCT_day_change'] < 3
                 ):
-                if(regression_data['PCT_day_change_pre1'] > 0
-                    and regression_data['PCT_day_change_pre2'] > 0
+                if(regression_data['PCT_day_change_pre1'] > 0.5
+                    and regression_data['PCT_day_change_pre2'] > 0.5
                     ):
                     add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupUp-3dayUp')
-                elif(regression_data['PCT_day_change_pre1'] > 0
+                elif(regression_data['PCT_day_change_pre1'] > 0.5
                     ):
                     add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupUp-2dayUp')
                 elif(regression_data['forecast_day_PCT7_change'] < 1
+                    and regression_data['PCT_day_change_pre2'] < 0
                     and abs_month3High_less_than_month3Low(regression_data)
                     ):
                     if(regression_data['forecast_day_PCT2_change'] > 1
-                        and regression_data['forecast_day_PCT3_change'] > 1
+                        and regression_data['forecast_day_PCT3_change'] > 1  
                         ):
                         add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupUp')
                     else:
                         add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupUp-inUpTrend')
+                elif(regression_data['forecast_day_PCT7_change'] < 1
+                    and regression_data['PCT_day_change_pre2'] > 0
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupUp-mayReversalSell')
             
     if(-2.5 < regression_data['PCT_day_change'] < -1
         and -3.5 < regression_data['PCT_change'] < -1
@@ -4589,13 +4595,23 @@ def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
         if(1 < regression_data['PCT_day_change'] < 3.5
             and 1 < regression_data['PCT_change'] < 3.5
             and 1 < regression_data['PCT_day_change_pre1'] 
+            and high_tail_pct_pre1(regression_data) > 1
+            and regression_data['yearHighChange'] > -5
+            and high_tail_pct(regression_data) < 2.5
+            #and regression_data['PCT_day_change_pre3'] < regression_data['PCT_day_change']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'MaySell-CheckChart(yearHigh-minimumLast2DayUp)')
+    elif(('MaySell-CheckChart' in regression_data['filter1']) or ('MaySellCheckChart' in regression_data['filter1'])):
+        if(1 < regression_data['PCT_day_change'] < 3.5
+            and 1 < regression_data['PCT_change'] < 3.5
+            and 1 < regression_data['PCT_day_change_pre1'] 
             and regression_data['monthHighChange'] > -1
             and high_tail_pct(regression_data) < 2.5
             #and regression_data['PCT_day_change_pre3'] < regression_data['PCT_day_change']
             ):
             add_in_csv(regression_data, regressionResult, ws, 'MaySell-CheckChart(monthHigh-minimumLast2DayUp)')
     
-    if(is_algo_buy(regression_data)):        
+    if(is_algo_sell(regression_data)):        
         if(('MaySellCheckChart' in regression_data['filter1'])
             and ('Reversal' not in regression_data['filter3'])
             and regression_data['year2LowChange'] > 10
@@ -6092,14 +6108,15 @@ def sell_random_filter(regression_data, regressionResult, reg, ws):
             ):
             if(-3 < regression_data['PCT_day_change'] < -2
                 ):
-                if(regression_data['PCT_day_change_pre1'] < 0
-                    and regression_data['PCT_day_change_pre2'] < 0
+                if(regression_data['PCT_day_change_pre1'] < -0.5
+                    and regression_data['PCT_day_change_pre2'] < -0.5
                     ):
                     add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-3dayDown')
-                elif(regression_data['PCT_day_change_pre1'] < 0
+                elif(regression_data['PCT_day_change_pre1'] < -0.5
                     ):
                     add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-2dayDown')
                 elif(regression_data['forecast_day_PCT7_change'] > -1
+                    and regression_data['PCT_day_change_pre2'] > 0 
                     and abs_month3High_more_than_month3Low(regression_data)
                     ):
                     if(regression_data['forecast_day_PCT2_change'] < -1
@@ -6107,7 +6124,11 @@ def sell_random_filter(regression_data, regressionResult, reg, ws):
                         ):
                         add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown')
                     else:
-                        add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-inDownTrend')     
+                        add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-inDownTrend')
+                elif(regression_data['forecast_day_PCT7_change'] > -1
+                    and regression_data['PCT_day_change_pre2'] < 0
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-mayReversalBuy')     
     if(1 < regression_data['PCT_day_change'] < 2.5
         and 1 < regression_data['PCT_change'] < 3.5
         and regression_data['PCT_day_change_pre1'] < -1.5
