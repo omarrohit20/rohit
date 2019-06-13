@@ -6096,35 +6096,33 @@ def sell_random_filter(regression_data, regressionResult, reg, ws):
             and regression_data['forecast_day_PCT5_change'] < 0
             ):
             add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-2dayDown-mayReversalBuy')
-        elif(
+        elif(-3 < regression_data['PCT_day_change'] < -2
+            and regression_data['week2LowChange'] > 2
             ):
-            if(-3 < regression_data['PCT_day_change'] < -2
-                and regression_data['week2LowChange'] > 2
+            if(is_algo_sell(regression_data)
+                and regression_data['PCT_day_change_pre1'] < -0.5
+                and regression_data['PCT_day_change_pre2'] < -0.5
                 ):
-                if(is_algo_sell(regression_data)
-                    and regression_data['PCT_day_change_pre1'] < -0.5
-                    and regression_data['PCT_day_change_pre2'] < -0.5
+                add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-3dayDown')
+            elif(is_algo_sell(regression_data)
+                and regression_data['PCT_day_change_pre1'] < -0.5
+                ):
+                add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-2dayDown')
+            elif(is_algo_sell(regression_data)
+                and regression_data['forecast_day_PCT7_change'] > -1
+                and regression_data['PCT_day_change_pre2'] > 0 
+                and abs_month3High_more_than_month3Low(regression_data)
+                ):
+                if(regression_data['forecast_day_PCT2_change'] < -1
+                    and regression_data['forecast_day_PCT3_change'] < -1
                     ):
-                    add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-3dayDown')
-                elif(is_algo_sell(regression_data)
-                    and regression_data['PCT_day_change_pre1'] < -0.5
-                    ):
-                    add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-2dayDown')
-                elif(is_algo_sell(regression_data)
-                    and regression_data['forecast_day_PCT7_change'] > -1
-                    and regression_data['PCT_day_change_pre2'] > 0 
-                    and abs_month3High_more_than_month3Low(regression_data)
-                    ):
-                    if(regression_data['forecast_day_PCT2_change'] < -1
-                        and regression_data['forecast_day_PCT3_change'] < -1
-                        ):
-                        add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown')
-                    else:
-                        add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-inDownTrend')
-                elif(regression_data['forecast_day_PCT7_change'] > -1
-                    and regression_data['PCT_day_change_pre2'] < 0
-                    ):
-                    add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-mayReversalBuy')     
+                    add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown')
+                else:
+                    add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-inDownTrend')
+            elif(regression_data['forecast_day_PCT7_change'] > -1
+                and regression_data['PCT_day_change_pre2'] < 0
+                ):
+                add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-mayReversalBuy')     
     if(1 < regression_data['PCT_day_change'] < 2.5
         and 1 < regression_data['PCT_change'] < 3.5
         and regression_data['PCT_day_change_pre1'] < -1.5
