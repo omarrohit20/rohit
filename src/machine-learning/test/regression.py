@@ -128,5 +128,5 @@ def calculateParallel(threads=1):
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(4)
+    calculateParallel(5)
     connection.close()

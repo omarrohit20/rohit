@@ -333,8 +333,8 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     year2High = dftemp['high'].max()
     year2Low = dftemp['low'].min()
-    year2HighChange = (close - year2High)*100/year2High
-    year2LowChange = (close - year2Low)*100/year2Low
+    year2HighChange = (high - year2High)*100/year2High
+    year2LowChange = (low - year2Low)*100/year2Low
     high_year2 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_year2 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
@@ -342,8 +342,8 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     yearHigh = dftemp['high'].max()
     yearLow = dftemp['low'].min()
-    yearHighChange = (close - yearHigh)*100/yearHigh
-    yearLowChange = (close - yearLow)*100/yearLow
+    yearHighChange = (high - yearHigh)*100/yearHigh
+    yearLowChange = (low - yearLow)*100/yearLow
     high_year = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_year = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
@@ -351,8 +351,8 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     month6High = dftemp['high'].max()
     month6Low = dftemp['low'].min()
-    month6HighChange = (close - month6High)*100/close
-    month6LowChange = (close - month6Low)*100/close
+    month6HighChange = (high - month6High)*100/month6High
+    month6LowChange = (low - month6Low)*100/month6Low
     high_month6 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_month6 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
@@ -360,8 +360,8 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     month3High = dftemp['high'].max()
     month3Low = dftemp['low'].min()
-    month3HighChange = (close - month3High)*100/close
-    month3LowChange = (close - month3Low)*100/close
+    month3HighChange = (high - month3High)*100/month3High
+    month3LowChange = (low - month3Low)*100/month3Low
     high_month3 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_month3 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
@@ -370,8 +370,8 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     monthHigh = dftemp['high'].max()
     monthLow = dftemp['low'].min()
-    monthHighChange = (close - monthHigh)*100/close
-    monthLowChange = (close - monthLow)*100/close
+    monthHighChange = (high - monthHigh)*100/monthHigh
+    monthLowChange = (low - monthLow)*100/monthLow
     high_month = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_month = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
@@ -379,8 +379,8 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     week2High = dftemp['high'].max()
     week2Low = dftemp['low'].min()
-    week2HighChange = (high - week2High)*100/high
-    week2LowChange = (low - week2Low)*100/low
+    week2HighChange = (high - week2High)*100/week2High
+    week2LowChange = (low - week2Low)*100/week2Low
     high_week2 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_week2 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
@@ -388,8 +388,8 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     weekHigh = dftemp['high'].max()
     weekLow = dftemp['low'].min()
-    weekHighChange = (high - weekHigh)*100/high
-    weekLowChange = (low - weekLow)*100/low
+    weekHighChange = (high - weekHigh)*100/weekHigh
+    weekLowChange = (low - weekLow)*100/weekLow
     high_week = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_week = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     

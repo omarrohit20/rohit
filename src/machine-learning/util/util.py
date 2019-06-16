@@ -1827,8 +1827,8 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
         and regression_data['forecast_day_PCT5_change'] < 0
         and regression_data['forecast_day_PCT7_change'] < 0
         and regression_data['forecast_day_PCT7_change'] < 0
-        and regression_data['PCT_day_change'] > 2
-        and regression_data['PCT_change'] > 2
+        and 2 < regression_data['PCT_day_change'] < 5
+        and 2 < regression_data['PCT_change'] < 5
         and regression_data['PCT_day_change_pre2'] < 0
         and regression_data['PCT_day_change_pre3'] < 0
         ):
@@ -1837,9 +1837,9 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
     return False
 
 def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
-    if((-1.5 < regression_data['PCT_day_change'] < 0) and (-1.5 < regression_data['PCT_change'] < 0.5)
-        and ((high_tail_pct(regression_data) < 1 and low_tail_pct(regression_data) >= 1.2)
-             or (high_tail_pct(regression_data) <= 0.4 and low_tail_pct(regression_data) >= 1)
+    if((-2 < regression_data['PCT_day_change'] < 0) and (-2.5 < regression_data['PCT_change'] < 0.5)
+        and ((high_tail_pct(regression_data) < 1 and 3 > low_tail_pct(regression_data) >= 1.2)
+             or (high_tail_pct(regression_data) <= 0.4 and 3 > low_tail_pct(regression_data) >= 1)
              )
         ):   
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuy-CheckChart')
@@ -4476,8 +4476,8 @@ def sell_all_common(regression_data, regressionResult, reg, ws):
         and regression_data['forecast_day_PCT5_change'] > 0
         and regression_data['forecast_day_PCT7_change'] > 0
         and regression_data['forecast_day_PCT7_change'] > 0
-        and regression_data['PCT_day_change'] < -2
-        and regression_data['PCT_change'] < -2
+        and -5 < regression_data['PCT_day_change'] < -2
+        and -5 < regression_data['PCT_change'] < -2
         and regression_data['PCT_day_change_pre2'] > 0
         and regression_data['PCT_day_change_pre3'] > 0
         ):
@@ -4507,9 +4507,9 @@ def sell_all_common(regression_data, regressionResult, reg, ws):
     return False
 
 def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
-    if((0 < regression_data['PCT_day_change'] < 1.5) and (-0.5 < regression_data['PCT_change'] < 1.5)
-        and ((low_tail_pct(regression_data) < 1 and high_tail_pct(regression_data) >= 1.2)
-             or (low_tail_pct(regression_data) <= 0.4 and high_tail_pct(regression_data) >= 1)
+    if((0 < regression_data['PCT_day_change'] < 2) and (-0.5 < regression_data['PCT_change'] < 2.5)
+        and ((low_tail_pct(regression_data) < 1 and 3 > high_tail_pct(regression_data) >= 1.2)
+             or (low_tail_pct(regression_data) <= 0.4 and 3 > high_tail_pct(regression_data) >= 1)
              )
         ):   
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySell-CheckChart')
