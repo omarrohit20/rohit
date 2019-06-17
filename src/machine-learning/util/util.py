@@ -1052,7 +1052,7 @@ def base_line(regression_data, regressionResult, reg, ws):
         and (regression_data['year2LowChange'] > 40)
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'BreakHighYear2')
-        if(regression_data['year2High'] == regression_data['high_month3']):
+        if(regression_data['year2High'] == regression_data['month6High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
         if(regression_data['year2High'] != regression_data['high_year2']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
@@ -1061,7 +1061,7 @@ def base_line(regression_data, regressionResult, reg, ws):
         and (regression_data['yearLowChange'] > 30)
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'BreakHighYear')
-        if(regression_data['yearHigh'] == regression_data['high_month3']):
+        if(regression_data['yearHigh'] == regression_data['month6High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
         if(regression_data['yearHigh'] != regression_data['high_year']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
@@ -1069,6 +1069,8 @@ def base_line(regression_data, regressionResult, reg, ws):
         and (regression_data['month6LowChange'] > 20)
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'BreakHighMonth6')
+        if(regression_data['month6High'] == regression_data['month3High']):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
 #         if(regression_data['month6High'] != regression_data['high_month6']
 #             #and regression_data['monthHighChange'] == regression_data['weekHighChange']
 #             ):
@@ -1077,6 +1079,8 @@ def base_line(regression_data, regressionResult, reg, ws):
         and (regression_data['month3LowChange'] > 15)
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'BreakHighMonth3')
+        if(regression_data['month3High'] == regression_data['monthHigh']):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
 #         if(regression_data['month3High'] != regression_data['high_month3']
 #             ##and regression_data['monthHighChange'] == regression_data['weekHighChange']
 #             ):
@@ -1093,7 +1097,7 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalHighYear2')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearHighYear2')
-        if(regression_data['year2High'] == regression_data['high_month3']):
+        if(regression_data['year2High'] == regression_data['month6High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
         if(regression_data['year2High'] != regression_data['high_year2']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
@@ -1104,7 +1108,7 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalHighYear')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearHighYear')
-        if(regression_data['yearHigh'] == regression_data['high_month3']):
+        if(regression_data['yearHigh'] == regression_data['month6High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
         if(regression_data['yearHigh'] != regression_data['high_year']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
@@ -1115,6 +1119,8 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalHighMonth6')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearHighMonth6')
+        if(regression_data['month6High'] == regression_data['month3High']):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
 #         if(regression_data['month6High'] != regression_data['high_month6']
 #             #and regression_data['monthHighChange'] == regression_data['weekHighChange']
 #             ):
@@ -1126,6 +1132,8 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalHighMonth3')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearHighMonth3')
+        if(regression_data['month3High'] == regression_data['monthHigh']):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
 #         if(regression_data['month3High'] != regression_data['high_month3']
 #             #and regression_data['monthHighChange'] == regression_data['weekHighChange']
 #             ):
@@ -1142,7 +1150,7 @@ def base_line(regression_data, regressionResult, reg, ws):
         and (regression_data['year2HighChange'] < -40)
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'BreakLowYear2')
-        if(regression_data['year2Low'] == regression_data['low_month3']):
+        if(regression_data['year2Low'] == regression_data['month6Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
         if(regression_data['year2Low'] != regression_data['low_year2']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
@@ -1151,7 +1159,7 @@ def base_line(regression_data, regressionResult, reg, ws):
         and (regression_data['yearHighChange'] < -30)
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'BreakLowYear')
-        if(regression_data['yearLow'] == regression_data['low_month3']):
+        if(regression_data['yearLow'] == regression_data['month6Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
         if(regression_data['yearLow'] != regression_data['low_year']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
@@ -1160,6 +1168,8 @@ def base_line(regression_data, regressionResult, reg, ws):
         and (regression_data['month6HighChange'] < -20)
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'BreakLowMonth6')
+        if(regression_data['month6Low'] == regression_data['month3Low']):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
 #         if(regression_data['month6Low'] != regression_data['low_month6']
 #             #and regression_data['monthLowChange'] == regression_data['weekLowChange']
 #             ):
@@ -1170,6 +1180,8 @@ def base_line(regression_data, regressionResult, reg, ws):
         and (regression_data['month3HighChange'] < -15)
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'BreakLowMonth3')
+        if(regression_data['month3Low'] == regression_data['monthLow']):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
 #         if(regression_data['month3Low'] != regression_data['low_month3']
 #             #and regression_data['monthLowChange'] == regression_data['weekLowChange']
 #             ):
@@ -1188,7 +1200,7 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalLowYear2')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearLowYear2')
-        if(regression_data['year2Low'] == regression_data['low_month3']):
+        if(regression_data['year2Low'] == regression_data['month6Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
         if(regression_data['year2Low'] != regression_data['low_year2']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
@@ -1200,7 +1212,7 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalLowYear')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearLowYear')
-        if(regression_data['yearLow'] == regression_data['low_month3']):
+        if(regression_data['yearLow'] == regression_data['month6Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
         if(regression_data['yearLow'] != regression_data['low_year']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Confirm)')
@@ -1212,6 +1224,8 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalLowMonth6')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearLowMonth6')
+        if(regression_data['month6Low'] == regression_data['month3Low']):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
 #         if(regression_data['month6Low'] != regression_data['low_month6']
 #             #and regression_data['monthLowChange'] == regression_data['weekLowChange']
 #             ):
@@ -1224,6 +1238,8 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'ReversalLowMonth3')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'NearLowMonth3')
+        if(regression_data['month3Low'] == regression_data['monthLow']):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
 #         if(regression_data['month3Low'] != regression_data['low_month3']
 #             #and regression_data['monthLowChange'] == regression_data['weekLowChange']
 #             ):
@@ -2016,7 +2032,24 @@ def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
         if((-5 <= regression_data['PCT_day_change'] < -3) and (-6 <= regression_data['PCT_change'] < -2)
             and 5 > low_tail_pct(regression_data) > 2.8
             ):
-            add_in_csv(regression_data, regressionResult, ws, "##ML:(Test)MayBuyCheckChart-PCTDayChangeLT(-3)BigHighTail")        
+            add_in_csv(regression_data, regressionResult, ws, "##ML:(Test)MayBuyCheckChart-PCTDayChangeLT(-3)BigHighTail")
+            
+    if(regression_data['year2LowChange'] > 3
+        and regression_data['low'] == regression_data['weekLow']
+        and low_tail_pct(regression_data) > 1.5
+        ):
+        if(regression_data['monthLowChange'] < 3
+            and regression_data['monthLow'] != regression_data['weekLow']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, "(Test)MayBuyCheckChart-monthLowReversal")
+        elif(regression_data['month3LowChange'] < 3
+            and regression_data['month3Low'] != regression_data['weekLow']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, "(Test)MayBuyCheckChart-month3LowReversal")
+        elif(regression_data['month6LowChange'] < 3
+            and regression_data['month6Low'] != regression_data['weekLow']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, "(Test)MayBuyCheckChart-month6LowReversal")    
                 
 def buy_year_high(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
@@ -4021,14 +4054,22 @@ def buy_random_filters(regression_data, regressionResult, reg, ws):
             and regression_data['week2HighChange'] < -3
             ):
             if(is_algo_buy(regression_data)
-                and regression_data['PCT_day_change_pre1'] > 0.5
+                and 1 > regression_data['PCT_day_change_pre1'] > 0.5
                 and regression_data['PCT_day_change_pre2'] > 0.5
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupUp-3dayUp')
             elif(is_algo_buy(regression_data)
-                and regression_data['PCT_day_change_pre1'] > 0.5
+                and 1 > regression_data['PCT_day_change_pre1'] > 0.5
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupUp-2dayUp')
+            elif(regression_data['forecast_day_PCT7_change'] < 1
+                and regression_data['PCT_day_change_pre1'] < 0 
+                and regression_data['PCT_day_change_pre2'] < 0
+                and regression_data['PCT_day_change_pre3'] < 0
+                and regression_data['forecast_day_PCT_change'] > 0
+                and regression_data['forecast_day_PCT2_change'] > 0
+                ):
+                add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupUp-downTrendLastDayUp-mayReversalSell')
             elif(is_algo_buy(regression_data) 
                 and regression_data['forecast_day_PCT7_change'] < 1
                 and (regression_data['PCT_day_change_pre2'] < 0
@@ -4636,7 +4677,23 @@ def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
             and 5 > high_tail_pct(regression_data) > 2.8
             ):
             add_in_csv(regression_data, regressionResult, ws, "##ML:(Test)MaySellCheckChart--PCTDayChangeGT(3)BigLowTail")
-
+    if(regression_data['year2HighChange'] < -3
+        and regression_data['high'] == regression_data['weekHigh'] 
+        and high_tail_pct(regression_data) > 1.5
+        ):
+        if(regression_data['monthHighChange'] > -3
+            and regression_data['monthHigh'] != regression_data['weekHigh']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, "(Test)MaySellCheckChart-monthHighReversal")
+        elif(regression_data['month3HighChange'] > -3
+            and regression_data['month3High'] != regression_data['weekHigh'] 
+            ):
+            add_in_csv(regression_data, regressionResult, ws, "(Test)MaySellCheckChart-month3HighReversal")
+        elif(regression_data['month6HighChange'] > -3
+            and regression_data['month6High'] != regression_data['weekHigh'] 
+            ):
+            add_in_csv(regression_data, regressionResult, ws, "(Test)MaySellCheckChart-month6HighReversal")
+    
 def sell_year_high(regression_data, regressionResult, reg, ws, ws1):
     return False
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
@@ -6081,14 +6138,22 @@ def sell_random_filter(regression_data, regressionResult, reg, ws):
             and regression_data['week2LowChange'] > 2
             ):
             if(is_algo_sell(regression_data)
-                and regression_data['PCT_day_change_pre1'] < -0.5
+                and -1 < regression_data['PCT_day_change_pre1'] < -0.5
                 and regression_data['PCT_day_change_pre2'] < -0.5
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-3dayDown')
             elif(is_algo_sell(regression_data)
-                and regression_data['PCT_day_change_pre1'] < -0.5
+                and -1 < regression_data['PCT_day_change_pre1'] < -0.5
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-2dayDown')
+            elif(regression_data['forecast_day_PCT7_change'] > -1
+                and regression_data['PCT_day_change_pre1'] > 0 
+                and regression_data['PCT_day_change_pre2'] > 0
+                and regression_data['PCT_day_change_pre3'] > 0
+                and regression_data['forecast_day_PCT_change'] < 0
+                and regression_data['forecast_day_PCT2_change'] < 0
+                ):
+                add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-upTrendLastDayDown-mayReversalBuy') 
             elif(is_algo_sell(regression_data)
                 and regression_data['forecast_day_PCT7_change'] > -1
                 and (regression_data['PCT_day_change_pre2'] > 0 
