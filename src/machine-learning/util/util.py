@@ -4054,12 +4054,12 @@ def buy_random_filters(regression_data, regressionResult, reg, ws):
             and regression_data['week2HighChange'] < -3
             ):
             if(is_algo_buy(regression_data)
-                and 1 > regression_data['PCT_day_change_pre1'] > 0.5
+                and 2 > regression_data['PCT_day_change_pre1'] > 0.5
                 and regression_data['PCT_day_change_pre2'] > 0.5
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupUp-3dayUp')
             elif(is_algo_buy(regression_data)
-                and 1 > regression_data['PCT_day_change_pre1'] > 0.5
+                and 2 > regression_data['PCT_day_change_pre1'] > 0.5
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupUp-2dayUp')
             elif(regression_data['forecast_day_PCT7_change'] < 1
@@ -6138,12 +6138,12 @@ def sell_random_filter(regression_data, regressionResult, reg, ws):
             and regression_data['week2LowChange'] > 2
             ):
             if(is_algo_sell(regression_data)
-                and -1 < regression_data['PCT_day_change_pre1'] < -0.5
+                and -2 < regression_data['PCT_day_change_pre1'] < -0.5
                 and regression_data['PCT_day_change_pre2'] < -0.5
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-3dayDown')
             elif(is_algo_sell(regression_data)
-                and -1 < regression_data['PCT_day_change_pre1'] < -0.5
+                and -2 < regression_data['PCT_day_change_pre1'] < -0.5
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '(Test)checkCupDown-2dayDown')
             elif(regression_data['forecast_day_PCT7_change'] > -1
