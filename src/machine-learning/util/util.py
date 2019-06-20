@@ -2039,15 +2039,15 @@ def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
         and regression_data['low'] == regression_data['weekLow']
         and low_tail_pct(regression_data) > 1.5
         ):
-        if(regression_data['monthLowChange'] < 3
+        if(regression_data['monthLowChange'] < 2
             and regression_data['monthLow'] != regression_data['weekLow']
             ):
             add_in_csv(regression_data, regressionResult, ws, "(Test)MayBuyCheckChart-monthLowReversal")
-        elif(regression_data['month2LowChange'] < 3
+        elif(regression_data['month2LowChange'] < 2
             and regression_data['month2Low'] != regression_data['weekLow']
             ):
             add_in_csv(regression_data, regressionResult, ws, "(Test)MayBuyCheckChart-month2LowReversal")
-        elif(regression_data['month3LowChange'] < 3
+        elif(regression_data['month3LowChange'] < 2
             and regression_data['month3Low'] != regression_data['weekLow']
             #and regression_data['month3Low'] != regression_data['low_month3']
             and regression_data['month6Low'] == regression_data['yearLow']
@@ -2058,7 +2058,7 @@ def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
             and regression_data['month3Low'] == regression_data['month6Low']
             ):
             add_in_csv(regression_data, regressionResult, ws, "(Test)MayBuyCheckChart-month3LowBreakReversal")
-        elif(regression_data['month6LowChange'] < 3
+        elif(regression_data['month6LowChange'] < 2
             and regression_data['month6Low'] != regression_data['weekLow']
             #and regression_data['month3Low'] != regression_data['low_month6']
             and regression_data['yearLow'] == regression_data['year2Low']
@@ -4712,32 +4712,32 @@ def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
         and regression_data['high'] == regression_data['weekHigh'] 
         and high_tail_pct(regression_data) > 1.5
         ):
-        if(regression_data['monthHighChange'] > -3
+        if(regression_data['monthHighChange'] > -2
             and regression_data['monthHigh'] != regression_data['weekHigh']
             ):
             add_in_csv(regression_data, regressionResult, ws, "(Test)MaySellCheckChart-monthHighReversal")
-        elif(regression_data['month2HighChange'] > -3
+        elif(regression_data['month2HighChange'] > -2
             and regression_data['month2High'] != regression_data['weekHigh']
             ):
             add_in_csv(regression_data, regressionResult, ws, "(Test)MaySellCheckChart-month2HighReversal")
-        elif(regression_data['month3HighChange'] > -3
+        elif(regression_data['month3HighChange'] > -2
             and regression_data['month3High'] != regression_data['weekHigh']
             #and regression_data['month3High'] != regression_data['high_month3'] 
             and regression_data['month6High'] == regression_data['yearHigh'] 
             ):
             add_in_csv(regression_data, regressionResult, ws, "(Test)MaySellCheckChart-month3HighReversal")
-        elif(regression_data['month3HighChange'] > -3
+        elif(regression_data['month3HighChange'] > 0
             and regression_data['month3High'] != regression_data['weekHigh']
             and regression_data['month3High'] == regression_data['month6High'] 
             ):
             add_in_csv(regression_data, regressionResult, ws, "(Test)MaySellCheckChart-month3HighBreakReversal")
-        elif(regression_data['month6HighChange'] > -3
+        elif(regression_data['month6HighChange'] > -2
             and regression_data['month6High'] != regression_data['weekHigh']
             #and regression_data['month6High'] != regression_data['high_month6']
             and regression_data['yearHigh'] == regression_data['year2High']
             ):
             add_in_csv(regression_data, regressionResult, ws, "(Test)MaySellCheckChart-month6HighReversal")
-        elif(regression_data['month6HighChange'] > -3
+        elif(regression_data['month6HighChange'] > 0
             and regression_data['month6High'] != regression_data['weekHigh']
             and regression_data['month6High'] == regression_data['yearHigh'] 
             ):

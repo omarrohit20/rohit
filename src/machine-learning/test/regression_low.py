@@ -331,76 +331,76 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     end_date = (today_date - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
     start_date = (today_date - datetime.timedelta(weeks=104)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
-    year2High = dftemp['high'].max()
-    year2Low = dftemp['low'].min()
-    year2HighChange = (high - year2High)*100/year2High
-    year2LowChange = (low - year2Low)*100/year2Low
-    high_year2 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
-    low_year2 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
+    year2High = max(dftemp['open'].max(), dftemp['close'].max())
+    year2Low = min(dftemp['open'].min(), dftemp['close'].min())
+    year2HighChange = (close - year2High)*100/year2High
+    year2LowChange = (close - year2Low)*100/year2Low
+    high_year2 = max(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0]) 
+    low_year2 = min(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0])
     
     start_date = (today_date - datetime.timedelta(weeks=52)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
-    yearHigh = dftemp['high'].max()
-    yearLow = dftemp['low'].min()
-    yearHighChange = (high - yearHigh)*100/yearHigh
-    yearLowChange = (low - yearLow)*100/yearLow
-    high_year = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
-    low_year = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
+    yearHigh = max(dftemp['open'].max(), dftemp['close'].max())
+    yearLow = min(dftemp['open'].min(), dftemp['close'].min())
+    yearHighChange = (close - yearHigh)*100/yearHigh
+    yearLowChange = (close - yearLow)*100/yearLow
+    high_year = max(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0])
+    low_year = min(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0])
     
     start_date = (today_date - datetime.timedelta(weeks=26)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
-    month6High = dftemp['high'].max()
-    month6Low = dftemp['low'].min()
-    month6HighChange = (high - month6High)*100/month6High
-    month6LowChange = (low - month6Low)*100/month6Low
-    high_month6 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
-    low_month6 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
+    month6High = max(dftemp['open'].max(), dftemp['close'].max())
+    month6Low = min(dftemp['open'].min(), dftemp['close'].min())
+    month6HighChange = (close - month6High)*100/month6High
+    month6LowChange = (close - month6Low)*100/month6Low
+    high_month6 = max(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0])
+    low_month6 = min(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0])
     
     start_date = (today_date - datetime.timedelta(weeks=13)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
-    month3High = dftemp['high'].max()
-    month3Low = dftemp['low'].min()
-    month3HighChange = (high - month3High)*100/month3High
-    month3LowChange = (low - month3Low)*100/month3Low
-    high_month3 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
-    low_month3 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
+    month3High = max(dftemp['open'].max(), dftemp['close'].max())
+    month3Low = min(dftemp['open'].min(), dftemp['close'].min())
+    month3HighChange = (close - month3High)*100/month3High
+    month3LowChange = (close - month3Low)*100/month3Low
+    high_month3 = max(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0])
+    low_month3 = min(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0])
     
     start_date = (today_date - datetime.timedelta(weeks=9)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
-    month2High = dftemp['high'].max()
-    month2Low = dftemp['low'].min()
-    month2HighChange = (high - month2High)*100/month3High
-    month2LowChange = (low - month2Low)*100/month3Low
-    high_month2 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
-    low_month2 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
+    month2High = max(dftemp['open'].max(), dftemp['close'].max())
+    month2Low = min(dftemp['open'].min(), dftemp['close'].min())
+    month2HighChange = (close - month2High)*100/month3High
+    month2LowChange = (close - month2Low)*100/month3Low
+    high_month2 = max(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0])
+    low_month2 = min(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0])
     
     end_date = forecast_day_date
     start_date = (today_date - datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
-    monthHigh = dftemp['high'].max()
-    monthLow = dftemp['low'].min()
-    monthHighChange = (high - monthHigh)*100/monthHigh
-    monthLowChange = (low - monthLow)*100/monthLow
-    high_month = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
-    low_month = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
+    monthHigh = max(dftemp['open'].max(), dftemp['close'].max())
+    monthLow = min(dftemp['open'].min(), dftemp['close'].min())
+    monthHighChange = (close - monthHigh)*100/monthHigh
+    monthLowChange = (close - monthLow)*100/monthLow
+    high_month = max(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0])
+    low_month = min(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0])
     
     start_date = (today_date - datetime.timedelta(weeks=2)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
-    week2High = dftemp['high'].max()
-    week2Low = dftemp['low'].min()
-    week2HighChange = (high - week2High)*100/week2High
-    week2LowChange = (low - week2Low)*100/week2Low
-    high_week2 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
-    low_week2 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
+    week2High = max(dftemp['open'].max(), dftemp['close'].max())
+    week2Low = min(dftemp['open'].min(), dftemp['close'].min())
+    week2HighChange = (close - week2High)*100/week2High
+    week2LowChange = (close - week2Low)*100/week2Low
+    high_week2 = max(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0])
+    low_week2 = min(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0])
     
     start_date = (today_date - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
-    weekHigh = dftemp['high'].max()
-    weekLow = dftemp['low'].min()
-    weekHighChange = (high - weekHigh)*100/weekHigh
-    weekLowChange = (low - weekLow)*100/weekLow
-    high_week = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
-    low_week = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
+    weekHigh = max(dftemp['open'].max(), dftemp['close'].max())
+    weekLow = min(dftemp['open'].min(), dftemp['close'].min())
+    weekHighChange = (close - weekHigh)*100/weekHigh
+    weekLowChange = (close - weekLow)*100/weekLow
+    high_week = max(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0])
+    low_week = min(dftemp.tail(-1).loc[-forecast_out:, 'open'].values[0], dftemp.tail(-1).loc[-forecast_out:, 'close'].values[0])
     
     technical = db.technical.find_one({'dataset_code':scrip})
     regression_data['date'] = forecast_day_date
