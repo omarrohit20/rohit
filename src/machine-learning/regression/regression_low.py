@@ -343,6 +343,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     year2High = dftemp['high'].max()
     year2Low = dftemp['low'].min()
+    year2BarHigh = max(dftemp['open'].max(), dftemp['close'].max())
+    year2BarLow = min(dftemp['open'].min(), dftemp['close'].min())
     year2HighChange = (high - year2High)*100/year2High
     year2LowChange = (low - year2Low)*100/year2Low
     high_year2 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
@@ -352,6 +354,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     yearHigh = dftemp['high'].max()
     yearLow = dftemp['low'].min()
+    yearBarHigh = max(dftemp['open'].max(), dftemp['close'].max())
+    yearBarLow = min(dftemp['open'].min(), dftemp['close'].min())
     yearHighChange = (high - yearHigh)*100/yearHigh
     yearLowChange = (low - yearLow)*100/yearLow
     high_year = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
@@ -361,6 +365,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     month6High = dftemp['high'].max()
     month6Low = dftemp['low'].min()
+    month6BarHigh = max(dftemp['open'].max(), dftemp['close'].max())
+    month6BarLow = min(dftemp['open'].min(), dftemp['close'].min())
     month6HighChange = (high - month6High)*100/month6High
     month6LowChange = (low - month6Low)*100/month6Low
     high_month6 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
@@ -370,6 +376,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     month3High = dftemp['high'].max()
     month3Low = dftemp['low'].min()
+    month3BarHigh = max(dftemp['open'].max(), dftemp['close'].max())
+    month3BarLow = min(dftemp['open'].min(), dftemp['close'].min())
     month3HighChange = (high - month3High)*100/month3High
     month3LowChange = (low - month3Low)*100/month3Low
     high_month3 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
@@ -379,6 +387,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     month2High = dftemp['high'].max()
     month2Low = dftemp['low'].min()
+    month2BarHigh = max(dftemp['open'].max(), dftemp['close'].max())
+    month2BarLow = min(dftemp['open'].min(), dftemp['close'].min())
     month2HighChange = (high - month2High)*100/month3High
     month2LowChange = (low - month2Low)*100/month3Low
     high_month2 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
@@ -389,6 +399,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     monthHigh = dftemp['high'].max()
     monthLow = dftemp['low'].min()
+    monthBarHigh = max(dftemp['open'].max(), dftemp['close'].max())
+    monthBarLow = min(dftemp['open'].min(), dftemp['close'].min())
     monthHighChange = (high - monthHigh)*100/monthHigh
     monthLowChange = (low - monthLow)*100/monthLow
     high_month = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
@@ -398,6 +410,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     week2High = dftemp['high'].max()
     week2Low = dftemp['low'].min()
+    week2BarHigh = max(dftemp['open'].max(), dftemp['close'].max())
+    week2BarLow = min(dftemp['open'].min(), dftemp['close'].min())
     week2HighChange = (high - week2High)*100/week2High
     week2LowChange = (low - week2Low)*100/week2Low
     high_week2 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
@@ -407,6 +421,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     weekHigh = dftemp['high'].max()
     weekLow = dftemp['low'].min()
+    weekBarHigh = max(dftemp['open'].max(), dftemp['close'].max())
+    weekBarLow = min(dftemp['open'].min(), dftemp['close'].min())
     weekHighChange = (high - weekHigh)*100/weekHigh
     weekLowChange = (low - weekLow)*100/weekLow
     high_week = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
@@ -447,20 +463,36 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     regression_data['weekLowChange'] = float(weekLowChange)
     regression_data['year2High'] = float(year2High) 
     regression_data['year2Low'] = float(year2Low)
+    regression_data['year2BarHigh'] = float(year2BarHigh) 
+    regression_data['year2BarLow'] = float(year2BarLow)
     regression_data['yearHigh'] = float(yearHigh) 
     regression_data['yearLow'] = float(yearLow)
+    regression_data['yearBarHigh'] = float(yearBarHigh) 
+    regression_data['yearBarLow'] = float(yearBarLow)
     regression_data['month6High'] = float(month6High) 
     regression_data['month6Low'] = float(month6Low)
+    regression_data['month6BarHigh'] = float(month6BarHigh) 
+    regression_data['month6BarLow'] = float(month6BarLow)
     regression_data['month3High'] = float(month3High) 
     regression_data['month3Low'] = float(month3Low)
+    regression_data['month3BarHigh'] = float(month3BarHigh) 
+    regression_data['month3BarLow'] = float(month3BarLow)
     regression_data['month2High'] = float(month2High) 
     regression_data['month2Low'] = float(month2Low)
+    regression_data['month2BarHigh'] = float(month2BarHigh) 
+    regression_data['month2BarLow'] = float(month2BarLow)
     regression_data['monthHigh'] = float(monthHigh) 
     regression_data['monthLow'] = float(monthLow)
+    regression_data['monthBarHigh'] = float(monthBarHigh) 
+    regression_data['monthBarLow'] = float(monthBarLow)
     regression_data['week2High'] = float(week2High) 
-    regression_data['week2Low'] = float(week2Low) 
+    regression_data['week2Low'] = float(week2Low)
+    regression_data['week2BarHigh'] = float(week2BarHigh) 
+    regression_data['week2BarLow'] = float(week2BarLow)
     regression_data['weekHigh'] = float(weekHigh) 
-    regression_data['weekLow'] = float(weekLow)  
+    regression_data['weekLow'] = float(weekLow)
+    regression_data['weekBarHigh'] = float(weekBarHigh) 
+    regression_data['weekBarLow'] = float(weekBarLow)   
     regression_data['patterns'] = ''
     regression_data['PCT_change_pre1'] = float(PCT_change_pre1)
     regression_data['PCT_change_pre2'] = float(PCT_change_pre2)
@@ -584,6 +616,6 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
         regression_data['lowTail_pre1'] = 0
     else:
         regression_data['lowTail_pre1'] = (((regression_data['bar_low_pre1'] - regression_data['low_pre1'])/regression_data['bar_low_pre1'])*100)
-    
+      
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     create_csv(regression_data)
