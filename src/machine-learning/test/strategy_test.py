@@ -3,7 +3,7 @@ sys.path.insert(0, '../')
 from pymongo import MongoClient
 import pprint
 
-from util.util import getScore, all_day_pct_change_negative, all_day_pct_change_positive, no_doji_or_spinning_buy_india, no_doji_or_spinning_sell_india, scrip_patterns_to_dict
+from util.util import pct_change_filter, getScore, all_day_pct_change_negative, all_day_pct_change_positive, no_doji_or_spinning_buy_india, no_doji_or_spinning_sell_india, scrip_patterns_to_dict
 from util.util import is_algo_buy, is_algo_sell
 from util.util import get_regressionResult
 from util.util import buy_test, buy_other_indicator, buy_pattern_from_history, buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final, buy_high_indicators, buy_pattern
@@ -38,19 +38,37 @@ dbresult = connection.result
 #         dbresult.sell_other_indicator.insert_one(json.loads(json.dumps(data))) 
         
 dbresult.drop_collection('buy_test')
+dbresult.drop_collection('buy_test_pct_change')
 curs = db.ws_high.find({})
 for data in curs:
     data['filterTest'] = ''
-    flag = buy_test(data, data, True, None)
+    flag = buy_test(data, data, False, True, None)
     if(flag):
         del data['_id']
         dbresult.buy_test.insert_one(json.loads(json.dumps(data))) 
+
+curs = db.ws_high.find({})
+for data in curs:
+    data['filterTest'] = ''
+    flag = buy_test(data, data, True, True, None)
+    if(flag):
+        del data['_id']
+        dbresult.buy_test_pct_change.insert_one(json.loads(json.dumps(data))) 
  
 dbresult.drop_collection('sell_test')
+dbresult.drop_collection('sell_test_pct_change')
 curs = db.ws_low.find({})
 for data in curs:
     data['filterTest'] = ''
-    flag = sell_test(data, data, True, None)
+    flag = sell_test(data, data, False, True, None)
     if(flag):
         del data['_id']
         dbresult.sell_test.insert_one(json.loads(json.dumps(data))) 
+
+curs = db.ws_low.find({})        
+for data in curs:
+    data['filterTest'] = ''
+    flag = sell_test(data, data, True, True, None)
+    if(flag):
+        del data['_id']
+        dbresult.sell_test_pct_change.insert_one(json.loads(json.dumps(data))) 

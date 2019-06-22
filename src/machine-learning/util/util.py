@@ -54,11 +54,7 @@ def add_in_csv(regression_data, regressionResult, ws=None, filter=None, filter1=
                    regression_data['filter'] = regression_data['filter'] + '***SELLPATTERN***' 
             if ('P@[' in str(regression_data['buyIndia'])) and (('sell' or 'Sell') in regression_data['filter']):
                 if '***BUYPATTERN***' not in regression_data['filter']:
-                   regression_data['filter'] = regression_data['filter'] + '***BUYPATTERN***'
-            
-            #if(regression_data['PCT_day_change'] < -5):
-            #    regression_data['filter1'] = 'PCTChangeLT-5' + ',' + regression_data['filter1']
-            
+                   regression_data['filter'] = regression_data['filter'] + '***BUYPATTERN***'            
                 
         if ((filter1 is not None) and (filter1 not in regression_data['filter1'])):
             regression_data['filter1'] = filter1 + ',' + regression_data['filter1']
@@ -79,6 +75,8 @@ def add_in_csv(regression_data, regressionResult, ws=None, filter=None, filter1=
         tempRegressionResult.append(regression_data['filter'])
         tempRegressionResult.append(regression_data['filter_avg'])
         tempRegressionResult.append(regression_data['filter_count'])
+        tempRegressionResult.append(regression_data['filter_pct_change_avg'])
+        tempRegressionResult.append(regression_data['filter_pct_change_count'])
         ws.append(tempRegressionResult) if (ws is not None) else False
         if(db.resultScripFutures.find_one({'scrip':regression_data['scrip']}) is None):
             db.resultScripFutures.insert_one({
@@ -804,6 +802,39 @@ def tail_reversal_filter(regression_data, regressionResult):
             ):
             add_in_csv(regression_data, regressionResult, None, None, 'Strong', None)
 
+def pct_change_filter(regression_data, regressionResult, save):
+    filterName = ''
+    if(regression_data['PCT_day_change'] < 0):
+        if(regression_data['PCT_day_change'] < -5):
+            filterName = 'PCTDayChangeLT-5'
+        elif(regression_data['PCT_day_change'] < -4):
+            filterName = 'PCTDayChangeLT-4'
+        elif(regression_data['PCT_day_change'] < -3):
+            filterName = 'PCTDayChangeLT-3'
+        elif(regression_data['PCT_day_change'] < -2):
+            filterName = 'PCTDayChangeLT-2'
+        elif(regression_data['PCT_day_change'] < -1):
+            filterName = 'PCTDayChangeLT-1'
+        else:
+            filterName = 'PCTDayChangeLT0'
+    elif(regression_data['PCT_day_change'] > 0):
+        if(regression_data['PCT_day_change'] > 5):
+            filterName = 'PCTDayChangeGT5'
+        elif(regression_data['PCT_day_change'] > 4):
+            filterName = 'PCTDayChangeGT4'
+        elif(regression_data['PCT_day_change'] > 3):
+            filterName = 'PCTDayChangeGT3'
+        elif(regression_data['PCT_day_change'] > 2):
+            filterName = 'PCTDayChangeGT2'
+        elif(regression_data['PCT_day_change'] > 1):
+            filterName = 'PCTDayChangeGT1'
+        else:
+            filterName = 'PCTDayChangeGT0'
+    if(save):
+        add_in_csv(regression_data, regressionResult, None, filterName)
+    else:
+        return filterName
+        
 def filterMA(regression_data, regressionResult):
     ws = None
     if(2 < regression_data['PCT_day_change'] < 4
@@ -1384,6 +1415,8 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regression_data['filter6'] = " "
     regression_data['filter_avg'] = 0
     regression_data['filter_count'] = 0
+    regression_data['filter_pct_change_avg'] = 0
+    regression_data['filter_pct_change_count'] = 0
     regression_data['series_trend'] = "NA"
     if pct_change_negative_trend(regression_data):
         regression_data['series_trend'] = "downTrend"
@@ -4230,10 +4263,12 @@ def buy_random_filters(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakUp')
         
-def buy_test(regression_data, regressionResult, reg, ws):
+def buy_test(regression_data, regressionResult, pctChangeFilter, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
     flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
+    if(pctChangeFilter):
+        pct_change_filter(regression_data, regressionResult, True)
     return flag
     
     
@@ -4303,6 +4338,15 @@ def buy_filter_accuracy(regression_data, regressionResult, reg, ws):
         if filter != '' and filter in filtersDict:
             regression_data['filter_avg'] = float(filtersDict[filter]['avg'])
             regression_data['filter_count'] = float(filtersDict[filter]['count'])
+
+def buy_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
+    filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-pct-change-buy.csv')
+    if regression_data['filter'] != '':
+        filterName = pct_change_filter(regression_data, regressionResult, False)
+        filter = filterName + ',' + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+        if filter != '' and filter in filtersDict:
+            regression_data['filter_pct_change_avg'] = float(filtersDict[filter]['avg'])
+            regression_data['filter_pct_change_count'] = float(filtersDict[filter]['count'])
             
 def sell_pattern_without_mlalgo(regression_data, regressionResult):
     if(regression_data['PCT_day_change'] > -3.5
@@ -6342,10 +6386,12 @@ def sell_random_filter(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakDown')
         
-def sell_test(regression_data, regressionResult, reg, ws):
+def sell_test(regression_data, regressionResult, pctChangeFilter, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
     flag = sell_other_indicator(regression_data, regressionResult, reg, ws)
+    if(pctChangeFilter):
+        pct_change_filter(regression_data, regressionResult, True)
     return flag
         
     return False
@@ -6416,3 +6462,12 @@ def sell_filter_accuracy(regression_data, regressionResult, reg, ws):
         if filter != '' and filter in filtersDict:
             regression_data['filter_avg'] = float(filtersDict[filter]['avg'])
             regression_data['filter_count'] = float(filtersDict[filter]['count'])
+            
+def sell_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
+    filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-pct-change-sell.csv')
+    if regression_data['filter'] != '':
+        filterName = pct_change_filter(regression_data, regressionResult, False)
+        filter = filterName + ',' + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+        if filter != '' and filter in filtersDict:
+            regression_data['filter_pct_change_avg'] = float(filtersDict[filter]['avg'])
+            regression_data['filter_pct_change_count'] = float(filtersDict[filter]['count'])
