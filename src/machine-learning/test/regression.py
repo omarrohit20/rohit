@@ -99,7 +99,7 @@ def regression_ta_data(scrip):
     df['EMA200'] = EMA(df,200)
     
     df.dropna(subset=['Act_PCT_change'], inplace = True)
-    size = int(int(np.floor(df.shape[0]))/3)
+    size = int((int(np.floor(df.shape[0]))/3)*2)
     for x in range(size):
         db.technical.delete_many({'dataset_code':scrip})
         ta_lib_data_df(scrip, df, True) 
