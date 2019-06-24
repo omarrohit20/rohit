@@ -24,7 +24,7 @@ BUY_VERY_LESS_DATA=True
 SELL_VERY_LESS_DATA=True
 MARKET_IN_UPTREND=False
 MARKET_IN_DOWNTREND=False
-TEST = True
+TEST = False
 
 buyMLP = 0.1
 buyMLP_MIN = 0
@@ -2967,23 +2967,6 @@ def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
         and regression_data['bar_high'] >= regression_data['week2BarHigh']
         ):
         add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakUp-2week')
-    elif(1 < regression_data['PCT_day_change'] < 6
-        and regression_data['PCT_change'] < 6
-        and (regression_data['PCT_day_change_pre1'] < 0 
-             or regression_data['PCT_day_change_pre2'] < 0
-             or regression_data['PCT_day_change_pre3'] < 0
-             )
-        #and regression_data['high'] > regression_data['high_pre3']
-        and regression_data['high'] > regression_data['high_pre2']
-        and regression_data['high'] > regression_data['high_pre1']
-        and 0.5 < regression_data['forecast_day_PCT4_change'] < 3
-        and 0 < regression_data['forecast_day_PCT3_change'] < 4
-        and 0 < regression_data['forecast_day_PCT2_change'] < 4
-        and 0 < regression_data['forecast_day_PCT_change'] < 3
-        and 0 <= regression_data['forecast_day_PCT5_change'] <= 3
-        and regression_data['bar_high'] >= regression_data['weekBarHigh']
-        ):
-        add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakUp-week')
     elif(1.5 < regression_data['PCT_day_change'] < 6
         and regression_data['PCT_change'] < 6
         and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0)
@@ -5838,23 +5821,6 @@ def sell_consolidation_breakdown(regression_data, regressionResult, reg, ws):
         and regression_data['bar_low'] <= regression_data['week2BarLow']
         ):
         add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakDown-2week')
-    elif(-6 < regression_data['PCT_day_change'] < -1
-        and -6 < regression_data['PCT_change']
-        and (regression_data['PCT_day_change_pre1'] > 0 
-             or regression_data['PCT_day_change_pre2'] > 0
-             or regression_data['PCT_day_change_pre3'] > 0
-            )
-        #and regression_data['low'] < regression_data['high_pre3']
-        and regression_data['low'] < regression_data['high_pre2']
-        and regression_data['low'] < regression_data['high_pre1']
-        and -3 < regression_data['forecast_day_PCT4_change'] < -0.5
-        and -4 < regression_data['forecast_day_PCT3_change'] < 0
-        and -4 < regression_data['forecast_day_PCT2_change'] < 0
-        and -3 < regression_data['forecast_day_PCT_change'] < 0
-        and -3 <= regression_data['forecast_day_PCT5_change'] <= 0
-        and regression_data['bar_low'] <= regression_data['weekBarLow']
-        ):
-        add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakDown-week')
     elif(-6 < regression_data['PCT_day_change'] < -1.5
         and -6 < regression_data['PCT_change']
         and (regression_data['PCT_day_change_pre1'] > 0 or regression_data['PCT_day_change_pre2'] > 0)
