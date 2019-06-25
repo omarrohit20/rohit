@@ -271,6 +271,7 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     forecast_day_PCT10_change = dfp.tail(1).loc[-forecast_out:, 'Low_change10'].values[0]
     forecast_day_VOL_change = df.tail(1).loc[-forecast_out:, 'VOL_change'].values[0]
     forecast_day_date = df.tail(1).loc[-forecast_out:, 'date'].values[0]
+    forecast_day_date_pre1 = df.tail(2).loc[-forecast_out:, 'date'].values[0]
     PCT_change_pre1 = df.tail(2).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_change_pre2 = df.tail(3).loc[-forecast_out:,'PCT_change'].values[0]
     PCT_change_pre3 = df.tail(4).loc[-forecast_out:,'PCT_change'].values[0]
@@ -384,7 +385,6 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     high_month2 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_month2 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
-    end_date = forecast_day_date
     start_date = (today_date - datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     monthHigh = dftemp['high'].max()
@@ -395,6 +395,17 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     monthLowChange = (low - monthLow)*100/monthLow
     high_month = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_month = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
+    
+    start_date = (today_date - datetime.timedelta(weeks=3)).strftime('%Y-%m-%d')
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
+    week3High = dftemp['high'].max()
+    week3Low = dftemp['low'].min()
+    week3BarHigh = max(dftemp['open'].max(), dftemp['close'].max())
+    week3BarLow = min(dftemp['open'].min(), dftemp['close'].min())
+    week3HighChange = (high - week3High)*100/week3High
+    week3LowChange = (low - week3Low)*100/week3Low
+    high_week3 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
+    low_week3 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
     start_date = (today_date - datetime.timedelta(weeks=2)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
@@ -407,6 +418,7 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     high_week2 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_week2 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
+    end_date = forecast_day_date_pre1
     start_date = (today_date - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     weekHigh = dftemp['high'].max()
@@ -475,6 +487,10 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     regression_data['monthLow'] = float(monthLow)
     regression_data['monthBarHigh'] = float(monthBarHigh) 
     regression_data['monthBarLow'] = float(monthBarLow)
+    regression_data['week3High'] = float(week3High) 
+    regression_data['week3Low'] = float(week3Low)
+    regression_data['week3BarHigh'] = float(week3BarHigh) 
+    regression_data['week3BarLow'] = float(week3BarLow)
     regression_data['week2High'] = float(week2High) 
     regression_data['week2Low'] = float(week2Low)
     regression_data['week2BarHigh'] = float(week2BarHigh) 
@@ -527,6 +543,7 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     regression_data['high_month3'] = float(high_month3)
     regression_data['high_month2'] = float(high_month2) 
     regression_data['high_month'] = float(high_month)
+    regression_data['high_week3'] = float(high_week3)
     regression_data['high_week2'] = float(high_week2)
     regression_data['high_week'] = float(high_week) 
     regression_data['low'] = float(low)
@@ -540,6 +557,7 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     regression_data['low_month3'] = float(low_month3)
     regression_data['low_month2'] = float(low_month2)
     regression_data['low_month'] = float(low_month)
+    regression_data['low_week3'] = float(low_week3)
     regression_data['low_week2'] = float(low_week2)
     regression_data['low_week'] = float(low_week)
     regression_data['close'] = float(close)
