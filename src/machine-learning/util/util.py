@@ -1955,10 +1955,18 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
     if((2 < regression_data['PCT_day_change'] < 3.25) and (1.5 < regression_data['PCT_change'] < 3.25)
         and regression_data['bar_high'] > regression_data['bar_high_pre1']
         ):
-        if(regression_data['year2HighChange'] < -50
+        if(regression_data['high_pre1'] < regression_data['high_pre2'] < regression_data['high_pre3']):
+            add_in_csv(regression_data, regressionResult, ws, None)
+        elif(regression_data['year2HighChange'] < -40
             and regression_data['yearHighChange'] < -30
             and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < -2)
-            and (regression_data['PCT_day_change_pre1'] > 0 or regression_data['PCT_day_change_pre2'] > 0)
+            and ((regression_data['PCT_day_change_pre1'] > 0 or regression_data['PCT_day_change_pre2'] > -2)
+                 or regression_data['high_pre1'] > regression_data['high_pre2'] > regression_data['high_pre3']
+                )
+            and regression_data['SMA25'] < 0
+            and regression_data['SMA50'] < 0
+            and regression_data['SMA100'] < 0
+            #and regression_data['high_pre1'] > regression_data['high_pre5']
             ):   
             add_in_csv(regression_data, regressionResult, ws, 'CommonHL:UPTREND:buyYear2LowLT-50(triggerAfter-9:15)') 
        
@@ -6823,15 +6831,18 @@ def sell_random_filter(regression_data, regressionResult, reg, ws):
         ):
         if(regression_data['year2HighChange'] < -40
             and regression_data['yearHighChange'] < -20
-            and (regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre2'] < 0)
+            and regression_data['PCT_day_change_pre1'] < 0
             and ((regression_data['bar_low_pre1'] < regression_data['bar_low_pre2'])
                 or regression_data['low_pre1'] < regression_data['low_pre2']
                 )
             and regression_data['SMA25'] < 0
-            and regression_data['SMA25'] < 0
-            and regression_data['SMA25'] < 0
-            ):   
-            add_in_csv(regression_data, regressionResult, ws, 'sellYear2LowLT-40(triggerAfter-9:15)')
+            and regression_data['SMA50'] < 0
+            and regression_data['SMA100'] < 0
+            ):
+            if(regression_data['high_pre1'] < regression_data['high_pre2'] < regression_data['high_pre3'] < regression_data['high_pre4']): 
+                add_in_csv(regression_data, regressionResult, ws, 'sellYear2LowLT-40-last4DayDown(triggerAfter-9:15)')
+            elif(regression_data['high_pre1'] < regression_data['high_pre2'] < regression_data['high_pre3']): 
+                add_in_csv(regression_data, regressionResult, ws, 'sellYear2LowLT-40-last3DayDown(triggerAfter-9:15)')
         
 def sell_test(regression_data, regressionResult, pctChangeFilter, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
