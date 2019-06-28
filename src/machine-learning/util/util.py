@@ -1898,8 +1898,19 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuy-CheckChart(|/mayFail(|before10AM))')
     if((0.5 < regression_data['PCT_day_change'] < 2) and (0.5 < regression_data['PCT_change'] < 2)
         and (1 <= high_tail_pct(regression_data) < 2)
-        ):   
-        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyContinueHighTail-(CheckChart-risky)')
+        and (regression_data['PCT_day_change_pre1'] > 0 
+             or (regression_data['low_pre2'])
+             )
+        ): 
+        if(regression_data['PCT_day_change_pre1'] > 0): 
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyContinueHighTail-uptrend(CheckChart-risky)')
+        elif(regression_data['bar_low'] > regression_data['bar_low_pre1']
+            and regression_data['bar_low_pre1'] < regression_data['bar_low_pre2']
+            and regression_data['low'] > regression_data['low_pre1']
+            and regression_data['low_pre1'] < regression_data['low_pre2'] < regression_data['low_pre3']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyContinueHighTail-uptrendStart(CheckChart-Risky)')  
+        
     if((-0.75 < regression_data['PCT_day_change'] < 0) and (-0.75 < regression_data['PCT_change'] < 0)
         and (regression_data['SMA4_2daysBack'] > 0 or regression_data['SMA9_2daysBack'] > 0)
         and regression_data['SMA4'] < 0
@@ -1931,7 +1942,7 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
 #         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:UPTREND'+regression_data['filter3'])
         
     if(last_4_day_all_up(regression_data) == False
-        and -10 < regression_data['year2HighChange'] < -2
+        and -10 < regression_data['year2HighChange'] < -1 and regression_data['weekHighChange'] < -2
         and regression_data['yearLowChange'] > 30
         and ((-1 < regression_data['PCT_change'] < 1.75
             and -1 < regression_data['PCT_day_change'] < 0
@@ -3073,7 +3084,7 @@ def buy_trend_break(regression_data, regressionResult, reg, ws):
 
 def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
     week2BarHighChange = ((regression_data['bar_high'] - regression_data['week2BarHigh'])/regression_data['bar_high'])*100
-    if(0.4 < regression_data['PCT_day_change'] < 6
+    if(0 < regression_data['PCT_day_change'] < 6
         and regression_data['PCT_change'] < 6
         and (regression_data['PCT_day_change_pre1'] < 0 
              or regression_data['PCT_day_change_pre2'] < 0
@@ -3089,8 +3100,10 @@ def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
         and 0 <= regression_data['forecast_day_PCT10_change'] <= 3
         and regression_data['bar_high'] >= regression_data['week2BarHigh']
         ):
-        if(regression_data['weekBarHigh'] < regression_data['week2BarHigh']):
-            add_in_csv(regression_data, regressionResult, ws, 'weekBarHighLTweek2')
+        if(regression_data['weekBarHigh'] > regression_data['bar_high_pre1'] 
+            and regression_data['week2BarHigh'] > regression_data['bar_high_pre1']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'brokenToday')
         if(week2BarHighChange > 5):
             add_in_csv(regression_data, regressionResult, ws, 'week2BarHighChangeGT5')
         elif(week2BarHighChange > 4):
@@ -3104,14 +3117,14 @@ def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
         elif(week2BarHighChange > 0):
             add_in_csv(regression_data, regressionResult, ws, 'week2BarHighChangeGT0')
         if(regression_data['PCT_day_change'] > 1
-            and regression_data['year2HighChange'] < -2
+            and regression_data['year2HighChange'] < -5
             ):
             add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakUp-2week')
         elif(regression_data['PCT_day_change'] < 1
-            and regression_data['year2HighChange'] < -2
+            and regression_data['year2HighChange'] < -5
             ):
             add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1')
-        elif(regression_data['year2HighChange'] >= -2):
+        elif(regression_data['year2HighChange'] >= -5):
             add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakUp-2week-(Risky)-year2High')
             
     elif(1.5 < regression_data['PCT_day_change'] < 6
@@ -4862,8 +4875,15 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySell-CheckChart(|\mayFail(|before10AM))')
     if((-2 < regression_data['PCT_day_change'] < -0.5) and (-2 < regression_data['PCT_change'] < -0.5)
         and (1 <= low_tail_pct(regression_data) < 2)
-        ):   
-        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellContinueLowTail-(CheckChart-Risky)')
+        ):
+        if(regression_data['PCT_day_change_pre1'] < 0): 
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellContinueLowTail-downtrend(CheckChart-Risky)')
+        elif(regression_data['bar_high'] < regression_data['bar_high_pre1']
+            and regression_data['bar_high_pre1'] > regression_data['bar_high_pre2']
+            and regression_data['high'] < regression_data['high_pre1']
+            and regression_data['high_pre1'] > regression_data['high_pre2'] > regression_data['high_pre3']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellContinueLowTail-downtrendStart(CheckChart-Risky)')
     if((0 < regression_data['PCT_day_change'] < 0.75) and (0 < regression_data['PCT_change'] < 0.75)
         and (regression_data['SMA4_2daysBack'] < 0 or regression_data['SMA9_2daysBack'] < 0)
         and regression_data['SMA4'] > 0
@@ -6066,7 +6086,7 @@ def sell_trend_break(regression_data, regressionResult, reg, ws):
 
 def sell_consolidation_breakdown(regression_data, regressionResult, reg, ws):
     week2BarLowChange = ((regression_data['bar_low'] - regression_data['week2BarLow'])/regression_data['bar_low'])*100
-    if(-6 < regression_data['PCT_day_change'] < -0.4
+    if(-6 < regression_data['PCT_day_change'] < 0
         and -6 < regression_data['PCT_change']
         and (regression_data['PCT_day_change_pre1'] > 0 
              or regression_data['PCT_day_change_pre2'] > 0
@@ -6082,8 +6102,10 @@ def sell_consolidation_breakdown(regression_data, regressionResult, reg, ws):
         and -3 <= regression_data['forecast_day_PCT10_change'] <= 0
         and regression_data['bar_low'] <= regression_data['week2BarLow']
         ):
-        if(regression_data['weekBarLow'] > regression_data['week2BarLow']):
-            add_in_csv(regression_data, regressionResult, ws, 'weekBarLowGTweek2')
+        if(regression_data['weekBarLow'] < regression_data['bar_low_pre1'] 
+            and regression_data['week2BarLow'] < regression_data['bar_low_pre1']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'brokenToday')
         if(week2BarLowChange < -5):
             add_in_csv(regression_data, regressionResult, ws, 'week2BarLowChangeLT-5')
         elif(week2BarLowChange < -4):
@@ -6097,14 +6119,14 @@ def sell_consolidation_breakdown(regression_data, regressionResult, reg, ws):
         elif(week2BarLowChange < 0):
             add_in_csv(regression_data, regressionResult, ws, 'week2BarLowChangeLT0')
         if(regression_data['PCT_day_change'] < -1
-            and regression_data['year2LowChange'] > 2
+            and regression_data['year2LowChange'] > 5
             ):
             add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakDown-2week')
         elif(regression_data['PCT_day_change'] > -1
-            and regression_data['year2LowChange'] > 2
+            and regression_data['year2LowChange'] > 5
             ):
             add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakDown-2week-(risky)-PCTDayChangeGT-1')
-        elif(regression_data['year2LowChange'] < 2
+        elif(regression_data['year2LowChange'] <= 5
             ):
             add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakDown-2week-(risky)-year2Low')
     elif(-6 < regression_data['PCT_day_change'] < -1.5
