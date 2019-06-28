@@ -1899,7 +1899,7 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
     if((0.5 < regression_data['PCT_day_change'] < 2) and (0.5 < regression_data['PCT_change'] < 2)
         and (1 <= high_tail_pct(regression_data) < 2)
         ):   
-        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyContinueHighTail-CheckChart-risky)')
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyContinueHighTail-(CheckChart-risky)')
     if((-0.75 < regression_data['PCT_day_change'] < 0) and (-0.75 < regression_data['PCT_change'] < 0)
         and (regression_data['SMA4_2daysBack'] > 0 or regression_data['SMA9_2daysBack'] > 0)
         and regression_data['SMA4'] < 0
@@ -2088,6 +2088,8 @@ def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
         and low_tail_pct(regression_data) > 1.5
         and (regression_data['PCT_day_change'] < 2 or is_algo_buy(regression_data))
         ):
+        if(regression_data['weekLow'] < regression_data['week2Low']):
+            add_in_csv(regression_data, regressionResult, ws, "weekLowLTweek2")
         if(regression_data['monthLowChange'] < 3
             and regression_data['monthLow'] != regression_data['weekLow']
             and regression_data['monthLow'] == regression_data['month2Low']
@@ -3087,6 +3089,8 @@ def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
         and 0 <= regression_data['forecast_day_PCT10_change'] <= 3
         and regression_data['bar_high'] >= regression_data['week2BarHigh']
         ):
+        if(regression_data['weekBarHigh'] < regression_data['week2BarHigh']):
+            add_in_csv(regression_data, regressionResult, ws, 'weekBarHighLTweek2')
         if(week2BarHighChange > 5):
             add_in_csv(regression_data, regressionResult, ws, 'week2BarHighChangeGT5')
         elif(week2BarHighChange > 4):
@@ -4852,7 +4856,7 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
     if((-2 < regression_data['PCT_day_change'] < -0.5) and (-2 < regression_data['PCT_change'] < -0.5)
         and (1 <= low_tail_pct(regression_data) < 2)
         ):   
-        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellContinueLowTail-CheckChart-Risky)')
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellContinueLowTail-(CheckChart-Risky)')
     if((0 < regression_data['PCT_day_change'] < 0.75) and (0 < regression_data['PCT_change'] < 0.75)
         and (regression_data['SMA4_2daysBack'] < 0 or regression_data['SMA9_2daysBack'] < 0)
         and regression_data['SMA4'] > 0
@@ -4989,6 +4993,8 @@ def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
         and high_tail_pct(regression_data) > 1.5
         and (regression_data['PCT_day_change'] > -2 or is_algo_sell(regression_data))
         ):
+        if(regression_data['weekHigh'] > regression_data['week2High']):
+            add_in_csv(regression_data, regressionResult, ws, "weekHighGTweek2")
         if(regression_data['monthHighChange'] > -3
             and regression_data['monthHigh'] != regression_data['weekHigh']
             and regression_data['monthHigh'] == regression_data['month2High']
@@ -6069,7 +6075,8 @@ def sell_consolidation_breakdown(regression_data, regressionResult, reg, ws):
         and -3 <= regression_data['forecast_day_PCT10_change'] <= 0
         and regression_data['bar_low'] <= regression_data['week2BarLow']
         ):
-        print(week2BarLowChange)
+        if(regression_data['weekBarLow'] > regression_data['week2BarLow']):
+            add_in_csv(regression_data, regressionResult, ws, 'weekBarLowGTweek2')
         if(week2BarLowChange < -5):
             add_in_csv(regression_data, regressionResult, ws, 'week2BarLowChangeLT-5')
         elif(week2BarLowChange < -4):
