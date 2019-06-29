@@ -24,7 +24,7 @@ BUY_VERY_LESS_DATA=True
 SELL_VERY_LESS_DATA=True
 MARKET_IN_UPTREND=False
 MARKET_IN_DOWNTREND=False
-TEST = False
+TEST = True
 
 buyMLP = 0.1
 buyMLP_MIN = 0
@@ -3109,6 +3109,8 @@ def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
             and regression_data['week2BarHigh'] > regression_data['bar_high_pre1']
             ):
             add_in_csv(regression_data, regressionResult, ws, 'brokenToday')
+        if(regression_data['weekHigh'] > regression_data['week2High']):
+            add_in_csv(regression_data, regressionResult, ws, '(weekHighGTweek2High)')
         if(week2BarHighChange > 5):
             add_in_csv(regression_data, regressionResult, ws, 'week2BarHighChangeGT5')
         elif(week2BarHighChange > 4):
@@ -4530,7 +4532,11 @@ def buy_test_all(regression_data, regressionResult, reg, ws):
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
     flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
     filterName = pct_change_filter(regression_data, regressionResult, False)
-    regression_data['filterTest'] = filterName + ',' + regression_data['filter3'] + ',' + regression_data['filter4'] + ',' + regression_data['filter5'] + ',' + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+    regression_data['filterTest'] = filterName + ',' \
+                                    + regression_data['filter3'] + ',' \
+                                    + regression_data['filter4'] + ',' \
+                                    + regression_data['filter5'] + ',' \
+                                    + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
     if regression_data['filterTest'] != '':
         return True  
     return False
@@ -4612,7 +4618,11 @@ def buy_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
 def buy_filter_all_accuracy(regression_data, regressionResult, reg, ws):
     filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-all-buy.csv')
     filterName = pct_change_filter(regression_data, regressionResult, False)
-    filter = filterName + ',' + regression_data['filter3'] + ',' + regression_data['filter4'] + ',' + regression_data['filter5'] + ',' + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+    filter = filterName + ',' \
+             + regression_data['filter3'] + ',' \
+             + regression_data['filter4'] + ',' \
+             + regression_data['filter5'] + ',' \
+             + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
     if filter != '' and filter in filtersDict:
         regression_data['filter_all_avg'] = float(filtersDict[filter]['avg'])
         regression_data['filter_all_count'] = float(filtersDict[filter]['count'])
@@ -6127,6 +6137,8 @@ def sell_consolidation_breakdown(regression_data, regressionResult, reg, ws):
             and regression_data['week2BarLow'] < regression_data['bar_low_pre1']
             ):
             add_in_csv(regression_data, regressionResult, ws, 'brokenToday')
+        if(regression_data['weekLow'] < regression_data['week2Low']):
+            add_in_csv(regression_data, regressionResult, ws, '(weekLowLTweek2Low)')
         if(week2BarLowChange < -5):
             add_in_csv(regression_data, regressionResult, ws, 'week2BarLowChangeLT-5')
         elif(week2BarLowChange < -4):
@@ -6923,7 +6935,11 @@ def sell_test_all(regression_data, regressionResult, reg, ws):
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
     flag = sell_other_indicator(regression_data, regressionResult, reg, ws)
     filterName = pct_change_filter(regression_data, regressionResult, False)
-    regression_data['filterTest'] = filterName + ',' + regression_data['filter3'] + ',' + regression_data['filter4'] + ',' + regression_data['filter5'] + ',' + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+    regression_data['filterTest'] = filterName + ',' \
+                                    + regression_data['filter3'] + ',' \
+                                    + regression_data['filter4'] + ',' \
+                                    + regression_data['filter5'] + ',' \
+                                    + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
     if regression_data['filterTest'] != '':
         return True  
     return False
@@ -7008,7 +7024,11 @@ def sell_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
 def sell_filter_all_accuracy(regression_data, regressionResult, reg, ws):
     filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-all-sell.csv')
     filterName = pct_change_filter(regression_data, regressionResult, False)
-    filter = filterName + ',' + regression_data['filter3'] + ',' + regression_data['filter4'] + ',' + regression_data['filter5'] + ',' + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+    filter = filterName + ',' \
+                + regression_data['filter3'] + ',' \
+                + regression_data['filter4'] + ',' \
+                + regression_data['filter5'] + ',' \
+                + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
     if filter != '' and filter in filtersDict:
         regression_data['filter_all_avg'] = float(filtersDict[filter]['avg'])
         regression_data['filter_all_count'] = float(filtersDict[filter]['count'])
