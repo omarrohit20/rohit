@@ -992,6 +992,37 @@ def filterMA(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(check-chart)consolidationBreakdownLastDay-Risky')
     
     
+#     flag = False
+#     if(regression_data['SMA4'] < 0 and regression_data['SMA9'] < 0):
+#         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA4&SMA9LT0')
+#         flag = True
+#     elif(0 < regression_data['SMA4'] < 10 and 0 < regression_data['SMA9'] < 10):
+#         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA4&SMA9GT0To10')
+#         flag = True
+#     elif(regression_data['SMA4'] > 10 and regression_data['SMA9'] > 10):
+#         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA4&SMA9GT10')
+#         flag = True
+#     if(flag == True):
+#         if(-5 < regression_data['SMA25'] < 0):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##BelowSMA25')
+#         elif(0 < regression_data['SMA25'] > 5):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##AboveSMA25')
+#         
+#         if(-5 < regression_data['SMA50'] < 0):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##BelowSMA50')
+#         elif(0 < regression_data['SMA50'] > 5):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##AboveSMA50')
+#         
+#         if(-5 < regression_data['SMA100'] < 0):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##BelowSMA100')
+#         elif(0 < regression_data['SMA100'] > 5):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##AboveSMA100')
+#             
+#         if(-5 < regression_data['SMA200'] < 0):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##BelowSMA200')
+#         elif(0 < regression_data['SMA200'] > 5):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##AboveSMA200') 
+    
     ema_diff = regression_data['ema6-14']
     ema_diff_pre1 = regression_data['ema6-14_pre1']
     ema_diff_pre2 = regression_data['ema6-14_pre2']
@@ -1091,6 +1122,21 @@ def filterMA(regression_data, regressionResult):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:DowningMA')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:DowningMA-Risky')
+            
+        if(-5 < regression_data['SMA25'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##LONGTERM:NearSMA25')
+        elif(0 < regression_data['SMA25'] < 5):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##LONGTERM:CrossoverSMA25')
+        elif(-5 < regression_data['SMA50'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##MEDIUMTERM:NearSMA50')
+        elif(0 < regression_data['SMA50'] < 5):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##MEDIUMTERM:CrossoverSMA50')
+        elif(-5 < regression_data['SMA100'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SHORTTERM:NearSMA100')
+        elif(0 < regression_data['SMA100'] < 5):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SHORTTERM:CrossoverSMA100')
+            
+    
     
 #     elif(regression_data['SMA200'] > 0 
 #          and regression_data['SMA100'] > 0
