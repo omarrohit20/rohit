@@ -4701,14 +4701,8 @@ def buy_filter_all_accuracy(regression_data, regressionResult, reg, ws):
              + regression_data['filter5'] + ',' \
              + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
     if (filter != '') and (filter in filtersDict):
-        if(float(filtersDict[filter]['count']) >= 2
-            and (((regression_data['filter3'] != '' and abs(float(filtersDict[filter]['avg'])) > .6) or ("[MLBuy]:" in regression_data['filter']) or ("[MLSell]:" in regression_data['filter']))
-                or (("[MLBuy]:" in regression_data['filter']) and float(filtersDict[filter]['avg']) > .6)
-                or (("[MLSell]:" in regression_data['filter']) and float(filtersDict[filter]['avg']) < -.6)
-                or (("[MLBuy]:" not in regression_data['filter']) and ("[MLSell]:" not in regression_data['filter']) and abs(float(filtersDict[filter]['avg']) >= 1))
-            )):
-            regression_data['filter_all_avg'] = float(filtersDict[filter]['avg'])
-            regression_data['filter_all_count'] = float(filtersDict[filter]['count'])
+        regression_data['filter_all_avg'] = float(filtersDict[filter]['avg'])
+        regression_data['filter_all_count'] = float(filtersDict[filter]['count'])
             
 def sell_pattern_without_mlalgo(regression_data, regressionResult):
     if(regression_data['PCT_day_change'] > -3.5
@@ -7116,11 +7110,19 @@ def sell_filter_all_accuracy(regression_data, regressionResult, reg, ws):
                 + regression_data['filter5'] + ',' \
                 + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
     if (filter != '') and (filter in filtersDict):
-        if(float(filtersDict[filter]['count']) >= 2
-            and (((regression_data['filter3'] != '' and abs(float(filtersDict[filter]['avg'])) > .6) or ("[MLBuy]:" in regression_data['filter']) or ("[MLSell]:" in regression_data['filter']))
-                or (("[MLBuy]:" in regression_data['filter']) and float(filtersDict[filter]['avg']) > .6)
-                or (("[MLSell]:" in regression_data['filter']) and float(filtersDict[filter]['avg']) < -.6)
-                or (("[MLBuy]:" not in regression_data['filter']) and ("[MLSell]:" not in regression_data['filter']) and abs(float(filtersDict[filter]['avg']) >= 1))
-            )):
-            regression_data['filter_all_avg'] = float(filtersDict[filter]['avg'])
-            regression_data['filter_all_count'] = float(filtersDict[filter]['count'])
+        regression_data['filter_all_avg'] = float(filtersDict[filter]['avg'])
+        regression_data['filter_all_count'] = float(filtersDict[filter]['count'])
+
+def is_filter_all_accuracy(regression_data, regressionResult, reg, ws):
+    if(regression_data['filter_all_count'] >= 2
+        and ((regression_data['filter3'] != '' and abs(regression_data['filter_all_avg']) > 1)
+            or (regression_data['filter3'] != '' and regression_data['filter_all_avg'] > 0.6 and ("[MLSell]:" not in regression_data['filter']))
+            or (regression_data['filter3'] != '' and regression_data['filter_all_avg'] < -0.6 and ("[MLBuy]:" not in regression_data['filter'])) 
+            or (("[MLBuy]:" in regression_data['filter']) and float(regression_data['filter_all_avg']) > 0.6)
+            or (("[MLSell]:" in regression_data['filter']) and float(regression_data['filter_all_avg']) < -0.6)
+            or (("[MLBuy]:" not in regression_data['filter']) and ("[MLSell]:" not in regression_data['filter']) and (abs(regression_data['filter_all_avg']) >= 1))
+            )
+        ):
+        return True
+
+            

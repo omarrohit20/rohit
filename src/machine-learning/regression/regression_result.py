@@ -17,7 +17,7 @@ import time
 import gc
 
 from util.util import pct_change_filter, getScore, all_day_pct_change_negative, all_day_pct_change_positive, no_doji_or_spinning_buy_india, no_doji_or_spinning_sell_india, scrip_patterns_to_dict
-from util.util import is_algo_buy, is_algo_sell
+from util.util import is_algo_buy, is_algo_sell, is_filter_all_accuracy
 from util.util import get_regressionResult
 from util.util import buy_pattern_from_history, buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final, buy_high_indicators, buy_pattern
 from util.util import sell_pattern_from_history, sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final, sell_high_indicators, sell_pattern
@@ -45,10 +45,10 @@ logname = '../../output/final' + '/all-result' + time.strftime("%d%m%y-%H%M%S")
 newsDict = {}
 wb = Workbook()
 
-ws_highBuyCla = wb.create_sheet("HighBuyCla")
-ws_highBuyCla.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter1Acc", "Filter1Count", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterAllAcc", "FilterAllCount"])
-ws_lowSellCla = wb.create_sheet("LowSellCla")
-ws_lowSellCla.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter1Acc", "Filter1Count", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterAllAcc", "FilterAllCount"])
+ws_highBuyAllFilterAcc = wb.create_sheet("HighBuyAllFilterAcc")
+ws_highBuyAllFilterAcc.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter1Acc", "Filter1Count", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterAllAcc", "FilterAllCount"])
+ws_lowSellAllFilterAcc = wb.create_sheet("LowSellAllFilterAcc")
+ws_lowSellAllFilterAcc.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter1Acc", "Filter1Count", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterAllAcc", "FilterAllCount"])
 
 ws_highBuyAll = wb.create_sheet("HighBuyAll")
 ws_highBuyAll.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter1Acc", "Filter1Count", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterAllAcc", "FilterAllCount"])
@@ -75,8 +75,8 @@ ws_low = wb.create_sheet("LowAll")
 ws_low.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "trend", "Score", "HighTail", "LowTail", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter1Acc", "Filter1Count", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterAllAcc", "FilterAllCount"])
 
 def saveReports(run_type=None):
-    ws_highBuyCla.append([""])
-    ws_lowSellCla.append([""])
+    ws_highBuyAllFilterAcc.append([""])
+    ws_lowSellAllFilterAcc.append([""])
     
     
     
@@ -121,11 +121,11 @@ def saveReports(run_type=None):
     ws_highBuyAll.add_table(tab)
     
     count = 0
-    for row in ws_highBuyCla.iter_rows(row_offset=1):
+    for row in ws_highBuyAllFilterAcc.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:BO" + str(count))
     tab.tableStyleInfo = style
-    ws_highBuyCla.add_table(tab)
+    ws_highBuyAllFilterAcc.add_table(tab)
     
     count = 0
     for row in ws_high.iter_rows(row_offset=1):
@@ -157,11 +157,11 @@ def saveReports(run_type=None):
     ws_lowSellAll.add_table(tab)
       
     count = 0
-    for row in ws_lowSellCla.iter_rows(row_offset=1):
+    for row in ws_lowSellAllFilterAcc.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:BO" + str(count))
     tab.tableStyleInfo = style
-    ws_lowSellCla.add_table(tab)
+    ws_lowSellAllFilterAcc.add_table(tab)
         
     count = 0
     for row in ws_low.iter_rows(row_offset=1):
@@ -304,6 +304,8 @@ def result_data_reg(scrip):
         if (is_algo_buy(regression_high, True) and is_algo_buy(regression_low, True)):
             buy_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_highBothBuyAll) 
+        if(is_filter_all_accuracy(regression_data, regressionResult, True, None)):
+            all_withoutml(regression_data, regressionResult, ws_highBuyAllFilterAcc) 
         all_withoutml(regression_data, regressionResult, ws_high)
           
                 
@@ -329,6 +331,8 @@ def result_data_reg(scrip):
         if (is_algo_sell(regression_high, True) and is_algo_sell(regression_low, True)):
             sell_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_lowBothSellAll)
+        if(is_filter_all_accuracy(regression_data, regressionResult, True, None)):
+            all_withoutml(regression_data, regressionResult, ws_lowSellAllFilterAcc) 
         all_withoutml(regression_data, regressionResult, ws_low)
         
 def result_data_cla(scrip):
@@ -349,7 +353,7 @@ def result_data_cla(scrip):
         buy_pattern_without_mlalgo(regression_data, regressionResult)
         if buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, None):
             buy_other_indicator(regression_data, regressionResult, True, None)
-            buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws_highBuyCla)
+            buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws_highBuyAllFilterAcc)
                 
     regression_data = regression_low
     if(regression_data is not None):
@@ -363,7 +367,7 @@ def result_data_cla(scrip):
         sell_pattern_without_mlalgo(regression_data, regressionResult)
         if sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, None):
             sell_other_indicator(regression_data, regressionResult, True, None)
-            sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws_lowSellCla)                              
+            sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws_lowSellAllFilterAcc)                              
                                              
 def calculateParallel(threads=2, futures=None):
     pool = ThreadPool(threads)
@@ -372,7 +376,7 @@ def calculateParallel(threads=2, futures=None):
         scrips.append(data['scrip'])
     scrips.sort()
     pool.map(result_data, scrips)
-    pool.map(result_data_cla, scrips)
+    #pool.map(result_data_cla, scrips)
     pool.map(result_data_reg, scrips)
                       
 if __name__ == "__main__":
