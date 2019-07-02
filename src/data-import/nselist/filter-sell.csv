@@ -1,5 +1,5 @@
 filterTest,avg,count
-,-0.09470180019184155,26843
+,-0.09449802004167031,26827
 "##(Check-chart):MaySellCheckChart-(IndexNotDownInSecondHalf),",0.5011048548738305,20
 "##(Check-chart):MaySellCheckChart-(Risky)-(|_|`|),",0.4444079793277659,15
 "##(Check-chart):MaySellCheckChart-(|_|`|),",-0.5291429779556106,10
@@ -126,6 +126,8 @@ filterTest,avg,count
 "buyDayHighVolLow-0,",-0.5833333333333357,1
 "buyDayHighVolLow-0,***SELLPATTERN***",-6.761177753544169,1
 "buyEveningStar-0(Buy-After-1pc-down),",0.18044459276378433,2
+"buyMorningStar-HighUpperTail-(checkChart),",-0.4667666008515701,13
+"buyMorningStar-HighUpperTail-(checkChart),***SELLPATTERN***",-0.3046910268808356,3
 "finalBreakOutSell-0,",0.48392532676865224,2
 "mayBuyFromSellPattern-GT1.8,",1.4176044521352917,5
 "sellDayHighVolLow-0,***BUYPATTERN***",2.095631641086176,1

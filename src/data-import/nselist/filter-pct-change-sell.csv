@@ -1,7 +1,7 @@
 filterTest,avg,count
 "PCTChangeEQ0,",-0.12042554518737389,121
 "PCTChangeEQ0,++,",0.4802744425385857,1
-"PCTChangeGT0,",-0.06157501793039389,3281
+"PCTChangeGT0,",-0.06162453505532259,3277
 "PCTChangeGT0,##(Check-chart):MaySellCheckChart-(Risky)-(|_|`|),",0.7366449631359113,14
 "PCTChangeGT0,##(Check-chart):MaySellCheckChart-(|_|`|),",-0.31984754559359707,8
 "PCTChangeGT0,##(Test)(check-chart)-buySMAUpTrend,",-0.8687208918857934,4
@@ -26,8 +26,9 @@ filterTest,avg,count
 "PCTChangeGT0,+-,",-2.3553289784908293,2
 "PCTChangeGT0,--,",-0.47757341077767607,1
 "PCTChangeGT0,ML:sellEveningStar-2(Check2-3MidCapCross),",-1.1971428571428588,2
+"PCTChangeGT0,buyMorningStar-HighUpperTail-(checkChart),",-0.021008113332554937,4
 "PCTChangeGT0,sellSuperTrend-(Risky),-+,***BUYPATTERN***",1.0905125408942202,1
-"PCTChangeGT0.5,",-0.06187855828595523,2755
+"PCTChangeGT0.5,",-0.06102932015512447,2752
 "PCTChangeGT0.5,##(Test)(check-chart)-buySMAUpTrend,",-1.390220517737299,1
 "PCTChangeGT0.5,##ML:(check-chart-2-3MidCapCross)MaySellCheckChart-1,",-2.13005330760877,6
 "PCTChangeGT0.5,##ML:MaySellCheckChart-last3DayUp,",-0.48092868988390997,1
@@ -43,9 +44,10 @@ filterTest,avg,count
 "PCTChangeGT0.5,--,",0.6261180679785356,1
 "PCTChangeGT0.5,ML:sellEveningStar-2(Check2-3MidCapCross),",-0.4127336413070543,3
 "PCTChangeGT0.5,ML:sellEveningStar-2(Check2-3MidCapCross),***BUYPATTERN***",0.08976660682225701,1
+"PCTChangeGT0.5,buyMorningStar-HighUpperTail-(checkChart),",-0.8409130036347289,3
 "PCTChangeGT0.5,sellPatterns-Risky-LT-0.9-SMALT0,(SMA9LT0),",-0.1947329376854726,1
 "PCTChangeGT0.5,sellPatternsML,",-1.5929203539822985,1
-"PCTChangeGT1,",-0.09191734125246867,3604
+"PCTChangeGT1,",-0.09162520188492382,3597
 "PCTChangeGT1,##(Check-chart):MaySellCheckChart-(IndexNotDownInSecondHalf),",-0.191780988681432,6
 "PCTChangeGT1,##(Test)(check-chart)-buySMAUpTrend,",-1.3070362473347588,1
 "PCTChangeGT1,##ML:(check-chart-2-3MidCapCross)MaySellCheckChart-1,",0.08549352736335444,15
@@ -66,12 +68,14 @@ filterTest,avg,count
 "PCTChangeGT1,ML:sellEveningStar-2(Check2-3MidCapCross),***BUYPATTERN***",-0.14213919488299823,1
 "PCTChangeGT1,MaySell-CheckChart(downTrend-mayReverseLast4DaysUp)-1,",-1.047783575063876,12
 "PCTChangeGT1,MaySell-CheckChart(yearHigh-minimumLast2DayUp),",0.1420440033776318,5
+"PCTChangeGT1,buyMorningStar-HighUpperTail-(checkChart),",-0.1950434032959245,4
+"PCTChangeGT1,buyMorningStar-HighUpperTail-(checkChart),***SELLPATTERN***",-0.3046910268808356,3
 "PCTChangeGT1,sellYear2LowLT-40-last3DayDown(triggerAfter-9:15),***BUYPATTERN***",-2.4341968679478,4
 "PCTChangeGT10,",-0.49481084337317893,34
 "PCTChangeGT10,sellYear2LowLT-40-last3DayDown(triggerAfter-9:15),",-3.580520199225238,1
 "PCTChangeGT10,sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),",-4.9790041991601575,1
 "PCTChangeGT10,sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),***BUYPATTERN***",7.482284285118807,1
-"PCTChangeGT2,",-0.16111018044944428,1930
+"PCTChangeGT2,",-0.159886736272705,1928
 "PCTChangeGT2,##(Check-chart):MaySellCheckChart-(IndexNotDownInSecondHalf),",1.059327719611858,13
 "PCTChangeGT2,##(Check-chart-sell):month3Low-InPlus,BreakLowMonth3,***BUYPATTERN***",0.874316939890702,1
 "PCTChangeGT2,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,",-1.276418738886225,2
@@ -81,6 +85,7 @@ filterTest,avg,count
 "PCTChangeGT2,MaySell-CheckChart(yearHigh-minimumLast2DayUp),",-0.05390530184185982,15
 "PCTChangeGT2,MaySell-CheckChart(yearHigh-minimumLast2DayUp),##(Check-chart):MaySellCheckChart-(IndexNotDownInSecondHalf),",0.22784753696850904,3
 "PCTChangeGT2,buyEveningStar-0(Buy-After-1pc-down),",-2.890625000000002,1
+"PCTChangeGT2,buyMorningStar-HighUpperTail-(checkChart),",-1.340510366826154,2
 "PCTChangeGT2,sellDayHighVolLow-0,***BUYPATTERN***",2.095631641086176,1
 "PCTChangeGT2,sellEveningStar-0,",2.3860111910471646,2
 "PCTChangeGT2,sellEveningStar-0,***BUYPATTERN***",-14.797687861271678,1
