@@ -304,9 +304,9 @@ def result_data_reg(scrip):
         if (is_algo_buy(regression_high, True) and is_algo_buy(regression_low, True)):
             buy_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_highBothBuyAll) 
+        all_withoutml(regression_data, regressionResult, ws_high)
         if(is_filter_all_accuracy(regression_data, regressionResult, True, None)):
             all_withoutml(regression_data, regressionResult, ws_highBuyAllFilterAcc) 
-        all_withoutml(regression_data, regressionResult, ws_high)
           
                 
     regression_data = regression_low
@@ -331,9 +331,9 @@ def result_data_reg(scrip):
         if (is_algo_sell(regression_high, True) and is_algo_sell(regression_low, True)):
             sell_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_lowBothSellAll)
+        all_withoutml(regression_data, regressionResult, ws_low)
         if(is_filter_all_accuracy(regression_data, regressionResult, True, None)):
             all_withoutml(regression_data, regressionResult, ws_lowSellAllFilterAcc) 
-        all_withoutml(regression_data, regressionResult, ws_low)
         
 def result_data_cla(scrip):
     regression_high = db.regressionhigh.find_one({'scrip':scrip})
