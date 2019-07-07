@@ -149,9 +149,10 @@ def is_algo_buy(regression_data, resticted=False):
             or (regression_data['mlpValue_reg'] > 0.5 and regression_data['kNeighboursValue_reg'] > 0.5)
             or ((regression_data['mlpValue_reg'] + regression_data['kNeighboursValue_reg'] + regression_data['mlpValue_reg_other'] + regression_data['kNeighboursValue_reg_other']) > 4)
             ):
-            if((0 < regression_data['PCT_day_change'] < 5) and (regression_data['mlpValue_reg_other'] >= 0 or regression_data['kNeighboursValue_reg_other'] >= 0)):
-                return True
-            elif(regression_data['PCT_day_change'] <= 0 or regression_data['PCT_day_change'] >=5):
+            if resticted:
+                if((regression_data['mlpValue_reg_other'] >= 0 or regression_data['kNeighboursValue_reg_other'] >= 0)):
+                    return True
+            else:
                 return True
     return False   
     
@@ -175,9 +176,10 @@ def is_algo_sell(regression_data, resticted=False):
             or (regression_data['mlpValue_reg'] < -0.5 and regression_data['kNeighboursValue_reg'] < -0.5)
             or ((regression_data['mlpValue_reg'] + regression_data['kNeighboursValue_reg'] + regression_data['mlpValue_reg_other'] + regression_data['kNeighboursValue_reg_other']) < -4)
             ):
-            if((-5 < regression_data['PCT_day_change'] < 0) and (regression_data['mlpValue_reg_other'] <= 0 or regression_data['kNeighboursValue_reg_other'] <= 0)):
-                return True
-            elif(regression_data['PCT_day_change'] >= 0 or regression_data['PCT_day_change'] <=-5):
+            if resticted:
+                if((-5 < regression_data['PCT_day_change'] < 0) and (regression_data['mlpValue_reg_other'] <= 0 or regression_data['kNeighboursValue_reg_other'] <= 0)):
+                    return True
+            else:
                 return True
     return False
 
@@ -7117,21 +7119,36 @@ def is_filter_all_accuracy(regression_data, regressionResult, reg, ws):
             ):
             return False
         
-        if(
-            (regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ')
-            and (regression_data['filter_all_avg'] < -0.4)
-            ):
-            return True
-        elif(
-            (regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ')
+        if((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ')
+            and "MLBuy" not in regression_data['filter']
+            and (regression_data['PCT_day_change'] > -2)
             and (regression_data['filter_all_avg'] > 0.4)
             ):   
             return True
-        elif(
-            (("MLBuy" in regression_data['filter']) and float(regression_data['filter_all_avg']) > 0.6)
-            or (("MLSell" in regression_data['filter']) and float(regression_data['filter_all_avg']) < -0.6)
-            #or (('$$(Study)$$:RisingMA' in regression_data['filter4']) and regression_data['filter_all_avg'] > 0.6)
-            #or (('$$(Study)$$:DowningMA' in regression_data['filter4']) and regression_data['filter_all_avg'] < -0.6)
+        elif((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ')
+            and "MLSell" not in regression_data['filter']
+            and (regression_data['PCT_day_change'] < 2)
+            and (regression_data['filter_all_avg'] < -0.4)
+            ):
+            return True
+        elif((regression_data['filter3'] != ' ' and regression_data['filter4'] != ' ')
+            and (regression_data['PCT_day_change'] > -2)
+            and (regression_data['filter_all_avg'] > 0.4)
+            ):   
+            return True
+        elif((regression_data['filter3'] != ' ' and regression_data['filter4'] != ' ')
+            and (regression_data['PCT_day_change'] < 2)
+            and (regression_data['filter_all_avg'] < -0.4)
+            ):
+            return True
+        elif(("MLBuy" in regression_data['filter'])
+            and (regression_data['mlpValue_reg'] >= 1 or regression_data['kNeighboursValue_reg'] >= 1)
+            and float(regression_data['filter_all_avg']) > 0.4
+            ):   
+            return True
+        elif(("MLSell" in regression_data['filter'])
+            and (regression_data['mlpValue_reg'] <= -1 or regression_data['kNeighboursValue_reg'] <= -1)
+            and float(regression_data['filter_all_avg']) < -0.4
             ):   
             return True
 
