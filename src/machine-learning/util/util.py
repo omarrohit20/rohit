@@ -2190,8 +2190,16 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
              )
         ): 
         if(regression_data['PCT_day_change_pre1'] > 0
-            and (regression_data['forecast_day_PCT3_change'] < 5 or regression_data['PCT_day_change_pre2'] < 0)): 
+            and (regression_data['forecast_day_PCT3_change'] < 5 or regression_data['PCT_day_change_pre2'] < 0)
+            ): 
             add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyContinueHighTail-uptrend(CheckChart-risky)')
+        elif(regression_data['forecast_day_PCT_change'] > 0
+            and regression_data['forecast_day_PCT3_change'] < 0
+            and regression_data['forecast_day_PCT5_change'] < 0 
+            and regression_data['forecast_day_PCT7_change'] < 0
+            and regression_data['forecast_day_PCT10_change'] < 0
+            ): 
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyContinueHighTail-uptrend-1(CheckChart-risky)')
         elif(regression_data['bar_low'] > regression_data['bar_low_pre1']
             and regression_data['bar_low_pre1'] < regression_data['bar_low_pre2']
             and regression_data['low'] > regression_data['low_pre1']
@@ -5210,10 +5218,17 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
     if((-2 < regression_data['PCT_day_change'] < -0.5) and (-2 < regression_data['PCT_change'] < -0.5)
         and (1 <= low_tail_pct(regression_data) < 2)
         ):
-        if(regression_data['PCT_day_change_pre1'] < 0
-            or (regression_data['forecast_day_PCT3_change'] > -5 or regression_data['PCT_day_change_pre2'] > 0)
+        if((regression_data['PCT_day_change_pre1'] < 0
+            and (regression_data['forecast_day_PCT3_change'] > -5 or regression_data['PCT_day_change_pre2'] > 0))
             ): 
             add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellContinueLowTail-downtrend(CheckChart-Risky)')
+        elif((regression_data['forecast_day_PCT_change'] < 0 
+              and regression_data['forecast_day_PCT3_change'] > 0
+              and regression_data['forecast_day_PCT5_change'] > 0 
+              and regression_data['forecast_day_PCT7_change'] > 0 
+              and regression_data['forecast_day_PCT10_change'] > 0)
+            ): 
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellContinueLowTail-downtrend-1(CheckChart-Risky)')
         elif(regression_data['bar_high'] < regression_data['bar_high_pre1']
             and regression_data['bar_high_pre1'] > regression_data['bar_high_pre2']
             and regression_data['high'] < regression_data['high_pre1']
@@ -7360,8 +7375,7 @@ def is_filter_all_accuracy(regression_data, regressionResult, reg, ws):
 #             ):
 #             add_in_csv(regression_data, regressionResult, ws, None, '3-AnyFilter-Risky')  
 #             return Tru    
-    if(regression_data['filter_all_count'] >= 2
-        and abs(regression_data['filter_all_avg']) > 0.5
+    if(abs(regression_data['filter_all_avg']) > 0.5
         ):
         if((("MLSell" in regression_data['filter']) and 0 < float(regression_data['filter_all_avg']) < 3.0 and regression_data['PCT_change'] > -2)
             or (("MLBuy" in regression_data['filter']) and -3.0 < float(regression_data['filter_all_avg']) < 0 and regression_data['PCT_change'] < 2)
