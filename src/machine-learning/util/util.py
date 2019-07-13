@@ -73,6 +73,8 @@ def add_in_csv(regression_data, regressionResult, ws=None, filter=None, filter1=
         tempRegressionResult.append(regression_data['filter4'])
         tempRegressionResult.append(regression_data['filter5'])
         tempRegressionResult.append(regression_data['filter'])
+        tempRegressionResult.append(regression_data['filter_345_avg'])
+        tempRegressionResult.append(regression_data['filter_345_count'])
         tempRegressionResult.append(regression_data['filter_avg'])
         tempRegressionResult.append(regression_data['filter_count'])
         tempRegressionResult.append(regression_data['filter_pct_change_avg'])
@@ -1637,6 +1639,7 @@ def base_line(regression_data, regressionResult, reg, ws):
             and regression_data['bar_low'] < regression_data['bar_low_pre1']
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, '(check-chart):sellMonthLowBreak-checkATRBuyBreak-Risky')                    
+
 def historical_data(data):
     ardate = np.array([str(x) for x in (np.array(data['data'])[:,0][::-1]).tolist()])
     aropen = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,1][::-1]).tolist()])
@@ -1698,6 +1701,8 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regression_data['filter4'] = " "
     regression_data['filter5'] = " "
     regression_data['filter6'] = " "
+    regression_data['filter_345_avg'] = 0
+    regression_data['filter_345_count'] = 0
     regression_data['filter_avg'] = 0
     regression_data['filter_count'] = 0
     regression_data['filter_pct_change_avg']  = 0
@@ -4816,7 +4821,25 @@ def buy_random_filters(regression_data, regressionResult, reg, ws):
         and (regression_data['PCT_day_change_pre1'] < -1.5 or regression_data['PCT_day_change_pre2'] < -1.5)
         ):   
         add_in_csv(regression_data, regressionResult, ws, '(Test)buySMA4Reversal')
-    
+
+def buy_test_345(regression_data, regressionResult, reg, ws):
+    regression_data['filter'] = " "
+    regression_data['filter1'] = " "
+    regression_data['filter2'] = " "
+    regression_data['filter3'] = " "
+    regression_data['filter4'] = " "
+    regression_data['filter5'] = " "
+    regression_data['filter6'] = " "
+    flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
+    filterName = pct_change_filter(regression_data, regressionResult, False)
+    regression_data['filterTest'] = filterName + ',' \
+                                    + regression_data['filter3'] + ',' \
+                                    + regression_data['filter4'] + ',' \
+                                    + regression_data['filter5'] + ',' 
+    if regression_data['filterTest'] != '':
+        return True  
+    return False
+  
 def buy_test(regression_data, regressionResult, pctChangeFilter, reg, ws):
     regression_data['filter'] = " "
     regression_data['filter1'] = " "
@@ -4908,6 +4931,17 @@ def buy_all_filter(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, None)
         flag = True
     return flag
+
+def buy_filter_345_accuracy(regression_data, regressionResult, reg, ws):
+    filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-345-buy.csv')
+    filterName = pct_change_filter(regression_data, regressionResult, False)
+    filter = filterName + ',' \
+             + regression_data['filter3'] + ',' \
+             + regression_data['filter4'] + ',' \
+             + regression_data['filter5'] + ','
+    if (filter != '') and (filter in filtersDict):
+        regression_data['filter_345_avg'] = float(filtersDict[filter]['avg'])
+        regression_data['filter_345_count'] = float(filtersDict[filter]['count'])
 
 def buy_filter_accuracy(regression_data, regressionResult, reg, ws):
     filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-buy.csv')
@@ -7238,6 +7272,24 @@ def sell_random_filter(regression_data, regressionResult, reg, ws):
                 add_in_csv(regression_data, regressionResult, ws, 'sellYear2LowLT-40-last4DayDown(triggerAfter-9:15)')
             elif(regression_data['high_pre1'] < regression_data['high_pre2'] < regression_data['high_pre3']): 
                 add_in_csv(regression_data, regressionResult, ws, 'sellYear2LowLT-40-last3DayDown(triggerAfter-9:15)')
+
+def sell_test_345(regression_data, regressionResult, reg, ws):
+    regression_data['filter'] = " "
+    regression_data['filter1'] = " "
+    regression_data['filter2'] = " "
+    regression_data['filter3'] = " "
+    regression_data['filter4'] = " "
+    regression_data['filter5'] = " "
+    regression_data['filter6'] = " "
+    flag = sell_other_indicator(regression_data, regressionResult, reg, ws)
+    filterName = pct_change_filter(regression_data, regressionResult, False)
+    regression_data['filterTest'] = filterName + ',' \
+                                    + regression_data['filter3'] + ',' \
+                                    + regression_data['filter4'] + ',' \
+                                    + regression_data['filter5'] + ','
+    if regression_data['filterTest'] != '':
+        return True  
+    return False
         
 def sell_test(regression_data, regressionResult, pctChangeFilter, reg, ws):
     regression_data['filter'] = " "
@@ -7332,6 +7384,17 @@ def sell_all_filter(regression_data, regressionResult, reg, ws):
         flag = True
     return flag
 
+def sell_filter_345_accuracy(regression_data, regressionResult, reg, ws):
+    filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-345-sell.csv')
+    filterName = pct_change_filter(regression_data, regressionResult, False)
+    filter = filterName + ',' \
+                + regression_data['filter3'] + ',' \
+                + regression_data['filter4'] + ',' \
+                + regression_data['filter5'] + ','
+    if (filter != '') and (filter in filtersDict):
+        regression_data['filter_345_avg'] = float(filtersDict[filter]['avg'])
+        regression_data['filter_345_count'] = float(filtersDict[filter]['count'])
+
 def sell_filter_accuracy(regression_data, regressionResult, reg, ws):
     filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-sell.csv')
     if regression_data['filter'] != '':
@@ -7362,20 +7425,8 @@ def sell_filter_all_accuracy(regression_data, regressionResult, reg, ws):
         regression_data['filter_all_count'] = float(filtersDict[filter]['count'])
 
 def is_filter_all_accuracy(regression_data, regressionResult, reg, ws):
-#     if(regression_data['filter_all_count'] >= 3
-#         and abs(regression_data['filter_all_avg']) > 3
-#         ):
-#         if((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ' or regression_data['filter5'] != ' ')
-#             and (regression_data['filter_all_avg'] > 3)
-#             ):
-#             add_in_csv(regression_data, regressionResult, ws, None, '3-AnyFilter-Risky')  
-#             return True
-#         elif((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ' or regression_data['filter5'] != ' ')
-#             and (regression_data['filter_all_avg'] < -3)
-#             ):
-#             add_in_csv(regression_data, regressionResult, ws, None, '3-AnyFilter-Risky')  
-#             return Tru    
     if(abs(regression_data['filter_all_avg']) > 0.5
+        and (abs(regression_data['filter_all_count'] > 2 or abs(regression_data['filter_all_avg']) > 1.5))
         ):
         if((("MLSell" in regression_data['filter']) and 0 < float(regression_data['filter_all_avg']) < 3.0 and regression_data['PCT_change'] > -2)
             or (("MLBuy" in regression_data['filter']) and -3.0 < float(regression_data['filter_all_avg']) < 0 and regression_data['PCT_change'] < 2)
@@ -7383,7 +7434,11 @@ def is_filter_all_accuracy(regression_data, regressionResult, reg, ws):
             return False
         
         if((regression_data['mlpValue_reg'] >= 0 or regression_data['kNeighboursValue_reg'] >= 0)
-            and (regression_data['mlpValue_reg_other'] >= 0 or regression_data['kNeighboursValue_reg_other'] >= 0)):
+                and (regression_data['mlpValue_reg_other'] >= 0 or regression_data['kNeighboursValue_reg_other'] >= 0)
+            or ((regression_data['mlpValue_reg'] >= 0 and regression_data['kNeighboursValue_reg'] >= 0)
+                and (regression_data['mlpValue_reg'] >= 1 or regression_data['kNeighboursValue_reg'] >= 1)
+                )
+            ):
             if((regression_data['mlpValue_reg'] >= 0 and regression_data['kNeighboursValue_reg'] >= 0)
                 and (regression_data['mlpValue_reg_other'] >= 0 and regression_data['kNeighboursValue_reg_other'] >= 0)
                 and float(regression_data['filter_all_avg']) > 0.4
@@ -7399,24 +7454,31 @@ def is_filter_all_accuracy(regression_data, regressionResult, reg, ws):
             elif((regression_data['filter3'] != ' ' and regression_data['filter4'] != ' ')
                 and (regression_data['PCT_day_change'] > -2)
                 and (regression_data['filter_all_avg'] > 0.4)
+                #and (regression_data['mlpValue_reg'] >= 0.5 or regression_data['kNeighboursValue_reg'] >= 0.5)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, '1-BothFilter') 
                 return True
             elif((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ')
                 and (regression_data['PCT_day_change'] > -2)
                 and (regression_data['filter_all_avg'] > 0.4)
+                #and (regression_data['mlpValue_reg'] >= 0.5 or regression_data['kNeighboursValue_reg'] >= 0.5)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, '2-AnyFilter')  
                 return True
             elif((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ' or regression_data['filter5'] != ' ')
                 and (regression_data['filter_all_avg'] > 3)
+                #and (regression_data['mlpValue_reg'] >= 0.5 or regression_data['kNeighboursValue_reg'] >= 0.5)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, '2-AnyFilter-Risky')  
                 return True
             
             
         if((regression_data['mlpValue_reg'] <= 0 or regression_data['kNeighboursValue_reg'] <= 0)
-            and (regression_data['mlpValue_reg_other'] <= 0 or regression_data['kNeighboursValue_reg_other'] <= 0)):
+                and (regression_data['mlpValue_reg_other'] <= 0 or regression_data['kNeighboursValue_reg_other'] <= 0)
+            or ((regression_data['mlpValue_reg'] <= 0 and regression_data['kNeighboursValue_reg'] <= 0)
+                and (regression_data['mlpValue_reg'] <= -1 or regression_data['kNeighboursValue_reg'] <= -1)
+                )
+            ):
             if((regression_data['mlpValue_reg'] <= 0 and regression_data['kNeighboursValue_reg'] <= 0)
                 and (regression_data['mlpValue_reg_other'] <= 0 and regression_data['kNeighboursValue_reg_other'] <= 0)
                 and float(regression_data['filter_all_avg']) < -0.4
@@ -7432,17 +7494,110 @@ def is_filter_all_accuracy(regression_data, regressionResult, reg, ws):
             elif((regression_data['filter3'] != ' ' and regression_data['filter4'] != ' ')
                 and (regression_data['PCT_day_change'] < 2)
                 and (regression_data['filter_all_avg'] < -0.4)
+               # and (regression_data['mlpValue_reg'] <= -0.5 or regression_data['kNeighboursValue_reg'] <= -0.5)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, '1-BothFilter')
                 return True
             elif((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ')
                 and (regression_data['PCT_day_change'] < 2)
                 and (regression_data['filter_all_avg'] < -0.4)
+                #and (regression_data['mlpValue_reg'] <= -0.5 or regression_data['kNeighboursValue_reg'] <= -0.5)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, '2-AnyFilter')
                 return True
             elif((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ' or regression_data['filter4'] != ' ')
                 and (regression_data['filter_all_avg'] < -3)
+                #and (regression_data['mlpValue_reg'] <= -0.5 or regression_data['kNeighboursValue_reg'] <= -0.5)
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, '2-AnyFilter-Risky')
+                return True
+    is_filter_345_accuracy(regression_data, regressionResult, reg, ws)   
+
+def is_filter_345_accuracy(regression_data, regressionResult, reg, ws):
+ 
+    if(abs(regression_data['filter_345_avg']) > 0.5
+        and (abs(regression_data['filter_345_count'] > 2 or abs(regression_data['filter_345_avg']) > 1.5))
+        ):
+        if((("MLSell" in regression_data['filter']) and 0 < float(regression_data['filter_345_avg']) < 3.0 and regression_data['PCT_change'] > -2)
+            or (("MLBuy" in regression_data['filter']) and -3.0 < float(regression_data['filter_345_avg']) < 0 and regression_data['PCT_change'] < 2)
+            ):
+            return False
+        
+        if((regression_data['mlpValue_reg'] >= 0 or regression_data['kNeighboursValue_reg'] >= 0)
+                and (regression_data['mlpValue_reg_other'] >= 0 or regression_data['kNeighboursValue_reg_other'] >= 0)
+            or ((regression_data['mlpValue_reg'] >= 0 and regression_data['kNeighboursValue_reg'] >= 0)
+                and (regression_data['mlpValue_reg'] >= 1 or regression_data['kNeighboursValue_reg'] >= 1)
+                )
+            ):
+            if((regression_data['mlpValue_reg'] >= 0 and regression_data['kNeighboursValue_reg'] >= 0)
+                and (regression_data['mlpValue_reg_other'] >= 0 and regression_data['kNeighboursValue_reg_other'] >= 0)
+                and float(regression_data['filter_345_avg']) > 0.4
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, '00-AllGT0')   
+                return True
+            elif(("MLBuy" in regression_data['filter'])
+                and (regression_data['mlpValue_reg'] >= 1 or regression_data['kNeighboursValue_reg'] >= 1)
+                and float(regression_data['filter_345_avg']) > 0.4
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, '0-ML')   
+                return True
+            elif((regression_data['filter3'] != ' ' and regression_data['filter4'] != ' ')
+                and (regression_data['PCT_day_change'] > -2)
+                and (regression_data['filter_345_avg'] > 0.4)
+                #and (regression_data['mlpValue_reg'] >= 0.5 or regression_data['kNeighboursValue_reg'] >= 0.5)
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, '1-BothFilter') 
+                return True
+            elif((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ')
+                and (regression_data['PCT_day_change'] > -2)
+                and (regression_data['filter_345_avg'] > 0.4)
+                #and (regression_data['mlpValue_reg'] >= 0.5 or regression_data['kNeighboursValue_reg'] >= 0.5)
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, '2-AnyFilter')  
+                return True
+            elif((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ' or regression_data['filter5'] != ' ')
+                and (regression_data['filter_345_avg'] > 3)
+                #and (regression_data['mlpValue_reg'] >= 0.5 or regression_data['kNeighboursValue_reg'] >= 0.5)
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, '2-AnyFilter-Risky')  
+                return True
+            
+            
+        if((regression_data['mlpValue_reg'] <= 0 or regression_data['kNeighboursValue_reg'] <= 0)
+                and (regression_data['mlpValue_reg_other'] <= 0 or regression_data['kNeighboursValue_reg_other'] <= 0)
+            or ((regression_data['mlpValue_reg'] <= 0 and regression_data['kNeighboursValue_reg'] <= 0)
+                and (regression_data['mlpValue_reg'] <= -1 or regression_data['kNeighboursValue_reg'] <= -1)
+                )
+            ):
+            if((regression_data['mlpValue_reg'] <= 0 and regression_data['kNeighboursValue_reg'] <= 0)
+                and (regression_data['mlpValue_reg_other'] <= 0 and regression_data['kNeighboursValue_reg_other'] <= 0)
+                and float(regression_data['filter_345_avg']) < -0.4
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, '00-AllLT0')   
+                return True
+            elif(("MLSell" in regression_data['filter'])
+                and (regression_data['mlpValue_reg'] <= -1 or regression_data['kNeighboursValue_reg'] <= -1)
+                and float(regression_data['filter_345_avg']) < -0.4
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, '0-ML')   
+                return True
+            elif((regression_data['filter3'] != ' ' and regression_data['filter4'] != ' ')
+                and (regression_data['PCT_day_change'] < 2)
+                and (regression_data['filter_345_avg'] < -0.4)
+               # and (regression_data['mlpValue_reg'] <= -0.5 or regression_data['kNeighboursValue_reg'] <= -0.5)
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, '1-BothFilter')
+                return True
+            elif((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ')
+                and (regression_data['PCT_day_change'] < 2)
+                and (regression_data['filter_345_avg'] < -0.4)
+                #and (regression_data['mlpValue_reg'] <= -0.5 or regression_data['kNeighboursValue_reg'] <= -0.5)
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, '2-AnyFilter')
+                return True
+            elif((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ' or regression_data['filter4'] != ' ')
+                and (regression_data['filter_345_avg'] < -3)
+                #and (regression_data['mlpValue_reg'] <= -0.5 or regression_data['kNeighboursValue_reg'] <= -0.5)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, '2-AnyFilter-Risky')
                 return True   
