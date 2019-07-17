@@ -2221,14 +2221,21 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
              )
         ):   
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuy-CheckChart(|/mayFail(|before10AM))')
+    
+    if(regression_data['series_trend'] == "upTrend"
+        and (-1 < regression_data['PCT_day_change'] < 0) and (-1 < regression_data['PCT_change'] < 0)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDayDownInUptrend')
+        
     if((-2 < regression_data['PCT_day_change'] < -0.5) and (-2 < regression_data['PCT_change'] < -0.5)
         and (1 <= low_tail_pct(regression_data) < 2)
         ):
         if(regression_data['PCT_day_change_pre2'] > 2
-            -2 < regression_data['PCT_day_change_pre1'] < 0
+            and -2 < regression_data['PCT_day_change_pre1'] < 0
             and regression_data['forecast_day_PCT3_change'] > -5
             ): 
             add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyStartLowTail-downtrend(CheckChart-Risky)')
+    
     if((0.3 < regression_data['PCT_day_change'] < 2) and (0.3 < regression_data['PCT_change'] < 2)
         and (1 <= high_tail_pct(regression_data) < 2)
         ):
@@ -5345,6 +5352,12 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
              )
         ):   
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySell-CheckChart(|\mayFail(|before10AM))')
+    
+    if(regression_data['series_trend'] == "downTrend"
+        and (0 < regression_data['PCT_day_change'] < 1) and (0 < regression_data['PCT_change'] < 1)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDayUpInDowntrend')
+    
     if((0.5 < regression_data['PCT_day_change'] < 2) and (0.5 < regression_data['PCT_change'] < 2)
         and (1 <= high_tail_pct(regression_data) < 2)
         ): 
@@ -7585,27 +7598,34 @@ def sell_filter_all_accuracy(regression_data, regressionResult, reg, ws):
 
 def is_filter_all_accuracy(regression_data, regressionResult, reg, ws):
     flag = False
-    flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count')
+    flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_all_avg', 'filter_all_count')
     if(flag):
         return flag
-    flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count')
+    flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_all_avg', 'filter_all_count', 'filter_345_avg', 'filter_345_count')
     if(flag):
         return flag  
 
-def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, filter_count):
+def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_avg_oth, filter_count_oth):
  
     if(abs(regression_data[filter_avg]) > 0.5
-        and abs(regression_data[filter_count] >= 2)
+        and regression_data[filter_count] >= 2
+        and (regression_data[filter_count_oth] >= 2
+            or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2))
         ):
         if((("MLSell" in regression_data['filter']) and 0 < float(regression_data[filter_avg]) < 3.0 and regression_data['PCT_change'] > -2)
             or (("MLBuy" in regression_data['filter']) and -3.0 < float(regression_data[filter_avg]) < 0 and regression_data['PCT_change'] < 2)
             ):
             return False
         Flag = False
-        if((regression_data['mlpValue_reg'] >= 0 or regression_data['kNeighboursValue_reg'] >= 0)
+        if(((regression_data['mlpValue_reg'] >= 0 or regression_data['kNeighboursValue_reg'] >= 0)
                 and (regression_data['mlpValue_reg_other'] >= 0 or regression_data['kNeighboursValue_reg_other'] >= 0)
+                and ((regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0)
+                     or (regression_data['mlpValue_reg'] >= 0.5 or regression_data['kNeighboursValue_reg'] >= 0.5)
+                     )
+                )
             or ((regression_data['mlpValue_reg'] >= 0 and regression_data['kNeighboursValue_reg'] >= 0)
                 and (regression_data['mlpValue_reg'] >= 1 or regression_data['kNeighboursValue_reg'] >= 1)
+                and (regression_data['mlpValue_reg_other'] >= 0 or regression_data['kNeighboursValue_reg_other'] >= 0)
                 )
             ):
             if((regression_data['mlpValue_reg'] >= 0 and regression_data['kNeighboursValue_reg'] >= 0)
@@ -7641,10 +7661,15 @@ def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, f
                 Flag = True
                 add_in_csv(regression_data, regressionResult, ws, None, '2-AnyFilter-Risky')
             
-        if((regression_data['mlpValue_reg'] <= 0 or regression_data['kNeighboursValue_reg'] <= 0)
+        if(((regression_data['mlpValue_reg'] <= 0 or regression_data['kNeighboursValue_reg'] <= 0)
                 and (regression_data['mlpValue_reg_other'] <= 0 or regression_data['kNeighboursValue_reg_other'] <= 0)
+                and ((regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0)
+                     or (regression_data['mlpValue_reg'] <= -0.5 or regression_data['kNeighboursValue_reg'] <= -0.5)
+                     )
+                )
             or ((regression_data['mlpValue_reg'] <= 0 and regression_data['kNeighboursValue_reg'] <= 0)
                 and (regression_data['mlpValue_reg'] <= -1 or regression_data['kNeighboursValue_reg'] <= -1)
+                and (regression_data['mlpValue_reg_other'] <= 0 or regression_data['kNeighboursValue_reg_other'] <= 0)
                 )
             ):
             if((regression_data['mlpValue_reg'] <= 0 and regression_data['kNeighboursValue_reg'] <= 0)
@@ -7679,26 +7704,29 @@ def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, f
                 ):
                 Flag = True
                 add_in_csv(regression_data, regressionResult, ws, None, '2-AnyFilter-Risky')
-        if(regression_data[filter_count] < 2):
+        if(regression_data[filter_count] < 2 or regression_data[filter_count_oth] < 2):
             add_in_csv(regression_data, regressionResult, ws, None, 'RISKY')
-        elif(regression_data[filter_avg] > 0 
-            and (regression_data['PCT_day_change'] > 3 or regression_data['PCT_day_change'] < -1)
-            and ((regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0) or (regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0))
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, 'STRONG')
-        elif(regression_data[filter_avg] < 0 
-            and (regression_data['PCT_day_change'] < -3 or regression_data['PCT_day_change'] > 1)
-            and ((regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0) or (regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0))
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, 'STRONG')
-        elif(regression_data[filter_avg] > 1 
+        elif(regression_data[filter_avg] > 0
             and (regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky(BuyAfter9:30)')
-        elif(regression_data[filter_avg] < -1 
+        elif(regression_data[filter_avg] < 0 
             and (regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky(SellAfter9:30)')
+        elif(regression_data[filter_avg] > 0 
+            and regression_data['PCT_day_change'] < 0.7 and regression_data['PCT_change'] < 0.7
+            and ((regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0)
+                 or (regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0))
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, 'STRONG')
+        elif(regression_data[filter_avg] < 0 
+            and regression_data['PCT_day_change'] > -0.7 and regression_data['PCT_change'] > -0.7
+            and ((regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0)
+                 or (regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0))
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, 'STRONG')
+        
         return Flag
         
         
