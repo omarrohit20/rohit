@@ -7608,9 +7608,9 @@ def is_filter_all_accuracy(regression_data, regressionResult, reg, ws):
 def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_avg_oth, filter_count_oth):
  
     if(abs(regression_data[filter_avg]) > 0.5
-        and regression_data[filter_count] >= 2
-        and (regression_data[filter_count_oth] >= 2
-            or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2))
+        and regression_data[filter_count] >= 1
+        #and (regression_data[filter_count_oth] >= 2
+        #    or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2))
         ):
         if((("MLSell" in regression_data['filter']) and 0 < float(regression_data[filter_avg]) < 3.0 and regression_data['PCT_change'] > -2)
             or (("MLBuy" in regression_data['filter']) and -3.0 < float(regression_data[filter_avg]) < 0 and regression_data['PCT_change'] < 2)
@@ -7620,12 +7620,29 @@ def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, f
         if(((regression_data['mlpValue_reg'] >= 0 or regression_data['kNeighboursValue_reg'] >= 0)
                 and (regression_data['mlpValue_reg_other'] >= 0 or regression_data['kNeighboursValue_reg_other'] >= 0)
                 and ((regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0)
-                     or (regression_data['mlpValue_reg'] >= 0.5 or regression_data['kNeighboursValue_reg'] >= 0.5)
+                     or (regression_data[filter_avg] > 1.5 and (regression_data['mlpValue_reg'] >= 0.5 or regression_data['kNeighboursValue_reg'] >= 0.5))
                      )
+                and (regression_data[filter_count_oth] >= 2
+                     or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2)
+                    )
                 )
             or ((regression_data['mlpValue_reg'] >= 0 and regression_data['kNeighboursValue_reg'] >= 0)
                 and (regression_data['mlpValue_reg'] >= 1 or regression_data['kNeighboursValue_reg'] >= 1)
                 and (regression_data['mlpValue_reg_other'] >= 0 or regression_data['kNeighboursValue_reg_other'] >= 0)
+                and ((regression_data['PCT_day_change'] < 1 and regression_data['PCT_change'] < 1)
+                     or (regression_data[filter_avg] > 1.5 and (regression_data['mlpValue_reg'] >= 1 or regression_data['kNeighboursValue_reg'] >= 1))
+                     )
+                and (regression_data[filter_count_oth] >= 2
+                     or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2)
+                    )
+                )
+            or (("MLBuy" in regression_data['filter']) 
+                and ((regression_data['PCT_day_change'] < 1 and regression_data['PCT_change'] < 1) 
+                     or (regression_data['PCT_day_change'] > 9 and regression_data['PCT_change'] > 9)
+                    )
+                and ((float(regression_data[filter_avg]) > 1.5)
+                     or (float(regression_data[filter_avg]) > 1.3 and regression_data[filter_avg] > 3)
+                    )
                 )
             ):
             if((regression_data['mlpValue_reg'] >= 0 and regression_data['kNeighboursValue_reg'] >= 0)
@@ -7664,12 +7681,29 @@ def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, f
         if(((regression_data['mlpValue_reg'] <= 0 or regression_data['kNeighboursValue_reg'] <= 0)
                 and (regression_data['mlpValue_reg_other'] <= 0 or regression_data['kNeighboursValue_reg_other'] <= 0)
                 and ((regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0)
-                     or (regression_data['mlpValue_reg'] <= -0.5 or regression_data['kNeighboursValue_reg'] <= -0.5)
+                     or (regression_data[filter_avg] < -1.5 and (regression_data['mlpValue_reg'] <= -0.5 or regression_data['kNeighboursValue_reg'] <= -0.5))
                      )
+                and (regression_data[filter_count_oth] >= 2
+                     or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2)
+                    )
                 )
             or ((regression_data['mlpValue_reg'] <= 0 and regression_data['kNeighboursValue_reg'] <= 0)
                 and (regression_data['mlpValue_reg'] <= -1 or regression_data['kNeighboursValue_reg'] <= -1)
                 and (regression_data['mlpValue_reg_other'] <= 0 or regression_data['kNeighboursValue_reg_other'] <= 0)
+                and ((regression_data['PCT_day_change'] > -1 and regression_data['PCT_change'] > -1)
+                     or (regression_data[filter_avg] < -1.5 and (regression_data['mlpValue_reg'] <= -1 or regression_data['kNeighboursValue_reg'] <= -1))
+                     )
+                and (regression_data[filter_count_oth] >= 2
+                     or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2)
+                    )
+                )
+            or (("MLSell" in regression_data['filter']) 
+                and ((regression_data['PCT_day_change'] > -1 and regression_data['PCT_change'] > -1)
+                     or (regression_data['PCT_day_change'] < -9 and regression_data['PCT_change'] < -9)
+                    )
+                and ((float(regression_data[filter_avg]) < -1.5)
+                     or (float(regression_data[filter_avg]) < -1.3 and regression_data[filter_avg] > 3)
+                    )
                 )
             ):
             if((regression_data['mlpValue_reg'] <= 0 and regression_data['kNeighboursValue_reg'] <= 0)
