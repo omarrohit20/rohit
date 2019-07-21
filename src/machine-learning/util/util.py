@@ -75,12 +75,16 @@ def add_in_csv(regression_data, regressionResult, ws=None, filter=None, filter1=
         tempRegressionResult.append(regression_data['filter'])
         tempRegressionResult.append(regression_data['filter_345_avg'])
         tempRegressionResult.append(regression_data['filter_345_count'])
+        tempRegressionResult.append(regression_data['filter_345_pct'])
         tempRegressionResult.append(regression_data['filter_avg'])
         tempRegressionResult.append(regression_data['filter_count'])
+        tempRegressionResult.append(regression_data['filter_pct'])
         tempRegressionResult.append(regression_data['filter_pct_change_avg'])
         tempRegressionResult.append(regression_data['filter_pct_change_count'])
+        tempRegressionResult.append(regression_data['filter_pct_change_pct'])
         tempRegressionResult.append(regression_data['filter_all_avg'])
         tempRegressionResult.append(regression_data['filter_all_count'])
+        tempRegressionResult.append(regression_data['filter_all_pct'])
         ws.append(tempRegressionResult) if (ws is not None) else False
         if(db.resultScripFutures.find_one({'scrip':regression_data['scrip']}) is None):
             db.resultScripFutures.insert_one({
@@ -1722,6 +1726,26 @@ def scrip_patterns_to_dict(filename):
                 pass
     return tempDict 
 
+def patterns_to_dict(filename):  
+    tempDict = {}
+    count = 0
+    with open(filename) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        for row in readCSV:
+            try:
+                if (count != 0):
+                    dictValue = {}
+                    dictValue['avg'] = row[1]
+                    dictValue['count'] = row[2]
+                    dictValue['countgt'] = row[3]
+                    dictValue['countlt'] = row[4]
+                    tempDict[row[0]] = dictValue
+                count = count + 1
+            except:
+                pass
+    return tempDict 
+
+
 def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, mlp_c_o, kneighbours_c_o):
     regression_data['mlpValue_reg_other'] = float(mlp_r_o)
     regression_data['kNeighboursValue_reg_other'] = float(kneighbours_r_o)
@@ -1736,12 +1760,16 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regression_data['filter6'] = " "
     regression_data['filter_345_avg'] = 0
     regression_data['filter_345_count'] = 0
+    regression_data['filter_345_pct'] = 0
     regression_data['filter_avg'] = 0
     regression_data['filter_count'] = 0
+    regression_data['filter_pct'] = 0
     regression_data['filter_pct_change_avg']  = 0
     regression_data['filter_pct_change_count'] = 0
+    regression_data['filter_pct_change_pct'] = 0
     regression_data['filter_all_avg']  = 0
     regression_data['filter_all_count'] = 0
+    regression_data['filter_all_pct'] = 0
     regression_data['series_trend'] = "NA"
     if pct_change_negative_trend(regression_data):
         regression_data['series_trend'] = "downTrend"
@@ -2370,6 +2398,33 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         buy_study_risingMA(regression_data, regressionResult, reg, ws)
         buy_random_filters(regression_data, regressionResult, reg, ws)
         buy_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        
+        sell_up_trend(regression_data, regressionResult, reg, ws)
+        sell_down_trend(regression_data, regressionResult, reg, ws)
+        sell_final(regression_data, regressionResult, reg, ws, ws)
+        sell_high_indicators(regression_data, regressionResult, reg, ws)
+        sell_pattern(regression_data, regressionResult, reg, ws, ws)
+        sell_base_line_buy(regression_data, regressionResult, reg, ws)
+        sell_morning_star_buy(regression_data, regressionResult, reg, ws)
+        sell_evening_star_sell(regression_data, regressionResult, reg, ws)
+        sell_oi_negative(regression_data, regressionResult, reg, ws)
+        sell_day_high(regression_data, regressionResult, reg, ws)
+        sell_vol_contract(regression_data, regressionResult, reg, ws)
+        sell_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
+        sell_trend_reversal(regression_data, regressionResult, reg, ws)
+        sell_trend_break(regression_data, regressionResult, reg, ws)
+        sell_consolidation_breakdown(regression_data, regressionResult, reg, ws)
+        sell_final_candidate(regression_data, regressionResult, reg, ws)
+        sell_oi(regression_data, regressionResult, reg, ws)
+        sell_downingMA(regression_data, regressionResult, reg, ws)
+        sell_study_downingMA(regression_data, regressionResult, reg, ws)
+        sell_market_downtrend(regression_data, regressionResult, reg, ws)
+        sell_supertrend(regression_data, regressionResult, reg, ws)
+        sell_heavy_downtrend(regression_data, regressionResult, reg, ws)
+        sell_check_chart(regression_data, regressionResult, reg, ws)
+        sell_random_filter(regression_data, regressionResult, reg, ws)
+        sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        
         return True
     return False
 
@@ -5021,7 +5076,7 @@ def buy_all_filter(regression_data, regressionResult, reg, ws):
     return flag
 
 def buy_filter_345_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-345-buy.csv')
+    filtersDict=patterns_to_dict('../../data-import/nselist/filter-345-buy.csv')
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filter = filterName + ',' \
             + regression_data['series_trend'] + ',' \
@@ -5032,9 +5087,14 @@ def buy_filter_345_accuracy(regression_data, regressionResult, reg, ws):
     if (filter != '') and (filter in filtersDict):
         regression_data['filter_345_avg'] = float(filtersDict[filter]['avg'])
         regression_data['filter_345_count'] = float(filtersDict[filter]['count'])
+        if float(filtersDict[filter]['count']) >= 2:
+            if float(filtersDict[filter]['avg']) >= 0:
+                regression_data['filter_345_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
+            else:
+                regression_data['filter_345_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
 
 def buy_filter_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-buy.csv')
+    filtersDict=patterns_to_dict('../../data-import/nselist/filter-buy.csv')
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
         filter = filterName + ',' \
@@ -5043,9 +5103,14 @@ def buy_filter_accuracy(regression_data, regressionResult, reg, ws):
         if filter != '' and filter in filtersDict:
             regression_data['filter_avg'] = float(filtersDict[filter]['avg'])
             regression_data['filter_count'] = float(filtersDict[filter]['count'])
+            if float(filtersDict[filter]['count']) >= 2:
+                if float(filtersDict[filter]['avg']) >= 0:
+                    regression_data['filter_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
+                else:
+                    regression_data['filter_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
 
 def buy_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-pct-change-buy.csv')
+    filtersDict=patterns_to_dict('../../data-import/nselist/filter-pct-change-buy.csv')
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
         filter = filterName + ',' \
@@ -5058,9 +5123,14 @@ def buy_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
         if filter != '' and filter in filtersDict:
             regression_data['filter_pct_change_avg'] = float(filtersDict[filter]['avg'])
             regression_data['filter_pct_change_count'] = float(filtersDict[filter]['count'])
-            
+            if float(filtersDict[filter]['count']) >= 2:
+                if float(filtersDict[filter]['avg']) >= 0:
+                    regression_data['filter_pct_change_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
+                else:
+                    regression_data['filter_pct_change_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
+                
 def buy_filter_all_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-all-buy.csv')
+    filtersDict=patterns_to_dict('../../data-import/nselist/filter-all-buy.csv')
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filterNameTail = tail_change_filter(regression_data, regressionResult, False)
     filter = filterName + ',' \
@@ -5074,6 +5144,12 @@ def buy_filter_all_accuracy(regression_data, regressionResult, reg, ws):
     if (filter != '') and (filter in filtersDict):
         regression_data['filter_all_avg'] = float(filtersDict[filter]['avg'])
         regression_data['filter_all_count'] = float(filtersDict[filter]['count'])
+        if float(filtersDict[filter]['count']) >= 2:
+            if float(filtersDict[filter]['avg']) >= 0:
+                regression_data['filter_all_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
+            else:
+                regression_data['filter_all_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
+                
             
 def sell_pattern_without_mlalgo(regression_data, regressionResult):
     if(regression_data['PCT_day_change'] > -3.5
@@ -5457,6 +5533,35 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         sell_check_chart(regression_data, regressionResult, reg, ws)
         sell_random_filter(regression_data, regressionResult, reg, ws)
         sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        
+        buy_year_high(regression_data, regressionResult, reg, ws)
+        buy_year_low(regression_data, regressionResult, reg, ws, ws)
+        buy_down_trend(regression_data, regressionResult, reg, ws)
+        buy_final(regression_data, regressionResult, reg, ws, ws)
+        buy_high_indicators(regression_data, regressionResult, reg, ws)
+        buy_pattern(regression_data, regressionResult, reg, ws, ws)
+        buy_morning_star_buy(regression_data, regressionResult, reg, ws)
+        buy_evening_star_sell(regression_data, regressionResult, reg, ws)
+        buy_oi_negative(regression_data, regressionResult, reg, ws)
+        buy_day_low(regression_data, regressionResult, reg, ws)
+        buy_vol_contract(regression_data, regressionResult, reg, ws)
+        buy_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
+        buy_trend_reversal(regression_data, regressionResult, reg, ws)
+        buy_trend_break(regression_data, regressionResult, reg, ws)
+        buy_consolidation_breakout(regression_data, regressionResult, reg, ws)
+        buy_final_candidate(regression_data, regressionResult, reg, ws)
+        buy_oi(regression_data, regressionResult, reg, ws)
+        buy_up_trend(regression_data, regressionResult, reg, ws)
+        buy_market_uptrend(regression_data, regressionResult, reg, ws)
+        buy_check_chart(regression_data, regressionResult, reg, ws)
+        buy_month3_high_continue(regression_data, regressionResult, reg, ws)
+        buy_heavy_uptrend_reversal(regression_data, regressionResult, reg, ws)
+        buy_supertrend(regression_data, regressionResult, reg, ws)
+        buy_risingMA(regression_data, regressionResult, reg, ws)
+        buy_study_risingMA(regression_data, regressionResult, reg, ws)
+        buy_random_filters(regression_data, regressionResult, reg, ws)
+        buy_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        
         return True
     return False
 
@@ -7542,7 +7647,7 @@ def sell_all_filter(regression_data, regressionResult, reg, ws):
     return flag
 
 def sell_filter_345_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-345-sell.csv')
+    filtersDict=patterns_to_dict('../../data-import/nselist/filter-345-sell.csv')
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filter = filterName + ',' \
                 + regression_data['series_trend'] + ',' \
@@ -7553,9 +7658,15 @@ def sell_filter_345_accuracy(regression_data, regressionResult, reg, ws):
     if (filter != '') and (filter in filtersDict):
         regression_data['filter_345_avg'] = float(filtersDict[filter]['avg'])
         regression_data['filter_345_count'] = float(filtersDict[filter]['count'])
+        if float(filtersDict[filter]['count']) >= 2:
+            if float(filtersDict[filter]['avg']) >= 0:
+                regression_data['filter_345_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
+            else:
+                regression_data['filter_345_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
+                
 
 def sell_filter_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-sell.csv')
+    filtersDict=patterns_to_dict('../../data-import/nselist/filter-sell.csv')
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
         filter = filterName + ',' \
@@ -7564,9 +7675,15 @@ def sell_filter_accuracy(regression_data, regressionResult, reg, ws):
         if filter != '' and filter in filtersDict:
             regression_data['filter_avg'] = float(filtersDict[filter]['avg'])
             regression_data['filter_count'] = float(filtersDict[filter]['count'])
+            if float(filtersDict[filter]['count']) >= 2:
+                if float(filtersDict[filter]['avg']) >= 0:
+                    regression_data['filter_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
+                else:
+                    regression_data['filter_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
+                
             
 def sell_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-pct-change-sell.csv')
+    filtersDict=patterns_to_dict('../../data-import/nselist/filter-pct-change-sell.csv')
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
         filter = filterName + ',' \
@@ -7579,9 +7696,14 @@ def sell_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
         if filter != '' and filter in filtersDict:
             regression_data['filter_pct_change_avg'] = float(filtersDict[filter]['avg'])
             regression_data['filter_pct_change_count'] = float(filtersDict[filter]['count'])
+            if float(filtersDict[filter]['count']) >= 2:
+                if float(filtersDict[filter]['avg']) >= 0:
+                    regression_data['filter_pct_change_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
+                else:
+                    regression_data['filter_pct_change_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
             
 def sell_filter_all_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=scrip_patterns_to_dict('../../data-import/nselist/filter-all-sell.csv')
+    filtersDict=patterns_to_dict('../../data-import/nselist/filter-all-sell.csv')
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filterNameTail = tail_change_filter(regression_data, regressionResult, False)
     filter = filterName + ',' \
@@ -7595,6 +7717,11 @@ def sell_filter_all_accuracy(regression_data, regressionResult, reg, ws):
     if (filter != '') and (filter in filtersDict):
         regression_data['filter_all_avg'] = float(filtersDict[filter]['avg'])
         regression_data['filter_all_count'] = float(filtersDict[filter]['count'])
+        if float(filtersDict[filter]['count']) >= 2:
+            if float(filtersDict[filter]['avg']) >= 0:
+                regression_data['filter_all_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
+            else:
+                regression_data['filter_all_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
 
 def is_filter_all_accuracy(regression_data, regressionResult, reg, ws):
     flag = False
