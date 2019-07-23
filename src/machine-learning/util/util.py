@@ -24,7 +24,7 @@ BUY_VERY_LESS_DATA=True
 SELL_VERY_LESS_DATA=True
 MARKET_IN_UPTREND=False
 MARKET_IN_DOWNTREND=False
-TEST = False
+TEST = True
 
 buyMLP = 0.1
 buyMLP_MIN = 0
@@ -2258,11 +2258,21 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
     if((-2 < regression_data['PCT_day_change'] < -0.5) and (-2 < regression_data['PCT_change'] < -0.5)
         and (1 <= low_tail_pct(regression_data) < 2)
         ):
-        if(regression_data['PCT_day_change_pre2'] > 2
+        if(regression_data['low'] < regression_data['low_pre1']
+            and regression_data['low_pre1'] < regression_data['low_pre2']
+            and regression_data['PCT_day_change_pre1'] < 0
+            and regression_data['PCT_day_change_pre2'] < 0
+            and regression_data['PCT_day_change_pre3'] < 0
+            and (regression_data['forecast_day_PCT3_change'] < 0)
+            and (regression_data['forecast_day_PCT5_change'] < -5)
+            and (regression_data['forecast_day_PCT7_change'] < -10 or regression_data['forecast_day_PCT10_change'] < -10)
+            ): 
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyStartLowTail-downtrend(CheckChart-Risky)')
+        elif(regression_data['PCT_day_change_pre2'] > 2
             and -2 < regression_data['PCT_day_change_pre1'] < 0
             and regression_data['forecast_day_PCT3_change'] > -5
             ): 
-            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyStartLowTail-downtrend(CheckChart-Risky)')
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyStartLowTail-downtrend-0(CheckChart-Risky)')
     
     if((0.3 < regression_data['PCT_day_change'] < 2) and (0.3 < regression_data['PCT_change'] < 2)
         and (1 <= high_tail_pct(regression_data) < 2)
@@ -2272,12 +2282,14 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
             and 0 < regression_data['PCT_day_change_pre1'] < 5
             and -1 < regression_data['PCT_day_change_pre2'] < 5
             and (regression_data['forecast_day_PCT3_change'] < 5)
+            and (regression_data['forecast_day_PCT5_change'] < 5)
             ): 
             add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyContinueHighTail-uptrend(CheckChart-risky)')
         elif(regression_data['high'] > regression_data['high_pre1']
             and regression_data['high_pre1'] > regression_data['high_pre2']
             and -1 < regression_data['PCT_day_change_pre2'] < 0
             and (regression_data['forecast_day_PCT3_change'] < 5)
+            and (regression_data['forecast_day_PCT5_change'] < 5)
             ): 
             add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyContinueHighTail-uptrend-0(CheckChart-risky)')
         elif(regression_data['forecast_day_PCT_change'] > 0
@@ -2465,9 +2477,19 @@ def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
             and regression_data['PCT_day_change_pre2'] < 0
             and regression_data['PCT_day_change_pre3'] < 0
             and regression_data['monthLow'] >= regression_data['low']
+            and (regression_data['forecast_day_PCT7_change'] < -10 or regression_data['forecast_day_PCT10_change'] < -10)
             #and regression_data['PCT_day_change_pre3'] < regression_data['PCT_day_change']
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'MayBuy-CheckChart(downTrend-mayReverseLast4DaysDown)-1')
+            add_in_csv(regression_data, regressionResult, ws, 'MayBuy-CheckChart(downTrend-mayReverseLast4DaysDown)')
+        elif(-2 < regression_data['PCT_day_change'] < -1
+            and -2 < regression_data['PCT_change'] < -1
+            and regression_data['PCT_day_change_pre1'] < -1
+            and regression_data['PCT_day_change_pre2'] < 0
+            and regression_data['PCT_day_change_pre3'] < 0
+            and regression_data['monthLow'] >= regression_data['low']
+            #and regression_data['PCT_day_change_pre3'] < regression_data['PCT_day_change']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'MayBuy-CheckChart(downTrend-mayReverseLast4DaysDown)-Risky')
         elif(-3.5 < regression_data['PCT_day_change'] < -1
             and -3.5 < regression_data['PCT_change'] < -1
             and regression_data['PCT_day_change_pre1'] < -1
@@ -2701,8 +2723,7 @@ def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
             and regression_data['month6Low'] == regression_data['yearLow']
             ):
             add_in_csv(regression_data, regressionResult, ws, "(Test)MayBuyCheckChart-month6LowBreakReversal")
-           
-                
+                          
 def buy_year_high(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     if(float(regression_data['forecast_day_VOL_change']) > 70
@@ -5436,12 +5457,23 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
     
     if((0.5 < regression_data['PCT_day_change'] < 2) and (0.5 < regression_data['PCT_change'] < 2)
         and (1 <= high_tail_pct(regression_data) < 2)
-        ): 
-        if(regression_data['PCT_day_change_pre2'] < -2
+        ):
+        if(regression_data['high'] > regression_data['high_pre1']
+            and regression_data['high_pre1'] > regression_data['high_pre2']
+            and 0 < regression_data['PCT_day_change_pre1']
+            and 0 < regression_data['PCT_day_change_pre2']
+            and 0 < regression_data['PCT_day_change_pre3']
+            and (regression_data['forecast_day_PCT3_change'] > 0)
+            and (regression_data['forecast_day_PCT5_change'] > 5)
+            and (regression_data['forecast_day_PCT7_change'] > 10 or regression_data['forecast_day_PCT7_change'] > 10)
+            ): 
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellStartHighTail-uptrend(CheckChart-risky)') 
+        elif(regression_data['PCT_day_change_pre2'] < -2
             and 0 < regression_data['PCT_day_change_pre1'] < 2
             and regression_data['forecast_day_PCT3_change'] < 5
             ): 
-            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellStartHighTail-uptrend(CheckChart-risky)')
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellStartHighTail-uptrend-0(CheckChart-risky)')
+        
     if((-2 < regression_data['PCT_day_change'] < -0.3) and (-2 < regression_data['PCT_change'] < -0.3)
         and (1 <= low_tail_pct(regression_data) < 2)
         ):
@@ -5450,10 +5482,12 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
             and -5 < regression_data['PCT_day_change_pre1'] < 0
             and -5 < regression_data['PCT_day_change_pre2'] < 1
             and (regression_data['forecast_day_PCT3_change'] > -5)
+            and (regression_data['forecast_day_PCT5_change'] > -5)
             ): 
             add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellContinueLowTail-downtrend(CheckChart-Risky)')
         elif(0 < regression_data['PCT_day_change_pre2'] < 1
             and (regression_data['forecast_day_PCT3_change'] > -5)
+            and (regression_data['forecast_day_PCT5_change'] > -5)
             ): 
             add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellContinueLowTail-downtrend-0(CheckChart-Risky)')    
         elif((regression_data['forecast_day_PCT_change'] < 0 
@@ -5583,8 +5617,17 @@ def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
             and regression_data['PCT_day_change_pre2'] > 0
             and regression_data['PCT_day_change_pre3'] > 0
             and regression_data['monthHigh'] <= regression_data['high']
+            and (regression_data['forecast_day_PCT7_change'] > 10 or regression_data['forecast_day_PCT10_change'] > 10)
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'MaySell-CheckChart(downTrend-mayReverseLast4DaysUp)-1')
+            add_in_csv(regression_data, regressionResult, ws, 'MaySell-CheckChart(downTrend-mayReverseLast4DaysUp)')
+        elif(1 < regression_data['PCT_day_change'] < 2
+            and 1 < regression_data['PCT_change'] < 2
+            and regression_data['PCT_day_change_pre1'] > 1
+            and regression_data['PCT_day_change_pre2'] > 0
+            and regression_data['PCT_day_change_pre3'] > 0
+            and regression_data['monthHigh'] <= regression_data['high']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'MaySell-CheckChart(downTrend-mayReverseLast4DaysUp)-Risky')
         elif(1 < regression_data['PCT_day_change'] < 3.5
             and 1 < regression_data['PCT_change'] < 3.5
             and 1 < regression_data['PCT_day_change_pre1'] 
