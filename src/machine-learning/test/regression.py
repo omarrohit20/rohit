@@ -101,14 +101,19 @@ def regression_ta_data(scrip):
     df.dropna(subset=['Act_PCT_change'], inplace = True)
     size = int((int(np.floor(df.shape[0]))/3)*2)
     for x in range(size):
-        db.technical.delete_many({'dataset_code':scrip})
-        ta_lib_data_df(scrip, df, True) 
-        regression_high = process_regression_high(scrip, df, directory, run_ml_algo)
-        regression_low = process_regression_low(scrip, df, directory, run_ml_algo)
-        result_data_reg(regression_high, regression_low, scrip)
-        result_data_cla(regression_high, regression_low, scrip)
-        result_data(regression_high, regression_low, scrip)
-        df = df[:-1]
+        try:
+            db.technical.delete_many({'dataset_code':scrip})
+            ta_lib_data_df(scrip, df, True) 
+            regression_high = process_regression_high(scrip, df, directory, run_ml_algo)
+            regression_low = process_regression_low(scrip, df, directory, run_ml_algo)
+            result_data_reg(regression_high, regression_low, scrip)
+            result_data_cla(regression_high, regression_low, scrip)
+            result_data(regression_high, regression_low, scrip)
+            df = df[:-1]
+        except IndexError as e:
+            print(e)
+        except Exception as e:
+            print(e)
         
     db.regressionHistoryScrip.insert_one({
         "dataset_code": scrip,

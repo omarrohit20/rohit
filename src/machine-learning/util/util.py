@@ -35,6 +35,34 @@ sellMLP_MIN = 0
 sellKN = -0.1
 sellKN_MIN = 0
 
+def patterns_to_dict(filename):  
+    tempDict = {}
+    count = 0
+    with open(filename) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        for row in readCSV:
+            try:
+                if (count != 0):
+                    dictValue = {}
+                    dictValue['avg'] = row[1]
+                    dictValue['count'] = row[2]
+                    dictValue['countgt'] = row[3]
+                    dictValue['countlt'] = row[4]
+                    tempDict[row[0]] = dictValue
+                count = count + 1
+            except:
+                pass
+    return tempDict
+
+filter345sell = patterns_to_dict('../../data-import/nselist/filter-345-sell.csv')
+filtersell = patterns_to_dict('../../data-import/nselist/filter-sell.csv')
+filterpctchangesell = patterns_to_dict('../../data-import/nselist/filter-pct-change-sell.csv')
+filterallsell = patterns_to_dict('../../data-import/nselist/filter-all-sell.csv')
+filter345buy = patterns_to_dict('../../data-import/nselist/filter-345-buy.csv')
+filterbuy = patterns_to_dict('../../data-import/nselist/filter-buy.csv')
+filterpctchangebuy = patterns_to_dict('../../data-import/nselist/filter-pct-change-buy.csv')
+filterallbuy = patterns_to_dict('../../data-import/nselist/filter-all-buy.csv')
+    
 def add_in_csv(regression_data, regressionResult, ws=None, filter=None, filter1=None, filter2=None, filter3=None, filter4=None, filter5=None, filter6=None):
     if(TEST != True):
         if(is_algo_buy(regression_data) and (filter is not None)):
@@ -369,6 +397,26 @@ def pct_change_positive_trend(regression_data):
             else:
                 trend = False
         return trend
+    return False       
+
+def pct_change_negative_trend_short(regression_data):
+    if (regression_data['forecast_day_PCT_change'] < 0
+        and regression_data['forecast_day_PCT2_change'] < 0
+        and regression_data['forecast_day_PCT3_change'] < 0
+        and regression_data['low'] < regression_data['low_pre1']
+        and regression_data['low_pre1'] < regression_data['high_pre2']
+        ):
+        return True            
+    return False           
+    
+def pct_change_positive_trend_short(regression_data):
+    if (regression_data['forecast_day_PCT_change'] > 0
+        and regression_data['forecast_day_PCT2_change'] > 0
+        and regression_data['forecast_day_PCT3_change'] > 0
+        and regression_data['high'] > regression_data['high_pre1']
+        and regression_data['high_pre1'] > regression_data['high_pre2']
+        ):
+        return False
     return False       
 
 def preDayPctChangeUp_orVolHigh(regression_data):
@@ -874,16 +922,21 @@ def tail_change_filter(regression_data, regressionResult, save):
     filterTail = ''
     
     if(high_tail_pct(regression_data) > 1.5):
-        filterTail = filterTail + 'HTGT3.5'
+        filterTail = filterTail + 'HTGT1.5'
+        if(high_tail_pct(regression_data) > abs(regression_data['PCT_day_change'])):
+            filterTail = filterTail + ',HTGTPCTDayChange'
 #     elif(high_tail_pct(regression_data) > 2.5):
 #         filterTail = filterTail + 'HTGT2.5'
 #     elif(high_tail_pct(regression_data) > 1.5):
 #         filterTail = filterTail + 'HTGT1.5'
 #     elif(high_tail_pct(regression_data) < 1):
 #         filterTail = filterTail + 'HTLT1'
+        
     
     if(low_tail_pct(regression_data) > 1.5):
-        filterTail = filterTail + 'LTGT3.5'
+        filterTail = filterTail + 'LTGT1.5'
+        if(low_tail_pct(regression_data) > abs(regression_data['PCT_day_change'])):
+            filterTail = filterTail + ',LTGTPCTDayChange'
 #     elif(low_tail_pct(regression_data) > 2.5):
 #         filterTail = filterTail + 'LTGT2.5'
 #     elif(low_tail_pct(regression_data) > 1.5):
@@ -891,6 +944,9 @@ def tail_change_filter(regression_data, regressionResult, save):
 #     elif(low_tail_pct(regression_data) < 1):
 #         filterTail = filterTail + 'LTLT1'
         
+        
+    
+    
     if(save):
         add_in_csv(regression_data, regressionResult, None, filterTail)
     else:
@@ -1724,27 +1780,7 @@ def scrip_patterns_to_dict(filename):
                 count = count + 1
             except:
                 pass
-    return tempDict 
-
-def patterns_to_dict(filename):  
-    tempDict = {}
-    count = 0
-    with open(filename) as csvfile:
-        readCSV = csv.reader(csvfile, delimiter=',')
-        for row in readCSV:
-            try:
-                if (count != 0):
-                    dictValue = {}
-                    dictValue['avg'] = row[1]
-                    dictValue['count'] = row[2]
-                    dictValue['countgt'] = row[3]
-                    dictValue['countlt'] = row[4]
-                    tempDict[row[0]] = dictValue
-                count = count + 1
-            except:
-                pass
-    return tempDict 
-
+    return tempDict  
 
 def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, mlp_c_o, kneighbours_c_o):
     regression_data['mlpValue_reg_other'] = float(mlp_r_o)
@@ -1771,10 +1807,14 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regression_data['filter_all_count'] = 0
     regression_data['filter_all_pct'] = 0
     regression_data['series_trend'] = "NA"
+    if pct_change_negative_trend_short(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend_short(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
     if pct_change_negative_trend(regression_data):
-        regression_data['series_trend'] = "downTrend"
+        regression_data['series_trend'] = "shortDownTrend"
     if pct_change_positive_trend(regression_data):
-         regression_data['series_trend'] = "upTrend"    
+        regression_data['series_trend'] = "shortUpTrend"    
     
     regression_data['oi'] = float(-10000)
     regression_data['contract'] = float(-10000)
@@ -2268,12 +2308,7 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
             and (regression_data['forecast_day_PCT7_change'] < -10 or regression_data['forecast_day_PCT10_change'] < -10)
             ): 
             add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyStartLowTail-downtrend(CheckChart-Risky)')
-        elif(regression_data['PCT_day_change_pre2'] > 2
-            and -2 < regression_data['PCT_day_change_pre1'] < 0
-            and regression_data['forecast_day_PCT3_change'] > -5
-            ): 
-            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyStartLowTail-downtrend-0(CheckChart-Risky)')
-    
+        
     if((0.3 < regression_data['PCT_day_change'] < 2) and (0.3 < regression_data['PCT_change'] < 2)
         and (1 <= high_tail_pct(regression_data) < 2)
         ):
@@ -4960,6 +4995,15 @@ def buy_test_345(regression_data, regressionResult, reg, ws):
     regression_data['filter4'] = " "
     regression_data['filter5'] = " "
     regression_data['filter6'] = " "
+    regression_data['series_trend'] = "NA"
+    if pct_change_negative_trend_short(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend_short(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
+    if pct_change_negative_trend(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
     flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
     filterName = pct_change_filter(regression_data, regressionResult, False)
     regression_data['filterTest'] = filterName + ',' \
@@ -4982,6 +5026,15 @@ def buy_test(regression_data, regressionResult, reg, ws):
     regression_data['filter4'] = " "
     regression_data['filter5'] = " "
     regression_data['filter6'] = " "
+    regression_data['series_trend'] = "NA"
+    if pct_change_negative_trend_short(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend_short(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
+    if pct_change_negative_trend(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
     flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
     filterName = pct_change_filter(regression_data, regressionResult, False)
     regression_data['filterTest'] = filterName + ',' \
@@ -5001,6 +5054,15 @@ def buy_test_pct_change(regression_data, regressionResult, reg, ws):
     regression_data['filter4'] = " "
     regression_data['filter5'] = " "
     regression_data['filter6'] = " "
+    regression_data['series_trend'] = "NA"
+    if pct_change_negative_trend_short(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend_short(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
+    if pct_change_negative_trend(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
     flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
     filterName = pct_change_filter(regression_data, regressionResult, False)
     regression_data['filterTest'] = filterName + ',' \
@@ -5024,6 +5086,15 @@ def buy_test_all(regression_data, regressionResult, reg, ws):
     regression_data['filter4'] = " "
     regression_data['filter5'] = " "
     regression_data['filter6'] = " "
+    regression_data['series_trend'] = "NA"
+    if pct_change_negative_trend_short(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend_short(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
+    if pct_change_negative_trend(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
     flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filterNameTail = tail_change_filter(regression_data, regressionResult, False)
@@ -5097,7 +5168,7 @@ def buy_all_filter(regression_data, regressionResult, reg, ws):
     return flag
 
 def buy_filter_345_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=patterns_to_dict('../../data-import/nselist/filter-345-buy.csv')
+    filtersDict=filter345buy
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filter = filterName + ',' \
             + regression_data['series_trend'] + ',' \
@@ -5115,7 +5186,7 @@ def buy_filter_345_accuracy(regression_data, regressionResult, reg, ws):
                 regression_data['filter_345_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
 
 def buy_filter_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=patterns_to_dict('../../data-import/nselist/filter-buy.csv')
+    filtersDict=filterbuy
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
         filter = filterName + ',' \
@@ -5131,7 +5202,7 @@ def buy_filter_accuracy(regression_data, regressionResult, reg, ws):
                     regression_data['filter_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
 
 def buy_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=patterns_to_dict('../../data-import/nselist/filter-pct-change-buy.csv')
+    filtersDict=filterpctchangebuy
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
         filter = filterName + ',' \
@@ -5151,7 +5222,7 @@ def buy_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
                     regression_data['filter_pct_change_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
                 
 def buy_filter_all_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=patterns_to_dict('../../data-import/nselist/filter-all-buy.csv')
+    filtersDict=filterallbuy
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filterNameTail = tail_change_filter(regression_data, regressionResult, False)
     filter = filterName + ',' \
@@ -5170,8 +5241,7 @@ def buy_filter_all_accuracy(regression_data, regressionResult, reg, ws):
                 regression_data['filter_all_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
             else:
                 regression_data['filter_all_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
-                
-            
+                            
 def sell_pattern_without_mlalgo(regression_data, regressionResult):
     if(regression_data['PCT_day_change'] > -3.5
         and regression_data['year2HighChange'] < -5):
@@ -5468,11 +5538,6 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
             and (regression_data['forecast_day_PCT7_change'] > 10 or regression_data['forecast_day_PCT7_change'] > 10)
             ): 
             add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellStartHighTail-uptrend(CheckChart-risky)') 
-        elif(regression_data['PCT_day_change_pre2'] < -2
-            and 0 < regression_data['PCT_day_change_pre1'] < 2
-            and regression_data['forecast_day_PCT3_change'] < 5
-            ): 
-            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellStartHighTail-uptrend-0(CheckChart-risky)')
         
     if((-2 < regression_data['PCT_day_change'] < -0.3) and (-2 < regression_data['PCT_change'] < -0.3)
         and (1 <= low_tail_pct(regression_data) < 2)
@@ -5485,7 +5550,9 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
             and (regression_data['forecast_day_PCT5_change'] > -5)
             ): 
             add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellContinueLowTail-downtrend(CheckChart-Risky)')
-        elif(0 < regression_data['PCT_day_change_pre2'] < 1
+        elif(regression_data['low'] < regression_data['low_pre1']
+            and regression_data['low_pre1'] < regression_data['low_pre2']
+            and 0 < regression_data['PCT_day_change_pre2'] < 1
             and (regression_data['forecast_day_PCT3_change'] > -5)
             and (regression_data['forecast_day_PCT5_change'] > -5)
             ): 
@@ -7553,6 +7620,15 @@ def sell_test_345(regression_data, regressionResult, reg, ws):
     regression_data['filter4'] = " "
     regression_data['filter5'] = " "
     regression_data['filter6'] = " "
+    regression_data['series_trend'] = "NA"
+    if pct_change_negative_trend_short(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend_short(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
+    if pct_change_negative_trend(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
     flag = sell_other_indicator(regression_data, regressionResult, reg, ws)
     filterName = pct_change_filter(regression_data, regressionResult, False)
     regression_data['filterTest'] = filterName + ',' \
@@ -7573,6 +7649,15 @@ def sell_test(regression_data, regressionResult, reg, ws):
     regression_data['filter4'] = " "
     regression_data['filter5'] = " "
     regression_data['filter6'] = " "
+    regression_data['series_trend'] = "NA"
+    if pct_change_negative_trend_short(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend_short(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
+    if pct_change_negative_trend(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
     flag = sell_other_indicator(regression_data, regressionResult, reg, ws)
     filterName = pct_change_filter(regression_data, regressionResult, False)
     regression_data['filterTest'] = filterName + ',' \
@@ -7592,6 +7677,15 @@ def sell_test_pct_change(regression_data, regressionResult, reg, ws):
     regression_data['filter4'] = " "
     regression_data['filter5'] = " "
     regression_data['filter6'] = " "
+    regression_data['series_trend'] = "NA"
+    if pct_change_negative_trend_short(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend_short(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
+    if pct_change_negative_trend(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
     flag = sell_other_indicator(regression_data, regressionResult, reg, ws)
     filterName = pct_change_filter(regression_data, regressionResult, False)
     regression_data['filterTest'] = filterName + ',' \
@@ -7615,6 +7709,15 @@ def sell_test_all(regression_data, regressionResult, reg, ws):
     regression_data['filter4'] = " "
     regression_data['filter5'] = " "
     regression_data['filter6'] = " "
+    regression_data['series_trend'] = "NA"
+    if pct_change_negative_trend_short(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend_short(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
+    if pct_change_negative_trend(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
     flag = sell_other_indicator(regression_data, regressionResult, reg, ws)
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filterNameTail = tail_change_filter(regression_data, regressionResult, False)
@@ -7690,7 +7793,7 @@ def sell_all_filter(regression_data, regressionResult, reg, ws):
     return flag
 
 def sell_filter_345_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=patterns_to_dict('../../data-import/nselist/filter-345-sell.csv')
+    filtersDict = filter345sell
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filter = filterName + ',' \
                 + regression_data['series_trend'] + ',' \
@@ -7707,9 +7810,8 @@ def sell_filter_345_accuracy(regression_data, regressionResult, reg, ws):
             else:
                 regression_data['filter_345_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
                 
-
 def sell_filter_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=patterns_to_dict('../../data-import/nselist/filter-sell.csv')
+    filtersDict=filtersell
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
         filter = filterName + ',' \
@@ -7723,10 +7825,9 @@ def sell_filter_accuracy(regression_data, regressionResult, reg, ws):
                     regression_data['filter_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
                 else:
                     regression_data['filter_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
-                
-            
+                     
 def sell_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=patterns_to_dict('../../data-import/nselist/filter-pct-change-sell.csv')
+    filtersDict=filterpctchangesell
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
         filter = filterName + ',' \
@@ -7746,7 +7847,7 @@ def sell_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
                     regression_data['filter_pct_change_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
             
 def sell_filter_all_accuracy(regression_data, regressionResult, reg, ws):
-    filtersDict=patterns_to_dict('../../data-import/nselist/filter-all-sell.csv')
+    filtersDict=filterallsell
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filterNameTail = tail_change_filter(regression_data, regressionResult, False)
     filter = filterName + ',' \
@@ -7768,170 +7869,49 @@ def sell_filter_all_accuracy(regression_data, regressionResult, reg, ws):
 
 def is_filter_all_accuracy(regression_data, regressionResult, reg, ws):
     flag = False
-    flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_all_avg', 'filter_all_count')
+    flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
     if(flag):
         return flag
-    flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_all_avg', 'filter_all_count', 'filter_345_avg', 'filter_345_count')
+    flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
+    if(flag):
+        return flag
+    flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_avg', 'filter_count', 'filter_pct')
+    if(flag):
+        return flag
+    flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
     if(flag):
         return flag  
 
-def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_avg_oth, filter_count_oth):
- 
+def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_pct):
     if(abs(regression_data[filter_avg]) > 0.5
         and regression_data[filter_count] >= 1
         #and (regression_data[filter_count_oth] >= 2
         #    or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2))
         ):
-        if((("MLSell" in regression_data['filter']) and 0 < float(regression_data[filter_avg]) < 3.0 and regression_data['PCT_change'] > -2)
-            or (("MLBuy" in regression_data['filter']) and -3.0 < float(regression_data[filter_avg]) < 0 and regression_data['PCT_change'] < 2)
+        if((("MLSell" in regression_data['filter']) and 0 < float(regression_data[filter_avg]) < 2.5)
+            or (("MLBuy" in regression_data['filter']) and -2.5 < float(regression_data[filter_avg]) < 0)
             ):
             return False
-        Flag = False
-        if(((regression_data['mlpValue_reg'] >= 0 or regression_data['kNeighboursValue_reg'] >= 0)
-                and (regression_data['mlpValue_reg_other'] >= 0 or regression_data['kNeighboursValue_reg_other'] >= 0)
-                and ((regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0)
-                     or (regression_data[filter_avg] > 1.5 and (regression_data['mlpValue_reg'] >= 0.5 or regression_data['kNeighboursValue_reg'] >= 0.5))
-                     )
-                and (regression_data[filter_count_oth] >= 2
-                     or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2)
-                    )
-                )
-            or ((regression_data['mlpValue_reg'] >= 0 and regression_data['kNeighboursValue_reg'] >= 0)
-                and (regression_data['mlpValue_reg'] >= 1 or regression_data['kNeighboursValue_reg'] >= 1)
-                and (regression_data['mlpValue_reg_other'] >= 0 or regression_data['kNeighboursValue_reg_other'] >= 0)
-                and ((regression_data['PCT_day_change'] < 1 and regression_data['PCT_change'] < 1)
-                     or (regression_data[filter_avg] > 1.5 and (regression_data['mlpValue_reg'] >= 1 or regression_data['kNeighboursValue_reg'] >= 1))
-                     )
-                and (regression_data[filter_count_oth] >= 2
-                     or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2)
-                    )
-                )
-            or (("MLBuy" in regression_data['filter']) 
-                and ((regression_data['PCT_day_change'] < 1 and regression_data['PCT_change'] < 1) 
-                     or (regression_data['PCT_day_change'] > 9 and regression_data['PCT_change'] > 9)
-                    )
-                and ((float(regression_data[filter_avg]) > 1.5)
-                     or (float(regression_data[filter_avg]) > 1.3 and regression_data[filter_avg] > 3)
-                    )
-                )
-            ):
-            if((regression_data['mlpValue_reg'] >= 0 and regression_data['kNeighboursValue_reg'] >= 0)
-                and (regression_data['mlpValue_reg_other'] >= 0 and regression_data['kNeighboursValue_reg_other'] >= 0)
-                and float(regression_data[filter_avg]) > 0.4
-                ):
-                Flag = True
-                add_in_csv(regression_data, regressionResult, ws, None, '00-AllGT0')
-            elif(("MLBuy" in regression_data['filter'])
-                and (regression_data['mlpValue_reg'] >= 1 or regression_data['kNeighboursValue_reg'] >= 1)
-                and float(regression_data[filter_avg]) > 0.4
-                ):
-                Flag = True
-                add_in_csv(regression_data, regressionResult, ws, None, '0-ML')
-            elif((regression_data['filter3'] != ' ' and regression_data['filter4'] != ' ')
-                and (regression_data['PCT_day_change'] > -2)
-                and (regression_data[filter_avg] > 0.4)
-                #and (regression_data['mlpValue_reg'] >= 0.5 or regression_data['kNeighboursValue_reg'] >= 0.5)
-                ):
-                Flag = True
-                add_in_csv(regression_data, regressionResult, ws, None, '1-BothFilter')
-            elif((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ')
-                and (regression_data['PCT_day_change'] > -2)
-                and (regression_data[filter_avg] > 0.4)
-                #and (regression_data['mlpValue_reg'] >= 0.5 or regression_data['kNeighboursValue_reg'] >= 0.5)
-                ):
-                Flag = True
-                add_in_csv(regression_data, regressionResult, ws, None, '2-AnyFilter')
-            elif((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ' or regression_data['filter5'] != ' ')
-                and (regression_data[filter_avg] > 3)
-                #and (regression_data['mlpValue_reg'] >= 0.5 or regression_data['kNeighboursValue_reg'] >= 0.5)
-                ):
-                Flag = True
-                add_in_csv(regression_data, regressionResult, ws, None, '2-AnyFilter-Risky')
-            
-        if(((regression_data['mlpValue_reg'] <= 0 or regression_data['kNeighboursValue_reg'] <= 0)
-                and (regression_data['mlpValue_reg_other'] <= 0 or regression_data['kNeighboursValue_reg_other'] <= 0)
-                and ((regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0)
-                     or (regression_data[filter_avg] < -1.5 and (regression_data['mlpValue_reg'] <= -0.5 or regression_data['kNeighboursValue_reg'] <= -0.5))
-                     )
-                and (regression_data[filter_count_oth] >= 2
-                     or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2)
-                    )
-                )
-            or ((regression_data['mlpValue_reg'] <= 0 and regression_data['kNeighboursValue_reg'] <= 0)
-                and (regression_data['mlpValue_reg'] <= -1 or regression_data['kNeighboursValue_reg'] <= -1)
-                and (regression_data['mlpValue_reg_other'] <= 0 or regression_data['kNeighboursValue_reg_other'] <= 0)
-                and ((regression_data['PCT_day_change'] > -1 and regression_data['PCT_change'] > -1)
-                     or (regression_data[filter_avg] < -1.5 and (regression_data['mlpValue_reg'] <= -1 or regression_data['kNeighboursValue_reg'] <= -1))
-                     )
-                and (regression_data[filter_count_oth] >= 2
-                     or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2)
-                    )
-                )
-            or (("MLSell" in regression_data['filter']) 
-                and ((regression_data['PCT_day_change'] > -1 and regression_data['PCT_change'] > -1)
-                     or (regression_data['PCT_day_change'] < -9 and regression_data['PCT_change'] < -9)
-                    )
-                and ((float(regression_data[filter_avg]) < -1.5)
-                     or (float(regression_data[filter_avg]) < -1.3 and regression_data[filter_avg] > 3)
-                    )
-                )
-            ):
-            if((regression_data['mlpValue_reg'] <= 0 and regression_data['kNeighboursValue_reg'] <= 0)
-                and (regression_data['mlpValue_reg_other'] <= 0 and regression_data['kNeighboursValue_reg_other'] <= 0)
-                and float(regression_data[filter_avg]) < -0.4
-                ):
-                Flag = True
-                add_in_csv(regression_data, regressionResult, ws, None, '00-AllLT0')
-            elif(("MLSell" in regression_data['filter'])
-                and (regression_data['mlpValue_reg'] <= -1 or regression_data['kNeighboursValue_reg'] <= -1)
-                and float(regression_data[filter_avg]) < -0.4
-                ):
-                Flag = True
-                add_in_csv(regression_data, regressionResult, ws, None, '0-ML')
-            elif((regression_data['filter3'] != ' ' and regression_data['filter4'] != ' ')
-                and (regression_data['PCT_day_change'] < 2)
-                and (regression_data[filter_avg] < -0.4)
-               # and (regression_data['mlpValue_reg'] <= -0.5 or regression_data['kNeighboursValue_reg'] <= -0.5)
-                ):
-                Flag = True
-                add_in_csv(regression_data, regressionResult, ws, None, '1-BothFilter')
-            elif((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ')
-                and (regression_data['PCT_day_change'] < 2)
-                and (regression_data[filter_avg] < -0.4)
-                #and (regression_data['mlpValue_reg'] <= -0.5 or regression_data['kNeighboursValue_reg'] <= -0.5)
-                ):
-                Flag = True
-                add_in_csv(regression_data, regressionResult, ws, None, '2-AnyFilter')
-            elif((regression_data['filter3'] != ' ' or regression_data['filter4'] != ' ' or regression_data['filter4'] != ' ')
-                and (regression_data[filter_avg] < -3)
-                #and (regression_data['mlpValue_reg'] <= -0.5 or regression_data['kNeighboursValue_reg'] <= -0.5)
-                ):
-                Flag = True
-                add_in_csv(regression_data, regressionResult, ws, None, '2-AnyFilter-Risky')
-        if(regression_data[filter_count] < 2 or regression_data[filter_count_oth] < 2):
-            add_in_csv(regression_data, regressionResult, ws, None, 'RISKY')
-        elif(regression_data[filter_avg] > 0
-            and (regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0)
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky(BuyAfter9:30)')
-        elif(regression_data[filter_avg] < 0 
-            and (regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0)
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky(SellAfter9:30)')
-        elif(regression_data[filter_avg] > 0 
-            and regression_data['PCT_day_change'] < 0.7 and regression_data['PCT_change'] < 0.7
-            and ((regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0)
-                 or (regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0))
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, 'STRONG')
-        elif(regression_data[filter_avg] < 0 
-            and regression_data['PCT_day_change'] > -0.7 and regression_data['PCT_change'] > -0.7
-            and ((regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0)
-                 or (regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0))
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, 'STRONG')
         
-        return Flag
+        if(abs(float(regression_data[filter_avg])) > 1.5 
+            and abs(regression_data[filter_pct]) > 60
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, 'STRONG')
+            return True
+            
+        if(("MLBuy" in regression_data['filter']) 
+            and regression_data[filter_avg] >= 1
+            and (regression_data[filter_pct] >= 80 or regression_data[filter_pct] == 0)
+            ):
+            return True
+            
+        if(("MLSell" in regression_data['filter']) 
+            and regression_data[filter_avg] <= -1
+            and (regression_data[filter_pct] <= -80 or regression_data[filter_pct] == 0)
+            ):
+            return True      
+        
+        
         
         
     
