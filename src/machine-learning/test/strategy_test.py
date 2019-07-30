@@ -166,6 +166,26 @@ def export_data_patterns_from_db():
     curser = dbresult.sell_test_all.aggregate(pipeline)
     curs_to_csv(curser, '../../data-import/nselist/filter-all-sell.csv')
     
+    pipeline = [{"$project":{"buyIndia":"$buyIndia","Act_PCT_day_change":"$Act_PCT_day_change"}},
+                {"$project":{"_id":"$_id","___group":{"buyIndia":"$buyIndia"},"Act_PCT_day_change":"$Act_PCT_day_change"}},
+                {"$group":{"_id":"$___group","avg":{"$avg":"$Act_PCT_day_change"},"count":{"$sum":1}}},{"$sort":SON({"_id":1})},
+                {"$project":{"_id":false,"buyIndia":"$_id.buyIndia","avg":true,"count":true}},
+                {"$sort":SON({"buyIndia":1})}
+                ]
+    print('patterns-buy')
+    curser = db.ws_high.aggregate(pipeline)
+    curs_to_csv(curser, '../../data-import/nselist/patterns-buy.csv')
+    
+    pipeline = [{"$project":{"sellIndia":"$sellIndia","Act_PCT_day_change":"$Act_PCT_day_change"}},
+                {"$project":{"_id":"$_id","___group":{"sellIndia":"$sellIndia"},"Act_PCT_day_change":"$Act_PCT_day_change"}},
+                {"$group":{"_id":"$___group","avg":{"$avg":"$Act_PCT_day_change"},"count":{"$sum":1}}},{"$sort":SON({"_id":1})},
+                {"$project":{"_id":false,"sellIndia":"$_id.sellIndia","avg":true,"count":true}},
+                {"$sort":SON({"sellIndia":1})}
+                ]
+    print('patterns-sell')
+    curser = db.ws_low.aggregate(pipeline)
+    curs_to_csv(curser, '../../data-import/nselist/patterns-sell.csv')
+    
 if __name__ == "__main__":    
     import_data_in_db()
     export_data_patterns_from_db()

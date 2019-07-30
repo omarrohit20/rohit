@@ -2330,7 +2330,11 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
             and (regression_data['forecast_day_PCT5_change'] < 5)
             ): 
             add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyContinueHighTail-uptrend-0(CheckChart-risky)')
-        elif(regression_data['forecast_day_PCT_change'] > 0
+        elif(((regression_data['high'] > regression_data['high_pre1']
+            and regression_data['forecast_day_PCT2_change'] > 0)
+              or (regression_data['PCT_day_change_pre1'] < -5)
+            )
+            and regression_data['forecast_day_PCT_change'] > 0  
             and regression_data['forecast_day_PCT3_change'] < 0
             and regression_data['forecast_day_PCT5_change'] < 0 
             and regression_data['forecast_day_PCT7_change'] < 0
@@ -5563,11 +5567,16 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
             and (regression_data['forecast_day_PCT5_change'] > -5)
             ): 
             add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellContinueLowTail-downtrend-0(CheckChart-Risky)')    
-        elif((regression_data['forecast_day_PCT_change'] < 0 
+        elif(((regression_data['low'] < regression_data['low_pre1']
+              and regression_data['forecast_day_PCT2_change'] < 0
+              )
+              or (regression_data['PCT_day_change_pre1'] > 5)
+              )
+              and regression_data['forecast_day_PCT_change'] < 0 
               and regression_data['forecast_day_PCT3_change'] > 0
               and regression_data['forecast_day_PCT5_change'] > 0 
               and regression_data['forecast_day_PCT7_change'] > 0 
-              and regression_data['forecast_day_PCT10_change'] > 0)
+              and regression_data['forecast_day_PCT10_change'] > 0
             ): 
             add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellContinueLowTail-downtrend-1(CheckChart-Risky)')
         elif(regression_data['bar_high'] < regression_data['bar_high_pre1']
@@ -7900,19 +7909,19 @@ def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, f
             return False
         
         if(abs(float(regression_data[filter_avg])) > 1.5 
-            and abs(regression_data[filter_pct]) > 60
+            and abs(regression_data[filter_pct]) > 50
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'STRONG')
             return True
             
         if(("MLBuy" in regression_data['filter']) 
-            and regression_data[filter_avg] >= 1
+            and regression_data[filter_avg] >= 1.5
             and (regression_data[filter_pct] >= 80 or regression_data[filter_pct] == 0)
             ):
             return True
             
         if(("MLSell" in regression_data['filter']) 
-            and regression_data[filter_avg] <= -1
+            and regression_data[filter_avg] <= -1.5
             and (regression_data[filter_pct] <= -80 or regression_data[filter_pct] == 0)
             ):
             return True      
