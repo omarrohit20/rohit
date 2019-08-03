@@ -28,6 +28,22 @@ def curs_to_csv(curser, filename):
         for record in data: 
             write.writerow(record)
 
+def tech_buy_curs_to_csv(curser, filename):
+    data = list(curser)
+    fields = ['buyIndia', 'avg', 'count']
+    with open(filename, 'w') as outfile:   
+        write = csv.DictWriter(outfile, fieldnames=fields)
+        for record in data: 
+            write.writerow(record)
+            
+def tech_sell_curs_to_csv(curser, filename):
+    data = list(curser)
+    fields = ['sellIndia', 'avg', 'count']
+    with open(filename, 'w') as outfile:   
+        write = csv.DictWriter(outfile, fieldnames=fields)
+        for record in data: 
+            write.writerow(record)            
+
 def import_data_in_db():
     print('############################################')
     print('import_data_in_db')
@@ -166,26 +182,28 @@ def export_data_patterns_from_db():
     curser = dbresult.sell_test_all.aggregate(pipeline)
     curs_to_csv(curser, '../../data-import/nselist/filter-all-sell.csv')
     
+def export_tech_patterns_from_db():   
     pipeline = [{"$project":{"buyIndia":"$buyIndia","Act_PCT_day_change":"$Act_PCT_day_change"}},
                 {"$project":{"_id":"$_id","___group":{"buyIndia":"$buyIndia"},"Act_PCT_day_change":"$Act_PCT_day_change"}},
                 {"$group":{"_id":"$___group","avg":{"$avg":"$Act_PCT_day_change"},"count":{"$sum":1}}},{"$sort":SON({"_id":1})},
-                {"$project":{"_id":false,"buyIndia":"$_id.buyIndia","avg":true,"count":true}},
+                {"$project":{"_id":False,"buyIndia":"$_id.buyIndia","avg":True,"count":True}},
                 {"$sort":SON({"buyIndia":1})}
                 ]
     print('patterns-buy')
     curser = db.ws_high.aggregate(pipeline)
-    curs_to_csv(curser, '../../data-import/nselist/patterns-buy.csv')
+    tech_buy_curs_to_csv(curser, '../../data-import/nselist/patterns-buy.csv')
     
     pipeline = [{"$project":{"sellIndia":"$sellIndia","Act_PCT_day_change":"$Act_PCT_day_change"}},
                 {"$project":{"_id":"$_id","___group":{"sellIndia":"$sellIndia"},"Act_PCT_day_change":"$Act_PCT_day_change"}},
                 {"$group":{"_id":"$___group","avg":{"$avg":"$Act_PCT_day_change"},"count":{"$sum":1}}},{"$sort":SON({"_id":1})},
-                {"$project":{"_id":false,"sellIndia":"$_id.sellIndia","avg":true,"count":true}},
+                {"$project":{"_id":False,"sellIndia":"$_id.sellIndia","avg":True,"count":True}},
                 {"$sort":SON({"sellIndia":1})}
                 ]
     print('patterns-sell')
     curser = db.ws_low.aggregate(pipeline)
-    curs_to_csv(curser, '../../data-import/nselist/patterns-sell.csv')
+    tech_sell_curs_to_csv(curser, '../../data-import/nselist/patterns-sell.csv')
     
 if __name__ == "__main__":    
-    import_data_in_db()
-    export_data_patterns_from_db()
+    #import_data_in_db()
+    #export_data_patterns_from_db()
+    export_tech_patterns_from_db()
