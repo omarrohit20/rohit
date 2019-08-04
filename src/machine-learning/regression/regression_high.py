@@ -53,6 +53,9 @@ def get_data_frame(df, regressor="None", type="reg"):
     if (df is not None):
         #dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
         dfp = df[['PCT_day_change']]
+        dfp['PCT_change'] = df['PCT_change']
+        dfp['high_tail'] = df['high_tail']
+        dfp['low_tail'] = df['low_tail']
 #         dfp.loc[df['VOL_change'] > 20, 'VOL_change'] = 1
 #         dfp.loc[df['VOL_change'] < 20, 'VOL_change'] = 0
 #         dfp.loc[df['VOL_change'] < -20, 'VOL_change'] = -1
@@ -84,9 +87,9 @@ def get_data_frame(df, regressor="None", type="reg"):
         dfp['downtrend'] = df['downtrend']
 #         dfp['greentrend'] = df['greentrend']
 #         dfp['redtrend'] = df['redtrend']
-        if soft == False:
-            dfp['HH'] = df['HH']
-            dfp['LL'] = df['LL']  
+#         if soft == False:
+#             dfp['HH'] = df['HH']
+#             dfp['LL'] = df['LL']  
        
         if regressor != 'mlp':      
             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
@@ -244,7 +247,7 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     
     regression_data = {}
     if (kNeighbours and run_ml_algo):
-        result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1, weights='distance'))
+        result = performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor())
         regression_data['kNeighboursValue_reg'] = float(result[0])
     else:
         regression_data['kNeighboursValue_reg'] = float(0)

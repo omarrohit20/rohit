@@ -77,6 +77,8 @@ def regression_ta_data(scrip):
     
     df['bar_high'] = np.where(df['close'] > df['open'], df['close'], df['open'])
     df['bar_low'] = np.where(df['close'] > df['open'], df['open'], df['close'])
+    df['high_tail'] = (df['high'] - df['bar_high'])
+    df['low_tail'] = (df['low'] - df['bar_low'])
     df['bar_high_pre'] = np.where(df['close_pre'] > df['open_pre'], df['close_pre'], df['open_pre'])
     df['bar_low_pre'] = np.where(df['close_pre'] > df['open_pre'], df['open_pre'], df['close_pre'])
     df['uptrend'] = np.where((df['bar_high'] >  df['bar_high_pre']) & (df['high'] > df['high_pre']), 1, 0)
