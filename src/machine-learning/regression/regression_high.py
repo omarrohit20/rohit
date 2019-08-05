@@ -49,13 +49,16 @@ adaBoost = False
 kNeighbours = True
 gradientBoosting = False
 
-def get_data_frame(df, regressor="None", type="reg"):
+def get_data_frame(df, regressor='kn', type='reg'):
     if (df is not None):
         #dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
         dfp = df[['PCT_day_change']]
-        dfp['PCT_change'] = df['PCT_change']
-        dfp['high_tail'] = df['high_tail']
-        dfp['low_tail'] = df['low_tail']
+        if regressor == 'kn':
+            #dfp['PCT_change'] = df['PCT_change']
+            dfp['high_tail_pct'] = df['high_tail_pct']
+            dfp['low_tail_pct'] = df['low_tail_pct']
+            #dfp['bar_high'] = df['bar_high']
+            #dfp['bar_low'] = df['bar_low']
 #         dfp.loc[df['VOL_change'] > 20, 'VOL_change'] = 1
 #         dfp.loc[df['VOL_change'] < 20, 'VOL_change'] = 0
 #         dfp.loc[df['VOL_change'] < -20, 'VOL_change'] = -1
@@ -74,7 +77,7 @@ def get_data_frame(df, regressor="None", type="reg"):
         for dele in range(1, 16):
             addFeaturesLowChange(df, dfp, low, dele) 
         
-        if type == "reg":
+        if type == 'reg':
             if regressor != 'mlp':
                 dfp['EMA9'] = df['EMA9']
                 dfp['EMA21'] = df['EMA21']
@@ -87,9 +90,9 @@ def get_data_frame(df, regressor="None", type="reg"):
         dfp['downtrend'] = df['downtrend']
 #         dfp['greentrend'] = df['greentrend']
 #         dfp['redtrend'] = df['redtrend']
-#         if soft == False:
-#             dfp['HH'] = df['HH']
-#             dfp['LL'] = df['LL']  
+        if soft == False:
+            dfp['HH'] = df['HH']
+            dfp['LL'] = df['LL']  
        
         if regressor != 'mlp':      
             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
@@ -243,7 +246,7 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     if(regression_data_db is not None):
         return
     
-    dfp = get_data_frame(df)
+    dfp = get_data_frame(df, 'kn', 'reg')
     
     regression_data = {}
     if (kNeighbours and run_ml_algo):
@@ -253,15 +256,15 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
         regression_data['kNeighboursValue_reg'] = float(0)
             
     if (mlp and run_ml_algo):
-        dfp = get_data_frame(df, 'mlp')
+        dfp = get_data_frame(df, 'mlp', 'reg')
         result = performRegression(dfp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
         regression_data['mlpValue_reg'] = float(result[0])
     else:
         regression_data['mlpValue_reg'] = float(0)
         
     if (kNeighbours and run_ml_algo):
-        dfp = get_data_frame(df, None, 'classification')
-        result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1, n_neighbors=3, weights='distance'))
+        dfp = get_data_frame(df, 'kn', 'cla')
+        result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier())
         #result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(random_state=1, n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1))
         #result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.RadiusNeighborsClassifier(radius=1.0))
         regression_data['kNeighboursValue_cla'] = float(result[0])
@@ -269,7 +272,7 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
         regression_data['kNeighboursValue_cla'] = float(0)
             
     if (mlp and run_ml_algo):
-        dfp = get_data_frame(df, 'mlp', 'classification')
+        dfp = get_data_frame(df, 'mlp', 'cla')
         result = performClassification(dfp, split, scrip, directory, forecast_out, MLPClassifier(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25)))
         regression_data['mlpValue_cla'] = float(result[0])
     else:
