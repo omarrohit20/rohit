@@ -24,7 +24,7 @@ BUY_VERY_LESS_DATA=True
 SELL_VERY_LESS_DATA=True
 MARKET_IN_UPTREND=False
 MARKET_IN_DOWNTREND=False
-TEST = True
+TEST = False
 
 buyMLP = 0.1
 buyMLP_MIN = 0
@@ -7881,19 +7881,22 @@ def sell_filter_all_accuracy(regression_data, regressionResult, reg, ws):
                 regression_data['filter_all_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
 
 def is_filter_all_accuracy(regression_data, regressionResult, reg, ws):
-    flag = False
+    superFlag = False
     flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
     if(flag):
-        return flag
+        superFlag = True
     flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
     if(flag):
-        return flag
+        superFlag = True
     flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_avg', 'filter_count', 'filter_pct')
     if(flag):
-        return flag
+        superFlag = True
     flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
     if(flag):
-        return flag  
+        superFlag = True
+    
+    if(superFlag):
+        return superFlag  
 
 def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_pct):
     if(abs(regression_data[filter_avg]) > 0.5
@@ -7941,22 +7944,33 @@ def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, f
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-3-Buy')
             elif(regression_data[filter_avg] < 0):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-3-Sell')
+        elif(regression_data[filter_count] >= 2
+            and abs(regression_data[filter_pct]) >= 70
+            and abs(regression_data[filter_avg]) >= 2.0
+            and ((abs(regression_data[filter_avg]) > 3.0) 
+                 or (regression_data[filter_count] >= 3)
+                )
+            ):
+            if(regression_data[filter_avg] >= 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-4-Buy')
+            elif(regression_data[filter_avg] < 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-4-Sell')
         elif(regression_data[filter_count] > 5
             and abs(regression_data[filter_pct]) > 60
             and abs(regression_data[filter_avg]) > 1.5
             ):
             if(regression_data[filter_avg] >= 0):
-                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Buy')
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky-Buy')
             elif(regression_data[filter_avg] < 0):
-                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Sell')
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky-Sell')
                 
-        if(abs(float(regression_data['PCT_day_change'])) < 0.7
+        if(abs(float(regression_data['PCT_day_change'])) < 1
             and -3 < float(regression_data['PCT_change']) < 3
             and regression_data['series_trend'] == "NA"
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'RISKYDOJI')
         
-        if(0 < float(regression_data['PCT_day_change']) < 0.7
+        if(0 < float(regression_data['PCT_day_change']) < 1
             and -3 < float(regression_data['PCT_change']) < 3
             and (regression_data['series_trend'] == "shortDownTrend"
                  or regression_data['series_trend'] == "downTrend"
@@ -7965,14 +7979,14 @@ def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, f
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'RISKYDOJI-Buy')
             
-        if(-0.7 < float(regression_data['PCT_day_change']) < 0
+        if(-1 < float(regression_data['PCT_day_change']) < 0
             and -3 < float(regression_data['PCT_change']) < 3 
             and regression_data['series_trend'] == "downTrend"
             and float(regression_data[filter_avg]) > 0.5
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'RISKYDOJI-Buy')
         
-        if(-0.7 < float(regression_data['PCT_day_change']) < 0
+        if(-1 < float(regression_data['PCT_day_change']) < 0
             and -3 < float(regression_data['PCT_change']) < 3 
             and (regression_data['series_trend'] == "shortUpTrend"
                  or regression_data['series_trend'] == "upTrend"
@@ -7981,7 +7995,7 @@ def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, f
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'RISKYDOJI-Sell')
         
-        if(0 < float(regression_data['PCT_day_change']) < 0.5
+        if(0 < float(regression_data['PCT_day_change']) < 1
             and -3 < float(regression_data['PCT_change']) < 3 
             and regression_data['series_trend'] == "upTrend"
             and float(regression_data[filter_avg]) < -0.5
