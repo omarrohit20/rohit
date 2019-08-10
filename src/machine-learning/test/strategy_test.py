@@ -127,10 +127,34 @@ def import_data_in_db():
         if(flag):
             del data['_id']
             dbresult.sell_test_all.insert_one(json.loads(json.dumps(data))) 
-            
+ 
+def import_filter_data_in_db():
+    print('############################################')
+    print('import_filter_data_in_db')
+    print('############################################')
+    dbresult.drop_collection('buy_test')
+    print('buy_test')
+    curs = db.ws_high.find({})
+    for data in curs:
+        data['filterTest'] = ''
+        flag = buy_test(data, data, True, None)
+        if(flag):
+            del data['_id']
+            dbresult.buy_test.insert_one(json.loads(json.dumps(data))) 
+    
+    dbresult.drop_collection('sell_test')
+    print('sell_test')
+    curs = db.ws_low.find({})
+    for data in curs:
+        data['filterTest'] = ''
+        flag = sell_test(data, data, True, None)
+        if(flag):
+            del data['_id']
+            dbresult.sell_test.insert_one(json.loads(json.dumps(data))) 
+                
 def export_data_patterns_from_db():
     print('\n\n\n\n############################################')
-    print('import_data_in_db')
+    print('export_data_patterns_from_db')
     print('############################################')
     pipeline = [{"$project":{"Act_PCT_day_change":"$Act_PCT_day_change",
                          "filterTest":"$filterTest",
@@ -145,10 +169,11 @@ def export_data_patterns_from_db():
                        "countgt":{"$sum" : {"$cond": [{"$gt": ['$Act_PCT_day_change', 0]}, 1, 0]}},
                        "countlt":{"$sum": {"$cond": [{"$lt": ['$Act_PCT_day_change', 0]}, 1, 0]}},
                        }},
-            {"$sort":SON({"_id":1})},
-            {"$project":{"_id":False,"filterTest":"$_id.filterTest","avg":True,"count":True,"countgt":True,"countlt":True}},
-            {"$sort":SON({"filterTest":1})}
-            ]
+            #{"$sort":SON({"_id":1})},
+            {"$project":{"_id":False,"filterTest":"$_id.filterTest","avg":True,"count":True,"countgt":True,"countlt":True}}
+            #{"$sort":SON({"filterTest":1})},
+            #{"allowDiskUse":True }
+            ] 
 
     print('buy_test_345')
     curser = dbresult.buy_test_345.aggregate(pipeline)
@@ -182,7 +207,10 @@ def export_data_patterns_from_db():
     curser = dbresult.sell_test_all.aggregate(pipeline)
     curs_to_csv(curser, '../../data-import/nselist/filter-all-sell.csv')
     
-def export_tech_patterns_from_db():   
+def export_tech_patterns_from_db():
+    print('\n\n\n\n############################################')
+    print('export_tech_patterns_from_db')
+    print('############################################')   
     pipeline = [{"$project":{"buyIndia":"$buyIndia","Act_PCT_day_change":"$Act_PCT_day_change"}},
                 {"$project":{"_id":"$_id","___group":{"buyIndia":"$buyIndia"},"Act_PCT_day_change":"$Act_PCT_day_change"}},
                 {"$group":{"_id":"$___group","avg":{"$avg":"$Act_PCT_day_change"},"count":{"$sum":1}}},{"$sort":SON({"_id":1})},

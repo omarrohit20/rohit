@@ -944,9 +944,36 @@ def tail_change_filter(regression_data, regressionResult, save):
 #     elif(low_tail_pct(regression_data) < 1):
 #         filterTail = filterTail + 'LTLT1'
         
-        
+    if(save):
+        add_in_csv(regression_data, regressionResult, None, filterTail)
+    else:
+        return filterTail
+
+def tail2_change_filter(regression_data, regressionResult, save):
+    filterTail = ''
     
-    
+    if(high_tail_pct(regression_data) > 3.5):
+        filterTail = filterTail + 'HTGT3.5,'
+    elif(high_tail_pct(regression_data) > 2.5):
+        filterTail = filterTail + 'HTGT2.5,'
+    elif(high_tail_pct(regression_data) > 1.5):
+        filterTail = filterTail + 'HTGT1.5,'
+    if(high_tail_pct(regression_data) > abs(regression_data['PCT_day_change']) 
+        and high_tail_pct(regression_data) > 1.5
+        ):
+        filterTail = filterTail + 'HTGTPCTDayChange'
+
+    if(low_tail_pct(regression_data) > 3.5):
+        filterTail = filterTail + 'LTGT3.5,'
+    elif(low_tail_pct(regression_data) > 2.5):
+        filterTail = filterTail + 'LTGT2.5,'
+    elif(low_tail_pct(regression_data) > 1.5):
+        filterTail = filterTail + 'LTGT1.5,'
+    if(low_tail_pct(regression_data) > abs(regression_data['PCT_day_change']) 
+        and low_tail_pct(regression_data) > 1.5
+        ):
+        filterTail = filterTail + 'LTGTPCTDayChange'
+
     if(save):
         add_in_csv(regression_data, regressionResult, None, filterTail)
     else:
@@ -1089,37 +1116,6 @@ def filterMA(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(check-chart)consolidationBreakdownLastDay-Risky')
     
     
-#     flag = False
-#     if(regression_data['SMA4'] < 0 and regression_data['SMA9'] < 0):
-#         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA4&SMA9LT0')
-#         flag = True
-#     elif(0 < regression_data['SMA4'] < 10 and 0 < regression_data['SMA9'] < 10):
-#         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA4&SMA9GT0To10')
-#         flag = True
-#     elif(regression_data['SMA4'] > 10 and regression_data['SMA9'] > 10):
-#         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA4&SMA9GT10')
-#         flag = True
-#     if(flag == True):
-#         if(-5 < regression_data['SMA25'] < 0):
-#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##BelowSMA25')
-#         elif(0 < regression_data['SMA25'] > 5):
-#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##AboveSMA25')
-#         
-#         if(-5 < regression_data['SMA50'] < 0):
-#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##BelowSMA50')
-#         elif(0 < regression_data['SMA50'] > 5):
-#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##AboveSMA50')
-#         
-#         if(-5 < regression_data['SMA100'] < 0):
-#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##BelowSMA100')
-#         elif(0 < regression_data['SMA100'] > 5):
-#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##AboveSMA100')
-#             
-#         if(-5 < regression_data['SMA200'] < 0):
-#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##BelowSMA200')
-#         elif(0 < regression_data['SMA200'] > 5):
-#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##AboveSMA200') 
-    
     ema_diff = regression_data['ema6-14']
     ema_diff_pre1 = regression_data['ema6-14_pre1']
     ema_diff_pre2 = regression_data['ema6-14_pre2']
@@ -1162,6 +1158,32 @@ def filterMA(regression_data, regressionResult):
             )
        ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(May)$$:EMA6-LT-May-MT-EMA14')
+    
+    if(is_ema6_sliding_up(regression_data)):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##EMA6Up')
+    elif(is_ema6_sliding_down(regression_data)):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##EMA6Down')
+    if(is_ema14_sliding_up(regression_data)):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##EMA14Up')
+    elif(is_ema14_sliding_down(regression_data)):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##EMA14Down')
+    
+    if(regression_data['SMA25']) < 0:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA25LT0')
+    elif(regression_data['SMA25']) > 0:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA25GT0')
+    if(regression_data['SMA50']) < 0:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA50LT0')
+    elif(regression_data['SMA50']) > 0:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA50GT0')
+    if(regression_data['SMA100']) < 0:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA100LT0')
+    elif(regression_data['SMA100']) > 0:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA100GT0')
+    if(regression_data['SMA200']) < 0:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA200LT0')
+    elif(regression_data['SMA200']) > 0:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA200GT0')
             
     if((regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50'] < regression_data['SMA25']
         or(
@@ -1179,7 +1201,7 @@ def filterMA(regression_data, regressionResult):
             or (regression_data['SMA9'] > 0 and regression_data['SMA4'] > 0)
             )
        #and (regression_data['SMA9'] > 0 and regression_data['SMA4'] > 0)
-    ):
+        ):
         if(is_ema14_sliding_up(regression_data)):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:RisingMA-Confirm')
         elif((regression_data['SMA9'] > 1 or regression_data['SMA4'] > 1)
@@ -1187,6 +1209,7 @@ def filterMA(regression_data, regressionResult):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:RisingMA')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:RisingMA-Risky')
+        
         if(-5 < regression_data['SMA25'] < 0):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##LONGTERM:NearSMA25')
         elif(0 < regression_data['SMA25'] < 5):
@@ -1198,8 +1221,16 @@ def filterMA(regression_data, regressionResult):
         elif(-5 < regression_data['SMA100'] < 0):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SHORTTERM:NearSMA100')
         elif(0 < regression_data['SMA100'] < 5):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SHORTTERM:CrossoverSMA100')
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SHORTTERM:CrossoverSMA100')  
         
+    elif(regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50'] < regression_data['SMA25'] < 0
+         and (regression_data['SMA9'] > 0 or regression_data['SMA4'] > 0)
+    ):
+        if(regression_data['SMA9'] > 0 and regression_data['SMA4'] > 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'SMA9&SMA4GT0')
+        elif(regression_data['SMA9'] > 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'SMA9GT0')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:NegativeMA')
     elif(regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50'] < regression_data['SMA25'] < 0
          and regression_data['SMA9'] < 0
          and regression_data['SMA4'] < 0
@@ -1219,7 +1250,33 @@ def filterMA(regression_data, regressionResult):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:DowningMA')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:DowningMA-Risky')
-            
+        
+        if(-5 < regression_data['SMA25'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##LONGTERM:NearSMA25')
+        elif(0 < regression_data['SMA25'] < 5):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##LONGTERM:CrossoverSMA25')
+        elif(-5 < regression_data['SMA50'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##MEDIUMTERM:NearSMA50')
+        elif(0 < regression_data['SMA50'] < 5):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##MEDIUMTERM:CrossoverSMA50')
+        elif(-5 < regression_data['SMA100'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SHORTTERM:NearSMA100')
+        elif(0 < regression_data['SMA100'] < 5):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SHORTTERM:CrossoverSMA100')
+    elif(regression_data['SMA200'] > regression_data['SMA100'] > regression_data['SMA50'] > regression_data['SMA25'] > 0
+        and (regression_data['SMA9'] < 0 or regression_data['SMA4'] < 0)
+        ):
+        if(regression_data['SMA9'] < 0 and regression_data['SMA4'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'SMA9&SMA4LT0')
+        elif(regression_data['SMA9'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'SMA9LT0')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:PositiveMA')
+    elif(regression_data['SMA200'] > regression_data['SMA100'] > regression_data['SMA50'] > regression_data['SMA25'] > 0
+         and regression_data['SMA9'] > 0
+         and regression_data['SMA4'] > 0
+    ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:AllPositiveMA')
+    else:
         if(-5 < regression_data['SMA25'] < 0):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##LONGTERM:NearSMA25')
         elif(0 < regression_data['SMA25'] < 5):
@@ -1233,17 +1290,6 @@ def filterMA(regression_data, regressionResult):
         elif(0 < regression_data['SMA100'] < 5):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SHORTTERM:CrossoverSMA100')
             
-    
-    
-#     elif(regression_data['SMA200'] > 0 
-#          and regression_data['SMA100'] > 0
-#          and regression_data['SMA50'] > 0
-#          and regression_data['SMA25'] > 0
-#          and regression_data['SMA9'] > 0
-#          and regression_data['SMA4'] > 0
-#          ):
-#         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Study)$$:AllPositiveMA')
-
 def base_line(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
@@ -2288,7 +2334,7 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDayDownInUptrend')
         
-    if((-2 < regression_data['PCT_day_change'] < 0) and (-2.5 < regression_data['PCT_change'] < 0.5)
+    if((-2 < regression_data['PCT_day_change'] < 0) and (-2.5 < regression_data['PCT_change'] < 0)
         and (1 <= low_tail_pct(regression_data) < 3)
         ):
         if(regression_data['bar_high'] < regression_data['bar_high_pre1']
@@ -4993,6 +5039,12 @@ def buy_random_filters(regression_data, regressionResult, reg, ws):
         and (regression_data['PCT_day_change_pre1'] < -1.5 or regression_data['PCT_day_change_pre2'] < -1.5)
         ):   
         add_in_csv(regression_data, regressionResult, ws, '(Test)buySMA4Reversal')
+        
+    if((-2 < regression_data['PCT_day_change'] < 0) and (-2 < regression_data['PCT_change'] < 0)
+        and regression_data['PCT_day_change_pre1'] < -7
+        and low_tail_pct(regression_data) > 2
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '(Test)buyLastDayDownReversal')
 
 def buy_test_345(regression_data, regressionResult, reg, ws):
     regression_data['filter'] = " "
@@ -5043,10 +5095,13 @@ def buy_test(regression_data, regressionResult, reg, ws):
     if pct_change_positive_trend(regression_data):
         regression_data['series_trend'] = "upTrend" 
     flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
-    filterName = pct_change_filter(regression_data, regressionResult, False)
-    regression_data['filterTest'] = filterName + ',' \
-                                    + regression_data['series_trend'] + ',' \
-                                    + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+    if regression_data['filterTest'] != '':
+        filterName = pct_change_filter(regression_data, regressionResult, False)
+        filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
+        regression_data['filterTest'] = filterName + ',' \
+                                        + filterNameTail + ',' \
+                                        + regression_data['series_trend'] + ',' \
+                                        + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
     
     if regression_data['filterTest'] != '':
         return True
@@ -5196,7 +5251,9 @@ def buy_filter_accuracy(regression_data, regressionResult, reg, ws):
     filtersDict=filterbuy
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
+        filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
         filter = filterName + ',' \
+                + filterNameTail + ',' \
                 + regression_data['series_trend'] + ',' \
                 + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
         if filter != '' and filter in filtersDict:
@@ -5525,7 +5582,7 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDayUpInDowntrend')
     
-    if((0 < regression_data['PCT_day_change'] < 2) and (-0.5 < regression_data['PCT_change'] < 2.5)
+    if((0 < regression_data['PCT_day_change'] < 2) and (0 < regression_data['PCT_change'] < 2.5)
         and (1 <= high_tail_pct(regression_data) < 3)
         ):
         if(regression_data['bar_low'] > regression_data['bar_low_pre1']
@@ -5611,9 +5668,6 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and (0.5 < regression_data['PCT_day_change'] < 3) and (0.5 < regression_data['PCT_change'] < 3)
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:sellRisingMAShortTerm-Risky')
-#     if('ReversalHigh' in regression_data['filter3'] 
-#         ):
-#         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:DOWNTREND'+regression_data['filter3'])
 
 def sell_other_indicator(regression_data, regressionResult, reg, ws):
     tail_pct_filter(regression_data, regressionResult)
@@ -7672,10 +7726,13 @@ def sell_test(regression_data, regressionResult, reg, ws):
     if pct_change_positive_trend(regression_data):
         regression_data['series_trend'] = "upTrend" 
     flag = sell_other_indicator(regression_data, regressionResult, reg, ws)
-    filterName = pct_change_filter(regression_data, regressionResult, False)
-    regression_data['filterTest'] = filterName + ',' \
-                                    + regression_data['series_trend'] + ',' \
-                                    + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+    if regression_data['filterTest'] != '':
+        filterName = pct_change_filter(regression_data, regressionResult, False)
+        filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
+        regression_data['filterTest'] = filterName + ',' \
+                                        + filterNameTail + ',' \
+                                        + regression_data['series_trend'] + ',' \
+                                        + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
     
     if regression_data['filterTest'] != '':
         return True
@@ -7827,7 +7884,9 @@ def sell_filter_accuracy(regression_data, regressionResult, reg, ws):
     filtersDict=filtersell
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
+        filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
         filter = filterName + ',' \
+                + filterNameTail + ',' \
                 + regression_data['series_trend'] + ',' \
                 + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
         if filter != '' and filter in filtersDict:
@@ -7882,38 +7941,60 @@ def sell_filter_all_accuracy(regression_data, regressionResult, reg, ws):
 
 def is_filter_all_accuracy(regression_data, regressionResult, reg, ws):
     superFlag = False
-    flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
+    flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
     if(flag):
         superFlag = True
-    flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
+    flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
     if(flag):
         superFlag = True
-    flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_avg', 'filter_count', 'filter_pct')
+    flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
     if(flag):
         superFlag = True
-    flag = is_filter_accuracy(regression_data, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
+    
+    flag = filter_accuracy_finder(regression_data, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
     if(flag):
         superFlag = True
+    flag = filter_accuracy_finder(regression_data, regressionResult, reg, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
+    if(flag):
+        superFlag = True
+    flag = filter_accuracy_finder(regression_data, regressionResult, reg, ws, 'filter_avg', 'filter_count', 'filter_pct')
+    if(flag):
+        superFlag = True
+    flag = filter_accuracy_finder(regression_data, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
+    if(flag):
+        superFlag = True
+    
+    is_filter_doji(regression_data, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
+    is_filter_doji(regression_data, regressionResult, reg, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
+    is_filter_doji(regression_data, regressionResult, reg, ws, 'filter_avg', 'filter_count', 'filter_pct')
+    is_filter_doji(regression_data, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
     
     if(superFlag):
         return superFlag  
 
-def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_pct):
+def filter_accuracy_finder(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_pct):
     if(abs(regression_data[filter_avg]) > 0.5
         and regression_data[filter_count] >= 1
         #and (regression_data[filter_count_oth] >= 2
         #    or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2))
         ):
-        if((("MLSell" in regression_data['filter']) and 0 < float(regression_data[filter_avg]) < 2.5)
-            or (("MLBuy" in regression_data['filter']) and -2.5 < float(regression_data[filter_avg]) < 0)
+        if((("MLSell" in regression_data['filter']) and float(regression_data[filter_avg]) > 0 and abs(float(regression_data[filter_pct])) < 80)
+            or (("MLBuy" in regression_data['filter']) and float(regression_data[filter_avg]) < 0 and abs(float(regression_data[filter_pct])) < 80)
             ):
             return False    
         
                 
-        
         if(regression_data[filter_count] >= 4
             and abs(regression_data[filter_pct]) >= 100
             and abs(regression_data[filter_avg]) > 1.5
+            ):
+            if(regression_data[filter_avg] >= 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Buy')
+            elif(regression_data[filter_avg] < 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Sell')
+        elif(regression_data[filter_count] >= 3
+            and abs(regression_data[filter_pct]) >= 100
+            and abs(regression_data[filter_avg]) > 2.5
             ):
             if(regression_data[filter_avg] >= 0):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Buy')
@@ -7924,10 +8005,40 @@ def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, f
             and abs(regression_data[filter_avg]) > 5
             ):
             if(regression_data[filter_avg] >= 0):
-                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-1-Buy')
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Buy')
             elif(regression_data[filter_avg] < 0):
-                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-1-Sell')
-        elif(regression_data[filter_count] > 2
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Sell')
+        
+                      
+        if(abs(float(regression_data[filter_avg])) > 1.5 
+            and abs(regression_data[filter_pct]) > 50
+            ):
+            return True
+            
+        if(("MLBuy" in regression_data['filter']) 
+            and regression_data[filter_avg] >= 1.5
+            and (regression_data[filter_pct] >= 80 or regression_data[filter_pct] == 0)
+            ):
+            return True
+            
+        if(("MLSell" in regression_data['filter']) 
+            and regression_data[filter_avg] <= -1.5
+            and (regression_data[filter_pct] <= -80 or regression_data[filter_pct] == 0)
+            ):
+            return True
+
+def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_pct):
+    if(abs(regression_data[filter_avg]) > 0.5
+        and regression_data[filter_count] >= 1
+        #and (regression_data[filter_count_oth] >= 2
+        #    or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2))
+        ):
+        if((("MLSell" in regression_data['filter']) and float(regression_data[filter_avg]) > 0 and abs(float(regression_data[filter_pct])) < 80)
+            or (("MLBuy" in regression_data['filter']) and float(regression_data[filter_avg]) < 0 and abs(float(regression_data[filter_pct])) < 80)
+            ):
+            return False    
+        
+        if(regression_data[filter_count] > 2
             and abs(regression_data[filter_pct]) > 60
             and abs(regression_data[filter_avg]) > 3
             ):
@@ -7955,6 +8066,14 @@ def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, f
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-4-Buy')
             elif(regression_data[filter_avg] < 0):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-4-Sell')
+        elif(regression_data[filter_count] >= 2
+            and abs(regression_data[filter_pct]) >= 100
+            and abs(regression_data[filter_avg]) >= 2.5
+            ):
+            if(regression_data[filter_avg] >= 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-5-Buy')
+            elif(regression_data[filter_avg] < 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-5-Sell')
         elif(regression_data[filter_count] > 5
             and abs(regression_data[filter_pct]) > 60
             and abs(regression_data[filter_avg]) > 1.5
@@ -7963,44 +8082,7 @@ def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, f
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky-Buy')
             elif(regression_data[filter_avg] < 0):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky-Sell')
-                
-        if(abs(float(regression_data['PCT_day_change'])) < 1
-            and -3 < float(regression_data['PCT_change']) < 3
-            and regression_data['series_trend'] == "NA"
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, 'RISKYDOJI')
-        
-        if(0 < float(regression_data['PCT_day_change']) < 1
-            and -3 < float(regression_data['PCT_change']) < 3
-            and (regression_data['series_trend'] == "shortDownTrend"
-                 or regression_data['series_trend'] == "downTrend"
-                )
-            and float(regression_data[filter_avg]) > 0.5
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, 'RISKYDOJI-Buy')
-            
-        if(-1 < float(regression_data['PCT_day_change']) < 0
-            and -3 < float(regression_data['PCT_change']) < 3 
-            and regression_data['series_trend'] == "downTrend"
-            and float(regression_data[filter_avg]) > 0.5
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, 'RISKYDOJI-Buy')
-        
-        if(-1 < float(regression_data['PCT_day_change']) < 0
-            and -3 < float(regression_data['PCT_change']) < 3 
-            and (regression_data['series_trend'] == "shortUpTrend"
-                 or regression_data['series_trend'] == "upTrend"
-                )
-            and float(regression_data[filter_avg]) < -0.5
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, 'RISKYDOJI-Sell')
-        
-        if(0 < float(regression_data['PCT_day_change']) < 1
-            and -3 < float(regression_data['PCT_change']) < 3 
-            and regression_data['series_trend'] == "upTrend"
-            and float(regression_data[filter_avg]) < -0.5
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, 'RISKYDOJI-Sell')        
+                      
             
         if(abs(float(regression_data[filter_avg])) > 1.5 
             and abs(regression_data[filter_pct]) > 50
@@ -8018,6 +8100,46 @@ def is_filter_accuracy(regression_data, regressionResult, reg, ws, filter_avg, f
             and (regression_data[filter_pct] <= -80 or regression_data[filter_pct] == 0)
             ):
             return True      
+
+def is_filter_doji(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_pct): 
+    if(0 < float(regression_data['PCT_day_change']) < 1
+        and -3 < float(regression_data['PCT_change']) < 3
+        and (regression_data['series_trend'] == "shortDownTrend"
+             or regression_data['series_trend'] == "downTrend"
+            )
+        and float(regression_data[filter_avg]) > 0.5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'RISKYDOJI-Buy')
+        
+    if(-1 < float(regression_data['PCT_day_change']) < 0
+        and -3 < float(regression_data['PCT_change']) < 3 
+        and regression_data['series_trend'] == "downTrend"
+        and float(regression_data[filter_avg]) > 0.5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'RISKYDOJI-Buy')
+    
+    if(-1 < float(regression_data['PCT_day_change']) < 0
+        and -3 < float(regression_data['PCT_change']) < 3 
+        and (regression_data['series_trend'] == "shortUpTrend"
+             or regression_data['series_trend'] == "upTrend"
+            )
+        and float(regression_data[filter_avg]) < -0.5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'RISKYDOJI-Sell')
+    
+    if(0 < float(regression_data['PCT_day_change']) < 1
+        and -3 < float(regression_data['PCT_change']) < 3 
+        and regression_data['series_trend'] == "upTrend"
+        and float(regression_data[filter_avg]) < -0.5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'RISKYDOJI-Sell')
+        
+    if(abs(float(regression_data['PCT_day_change'])) < 1
+        and -3 < float(regression_data['PCT_change']) < 3
+        and regression_data['series_trend'] == "NA"
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'RISKYDOJI')        
+            
         
         
         
