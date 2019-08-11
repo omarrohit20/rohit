@@ -35,7 +35,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.svm import SVC, SVR
 #from sklearn.qda import QDA
-from sklearn.grid_search import GridSearchCV
+#from sklearn.grid_search import GridSearchCV
 
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
@@ -250,7 +250,7 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     
     regression_data = {}
     if (kNeighbours and run_ml_algo):
-        result = performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor())
+        result = performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor(max_depth=30, n_estimators=10, n_jobs=1))
         regression_data['kNeighboursValue_reg'] = float(result[0])
     else:
         regression_data['kNeighboursValue_reg'] = float(0)
@@ -264,7 +264,7 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
         
     if (kNeighbours and run_ml_algo):
         dfp = get_data_frame(df, 'kn', 'cla')
-        result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier())
+        result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(n_estimators=10, n_jobs=1))
         #result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(random_state=1, n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1))
         #result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.RadiusNeighborsClassifier(radius=1.0))
         regression_data['kNeighboursValue_cla'] = float(result[0])

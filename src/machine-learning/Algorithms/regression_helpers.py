@@ -17,7 +17,7 @@ from sklearn.ensemble import AdaBoostRegressor
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.neural_network import MLPRegressor
-from sknn.mlp import Classifier, Layer
+#from sknn.mlp import Classifier, Layer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import neighbors
 from sklearn.ensemble import AdaBoostClassifier
@@ -28,13 +28,13 @@ from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.svm import SVC, SVR
 #from sklearn.qda import QDA
 import os
-from sklearn.grid_search import GridSearchCV
+#from sklearn.grid_search import GridSearchCV
 #from Neural_Network import NeuralNet
 
 import lasagne
 from lasagne import layers
 from lasagne.updates import nesterov_momentum
-from nolearn.lasagne import NeuralNet as nlNeuralNet
+#from nolearn.lasagne import NeuralNet as nlNeuralNet
 
 import tflearn
 
@@ -44,7 +44,7 @@ log = logging.getLogger(__name__)
 import gc
 import time
 
-plotgraph = False
+plotgraph = True
 memoize_data = {}
 
 def load_dataset(path_directory, symbol): 

@@ -2993,7 +2993,7 @@ def buy_final(regression_data, regressionResult, reg, ws, ws1):
 def buy_high_indicators(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
-    if(mlpValue >= 2.0 and kNeighboursValue >= 1.0
+    if(mlpValue >= 2.0 and kNeighboursValue >= 2.0
        and regression_data['month3HighChange'] < -3
        and regression_data['month3LowChange'] > 3
        and regression_data['yearHighChange'] < -10
@@ -3010,7 +3010,11 @@ def buy_high_indicators(regression_data, regressionResult, reg, ws):
         if(1 > regression_data['PCT_day_change'] > 0 and 2.5 > regression_data['PCT_change'] > -0.5):
             #add_in_csv(regression_data, regressionResult, ws, '(longDownTrend)buyHighIndicators')
             add_in_csv(regression_data, regressionResult, ws, None)
-            return True 
+            return True
+    if((mlpValue_other >= 0 and kNeighboursValue_other >= 0)
+        and ((4.0 <= mlpValue < 10.0 and 2.0 <= kNeighboursValue < 10.0) or (2.0 <= mlpValue < 10.0 and 4.0 <= kNeighboursValue < 10.0))
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'buyHighIndicators-Risky')
     return False
               
 def buy_pattern(regression_data, regressionResult, reg, ws, ws1):
@@ -6322,8 +6326,7 @@ def sell_high_indicators(regression_data, regressionResult, reg, ws):
             and -10 < regression_data['PCT_day_change'] < -5
             ):
             add_in_csv(regression_data, regressionResult, ws, '##sellHighMLP(Risky)')
-    return False
-    if(mlpValue <= -2.0 and kNeighboursValue <= -1.0 
+    if(mlpValue <= -2.0 and kNeighboursValue <= -2.0 
        and regression_data['yearHighChange'] < -10 
        and regression_data['yearLowChange'] > 10
        and (low_tail_pct(regression_data) < 1.5 and (low_tail_pct(regression_data) < high_tail_pct(regression_data)))
@@ -6337,7 +6340,11 @@ def sell_high_indicators(regression_data, regressionResult, reg, ws):
         if(-1 < regression_data['PCT_day_change'] < 0.5 and -2.5 < regression_data['PCT_change'] < 0.5):
             #add_in_csv(regression_data, regressionResult, ws, '(longUpTrend)sellHighIndicators')
             add_in_csv(regression_data, regressionResult, ws, None)
-            return True         
+            return True 
+    if((mlpValue_other <= 0 and kNeighboursValue_other <= 0)
+        and ((-10 < mlpValue <= -4.0 and -10 < kNeighboursValue <= -2.0) or (-10 < mlpValue <= -2.0 and -10 < kNeighboursValue <= -4.0))
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'sellHighIndicators-Risky')        
     return False
 
 def sell_pattern(regression_data, regressionResult, reg, ws, ws1):

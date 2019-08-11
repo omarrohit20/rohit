@@ -35,7 +35,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.svm import SVC, SVR
 #from sklearn.qda import QDA
-from sklearn.grid_search import GridSearchCV
+#from sklearn.grid_search import GridSearchCV
 
 connection = MongoClient('localhost', 27017)
 db = connection.nsehistnew
