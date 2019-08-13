@@ -3011,7 +3011,8 @@ def buy_high_indicators(regression_data, regressionResult, reg, ws):
             #add_in_csv(regression_data, regressionResult, ws, '(longDownTrend)buyHighIndicators')
             add_in_csv(regression_data, regressionResult, ws, None)
             return True
-    if((mlpValue_other >= 0 and kNeighboursValue_other >= 0)
+    if(is_algo_buy(regression_data)
+        and (mlpValue_other >= 0 and kNeighboursValue_other >= 0)
         and ((4.0 <= mlpValue < 10.0 and 2.0 <= kNeighboursValue < 10.0) or (2.0 <= mlpValue < 10.0 and 4.0 <= kNeighboursValue < 10.0))
         ):
         add_in_csv(regression_data, regressionResult, ws, 'buyHighIndicators-Risky')
@@ -6341,7 +6342,8 @@ def sell_high_indicators(regression_data, regressionResult, reg, ws):
             #add_in_csv(regression_data, regressionResult, ws, '(longUpTrend)sellHighIndicators')
             add_in_csv(regression_data, regressionResult, ws, None)
             return True 
-    if((mlpValue_other <= 0 and kNeighboursValue_other <= 0)
+    if(is_algo_sell(regression_data)
+        and (mlpValue_other <= 0 and kNeighboursValue_other <= 0)
         and ((-10 < mlpValue <= -4.0 and -10 < kNeighboursValue <= -2.0) or (-10 < mlpValue <= -2.0 and -10 < kNeighboursValue <= -4.0))
         ):
         add_in_csv(regression_data, regressionResult, ws, 'sellHighIndicators-Risky')        
