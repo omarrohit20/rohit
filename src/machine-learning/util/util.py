@@ -2626,7 +2626,7 @@ def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
             elif((-2 <= regression_data['PCT_day_change'] < -1) and (-2 <= regression_data['PCT_change'] < 0)
                 and 3 > low_tail_pct(regression_data) > 1.8
                 ):
-                add_in_csv(regression_data, regressionResult, ws, "$$ML:(check-chart-2-3MidCapCross)MayBuyCheckChart-1") 
+                add_in_csv(regression_data, regressionResult, ws, "$$ML:(check-chart-2-3MidCapCross)MayBuyCheckChart-Risky") 
     elif(('MayBuyCheckChart' in regression_data['filter1'])
         and ('Reversal' not in regression_data['filter3'])
         and high_tail_pct(regression_data) < 0.5
@@ -5827,7 +5827,7 @@ def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
                 add_in_csv(regression_data, regressionResult, ws, "$$ML:MaySellCheckChart-last3DayUp")
             elif(((1 < regression_data['PCT_day_change'] <= 2) and (0 < regression_data['PCT_change'] <= 2))
                 and 3 > high_tail_pct(regression_data) > 1.8):
-                add_in_csv(regression_data, regressionResult, ws, "$$ML:(check-chart-2-3MidCapCross)MaySellCheckChart-1")
+                add_in_csv(regression_data, regressionResult, ws, "$$ML:(check-chart-2-3MidCapCross)MaySellCheckChart-Risky")
     elif(('MaySellCheckChart' in regression_data['filter1'])
         and ('Reversal' not in regression_data['filter3'])
         and regression_data['year2LowChange'] > 10
@@ -5836,7 +5836,7 @@ def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
         if((3 < regression_data['PCT_day_change'] <= 5) and (2 < regression_data['PCT_change'] <= 6)
             and 5 > high_tail_pct(regression_data) > 2.8
             ):
-            add_in_csv(regression_data, regressionResult, ws, "$$ML:(Test)MaySellCheckChart--PCTDayChangeGT(3)BigLowTail")
+            add_in_csv(regression_data, regressionResult, ws, "$$ML:(Test)MaySellCheckChart-PCTDayChangeGT(3)BigLowTail-Risky")
     if(regression_data['year2HighChange'] < -3
         and regression_data['high'] == regression_data['weekHigh'] 
         and high_tail_pct(regression_data) > 1.5
