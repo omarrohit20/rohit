@@ -1125,14 +1125,14 @@ def filterMA(regression_data, regressionResult):
        and ema_diff_pre2 < 0
        and ema_diff_pre2 < ema_diff_pre1
        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Confirmed)$$:EMA6>EMA14')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '(Confirmed)EMA6>EMA14')
         
     if(ema_diff < 0
        and ema_diff_pre1 > 0
        and ema_diff_pre2 > 0
        and ema_diff_pre2 > ema_diff_pre1
        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(Confirmed)$$:EMA6<EMA14')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '(Confirmed)EMA6<EMA14')
         
         
     if(((regression_data['EMA6'] < regression_data['EMA6_1daysBack'] < regression_data['EMA6_2daysBack'])
@@ -1145,7 +1145,7 @@ def filterMA(regression_data, regressionResult):
              or regression_data['PCT_day_change_pre3'] > 0
             )
        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(May)$$:EMA6-MT-May-LT-EMA14')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '(May)EMA6-MT-May-LT-EMA14')
         
     if(((regression_data['EMA6'] > regression_data['EMA6_1daysBack'] > regression_data['EMA6_2daysBack'])
        or (regression_data['EMA14'] > regression_data['EMA14_1daysBack'] > regression_data['EMA14_2daysBack']))
@@ -1157,33 +1157,33 @@ def filterMA(regression_data, regressionResult):
              or regression_data['PCT_day_change_pre3'] < 0
             )
        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '$$(May)$$:EMA6-LT-May-MT-EMA14')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '(May)EMA6-LT-May-MT-EMA14')
     
     if(is_ema6_sliding_up(regression_data)):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##EMA6Up')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '@s@EMA6Up@e@')
     elif(is_ema6_sliding_down(regression_data)):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##EMA6Down')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '@s@EMA6Down@e@')
     if(is_ema14_sliding_up(regression_data)):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##EMA14Up')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '@s@EMA14Up@e@')
     elif(is_ema14_sliding_down(regression_data)):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##EMA14Down')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '@s@EMA14Down@e@')
     
     if(regression_data['SMA25']) < 0:
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA25LT0')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '@s@SMA25LT0@e@')
     elif(regression_data['SMA25']) > 0:
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA25GT0')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '@s@SMA25GT0@e@')
     if(regression_data['SMA50']) < 0:
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA50LT0')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '@s@SMA50LT0@e@')
     elif(regression_data['SMA50']) > 0:
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA50GT0')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '@s@SMA50GT0@e@')
     if(regression_data['SMA100']) < 0:
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA100LT0')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '@s@SMA100LT0@e@')
     elif(regression_data['SMA100']) > 0:
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA100GT0')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '@s@SMA100GT0@e@')
     if(regression_data['SMA200']) < 0:
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA200LT0')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '@s@SMA200LT0@e@')
     elif(regression_data['SMA200']) > 0:
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SMA200GT0')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '@s@SMA200GT0@e@')
             
     if((regression_data['SMA200'] < regression_data['SMA100'] < regression_data['SMA50'] < regression_data['SMA25']
         or(
@@ -2169,7 +2169,7 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
         and ((last_7_day_all_up(regression_data) == False) or (regression_data['forecast_day_PCT10_change'] < 10))
         and (MARKET_IN_UPTREND or (last_4_day_all_up(regression_data) == False)) #Uncomment0 If very less data
         and breakout_or_no_consolidation(regression_data) == True
-        and '$$(Confirmed)$$:EMA6>EMA14' not in regression_data['filter4']
+        and '(Confirmed)EMA6>EMA14' not in regression_data['filter4']
         and regression_data['close'] > 50
         and high_tail_pct(regression_data) < 1
         and low_tail_pct(regression_data) > 1.2
@@ -2206,7 +2206,7 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
         and ((last_7_day_all_up(regression_data) == False) or (regression_data['forecast_day_PCT10_change'] < 10))
         and (MARKET_IN_UPTREND or (last_4_day_all_up(regression_data) == False)) #Uncomment0 If very less data
         and breakout_or_no_consolidation(regression_data) == True
-        and '$$(Confirmed)$$:EMA6>EMA14' not in regression_data['filter4']
+        and '(Confirmed)EMA6>EMA14' not in regression_data['filter4']
         and regression_data['close'] > 50
         ):
         add_in_csv(regression_data, regressionResult, ws, None)
@@ -2233,7 +2233,7 @@ def buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws):
         and ((last_7_day_all_up(regression_data) == False) or (regression_data['forecast_day_PCT10_change'] < 10))
         and (MARKET_IN_UPTREND or (last_4_day_all_up(regression_data) == False)) #Uncomment0 If very less data
         and breakout_or_no_consolidation(regression_data) == True
-        and '$$(Confirmed)$$:EMA6>EMA14' not in regression_data['filter4']
+        and '(Confirmed)EMA6>EMA14' not in regression_data['filter4']
         and regression_data['close'] > 50
         ):
         add_in_csv(regression_data, regressionResult, ws, None)
@@ -4741,7 +4741,7 @@ def buy_study_risingMA(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, '(check-chart)maySell-EMA6-MT-May-LT-EMA14')
         
         
-    if(('$$(Confirmed)$$:EMA6>EMA14' in regression_data['filter4'])
+    if(('(Confirmed)EMA6>EMA14' in regression_data['filter4'])
         and 3 < regression_data['PCT_day_change'] 
         and 0 < regression_data['PCT_change']
         and regression_data['PCT_day_change_pre1'] < -1
@@ -5400,7 +5400,7 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
         and ((last_7_day_all_down(regression_data) == False) or (regression_data['forecast_day_PCT10_change'] > -10))
         and (MARKET_IN_DOWNTREND or (last_4_day_all_down(regression_data) == False)) #Uncomment0 If very less data
         and breakout_or_no_consolidation(regression_data) == True
-        and '$$(Confirmed)$$:EMA6<EMA14' not in regression_data['filter4']
+        and '(Confirmed)EMA6<EMA14' not in regression_data['filter4']
         and regression_data['close'] > 50
         and low_tail_pct(regression_data) < 1
         and high_tail_pct(regression_data) > 1.2
@@ -5437,7 +5437,7 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
         and ((last_7_day_all_down(regression_data) == False) or (regression_data['forecast_day_PCT10_change'] > -10))
         and (MARKET_IN_DOWNTREND or (last_4_day_all_down(regression_data) == False)) #Uncomment0 If very less data
         and breakout_or_no_consolidation(regression_data) == True
-        and '$$(Confirmed)$$:EMA6<EMA14' not in regression_data['filter4']
+        and '(Confirmed)EMA6<EMA14' not in regression_data['filter4']
         and regression_data['close'] > 50
         ):
         add_in_csv(regression_data, regressionResult, ws, None)
@@ -5464,7 +5464,7 @@ def sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws
         and ((last_7_day_all_down(regression_data) == False) or (regression_data['forecast_day_PCT10_change'] > -10))
         and (MARKET_IN_DOWNTREND or (last_4_day_all_down(regression_data) == False)) #Uncomment0 If very less data
         and breakout_or_no_consolidation(regression_data) == True
-        and '$$(Confirmed)$$:EMA6<EMA14' not in regression_data['filter4']
+        and '(Confirmed)EMA6<EMA14' not in regression_data['filter4']
         and regression_data['close'] > 50
         ):
         add_in_csv(regression_data, regressionResult, ws, None)
@@ -7444,7 +7444,7 @@ def sell_study_downingMA(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
     
-    if(('$$(Confirmed)$$:EMA6<EMA14' in regression_data['filter4'])
+    if(('(Confirmed)EMA6<EMA14' in regression_data['filter4'])
         and -3 > regression_data['PCT_day_change'] 
         and 0 > regression_data['PCT_change']
         and regression_data['PCT_day_change_pre1'] > 1
@@ -7990,9 +7990,8 @@ def filter_accuracy_finder(regression_data, regressionResult, reg, ws, filter_av
         if((("MLSell" in regression_data['filter']) and float(regression_data[filter_avg]) > 0 and abs(float(regression_data[filter_pct])) < 80)
             or (("MLBuy" in regression_data['filter']) and float(regression_data[filter_avg]) < 0 and abs(float(regression_data[filter_pct])) < 80)
             ):
-            return False    
-        
-                
+            return False
+                     
         if(regression_data[filter_count] >= 4
             and abs(regression_data[filter_pct]) >= 100
             and abs(regression_data[filter_avg]) > 1.5
@@ -8018,7 +8017,6 @@ def filter_accuracy_finder(regression_data, regressionResult, reg, ws, filter_av
             elif(regression_data[filter_avg] < 0):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Sell')
         
-                      
         if(abs(float(regression_data[filter_avg])) > 1.5 
             and abs(regression_data[filter_pct]) > 50
             ):
@@ -8034,7 +8032,7 @@ def filter_accuracy_finder(regression_data, regressionResult, reg, ws, filter_av
             and regression_data[filter_avg] <= -1.5
             and (regression_data[filter_pct] <= -80 or regression_data[filter_pct] == 0)
             ):
-            return True
+            return True              
 
 def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_pct):
     if(abs(regression_data[filter_avg]) > 0.5
