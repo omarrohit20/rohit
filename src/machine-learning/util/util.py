@@ -2523,6 +2523,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         sell_random_filter(regression_data, regressionResult, reg, ws)
         sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
         return True
+    
     return False
 
 def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
