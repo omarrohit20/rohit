@@ -311,7 +311,7 @@ def result_data_reg(scrip):
             buy_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_highBothBuyAll) 
         all_withoutml(regression_data, regressionResult, ws_high)
-        if(is_filter_all_accuracy(regression_data, regressionResult, True, None)):
+        if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, True, None)):
             all_withoutml(regression_data, regressionResult, ws_highBuyAllFilterAcc) 
           
                 
@@ -339,7 +339,7 @@ def result_data_reg(scrip):
             sell_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_lowBothSellAll)
         all_withoutml(regression_data, regressionResult, ws_low)
-        if(is_filter_all_accuracy(regression_data, regressionResult, True, None)):
+        if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, True, None)):
             all_withoutml(regression_data, regressionResult, ws_lowSellAllFilterAcc) 
         
 def result_data_cla(scrip):
