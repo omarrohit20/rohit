@@ -3016,7 +3016,8 @@ def buy_high_indicators(regression_data, regressionResult, reg, ws):
         and (mlpValue_other >= 0 and kNeighboursValue_other >= 0)
         and ((4.0 <= mlpValue < 10.0 and 2.0 <= kNeighboursValue < 10.0) or (2.0 <= mlpValue < 10.0 and 4.0 <= kNeighboursValue < 10.0))
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'buyHighIndicators-0')
+        if(mlpValue_cla > 0 or kNeighboursValue_cla > 0):
+            add_in_csv(regression_data, regressionResult, ws, 'buyHighIndicators-0')
     elif(is_algo_buy(regression_data)
         and (mlpValue_other >= 0 and kNeighboursValue_other >= 0)
         #and (mlpValue_cla > 0 or kNeighboursValue_cla > 0)
@@ -3024,6 +3025,12 @@ def buy_high_indicators(regression_data, regressionResult, reg, ws):
         and ((mlpValue + kNeighboursValue) > 5)
         ):
         add_in_csv(regression_data, regressionResult, ws, 'buyHighIndicators-Risky')
+    elif(is_algo_buy(regression_data)
+        and (mlpValue_other >= 0 and kNeighboursValue_other >= 0)
+        and (1 < mlpValue_cla <= 5)
+        and (0 <= mlpValue < 10.0 and 0 <= kNeighboursValue < 10.0)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '(uptrend)buyHighMLPClaIndicators-Risky')
     return False
               
 def buy_pattern(regression_data, regressionResult, reg, ws, ws1):
@@ -6360,14 +6367,21 @@ def sell_high_indicators(regression_data, regressionResult, reg, ws):
         and (mlpValue_other <= 0 and kNeighboursValue_other <= 0)
         and ((-10 < mlpValue <= -4.0 and -10 < kNeighboursValue <= -2.0) or (-10 < mlpValue <= -2.0 and -10 < kNeighboursValue <= -4.0))
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'sellHighIndicators-0')
+        if(mlpValue_cla < 0 or kNeighboursValue_cla < 0):
+            add_in_csv(regression_data, regressionResult, ws, 'sellHighIndicators-0')
     elif(is_algo_sell(regression_data)
         and (mlpValue_other <= 0 and kNeighboursValue_other <= 0)
         #and (mlpValue_cla < 0 or kNeighboursValue_cla < 0)
         and (-10 < mlpValue <= -2.0 and -10 < kNeighboursValue <= -1.5)
         and ((mlpValue + kNeighboursValue) < -5)
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'sellHighIndicators-Risky')       
+        add_in_csv(regression_data, regressionResult, ws, 'sellHighIndicators-Risky')
+    elif(is_algo_sell(regression_data)
+        and (mlpValue_other <= 0 and kNeighboursValue_other <= 0)
+        and (-5 <= mlpValue_cla < -1)
+        and (-10 < mlpValue <= 0 and -10 < kNeighboursValue <= 0)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '(downtrend)sellHighMLPClaIndicators-Risky')    
     return False
 
 def sell_pattern(regression_data, regressionResult, reg, ws, ws1):
