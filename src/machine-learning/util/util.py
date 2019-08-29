@@ -3003,6 +3003,22 @@ def buy_high_indicators(regression_data, regressionResult, reg, ws):
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
     if(is_algo_buy(regression_data, True)
         and ((mlpValue_other >= 1 or kNeighboursValue_other >= 1) or regression_data['PCT_day_change'] < 0)
+        and (abs(regression_data['filter_345_avg']) == 0
+             or (float(regression_data['filter_345_pct']) > -1.5 
+                 and abs(regression_data['filter_345_avg']) > -50)
+            )
+        and (abs(regression_data['filter_all_avg']) == 0
+             or (float(regression_data['filter_all_pct']) > -1.5 
+                 and abs(regression_data['filter_all_avg']) > -50)
+            )
+        and (abs(regression_data['filter_pct_change_avg']) == 0
+             or (float(regression_data['filter_pct_change_pct']) > -1.5 
+                 and abs(regression_data['filter_pct_change_avg']) > -50)
+            )
+        and (abs(regression_data['filter_avg']) == 0
+             or (float(regression_data['filter_pct']) > -1.5 
+                 and abs(regression_data['filter_avg']) > -50)
+            )
         ):
         if(mlpValue >= 2.0 and kNeighboursValue >= 2.0
            and regression_data['month3HighChange'] < -3
@@ -6355,6 +6371,22 @@ def sell_high_indicators(regression_data, regressionResult, reg, ws):
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
     if(is_algo_sell(regression_data, True)
         and ((mlpValue_other <= -1 or kNeighboursValue_other <= -1) or regression_data['PCT_day_change'] > 0)
+        and (abs(regression_data['filter_345_avg']) == 0
+             or (float(regression_data['filter_345_pct']) < 1.5 
+                  and abs(regression_data['filter_345_avg']) < 50)
+            )
+        and (abs(regression_data['filter_all_avg']) == 0
+             or (float(regression_data['filter_all_pct']) < 1.5
+                 and abs(regression_data['filter_all_avg']) < 50)
+            )
+        and (abs(regression_data['filter_pct_change_avg']) == 0
+             or (float(regression_data['filter_pct_change_pct']) < 1.5
+                 and abs(regression_data['filter_pct_change_avg']) < 50)
+            )
+        and (abs(regression_data['filter_avg']) == 0
+             or (float(regression_data['filter_pct']) < 1.5
+                 and abs(regression_data['filter_avg']) < 50)
+            )
         ):
         if(mlpValue < -3 and mlpValue_other < -3
             and regression_data['PCT_day_change'] < -5
