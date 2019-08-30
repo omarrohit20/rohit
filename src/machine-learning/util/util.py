@@ -2473,8 +2473,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
     base_line(regression_data, regressionResult, reg, ws)
     filterMA(regression_data, regressionResult)
     tail_reversal_filter(regression_data, regressionResult)
-    if(regression_data['close'] > 50
-        ):
+    if(regression_data['close'] > 50):
         buy_year_high(regression_data, regressionResult, reg, ws)
         buy_year_low(regression_data, regressionResult, reg, ws, ws)
         buy_down_trend(regression_data, regressionResult, reg, ws)
@@ -2527,7 +2526,8 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         sell_random_filter(regression_data, regressionResult, reg, ws)
         sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
         return True
-    
+    if(buy_skip_close_lt_50(regression_data, regressionResult, reg, ws)):
+        return True
     return False
 
 def buy_indicator_after_filter_accuracy(regression_data, regressionResult, reg, ws):
@@ -3020,6 +3020,9 @@ def buy_high_indicators(regression_data, regressionResult, reg, ws):
                  and abs(regression_data['filter_avg']) > -50)
             )
         ):
+        if(2 < high_tail_pct(regression_data) < 4
+            and (regression_data['PCT_day_change'] + high_tail_pct(regression_data)) > 6.5):
+            return False
         if(mlpValue >= 2.0 and kNeighboursValue >= 2.0
            and regression_data['month3HighChange'] < -3
            and regression_data['month3LowChange'] > 3
@@ -5101,6 +5104,9 @@ def buy_random_filters(regression_data, regressionResult, reg, ws):
         and low_tail_pct(regression_data) > 1
         ):
         add_in_csv(regression_data, regressionResult, ws, '(Test)buyLastDayHighDownReversal')
+
+def buy_skip_close_lt_50(regression_data, regressionResult, reg, ws):
+    return False
         
 def buy_test_345(regression_data, regressionResult, reg, ws):
     regression_data['filter'] = " "
@@ -5730,8 +5736,7 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
     base_line(regression_data, regressionResult, reg, ws)
     filterMA(regression_data, regressionResult)
     tail_reversal_filter(regression_data, regressionResult)
-    if(regression_data['close'] > 50
-        ):
+    if(regression_data['close'] > 50):
         sell_up_trend(regression_data, regressionResult, reg, ws)
         sell_down_trend(regression_data, regressionResult, reg, ws)
         sell_final(regression_data, regressionResult, reg, ws, ws)
@@ -5783,7 +5788,8 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         buy_study_risingMA(regression_data, regressionResult, reg, ws)
         buy_random_filters(regression_data, regressionResult, reg, ws)
         buy_tail_reversal_filter(regression_data, regressionResult, reg, ws)
-        
+        return True
+    if(sell_skip_close_lt_50(regression_data, regressionResult, reg, ws)):
         return True
     return False
 
@@ -6388,6 +6394,9 @@ def sell_high_indicators(regression_data, regressionResult, reg, ws):
                  and abs(regression_data['filter_avg']) < 50)
             )
         ):
+        if(2 < low_tail_pct(regression_data) < 4
+            and (regression_data['PCT_day_change'] - low_tail_pct(regression_data)) < -6.5):
+            return False
         if(mlpValue < -3 and mlpValue_other < -3
             and regression_data['PCT_day_change'] < -5
             and regression_data['PCT_change'] < -5
@@ -7786,11 +7795,14 @@ def sell_random_filter(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, '(Test)sellLastDayHighUpReversal')
         
+def sell_skip_close_lt_50(regression_data, regressionResult, reg, ws):
     if((regression_data['weekLowChange'] > 15) 
         and (-10 < regression_data['PCT_change'] < -4)
         and (-10 < regression_data['PCT_day_change'] < -4)
         ):
         add_in_csv(regression_data, regressionResult, ws, '(Test)sellUptrendReversal')
+        return True
+    return False
 
 def sell_test_345(regression_data, regressionResult, reg, ws):
     regression_data['filter'] = " "
