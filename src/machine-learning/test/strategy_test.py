@@ -44,80 +44,14 @@ def tech_sell_curs_to_csv(curser, filename):
         for record in data: 
             write.writerow(record)            
 
-def import_data_in_db():
-    print('############################################')
-    print('import_data_in_db')
-    print('############################################')
-    dbresult.drop_collection('buy_test_345')        
+def db_cleanup():
+    dbresult.drop_collection('buy_test_345')  
     dbresult.drop_collection('buy_test')
     dbresult.drop_collection('buy_test_pct_change')
     dbresult.drop_collection('buy_test_all')
     dbresult.drop_collection('buy_test_tech')
     dbresult.drop_collection('buy_test_tech_all')
     dbresult.drop_collection('buy_test_tech_pct_change')
-    
-    print('buy_test_345')
-    curs = db.ws_high.find({})
-    for data in curs:
-        data['filterTest'] = ''
-        flag = buy_test_345(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.buy_test_345.insert_one(json.loads(json.dumps(data))) 
-     
-    print('buy_test')
-    curs = db.ws_high.find({})
-    for data in curs:
-        data['filterTest'] = ''
-        flag = buy_test(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.buy_test.insert_one(json.loads(json.dumps(data))) 
-     
-    print('buy_test_pct_change')
-    curs = db.ws_high.find({})
-    for data in curs:
-        data['filterTest'] = ''
-        flag = buy_test_pct_change(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.buy_test_pct_change.insert_one(json.loads(json.dumps(data)))
-     
-    print('buy_test_all')        
-    curs = db.ws_high.find({})
-    for data in curs:
-        data['filterTest'] = ''
-        flag = buy_test_all(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.buy_test_all.insert_one(json.loads(json.dumps(data)))
-            
-    print('buy_test_tech')        
-    curs = db.ws_high.find({})
-    for data in curs:
-        data['filterTest'] = ''
-        flag = buy_test_tech(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.buy_test_tech.insert_one(json.loads(json.dumps(data)))
-             
-    print('buy_test_tech_all')        
-    curs = db.ws_high.find({})
-    for data in curs:
-        data['filterTest'] = ''
-        flag = buy_test_tech_all(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.buy_test_tech_all.insert_one(json.loads(json.dumps(data)))
-#             
-#     print('buy_test_tech_all_pct_change')        
-#     curs = db.ws_high.find({})
-#     for data in curs:
-#         data['filterTest'] = ''
-#         flag = buy_test_tech_all_pct_change(data, data, True, None)
-#         if(flag):
-#             del data['_id']
-#             dbresult.buy_test_tech_all_pct_change.insert_one(json.loads(json.dumps(data)))  
     
     dbresult.drop_collection('sell_test_345')  
     dbresult.drop_collection('sell_test')
@@ -126,8 +60,142 @@ def import_data_in_db():
     dbresult.drop_collection('sell_test_tech')
     dbresult.drop_collection('sell_test_tech_all')
     dbresult.drop_collection('sell_test_tech_pct_change')
+
+def import_data_in_db_and_save():
+    print('\n\n\n\n############################################')
+    print('export_data_patterns_from_db')
+    print('############################################')
+    pipeline = [{"$project":{"Act_PCT_day_change":"$Act_PCT_day_change",
+                         "filterTest":"$filterTest",
+                         }},
+            {"$project":{"_id":"$_id",
+                         "___group":{"filterTest":"$filterTest"},
+                         "Act_PCT_day_change":"$Act_PCT_day_change",
+                         }},
+            {"$group":{"_id":"$___group",
+                       "avg":{"$avg":"$Act_PCT_day_change"},
+                       "count":{"$sum":1},
+                       "countgt":{"$sum" : {"$cond": [{"$gt": ['$Act_PCT_day_change', 0]}, 1, 0]}},
+                       "countlt":{"$sum": {"$cond": [{"$lt": ['$Act_PCT_day_change', 0]}, 1, 0]}},
+                       }},
+            #{"$sort":SON({"_id":1})},
+            {"$project":{"_id":False,"filterTest":"$_id.filterTest","avg":True,"count":True,"countgt":True,"countlt":True}}
+            #{"$sort":SON({"filterTest":1})},
+            #{"allowDiskUse":True }
+            ]
+    
+    print('############################################')
+    print('import_data_in_db')
+    print('############################################')
+    
+    print('buy_test_345')
+    dbresult.drop_collection('buy_test_345')       
+    curs = db.ws_high.find({})
+    for data in curs:
+        data['filterTest'] = ''
+        flag = buy_test_345(data, data, True, None)
+        if(flag):
+            del data['_id']
+            dbresult.buy_test_345.insert_one(json.loads(json.dumps(data)))
+    print('buy_test_345')
+    curser = dbresult.buy_test_345.aggregate(pipeline)
+    curs_to_csv(curser, '../../data-import/nselist/filter-345-buy.csv')
+    dbresult.drop_collection('buy_test_345')    
+    
+     
+    print('buy_test')
+    dbresult.drop_collection('buy_test')
+    curs = db.ws_high.find({})
+    for data in curs:
+        data['filterTest'] = ''
+        flag = buy_test(data, data, True, None)
+        if(flag):
+            del data['_id']
+            dbresult.buy_test.insert_one(json.loads(json.dumps(data)))
+    print('buy_test')
+    curser = dbresult.buy_test.aggregate(pipeline)
+    curs_to_csv(curser, '../../data-import/nselist/filter-buy.csv')
+    dbresult.drop_collection('buy_test')
+     
+     
+    print('buy_test_pct_change')
+    dbresult.drop_collection('buy_test_pct_change')
+    curs = db.ws_high.find({})
+    for data in curs:
+        data['filterTest'] = ''
+        flag = buy_test_pct_change(data, data, True, None)
+        if(flag):
+            del data['_id']
+            dbresult.buy_test_pct_change.insert_one(json.loads(json.dumps(data)))
+    print('buy_test_pct_change')
+    curser = dbresult.buy_test_pct_change.aggregate(pipeline)
+    curs_to_csv(curser, '../../data-import/nselist/filter-pct-change-buy.csv')
+    dbresult.drop_collection('buy_test_pct_change')
+    
+    
+    print('buy_test_all')
+    dbresult.drop_collection('buy_test_all')         
+    curs = db.ws_high.find({})
+    for data in curs:
+        data['filterTest'] = ''
+        flag = buy_test_all(data, data, True, None)
+        if(flag):
+            del data['_id']
+            dbresult.buy_test_all.insert_one(json.loads(json.dumps(data)))
+    print('buy_test_all')
+    curser = dbresult.buy_test_all.aggregate(pipeline)
+    curs_to_csv(curser, '../../data-import/nselist/filter-all-buy.csv')
+    dbresult.drop_collection('buy_test_all')
+    
+            
+    print('buy_test_tech')
+    dbresult.drop_collection('buy_test_tech')     
+    curs = db.ws_high.find({})
+    for data in curs:
+        data['filterTest'] = ''
+        flag = buy_test_tech(data, data, True, None)
+        if(flag):
+            del data['_id']
+            dbresult.buy_test_tech.insert_one(json.loads(json.dumps(data)))
+    print('buy_test_tech')
+    curser = dbresult.buy_test_tech.aggregate(pipeline)
+    curs_to_csv(curser, '../../data-import/nselist/filter-tech-buy.csv')
+    dbresult.drop_collection('buy_test_tech')
+    
+             
+    print('buy_test_tech_all')
+    dbresult.drop_collection('buy_test_tech_all')       
+    curs = db.ws_high.find({})
+    for data in curs:
+        data['filterTest'] = ''
+        flag = buy_test_tech_all(data, data, True, None)
+        if(flag):
+            del data['_id']
+            dbresult.buy_test_tech_all.insert_one(json.loads(json.dumps(data)))
+    print('buy_test_tech_all')
+    curser = dbresult.buy_test_tech_all.aggregate(pipeline)
+    curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-buy.csv')
+    dbresult.drop_collection('buy_test_tech_all')
+    
+#             
+#     print('buy_test_tech_all_pct_change')
+#     dbresult.drop_collection('buy_test_tech_pct_change')       
+#     curs = db.ws_high.find({})
+#     for data in curs:
+#         data['filterTest'] = ''
+#         flag = buy_test_tech_all_pct_change(data, data, True, None)
+#         if(flag):
+#             del data['_id']
+#             dbresult.buy_test_tech_all_pct_change.insert_one(json.loads(json.dumps(data)))  
+#     print('buy_test_tech_all_pct_change')
+#     curser = dbresult.buy_test_tech_all_pct_change.aggregate(pipeline)
+#     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-pct-change-buy.csv')
+#     dbresult.drop_collection('buy_test_tech_pct_change')
+    
+
     
     print('sell_test_345')
+    dbresult.drop_collection('sell_test_345') 
     curs = db.ws_low.find({})
     for data in curs:
         data['filterTest'] = ''
@@ -135,8 +203,14 @@ def import_data_in_db():
         if(flag):
             del data['_id']
             dbresult.sell_test_345.insert_one(json.loads(json.dumps(data))) 
+    print('sell_test_345')
+    curser = dbresult.sell_test_345.aggregate(pipeline)
+    curs_to_csv(curser, '../../data-import/nselist/filter-345-sell.csv')
+    dbresult.drop_collection('sell_test_345') 
+    
      
     print('sell_test')
+    dbresult.drop_collection('sell_test')
     curs = db.ws_low.find({})
     for data in curs:
         data['filterTest'] = ''
@@ -144,26 +218,42 @@ def import_data_in_db():
         if(flag):
             del data['_id']
             dbresult.sell_test.insert_one(json.loads(json.dumps(data))) 
+    print('sell_test')
+    curser = dbresult.sell_test.aggregate(pipeline)
+    curs_to_csv(curser, '../../data-import/nselist/filter-sell.csv')
+    dbresult.drop_collection('sell_test')
+    
      
     print('sell_test_pct_change')
+    dbresult.drop_collection('sell_test_pct_change')
     curs = db.ws_low.find({})        
     for data in curs:
         data['filterTest'] = ''
         flag = sell_test_pct_change(data, data, True, None)
         if(flag):
             del data['_id']
-            dbresult.sell_test_pct_change.insert_one(json.loads(json.dumps(data))) 
+            dbresult.sell_test_pct_change.insert_one(json.loads(json.dumps(data)))
+    print('sell_test_pct_change')
+    curser = dbresult.sell_test_pct_change.aggregate(pipeline)
+    curs_to_csv(curser, '../../data-import/nselist/filter-pct-change-sell.csv') 
+    dbresult.drop_collection('sell_test_pct_change')
              
     print('sell_test_all')
+    dbresult.drop_collection('sell_test_all')
     curs = db.ws_low.find({})        
     for data in curs:
         data['filterTest'] = ''
         flag = sell_test_all(data, data, True, None)
         if(flag):
             del data['_id']
-            dbresult.sell_test_all.insert_one(json.loads(json.dumps(data))) 
+            dbresult.sell_test_all.insert_one(json.loads(json.dumps(data)))
+    print('sell_test_all')
+    curser = dbresult.sell_test_all.aggregate(pipeline)
+    curs_to_csv(curser, '../../data-import/nselist/filter-all-sell.csv') 
+    dbresult.drop_collection('sell_test_all')
             
-    print('sell_test_tech')        
+    print('sell_test_tech')  
+    dbresult.drop_collection('sell_test_tech')      
     curs = db.ws_low.find({})
     for data in curs:
         data['filterTest'] = ''
@@ -171,8 +261,14 @@ def import_data_in_db():
         if(flag):
             del data['_id']
             dbresult.sell_test_tech.insert_one(json.loads(json.dumps(data)))
+    print('sell_test_tech')
+    curser = dbresult.sell_test_tech.aggregate(pipeline)
+    curs_to_csv(curser, '../../data-import/nselist/filter-tech-sell.csv')
+    dbresult.drop_collection('sell_test_tech')
+    
             
-    print('sell_test_tech_all')        
+    print('sell_test_tech_all') 
+    dbresult.drop_collection('sell_test_tech_all')       
     curs = db.ws_low.find({})
     for data in curs:
         data['filterTest'] = ''
@@ -180,15 +276,24 @@ def import_data_in_db():
         if(flag):
             del data['_id']
             dbresult.sell_test_tech_all.insert_one(json.loads(json.dumps(data)))
+    print('sell_test_tech_all')
+    curser = dbresult.sell_test_tech_all.aggregate(pipeline)
+    curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-sell.csv')
+    dbresult.drop_collection('sell_test_tech_all')
 #            
-#     print('sell_test_tech_all_pct_change')        
+#     print('sell_test_tech_all_pct_change')  
+#     dbresult.drop_collection('sell_test_tech_pct_change')      
 #     curs = db.ws_low.find({})
 #     for data in curs:
 #         data['filterTest'] = ''
 #         flag = sell_test_tech_all_pct_change(data, data, True, None)
 #         if(flag):
 #             del data['_id']
-#             dbresult.sell_test_tech_all_pct_change.insert_one(json.loads(json.dumps(data)))  
+#             dbresult.sell_test_tech_all_pct_change.insert_one(json.loads(json.dumps(data)))
+#     print('sell_test_tech_all_pct_change')
+#     curser = dbresult.sell_test_tech_all_pct_change.aggregate(pipeline)
+#     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-pct-change-sell.csv') 
+#     dbresult.drop_collection('sell_test_tech_pct_change')
  
 def import_filter_data_in_db():
     print('############################################')
@@ -213,86 +318,7 @@ def import_filter_data_in_db():
         if(flag):
             del data['_id']
             dbresult.sell_test.insert_one(json.loads(json.dumps(data))) 
-                
-def export_data_patterns_from_db():
-    print('\n\n\n\n############################################')
-    print('export_data_patterns_from_db')
-    print('############################################')
-    pipeline = [{"$project":{"Act_PCT_day_change":"$Act_PCT_day_change",
-                         "filterTest":"$filterTest",
-                         }},
-            {"$project":{"_id":"$_id",
-                         "___group":{"filterTest":"$filterTest"},
-                         "Act_PCT_day_change":"$Act_PCT_day_change",
-                         }},
-            {"$group":{"_id":"$___group",
-                       "avg":{"$avg":"$Act_PCT_day_change"},
-                       "count":{"$sum":1},
-                       "countgt":{"$sum" : {"$cond": [{"$gt": ['$Act_PCT_day_change', 0]}, 1, 0]}},
-                       "countlt":{"$sum": {"$cond": [{"$lt": ['$Act_PCT_day_change', 0]}, 1, 0]}},
-                       }},
-            #{"$sort":SON({"_id":1})},
-            {"$project":{"_id":False,"filterTest":"$_id.filterTest","avg":True,"count":True,"countgt":True,"countlt":True}}
-            #{"$sort":SON({"filterTest":1})},
-            #{"allowDiskUse":True }
-            ] 
-
-    print('buy_test_345')
-    curser = dbresult.buy_test_345.aggregate(pipeline)
-    curs_to_csv(curser, '../../data-import/nselist/filter-345-buy.csv')
-     
-    print('buy_test')
-    curser = dbresult.buy_test.aggregate(pipeline)
-    curs_to_csv(curser, '../../data-import/nselist/filter-buy.csv')
-     
-    print('buy_test_pct_change')
-    curser = dbresult.buy_test_pct_change.aggregate(pipeline)
-    curs_to_csv(curser, '../../data-import/nselist/filter-pct-change-buy.csv')
-     
-    print('buy_test_all')
-    curser = dbresult.buy_test_all.aggregate(pipeline)
-    curs_to_csv(curser, '../../data-import/nselist/filter-all-buy.csv')
-    
-    print('buy_test_tech')
-    curser = dbresult.buy_test_tech.aggregate(pipeline)
-    curs_to_csv(curser, '../../data-import/nselist/filter-tech-buy.csv')
-      
-    print('buy_test_tech_all')
-    curser = dbresult.buy_test_tech_all.aggregate(pipeline)
-    curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-buy.csv')
-      
-#     print('buy_test_tech_all_pct_change')
-#     curser = dbresult.buy_test_tech_all_pct_change.aggregate(pipeline)
-#     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-pct-change-buy.csv')
-    
-    print('sell_test_345')
-    curser = dbresult.sell_test_345.aggregate(pipeline)
-    curs_to_csv(curser, '../../data-import/nselist/filter-345-sell.csv')
-     
-    print('sell_test')
-    curser = dbresult.sell_test.aggregate(pipeline)
-    curs_to_csv(curser, '../../data-import/nselist/filter-sell.csv')
-     
-    print('sell_test_pct_change')
-    curser = dbresult.sell_test_pct_change.aggregate(pipeline)
-    curs_to_csv(curser, '../../data-import/nselist/filter-pct-change-sell.csv')
-     
-    print('sell_test_all')
-    curser = dbresult.sell_test_all.aggregate(pipeline)
-    curs_to_csv(curser, '../../data-import/nselist/filter-all-sell.csv')
-    
-    print('sell_test_tech')
-    curser = dbresult.sell_test_tech.aggregate(pipeline)
-    curs_to_csv(curser, '../../data-import/nselist/filter-tech-sell.csv')
-    
-    print('sell_test_tech_all')
-    curser = dbresult.sell_test_tech_all.aggregate(pipeline)
-    curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-sell.csv')
-    
-#     print('sell_test_tech_all_pct_change')
-#     curser = dbresult.sell_test_tech_all_pct_change.aggregate(pipeline)
-#     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-pct-change-sell.csv')
-    
+                    
 def export_tech_patterns_from_db():
     print('\n\n\n\n############################################')
     print('export_tech_patterns_from_db')
@@ -317,7 +343,8 @@ def export_tech_patterns_from_db():
     curser = db.ws_low.aggregate(pipeline)
     tech_sell_curs_to_csv(curser, '../../data-import/nselist/patterns-sell.csv')
     
-if __name__ == "__main__":    
-    import_data_in_db()
-    export_data_patterns_from_db()
+if __name__ == "__main__":  
+    db_cleanup()  
+    import_data_in_db_and_save()
     export_tech_patterns_from_db()
+    db_cleanup()
