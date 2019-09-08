@@ -58,10 +58,17 @@ filter345sell = patterns_to_dict('../../data-import/nselist/filter-345-sell.csv'
 filtersell = patterns_to_dict('../../data-import/nselist/filter-sell.csv')
 filterpctchangesell = patterns_to_dict('../../data-import/nselist/filter-pct-change-sell.csv')
 filterallsell = patterns_to_dict('../../data-import/nselist/filter-all-sell.csv')
+filtertechsell = patterns_to_dict('../../data-import/nselist/filter-tech-buy.csv')
+filtertechallsell = patterns_to_dict('../../data-import/nselist/filter-tech-all-buy.csv')
+filtertechallpctchangesell = patterns_to_dict('../../data-import/nselist/filter-tech-all-pct-change-buy.csv')
 filter345buy = patterns_to_dict('../../data-import/nselist/filter-345-buy.csv')
 filterbuy = patterns_to_dict('../../data-import/nselist/filter-buy.csv')
 filterpctchangebuy = patterns_to_dict('../../data-import/nselist/filter-pct-change-buy.csv')
 filterallbuy = patterns_to_dict('../../data-import/nselist/filter-all-buy.csv')
+filtertechbuy = patterns_to_dict('../../data-import/nselist/filter-tech-buy.csv')
+filtertechallbuy = patterns_to_dict('../../data-import/nselist/filter-tech-all-buy.csv')
+filtertechallpctchangebuy = patterns_to_dict('../../data-import/nselist/filter-tech-all-pct-change-buy.csv')
+
     
 def add_in_csv(regression_data, regressionResult, ws=None, filter=None, filter1=None, filter2=None, filter3=None, filter4=None, filter5=None, filter6=None):
     if(TEST != True):
@@ -113,6 +120,15 @@ def add_in_csv(regression_data, regressionResult, ws=None, filter=None, filter1=
         tempRegressionResult.append(regression_data['filter_all_avg'])
         tempRegressionResult.append(regression_data['filter_all_count'])
         tempRegressionResult.append(regression_data['filter_all_pct'])
+        tempRegressionResult.append(regression_data['filter_tech_avg'])
+        tempRegressionResult.append(regression_data['filter_tech_count'])
+        tempRegressionResult.append(regression_data['filter_tech_pct'])
+        tempRegressionResult.append(regression_data['filter_tech_all_avg'])
+        tempRegressionResult.append(regression_data['filter_tech_all_count'])
+        tempRegressionResult.append(regression_data['filter_tech_all_pct'])
+        tempRegressionResult.append(regression_data['filter_tech_all_pct_change_avg'])
+        tempRegressionResult.append(regression_data['filter_tech_all_pct_change_count'])
+        tempRegressionResult.append(regression_data['filter_tech_all_pct_change_pct'])
         ws.append(tempRegressionResult) if (ws is not None) else False
         if(db.resultScripFutures.find_one({'scrip':regression_data['scrip']}) is None):
             db.resultScripFutures.insert_one({
@@ -1852,6 +1868,15 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regression_data['filter_all_avg']  = 0
     regression_data['filter_all_count'] = 0
     regression_data['filter_all_pct'] = 0
+    regression_data['filter_tech_avg'] = 0
+    regression_data['filter_tech_count'] = 0
+    regression_data['filter_tech_pct'] = 0
+    regression_data['filter_tech_all_avg'] = 0
+    regression_data['filter_tech_all_count'] = 0
+    regression_data['filter_tech_all_pct'] = 0
+    regression_data['filter_tech_all_pct_change_avg'] = 0
+    regression_data['filter_tech_all_pct_change_count'] = 0
+    regression_data['filter_tech_all_pct_change_pct'] = 0
     regression_data['series_trend'] = "NA"
     if pct_change_negative_trend_short(regression_data):
         regression_data['series_trend'] = "shortDownTrend"
@@ -5234,6 +5259,92 @@ def buy_test_all(regression_data, regressionResult, reg, ws):
         return True  
     return False
 
+def buy_test_tech(regression_data, regressionResult, reg, ws):
+    regression_data['filter'] = " "
+    regression_data['filter1'] = " "
+    regression_data['filter2'] = " "
+    regression_data['filter3'] = " "
+    regression_data['filter4'] = " "
+    regression_data['filter5'] = " "
+    regression_data['filter6'] = " "
+    regression_data['series_trend'] = "NA"
+    if pct_change_negative_trend_short(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend_short(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
+    if pct_change_negative_trend(regression_data):
+        regression_data['series_trend'] = "downTrend"
+    if pct_change_positive_trend(regression_data):
+        regression_data['series_trend'] = "upTrend" 
+    if (regression_data['buyIndia'] != '' or regression_data['sellIndia'] != ''):
+        regression_data['filterTest'] = 'B@{' + regression_data['buyIndia'] + '}' \
+                                        + 'S@{' + regression_data['sellIndia'] + '}'
+        return True
+    
+    return False
+
+def buy_test_tech_all(regression_data, regressionResult, reg, ws):
+    regression_data['filter'] = " "
+    regression_data['filter1'] = " "
+    regression_data['filter2'] = " "
+    regression_data['filter3'] = " "
+    regression_data['filter4'] = " "
+    regression_data['filter5'] = " "
+    regression_data['filter6'] = " "
+    regression_data['series_trend'] = "NA"
+    if pct_change_negative_trend_short(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend_short(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
+    if pct_change_negative_trend(regression_data):
+        regression_data['series_trend'] = "downTrend"
+    if pct_change_positive_trend(regression_data):
+        regression_data['series_trend'] = "upTrend" 
+    flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
+    if (regression_data['buyIndia'] != '' or regression_data['sellIndia'] != ''):
+        filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
+        regression_data['filterTest'] = filterNameTail + ',' \
+                                        + regression_data['series_trend'] + ',' \
+                                        + 'B@{' + regression_data['buyIndia'] + '}' \
+                                        + 'S@{' + regression_data['sellIndia'] + '}' \
+                                        + regression_data['filter3'] + ',' \
+                                        + regression_data['filter4'] + ',' 
+        return True
+    
+    return False
+
+def buy_test_tech_all_pct_change(regression_data, regressionResult, reg, ws):
+    regression_data['filter'] = " "
+    regression_data['filter1'] = " "
+    regression_data['filter2'] = " "
+    regression_data['filter3'] = " "
+    regression_data['filter4'] = " "
+    regression_data['filter5'] = " "
+    regression_data['filter6'] = " "
+    regression_data['series_trend'] = "NA"
+    if pct_change_negative_trend_short(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend_short(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
+    if pct_change_negative_trend(regression_data):
+        regression_data['series_trend'] = "downTrend"
+    if pct_change_positive_trend(regression_data):
+        regression_data['series_trend'] = "upTrend" 
+    flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
+    if (regression_data['buyIndia'] != '' or regression_data['sellIndia'] != ''):
+        filterName = pct_change_filter(regression_data, regressionResult, False)
+        filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
+        regression_data['filterTest'] = filterName + ',' \
+                                        + filterNameTail + ',' \
+                                        + regression_data['series_trend'] + ',' \
+                                        + 'B@{' + regression_data['buyIndia'] + '}' \
+                                        + 'S@{' + regression_data['sellIndia'] + '}' \
+                                        + regression_data['filter3'] + ',' \
+                                        + regression_data['filter4'] + ',' 
+        return True
+    
+    return False
+
 def buy_oi_candidate(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     tail_pct_filter(regression_data, regressionResult)
@@ -5291,7 +5402,7 @@ def buy_all_filter(regression_data, regressionResult, reg, ws):
         flag = True
     return flag
 
-def buy_filter_345_accuracy(regression_data, regressionResult, reg, ws):
+def buy_filter_345_accuracy(regression_data, regressionResult):
     filtersDict=filter345buy
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filter = filterName + ',' \
@@ -5309,7 +5420,7 @@ def buy_filter_345_accuracy(regression_data, regressionResult, reg, ws):
             else:
                 regression_data['filter_345_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
 
-def buy_filter_accuracy(regression_data, regressionResult, reg, ws):
+def buy_filter_accuracy(regression_data, regressionResult):
     filtersDict=filterbuy
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
@@ -5327,7 +5438,7 @@ def buy_filter_accuracy(regression_data, regressionResult, reg, ws):
                 else:
                     regression_data['filter_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
 
-def buy_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
+def buy_filter_pct_change_accuracy(regression_data, regressionResult):
     filtersDict=filterpctchangebuy
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
@@ -5347,7 +5458,7 @@ def buy_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
                 else:
                     regression_data['filter_pct_change_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
                 
-def buy_filter_all_accuracy(regression_data, regressionResult, reg, ws):
+def buy_filter_345_all_accuracy(regression_data, regressionResult):
     filtersDict=filterallbuy
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filterNameTail = tail_change_filter(regression_data, regressionResult, False)
@@ -5367,7 +5478,67 @@ def buy_filter_all_accuracy(regression_data, regressionResult, reg, ws):
                 regression_data['filter_all_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
             else:
                 regression_data['filter_all_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
-                            
+
+def buy_filter_tech_accuracy(regression_data, regressionResult):
+    filtersDict=filtertechbuy
+    filter = 'B@{' + regression_data['buyIndia'] + '}' \
+            + 'S@{' + regression_data['sellIndia'] + '}' 
+    if (filter != '') and (filter in filtersDict):
+        regression_data['filter_tech_avg'] = float(filtersDict[filter]['avg'])
+        regression_data['filter_tech_count'] = float(filtersDict[filter]['count'])
+        if float(filtersDict[filter]['count']) >= 2:
+            if float(filtersDict[filter]['avg']) >= 0:
+                regression_data['filter_tech_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
+            else:
+                regression_data['filter_tech_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
+
+def buy_filter_tech_all_accuracy(regression_data, regressionResult):
+    filtersDict=filtertechallbuy
+    filterNameTail = tail_change_filter(regression_data, regressionResult, False)
+    filter = filterNameTail + ',' \
+            + regression_data['series_trend'] + ',' \
+            + 'B@{' + regression_data['buyIndia'] + '}' \
+            + 'S@{' + regression_data['sellIndia'] + '}' \
+            + regression_data['filter3'] + ',' \
+            + regression_data['filter4'] + ','
+    if (filter != '') and (filter in filtersDict):
+        regression_data['filter_tech_all_avg'] = float(filtersDict[filter]['avg'])
+        regression_data['filter_tech_all_count'] = float(filtersDict[filter]['count'])
+        if float(filtersDict[filter]['count']) >= 2:
+            if float(filtersDict[filter]['avg']) >= 0:
+                regression_data['filter_tech_all_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
+            else:
+                regression_data['filter_tech_all_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
+
+def buy_filter_tech_all_pct_change_accuracy(regression_data, regressionResult):
+    filtersDict=filtertechallpctchangebuy
+    filterName = pct_change_filter(regression_data, regressionResult, False)
+    filterNameTail = tail_change_filter(regression_data, regressionResult, False)
+    filter = filterName + ',' \
+            + filterNameTail + ',' \
+            + regression_data['series_trend'] + ',' \
+            + 'B@{' + regression_data['buyIndia'] + '}' \
+            + 'S@{' + regression_data['sellIndia'] + '}' \
+            + regression_data['filter3'] + ',' \
+            + regression_data['filter4'] + ','
+    if (filter != '') and (filter in filtersDict):
+        regression_data['filter_tech_all_pct_change_avg'] = float(filtersDict[filter]['avg'])
+        regression_data['filter_tech_all_pct_change_count'] = float(filtersDict[filter]['count'])
+        if float(filtersDict[filter]['count']) >= 2:
+            if float(filtersDict[filter]['avg']) >= 0:
+                regression_data['filter_tech_all_pct_change_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
+            else:
+                regression_data['filter_tech_all_pct_change_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
+
+def buy_filter_all_accuracy(regression_data, regressionResult):
+    buy_filter_345_accuracy(regression_data, regressionResult)
+    buy_filter_accuracy(regression_data, regressionResult)
+    buy_filter_pct_change_accuracy(regression_data, regressionResult) 
+    buy_filter_345_all_accuracy(regression_data, regressionResult)
+    buy_filter_tech_accuracy(regression_data, regressionResult)
+    buy_filter_tech_all_accuracy(regression_data, regressionResult)
+    #buy_filter_tech_all_pct_change_accuracy(regression_data, regressionResult)
+                           
 def sell_pattern_without_mlalgo(regression_data, regressionResult):
     if(regression_data['PCT_day_change'] > -3.5
         and regression_data['year2HighChange'] < -5):
@@ -7927,6 +8098,92 @@ def sell_test_all(regression_data, regressionResult, reg, ws):
     if regression_data['filterTest'] != '':
         return True  
     return False
+
+def sell_test_tech(regression_data, regressionResult, reg, ws):
+    regression_data['filter'] = " "
+    regression_data['filter1'] = " "
+    regression_data['filter2'] = " "
+    regression_data['filter3'] = " "
+    regression_data['filter4'] = " "
+    regression_data['filter5'] = " "
+    regression_data['filter6'] = " "
+    regression_data['series_trend'] = "NA"
+    if pct_change_negative_trend_short(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend_short(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
+    if pct_change_negative_trend(regression_data):
+        regression_data['series_trend'] = "downTrend"
+    if pct_change_positive_trend(regression_data):
+        regression_data['series_trend'] = "upTrend" 
+    if (regression_data['buyIndia'] != '' or regression_data['sellIndia'] != ''):
+        regression_data['filterTest'] = 'B@{' + regression_data['buyIndia'] + '}' \
+                                        + 'S@{' + regression_data['sellIndia'] + '}' 
+        return True
+    
+    return False
+
+def sell_test_tech_all(regression_data, regressionResult, reg, ws):
+    regression_data['filter'] = " "
+    regression_data['filter1'] = " "
+    regression_data['filter2'] = " "
+    regression_data['filter3'] = " "
+    regression_data['filter4'] = " "
+    regression_data['filter5'] = " "
+    regression_data['filter6'] = " "
+    regression_data['series_trend'] = "NA"
+    if pct_change_negative_trend_short(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend_short(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
+    if pct_change_negative_trend(regression_data):
+        regression_data['series_trend'] = "downTrend"
+    if pct_change_positive_trend(regression_data):
+        regression_data['series_trend'] = "upTrend" 
+    flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
+    if (regression_data['buyIndia'] != '' or regression_data['sellIndia'] != ''):
+        filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
+        regression_data['filterTest'] = filterNameTail + ',' \
+                                        + regression_data['series_trend'] + ',' \
+                                        + 'B@{' + regression_data['buyIndia'] + '}' \
+                                        + 'S@{' + regression_data['sellIndia'] + '}' \
+                                        + regression_data['filter3'] + ',' \
+                                        + regression_data['filter4'] + ',' 
+        return True
+    
+    return False
+
+def sell_test_tech_all_pct_change(regression_data, regressionResult, reg, ws):
+    regression_data['filter'] = " "
+    regression_data['filter1'] = " "
+    regression_data['filter2'] = " "
+    regression_data['filter3'] = " "
+    regression_data['filter4'] = " "
+    regression_data['filter5'] = " "
+    regression_data['filter6'] = " "
+    regression_data['series_trend'] = "NA"
+    if pct_change_negative_trend_short(regression_data):
+        regression_data['series_trend'] = "shortDownTrend"
+    if pct_change_positive_trend_short(regression_data):
+        regression_data['series_trend'] = "shortUpTrend"
+    if pct_change_negative_trend(regression_data):
+        regression_data['series_trend'] = "downTrend"
+    if pct_change_positive_trend(regression_data):
+        regression_data['series_trend'] = "upTrend" 
+    flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
+    if (regression_data['buyIndia'] != '' or regression_data['sellIndia'] != ''):
+        filterName = pct_change_filter(regression_data, regressionResult, False)
+        filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
+        regression_data['filterTest'] = filterName + ',' \
+                                        + filterNameTail + ',' \
+                                        + regression_data['series_trend'] + ',' \
+                                        + 'B@{' + regression_data['buyIndia'] + '}' \
+                                        + 'S@{' + regression_data['sellIndia'] + '}' \
+                                        + regression_data['filter3'] + ',' \
+                                        + regression_data['filter4'] + ',' 
+        return True
+    
+    return False
       
 def sell_oi_candidate(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
@@ -7987,7 +8244,7 @@ def sell_all_filter(regression_data, regressionResult, reg, ws):
         flag = True
     return flag
 
-def sell_filter_345_accuracy(regression_data, regressionResult, reg, ws):
+def sell_filter_345_accuracy(regression_data, regressionResult):
     filtersDict = filter345sell
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filter = filterName + ',' \
@@ -8005,7 +8262,7 @@ def sell_filter_345_accuracy(regression_data, regressionResult, reg, ws):
             else:
                 regression_data['filter_345_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
                 
-def sell_filter_accuracy(regression_data, regressionResult, reg, ws):
+def sell_filter_accuracy(regression_data, regressionResult):
     filtersDict=filtersell
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
@@ -8023,7 +8280,7 @@ def sell_filter_accuracy(regression_data, regressionResult, reg, ws):
                 else:
                     regression_data['filter_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
                      
-def sell_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
+def sell_filter_pct_change_accuracy(regression_data, regressionResult):
     filtersDict=filterpctchangesell
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
@@ -8043,7 +8300,7 @@ def sell_filter_pct_change_accuracy(regression_data, regressionResult, reg, ws):
                 else:
                     regression_data['filter_pct_change_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
             
-def sell_filter_all_accuracy(regression_data, regressionResult, reg, ws):
+def sell_filter_345_all_accuracy(regression_data, regressionResult):
     filtersDict=filterallsell
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filterNameTail = tail_change_filter(regression_data, regressionResult, False)
@@ -8063,6 +8320,66 @@ def sell_filter_all_accuracy(regression_data, regressionResult, reg, ws):
                 regression_data['filter_all_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
             else:
                 regression_data['filter_all_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
+
+def sell_filter_tech_accuracy(regression_data, regressionResult):
+    filtersDict=filtertechsell
+    filter ='B@{' + regression_data['buyIndia'] + '}' \
+            + 'S@{' + regression_data['sellIndia'] + '}'
+    if (filter != '') and (filter in filtersDict):
+        regression_data['filter_tech_avg'] = float(filtersDict[filter]['avg'])
+        regression_data['filter_tech_count'] = float(filtersDict[filter]['count'])
+        if float(filtersDict[filter]['count']) >= 2:
+            if float(filtersDict[filter]['avg']) >= 0:
+                regression_data['filter_tech_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
+            else:
+                regression_data['filter_tech_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
+
+def sell_filter_tech_all_accuracy(regression_data, regressionResult):
+    filtersDict=filtertechallsell
+    filterNameTail = tail_change_filter(regression_data, regressionResult, False)
+    filter = filterNameTail + ',' \
+            + regression_data['series_trend'] + ',' \
+            + 'B@{' + regression_data['buyIndia'] + '}' \
+            + 'S@{' + regression_data['sellIndia'] + '}' \
+            + regression_data['filter3'] + ',' \
+            + regression_data['filter4'] + ','
+    if (filter != '') and (filter in filtersDict):
+        regression_data['filter_tech_all_avg'] = float(filtersDict[filter]['avg'])
+        regression_data['filter_tech_all_count'] = float(filtersDict[filter]['count'])
+        if float(filtersDict[filter]['count']) >= 2:
+            if float(filtersDict[filter]['avg']) >= 0:
+                regression_data['filter_tech_all_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
+            else:
+                regression_data['filter_tech_all_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
+
+def sell_filter_tech_all_pct_change_accuracy(regression_data, regressionResult):
+    filtersDict=filtertechallpctchangesell
+    filterName = pct_change_filter(regression_data, regressionResult, False)
+    filterNameTail = tail_change_filter(regression_data, regressionResult, False)
+    filter = filterName + ',' \
+            + filterNameTail + ',' \
+            + regression_data['series_trend'] + ',' \
+            + 'B@{' + regression_data['buyIndia'] + '}' \
+            + 'S@{' + regression_data['sellIndia'] + '}' \
+            + regression_data['filter3'] + ',' \
+            + regression_data['filter4'] + ','
+    if (filter != '') and (filter in filtersDict):
+        regression_data['filter_tech_all_pct_change_avg'] = float(filtersDict[filter]['avg'])
+        regression_data['filter_tech_all_pct_change_count'] = float(filtersDict[filter]['count'])
+        if float(filtersDict[filter]['count']) >= 2:
+            if float(filtersDict[filter]['avg']) >= 0:
+                regression_data['filter_tech_all_pct_change_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
+            else:
+                regression_data['filter_tech_all_pct_change_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
+
+def sell_filter_all_accuracy(regression_data, regressionResult):
+    sell_filter_345_accuracy(regression_data, regressionResult)
+    sell_filter_accuracy(regression_data, regressionResult)
+    sell_filter_pct_change_accuracy(regression_data, regressionResult) 
+    sell_filter_345_all_accuracy(regression_data, regressionResult)
+    sell_filter_tech_accuracy(regression_data, regressionResult)
+    sell_filter_tech_all_accuracy(regression_data, regressionResult)
+    #sell_filter_tech_all_pct_change_accuracy(regression_data, regressionResult)
 
 def is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, reg, ws):
     superFlag = False
