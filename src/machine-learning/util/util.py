@@ -179,6 +179,26 @@ def add_in_csv_hist_pattern(regression_data, regressionResult, ws, filter, avg, 
         tempRegressionResult.append(count)
         ws.append(tempRegressionResult) if (ws is not None) else False
 
+def is_any_reg_algo_gt1(regression_data):
+    if((regression_data['mlpValue_reg'] >= 1) 
+        or (regression_data['kNeighboursValue_reg'] >= 1)
+        or (regression_data['mlpValue_reg_other'] >= 1) 
+        or (regression_data['kNeighboursValue_reg_other'] >= 1)
+        ):
+        return True
+    else:
+        return False
+    
+def is_any_reg_algo_lt_minus1(regression_data):
+    if((regression_data['mlpValue_reg'] <= -1) 
+        or (regression_data['kNeighboursValue_reg'] <= -1)
+        or (regression_data['mlpValue_reg_other'] <= -1) 
+        or (regression_data['kNeighboursValue_reg_other'] <= -1)
+        ):
+        return True
+    else:
+        return False
+
 def is_algo_buy(regression_data, resticted=False):
     if TEST:
         return True
