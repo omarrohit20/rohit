@@ -5203,11 +5203,7 @@ def buy_test(regression_data, regressionResult, reg, ws):
         regression_data['series_trend'] = "upTrend" 
     flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
     if regression_data['filterTest'] != '':
-        filterName = pct_change_filter(regression_data, regressionResult, False)
-        filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
-        regression_data['filterTest'] = filterName + ',' \
-                                        + filterNameTail + ',' \
-                                        + regression_data['series_trend'] + ',' \
+        regression_data['filterTest'] = regression_data['series_trend'] + ',' \
                                         + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
     
     if regression_data['filterTest'] != '':
@@ -5233,14 +5229,13 @@ def buy_test_pct_change(regression_data, regressionResult, reg, ws):
     if pct_change_positive_trend(regression_data):
         regression_data['series_trend'] = "upTrend" 
     flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
-    filterName = pct_change_filter(regression_data, regressionResult, False)
-    regression_data['filterTest'] = filterName + ',' \
-                                    + regression_data['series_trend'] + ',' \
-                                    + regression_data['filter2'] + ',' \
-                                    + regression_data['filter3'] + ',' \
-                                    + regression_data['filter4'] + ',' \
-                                    + regression_data['filter5'] + ',' \
-                                    + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+    if regression_data['filterTest'] != '':
+        filterName = pct_change_filter(regression_data, regressionResult, False)
+        filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
+        regression_data['filterTest'] = filterName + ',' \
+                                        + filterNameTail + ',' \
+                                        + regression_data['series_trend'] + ',' \
+                                        + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
     
     if regression_data['filterTest'] != '':
         return True
@@ -5445,9 +5440,7 @@ def buy_filter_accuracy(regression_data, regressionResult):
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
         filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
-        filter = filterName + ',' \
-                + filterNameTail + ',' \
-                + regression_data['series_trend'] + ',' \
+        filter = regression_data['series_trend'] + ',' \
                 + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
         if filter != '' and filter in filtersDict:
             regression_data['filter_avg'] = float(filtersDict[filter]['avg'])
@@ -5462,12 +5455,10 @@ def buy_filter_pct_change_accuracy(regression_data, regressionResult):
     filtersDict=filterpctchangebuy
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
+        filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
         filter = filterName + ',' \
+                + filterNameTail + ',' \
                 + regression_data['series_trend'] + ',' \
-                + regression_data['filter2'] + ',' \
-                + regression_data['filter3'] + ',' \
-                + regression_data['filter4'] + ',' \
-                + regression_data['filter5'] + ',' \
                 + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
         if filter != '' and filter in filtersDict:
             regression_data['filter_pct_change_avg'] = float(filtersDict[filter]['avg'])
@@ -5557,7 +5548,7 @@ def buy_filter_all_accuracy(regression_data, regressionResult):
     buy_filter_345_all_accuracy(regression_data, regressionResult)
     buy_filter_tech_accuracy(regression_data, regressionResult)
     buy_filter_tech_all_accuracy(regression_data, regressionResult)
-    #buy_filter_tech_all_pct_change_accuracy(regression_data, regressionResult)
+    buy_filter_tech_all_pct_change_accuracy(regression_data, regressionResult)
                            
 def sell_pattern_without_mlalgo(regression_data, regressionResult):
     if(regression_data['PCT_day_change'] > -3.5
@@ -8043,11 +8034,7 @@ def sell_test(regression_data, regressionResult, reg, ws):
         regression_data['series_trend'] = "upTrend" 
     flag = sell_other_indicator(regression_data, regressionResult, reg, ws)
     if regression_data['filterTest'] != '':
-        filterName = pct_change_filter(regression_data, regressionResult, False)
-        filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
-        regression_data['filterTest'] = filterName + ',' \
-                                        + filterNameTail + ',' \
-                                        + regression_data['series_trend'] + ',' \
+        regression_data['filterTest'] = regression_data['series_trend'] + ',' \
                                         + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
     
     if regression_data['filterTest'] != '':
@@ -8073,14 +8060,13 @@ def sell_test_pct_change(regression_data, regressionResult, reg, ws):
     if pct_change_positive_trend(regression_data):
         regression_data['series_trend'] = "upTrend" 
     flag = sell_other_indicator(regression_data, regressionResult, reg, ws)
-    filterName = pct_change_filter(regression_data, regressionResult, False)
-    regression_data['filterTest'] = filterName + ',' \
-                                    + regression_data['series_trend'] + ',' \
-                                    + regression_data['filter2'] + ',' \
-                                    + regression_data['filter3'] + ',' \
-                                    + regression_data['filter4'] + ',' \
-                                    + regression_data['filter5'] + ',' \
-                                    + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+    if regression_data['filterTest'] != '':
+        filterName = pct_change_filter(regression_data, regressionResult, False)
+        filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
+        regression_data['filterTest'] = filterName + ',' \
+                                        + filterNameTail + ',' \
+                                        + regression_data['series_trend'] + ',' \
+                                        + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
     
     if regression_data['filterTest'] != '':
         return True
@@ -8287,9 +8273,7 @@ def sell_filter_accuracy(regression_data, regressionResult):
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
         filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
-        filter = filterName + ',' \
-                + filterNameTail + ',' \
-                + regression_data['series_trend'] + ',' \
+        filter =regression_data['series_trend'] + ',' \
                 + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
         if filter != '' and filter in filtersDict:
             regression_data['filter_avg'] = float(filtersDict[filter]['avg'])
@@ -8304,12 +8288,10 @@ def sell_filter_pct_change_accuracy(regression_data, regressionResult):
     filtersDict=filterpctchangesell
     if regression_data['filter'] != '':
         filterName = pct_change_filter(regression_data, regressionResult, False)
+        filterNameTail = tail2_change_filter(regression_data, regressionResult, False)
         filter = filterName + ',' \
+                + filterNameTail + ',' \
                 + regression_data['series_trend'] + ',' \
-                + regression_data['filter2'] + ',' \
-                + regression_data['filter3'] + ',' \
-                + regression_data['filter4'] + ',' \
-                + regression_data['filter5'] + ',' \
                 + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
         if filter != '' and filter in filtersDict:
             regression_data['filter_pct_change_avg'] = float(filtersDict[filter]['avg'])
@@ -8319,7 +8301,7 @@ def sell_filter_pct_change_accuracy(regression_data, regressionResult):
                     regression_data['filter_pct_change_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
                 else:
                     regression_data['filter_pct_change_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
-            
+                        
 def sell_filter_345_all_accuracy(regression_data, regressionResult):
     filtersDict=filterallsell
     filterName = pct_change_filter(regression_data, regressionResult, False)
@@ -8399,7 +8381,7 @@ def sell_filter_all_accuracy(regression_data, regressionResult):
     sell_filter_345_all_accuracy(regression_data, regressionResult)
     sell_filter_tech_accuracy(regression_data, regressionResult)
     sell_filter_tech_all_accuracy(regression_data, regressionResult)
-    #sell_filter_tech_all_pct_change_accuracy(regression_data, regressionResult)
+    sell_filter_tech_all_pct_change_accuracy(regression_data, regressionResult)
 
 def is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, reg, ws):
     superFlag = False
@@ -8409,7 +8391,19 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
     if(flag):
         superFlag = True
+    flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_avg', 'filter_count', 'filter_pct')
+    if(flag):
+        superFlag = True
     flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
+    if(flag):
+        superFlag = True
+    flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
+    if(flag):
+        superFlag = True
+    flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
+    if(flag):
+        superFlag = True
+    flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
     if(flag):
         superFlag = True
     
@@ -8425,12 +8419,23 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
     if(flag):
         superFlag = True
+    flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
+    if(flag):
+        superFlag = True
+    flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
+    if(flag):
+        superFlag = True
+    flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
+    if(flag):
+        superFlag = True
     
     is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
     is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
     is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_avg', 'filter_count', 'filter_pct')
     is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
-    
+    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
+    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
+    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
     if(superFlag):
         return superFlag  
 
@@ -8445,7 +8450,7 @@ def filter_accuracy_finder(regression_data, regression_high, regression_low, reg
             ):
             return False
                      
-        if(regression_data[filter_count] >= 4
+        if(regression_data[filter_count] >= 5
             and abs(regression_data[filter_pct]) >= 100
             and abs(regression_data[filter_avg]) > 1.5
             ):
@@ -8534,12 +8539,9 @@ def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, fil
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-3-Buy')
             elif(regression_data[filter_avg] < 0):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-3-Sell')
-        elif(regression_data[filter_count] >= 2
+        elif(regression_data[filter_count] > 2
             and abs(regression_data[filter_pct]) >= 70
             and abs(regression_data[filter_avg]) >= 2.0
-            and ((abs(regression_data[filter_avg]) > 3.0) 
-                 or (regression_data[filter_count] >= 3)
-                )
             ):
             if(regression_data[filter_avg] >= 0):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-4-Buy')
@@ -8549,17 +8551,29 @@ def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, fil
             and abs(regression_data[filter_pct]) >= 100
             and abs(regression_data[filter_avg]) >= 2.5
             ):
-            if(regression_data[filter_avg] >= 0):
+            if(regression_data[filter_avg] >= 0 and is_algo_buy(regression_data)):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-5-Buy')
-            elif(regression_data[filter_avg] < 0):
+            elif(regression_data[filter_avg] < 0 and is_algo_sell(regression_data)):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-5-Sell')
+        elif(regression_data[filter_count] >= 2
+            and abs(regression_data[filter_pct]) >= 70
+            and abs(regression_data[filter_avg]) >= 2.0
+            ):
+            if(regression_data[filter_avg] >= 0 and is_algo_buy(regression_data)):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-6-Buy')
+            elif(regression_data[filter_avg] < 0 and is_algo_sell(regression_data)):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-6-Sell')
         elif(regression_data[filter_count] > 5
             and abs(regression_data[filter_pct]) > 60
             and abs(regression_data[filter_avg]) > 1.5
             ):
-            if(regression_data[filter_avg] >= 0):
+            if(regression_data[filter_avg] >= 0
+                and ((abs(regression_data[filter_avg]) > 2 and abs(regression_data[filter_pct]) > 80) or is_algo_buy(regression_data))
+                ):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky-Buy')
-            elif(regression_data[filter_avg] < 0):
+            elif(regression_data[filter_avg] < 0
+                and ((abs(regression_data[filter_avg]) > 2 and abs(regression_data[filter_pct]) > 80) or is_algo_sell(regression_data))
+                ):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky-Sell')
                       
             

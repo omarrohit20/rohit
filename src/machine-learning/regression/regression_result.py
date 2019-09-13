@@ -292,8 +292,8 @@ def result_data_reg(scrip):
         buy_other_indicator(regression_data, regressionResult, True, None)
         buy_filter_all_accuracy(regression_data, regressionResult)
         buy_indicator_after_filter_accuracy(regression_data, regressionResult, True, None)
-        if buy_all_rule(regression_data, regressionResult, buyIndiaAvg, None):
-            buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws_highBuyReg)
+        if (is_algo_buy(regression_data) and is_any_reg_algo_gt1(regression_data)):
+            all_withoutml(regression_data, regressionResult, ws_highBuyReg)
         if (is_algo_buy(regression_high) and is_algo_buy(regression_low) and is_any_reg_algo_gt1(regression_data)):
             buy_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_highBuyAll) 
@@ -318,8 +318,8 @@ def result_data_reg(scrip):
         sell_other_indicator(regression_data, regressionResult, True, None)
         sell_filter_all_accuracy(regression_data, regressionResult)
         sell_indicator_after_filter_accuracy(regression_data, regressionResult, True, None)
-        if sell_all_rule(regression_data, regressionResult, sellIndiaAvg, None):
-            sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws_lowSellReg)                               
+        if (is_algo_sell(regression_data) and is_any_reg_algo_lt_minus1(regression_data)):
+            all_withoutml(regression_data, regressionResult, ws_lowSellReg)                               
         if (is_algo_sell(regression_high) and is_algo_sell(regression_low) and is_any_reg_algo_lt_minus1(regression_data)):
             sell_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_lowSellAll)
