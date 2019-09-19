@@ -2578,6 +2578,8 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
 
 def buy_indicator_after_filter_accuracy(regression_data, regressionResult, reg, ws):
     buy_high_indicators(regression_data, regressionResult, reg, ws)
+    buy_low_tail(regression_data, regressionResult, reg, ws)
+    buy_up_continued(regression_data, regressionResult, reg, ws)
         
 def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
     if('MayBuy-CheckChart' in regression_data['filter1']):
@@ -3114,6 +3116,20 @@ def buy_high_indicators(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, '**(HighBothBuyAll)buyDowntrendReversal')
     return False
+    
+def buy_low_tail(regression_data, regressionResult, reg, ws):
+    if(high_tail_pct(regression_data) < 1 and 1 <= low_tail_pct(regression_data) <= 2):
+        if(-3 < regression_data['PCT_day_change'] < 0 and -3 < regression_data['PCT_change'] < 0):
+           add_in_csv(regression_data, regressionResult, ws, '%%mayBuyTail')
+        elif(-3 < regression_data['PCT_day_change'] < 1 and -3 < regression_data['PCT_change'] < 1):
+           add_in_csv(regression_data, regressionResult, ws, '%%mayBuyTail-Risky')
+    
+def buy_up_continued(regression_data, regressionResult, reg, ws):
+    if(high_tail_pct(regression_data) < 1.1 and low_tail_pct(regression_data) < 1.1):
+        if(1.9 < regression_data['PCT_day_change'] < 3 and 1 < regression_data['PCT_change'] < 3):
+           add_in_csv(regression_data, regressionResult, ws, '%%mayBuyUpContinueLT3')
+        elif(3.25 < regression_data['PCT_day_change'] < 4 and 3 < regression_data['PCT_change'] < 4):
+           add_in_csv(regression_data, regressionResult, ws, '%%mayBuyUpContinueGT3')
               
 def buy_pattern(regression_data, regressionResult, reg, ws, ws1):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
@@ -5978,6 +5994,8 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
 
 def sell_indicator_after_filter_accuracy(regression_data, regressionResult, reg, ws):
     sell_high_indicators(regression_data, regressionResult, reg, ws)
+    sell_high_tail(regression_data, regressionResult, reg, ws)
+    sell_down_continued(regression_data, regressionResult, reg, ws)
 
 def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
     if('MaySell-CheckChart' in regression_data['filter1']):
@@ -6633,6 +6651,20 @@ def sell_high_indicators(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, '**(HighBothSellAll)sellUptrendReversal')    
     return False
+
+def sell_high_tail(regression_data, regressionResult, reg, ws):
+    if(low_tail_pct(regression_data) < 1 and 1 <= high_tail_pct(regression_data) <= 2):
+        if(0 < regression_data['PCT_day_change'] < 3 and 0 < regression_data['PCT_change'] < 3):
+           add_in_csv(regression_data, regressionResult, ws, '%%maySellTail')
+        elif(-1 < regression_data['PCT_day_change'] < 3 and -1 < regression_data['PCT_change'] < 3):
+           add_in_csv(regression_data, regressionResult, ws, '%%maySellTail-Risky')
+        
+def sell_down_continued(regression_data, regressionResult, reg, ws):
+    if(high_tail_pct(regression_data) < 1.1 and low_tail_pct(regression_data) < 1.1):
+        if(-3 < regression_data['PCT_day_change'] < -1.9 and -3 < regression_data['PCT_change'] < -1):
+           add_in_csv(regression_data, regressionResult, ws, '%%maySellDownContinueGT-3')
+        elif(-4 < regression_data['PCT_day_change'] < -3.25 and -4 < regression_data['PCT_change'] < -3):
+           add_in_csv(regression_data, regressionResult, ws, '%%maySellDownContinueLT -3')
 
 def sell_pattern(regression_data, regressionResult, reg, ws, ws1):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
