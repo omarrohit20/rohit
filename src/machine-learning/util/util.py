@@ -8635,6 +8635,7 @@ def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, fil
             and ((regression_data[filter_avg] >= 0.75 and regression_data[filter_count] >= 3 and regression_data[filter_pct] > 70)
                  or (regression_data[filter_avg] >= 2.5 and regression_data[filter_count] >= 2 and regression_data[filter_pct] >= 90))
             and (buyRisky == False or "MLBuy" in regression_data['filter'])
+            and (high_tail_pct(regression_data) < 2 or high_tail_pct(regression_data) > 4)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Buy')
             Flag = True
@@ -8643,6 +8644,7 @@ def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, fil
             and ((regression_data[filter_avg] <= -0.75 and regression_data[filter_count] >= 3 and regression_data[filter_pct] < -70)
                  or (regression_data[filter_avg] <= -2.5 and regression_data[filter_count] >= 2 and regression_data[filter_pct] <= -90))
             and (sellRisky == False or "MLSell" in regression_data['filter'])
+            and (low_tail_pct(regression_data) < 2 or low_tail_pct(regression_data) > 4)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Sell')
             Flag = True
