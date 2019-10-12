@@ -2013,6 +2013,7 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     return regressionResult
 
 def all_withoutml(regression_data, regressionResult, ws):
+    filter_accuracy_finder_regression(regression_data, regressionResult, None)
     add_in_csv(regression_data, regressionResult, ws, '')
 
 def ten_days_more_than_fifteen(regression_data):
@@ -8502,6 +8503,52 @@ def sell_filter_all_accuracy(regression_data, regressionResult):
     sell_filter_tech_accuracy(regression_data, regressionResult)
     sell_filter_tech_all_accuracy(regression_data, regressionResult)
     sell_filter_tech_all_pct_change_accuracy(regression_data, regressionResult)
+
+def filter_accuracy_finder_regression(regression_data, regressionResult, ws):
+    Flag = False
+    if("MLBuy" in regression_data['filter'] and len(regression_data['filter']) > 9):
+        if(is_reg_buy_from_filter(regression_data, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
+            or is_reg_buy_from_filter(regression_data, 'filter_avg', 'filter_count', 'filter_pct')
+            or is_reg_buy_from_filter(regression_data, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
+            or is_reg_buy_from_filter(regression_data, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
+            or is_reg_buy_from_filter(regression_data, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
+            or is_reg_buy_from_filter(regression_data, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
+            or is_reg_buy_from_filter(regression_data, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Buy-Reg-GT0.75')
+            Flag = True
+            
+    if("MLSell" in regression_data['filter'] and len(regression_data['filter']) > 9):
+        if(is_reg_buy_from_filter(regression_data, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
+            or is_reg_sell_from_filter(regression_data, 'filter_avg', 'filter_count', 'filter_pct')
+            or is_reg_sell_from_filter(regression_data, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
+            or is_reg_sell_from_filter(regression_data, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
+            or is_reg_sell_from_filter(regression_data, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
+            or is_reg_sell_from_filter(regression_data, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
+            or is_reg_sell_from_filter(regression_data, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Sell-Reg-LT-0.75')
+            Flag = True
+    return Flag
+        
+def is_reg_buy_from_filter(regression_data, filter_avg, filter_count, filter_pct):
+    if(regression_data[filter_avg] > 0.75
+        and regression_data[filter_count] > 1
+        and regression_data[filter_pct] >= 90
+        ):
+        return True
+    else:
+        return False
+   
+def is_reg_sell_from_filter(regression_data, filter_avg, filter_count, filter_pct):
+    if(regression_data[filter_avg] < -0.75
+        and regression_data[filter_count] > 1
+        and regression_data[filter_pct] <= -90
+        ):
+        return True
+    else:
+        return False
+        
 
 def is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, reg, ws):
     superFlag = False
