@@ -3062,7 +3062,7 @@ def buy_high_indicators(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_cla, kNeighboursValue_cla = get_reg_or_cla(regression_data, False)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
-    if(abs(regression_data['PCT_day_change']) > 1 or low_tail_pct(regression_data) > 1.5):
+    if(abs(regression_data['PCT_day_change']) > 1.5 or (low_tail_pct(regression_data) > 1.5 and high_tail_pct(regression_data) < 1)):
         if(is_algo_buy(regression_data, True)
             and ((mlpValue_other >= 1 or kNeighboursValue_other >= 1) or regression_data['PCT_day_change'] < 0)
             and (abs(regression_data['filter_345_avg']) == 0
@@ -6615,7 +6615,7 @@ def sell_high_indicators(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_cla, kNeighboursValue_cla = get_reg_or_cla(regression_data, False)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
-    if(abs(regression_data['PCT_day_change']) > 1 or high_tail_pct(regression_data) > 1.5):
+    if(abs(regression_data['PCT_day_change']) > 1.5 or (high_tail_pct(regression_data) > 1.5 or low_tail_pct(regression_data) < 1)):
         if(is_algo_sell(regression_data, True)
             and ((mlpValue_other <= -1 or kNeighboursValue_other <= -1) or regression_data['PCT_day_change'] > 0)
             and (abs(regression_data['filter_345_avg']) == 0
