@@ -3122,13 +3122,17 @@ def buy_high_indicators(regression_data, regressionResult, reg, ws):
                 and (0 <= mlpValue < 10.0 and 0 <= kNeighboursValue < 10.0)
                 and (1 <= mlpValue or 1 <= kNeighboursValue)
                 ):
-                add_in_csv(regression_data, regressionResult, ws, '**(uptrend)buyHighMLPClaIndicators-Risky')
+                add_in_csv(regression_data, regressionResult, ws, '**(uptrend)buyHighMLPClaIndicators')
             if(is_algo_buy(regression_data)
                 and (regression_data['weekLowChange'] < 0) 
                 and (4 < regression_data['PCT_change'] < 10)
                 and (4 < regression_data['PCT_day_change'] < 10)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '**(HighBothBuyAll)buyDowntrendReversal')
+    if((5 <= mlpValue < 15 and 2 < mlpValue_other)
+        and (-1 <= kNeighboursValue < 15)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '**(Test)buyHighMLPClaIndicators-Risky')
     return False
     
 def buy_low_tail(regression_data, regressionResult, reg, ws):
@@ -6683,13 +6687,17 @@ def sell_high_indicators(regression_data, regressionResult, reg, ws):
                 and (-10 < mlpValue <= 0 and -10 < kNeighboursValue <= 0)
                 and (mlpValue < -1 or kNeighboursValue < -1)
                 ):
-                add_in_csv(regression_data, regressionResult, ws, '**(downtrend)sellHighMLPClaIndicators-Risky')
+                add_in_csv(regression_data, regressionResult, ws, '**(downtrend)sellHighMLPClaIndicators')
             if(is_algo_sell(regression_data)
                 and (regression_data['weekLowChange'] > 15) 
                 and (-10 < regression_data['PCT_change'] < -4)
                 and (-10 < regression_data['PCT_day_change'] < -4)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '**(HighBothSellAll)sellUptrendReversal')    
+    if((-15 < mlpValue < -5 and mlpValue_other < -2)
+        and (-15 <= kNeighboursValue < 1)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '**(Test)sellHighMLPClaIndicators-Risky')
     return False
 
 def sell_high_tail(regression_data, regressionResult, reg, ws):
