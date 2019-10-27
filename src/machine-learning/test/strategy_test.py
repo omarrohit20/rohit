@@ -51,7 +51,7 @@ def db_cleanup():
     dbresult.drop_collection('buy_test_all')
     dbresult.drop_collection('buy_test_tech')
     dbresult.drop_collection('buy_test_tech_all')
-    dbresult.drop_collection('buy_test_tech_pct_change')
+    dbresult.drop_collection('buy_test_tech_all_pct_change')
     
     dbresult.drop_collection('sell_test_345')  
     dbresult.drop_collection('sell_test')
@@ -59,7 +59,7 @@ def db_cleanup():
     dbresult.drop_collection('sell_test_all')
     dbresult.drop_collection('sell_test_tech')
     dbresult.drop_collection('sell_test_tech_all')
-    dbresult.drop_collection('sell_test_tech_pct_change')
+    dbresult.drop_collection('sell_test_tech_all_pct_change')
 
 def import_data_in_db_and_save():
     print('\n\n\n\n############################################')
@@ -98,11 +98,11 @@ def import_data_in_db_and_save():
             del data['_id']
             dbresult.buy_test_345.insert_one(json.loads(json.dumps(data)))
     print('buy_test_345')
-    curser = dbresult.buy_test_345.aggregate(pipeline)
+    curser = dbresult.buy_test_345.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-345-buy.csv')
     dbresult.drop_collection('buy_test_345')    
-      
        
+        
     print('buy_test')
     dbresult.drop_collection('buy_test')
     curs = db.ws_high.find({})
@@ -113,11 +113,11 @@ def import_data_in_db_and_save():
             del data['_id']
             dbresult.buy_test.insert_one(json.loads(json.dumps(data)))
     print('buy_test')
-    curser = dbresult.buy_test.aggregate(pipeline)
+    curser = dbresult.buy_test.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-buy.csv')
     dbresult.drop_collection('buy_test')
-       
-       
+        
+        
     print('buy_test_pct_change')
     dbresult.drop_collection('buy_test_pct_change')
     curs = db.ws_high.find({})
@@ -128,11 +128,11 @@ def import_data_in_db_and_save():
             del data['_id']
             dbresult.buy_test_pct_change.insert_one(json.loads(json.dumps(data)))
     print('buy_test_pct_change')
-    curser = dbresult.buy_test_pct_change.aggregate(pipeline)
+    curser = dbresult.buy_test_pct_change.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-pct-change-buy.csv')
     dbresult.drop_collection('buy_test_pct_change')
-      
-      
+       
+       
     print('buy_test_all')
     dbresult.drop_collection('buy_test_all')         
     curs = db.ws_high.find({})
@@ -143,11 +143,11 @@ def import_data_in_db_and_save():
             del data['_id']
             dbresult.buy_test_all.insert_one(json.loads(json.dumps(data)))
     print('buy_test_all')
-    curser = dbresult.buy_test_all.aggregate(pipeline)
+    curser = dbresult.buy_test_all.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-all-buy.csv')
     dbresult.drop_collection('buy_test_all')
-      
-              
+       
+               
     print('buy_test_tech')
     dbresult.drop_collection('buy_test_tech')     
     curs = db.ws_high.find({})
@@ -158,11 +158,11 @@ def import_data_in_db_and_save():
             del data['_id']
             dbresult.buy_test_tech.insert_one(json.loads(json.dumps(data)))
     print('buy_test_tech')
-    curser = dbresult.buy_test_tech.aggregate(pipeline)
+    curser = dbresult.buy_test_tech.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-buy.csv')
     dbresult.drop_collection('buy_test_tech')
-      
-               
+       
+                
     print('buy_test_tech_all')
     dbresult.drop_collection('buy_test_tech_all')       
     curs = db.ws_high.find({})
@@ -173,13 +173,13 @@ def import_data_in_db_and_save():
             del data['_id']
             dbresult.buy_test_tech_all.insert_one(json.loads(json.dumps(data)))
     print('buy_test_tech_all')
-    curser = dbresult.buy_test_tech_all.aggregate(pipeline)
+    curser = dbresult.buy_test_tech_all.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-buy.csv')
     dbresult.drop_collection('buy_test_tech_all')
      
               
     print('buy_test_tech_all_pct_change')
-    dbresult.drop_collection('buy_test_tech_pct_change')       
+    dbresult.drop_collection('buy_test_tech_all_pct_change')       
     curs = db.ws_high.find({})
     for data in curs:
         data['filterTest'] = ''
@@ -188,9 +188,9 @@ def import_data_in_db_and_save():
             del data['_id']
             dbresult.buy_test_tech_all_pct_change.insert_one(json.loads(json.dumps(data)))  
     print('buy_test_tech_all_pct_change')
-    curser = dbresult.buy_test_tech_all_pct_change.aggregate(pipeline)
+    curser = dbresult.buy_test_tech_all_pct_change.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-pct-change-buy.csv')
-    dbresult.drop_collection('buy_test_tech_pct_change')
+    dbresult.drop_collection('buy_test_tech_all_pct_change')
      
  
      
@@ -204,7 +204,7 @@ def import_data_in_db_and_save():
             del data['_id']
             dbresult.sell_test_345.insert_one(json.loads(json.dumps(data))) 
     print('sell_test_345')
-    curser = dbresult.sell_test_345.aggregate(pipeline)
+    curser = dbresult.sell_test_345.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-345-sell.csv')
     dbresult.drop_collection('sell_test_345') 
       
@@ -219,7 +219,7 @@ def import_data_in_db_and_save():
             del data['_id']
             dbresult.sell_test.insert_one(json.loads(json.dumps(data))) 
     print('sell_test')
-    curser = dbresult.sell_test.aggregate(pipeline)
+    curser = dbresult.sell_test.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-sell.csv')
     dbresult.drop_collection('sell_test')
       
@@ -234,7 +234,7 @@ def import_data_in_db_and_save():
             del data['_id']
             dbresult.sell_test_pct_change.insert_one(json.loads(json.dumps(data)))
     print('sell_test_pct_change')
-    curser = dbresult.sell_test_pct_change.aggregate(pipeline)
+    curser = dbresult.sell_test_pct_change.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-pct-change-sell.csv') 
     dbresult.drop_collection('sell_test_pct_change')
                
@@ -248,7 +248,7 @@ def import_data_in_db_and_save():
             del data['_id']
             dbresult.sell_test_all.insert_one(json.loads(json.dumps(data)))
     print('sell_test_all')
-    curser = dbresult.sell_test_all.aggregate(pipeline)
+    curser = dbresult.sell_test_all.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-all-sell.csv') 
     dbresult.drop_collection('sell_test_all')
               
@@ -262,7 +262,7 @@ def import_data_in_db_and_save():
             del data['_id']
             dbresult.sell_test_tech.insert_one(json.loads(json.dumps(data)))
     print('sell_test_tech')
-    curser = dbresult.sell_test_tech.aggregate(pipeline)
+    curser = dbresult.sell_test_tech.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-sell.csv')
     dbresult.drop_collection('sell_test_tech')
       
@@ -277,12 +277,12 @@ def import_data_in_db_and_save():
             del data['_id']
             dbresult.sell_test_tech_all.insert_one(json.loads(json.dumps(data)))
     print('sell_test_tech_all')
-    curser = dbresult.sell_test_tech_all.aggregate(pipeline)
+    curser = dbresult.sell_test_tech_all.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-sell.csv')
     dbresult.drop_collection('sell_test_tech_all')
              
     print('sell_test_tech_all_pct_change')  
-    dbresult.drop_collection('sell_test_tech_pct_change')      
+    dbresult.drop_collection('sell_test_tech_all_pct_change')      
     curs = db.ws_low.find({})
     for data in curs:
         data['filterTest'] = ''
@@ -291,9 +291,9 @@ def import_data_in_db_and_save():
             del data['_id']
             dbresult.sell_test_tech_all_pct_change.insert_one(json.loads(json.dumps(data)))
     print('sell_test_tech_all_pct_change')
-    curser = dbresult.sell_test_tech_all_pct_change.aggregate(pipeline)
+    curser = dbresult.sell_test_tech_all_pct_change.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-pct-change-sell.csv') 
-    dbresult.drop_collection('sell_test_tech_pct_change')
+    dbresult.drop_collection('sell_test_tech_all_pct_change')
  
 def import_filter_data_in_db():
     print('############################################')
@@ -330,7 +330,7 @@ def export_tech_patterns_from_db():
                 {"$sort":SON({"buyIndia":1})}
                 ]
     print('patterns-buy')
-    curser = db.ws_high.aggregate(pipeline)
+    curser = db.ws_high.aggregate(pipeline, allowDiskUse=True)
     tech_buy_curs_to_csv(curser, '../../data-import/nselist/patterns-buy.csv')
     
     pipeline = [{"$project":{"sellIndia":"$sellIndia","Act_PCT_day_change":"$Act_PCT_day_change"}},
@@ -340,11 +340,11 @@ def export_tech_patterns_from_db():
                 {"$sort":SON({"sellIndia":1})}
                 ]
     print('patterns-sell')
-    curser = db.ws_low.aggregate(pipeline)
+    curser = db.ws_low.aggregate(pipeline, allowDiskUse=True)
     tech_sell_curs_to_csv(curser, '../../data-import/nselist/patterns-sell.csv')
     
 if __name__ == "__main__":  
     db_cleanup()  
     import_data_in_db_and_save()
     #export_tech_patterns_from_db()
-    #db_cleanup()
+    db_cleanup()
