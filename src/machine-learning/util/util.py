@@ -24,7 +24,7 @@ BUY_VERY_LESS_DATA=True
 SELL_VERY_LESS_DATA=True
 MARKET_IN_UPTREND=False
 MARKET_IN_DOWNTREND=False
-TEST = False
+TEST = True
 
 buyMLP = 0.1
 buyMLP_MIN = 0
@@ -543,7 +543,7 @@ def pct_change_negative_trend_medium(regression_data):
             )
         ):
         return 'mediumDownTrend'           
-    return False           
+    return 'NA'           
     
 def pct_change_positive_trend_medium(regression_data):
     if (#regression_data['forecast_day_PCT_change'] > 0
@@ -556,7 +556,7 @@ def pct_change_positive_trend_medium(regression_data):
             )
         ):
         return 'mediumUpTrend'
-    return False          
+    return 'NA'          
 
 def pct_change_negative_trend_short(regression_data):
     if(regression_data['forecast_day_PCT_change'] < 0
