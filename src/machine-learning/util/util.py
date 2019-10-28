@@ -542,7 +542,7 @@ def pct_change_negative_trend_medium(regression_data):
              or (regression_data['forecast_day_PCT3_change'] > regression_data['forecast_day_PCT5_change'] > regression_data['forecast_day_PCT7_change'])
             )
         ):
-        return True            
+        return 'mediumDownTrend'           
     return False           
     
 def pct_change_positive_trend_medium(regression_data):
@@ -555,7 +555,7 @@ def pct_change_positive_trend_medium(regression_data):
              or (regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT5_change'] < regression_data['forecast_day_PCT7_change'])
             )
         ):
-        return True
+        return 'mediumUpTrend'
     return False          
 
 def pct_change_negative_trend_short(regression_data):
@@ -595,6 +595,7 @@ def pct_change_positive_trend_short(regression_data):
 def trend_calculator(regression_data):
     trend = pct_change_positive_trend(regression_data) + '$' + pct_change_negative_trend(regression_data)
     shortTrend = pct_change_positive_trend_short(regression_data) + '$' +  pct_change_negative_trend_short(regression_data)
+    mediumTrend = pct_change_positive_trend_medium(regression_data) + '$' +  pct_change_negative_trend_medium(regression_data)
            
     return trend + ':' + shortTrend 
 
@@ -2533,7 +2534,7 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None)
         else:
-            add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Buy-Relaxed-Risky')
+            add_in_csv(regression_data, regressionResult, ws, None, None)
             
     return False
 
@@ -2690,7 +2691,7 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None)
         else:
-            add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Buy-Relaxed-Risky')    
+            add_in_csv(regression_data, regressionResult, ws, None, None)    
        
 def buy_other_indicator(regression_data, regressionResult, reg, ws):
     tail_pct_filter(regression_data, regressionResult)
@@ -2760,7 +2761,7 @@ def buy_indicator_after_filter_accuracy(regression_data, regressionResult, reg, 
         buy_up_continued(regression_data, regressionResult, reg, ws)
         buy_high_volatility(regression_data, regressionResult, reg, ws)
     buy_low_tail(regression_data, regressionResult, reg, ws)
-    sell_high_tail(regression_data, regressionResult, reg, ws)
+    #sell_high_tail(regression_data, regressionResult, reg, ws)
         
 def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
     if('MayBuy-CheckChart' in regression_data['filter1']):
@@ -6017,7 +6018,7 @@ def sell_all_common(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None)  
         else:
-            add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Sell-Relaxed-Risky')
+            add_in_csv(regression_data, regressionResult, ws, None, None)
     return False
 
 def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
@@ -6133,7 +6134,7 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None)  
         else:
-            add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Sell-Relaxed-Risky')
+            add_in_csv(regression_data, regressionResult, ws, None, None)
 
 def sell_other_indicator(regression_data, regressionResult, reg, ws):
     tail_pct_filter(regression_data, regressionResult)
@@ -6203,7 +6204,7 @@ def sell_indicator_after_filter_accuracy(regression_data, regressionResult, reg,
         sell_down_continued(regression_data, regressionResult, reg, ws)
         sell_high_volatility(regression_data, regressionResult, reg, ws)
     sell_high_tail(regression_data, regressionResult, reg, ws)
-    buy_low_tail(regression_data, regressionResult, reg, ws)
+    #buy_low_tail(regression_data, regressionResult, reg, ws)
         
 def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
     if('MaySell-CheckChart' in regression_data['filter1']):
