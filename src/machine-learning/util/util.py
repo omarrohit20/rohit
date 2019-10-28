@@ -595,7 +595,7 @@ def pct_change_positive_trend_short(regression_data):
 def trend_calculator(regression_data):
     trend = pct_change_positive_trend(regression_data) + '$' + pct_change_negative_trend(regression_data)
     shortTrend = pct_change_positive_trend_short(regression_data) + '$' +  pct_change_negative_trend_short(regression_data)
-    mediumTrend = pct_change_positive_trend_medium(regression_data) + '$' +  pct_change_negative_trend_medium(regression_data)
+    #mediumTrend = pct_change_positive_trend_medium(regression_data) + '$' +  pct_change_negative_trend_medium(regression_data)
            
     return trend + ':' + shortTrend 
 
