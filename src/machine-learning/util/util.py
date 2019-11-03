@@ -535,18 +535,16 @@ def pct_change_negative_trend(regression_data):
                 trend = False
         if trend:
             if(regression_data['bar_low'] < regression_data['bar_low_pre1']
-                or regression_data['bar_low_pre1'] < regression_data['bar_low_pre2']
+                #or regression_data['bar_low_pre1'] < regression_data['bar_low_pre2']
                 ):
                 return '(downTrend-min3Day)'
             else:
                 return '(downTrend-min3Day-Risky)'
-    elif (#regression_data['forecast_day_PCT_change'] < 0
-        #and regression_data['forecast_day_PCT2_change'] < 0
-        regression_data['forecast_day_PCT3_change'] < 0
-        and low_counter(regression_data) >= 3
-        and ((regression_data['forecast_day_PCT3_change'] > regression_data['forecast_day_PCT4_change'] > regression_data['forecast_day_PCT5_change'])
-             or (regression_data['forecast_day_PCT4_change'] > regression_data['forecast_day_PCT5_change'] > regression_data['forecast_day_PCT7_change'])
-             or (regression_data['forecast_day_PCT3_change'] > regression_data['forecast_day_PCT5_change'] > regression_data['forecast_day_PCT7_change'])
+    elif (regression_data['forecast_day_PCT_change'] > 0
+        and regression_data['forecast_day_PCT_change'] < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change']
+        and high_counter(regression_data) >= 3
+        and ((regression_data['forecast_day_PCT3_change'] > regression_data['forecast_day_PCT4_change'] > regression_data['forecast_day_PCT5_change'] > regression_data['forecast_day_PCT7_change'] > regression_data['forecast_day_PCT10_change'])
+             or (regression_data['forecast_day_PCT4_change'] > regression_data['forecast_day_PCT5_change'] > regression_data['forecast_day_PCT7_change'] > regression_data['forecast_day_PCT10_change'])
             )
         ):
         return '(mediumDownTrend)'                        
@@ -616,19 +614,17 @@ def pct_change_positive_trend(regression_data):
                 trend = False
         if trend:
             if(regression_data['bar_high'] > regression_data['bar_high_pre1']
-                or regression_data['bar_high_pre1'] > regression_data['bar_high_pre2']
+                #or regression_data['bar_high_pre1'] > regression_data['bar_high_pre2']
                 ):
                 return '(upTrend-min3Day)' 
             else:
                 return '(upTrend-min3Day-Risky)'
-    elif (#regression_data['forecast_day_PCT_change'] > 0
-        #and regression_data['forecast_day_PCT2_change'] > 0
-        regression_data['forecast_day_PCT3_change'] > 0
-        and high_counter(regression_data) >= 3
-        and ((regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change'])
-             or (regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change'] < regression_data['forecast_day_PCT7_change'])
-             or (regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT5_change'] < regression_data['forecast_day_PCT7_change'])
-            )
+    elif (regression_data['forecast_day_PCT_change'] < 0
+        and regression_data['forecast_day_PCT_change'] > regression_data['forecast_day_PCT2_change'] > regression_data['forecast_day_PCT3_change'] > 0
+        and low_counter(regression_data) >= 3
+        and ((regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change'] < regression_data['forecast_day_PCT7_change'] < regression_data['forecast_day_PCT10_change'])
+             or (regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change'] < regression_data['forecast_day_PCT7_change'] < regression_data['forecast_day_PCT10_change'])
+             )
         ):
         return '(mediumUpTrend)'
                 
@@ -681,7 +677,7 @@ def pct_change_negative_trend_short(regression_data):
         and low_counter(regression_data) >= 3
         ):
         if(regression_data['bar_low'] < regression_data['bar_low_pre1']
-            or regression_data['bar_low_pre1'] < regression_data['bar_low_pre2']
+            #or regression_data['bar_low_pre1'] < regression_data['bar_low_pre2']
             ):
             return '(shortDownTrend-min3Day)' 
         else:
@@ -710,7 +706,7 @@ def pct_change_positive_trend_short(regression_data):
         and high_counter(regression_data) >= 3
         ):
         if(regression_data['bar_high'] > regression_data['bar_high_pre1']
-            or regression_data['bar_high_pre1'] > regression_data['bar_high_pre2']
+            #or regression_data['bar_high_pre1'] > regression_data['bar_high_pre2']
             ):
             return '(shortUpTrend-min3Day)'
         else:
@@ -8860,12 +8856,14 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
     if(flag):
         superFlag = True
-    flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
-    if(flag):
-        superFlag = True
-    flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
-    if(flag):
-        superFlag = True
+    if(abs(regression_data['filter_tech_avg']) > 2):
+        flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
+        if(flag):
+            superFlag = True
+    if(abs(regression_data['filter_tech_all_avg']) > 2):
+        flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
+        if(flag):
+            superFlag = True
     if(abs(regression_data['filter_tech_all_pct_change_avg']) > 5):
         flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
         if(flag):
@@ -8883,12 +8881,14 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
     if(flag):
         superFlag = True
-    flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
-    if(flag):
-        superFlag = True
-    flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
-    if(flag):
-        superFlag = True
+    if(abs(regression_data['filter_tech_avg']) > 2):    
+        flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
+        if(flag):
+            superFlag = True
+    if(abs(regression_data['filter_tech_all_avg']) > 2): 
+        flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
+        if(flag):
+            superFlag = True
     if(abs(regression_data['filter_tech_all_pct_change_avg']) > 5):
         flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
         if(flag):
