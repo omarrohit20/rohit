@@ -540,14 +540,17 @@ def pct_change_negative_trend(regression_data):
                 return '(downTrend-min3Day)'
             else:
                 return '(downTrend-min3Day-Risky)'
-    elif (regression_data['forecast_day_PCT_change'] > 0
+    elif (regression_data['forecast_day_PCT_change'] > 0  
         and regression_data['forecast_day_PCT_change'] < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change']
         and high_counter(regression_data) >= 3
         and ((regression_data['forecast_day_PCT3_change'] > regression_data['forecast_day_PCT4_change'] > regression_data['forecast_day_PCT5_change'] > regression_data['forecast_day_PCT7_change'] > regression_data['forecast_day_PCT10_change'])
              or (regression_data['forecast_day_PCT4_change'] > regression_data['forecast_day_PCT5_change'] > regression_data['forecast_day_PCT7_change'] > regression_data['forecast_day_PCT10_change'])
             )
         ):
-        return '(mediumDownTrend)'                        
+        if(regression_data['forecast_day_PCT10_change'] < 0):
+            return '(mediumDownTrend)'  
+        elif(regression_data['forecast_day_PCT10_change'] > 0):
+            return '(mediumDownTrend-crossed10Days)'                        
     return 'NA'           
     
 def pct_change_positive_trend(regression_data):
@@ -619,14 +622,17 @@ def pct_change_positive_trend(regression_data):
                 return '(upTrend-min3Day)' 
             else:
                 return '(upTrend-min3Day-Risky)'
-    elif (regression_data['forecast_day_PCT_change'] < 0
+    elif (regression_data['forecast_day_PCT_change'] < 0  
         and regression_data['forecast_day_PCT_change'] > regression_data['forecast_day_PCT2_change'] > regression_data['forecast_day_PCT3_change'] > 0
         and low_counter(regression_data) >= 3
         and ((regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change'] < regression_data['forecast_day_PCT7_change'] < regression_data['forecast_day_PCT10_change'])
              or (regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change'] < regression_data['forecast_day_PCT7_change'] < regression_data['forecast_day_PCT10_change'])
              )
         ):
-        return '(mediumUpTrend)'
+        if(regression_data['forecast_day_PCT10_change'] > 0):
+            return '(mediumUpTrend)'
+        elif(regression_data['forecast_day_PCT10_change'] < 0):
+            return '(mediumUpTrend-crossed10Days)'
                 
     return 'NA' 
 
