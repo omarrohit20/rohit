@@ -2265,7 +2265,6 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     return regressionResult
 
 def all_withoutml(regression_data, regressionResult, ws):
-    filter_accuracy_finder_regression(regression_data, regressionResult, None)
     add_in_csv(regression_data, regressionResult, ws, '')
 
 def ten_days_more_than_fifteen(regression_data):
@@ -2773,6 +2772,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
     return False
 
 def buy_indicator_after_filter_accuracy(regression_data, regressionResult, reg, ws):
+    filter_accuracy_finder_regression(regression_data, regressionResult, None)
     if(is_sell_from_filter_all_filter(regression_data) != True):
         buy_af_high_indicators(regression_data, regressionResult, reg, ws)
         buy_af_up_continued(regression_data, regressionResult, reg, ws)
@@ -3304,7 +3304,7 @@ def buy_af_high_indicators(regression_data, regressionResult, reg, ws):
                    and regression_data['forecast_day_PCT_change'] > 0
                    and high_tail_pct(regression_data) < 1
                    ):
-                    add_in_csv(regression_data, regressionResult, ws, 'buyHighIndicators(shouldNotOpenInMinus)')
+                    add_in_csv(regression_data, regressionResult, ws, None, '**buyHighIndicators(shouldNotOpenInMinus)')
                     return True
                 if(1 > regression_data['PCT_day_change'] > 0 and 2.5 > regression_data['PCT_change'] > -0.5):
                     #add_in_csv(regression_data, regressionResult, ws, '(longDownTrend)buyHighIndicators')
@@ -3312,47 +3312,40 @@ def buy_af_high_indicators(regression_data, regressionResult, reg, ws):
                     return True
             
             if(is_algo_buy(regression_data)
-                and (regression_data['weekLowChange'] < 0) 
-                and (4 < regression_data['PCT_change'] < 10)
-                and (4 < regression_data['PCT_day_change'] < 10)
-                ):
-                add_in_csv(regression_data, regressionResult, ws, '**(HighBothBuyAll)buyDowntrendReversal') 
-            
-            if(is_algo_buy(regression_data)
                 and (mlpValue_other >= 0 and kNeighboursValue_other >= 0)
                 and ((4.0 <= mlpValue < 10.0 and 2.0 <= kNeighboursValue < 10.0) or (2.0 <= mlpValue < 10.0 and 4.0 <= kNeighboursValue < 10.0))
                 ):
                 if(mlpValue_cla > 0 or kNeighboursValue_cla > 0):
-                    add_in_csv(regression_data, regressionResult, ws, '**buyHighIndicators-0')
+                    add_in_csv(regression_data, regressionResult, ws, None, '**buyHighIndicators-0')
             elif(is_algo_buy(regression_data)
                 and (mlpValue_other >= 0 and kNeighboursValue_other >= 0)
                 #and (mlpValue_cla > 0 or kNeighboursValue_cla > 0)
                 and (2.0 <= mlpValue < 10.0 and 1.5 <= kNeighboursValue < 10.0)
                 and ((mlpValue + kNeighboursValue) > 5)
                 ):
-                add_in_csv(regression_data, regressionResult, ws, '**buyHighIndicators-Risky')
+                add_in_csv(regression_data, regressionResult, ws, None, '**buyHighIndicators-Risky')
             elif(is_algo_buy(regression_data)
                 and (mlpValue_other >= 0 and kNeighboursValue_other >= 0)
                 and (1 < mlpValue_cla <= 5)
                 and (0 <= mlpValue < 10.0 and 0 <= kNeighboursValue < 10.0)
                 and (1 <= mlpValue or 1 <= kNeighboursValue)
                 ):
-                add_in_csv(regression_data, regressionResult, ws, '**(uptrend)buyHighMLPClaIndicators')
+                add_in_csv(regression_data, regressionResult, ws, None, '**(uptrend)buyHighMLPClaIndicators')
             elif((5 <= mlpValue < 15 and 2 < mlpValue_other)
                 and (-1 <= kNeighboursValue < 15)
                 ):
-                add_in_csv(regression_data, regressionResult, ws, '**(Test)buyHighMLPClaIndicators-Risky')
+                add_in_csv(regression_data, regressionResult, ws, None, '**(Test)buyHighMLPClaIndicators-Risky')
                 Flag = True
         elif((5 <= mlpValue < 15 and 2 < mlpValue_other)
             and (-1 <= kNeighboursValue < 15)
             ):
-            add_in_csv(regression_data, regressionResult, ws, '**(Test)buyHighMLPClaIndicators-Risky')
+            add_in_csv(regression_data, regressionResult, ws, None, '**(Test)buyHighMLPClaIndicators-Risky')
             Flag = True
     elif(regression_data['PCT_day_change'] < 5
         and (5 <= mlpValue < 15 and 2 < mlpValue_other)
         and (-1 <= kNeighboursValue < 15)
         ):
-        add_in_csv(regression_data, regressionResult, ws, '**(Test)buyHighMLPClaIndicators-Risky')
+        add_in_csv(regression_data, regressionResult, ws, None, '**(Test)buyHighMLPClaIndicators-Risky')
         Flag = True
     return Flag
     
@@ -3399,12 +3392,12 @@ def buy_af_high_volatility(regression_data, regressionResult, reg, ws):
         if(countGt > countLt 
             and regression_data['PCT_day_change'] < 3
             and regression_data['PCT_change'] < 3
-            and (-2 > regression_data['monthHighChange'] or regression_data['monthHighChange'] > 2)
+            and (-2 > regression_data['month3HighChange'] or regression_data['month3HighChange'] > 2)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, '%%BuyUpTrend-highTail')
-        elif(regression_data['PCT_day_change'] > 0
-            and regression_data['PCT_change'] > 0
-            and -2 < regression_data['monthHighChange'] < 2
+        elif(regression_data['PCT_day_change'] > -0.5
+            and regression_data['PCT_change'] > -0.5
+            and -2 < regression_data['month3HighChange'] < 2
             ):
             add_in_csv(regression_data, regressionResult, ws, None, '%%SellUpTrend-highTail')
             
@@ -3493,7 +3486,7 @@ def buy_af_vol_contract(regression_data, regressionResult, reg, ws):
             and float(regression_data['contract']) > 10
             ):
             if((mlpValue >= 0.3 and kNeighboursValue >= 0.3) or is_algo_buy(regression_data)):
-                add_in_csv(regression_data, regressionResult, ws, 'ML:buyOI-0')
+                add_in_csv(regression_data, regressionResult, ws, None)
                 return True
             return False
         elif((regression_data['forecast_day_VOL_change'] > 35 and 0.5 < regression_data['PCT_day_change'] < 2 and 1 < regression_data['PCT_change'] < 2)
@@ -3501,7 +3494,7 @@ def buy_af_vol_contract(regression_data, regressionResult, reg, ws):
             #and regression_data['PCT_day_change_pre1'] > -0.5
             ):
             if((mlpValue >= 0.3 and kNeighboursValue >= 0.3) or is_algo_buy(regression_data)):
-                add_in_csv(regression_data, regressionResult, ws, 'ML:buyOI-1')
+                add_in_csv(regression_data, regressionResult, ws, None)
                 return True
             return False
         elif((regression_data['forecast_day_VOL_change'] > 150 and 1 < regression_data['PCT_day_change'] < 3 and 1 < regression_data['PCT_change'] < 3)
@@ -6180,6 +6173,7 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
     return False
 
 def sell_indicator_after_filter_accuracy(regression_data, regressionResult, reg, ws):
+    filter_accuracy_finder_regression(regression_data, regressionResult, None)
     if(is_buy_from_filter_all_filter(regression_data) != True):
         sell_af_high_indicators(regression_data, regressionResult, reg, ws)
         sell_af_down_continued(regression_data, regressionResult, reg, ws)
@@ -6815,12 +6809,12 @@ def sell_af_high_indicators(regression_data, regressionResult, reg, ws):
                 and regression_data['PCT_change'] < -5
                 ):
                 if(-35 < regression_data['forecast_day_PCT10_change'] < -10):
-                    add_in_csv(regression_data, regressionResult, ws, 'sellHighMLP-StockDowntrend(Risky)')
+                    add_in_csv(regression_data, regressionResult, ws, None, '**sellHighMLP-StockDowntrend(Risky)')
                 elif(regression_data['forecast_day_PCT10_change'] > -10
                     and -10 < regression_data['PCT_day_change'] < -5
                     and -10 < regression_data['PCT_day_change'] < -5
                     ):
-                    add_in_csv(regression_data, regressionResult, ws, 'sellHighMLP(Risky)')
+                    add_in_csv(regression_data, regressionResult, ws, None, '**sellHighMLP(Risky)')
             if(mlpValue <= -2.0 and kNeighboursValue <= -2.0 
                and regression_data['yearHighChange'] < -10 
                and regression_data['yearLowChange'] > 10
@@ -6830,7 +6824,7 @@ def sell_af_high_indicators(regression_data, regressionResult, reg, ws):
                    and regression_data['forecast_day_PCT_change'] < 0
                    and low_tail_pct(regression_data) < 1
                    ):
-                    add_in_csv(regression_data, regressionResult, ws, 'sellHighIndicators')
+                    add_in_csv(regression_data, regressionResult, ws, None, '**sellHighIndicators')
                     return True
                 if(-1 < regression_data['PCT_day_change'] < 0.5 and -2.5 < regression_data['PCT_change'] < 0.5):
                     #add_in_csv(regression_data, regressionResult, ws, '(longUpTrend)sellHighIndicators')
@@ -6841,43 +6835,43 @@ def sell_af_high_indicators(regression_data, regressionResult, reg, ws):
                 and (-10 < regression_data['PCT_change'] < -4)
                 and (-10 < regression_data['PCT_day_change'] < -4)
                 ):
-                add_in_csv(regression_data, regressionResult, ws, '**(HighBothSellAll)sellUptrendReversal')
+                add_in_csv(regression_data, regressionResult, ws, None, '**(HighBothSellAll)sellUptrendReversal')
                 
             if(is_algo_sell(regression_data)
                 and (mlpValue_other <= 0 and kNeighboursValue_other <= 0)
                 and ((-10 < mlpValue <= -4.0 and -10 < kNeighboursValue <= -2.0) or (-10 < mlpValue <= -2.0 and -10 < kNeighboursValue <= -4.0))
                 ):
                 if(mlpValue_cla < 0 or kNeighboursValue_cla < 0):
-                    add_in_csv(regression_data, regressionResult, ws, '**sellHighIndicators-0')
+                    add_in_csv(regression_data, regressionResult, ws, None, '**sellHighIndicators-0')
             elif(is_algo_sell(regression_data)
                 and (mlpValue_other <= 0 and kNeighboursValue_other <= 0)
                 #and (mlpValue_cla < 0 or kNeighboursValue_cla < 0)
                 and (-10 < mlpValue <= -2.0 and -10 < kNeighboursValue <= -1.5)
                 and ((mlpValue + kNeighboursValue) < -5)
                 ):
-                add_in_csv(regression_data, regressionResult, ws, '**sellHighIndicators-Risky')
+                add_in_csv(regression_data, regressionResult, ws, None, '**sellHighIndicators-Risky')
             elif(is_algo_sell(regression_data)
                 and (mlpValue_other <= 0 and kNeighboursValue_other <= 0)
                 and (-5 <= mlpValue_cla < -1)
                 and (-10 < mlpValue <= 0 and -10 < kNeighboursValue <= 0)
                 and (mlpValue < -1 or kNeighboursValue < -1)
                 ):
-                add_in_csv(regression_data, regressionResult, ws, '**(downtrend)sellHighMLPClaIndicators')
+                add_in_csv(regression_data, regressionResult, ws, None, '**(downtrend)sellHighMLPClaIndicators')
             elif((-15 < mlpValue < -5 and mlpValue_other < -2)
                 and (-15 <= kNeighboursValue < 1)
                 ):
-                add_in_csv(regression_data, regressionResult, ws, '**(Test)sellHighMLPClaIndicators-Risky')
+                add_in_csv(regression_data, regressionResult, ws, None, '**(Test)sellHighMLPClaIndicators-Risky')
                 Flag = True
         elif((-15 < mlpValue < -5 and mlpValue_other < -2)
             and (-15 <= kNeighboursValue < 1)
             ):
-            add_in_csv(regression_data, regressionResult, ws, '**(Test)sellHighMLPClaIndicators-Risky') 
+            add_in_csv(regression_data, regressionResult, ws, None, '**(Test)sellHighMLPClaIndicators-Risky') 
             Flag = True       
     elif(regression_data['PCT_day_change'] > -5 and regression_data['PCT_change'] > -5
         and (-15 < mlpValue < -5 and mlpValue_other < -2)
         and (-15 <= kNeighboursValue < 1)
         ):
-        add_in_csv(regression_data, regressionResult, ws, '**(Test)sellHighMLPClaIndicators-Risky')
+        add_in_csv(regression_data, regressionResult, ws, None, '**(Test)sellHighMLPClaIndicators-Risky')
         Flag = True
     return Flag
 
@@ -6955,13 +6949,13 @@ def sell_af_high_volatility(regression_data, regressionResult, reg, ws):
         if(countGt < countLt
             and regression_data['PCT_day_change'] > -3
             and regression_data['PCT_change'] > -3
-            and (-2 > regression_data['monthLowChange'] or regression_data['monthLowChange'] > 2)
+            and (-2 > regression_data['month3LowChange'] or regression_data['month3LowChange'] > 2)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, '%%SellDownTrend-lowTail')
         elif(countGt == countLt
-            and regression_data['PCT_day_change'] < 0
-            and regression_data['PCT_change'] < 0
-            and -2 < regression_data['monthLowChange'] < 2
+            and regression_data['PCT_day_change'] < 0.5
+            and regression_data['PCT_change'] < 0.5
+            and -2 < regression_data['month3LowChange'] < 2
             ):
             add_in_csv(regression_data, regressionResult, ws, None, '%%BuyDownTrend-lowTail')
         return True    
@@ -7045,14 +7039,14 @@ def sell_af_vol_contract(regression_data, regressionResult, reg, ws):
             and float(regression_data['contract']) > 10
             ):
             if((mlpValue <= -0.3 and kNeighboursValue <= -0.3) or is_algo_sell(regression_data)):
-                add_in_csv(regression_data, regressionResult, ws, None, 'ML:oiSell-0')
+                add_in_csv(regression_data, regressionResult, ws, None, None)
                 return True
             return False
         elif((regression_data['forecast_day_VOL_change'] > 35 and -2 < regression_data['PCT_day_change'] < -0.5 and -2 < regression_data['PCT_change'] < -1)
             and float(regression_data['contract']) > 20
             ):
             if((mlpValue <= -0.3 and kNeighboursValue <= -0.3) or is_algo_sell(regression_data)):
-                add_in_csv(regression_data, regressionResult, ws, None, 'ML:oiSell-1')
+                add_in_csv(regression_data, regressionResult, ws, None, None)
                 return True
             return False
         elif((regression_data['forecast_day_VOL_change'] > 150 and -3 < regression_data['PCT_day_change'] < -1 and -3 < regression_data['PCT_change'] < -1)
@@ -8715,7 +8709,7 @@ def filter_accuracy_finder_regression(regression_data, regressionResult, ws):
             
             
     if("MLSell" in regression_data['filter'] and len(regression_data['filter']) > 9):
-        if(is_reg_buy_from_filter(regression_data, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
+        if(is_reg_sell_from_filter(regression_data, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
             or is_reg_sell_from_filter(regression_data, 'filter_avg', 'filter_count', 'filter_pct')
             or is_reg_sell_from_filter(regression_data, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
             or is_reg_sell_from_filter(regression_data, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
@@ -8746,6 +8740,14 @@ def is_reg_sell_from_filter(regression_data, filter_avg, filter_count, filter_pc
         return False
         
 def is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, reg, ws):
+    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
+    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
+    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_avg', 'filter_count', 'filter_pct')
+    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
+    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
+    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
+    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
+
     superFlag = False
     if(abs(regression_data['filter_345_avg']) > 2):
         flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
@@ -8796,16 +8798,7 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     if(abs(regression_data['filter_tech_all_pct_change_avg']) > 5):
         flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
         if(flag):
-            superFlag = True
-    
-    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
-    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
-    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_avg', 'filter_count', 'filter_pct')
-    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
-    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
-    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
-    is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
-    
+            superFlag = True    
     
     if(buy_af_high_volatility(regression_data, regressionResult, reg, ws)):
         superFlag = True
@@ -8933,113 +8926,110 @@ def filter_accuracy_finder(regression_data, regression_high, regression_low, reg
             return False
                      
         
-        if((low_tail_pct(regression_data) < 1.5 and high_tail_pct(regression_data) < 2.5 and regression_data[filter_avg] < 0)
-            or (high_tail_pct(regression_data) < 1.5 and low_tail_pct(regression_data) < 2.5 and regression_data[filter_avg] > 0)
+        if(regression_data[filter_count] >= 5
+            and abs(regression_data[filter_pct]) >= 100
+            and abs(regression_data[filter_avg]) > 1.5
             ):
-            if(regression_data[filter_count] >= 5
-                and abs(regression_data[filter_pct]) >= 100
-                and abs(regression_data[filter_avg]) > 1.5
+            if(regression_data[filter_avg] >= 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Buy')
+            elif(regression_data[filter_avg] < 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Sell')
+        elif(regression_data[filter_count] >= 3
+            and abs(regression_data[filter_pct]) >= 100
+            and abs(regression_data[filter_avg]) > 2.5
+            ):
+            if(regression_data[filter_avg] >= 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Buy')
+            elif(regression_data[filter_avg] < 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Sell')
+        elif(regression_data[filter_count] >= 2
+            and abs(regression_data[filter_pct]) >= 100
+            and abs(regression_data[filter_avg]) > 5
+            ):
+            if(regression_data[filter_avg] >= 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Buy')
+            elif(regression_data[filter_avg] < 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Sell')
+                
+        if(regression_data[filter_count] >= 3
+            and abs(regression_data[filter_pct]) >= 100
+            and abs(regression_data[filter_avg]) > 2
+            ):
+            if(regression_data[filter_avg] >= 0
+                and is_algo_sell(regression_high) != True
+                and is_algo_sell(regression_low) != True
+                #and (is_algo_buy(regression_high) == True or is_algo_buy(regression_low) == True)
                 ):
-                if(regression_data[filter_avg] >= 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Buy')
-                elif(regression_data[filter_avg] < 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Sell')
-            elif(regression_data[filter_count] >= 3
-                and abs(regression_data[filter_pct]) >= 100
-                and abs(regression_data[filter_avg]) > 2.5
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-1-Buy')
+            elif(regression_data[filter_avg] < 0
+                and is_algo_buy(regression_high) != True
+                and is_algo_buy(regression_low) != True
+                #and (is_algo_sell(regression_high) == True or is_algo_sell(regression_low) == True)
                 ):
-                if(regression_data[filter_avg] >= 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Buy')
-                elif(regression_data[filter_avg] < 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Sell')
-            elif(regression_data[filter_count] >= 2
-                and abs(regression_data[filter_pct]) >= 100
-                and abs(regression_data[filter_avg]) > 5
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-1-Sell')
+                
+        if(regression_data[filter_count] >= 3
+            and abs(regression_data[filter_pct]) > 80
+            and abs(regression_data[filter_avg]) > 3
+            ):
+            if(regression_data[filter_avg] >= 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-2-Buy')
+            elif(regression_data[filter_avg] < 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-2-Sell')   
+        elif(regression_data[filter_count] >= 3
+            and abs(regression_data[filter_pct]) > 85
+            and abs(regression_data[filter_avg]) > 2.5
+            and abs(regression_data[filter_count] * regression_data[filter_avg]) > 9
+            ):
+            if(regression_data[filter_avg] >= 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-3-Buy')
+            elif(regression_data[filter_avg] < 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-3-Sell')
+        elif(regression_data[filter_count] >= 3
+            and abs(regression_data[filter_pct]) >= 85
+            and abs(regression_data[filter_avg]) >= 2.0
+            ):
+            if(regression_data[filter_avg] >= 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-4-Buy')
+            elif(regression_data[filter_avg] < 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-4-Sell')
+        elif(regression_data[filter_count] >= 2
+            and abs(regression_data[filter_pct]) >= 85
+            and abs(regression_data[filter_avg]) >= 3
+            ):
+            if(regression_data[filter_avg] >= 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-5-Buy')
+            elif(regression_data[filter_avg] < 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-5-Sell')
+        elif(regression_data[filter_count] >= 2
+            and((abs(regression_data[filter_pct]) >= 100 and abs(regression_data[filter_avg]) >= 2.5)
+                 or (abs(regression_data[filter_pct]) >= 70 and abs(regression_data[filter_avg]) >= 3.5)
+                 )
+            ):
+            if(regression_data[filter_avg] >= 0 and is_algo_buy(regression_data)):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-6-Buy')
+            elif(regression_data[filter_avg] < 0 and is_algo_sell(regression_data)):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-6-Sell')
+        elif(regression_data[filter_count] > 5
+            and abs(regression_data[filter_pct]) > 60
+            and abs(regression_data[filter_avg]) > 1.5
+            ):
+            if(regression_data[filter_avg] >= 0
+                and ((abs(regression_data[filter_avg]) > 2 and abs(regression_data[filter_pct]) > 80) or is_algo_buy(regression_data))
                 ):
-                if(regression_data[filter_avg] >= 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Buy')
-                elif(regression_data[filter_avg] < 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Sell')
-                    
-            if(regression_data[filter_count] >= 3
-                and abs(regression_data[filter_pct]) >= 100
-                and abs(regression_data[filter_avg]) > 2
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky-Buy')
+            elif(regression_data[filter_avg] < 0
+                and ((abs(regression_data[filter_avg]) > 2 and abs(regression_data[filter_pct]) > 80) or is_algo_sell(regression_data))
                 ):
-                if(regression_data[filter_avg] >= 0
-                    and is_algo_sell(regression_high) != True
-                    and is_algo_sell(regression_low) != True
-                    #and (is_algo_buy(regression_high) == True or is_algo_buy(regression_low) == True)
-                    ):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-1-Buy')
-                elif(regression_data[filter_avg] < 0
-                    and is_algo_buy(regression_high) != True
-                    and is_algo_buy(regression_low) != True
-                    #and (is_algo_sell(regression_high) == True or is_algo_sell(regression_low) == True)
-                    ):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-1-Sell')
-                    
-            if(regression_data[filter_count] >= 3
-                and abs(regression_data[filter_pct]) > 80
-                and abs(regression_data[filter_avg]) > 3
-                ):
-                if(regression_data[filter_avg] >= 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-2-Buy')
-                elif(regression_data[filter_avg] < 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-2-Sell')   
-            elif(regression_data[filter_count] >= 3
-                and abs(regression_data[filter_pct]) > 85
-                and abs(regression_data[filter_avg]) > 2.5
-                and abs(regression_data[filter_count] * regression_data[filter_avg]) > 9
-                ):
-                if(regression_data[filter_avg] >= 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-3-Buy')
-                elif(regression_data[filter_avg] < 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-3-Sell')
-            elif(regression_data[filter_count] >= 3
-                and abs(regression_data[filter_pct]) >= 85
-                and abs(regression_data[filter_avg]) >= 2.0
-                ):
-                if(regression_data[filter_avg] >= 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-4-Buy')
-                elif(regression_data[filter_avg] < 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-4-Sell')
-            elif(regression_data[filter_count] >= 2
-                and abs(regression_data[filter_pct]) >= 85
-                and abs(regression_data[filter_avg]) >= 3
-                ):
-                if(regression_data[filter_avg] >= 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-5-Buy')
-                elif(regression_data[filter_avg] < 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-5-Sell')
-            elif(regression_data[filter_count] >= 2
-                and((abs(regression_data[filter_pct]) >= 100 and abs(regression_data[filter_avg]) >= 2.5)
-                     or (abs(regression_data[filter_pct]) >= 70 and abs(regression_data[filter_avg]) >= 3.5)
-                     )
-                ):
-                if(regression_data[filter_avg] >= 0 and is_algo_buy(regression_data)):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-6-Buy')
-                elif(regression_data[filter_avg] < 0 and is_algo_sell(regression_data)):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-6-Sell')
-            elif(regression_data[filter_count] > 5
-                and abs(regression_data[filter_pct]) > 60
-                and abs(regression_data[filter_avg]) > 1.5
-                ):
-                if(regression_data[filter_avg] >= 0
-                    and ((abs(regression_data[filter_avg]) > 2 and abs(regression_data[filter_pct]) > 80) or is_algo_buy(regression_data))
-                    ):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky-Buy')
-                elif(regression_data[filter_avg] < 0
-                    and ((abs(regression_data[filter_avg]) > 2 and abs(regression_data[filter_pct]) > 80) or is_algo_sell(regression_data))
-                    ):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky-Sell')
-            elif(regression_data[filter_count] >= 2
-                and abs(regression_data[filter_pct]) >= 70
-                and abs(regression_data[filter_avg]) >= 2.0
-                ):
-                if(regression_data[filter_avg] >= 0 and is_algo_buy(regression_data)):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-7-Buy')
-                elif(regression_data[filter_avg] < 0 and is_algo_sell(regression_data)):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-7-Sell')       
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky-Sell')
+        elif(regression_data[filter_count] >= 2
+            and abs(regression_data[filter_pct]) >= 70
+            and abs(regression_data[filter_avg]) >= 2.0
+            ):
+            if(regression_data[filter_avg] >= 0 and is_algo_buy(regression_data)):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-7-Buy')
+            elif(regression_data[filter_avg] < 0 and is_algo_sell(regression_data)):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-7-Sell')       
                 
         Flag = False
         if(abs(float(regression_data[filter_avg])) > 1.5 
@@ -9168,7 +9158,7 @@ def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, fil
             and ("MLSell" not in regression_data['filter'])
             and (buyRisky == False or ("MLBuy" in regression_data['filter']))
             and is_buy_filter_not_risky(regression_data)
-            and high_tail_pct(regression_data) < 1.5 and low_tail_pct(regression_data) < 2.5
+            #and high_tail_pct(regression_data) < 1.5 and low_tail_pct(regression_data) < 2.5
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Buy')
             Flag = True
@@ -9181,7 +9171,7 @@ def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, fil
             and ("MLBuy" not in regression_data['filter'])
             and (sellRisky == False or ("MLSell" in regression_data['filter']))
             and is_sell_filter_not_risky(regression_data)
-            and low_tail_pct(regression_data) < 1.5 and high_tail_pct(regression_data) < 2.5
+            #and low_tail_pct(regression_data) < 1.5 and high_tail_pct(regression_data) < 2.5
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Sell')
             Flag = True  
@@ -9254,8 +9244,8 @@ def is_filter_risky(regression_data, regressionResult, reg, ws, filter_avg, filt
     
     if((
             #-2 < regression_data['week2LowChange'] < 2 
-            -2 < regression_data['monthLowChange'] < 2
-            #or -2 < regression_data['month3LowChange'] < 2
+            #-2 < regression_data['monthLowChange'] < 2
+            -2 < regression_data['month3LowChange'] < 2
             #or -2 < regression_data['month6LowChange'] < 2
             )
         ):
@@ -9264,15 +9254,20 @@ def is_filter_risky(regression_data, regressionResult, reg, ws, filter_avg, filt
             
     if((
             #-2 < regression_data['week2HighChange'] < 2
-            -2 < regression_data['monthHighChange'] < 2
-            #or -2 < regression_data['month3HighChange'] < 2
+            #-2 < regression_data['monthHighChange'] < 2
+            -2 < regression_data['month3HighChange'] < 2
             #or -2 < regression_data['month6HighChange'] < 2
             )
         ):
         if update:
             add_in_csv(regression_data, regressionResult, ws, None, 'RISKYBASELINEBUY')
         
-    
+    if(((low_tail_pct(regression_data) > 1.5 or high_tail_pct(regression_data) > 2.5) and regression_data[filter_avg] < -0.5)
+        or ((high_tail_pct(regression_data) > 1.5 and low_tail_pct(regression_data) > 2.5) and regression_data[filter_avg] > 0.5)
+        ):
+        if update:
+            add_in_csv(regression_data, regressionResult, ws, None, 'RISKYTAIL')
+            
     if(((regression_data['filter'] == " " and abs(float(regression_data[filter_avg])) > 0.75)
             or ("MLBuy" in regression_data['filter'] and float(regression_data[filter_avg]) < -0.5)
             or ("MLSell" in regression_data['filter'] and float(regression_data[filter_avg]) > 0.5)
