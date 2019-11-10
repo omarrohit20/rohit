@@ -713,7 +713,7 @@ def pct_change_negative_trend_short(regression_data):
         if(regression_data['low'] < regression_data['low_pre2']):
             if(regression_data['bar_low'] < regression_data['bar_low_pre1']
                 and regression_data['bar_low_pre1'] < regression_data['bar_low_pre2']
-                and high_counter(regression_data) >= 3
+                and low_counter(regression_data) >= 3
                 ):
                 return '(shortDownTrend)'
             else:
@@ -2824,17 +2824,17 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
 
 def buy_indicator_after_filter_accuracy(regression_data, regressionResult, reg, ws):
     filter_accuracy_finder_regression(regression_data, regressionResult, None)
+    buy_af_low_tail(regression_data, regressionResult, reg, ws)
+    #sell_af_high_tail(regression_data, regressionResult, reg, ws)
     if(is_sell_from_filter_all_filter(regression_data) != True):
         buy_af_high_indicators(regression_data, regressionResult, reg, ws)
         buy_af_up_continued(regression_data, regressionResult, reg, ws)
-        buy_af_high_volatility(regression_data, regressionResult, reg, ws)
         buy_af_oi_negative(regression_data, regressionResult, reg, ws)
         buy_af_vol_contract(regression_data, regressionResult, reg, ws)
         buy_af_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
         buy_af_others(regression_data, regressionResult, reg, ws)
-    buy_af_low_tail(regression_data, regressionResult, reg, ws)
-    #sell_af_high_tail(regression_data, regressionResult, reg, ws)
-        
+        buy_af_high_volatility(regression_data, regressionResult, reg, ws)
+      
 def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
     if('MayBuy-CheckChart' in regression_data['filter1']):
         if(regression_data['PCT_day_change_pre1'] > 2
@@ -3319,7 +3319,7 @@ def buy_af_high_indicators(regression_data, regressionResult, reg, ws):
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
     if(regression_data['PCT_day_change'] == 0):
         return False
-    Flag = False
+    flag = False
     if((mlpValue >= 4 or kNeighboursValue >= 4)
         and ((regression_data['PCT_day_change'] < 5 and abs(regression_data['PCT_day_change']) > 1.5)
              or (low_tail_pct(regression_data) > 1.5 and high_tail_pct(regression_data) < 1)
@@ -3390,19 +3390,19 @@ def buy_af_high_indicators(regression_data, regressionResult, reg, ws):
                 and (-1 <= kNeighboursValue < 15)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, '**(Test)buyHighMLPClaIndicators-Risky')
-                Flag = True
+                flag = True
         elif((5 <= mlpValue < 15 and 2 < mlpValue_other)
             and (-1 <= kNeighboursValue < 15)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, '**(Test)buyHighMLPClaIndicators-Risky')
-            Flag = True
+            flag = True
     elif(regression_data['PCT_day_change'] < 5
         and (5 <= mlpValue < 15 and 2 < mlpValue_other)
         and (-1 <= kNeighboursValue < 15)
         ):
         add_in_csv(regression_data, regressionResult, ws, None, '**(Test)buyHighMLPClaIndicators-Risky')
-        Flag = True
-    return Flag
+        flag = True
+    return flag
     
 def buy_af_low_tail(regression_data, regressionResult, reg, ws):
     if(high_tail_pct(regression_data) <= 1 and 1.3 <= low_tail_pct(regression_data) <= 2
@@ -3450,13 +3450,15 @@ def buy_af_up_continued(regression_data, regressionResult, reg, ws):
                 add_in_csv(regression_data, regressionResult, ws, '%%mayBuyUpContinueGT3-Risky')
 
 def buy_af_high_volatility(regression_data, regressionResult, reg, ws):
+    flag = False
     if(regression_data['PCT_day_change'] < -8
         and regression_data['PCT_change'] < -8
         and regression_data['forecast_day_PCT2_change'] < -20
         ):
         add_in_csv(regression_data, regressionResult, ws, None, '%%mayBuyHighVolatileAfter10:20DownL2T-20')
-        return True
-    elif('%%maySellTail' in regression_data['filter']
+        flag = True
+    
+    if('%%maySellTail' in regression_data['filter']
         and (('upTrend' in regression_data['series_trend'])
              or ('UpTrend' in regression_data['series_trend'])
              or pct_day_change_trend(regression_data) >= 3
@@ -3474,11 +3476,15 @@ def buy_af_high_volatility(regression_data, regressionResult, reg, ws):
             and -2 < regression_data['month3HighChange'] < 2
             ):
             add_in_csv(regression_data, regressionResult, ws, None, '%%SellUpTrend-highTail')
-            
-            
-        return True
-    else:
-        return False
+        flag = True
+        
+    if('NA$NA:NA$(shortDownTrend-MayReversal)' in regression_data['series_trend']
+        and regression_data['PCT_day_change'] < -0.5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'TEST:shortDownTrend-MayReversalBuy')
+        flag = True
+        
+    return flag
 
 def buy_af_oi_negative(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
@@ -3689,8 +3695,7 @@ def buy_af_others(regression_data, regressionResult, reg, ws):
     
     if('NA$NA:(shortUpTrend)$NA' in regression_data['series_trend']):
         add_in_csv(regression_data, regressionResult, ws, None, 'shortUpTrend')
-        
-            
+                   
     return False
               
 def buy_pattern(regression_data, regressionResult, reg, ws, ws1):
@@ -6248,16 +6253,16 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
 
 def sell_indicator_after_filter_accuracy(regression_data, regressionResult, reg, ws):
     filter_accuracy_finder_regression(regression_data, regressionResult, None)
+    sell_af_high_tail(regression_data, regressionResult, reg, ws)
+    #buy_af_low_tail(regression_data, regressionResult, reg, ws)
     if(is_buy_from_filter_all_filter(regression_data) != True):
         sell_af_high_indicators(regression_data, regressionResult, reg, ws)
         sell_af_down_continued(regression_data, regressionResult, reg, ws)
-        sell_af_high_volatility(regression_data, regressionResult, reg, ws)
         sell_af_oi_negative(regression_data, regressionResult, reg, ws)
         sell_af_vol_contract(regression_data, regressionResult, reg, ws)
         sell_af_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
         sell_af_others(regression_data, regressionResult, reg, ws)
-    sell_af_high_tail(regression_data, regressionResult, reg, ws)
-    #buy_af_low_tail(regression_data, regressionResult, reg, ws)
+        sell_af_high_volatility(regression_data, regressionResult, reg, ws)
         
 def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
     if('MaySell-CheckChart' in regression_data['filter1']):
@@ -6854,7 +6859,7 @@ def sell_af_high_indicators(regression_data, regressionResult, reg, ws):
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
     if(regression_data['PCT_day_change'] == 0):
         return False
-    Flag = False
+    flag = False
     if((mlpValue <= -4 or kNeighboursValue <= -4)
         and (regression_data['PCT_day_change'] > -5 and regression_data['PCT_change'] > -5 and abs(regression_data['PCT_day_change']) > 1.5 
             or (high_tail_pct(regression_data) > 1.5 or low_tail_pct(regression_data) < 1)
@@ -6939,19 +6944,19 @@ def sell_af_high_indicators(regression_data, regressionResult, reg, ws):
                 and (-15 <= kNeighboursValue < 1)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, '**(Test)sellHighMLPClaIndicators-Risky')
-                Flag = True
+                flag = True
         elif((-15 < mlpValue < -5 and mlpValue_other < -2)
             and (-15 <= kNeighboursValue < 1)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, '**(Test)sellHighMLPClaIndicators-Risky') 
-            Flag = True       
+            flag = True       
     elif(regression_data['PCT_day_change'] > -5 and regression_data['PCT_change'] > -5
         and (-15 < mlpValue < -5 and mlpValue_other < -2)
         and (-15 <= kNeighboursValue < 1)
         ):
         add_in_csv(regression_data, regressionResult, ws, None, '**(Test)sellHighMLPClaIndicators-Risky')
-        Flag = True
-    return Flag
+        flag = True
+    return flag
 
 def sell_af_high_tail(regression_data, regressionResult, reg, ws):
     if(low_tail_pct(regression_data) <= 1 and 1.3 <= high_tail_pct(regression_data) <= 2
@@ -6999,6 +7004,7 @@ def sell_af_down_continued(regression_data, regressionResult, reg, ws):
                 add_in_csv(regression_data, regressionResult, ws, '%%maySellDownContinueLT-3-Risky')
 
 def sell_af_high_volatility(regression_data, regressionResult, reg, ws):
+    flag = False
     if(high_tail_pct(regression_data) < 2 and low_tail_pct(regression_data) < 1.5):
         if(regression_data['PCT_day_change_pre1'] > -5
             and regression_data['PCT_change_pre1'] > -5
@@ -7012,10 +7018,11 @@ def sell_af_high_volatility(regression_data, regressionResult, reg, ws):
                 and -15 < regression_data['PCT_change']
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, '%%maySellHighVolatileDownContinueLT-8')
-                return True
+                flag = True
             else:
                 add_in_csv(regression_data, regressionResult, ws, None, '%%maySellAfter10:30HighVolatileDownContinueLT-8-Risky')
-                return True
+                flag = True
+    
     if(regression_data['forecast_day_PCT2_change'] > 0
         and regression_data['forecast_day_PCT3_change'] > 0
         and (regression_data['forecast_day_PCT7_change'] > 0 and regression_data['forecast_day_PCT10_change'] > 0
@@ -7028,15 +7035,16 @@ def sell_af_high_volatility(regression_data, regressionResult, reg, ws):
             )
         ):
         add_in_csv(regression_data, regressionResult, ws, None, '%%maySellAfter10:20HighVolatileLastDayUp-GT10')
-        return True
+        flag = True
     elif(
         regression_data['forecast_day_PCT7_change'] < 0
         and regression_data['forecast_day_PCT10_change'] < 0
         and 8 < regression_data['PCT_day_change'] < 20 and 8 < regression_data['PCT_change'] < 20
         ):
         add_in_csv(regression_data, regressionResult, ws, None, '%%mayBuyContinueHighVolatileLastDayUp-GT8')
-        return True
-    elif('%%mayBuyTail' in regression_data['filter']
+        flag = True
+        
+    if('%%mayBuyTail' in regression_data['filter']
         and (('downTrend' in regression_data['series_trend'])
              or ('DownTrend' in regression_data['series_trend'])
              or pct_day_change_trend(regression_data) <= -3
@@ -7055,9 +7063,15 @@ def sell_af_high_volatility(regression_data, regressionResult, reg, ws):
             and -2 < regression_data['month3LowChange'] < 2
             ):
             add_in_csv(regression_data, regressionResult, ws, None, '%%BuyDownTrend-lowTail')
-        return True    
-    else:
-        return False
+        flag = True
+        
+    if('NA$(shortDownTrend)' in regression_data['series_trend']
+        and regression_data['yearHighChange'] > -10
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'TEST:checkATRBuyOrSell')
+        flag = True
+            
+    return flag
 
 def sell_af_oi_negative(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
@@ -8790,7 +8804,7 @@ def sell_filter_all_accuracy(regression_data, regressionResult):
     sell_filter_tech_all_pct_change_accuracy(regression_data, regressionResult)
 
 def filter_accuracy_finder_regression(regression_data, regressionResult, ws):
-    Flag = False
+    flag = False
     if("MLBuy" in regression_data['filter'] and len(regression_data['filter']) > 9):
         if(is_reg_buy_from_filter(regression_data, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
             or is_reg_buy_from_filter(regression_data, 'filter_avg', 'filter_count', 'filter_pct')
@@ -8801,7 +8815,7 @@ def filter_accuracy_finder_regression(regression_data, regressionResult, ws):
             or (regression_data['filter_tech_all_pct_change_avg'] > 3 and is_reg_buy_from_filter(regression_data, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct'))
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Buy-Reg-GT0.75')
-            Flag = True
+            flag = True
             
             
             
@@ -8815,8 +8829,8 @@ def filter_accuracy_finder_regression(regression_data, regressionResult, ws):
             or (regression_data['filter_tech_all_pct_change_avg'] < -3 and is_reg_sell_from_filter(regression_data, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct'))
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Sell-Reg-LT-0.75')
-            Flag = True
-    return Flag
+            flag = True
+    return flag
         
 def is_reg_buy_from_filter(regression_data, filter_avg, filter_count, filter_pct):
     if(regression_data[filter_avg] > 0.75
@@ -8845,20 +8859,20 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
     is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
 
-    superFlag = False
+    superflag = False
     if(abs(regression_data['filter_345_avg']) > 2):
         flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
         if(flag):
-            superFlag = True
+            superflag = True
     flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
     if(flag):
-        superFlag = True
+        superflag = True
     flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_avg', 'filter_count', 'filter_pct')
     if(flag):
-        superFlag = True
+        superflag = True
     flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
     if(flag):
-        superFlag = True
+        superflag = True
     if(abs(regression_data['filter_tech_avg']) > 2
         #and((regression_data['filter_tech_avg'] > 0 and "MLBuy" in regression_data['filter'])
         #    or (regression_data['filter_tech_avg'] < 0 and "MLSell" in regression_data['filter'])
@@ -8868,28 +8882,28 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
         ):
         flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
         if(flag):
-            superFlag = True
+            superflag = True
     if(abs(regression_data['filter_tech_all_avg']) > 2):
         flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
         if(flag):
-            superFlag = True
+            superflag = True
     if(abs(regression_data['filter_tech_all_pct_change_avg']) > 5):
         flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
         if(flag):
-            superFlag = True
+            superflag = True
     
     flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
     if(flag):
-        superFlag = True
+        superflag = True
     flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
     if(flag):
-        superFlag = True
+        superflag = True
     flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_avg', 'filter_count', 'filter_pct')
     if(flag):
-        superFlag = True
+        superflag = True
     flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
     if(flag):
-        superFlag = True
+        superflag = True
     if(abs(regression_data['filter_tech_avg']) > 2 
         #and((regression_data['filter_tech_avg'] > 0 and "MLBuy" in regression_data['filter'])
         #    or (regression_data['filter_tech_avg'] < 0 and "MLSell" in regression_data['filter'])
@@ -8899,23 +8913,23 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
         ):    
         flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
         if(flag):
-            superFlag = True
+            superflag = True
     if(abs(regression_data['filter_tech_all_avg']) > 2): 
         flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
         if(flag):
-            superFlag = True
+            superflag = True
     if(abs(regression_data['filter_tech_all_pct_change_avg']) > 5):
         flag = filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
         if(flag):
-            superFlag = True    
+            superflag = True    
     
     if(buy_af_high_volatility(regression_data, regressionResult, reg, ws)):
-        superFlag = True
+        superflag = True
     if(sell_af_high_volatility(regression_data, regressionResult, reg, ws)):
-        superFlag = True 
+        superflag = True 
         
-    if(superFlag):
-        return superFlag       
+    if(superflag):
+        return superflag       
     
 def is_buy_from_filter_all_filter_relaxed(regression_data):
     if(is_buy_from_filter_relaxed(regression_data, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
@@ -9141,26 +9155,26 @@ def filter_accuracy_finder(regression_data, regression_high, regression_low, reg
             elif(regression_data[filter_avg] < 0 and is_algo_sell(regression_data)):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-7-Sell')       
                 
-        Flag = False
+        flag = False
         if(abs(float(regression_data[filter_avg])) > 1.5 
             and abs(regression_data[filter_pct]) > 50
             ):
-            Flag = True
+            flag = True
             
         if(("MLBuy" in regression_data['filter']) 
             and regression_data[filter_avg] >= 1.5
             and (regression_data[filter_pct] >= 80 or regression_data[filter_pct] == 0)
             ):
-            Flag = True
+            flag = True
             
         if(("MLSell" in regression_data['filter']) 
             and regression_data[filter_avg] <= -1.5
             and (regression_data[filter_pct] <= -80 or regression_data[filter_pct] == 0)
             ):
-            Flag = True
+            flag = True
                     
         #is_filter_risky(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_pct)
-        return Flag            
+        return flag            
 
 def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_pct):
     if(abs(regression_data[filter_avg]) >= 0.5
@@ -9168,7 +9182,7 @@ def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, fil
         #and (regression_data[filter_count_oth] >= 2
         #    or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2))
         ):
-        Flag = False
+        flag = False
         if(regression_data[filter_count] >= 3
             and abs(regression_data[filter_pct]) >= 85
             and abs(regression_data[filter_avg]) > 5
@@ -9177,7 +9191,7 @@ def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, fil
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-SUPER-Buy')
             elif(regression_data[filter_avg] < 0):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-SUPER-Sell')
-            Flag = True
+            flag = True
             
         if((regression_data[filter_count] >= 3
             and abs(regression_data[filter_pct]) >= 80
@@ -9220,7 +9234,7 @@ def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, fil
                     and regression_data['high'] < regression_data['high_pre1']
                     ):
                     add_in_csv(regression_data, regressionResult, ws, None, 'BuyUpTrend-%%mayBuyTail')
-                Flag = True
+                flag = True
                 
             if('%%maySellTail' in regression_data['filter']):
                 if(regression_data[filter_avg] > 0 
@@ -9242,23 +9256,23 @@ def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, fil
                     and regression_data['low'] > regression_data['low_pre1']
                     ):
                     add_in_csv(regression_data, regressionResult, ws, None, 'SellDownTrend-%%maySellTail')
-                Flag = True                
+                flag = True                
         if(abs(float(regression_data[filter_avg])) > 1.5 
             and abs(regression_data[filter_pct]) > 50
             ):
-            Flag = True
+            flag = True
             
         if(("MLBuy" in regression_data['filter']) 
             and regression_data[filter_avg] >= 1.5
             and (regression_data[filter_pct] >= 80 or regression_data[filter_pct] == 0)
             ):
-            Flag = True
+            flag = True
             
         if(("MLSell" in regression_data['filter']) 
             and regression_data[filter_avg] <= -1.5
             and (regression_data[filter_pct] <= -80 or regression_data[filter_pct] == 0)
             ):
-            Flag = True
+            flag = True
         
         #is_filter_risky(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_pct)  
         buyRisky, sellRisky =  is_filter_risky(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_pct, False)
@@ -9273,7 +9287,7 @@ def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, fil
             #and high_tail_pct(regression_data) < 1.5 and low_tail_pct(regression_data) < 2.5
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Buy')
-            Flag = True
+            flag = True
         
         if(len(regression_data['filter']) > 9
             and ((regression_data[filter_avg] <= -0.75 and regression_data[filter_count] >= 3 and regression_data[filter_pct] < -100 and regression_data['PCT_day_change'] > -2)
@@ -9286,8 +9300,8 @@ def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, fil
             #and low_tail_pct(regression_data) < 1.5 and high_tail_pct(regression_data) < 2.5
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Sell')
-            Flag = True  
-        return Flag
+            flag = True  
+        return flag
           
 def is_filter_risky(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_pct, update=True): 
     BuyRisky = False
