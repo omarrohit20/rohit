@@ -2833,7 +2833,7 @@ def buy_indicator_after_filter_accuracy(regression_data, regressionResult, reg, 
         buy_af_vol_contract(regression_data, regressionResult, reg, ws)
         buy_af_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
         buy_af_others(regression_data, regressionResult, reg, ws)
-        buy_af_high_volatility(regression_data, regressionResult, reg, ws)
+        #buy_af_high_volatility(regression_data, regressionResult, reg, ws)
       
 def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
     if('MayBuy-CheckChart' in regression_data['filter1']):
@@ -3449,7 +3449,7 @@ def buy_af_up_continued(regression_data, regressionResult, reg, ws):
             else:
                 add_in_csv(regression_data, regressionResult, ws, '%%mayBuyUpContinueGT3-Risky')
 
-def buy_af_high_volatility(regression_data, regressionResult, reg, ws):
+def buy_high_volatility(regression_data, regressionResult, reg, ws):
     flag = False
     if(regression_data['PCT_day_change'] < -8
         and regression_data['PCT_change'] < -8
@@ -6262,7 +6262,7 @@ def sell_indicator_after_filter_accuracy(regression_data, regressionResult, reg,
         sell_af_vol_contract(regression_data, regressionResult, reg, ws)
         sell_af_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
         sell_af_others(regression_data, regressionResult, reg, ws)
-        sell_af_high_volatility(regression_data, regressionResult, reg, ws)
+        #sell_af_high_volatility(regression_data, regressionResult, reg, ws)
         
 def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
     if('MaySell-CheckChart' in regression_data['filter1']):
@@ -7003,7 +7003,7 @@ def sell_af_down_continued(regression_data, regressionResult, reg, ws):
             else:
                 add_in_csv(regression_data, regressionResult, ws, '%%maySellDownContinueLT-3-Risky')
 
-def sell_af_high_volatility(regression_data, regressionResult, reg, ws):
+def sell_high_volatility(regression_data, regressionResult, reg, ws):
     flag = False
     if(high_tail_pct(regression_data) < 2 and low_tail_pct(regression_data) < 1.5):
         if(regression_data['PCT_day_change_pre1'] > -5
@@ -8923,9 +8923,9 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
         if(flag):
             superflag = True    
     
-    if(buy_af_high_volatility(regression_data, regressionResult, reg, ws)):
+    if(buy_high_volatility(regression_data, regressionResult, reg, ws)):
         superflag = True
-    if(sell_af_high_volatility(regression_data, regressionResult, reg, ws)):
+    if(sell_high_volatility(regression_data, regressionResult, reg, ws)):
         superflag = True 
         
     if(superflag):
@@ -9394,6 +9394,32 @@ def is_filter_risky(regression_data, regressionResult, reg, ws, filter_avg, filt
         ):
         if update:
             add_in_csv(regression_data, regressionResult, ws, None, 'RISKYTAIL')
+            
+    if((regression_data['PCT_day_change'] < 0
+        and regression_data['PCT_day_change_pre1'] < 0
+        and regression_data['PCT_day_change_pre2'] < 0
+        and regression_data['PCT_day_change_pre3'] < 0
+        )
+        or
+        (
+        regression_data['PCT_day_change'] < -3
+        or regression_data['PCT_change'] < -3
+        )
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'DOWNTREND-SELL')
+        
+    if((regression_data['PCT_day_change'] > 0
+        and regression_data['PCT_day_change_pre1'] > 0
+        and regression_data['PCT_day_change_pre2'] > 0
+        and regression_data['PCT_day_change_pre3'] > 0
+        )
+        or
+        (
+        regression_data['PCT_day_change'] > 3
+        or regression_data['PCT_change'] > 3
+        )
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'UPTREND-BUY')
             
     if(((regression_data['filter'] == " " and abs(float(regression_data[filter_avg])) > 0.75)
             or ("MLBuy" in regression_data['filter'] and float(regression_data[filter_avg]) < -0.5)
