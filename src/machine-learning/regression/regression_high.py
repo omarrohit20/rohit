@@ -250,7 +250,14 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     
     regression_data = {}
     if (kNeighbours and run_ml_algo):
-        result = performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor(max_depth=30, n_estimators=10, n_jobs=1))
+        #result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1, weights='distance'))
+        result = performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor(max_depth=2, n_estimators=100, min_samples_leaf=5, n_jobs=1, random_state= 0))
+#         result = performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=2,
+#            max_features='auto', max_leaf_nodes=None,
+#            min_impurity_decrease=0.0, min_impurity_split=None,
+#            min_samples_leaf=1, min_samples_split=2,
+#            min_weight_fraction_leaf=0.0, n_estimators=100, n_jobs=None,
+#            oob_score=False, random_state=0, verbose=0, warm_start=False))
         regression_data['kNeighboursValue_reg'] = float(result[0])
     else:
         regression_data['kNeighboursValue_reg'] = float(0)
@@ -264,9 +271,9 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
         
     if (kNeighbours and run_ml_algo):
         dfp = get_data_frame(df, 'kn', 'cla')
-        result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(n_estimators=10, n_jobs=1))
+        result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1, n_neighbors=3, weights='distance'))
+        #result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(n_estimators=10, n_jobs=1))
         #result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(random_state=1, n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1))
-        #result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.RadiusNeighborsClassifier(radius=1.0))
         regression_data['kNeighboursValue_cla'] = float(result[0])
     else:
         regression_data['kNeighboursValue_cla'] = float(0)
