@@ -3463,11 +3463,13 @@ def buy_high_volatility(regression_data, regressionResult, reg, ws):
              or ('UpTrend' in regression_data['series_trend'])
              or pct_day_change_trend(regression_data) >= 3
              )
+        and ('shortUpTrend-Mini' not in regression_data['series_trend'])
         ):
         countGt, countLt = pct_day_change_counter(regression_data)
         if(countGt > countLt 
             and regression_data['PCT_day_change'] < 3
             and regression_data['PCT_change'] < 3
+            and regression_data['forecast_day_PCT10_change'] < 10
             and (-2 > regression_data['month3HighChange'] or regression_data['month3HighChange'] > 2)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, '%%BuyUpTrend-highTail')
@@ -7049,11 +7051,13 @@ def sell_high_volatility(regression_data, regressionResult, reg, ws):
              or ('DownTrend' in regression_data['series_trend'])
              or pct_day_change_trend(regression_data) <= -3
             )
+        and ('shortDownTrend-Mini' not in regression_data['series_trend'])
         ):
         countGt, countLt = pct_day_change_counter(regression_data)
         if(countGt < countLt
             and regression_data['PCT_day_change'] > -3
             and regression_data['PCT_change'] > -3
+            and regression_data['forecast_day_PCT10_change'] > -10
             and (-2 > regression_data['month3LowChange'] or regression_data['month3LowChange'] > 2)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, '%%SellDownTrend-lowTail')
@@ -7067,6 +7071,9 @@ def sell_high_volatility(regression_data, regressionResult, reg, ws):
         
     if('NA$(shortDownTrend)' in regression_data['series_trend']
         and regression_data['yearHighChange'] > -10
+        and ((regression_data['PCT_day_change'] < -1 and regression_data['PCT_change'] < -1)
+             or (regression_data['PCT_day_change'] > 1.5 and regression_data['PCT_change'] > 1.5)
+            )
         ):
         add_in_csv(regression_data, regressionResult, ws, None, 'TEST:checkATRBuyOrSell')
         flag = True
