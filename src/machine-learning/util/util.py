@@ -434,6 +434,31 @@ def pct_day_change_counter(regression_data):
     
     return countGt, countLt
 
+def pct_day_change_counter_gt1dot5(regression_data):
+    countGt = 0
+    countLt = 0
+    if(regression_data['PCT_day_change'] > 1):
+        countGt = countGt + 1
+    if(regression_data['PCT_day_change'] < -1):
+        countLt = countLt + 1
+        
+    if(regression_data['PCT_day_change_pre1'] > 1):
+        countGt = countGt + 1
+    if(regression_data['PCT_day_change_pre1'] < -1):
+        countLt = countLt + 1
+        
+    if(regression_data['PCT_day_change_pre2'] > 1):
+        countGt = countGt + 1
+    if(regression_data['PCT_day_change_pre2'] < -1):
+        countLt = countLt + 1
+        
+    if(regression_data['PCT_day_change_pre3'] > 1):
+        countGt = countGt + 1
+    if(regression_data['PCT_day_change_pre3'] < -1):
+        countLt = countLt + 1
+    
+    return countGt, countLt
+
 def pct_day_change_trend(regression_data):
     countGt = 0
     countLt = 0
@@ -478,6 +503,7 @@ def pct_day_change_trend(regression_data):
     return count
     
 def pct_change_negative_trend(regression_data):
+    countGt1, countLt1 = pct_day_change_counter_gt1dot5(regression_data)
     if (#regression_data['forecast_day_PCT_change'] < 0
         regression_data['forecast_day_PCT2_change'] < 0
         and regression_data['forecast_day_PCT3_change'] < 0
@@ -486,6 +512,12 @@ def pct_change_negative_trend(regression_data):
 #             )
         and regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT2_change']
         and low_counter(regression_data) >= 2
+#         and (regression_data['high'] < regression_data['high_pre1']
+#              or regression_data['high'] < regression_data['high_pre2']
+#              or regression_data['high'] < regression_data['high_pre3']
+#              or regression_data['high'] < regression_data['high_pre4']
+#              )
+        #and countLt1 >= 2
         ):
         pct_change_list = [regression_data['forecast_day_PCT_change'],
                            regression_data['forecast_day_PCT2_change'],
@@ -580,10 +612,17 @@ def pct_change_negative_trend(regression_data):
     return 'NA'           
     
 def pct_change_positive_trend(regression_data):
+    countGt1, countLt1 = pct_day_change_counter_gt1dot5(regression_data)
     if (regression_data['forecast_day_PCT2_change'] > 0
         and regression_data['forecast_day_PCT3_change'] > 0
         and regression_data['forecast_day_PCT3_change'] > regression_data['forecast_day_PCT2_change']
         and high_counter(regression_data) >= 2
+#         and (regression_data['low'] > regression_data['low_pre1']
+#              or regression_data['low'] > regression_data['low_pre2']
+#              or regression_data['low'] > regression_data['low_pre3']
+#              or regression_data['low'] > regression_data['low_pre4']
+#              )
+        #and countGt1 >= 2
         ):
         pct_change_list = [regression_data['forecast_day_PCT_change'],
                            regression_data['forecast_day_PCT2_change'],
@@ -705,10 +744,17 @@ def pct_change_positive_trend_medium(regression_data):
     return 'NA'          
 
 def pct_change_negative_trend_short(regression_data):
+    countGt1, countLt1 = pct_day_change_counter_gt1dot5(regression_data)
     if(regression_data['forecast_day_PCT2_change'] < 0
         and regression_data['forecast_day_PCT3_change'] < 0
         and regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT2_change']
         and low_counter(regression_data) >= 2
+        and (regression_data['high'] < regression_data['high_pre1']
+             or regression_data['high'] < regression_data['high_pre2']
+             or regression_data['high'] < regression_data['high_pre3']
+             or regression_data['high'] < regression_data['high_pre4']
+             )
+        and countLt1 >= 2
         ):
         if(regression_data['low'] < regression_data['low_pre2']):
             if(regression_data['bar_low'] < regression_data['bar_low_pre1']
@@ -739,10 +785,17 @@ def pct_change_negative_trend_short(regression_data):
     return 'NA'           
     
 def pct_change_positive_trend_short(regression_data):
+    countGt1, countLt1 = pct_day_change_counter_gt1dot5(regression_data)
     if(regression_data['forecast_day_PCT2_change'] > 0
         and regression_data['forecast_day_PCT3_change'] > 0
         and regression_data['forecast_day_PCT3_change'] > regression_data['forecast_day_PCT2_change']
         and high_counter(regression_data) >= 2
+        and (regression_data['low'] > regression_data['low_pre1']
+             or regression_data['low'] > regression_data['low_pre2']
+             or regression_data['low'] > regression_data['low_pre3']
+             or regression_data['low'] > regression_data['low_pre4']
+             )
+        and countGt1 >= 2
         ):
         if(regression_data['high'] > regression_data['high_pre2']):
             if(regression_data['bar_high'] > regression_data['bar_high_pre1']
@@ -8867,10 +8920,9 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
 
     superflag = False
-    if(abs(regression_data['filter_345_avg']) > 2):
-        flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
-        if(flag):
-            superflag = True
+    flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
+    if(flag):
+        superflag = True
     flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, reg, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
     if(flag):
         superflag = True
@@ -9051,11 +9103,21 @@ def filter_accuracy_finder(regression_data, regression_high, regression_low, reg
         #and (regression_data[filter_count_oth] >= 2
         #    or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2))
         ):
-        if((("MLSell" in regression_data['filter']) and float(regression_data[filter_avg]) > 0 and abs(float(regression_data[filter_pct])) < 80)
-            or (("MLBuy" in regression_data['filter']) and float(regression_data[filter_avg]) < 0 and abs(float(regression_data[filter_pct])) < 80)
+        Flag = False
+        if(regression_data[filter_count] >= 2
+            and abs(regression_data[filter_pct]) >= 90
+            and abs(regression_data[filter_avg]) >= 2
+            ):
+            if(regression_data[filter_avg] >= 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-8-Buy')
+            elif(regression_data[filter_avg] < 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-8-Sell')
+            Flag = True
+        
+        if((("MLSell" in regression_data['filter']) and (float(regression_data[filter_avg]) > 0) and (abs(float(regression_data[filter_pct]) < 80)))
+            or (("MLBuy" in regression_data['filter']) and (float(regression_data[filter_avg]) < 0) and (abs(float(regression_data[filter_pct]) < 80)))
             ):
             return False
-                     
         
         if(regression_data[filter_count] >= 5
             and abs(regression_data[filter_pct]) >= 100
@@ -9160,11 +9222,13 @@ def filter_accuracy_finder(regression_data, regression_high, regression_low, reg
             if(regression_data[filter_avg] >= 0 and is_algo_buy(regression_data)):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-7-Buy')
             elif(regression_data[filter_avg] < 0 and is_algo_sell(regression_data)):
-                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-7-Sell')       
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-7-Sell')
+                
+           
                 
         flag = False
-        if(abs(float(regression_data[filter_avg])) > 1.5 
-            and abs(regression_data[filter_pct]) > 50
+        if(abs(float(regression_data[filter_avg])) > 1.25 
+            and abs(regression_data[filter_pct]) > 65
             ):
             flag = True
             
@@ -9313,6 +9377,33 @@ def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, fil
 def is_filter_risky(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_pct, update=True): 
     BuyRisky = False
     SellRisky = False
+    
+    if((regression_data['PCT_day_change'] < 0
+        and regression_data['PCT_day_change_pre1'] < 0
+        and regression_data['PCT_day_change_pre2'] < 0
+        and regression_data['PCT_day_change_pre3'] < 0
+        )
+        or
+        (
+        regression_data['PCT_day_change'] < -3
+        or regression_data['PCT_change'] < -3
+        )
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'DOWNTREND-SELL')
+        
+    if((regression_data['PCT_day_change'] > 0
+        and regression_data['PCT_day_change_pre1'] > 0
+        and regression_data['PCT_day_change_pre2'] > 0
+        and regression_data['PCT_day_change_pre3'] > 0
+        )
+        or
+        (
+        regression_data['PCT_day_change'] > 3
+        or regression_data['PCT_change'] > 3
+        )
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'UPTREND-BUY')
+    
     dojivalue = 1
     if(0 < float(regression_data['PCT_day_change']) < 1
         and -3 < float(regression_data['PCT_change']) < 3
@@ -9358,7 +9449,7 @@ def is_filter_risky(regression_data, regressionResult, reg, ws, filter_avg, filt
             add_in_csv(regression_data, regressionResult, ws, None, 'RISKYDOJI-Sell')
         SellRisky = True
         
-    if(abs(float(regression_data['PCT_day_change'])) < 0.7
+    if(abs(float(regression_data['PCT_day_change'])) < 0.85
         and -3 < float(regression_data['PCT_change']) < 3
         #and regression_data['series_trend'] == "NA$NA:NA$NA"
         ):
@@ -9401,32 +9492,6 @@ def is_filter_risky(regression_data, regressionResult, reg, ws, filter_avg, filt
         ):
         if update:
             add_in_csv(regression_data, regressionResult, ws, None, 'RISKYTAIL')
-            
-    if((regression_data['PCT_day_change'] < 0
-        and regression_data['PCT_day_change_pre1'] < 0
-        and regression_data['PCT_day_change_pre2'] < 0
-        and regression_data['PCT_day_change_pre3'] < 0
-        )
-        or
-        (
-        regression_data['PCT_day_change'] < -3
-        or regression_data['PCT_change'] < -3
-        )
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, 'DOWNTREND-SELL')
-        
-    if((regression_data['PCT_day_change'] > 0
-        and regression_data['PCT_day_change_pre1'] > 0
-        and regression_data['PCT_day_change_pre2'] > 0
-        and regression_data['PCT_day_change_pre3'] > 0
-        )
-        or
-        (
-        regression_data['PCT_day_change'] > 3
-        or regression_data['PCT_change'] > 3
-        )
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, 'UPTREND-BUY')
             
     if(((regression_data['filter'] == " " and abs(float(regression_data[filter_avg])) > 0.75)
             or ("MLBuy" in regression_data['filter'] and float(regression_data[filter_avg]) < -0.5)
