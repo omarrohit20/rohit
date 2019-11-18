@@ -9125,6 +9125,14 @@ def filter_accuracy_finder(regression_data, regression_high, regression_low, reg
             return False
                 
         if(regression_data[filter_count] >= 2
+            and abs(regression_data[filter_pct]) >= 90
+            and abs(regression_data[filter_avg]) >= 2
+            ):
+            if(regression_data[filter_avg] >= 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-8-Buy')
+            elif(regression_data[filter_avg] < 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-8-Sell')
+        if(regression_data[filter_count] >= 2
             and abs(regression_data[filter_pct]) >= 85
             and abs(regression_data[filter_avg]) >= 3
             ):
@@ -9149,14 +9157,7 @@ def filter_accuracy_finder(regression_data, regression_high, regression_low, reg
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-7-Buy')
             elif(regression_data[filter_avg] < 0 and is_algo_sell(regression_data)):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-7-Sell')
-        elif(regression_data[filter_count] >= 2
-            and abs(regression_data[filter_pct]) >= 90
-            and abs(regression_data[filter_avg]) >= 2
-            ):
-            if(regression_data[filter_avg] >= 0):
-                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-8-Buy')
-            elif(regression_data[filter_avg] < 0):
-                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-8-Sell') 
+         
          
            
         flag = False
@@ -9342,7 +9343,7 @@ def filter_accuracy_finder_stable(regression_data, regressionResult, reg, ws, fi
                     and filter_avg != 'filter_345_avg'
                     ):
                     add_in_csv(regression_data, regressionResult, ws, None, 'Sell-%%mayBuyTail-Risky')
-                elif((regression_data[filter_avg] > 2.5 or (regression_data[filter_avg] > 1 and regression_data[filter_count] >= 3)) 
+                elif((regression_data[filter_avg] > 2.5 or (regression_data[filter_avg] > 2 and regression_data[filter_count] >= 3)) 
                     and ("MLSell" not in regression_data['filter'])
                     and (pct_day_change_trend(regression_data) >= 0)
                     ):
@@ -9363,7 +9364,7 @@ def filter_accuracy_finder_stable(regression_data, regressionResult, reg, ws, fi
                     and filter_avg != 'filter_345_avg'
                     ):
                     add_in_csv(regression_data, regressionResult, ws, None, 'Buy-%%maySellTail-Risky')
-                elif((regression_data[filter_avg] < -2.5 or (regression_data[filter_avg] < -1 and regression_data[filter_count] >= 3)) 
+                elif((regression_data[filter_avg] < -2.5 or (regression_data[filter_avg] < -2 and regression_data[filter_count] >= 3)) 
                     and ("MLBuy" not in regression_data['filter'])
                     and (pct_day_change_trend(regression_data) <= 0)
                     ):
