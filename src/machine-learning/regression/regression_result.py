@@ -392,7 +392,15 @@ def calculateParallel(threads=2, futures=None):
     pool = ThreadPool(threads)
     scrips = []
     for data in db.scrip.find({'futures':futures}):
-        scrips.append(data['scrip'])
+        hsdata = db.history.find_one({'dataset_code':data['scrip']})
+    
+        processing_date = '2019-11-18'
+        if(hsdata is None or (np.array(hsdata['data'])).size < 1000):
+            print('Missing or very less Data for ', data['scrip'])
+        elif(hsdata['end_date'] != processing_date):
+            print('End Date ', hsdata['end_date'], 'not recent for', data['scrip'])
+        else: 
+            scrips.append(data['scrip'])
     scrips.sort()
     pool.map(result_data, scrips)
     #pool.map(result_data_cla, scrips)
