@@ -7170,7 +7170,28 @@ def sell_high_volatility(regression_data, regressionResult, reg, ws):
              or (regression_data['PCT_day_change'] > 1.5 and regression_data['PCT_change'] > 1.5)
             )
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, 'TEST:checkATRBuyOrSell')
+        add_in_csv(regression_data, regressionResult, ws, None, 'TEST:checkDownTrendATRBuyOrSell')
+        flag = True
+    if((('(shortUpTrend)$NA' in regression_data['series_trend']) 
+            or
+            (regression_data['PCT_day_change'] > 0 
+             and regression_data['PCT_day_change_pre1'] > 0
+             and regression_data['PCT_day_change_pre2'] > 0
+             and regression_data['PCT_day_change_pre3'] > 0
+            )
+        ) 
+        and (regression_data['yearHighChange'] < -5
+#              or (regression_data['yearHighChange'] < 20
+#                  and abs(regression_data['yearHighChange']) > abs(regression_data['yearLowChange'])
+#                  and abs(regression_data['PCT_day_change']) < high_tail_pct(regression_data)
+#                  and high_tail_pct(regression_data) > 1
+#                 )
+            )
+        and ((regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0)
+             or (regression_data['PCT_day_change'] < -1.5 and regression_data['PCT_change'] < -1.5)
+            )
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'TEST:checkUpTrendATRBuyOrSell')
         flag = True
             
     return flag
