@@ -9534,7 +9534,17 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, reg, ws
             #and low_tail_pct(regression_data) < 1.5 and high_tail_pct(regression_data) < 2.5
             ):
             add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Sell')
-            flag = True  
+            flag = True
+            
+        if(regression_data[filter_count] > 7
+            and abs(regression_data[filter_pct]) > 75
+            and abs(regression_data[filter_avg]) > 0.8
+            ):
+            if(regression_data[filter_avg] >= 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky-01-Buy')
+            elif(regression_data[filter_avg] < 0):
+                add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky-01-Sell')  
+            flag = True
         return flag
          
 def is_filter_risky(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_pct, update=True): 
