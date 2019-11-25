@@ -9601,11 +9601,11 @@ def is_filter_risky(regression_data, regressionResult, reg, ws, filter_avg, filt
     if(regression_data[filter_avg] < -0.75
         and regression_data['PCT_day_change'] > 0
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, 'DOWNTREND-SELL')
+        add_in_csv(regression_data, regressionResult, ws, None, 'DOWNTREND-MARKET-SELL')
     elif(regression_data[filter_avg] > 0.75
         and regression_data['PCT_day_change'] < 0
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, 'UPTREND-BUY')
+        add_in_csv(regression_data, regressionResult, ws, None, 'UPTREND-MARKET-BUY')
     
     dojivalue = 1
     if(0 < float(regression_data['PCT_day_change']) < 1
