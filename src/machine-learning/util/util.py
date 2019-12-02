@@ -578,6 +578,12 @@ def pct_change_negative_trend(regression_data):
     elif(regression_data['forecast_day_PCT10_change'] < regression_data['forecast_day_PCT7_change'] < regression_data['forecast_day_PCT3_change'] < 0
         ):
         return '(trendDown10<7<3)'
+    elif(pct_day_change_trend(regression_data) <= -3
+        and abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])
+        and regression_data['forecast_day_PCT5_change'] < 0
+        and regression_data['forecast_day_PCT7_change'] < 0
+        ):
+        return '(trendDown-MLowLTMHigh)'
     elif (regression_data['forecast_day_PCT_change'] > 0  
         and regression_data['forecast_day_PCT_change'] < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change']
         and high_counter(regression_data) >= 3
@@ -670,7 +676,13 @@ def pct_change_positive_trend(regression_data):
 #         return '(trendUpAll)' 
     elif(regression_data['forecast_day_PCT10_change'] > regression_data['forecast_day_PCT7_change'] > regression_data['forecast_day_PCT3_change'] > 0
         ):
-        return '(trendUp10>7>3)'    
+        return '(trendUp10>7>3)'
+    elif(pct_day_change_trend(regression_data) >= 3
+        and abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])
+        and regression_data['forecast_day_PCT5_change'] > 0
+        and regression_data['forecast_day_PCT7_change'] > 0
+        ):
+        return '(trendDown-MLowLTMHigh)'    
     elif (regression_data['forecast_day_PCT_change'] < 0  
         and regression_data['forecast_day_PCT_change'] > regression_data['forecast_day_PCT2_change'] > regression_data['forecast_day_PCT3_change'] > 0
         and low_counter(regression_data) >= 3
@@ -9445,7 +9457,7 @@ def filter_accuracy_finder_stable(regression_data, regressionResult, reg, ws, fi
         flag = False
         if(regression_data[filter_count] >= 5
             and abs(regression_data[filter_pct]) > 70
-            and abs(regression_data[filter_avg]) > 0.75
+            and abs(regression_data[filter_avg]) > 1.5
             ):
             if(regression_data[filter_avg] >= 0
                 and ((abs(regression_data[filter_avg]) > 1 and abs(regression_data[filter_pct]) >= 80) or is_algo_buy(regression_data))
@@ -9600,6 +9612,8 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, reg, ws
         if(regression_data[filter_count] > 7
             and abs(regression_data[filter_pct]) > 80
             and abs(regression_data[filter_avg]) > 1
+            and abs(regression_data['PCT_day_change']) > 1
+            and abs(regression_data['PCT_change']) > 1
             ):
             if(regression_data[filter_avg] >= 0):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-Risky-01-Buy')
