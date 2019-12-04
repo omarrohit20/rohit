@@ -1732,7 +1732,118 @@ def filterMA(regression_data, regressionResult):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SHORTTERM:NearSMA100')
         elif(0 < regression_data['SMA100'] < 5):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, '##SHORTTERM:CrossoverSMA100')
+
+def filterTrend(regression_data, regressionResult):
+    flag = False
+    ws = None
+    if((('NA$(shortDownTrend)' in regression_data['series_trend']) 
+            or
+            (regression_data['PCT_day_change'] < 0 
+             and regression_data['PCT_day_change_pre1'] < 0
+             and regression_data['PCT_day_change_pre2'] < 0
+             and regression_data['PCT_day_change_pre3'] < 0
+            )
+        ) 
+        and (regression_data['yearHighChange'] > -10
+             or (regression_data['yearHighChange'] > -20
+                 and abs(regression_data['yearHighChange']) < abs(regression_data['yearLowChange'])
+                 and abs(regression_data['PCT_day_change']) < low_tail_pct(regression_data)
+                 and low_tail_pct(regression_data) > 1
+                )
+            )
+        and ((regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0)
+             or (regression_data['PCT_day_change'] > 1.5 and regression_data['PCT_change'] > 1.5)
+            )
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'TEST:yearHighCheckDownTrendATRBuyOrSell')
+        flag = True
+    elif((('NA$(shortDownTrend)' in regression_data['series_trend']) 
+            or
+            (regression_data['PCT_day_change'] < 0 
+             and regression_data['PCT_day_change_pre1'] < 0
+             and regression_data['PCT_day_change_pre2'] < 0
+             and regression_data['PCT_day_change_pre3'] < 0
+            )
+        ) 
+        and (regression_data['yearLowChange'] > 5)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'TEST:checkDownTrendATRBuyOrSell')
+        flag = True
+    
+    if((('(shortUpTrend)$NA' in regression_data['series_trend']) 
+            or
+            (regression_data['PCT_day_change'] > 0 
+             and regression_data['PCT_day_change_pre1'] > 0
+             and regression_data['PCT_day_change_pre2'] > 0
+             and regression_data['PCT_day_change_pre3'] > 0
+            )
+        ) 
+        and (regression_data['yearLowChange'] < 10
+             or (regression_data['yearLowChange'] < 20
+                 and abs(regression_data['yearHighChange']) > abs(regression_data['yearLowChange'])
+                 and abs(regression_data['PCT_day_change']) < high_tail_pct(regression_data)
+                 and low_tail_pct(regression_data) > 1
+                )
+            )
+        and ((regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0)
+             or (regression_data['PCT_day_change'] > 1.5 and regression_data['PCT_change'] > 1.5)
+            )
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'TEST:yearLowCheckUpTrendATRBuyOrSell')
+        flag = True
+    elif((('(shortUpTrend)$NA' in regression_data['series_trend']) 
+            or
+            (regression_data['PCT_day_change'] > 0 
+             and regression_data['PCT_day_change_pre1'] > 0
+             and regression_data['PCT_day_change_pre2'] > 0
+             and regression_data['PCT_day_change_pre3'] > 0
+            )
+        ) 
+        and (regression_data['yearHighChange'] < -5)
+        ):
+        if(high_tail_pct(regression_data) > 1.5 
+           and regression_data['PCT_day_change'] < 1
+           and regression_data['PCT_day_change_pre1'] < 1
+           #and (regression_data['PCT_day_change_pre2'] > 2 or regression_data['PCT_day_change_pre3'] > 2)
+           ):
+           add_in_csv(regression_data, regressionResult, ws, None, 'maySellShortUpTrendDoji')
+        elif(high_tail_pct(regression_data) < 1.5 
+           and 2 < regression_data['PCT_day_change'] < 4.5
+           and 2 < regression_data['PCT_change'] < 5
+           and regression_data['PCT_day_change_pre1'] < 0
+           and regression_data['PCT_day_change_pre2'] > 0.5
+           ):
+           add_in_csv(regression_data, regressionResult, ws, None, 'mayBuyShortUpTrend')
+        elif(high_tail_pct(regression_data) < 1.5 
+           and low_tail_pct(regression_data) > 1.5
+           and -1.5 < regression_data['PCT_day_change'] 
+           and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0)
+           and (regression_data['PCT_day_change_pre1'] > 2 or regression_data['PCT_day_change_pre2'] > 2)
+           ):
+           add_in_csv(regression_data, regressionResult, ws, None, 'mayBuyShortUpTrendDojiNegative')
+        elif(high_tail_pct(regression_data) < 1.5 
+           and low_tail_pct(regression_data) > 1.5
+           and 0 < regression_data['PCT_day_change'] < 1.5
+           and (regression_data['PCT_day_change_pre1'] > 2 and regression_data['PCT_day_change_pre2'] > 0)
+           ):
+           add_in_csv(regression_data, regressionResult, ws, None, 'mayBuyShortUpTrendDojiPositive')
+        elif(regression_data['PCT_day_change_pre1'] > 1.5
+           ):
+           if(high_tail_pct(regression_data) < 1.5
+              and 4 < regression_data['PCT_day_change'] < 7
+              and 4 < regression_data['PCT_change'] < 7
+              and regression_data['PCT_day_change_pre2'] < 0
+              ): 
+              add_in_csv(regression_data, regressionResult, ws, None, 'TestmayBuyShortUpTrend')
+           elif(3 < regression_data['PCT_day_change'] < 5
+              and 3 < regression_data['PCT_change'] < 5
+              ):
+              add_in_csv(regression_data, regressionResult, ws, None, 'TestmaySellShortUpTrend')
+        add_in_csv(regression_data, regressionResult, ws, None, 'TEST:checkUpTrendATRBuyOrSell')
+        flag = True
             
+    return flag
+           
 def base_line(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
@@ -3540,6 +3651,13 @@ def buy_high_volatility(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, None, '%%mayBuyHighVolatileAfter10:20DownL2T-20')
         flag = True
+    elif(high_tail_pct(regression_data) < 2):
+        if(5 < regression_data['PCT_day_change'] < 10
+            and 2 < regression_data['PCT_change'] < 10
+            and (regression_data['forecast_day_PCT3_change'] < 0 or regression_data['forecast_day_PCT5_change'] < 0 or regression_data['forecast_day_PCT7_change'] < 0)
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, 'Test:%%mayBuyHighVolatileUpContinueGT-5')
+            flag = True
     
     if('%%maySellTail' in regression_data['filter']
         and (('upTrend' in regression_data['series_trend'])
@@ -3568,7 +3686,8 @@ def buy_high_volatility(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, None, 'TEST:shortDownTrend-MayReversalBuy')
         flag = True
-        
+    
+    filterTrend(regression_data, regressionResult)     
     return flag
 
 def buy_af_oi_negative(regression_data, regressionResult, reg, ws):
@@ -7116,6 +7235,13 @@ def sell_high_volatility(regression_data, regressionResult, reg, ws):
             else:
                 add_in_csv(regression_data, regressionResult, ws, None, '%%maySellAfter10:30HighVolatileDownContinueLT-8-Risky')
                 flag = True
+    elif(low_tail_pct(regression_data) < 2):
+        if(-10 < regression_data['PCT_day_change'] < -5
+            and -10 < regression_data['PCT_change'] < -2
+            and (regression_data['forecast_day_PCT3_change'] > 0 or regression_data['forecast_day_PCT5_change'] > 0 or regression_data['forecast_day_PCT7_change'] > 0)
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, 'Test:%%maySellHighVolatileDownContinueLT-5')
+            flag = True
     
     if(regression_data['forecast_day_PCT2_change'] > 0
         and regression_data['forecast_day_PCT3_change'] > 0
@@ -7161,87 +7287,7 @@ def sell_high_volatility(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, '%%BuyDownTrend-lowTail-nearMonth3Low')
         flag = True
         
-    if((('NA$(shortDownTrend)' in regression_data['series_trend']) 
-            or
-            (regression_data['PCT_day_change'] < 0 
-             and regression_data['PCT_day_change_pre1'] < 0
-             and regression_data['PCT_day_change_pre2'] < 0
-             and regression_data['PCT_day_change_pre3'] < 0
-            )
-        ) 
-        and (regression_data['yearHighChange'] > -10
-             or (regression_data['yearHighChange'] > -20
-                 and abs(regression_data['yearHighChange']) < abs(regression_data['yearLowChange'])
-                 and abs(regression_data['PCT_day_change']) < low_tail_pct(regression_data)
-                 and low_tail_pct(regression_data) > 1
-                )
-            )
-        and ((regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0)
-             or (regression_data['PCT_day_change'] > 1.5 and regression_data['PCT_change'] > 1.5)
-            )
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, 'TEST:checkDownTrendATRBuyOrSell')
-        flag = True
-    if((('(shortUpTrend)$NA' in regression_data['series_trend']) 
-            or
-            (regression_data['PCT_day_change'] > 0 
-             and regression_data['PCT_day_change_pre1'] > 0
-             and regression_data['PCT_day_change_pre2'] > 0
-             and regression_data['PCT_day_change_pre3'] > 0
-            )
-        ) 
-        and (regression_data['yearHighChange'] < -5
-#              or (regression_data['yearHighChange'] < 20
-#                  and abs(regression_data['yearHighChange']) > abs(regression_data['yearLowChange'])
-#                  and abs(regression_data['PCT_day_change']) < high_tail_pct(regression_data)
-#                  and high_tail_pct(regression_data) > 1
-#                 )
-            )
-#         and ((regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0)
-#              or (regression_data['PCT_day_change'] < -1.5 and regression_data['PCT_change'] < -1.5)
-#             )
-        ):
-        if(high_tail_pct(regression_data) > 1.5 
-           and regression_data['PCT_day_change'] < 1
-           and regression_data['PCT_day_change_pre1'] < 1
-           #and (regression_data['PCT_day_change_pre2'] > 2 or regression_data['PCT_day_change_pre3'] > 2)
-           ):
-           add_in_csv(regression_data, regressionResult, ws, None, 'maySellShortUpTrendDoji')
-        elif(high_tail_pct(regression_data) < 1.5 
-           and 2 < regression_data['PCT_day_change'] < 4.5
-           and 2 < regression_data['PCT_change'] < 5
-           and regression_data['PCT_day_change_pre1'] < 0
-           and regression_data['PCT_day_change_pre2'] > 0.5
-           ):
-           add_in_csv(regression_data, regressionResult, ws, None, 'mayBuyShortUpTrend')
-        elif(high_tail_pct(regression_data) < 1.5 
-           and low_tail_pct(regression_data) > 1.5
-           and -1.5 < regression_data['PCT_day_change'] 
-           and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0)
-           and (regression_data['PCT_day_change_pre1'] > 2 or regression_data['PCT_day_change_pre2'] > 2)
-           ):
-           add_in_csv(regression_data, regressionResult, ws, None, 'mayBuyShortUpTrendDojiNegative')
-        elif(high_tail_pct(regression_data) < 1.5 
-           and low_tail_pct(regression_data) > 1.5
-           and 0 < regression_data['PCT_day_change'] < 1.5
-           and (regression_data['PCT_day_change_pre1'] > 2 and regression_data['PCT_day_change_pre2'] > 0)
-           ):
-           add_in_csv(regression_data, regressionResult, ws, None, 'mayBuyShortUpTrendDojiPositive')
-        elif(regression_data['PCT_day_change_pre1'] > 1.5
-           ):
-           if(high_tail_pct(regression_data) < 1.5
-              and 4 < regression_data['PCT_day_change'] < 7
-              and 4 < regression_data['PCT_change'] < 7
-              and regression_data['PCT_day_change_pre2'] < 0
-              ): 
-              add_in_csv(regression_data, regressionResult, ws, None, 'TestmayBuyShortUpTrend')
-           elif(3 < regression_data['PCT_day_change'] < 5
-              and 3 < regression_data['PCT_change'] < 5
-              ):
-              add_in_csv(regression_data, regressionResult, ws, None, 'TestmaySellShortUpTrend')
-        add_in_csv(regression_data, regressionResult, ws, None, 'TEST:checkUpTrendATRBuyOrSell')
-        flag = True
-            
+    filterTrend(regression_data, regressionResult)     
     return flag
 
 def sell_af_oi_negative(regression_data, regressionResult, reg, ws):

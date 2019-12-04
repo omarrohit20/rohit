@@ -31,6 +31,7 @@ from util.util import buy_filter_345_accuracy, sell_filter_345_accuracy
 from util.util import buy_filter_accuracy, sell_filter_accuracy
 from util.util import buy_filter_pct_change_accuracy, sell_filter_pct_change_accuracy
 from util.util import buy_filter_all_accuracy, sell_filter_all_accuracy
+from util.util import filterTrend
 
 
 
@@ -51,11 +52,15 @@ ws_highBuyAllFilterAcc.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndi
 ws_lowSellAllFilterAcc = wb.create_sheet("LowSellAllFilterAcc")
 ws_lowSellAllFilterAcc.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "mHighChange", "mLowChange", "w2HighChange", "w2LowChange", "wHighChange", "wLowChange", "trend", "Score", "HighTail", "LowTail", "Close", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter345Acc", "Filter345Count", "Filter345Pct", "Filter1Acc", "Filter1Count", "Filter1Pct", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterPctDayChangePct", "FilterAllAcc", "FilterAllCount", "FilterAllPct", "FilterTechAcc", "FilterTechCount", "FilterTechPct", "FilterTechAllAcc", "FilterTechAllCount", "FilterTechAllPct", "FilterTechAllPctChangeAcc", "FilterTechAllPctChangeCount", "FilterTechAllPctChangePct"])
 
+ws_highAnalysis = wb.create_sheet("HighAnalysis")
+ws_highAnalysis.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "mHighChange", "mLowChange", "w2HighChange", "w2LowChange", "wHighChange", "wLowChange", "trend", "Score", "HighTail", "LowTail", "Close", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter345Acc", "Filter345Count", "Filter345Pct", "Filter1Acc", "Filter1Count", "Filter1Pct", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterPctDayChangePct", "FilterAllAcc", "FilterAllCount", "FilterAllPct", "FilterTechAcc", "FilterTechCount", "FilterTechPct", "FilterTechAllAcc", "FilterTechAllCount", "FilterTechAllPct", "FilterTechAllPctChangeAcc", "FilterTechAllPctChangeCount", "FilterTechAllPctChangePct"])
+ws_lowAnalysis = wb.create_sheet("LowAnalysis")
+ws_lowAnalysis.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "mHighChange", "mLowChange", "w2HighChange", "w2LowChange", "wHighChange", "wLowChange", "trend", "Score", "HighTail", "LowTail", "Close", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter345Acc", "Filter345Count", "Filter345Pct", "Filter1Acc", "Filter1Count", "Filter1Pct", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterPctDayChangePct", "FilterAllAcc", "FilterAllCount", "FilterAllPct", "FilterTechAcc", "FilterTechCount", "FilterTechPct", "FilterTechAllAcc", "FilterTechAllCount", "FilterTechAllPct", "FilterTechAllPctChangeAcc", "FilterTechAllPctChangeCount", "FilterTechAllPctChangePct"])
+
 ws_highBothBuy = wb.create_sheet("HighBothBuy")
 ws_highBothBuy.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "mHighChange", "mLowChange", "w2HighChange", "w2LowChange", "wHighChange", "wLowChange", "trend", "Score", "HighTail", "LowTail", "Close", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter345Acc", "Filter345Count", "Filter345Pct", "Filter1Acc", "Filter1Count", "Filter1Pct", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterPctDayChangePct", "FilterAllAcc", "FilterAllCount", "FilterAllPct", "FilterTechAcc", "FilterTechCount", "FilterTechPct", "FilterTechAllAcc", "FilterTechAllCount", "FilterTechAllPct", "FilterTechAllPctChangeAcc", "FilterTechAllPctChangeCount", "FilterTechAllPctChangePct"])
 ws_lowBothSell = wb.create_sheet("LowBothSell")
 ws_lowBothSell.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "mHighChange", "mLowChange", "w2HighChange", "w2LowChange", "wHighChange", "wLowChange", "trend", "Score", "HighTail", "LowTail", "Close", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter345Acc", "Filter345Count", "Filter345Pct", "Filter1Acc", "Filter1Count", "Filter1Pct", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterPctDayChangePct", "FilterAllAcc", "FilterAllCount", "FilterAllPct", "FilterTechAcc", "FilterTechCount", "FilterTechPct", "FilterTechAllAcc", "FilterTechAllCount", "FilterTechAllPct", "FilterTechAllPctChangeAcc", "FilterTechAllPctChangeCount", "FilterTechAllPctChangePct"])
-
 
 ws_highBothBuyAll = wb.create_sheet("HighBothBuyAll")
 ws_highBothBuyAll.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "mHighChange", "mLowChange", "w2HighChange", "w2LowChange", "wHighChange", "wLowChange", "trend", "Score", "HighTail", "LowTail", "Close", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter345Acc", "Filter345Count", "Filter345Pct", "Filter1Acc", "Filter1Count", "Filter1Pct", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterPctDayChangePct", "FilterAllAcc", "FilterAllCount", "FilterAllPct", "FilterTechAcc", "FilterTechCount", "FilterTechPct", "FilterTechAllAcc", "FilterTechAllCount", "FilterTechAllPct", "FilterTechAllPctChangeAcc", "FilterTechAllPctChangeCount", "FilterTechAllPctChangePct"])
@@ -83,7 +88,8 @@ def saveReports(run_type=None):
     ws_highBuyAllFilterAcc.append([""])
     ws_lowSellAllFilterAcc.append([""])
     
-    
+    ws_highAnalysis.append([""])
+    ws_lowAnalysis.append([""])
     
     ws_highBothBuyAll.append([""])
     ws_lowBothSellAll.append([""])
@@ -133,6 +139,13 @@ def saveReports(run_type=None):
     ws_highBuyAllFilterAcc.add_table(tab)
     
     count = 0
+    for row in ws_highAnalysis.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:CK" + str(count))
+    tab.tableStyleInfo = style
+    ws_highAnalysis.add_table(tab)
+    
+    count = 0
     for row in ws_high.iter_rows(row_offset=1):
         count += 1
     tab = Table(displayName="Table1", ref="A1:CK" + str(count))
@@ -167,6 +180,13 @@ def saveReports(run_type=None):
     tab = Table(displayName="Table1", ref="A1:CK" + str(count))
     tab.tableStyleInfo = style
     ws_lowSellAllFilterAcc.add_table(tab)
+    
+    count = 0
+    for row in ws_lowAnalysis.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:CK" + str(count))
+    tab.tableStyleInfo = style
+    ws_lowAnalysis.add_table(tab)
         
     count = 0
     for row in ws_low.iter_rows(row_offset=1):
@@ -313,8 +333,11 @@ def result_data_reg(scrip):
         if (is_algo_buy(regression_high, True) and is_algo_buy(regression_low, True) and is_any_reg_algo_gt1(regression_data)):
             buy_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_highBothBuyAll) 
+        if(filterTrend(regression_data, regressionResult)):
+            all_withoutml(regression_data, regressionResult, ws_highAnalysis)
         if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, True, None)):
-            all_withoutml(regression_data, regressionResult, ws_highBuyAllFilterAcc) 
+            all_withoutml(regression_data, regressionResult, ws_highBuyAllFilterAcc)
+         
         all_withoutml(regression_data, regressionResult, ws_high)
           
                 
@@ -339,8 +362,11 @@ def result_data_reg(scrip):
         if (is_algo_sell(regression_high, True) and is_algo_sell(regression_low, True) and is_any_reg_algo_lt_minus1(regression_data)):
             sell_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_lowBothSellAll)
+        if(filterTrend(regression_data, regressionResult)):
+            all_withoutml(regression_data, regressionResult, ws_lowAnalysis)
         if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, True, None)):
             all_withoutml(regression_data, regressionResult, ws_lowSellAllFilterAcc)
+        
         all_withoutml(regression_data, regressionResult, ws_low)
         
         regression_data = regression_high
@@ -394,7 +420,7 @@ def calculateParallel(threads=2, futures=None):
     for data in db.scrip.find({'futures':futures}):
         hsdata = db.history.find_one({'dataset_code':data['scrip']})
     
-        processing_date = '2019-11-29'
+        processing_date = '2019-12-03'
         if(hsdata is None or (np.array(hsdata['data'])).size < 1000):
             print('Missing or very less Data for ', data['scrip'])
         elif(hsdata['end_date'] != processing_date):
