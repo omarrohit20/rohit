@@ -624,6 +624,11 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     regression_data['kNeighboursValue_reg_other'] = 0
     regression_data['mlpValue_cla_other'] = 0
     regression_data['kNeighboursValue_cla_other'] = 0
+    regression_data['forecast_kNeighboursValue_reg'] = 0
+    regression_data['forecast_mlpValue_reg'] = 0
+    regression_data['forecast_kNeighboursValue_cla'] = 0
+    regression_data['forecast_mlpValue_cla'] = 0
+    
     regression_data['highTail'] = 0
     regression_data['lowTail'] = 0
     if(regression_data['high'] - regression_data['bar_high'] == 0):

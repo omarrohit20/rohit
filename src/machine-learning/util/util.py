@@ -229,6 +229,13 @@ def is_algo_buy(regression_data, resticted=False):
                     return True
             else:
                 return True
+    elif(regression_data['PCT_day_change'] < -3
+         and ((regression_data['mlpValue_reg_other'] > -1 and regression_data['mlpValue_reg'] > -1 and regression_data['forecast_mlpValue_reg'] > 5)
+              or (regression_data['kNeighboursValue_reg_other'] > -1 and regression_data['kNeighboursValue_reg'] > -1 and regression_data['forecast_kNeighboursValue_reg'] > 5)
+              )
+        ):
+        return True
+        
     return False   
     
 def is_algo_sell(regression_data, resticted=False):
@@ -261,6 +268,12 @@ def is_algo_sell(regression_data, resticted=False):
                     return True
             else:
                 return True
+    elif(regression_data['PCT_day_change'] > 3
+         and ((regression_data['mlpValue_reg_other'] < 1 and regression_data['mlpValue_reg'] < 1 and regression_data['forecast_mlpValue_reg'] > 5)
+              or (regression_data['kNeighboursValue_reg_other'] < 1 and regression_data['kNeighboursValue_reg'] < 1 and regression_data['forecast_kNeighboursValue_reg'] > 5)
+              )
+        ):
+        return True
     return False
 
 def is_algo_buy_classifier(regression_data, resticted=False):
@@ -2456,11 +2469,44 @@ def scrip_patterns_to_dict(filename):
                 pass
     return tempDict  
 
-def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, mlp_c_o, kneighbours_c_o):
+def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, mlp_c_o, kneighbours_c_o, high=True):
     regression_data['mlpValue_reg_other'] = float(mlp_r_o)
     regression_data['kNeighboursValue_reg_other'] = float(kneighbours_r_o)
     regression_data['mlpValue_cla_other'] = float(mlp_c_o)
     regression_data['kNeighboursValue_cla_other'] = float(kneighbours_c_o)
+    
+    kNeighboursValue_reg = regression_data['kNeighboursValue_reg']
+    mlpValue_reg = regression_data['mlpValue_reg']
+    kNeighboursValue_cla = regression_data['kNeighboursValue_cla']
+    mlpValue_cla = regression_data['mlpValue_cla']
+    
+    kNeighboursValue_reg_other = regression_data['kNeighboursValue_reg_other']
+    mlpValue_reg_other = regression_data['mlpValue_reg_other']
+    kNeighboursValue_cla_other = regression_data['kNeighboursValue_cla_other']
+    mlpValue_cla_other = regression_data['mlpValue_cla_other']
+    
+    if(high==False):
+        kNeighboursValue_reg_other = regression_data['kNeighboursValue_reg']
+        mlpValue_reg_other = regression_data['mlpValue_reg']
+        kNeighboursValue_cla_other = regression_data['kNeighboursValue_cla']
+        mlpValue_cla_other = regression_data['mlpValue_cla']
+        
+        kNeighboursValue_reg = regression_data['kNeighboursValue_reg_other']
+        mlpValue_reg = regression_data['mlpValue_reg_other']
+        kNeighboursValue_cla = regression_data['kNeighboursValue_cla_other']
+        mlpValue_cla = regression_data['mlpValue_cla_other']
+            
+            
+    regression_data['forecast_kNeighboursValue_reg'] = (regression_data['high'] + kNeighboursValue_reg*regression_data['high']/100) - (regression_data['low'] + kNeighboursValue_reg_other*regression_data['low']/100)
+    regression_data['forecast_mlpValue_reg'] = (regression_data['high'] + mlpValue_reg*regression_data['high']/100) - (regression_data['low'] + mlpValue_reg_other*regression_data['low']/100)
+    regression_data['forecast_kNeighboursValue_cla'] = (regression_data['high'] + kNeighboursValue_cla*regression_data['high']/100) - (regression_data['low'] + kNeighboursValue_cla_other*regression_data['low']/100)
+    regression_data['forecast_mlpValue_cla'] = (regression_data['high'] + mlpValue_cla*regression_data['high']/100) - (regression_data['low'] + mlpValue_cla_other*regression_data['low']/100)
+    
+    regression_data['forecast_kNeighboursValue_reg'] = (regression_data['forecast_kNeighboursValue_reg'])*100/regression_data['close']
+    regression_data['forecast_mlpValue_reg'] = (regression_data['forecast_mlpValue_reg'])*100/regression_data['close']
+    regression_data['forecast_kNeighboursValue_cla'] = (regression_data['forecast_kNeighboursValue_cla'])*100/regression_data['close']
+    regression_data['forecast_mlpValue_cla'] = (regression_data['forecast_mlpValue_cla'])*100/regression_data['close']
+    
     regression_data['filter'] = " "
     regression_data['filter1'] = " "
     regression_data['filter2'] = " "
@@ -2561,6 +2607,10 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regressionResult.append(regression_data['kNeighboursValue_reg_other'])
     regressionResult.append(regression_data['mlpValue_cla_other'])
     regressionResult.append(regression_data['kNeighboursValue_cla_other'])
+    regressionResult.append(regression_data['forecast_mlpValue_reg'])
+    regressionResult.append(regression_data['forecast_kNeighboursValue_reg'])
+    regressionResult.append(regression_data['forecast_mlpValue_reg'])
+    regressionResult.append(regression_data['forecast_kNeighboursValue_cla'])
     regressionResult.append(regression_data['year2HighChange'])
     regressionResult.append(regression_data['year2LowChange'])
     regressionResult.append(regression_data['yearHighChange'])
