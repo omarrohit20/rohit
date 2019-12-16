@@ -9216,9 +9216,9 @@ def is_reg_sell_from_filter(regression_data, filter_avg, filter_count, filter_pc
 
 def filter_avg_gt_1_count(regression_data):
     count = 0
-    if(regression_data['filter_345_avg'] > 1 or regression_data['filter_all_avg'] > 1):
+    if(regression_data['filter_avg'] > 1 or regression_data['filter_all_avg'] > 1):
         count = count + 1
-    if(regression_data['filter_avg'] > 1):
+    if(regression_data['filter_345_avg'] > 1):
         count = count + 1
     if(regression_data['filter_pct_change_avg'] > 1):
         count = count + 1
@@ -9232,9 +9232,9 @@ def filter_avg_gt_1_count(regression_data):
     
 def filter_avg_lt_minus_1_count(regression_data):
     count = 0
-    if(regression_data['filter_345_avg'] < -1 or regression_data['filter_all_avg'] < -1):
+    if(regression_data['filter_avg'] < -1 or regression_data['filter_all_avg'] < -1):
         count = count + 1
-    if(regression_data['filter_avg'] < -1):
+    if(regression_data['filter_345_avg'] < -1):
         count = count + 1
     if(regression_data['filter_pct_change_avg'] < -1):
         count = count + 1
@@ -9888,6 +9888,7 @@ def filter_accuracy_finder_risky(regression_data, regressionResult, reg, ws, fil
         if(regression_data[filter_count] > 5
             and abs(regression_data[filter_pct]) > 70
             and abs(regression_data[filter_avg]) > 1
+            #and (abs(regression_data[filter_avg]) > 1.5 or abs(regression_data[filter_pct]) > 80)
             #and abs(regression_data['PCT_day_change']) > 1
             #and abs(regression_data['PCT_change']) > 1
             ):
