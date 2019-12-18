@@ -9308,7 +9308,75 @@ def filter_avg_lt_minus_1_count(regression_data):
     if(regression_data['filter_tech_all_pct_change_avg'] < -2):
         count = count + 1
     return count
-      
+
+def filter_avg_gt_2_count(regression_data):
+    count = 0
+    if(regression_data['filter_345_avg'] > 2 
+        and regression_data['filter_345_pct'] >= 85
+        and regression_data['filter_345_avg'] != regression_data['filter_all_avg']
+        ):
+        count = count + 1
+    if(regression_data['filter_avg'] > 2
+        and regression_data['filter_pct'] >= 85
+        and regression_data['filter_avg'] != regression_data['filter_all_avg']
+        ):
+        count = count + 1
+    if(regression_data['filter_pct_change_avg'] > 2
+        and regression_data['filter_pct_change_pct'] >= 85
+        ):
+        count = count + 1
+    if(regression_data['filter_all_avg'] > 2
+        and regression_data['filter_all_pct'] >= 85
+        ):
+        count = count + 1
+    if(regression_data['filter_tech_avg'] > 2
+        and regression_data['filter_tech_pct'] >= 85
+        ):
+        count = count + 1
+    if(regression_data['filter_tech_all_avg'] > 3
+        and regression_data['filter_tech_all_pct'] >= 85
+        ):
+        count = count + 1
+    if(regression_data['filter_tech_all_pct_change_avg'] > 3
+        and regression_data['filter_tech_all_pct_change_pct'] >= 85
+        ):
+        count = count + 1
+    return count
+    
+def filter_avg_lt_minus_2_count(regression_data):
+    count = 0
+    if(regression_data['filter_345_avg'] < -2
+        and regression_data['filter_345_pct'] <= -85
+        and regression_data['filter_345_avg'] != regression_data['filter_all_avg']
+        ):
+        count = count + 1
+    if(regression_data['filter_avg'] < -2
+        and regression_data['filter_pct'] <= -85
+        and regression_data['filter_avg'] != regression_data['filter_all_avg']
+        ):
+        count = count + 1
+    if(regression_data['filter_pct_change_avg'] < -2
+        and regression_data['filter_pct_change_pct'] <= -85
+        ):
+        count = count + 1
+    if(regression_data['filter_all_avg'] < -2
+        and regression_data['filter_all_pct'] <= -85
+        ):
+        count = count + 1
+    if(regression_data['filter_tech_avg'] < -2
+        and regression_data['filter_tech_pct'] <= -85
+        ):
+        count = count + 1
+    if(regression_data['filter_tech_all_avg'] < -3
+        and regression_data['filter_tech_all_pct'] <= -85
+        ):
+        count = count + 1
+    if(regression_data['filter_tech_all_pct_change_avg'] < -3
+        and regression_data['filter_tech_all_pct_change_pct'] <= -85
+        ):
+        count = count + 1
+    return count
+     
 def is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, reg, ws):
     is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
     is_filter_risky(regression_data, regressionResult, reg, ws, 'filter_avg', 'filter_count', 'filter_pct')
@@ -9435,17 +9503,33 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     if(regression_data['filter_345_avg'] > 0.75
        and regression_data['filter_all_avg'] > 0.75
        and regression_data['filter_avg'] > 0.75
-       and ((regression_data['filter_345_avg'] > 1 and regression_data['filter_all_avg'] > 1)
-           or (regression_data['filter_all_avg'] > 1 and regression_data['filter_avg'] > 1)
-           or (regression_data['filter_avg'] > 1 and regression_data['filter_345_avg'] > 1)
-           )
        and filter_avg_gt_1_count(regression_data) >=2
        and 'RISKYBASELINESELL' not in regression_data['filter1']
        and 'RISKY-DOWNTREND-SELL' not in regression_data['filter1']
        ):
        add_in_csv(regression_data, regressionResult, ws, None, None, 'SUPER')
        
-    
+    if((regression_data['filter_345_avg'] < -3
+        or regression_data['filter_avg'] < -3
+        or regression_data['filter_pct_change_avg'] < -3
+        or regression_data['filter_all_avg'] < -3
+        )
+       and filter_avg_lt_minus_2_count(regression_data) >=2
+       and 'RISKYBASELINEBUY' not in regression_data['filter1']
+       and 'RISKY-UPTREND-BUY' not in regression_data['filter1']
+       ):
+       add_in_csv(regression_data, regressionResult, ws, None, None, 'SUPER-Risky')
+       
+    if((regression_data['filter_345_avg'] > 3
+        or regression_data['filter_avg'] > 3
+        or regression_data['filter_pct_change_avg'] > 3
+        or regression_data['filter_all_avg'] > 3
+        )
+       and filter_avg_gt_2_count(regression_data) >=2
+       and 'RISKYBASELINESELL' not in regression_data['filter1']
+       and 'RISKY-DOWNTREND-SELL' not in regression_data['filter1']
+       ):
+       add_in_csv(regression_data, regressionResult, ws, None, None, 'SUPER-Risky')
     
     if(buy_high_volatility(regression_data, regressionResult, reg, ws)):
         superflag = True
