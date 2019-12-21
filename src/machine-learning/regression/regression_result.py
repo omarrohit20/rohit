@@ -31,7 +31,7 @@ from util.util import buy_filter_345_accuracy, sell_filter_345_accuracy
 from util.util import buy_filter_accuracy, sell_filter_accuracy
 from util.util import buy_filter_pct_change_accuracy, sell_filter_pct_change_accuracy
 from util.util import buy_filter_all_accuracy, sell_filter_all_accuracy
-from util.util import filterTrend
+from util.util import buy_high_volatility, sell_high_volatility
 
 
 
@@ -334,7 +334,7 @@ def result_data_reg(scrip):
         if (is_algo_buy(regression_high, True) and is_algo_buy(regression_low, True) and is_any_reg_algo_gt1(regression_data)):
             buy_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_highBothBuyAll) 
-        if(filterTrend(regression_data, regressionResult)):
+        if(buy_high_volatility(regression_data, regressionResult)):
             all_withoutml(regression_data, regressionResult, ws_highAnalysis)
         if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, True, None)):
             all_withoutml(regression_data, regressionResult, ws_highBuyAllFilterAcc)
@@ -364,7 +364,7 @@ def result_data_reg(scrip):
         if (is_algo_sell(regression_high, True) and is_algo_sell(regression_low, True) and is_any_reg_algo_lt_minus1(regression_data)):
             sell_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_lowBothSellAll)
-        if(filterTrend(regression_data, regressionResult)):
+        if(sell_high_volatility(regression_data, regressionResult)):
             all_withoutml(regression_data, regressionResult, ws_lowAnalysis)
         if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, True, None)):
             all_withoutml(regression_data, regressionResult, ws_lowSellAllFilterAcc)
@@ -423,7 +423,7 @@ def calculateParallel(threads=2, futures=None):
     for data in db.scrip.find({'futures':futures}):
         hsdata = db.history.find_one({'dataset_code':data['scrip']})
     
-        processing_date = '2019-12-18'
+        processing_date = '2019-12-19'
         if(hsdata is None or (np.array(hsdata['data'])).size < 1000):
             print('Missing or very less Data for ', data['scrip'])
         elif(hsdata['end_date'] != processing_date):
