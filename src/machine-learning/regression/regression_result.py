@@ -325,7 +325,11 @@ def result_data_reg(scrip):
         buy_pattern_without_mlalgo(regression_data, regressionResult)
         buy_other_indicator(regression_data, regressionResult, True, None)
         buy_filter_all_accuracy(regression_data, regressionResult)
-        buy_indicator_after_filter_accuracy(regression_data, regressionResult, True, None)
+        buy_indicator_after_filter_accuracy(regression_data, regressionResult, True, None) 
+        if(buy_high_volatility(regression_data, regressionResult)):
+            all_withoutml(regression_data, regressionResult, ws_highAnalysis)
+        if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, True, None)):
+            all_withoutml(regression_data, regressionResult, ws_highBuyAllFilterAcc)
         if (is_algo_buy(regression_data)):
             all_withoutml(regression_data, regressionResult, ws_highBuyReg)
         if (is_algo_buy(regression_high) and is_algo_buy(regression_low) and is_any_reg_algo_gt1(regression_data)):
@@ -333,11 +337,7 @@ def result_data_reg(scrip):
             all_withoutml(regression_data, regressionResult, ws_highBuyAll) 
         if (is_algo_buy(regression_high, True) and is_algo_buy(regression_low, True) and is_any_reg_algo_gt1(regression_data)):
             buy_all_common_High_Low(regression_data, regressionResult, True, None)
-            all_withoutml(regression_data, regressionResult, ws_highBothBuyAll) 
-        if(buy_high_volatility(regression_data, regressionResult)):
-            all_withoutml(regression_data, regressionResult, ws_highAnalysis)
-        if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, True, None)):
-            all_withoutml(regression_data, regressionResult, ws_highBuyAllFilterAcc)
+            all_withoutml(regression_data, regressionResult, ws_highBothBuyAll)
          
         all_withoutml(regression_data, regressionResult, ws_high)
           
@@ -356,6 +356,10 @@ def result_data_reg(scrip):
         sell_other_indicator(regression_data, regressionResult, True, None)
         sell_filter_all_accuracy(regression_data, regressionResult)
         sell_indicator_after_filter_accuracy(regression_data, regressionResult, True, None)
+        if(sell_high_volatility(regression_data, regressionResult)):
+            all_withoutml(regression_data, regressionResult, ws_lowAnalysis)
+        if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, True, None)):
+            all_withoutml(regression_data, regressionResult, ws_lowSellAllFilterAcc)
         if (is_algo_sell(regression_data)):
             all_withoutml(regression_data, regressionResult, ws_lowSellReg)                               
         if (is_algo_sell(regression_high) and is_algo_sell(regression_low) and is_any_reg_algo_lt_minus1(regression_data)):
@@ -364,10 +368,6 @@ def result_data_reg(scrip):
         if (is_algo_sell(regression_high, True) and is_algo_sell(regression_low, True) and is_any_reg_algo_lt_minus1(regression_data)):
             sell_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_lowBothSellAll)
-        if(sell_high_volatility(regression_data, regressionResult)):
-            all_withoutml(regression_data, regressionResult, ws_lowAnalysis)
-        if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, True, None)):
-            all_withoutml(regression_data, regressionResult, ws_lowSellAllFilterAcc)
         
         all_withoutml(regression_data, regressionResult, ws_low)
         
@@ -423,7 +423,7 @@ def calculateParallel(threads=2, futures=None):
     for data in db.scrip.find({'futures':futures}):
         hsdata = db.history.find_one({'dataset_code':data['scrip']})
     
-        processing_date = '2019-12-20'
+        processing_date = '2019-12-24'
         if(hsdata is None or (np.array(hsdata['data'])).size < 1000):
             print('Missing or very less Data for ', data['scrip'])
         elif(hsdata['end_date'] != processing_date):
