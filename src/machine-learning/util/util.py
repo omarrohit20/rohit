@@ -9711,20 +9711,44 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     if(regression_data['filter_345_avg'] < -0.75
        and regression_data['filter_all_avg'] < -0.75
        and regression_data['filter_avg'] < -0.75
+       and ((regression_data['filter_345_avg'] < -2
+        or regression_data['filter_avg'] < -2
+        or regression_data['filter_pct_change_avg'] < -2
+        or regression_data['filter_all_avg'] < -2 
+        )
+        or
+        ((regression_data['filter_345_avg'] < -1 and regression_data['filter_345_count'] >= 5)
+        or (regression_data['filter_avg'] < -1 and regression_data['filter_count'] >= 5)
+        or (regression_data['filter_pct_change_avg'] < -1 and regression_data['filter_pct_change_count'] >= 5)
+        or (regression_data['filter_all_avg'] < -1 and regression_data['filter_all_count'] >= 5)
+        )
+        )
        and filter_avg_lt_minus_1_count(regression_data) >=2
-       and 'RISKYBASELINEBUY' not in regression_data['filter1']
-       and 'RISKY-UPTREND-BUY' not in regression_data['filter1']
+       and 'RISKYBASELINESELL' not in regression_data['filter1']
+       and 'RISKY-DOWNTREND-SELL' not in regression_data['filter1']
        ):
-       add_in_csv(regression_data, regressionResult, ws, None, None, 'SUPER')
+       add_in_csv(regression_data, regressionResult, ws, None, None, 'SUPER-Risky')
        
     if(regression_data['filter_345_avg'] > 0.75
        and regression_data['filter_all_avg'] > 0.75
        and regression_data['filter_avg'] > 0.75
+       and ((regression_data['filter_345_avg'] > 2
+        or regression_data['filter_avg'] > 2
+        or regression_data['filter_pct_change_avg'] > 2
+        or regression_data['filter_all_avg'] > 2
+        )
+        or
+        ((regression_data['filter_345_avg'] > 1 and regression_data['filter_345_count'] >= 5)
+        or (regression_data['filter_avg'] > 1 and regression_data['filter_count'] >= 5)
+        or (regression_data['filter_pct_change_avg'] > 1 and regression_data['filter_pct_change_count'] >= 5)
+        or (regression_data['filter_all_avg'] > 1 and regression_data['filter_all_count'] >= 5)
+        )
+        )
        and filter_avg_gt_1_count(regression_data) >=2
-       and 'RISKYBASELINESELL' not in regression_data['filter1']
-       and 'RISKY-DOWNTREND-SELL' not in regression_data['filter1']
+       and 'RISKYBASELINEBUY' not in regression_data['filter1']
+       and 'RISKY-UPTREND-BUY' not in regression_data['filter1']
        ):
-       add_in_csv(regression_data, regressionResult, ws, None, None, 'SUPER')
+       add_in_csv(regression_data, regressionResult, ws, None, None, 'SUPER-risky')
        
     if((regression_data['filter_345_avg'] < -3
         or regression_data['filter_avg'] < -3
@@ -9732,10 +9756,10 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
         or regression_data['filter_all_avg'] < -3
         )
        and filter_avg_lt_minus_2_count(regression_data) >=2
-       and 'RISKYBASELINEBUY' not in regression_data['filter1']
-       and 'RISKY-UPTREND-BUY' not in regression_data['filter1']
+       #and 'RISKYBASELINESELL' not in regression_data['filter1']
+       #and 'RISKY-DOWNTREND-SELL' not in regression_data['filter1']
        ):
-       add_in_csv(regression_data, regressionResult, ws, None, None, 'SUPER-Risky')
+       add_in_csv(regression_data, regressionResult, ws, None, None, 'SUPER')
        
     if((regression_data['filter_345_avg'] > 3
         or regression_data['filter_avg'] > 3
@@ -9743,10 +9767,10 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
         or regression_data['filter_all_avg'] > 3
         )
        and filter_avg_gt_2_count(regression_data) >=2
-       and 'RISKYBASELINESELL' not in regression_data['filter1']
-       and 'RISKY-DOWNTREND-SELL' not in regression_data['filter1']
+       #and 'RISKYBASELINEBUY' not in regression_data['filter1']
+       #and 'RISKY-UPTREND-BUY' not in regression_data['filter1']
        ):
-       add_in_csv(regression_data, regressionResult, ws, None, None, 'SUPER-Risky')
+       add_in_csv(regression_data, regressionResult, ws, None, None, 'SUPER')
     
 #     if(buy_high_volatility(regression_data, regressionResult, reg, ws)):
 #         superflag = True
