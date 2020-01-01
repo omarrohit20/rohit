@@ -6,8 +6,6 @@ from pymongo import MongoClient
 from multiprocessing.dummy import Pool as ThreadPool
 
 import quandl, math, time
-from nsepy import get_history
-from nsepy.derivatives import get_expiry_date
 from datetime import date
 import datetime   
 import pandas as pd
