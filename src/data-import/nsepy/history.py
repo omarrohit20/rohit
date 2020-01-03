@@ -91,7 +91,7 @@ RBI_REF_RATE_HEADERS = ['Date', '1 USD', '1 GBP', '1 EURO', '100 YEN']
 
 """
 def get_history(symbol, start, end, index=False, futures=False, option_type="",
-                    expiry_date = None, strike_price="", series='ALL'):
+                    expiry_date = None, strike_price="", series='EQ'):
     """This is the function to get the historical prices of any security (index,
         stocks, derviatives, VIX) etc.
         

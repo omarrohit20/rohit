@@ -3795,10 +3795,13 @@ def buy_high_volatility(regression_data, regressionResult):
            and -1 < regression_data['PCT_day_change'] < 0
            and (regression_data['PCT_change'] < -0.75 or regression_data['PCT_day_change'] < -0.75)
            and (regression_data['PCT_day_change_pre1'] > 1 or regression_data['PCT_day_change_pre2'] > 1 or regression_data['PCT_day_change_pre3'] > 1)
-           and ((abs(regression_data['week2HighChange']) > abs(regression_data['week2LowChange']) - 1
-                and regression_data['week2LowChange'] > 0)
+           and (regression_data['week2LowChange'] < 0
+                or regression_data['monthLowChange'] < 0
+                or (abs(regression_data['week2HighChange']) > abs(regression_data['week2LowChange']) - 1
+                    and regression_data['week2HighChange'] < 0
+                    )
                 or (abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange']) -1
-                    and regression_data['monthLowChange'] > 0
+                    and regression_data['monthHighChange'] < 0
                     and (regression_data['forecast_day_PCT7_change'] < -3 or regression_data['forecast_day_PCT10_change'] < -3)
                     )
                 )
@@ -3811,10 +3814,12 @@ def buy_high_volatility(regression_data, regressionResult):
            and -2 < regression_data['PCT_day_change'] < 0
            #and (regression_data['PCT_change'] < -0.75 or regression_data['PCT_day_change'] < -0.75)
            and (regression_data['PCT_day_change_pre1'] > 1 or regression_data['PCT_day_change_pre2'] > 1 or regression_data['PCT_day_change_pre3'] > 1)
-           and ((abs(regression_data['week2HighChange']) > abs(regression_data['week2LowChange']) - 1
-                and regression_data['week2LowChange'] > 0)
+           and (regression_data['week2LowChange'] < 0
+                or regression_data['monthLowChange'] < 0
+                or (abs(regression_data['week2HighChange']) > abs(regression_data['week2LowChange']) - 1
+                    and regression_data['week2HighChange'] < 0)
                 or (abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange']) -1
-                    and regression_data['monthLowChange'] > 0
+                    and regression_data['monthHighChange'] < 0
                     and (regression_data['forecast_day_PCT7_change'] < -2 
                          or regression_data['forecast_day_PCT10_change'] < -2
                          or (regression_data['forecast_day_PCT7_change'] < 0 and regression_data['forecast_day_PCT10_change'] < 0)
@@ -3830,9 +3835,11 @@ def buy_high_volatility(regression_data, regressionResult):
            and -1 < regression_data['PCT_day_change'] < 0
            and (regression_data['PCT_change'] < -0.75 or regression_data['PCT_day_change'] < -0.75)
            and (regression_data['PCT_day_change_pre1'] > 1 or regression_data['PCT_day_change_pre2'] > 1 or regression_data['PCT_day_change_pre3'] > 1)
-           and (regression_data['monthLowChange'] > 0
-                and abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])
-                and (regression_data['forecast_day_PCT7_change'] > 3 or regression_data['forecast_day_PCT10_change'] > 3)
+           and (regression_data['monthHighChange'] > 0
+                or (regression_data['monthLowChange'] > 0
+                    and abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])
+                    and (regression_data['forecast_day_PCT7_change'] > 3 or regression_data['forecast_day_PCT10_change'] > 3)
+                    )
                 )
            and regression_data['year2HighChange'] < -5
            and regression_data['year2LowChange'] > 5
@@ -7635,8 +7642,10 @@ def sell_high_volatility(regression_data, regressionResult):
            and 0 < regression_data['PCT_day_change'] < 1
            and (regression_data['PCT_change'] > 0.75 or regression_data['PCT_day_change'] > 0.75)
            and (regression_data['PCT_day_change_pre1'] < -1 or regression_data['PCT_day_change_pre2'] < -1 or regression_data['PCT_day_change_pre3'] < -1)
-           and ((abs(regression_data['week2HighChange']) < abs(regression_data['week2LowChange']) - 1
-                and regression_data['week2LowChange'] > 0)
+           and (regression_data['week2HighChange'] > 0
+                or regression_data['monthHighChange'] > 0
+                or (abs(regression_data['week2HighChange']) < abs(regression_data['week2LowChange']) - 1
+                    and regression_data['week2LowChange'] > 0)
                 or (abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange']) -1
                     and regression_data['monthLowChange'] > 0
                     and (regression_data['forecast_day_PCT7_change'] > 3 or regression_data['forecast_day_PCT10_change'] > 3)
@@ -7651,8 +7660,10 @@ def sell_high_volatility(regression_data, regressionResult):
            and 0 < regression_data['PCT_day_change'] < 2
            #and (regression_data['PCT_change'] > 0.75 or regression_data['PCT_day_change'] > 0.75)
            and (regression_data['PCT_day_change_pre1'] < -1 or regression_data['PCT_day_change_pre2'] < -1 or regression_data['PCT_day_change_pre3'] < -1)
-           and ((abs(regression_data['week2HighChange']) < abs(regression_data['week2LowChange']) - 1
-                and regression_data['week2LowChange'] > 0)
+           and (regression_data['week2HighChange'] > 0
+                or regression_data['monthHighChange'] > 0
+                or (abs(regression_data['week2HighChange']) < abs(regression_data['week2LowChange']) - 1
+                    and regression_data['week2LowChange'] > 0)
                 or (abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange']) -1
                     and regression_data['monthLowChange'] > 0
                     and (regression_data['forecast_day_PCT7_change'] > 2 
@@ -7671,8 +7682,10 @@ def sell_high_volatility(regression_data, regressionResult):
            and (regression_data['PCT_change'] > 0.75 or regression_data['PCT_day_change'] > 0.75)
            and (regression_data['PCT_day_change_pre1'] < -1 or regression_data['PCT_day_change_pre2'] < -1 or regression_data['PCT_day_change_pre3'] < -1)
            and (regression_data['monthLowChange'] < 0
-                and abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])
-                and (regression_data['forecast_day_PCT7_change'] < -3 or regression_data['forecast_day_PCT10_change'] < -3)
+                or (regression_data['monthHighChange'] < 0
+                    and abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])
+                    and (regression_data['forecast_day_PCT7_change'] < -3 or regression_data['forecast_day_PCT10_change'] < -3)
+                    )
                 )
            and regression_data['year2HighChange'] < -5
            and regression_data['year2LowChange'] > 5
