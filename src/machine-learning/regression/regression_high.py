@@ -264,7 +264,7 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
             
     if (mlp and run_ml_algo):
         dfp = get_data_frame(df, 'mlp', 'reg')
-        result = performRegression(dfp, split, scrip, directory, forecast_out, MLPRegressor(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
+        result = performRegression(dfp, split, scrip, directory, forecast_out, MLPRegressor(random_state=0, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
         regression_data['mlpValue_reg'] = float(result[0])
     else:
         regression_data['mlpValue_reg'] = float(0)
@@ -280,7 +280,7 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
             
     if (mlp and run_ml_algo):
         dfp = get_data_frame(df, 'mlp', 'cla')
-        result = performClassification(dfp, split, scrip, directory, forecast_out, MLPClassifier(random_state=1, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25)))
+        result = performClassification(dfp, split, scrip, directory, forecast_out, MLPClassifier(random_state=0, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25)))
         regression_data['mlpValue_cla'] = float(result[0])
     else:
         regression_data['mlpValue_cla'] = float(0)
