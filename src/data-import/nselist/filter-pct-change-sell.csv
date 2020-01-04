@@ -64,7 +64,6 @@
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,buyMorningStar-(checkChart),",-2.1486892995272884,1,0,1
 "PCTChangeGT1,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,buyDownTrend-2(Risky),",-2.85159749178858,1,0,1
 "PCTChangeLT-4,,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,sellFinalCandidate-(lastDayUp)-(highChange),***SELLPATTERN***",1.3488372093023282,1,1,0
-"PCTChangeGT4,HTGT1.3,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",-2.9447852760736266,1,0,1
 "PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,ReversalHighMonth3,(Test)checkCupDown-2dayDown-mayReversalBuy,##DOWNTREND:sellMonth3HighReversal(InDownTrend),***SELLPATTERN***",0.9320175438596429,1,1,0
 "PCTChangeGT2,,(Test)checkCupUp-2dayUp-mayReversalSell,##UPTREND:buyMonth3Low,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***BUYPATTERN***",4.404567699836864,1,1,0
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,++,set2,weekHighGTweek2,",-2.6515151515151545,1,0,1
@@ -129,7 +128,6 @@
 "PCTChangeGT4,,sell-2week-breakoutup,buyYearLow,***BUYPATTERN***",-3.781347962382436,1,0,1
 "PCTChangeGT4,HTGT1.3,##UPTREND:buyYear2Low,sellYear2LowLT-40-last3DayDown(triggerAfter-9:15),",1.4830508474576272,1,1,0
 "PCTDayChangeLT0,LTGT1.3,LTGTPCTDayChange,$$MayBuyCheckChart-(|`|_|),(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,",0.24193548387096545,1,1,0
-"PCTChangeLT-1,HTGT3.0,,HTGTPCTDayChange,##RisingMA(check-chart-sell)-MaySellCheckChart,***BUYPATTERN***",-5.661445555765239,1,0,1
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,ML:BuyRisingMA-Risky-1,set1,",0.9241755933627341,1,1,0
 "PCTChangeLT-3,LTGT1.3,##(Check-chart-buy):month3High-InMinus,ReversalHighMonth3,",-0.49205147615443273,1,0,1
 "PCTChangeLT-1,,$$MayBuy-CheckChart(monthLow-minimumLast2DayDown),##(Check-chart-buy):month3High-InMinus,NearHighMonth3,***SELLPATTERN***",-3.3128677411102556,1,0,1
@@ -171,7 +169,10 @@
 "PCTChangeGT0.5,LTGT1.3,buyYearHigh-1,",-1.4554411106135243,1,0,1
 "PCTChangeGT3,,##UPTREND:buyMonth3LowReversal(Confirm),(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT0,##(Check-chart-sell):month3Low-InPlus,ReversalLowMonth3,***BUYPATTERN***",-1.9932432432432357,1,0,1
 "PCTChangeGT2,,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,##UPTREND:buyMonth6Low,",-3.1504818383988136,1,0,1
+"PCTChangeGT1,HTGT1.3,##(Test)(check-chart)-sellSMADownTrend-2DayUp-weekHighTouch,***BUYPATTERN***",2.9252925292529253,1,1,0
 "PCTChangeLT-0.5,HTGT1.3,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend),",4.087072412261225,1,1,0
+"PCTChangeLT-1,HTGT3.0,,HTGTPCTDayChange,##RisingMA(check-chart-sell)-MaySellCheckChart,***BUYPATTERN***",-5.661445555765239,1,0,1
+"PCTChangeLT-1,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",0.2763521515988901,1,1,0
 "PCTChangeLT-3,HTGT1.3,HTGTPCTDayChange,buyYearHigh-0,",-1.061224489795916,1,0,1
 "PCTChangeLT-0.5,,ML:buySuperTrend-0,-+,",0.3513513513513544,1,1,0
 "PCTDayChangeLT0,,ML:buySuperTrend-0,++,",-1.9448946515397054,1,0,1
@@ -219,7 +220,6 @@
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChange,buySuperTrend-0,+-,set2,***SELLPATTERN***",-2.997709391494873,1,0,1
 "PCTChangeLT-2,,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,ML:sellFinalCandidate-(lastDayUp),sellPatternsML,sellUpTrend-2(Risky),",0.5034482758620659,1,1,0
 "PCTChangeLT-2,LTGT1.3,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,***SELLPATTERN***",2.850861641018371,1,1,0
-"PCTChangeGT4,HTGT1.3LTGT1.3,sell-2week-breakoutup,",-0.3644314868804665,1,0,1
 "PCTChangeLT-4,,sellDayLowVolLow-01,##DOWNTREND:sellYearHigh(InDownTrend),",-1.9999999999999927,1,0,1
 "PCTChangeGT0,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,sellSuperTrend-1,+-,set2,",-1.2159533073929962,1,0,1
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChange,+-,set2,buyYearHigh-0,",-1.8175164674310782,1,0,1
@@ -435,6 +435,8 @@
 "PCTChangeGT3,HTGT1.3LTGT1.3,weekLowLTweek2,",-1.0156971375807888,1,0,1
 "PCTChangeGT3,,##(Check-chart):yearHigh-InPlus,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,brokenToday,",0.7181259600614369,1,1,0
 "PCTChangeGT2,,##(Check-chart):year2High-InPlus,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT0,",-2.231482726172876,1,0,1
+"PCTChangeLT-1,HTGT3.0,,HTGTPCTDayChange,(Test)checkCupDown-2dayDown,sellUpTrend-2(Risky),",4.410876132930521,1,1,0
+"PCTChangeLT-2,,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",1.0660903251620866,2,2,0
 "PCTChangeLT-3,HTGT1.3LTGT1.3,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,##DOWNTREND:sellMonth6High(InDownTrend),",-0.4410766794842898,1,0,1
 "PCTChangeLT-2,,sellDownTrend-00,",2.2821576763485356,1,1,0
 "PCTChangeGT4,,buyDownTrend-0(Risky),sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),***BUYPATTERN***",-1.3513513513513513,1,0,1
@@ -476,6 +478,7 @@
 "PCTChangeGT2,,##finalBreakOutBuyContinue-11-test-atYearLow,",0.19337016574585636,1,1,0
 "PCTChangeLT-0.5,LTGT1.3,LTGTPCTDayChange,$$ML:MayBuyCheckChart-last3DayDown,(Test)buyLastDayDownReversal,buyYear2Low,",2.3841961852861036,1,1,0
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,buyYear2LowMovingSMA,##(Test)(check-chart)-buySMAUpTrend,",1.3180586351318115,1,1,0
+"PCTChangeGT4,HTGT1.3LTGT1.3,(Test)check10DayLowReversal,##UPTREND:buyYear2LowReversal(Confirm),",-4.711458042932807,1,0,1
 "PCTChangeGT4,,(check-chart)sellEMA6>EMA14,(check-chart)buy-2week-breakoutup(|-|-| or --|),***BUYPATTERN***",-2.0824479388015202,1,0,1
 "PCTChangeGT2,,##finalBreakOutBuyContinue-1-test-atYearLow,",-0.2159090909090883,1,0,1
 "PCTChangeLT-4,,(SMA9GT0),",0.9553586937641132,1,1,0
@@ -492,8 +495,6 @@
 "PCTChangeGT3,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT1,weekHighGTweek2High,brokenToday,",-0.6947335756683869,2,1,1
 "PCTChangeGT2,LTGT1.3,LTGTPCTDayChange,sellFinalContinue-(lastDayUp)-1,buyFinal1,",0.05263157894737578,1,1,0
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChange,buyYearHigh-0,buyMorningStar-HighUpperTail-(checkChart),***SELLPATTERN***",-1.947136563876644,1,0,1
-"PCTChangeGT4,HTGT1.3LTGT1.3,(Test)check10DayLowReversal,##UPTREND:buyYear2LowReversal(Confirm),",-4.711458042932807,1,0,1
-"PCTChangeLT-3,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-0.30913266207383855,1,0,1
 "PCTDayChangeLT0,LTGT1.3,LTGTPCTDayChange,ML:BuyRisingMA-Risky-2,",2.023679570073046,1,1,0
 "PCTChangeLT-2,HTGT1.3,HTGTPCTDayChange,--,",0.7719410634208812,1,1,0
 "PCTChangeGT3,,(Test)check10DayLowReversal,buyUpTrend-1-YearHigh,***SELLPATTERN***",-1.3963542883851288,1,0,1
@@ -563,6 +564,7 @@
 "PCTChangeLT-3,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-2,weekLowLTweek2Low,brokenToday,",-3.8068158164362544,3,0,3
 "PCTChangeGT2,LTGT1.3,LTGTPCTDayChange,ML:buySuperTrend-0,",0.458295142071494,1,1,0
 "PCTChangeLT-2,,ML:BuyRisingMA-Risky-1,ML:sellFinalCandidate-(lastDayUp),",-1.1057692307692273,1,0,1
+"PCTChangeLT-0.5,,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-0.6781914893617051,1,0,1
 "PCTChangeGT2,,(Test)checkCupUp-2dayUp,##RisingMA(Test)(check-chart-buy)-2DayUp,##UPTREND:buyYear2LowReversal(Confirm),",-2.055306427503737,1,0,1
 "PCTChangeGT0.5,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyMorningStar-(checkChart),***SELLPATTERN***",-6.189655172413789,1,0,1
 "PCTChangeGT3,LTGT1.3,(check-chart):ML:buy-2week-breakoutup,sell-2week-breakoutup,***BUYPATTERN***",1.222632925789028,1,1,0
@@ -572,7 +574,6 @@
 "PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,sellPatterns-Risky-LT-0.9-SMALT0,(SMA4LT(-1.5)),***SELLPATTERN***",-3.8036470804936413,1,0,1
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week-(risky)-PCTDayChangeGT-1,week2BarLowChangeLT0,",1.8283582089552153,1,1,0
 "PCTChangeGT2,HTGT1.3,HTGTPCTDayChangeLTGT1.3,(Test)checkCupUp-3dayUp,##UPTREND:buyYear2LowReversal(Confirm),",-1.0032362459547,1,0,1
-"PCTChangeLT-2,,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",4.056603773584903,1,1,0
 "PCTChangeLT-1,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyYear2LowMovingSMA,",1.7912291537986447,1,1,0
 "PCTChangeLT-3,,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,mayBuyFromSellPattern-GT1.8,***SELLPATTERN***",0.619765494137361,1,1,0
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,sellRisingMA-1,sellFinalCandidate-(lastDayDown)-(buyPattern),sellUpTrend-2(Risky),***BUYPATTERN***",3.3716191181919317,1,1,0
@@ -591,7 +592,7 @@
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChange,sellSuperTrend-1,+-,set2,",-1.1979166666666667,1,0,1
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,--,sellPatternsML,sellPatterns-LT-1.5-SMALT0,(SMA9LT0),",-2.165787159190858,1,0,1
 "PCTChangeGT2,,##UPTREND:buyMonth3Low,(check-chart):ML:buy-2week-breakoutup,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***BUYPATTERN***",0.7522224754957856,1,1,0
-"PCTChangeLT-2,LTGT1.3,(Test)checkCupDown-upTrendLastDayDown-mayReversalBuy,##Test:longDownTrend-0-IndexNotDownLastDay(checkBase),",-3.855619360131253,1,0,1
+"PCTChangeLT-2,LTGT1.3,(Test)checkCupDown-upTrendLastDayDown-mayReversalBuy,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",-3.855619360131253,1,0,1
 "PCTChangeLT-1,LTGT1.3,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,",-0.5535656138065924,1,0,1
 "PCTChangeLT-8,LTGT1.3,(check-chart)buyEMA6<EMA14-Risky,",-3.139538630066375,2,0,2
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,buyYear2Low,NearLowYear2,",-0.3074820635462854,1,0,1
@@ -725,6 +726,7 @@
 "PCTChangeGT4,,(Test)check10DayLowReversal,##UPTREND:buyYear2LowReversal(Confirm),",0.20910369835485199,2,1,1
 "PCTChangeGT4,,##UPTREND:buyYear2Low,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",-2.0151133501259553,1,0,1
 "PCTChangeLT-1,HTGT1.3,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,ML:BuyRisingMA-Risky-2,***SELLPATTERN***",-0.8572273130357771,1,0,1
+"PCTChangeGT3,,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,(check-chart):ML:buy-2week-breakoutup,sell-2week-breakoutup,***BUYPATTERN***",2.7733118971061,1,1,0
 "PCTChangeLT-1,,ML:BuyRisingMA-Risky-1,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,",-1.061946902654874,1,0,1
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,+-,set1,(Test)MaySellCheckChart-monthHighReversal-risky,monthHighChangeGT5,weekHighGTweek2,",-1.4809329877823028,1,0,1
 "PCTChangeLT-2,LTGT1.3,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-2.797811489679184,1,0,1
@@ -761,7 +763,6 @@
 "PCTChangeGT0.5,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1,week2BarHighChangeGT0,",0.29274444160874324,1,1,0
 "PCTChangeGT1,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyMorningStar-(checkChart),***SELLPATTERN***",-3.2671629445823016,1,0,1
 "PCTChangeGT2,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT5,weekHighGTweek2High,",2.9499601356738325,1,1,0
-"PCTChangeLT-2,LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,***SELLPATTERN***",4.431554524361954,1,1,0
 "PCTChangeLT-0.5,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##(Test)(check-chart)-buySMAUpTrend,",-1.7774531288044693,1,0,1
 "PCTChangeGT0,HTGT3.0,,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)sellSMA4Reversal,***BUYPATTERN***",1.7538731365097922,1,1,0
 "PCTChangeLT-2,LTGT1.3,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,##DOWNTREND:sellMonth3High(InDownTrend),",-2.4546658725921064,2,0,2
@@ -859,7 +860,7 @@
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,--,",-3.4641626097153657,2,0,2
 "PCTChangeLT-8,HTGT1.3LTGT3.0LTGT1.3,maySellAfter10:20HighVolatileLastDayUp-GT10,",4.452226113056531,1,1,0
 "PCTChangeLT-2,HTGT3.0,,HTGTPCTDayChange,(Test)checkCupDown-2dayDown-mayReversalBuy,",1.8098159509202385,1,1,0
-"PCTChangeGT3,HTGT1.3,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",-0.3820468707992459,3,2,1
+"PCTChangeGT3,HTGT1.3,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",-0.6460097664468691,2,1,1
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buySuperTrend-1,++,set1,",2.523659305993697,1,1,0
 "PCTChangeGT3,HTGT3.0,LTGT1.3,buyTenDaysLessThanMinusTen,",-4.63224893917964,1,0,1
 "PCTChangeLT-4,HTGT3.0,,HTGTPCTDayChangeLTGT1.3,RSISellCandidate(yearLow)-lessThanMinus5,",-5.106382978723407,1,0,1
@@ -913,7 +914,6 @@
 "PCTChangeGT0,,(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1,week2BarHighChangeGT0,buyYearHigh-3,",-1.8673647469459067,1,0,1
 "PCTChangeLT-1,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-upTrendLastDayDown-mayReversalBuy,",-0.8666811113518559,1,0,1
 "PCTChangeLT-2,HTGT1.3,HTGTPCTDayChangeLTGT1.3,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,",-0.8108108108108109,1,0,1
-"PCTChangeGT4,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,(check-chart)buy-2week-breakoutup(|-|-| or --|),",-1.0754716981132162,1,0,1
 "PCTChangeLT-1,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-2,weekLowLTweek2Low,",0.3493552299305488,2,2,0
 "PCTChangeLT-3,HTGT1.3LTGT1.3,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",2.506811989100814,1,1,0
 "PCTChangeGT2,HTGT1.3LTGT1.3,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,",-3.5550458715596376,1,0,1
@@ -921,10 +921,7 @@
 "PCTChangeGT0,HTGT3.0,,HTGTPCTDayChange,(Test)MaySellCheckChart-monthHighReversal,monthHighChangeGT-1,",-0.5369745320650506,1,0,1
 "PCTChangeGT2,,(Test)checkCupUp-downTrendLastDayUp-mayReversalSell,(Test)checkConsolidationBreakUp-month3HighLTMonth3Low,",-0.5403687221869184,1,0,1
 "PCTChangeGT4,HTGT1.3,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,",-1.7677106028285337,2,1,1
-"PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,$$ML:(check-chart-2-3MidCapCross)MayBuyCheckChart-Risky,ML:buyFinalContinue-3,***SELLPATTERN***",-4.730191256830609,1,0,1
 "PCTChangeLT-3,,ML:buyFinalContinue-4,##buyFinalContinue-2,***SELLPATTERN***",2.4646611090975035,1,1,0
-"PCTChangeLT-4,LTGT1.3,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,",2.485313400612965,3,3,0
-"PCTChangeGT2,HTGT1.3LTGT1.3,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,buyUpTrend-1-YearHigh,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,***SELLPATTERN***",1.0529674537332456,1,1,0
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChange,buyYearHigh-0,ML:sellEveningStar-2(Check2-3MidCapCross),",-3.875019145351502,1,0,1
 "PCTChangeGT2,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,buyDownTrend-0(Risky),",-0.3930131004366837,1,0,1
 "PCTChangeGT1,,(Test)checkCupUp-2dayUp,##UPTREND:buyMonth3Low,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***BUYPATTERN***",2.8616021382788497,2,1,1
@@ -964,6 +961,8 @@
 "PCTChangeLT-2,,##(Test)(check-chart)-sellSMADownTrend,***BUYPATTERN***",-5.259695765383037,1,0,1
 "PCTChangeLT-2,HTGT1.3LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,***SELLPATTERN***",2.407407407407402,1,1,0
 "PCTChangeGT2,LTGT1.3,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT1,weekHighGTweek2High,brokenToday,",2.654590880699563,1,1,0
+"PCTChangeGT2,HTGT1.3LTGT1.3,(Test)checkCupUp-inUpTrend,bar_high,",-0.44444444444445075,1,0,1
+"PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week-(risky)-year2Low,week2BarLowChangeLT-1,weekLowLTweek2Low,",-1.5028901734104068,1,0,1
 "PCTChangeLT-4,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,##(Check-chart-buy):month3High-InMinus,ReversalHighMonth3,##DOWNTREND:sellMonth3HighReversal(InDownTrend),***SELLPATTERN***",-2.6576505739896175,1,0,1
 "PCTChangeLT-3,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-3,weekLowLTweek2Low,brokenToday,",-1.8419290020093768,1,0,1
 "PCTChangeGT3,,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,##UPTREND:buyYearLow,",-0.5931198102016607,1,0,1
@@ -1021,10 +1020,11 @@
 "PCTChangeGT2,,##RisingMA(Test)(check-chart-buy)-2DayUp,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,(check-chart):ML:buy-2week-breakoutup,sell-2week-breakoutup,buyYearLow,***BUYPATTERN***",0.2627430373095113,1,1,0
 "PCTChangeLT-4,HTGT3.0,LTGT1.3,##DOWNTREND:sellMonth3LowBreak,",-4.272727272727268,1,0,1
 "PCTChangeLT-3,,sellDayLowVolLow-03-checkMorningTrend(.5SL),##DOWNTREND:sellMonth6HighReversal(InDownTrend),",6.0909090909090935,1,1,0
+"PCTChangeLT-0.5,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,ML:sellRisingMA-down-(Risky),",4.603729603729607,1,1,0
 "PCTChangeLT-2,LTGT1.3,(SMA9GT0),",0.4845610598484387,1,1,0
 "PCTChangeLT-3,,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,sellUpTrend-2(Risky),***BUYPATTERN***",1.7910447761194004,1,1,0
-"PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,$$MaySellCheckChart-(IndexNotDownInSecondHalf),$$MaySell-CheckChart(yearHigh-minimumLast2DayUp),",0.38724446537419716,2,2,0
 "PCTChangeGT0,,##RisingMA(Test)(check-chart-buy)-2DayUp,",-2.5731387078979564,2,0,2
+"PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,$$MaySellCheckChart-(IndexNotDownInSecondHalf),$$MaySell-CheckChart(yearHigh-minimumLast2DayUp),",0.38724446537419716,2,2,0
 "PCTChangeGT2,HTGT1.3,HTGTPCTDayChange,##UPTREND:buyYearLow,",1.491041222904395,1,1,0
 "PCTChangeGT3,,##UPTREND:buyYear2Low,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",4.831168831168837,1,1,0
 "PCTChangeLT-1,HTGT3.0,,HTGTPCTDayChange,##(Test)(check-chart)-sellSMADownTrend,",2.2935779816513757,1,1,0
@@ -1054,11 +1054,8 @@
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,-+,set2,",3.286833081779928,2,2,0
 "PCTChangeLT-2,,(Test)checkCupDown-2dayDown,##(Check-chart-sell)Month3Low-Continue(InUpTrend),NearLowMonth3,",0.08787346221441875,1,1,0
 "PCTChangeLT-2,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):month3High-InMinus,ReversalHighMonth3,",-2.8077753779697625,1,0,1
-"PCTChangeGT1,HTGT1.3,##(Test)(check-chart)-sellSMADownTrend-2DayUp-weekHighTouch,***BUYPATTERN***",2.9252925292529253,1,1,0
-"PCTChangeGT4,LTGT1.3,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***BUYPATTERN***",2.8972366148531914,1,1,0
 "PCTChangeGT4,HTGT1.3LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)buyMay5DayCeilReversal,",3.1875,1,1,0
 "PCTChangeGT4,LTGT1.3,##UPTREND:buyMonth3LowReversal(Confirm),##(Check-chart-sell):month3Low-InPlus,ReversalLowMonth3,***BUYPATTERN***",-4.705003734129956,1,0,1
-"PCTDayChangeLT0,HTGT3.0,,HTGTPCTDayChange,buyYearHigh-0,***SELLPATTERN***",-1.7928286852589566,1,0,1
 "PCTChangeLT-0.5,HTGT1.3,sellPatternsML,sellPatterns-LT-1.5-SMALT0,(SMA9LT0),",-2.3537323470073974,1,0,1
 "PCTChangeGT2,LTGT1.3,##UPTREND:buyYear2Low,sellYear2LowLT-40-last3DayDown(triggerAfter-9:15),",-4.930319709567868,1,0,1
 "PCTChangeLT-3,LTGT1.3,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,##DOWNTREND:sellMonth3High(InDownTrend),***SELLPATTERN***",-0.8019471839719994,2,0,2
@@ -1319,6 +1316,10 @@
 "PCTChangeLT-1,,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,",1.4869281045751672,1,1,0
 "PCTChangeLT-1,,##(Test)(check-chart)-buySMAUpTrend,",-0.8109640047005984,2,1,1
 "PCTChangeLT-1,,##(Test)(Check-chart):year2Low-InMinus,(Test)checkConsolidationBreakDown-2week-(risky)-year2Low,week2BarLowChangeLT0,",-0.22756174285522146,1,0,1
+"PCTDayChangeLT0,,(Test)buySMA4Reversal,***SELLPATTERN***",-0.2815400119128166,43,18,25
+"PCTChangeGT2,HTGT1.3,(check-chart):ML:buy-2week-breakoutup,",0.9371513573819197,1,1,0
+"PCTChangeLT-1,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,ML:sellRisingMA-down-(Risky),",1.069131832797424,1,1,0
+"PCTChangeGT3,,buyUpTrend-1-YearHigh,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT2,weekHighGTweek2High,brokenToday,***SELLPATTERN***",-4.759759759759766,1,0,1
 "PCTChangeGT0,LTGT1.3,LTGTPCTDayChange,##RisingMA(Test)(check-chart-buy)-1DayUp,",0.322332623803657,6,1,5
 "PCTChangeLT-4,HTGT3.0,LTGT1.3,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",0.35369774919614877,1,1,0
 "PCTChangeGT0.5,,--,",2.009915517080089,3,3,0
@@ -1345,7 +1346,7 @@
 "PCTChangeLT-1,,--,set2,",-2.4650319928356095,3,1,2
 "PCTChangeGT2,HTGT1.3,buyUpTrend-1-YearHigh,$$MaySellCheckChart-(IndexNotDownInSecondHalf),***SELLPATTERN***",-1.5799256505576276,1,0,1
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-1,brokenToday,***SELLPATTERN***",-4.544961240310072,1,0,1
-"PCTChangeGT2,,##RisingMA(Test)(check-chart-buy)-2DayUp,",-0.5404556840052682,29,12,17
+"PCTChangeGT2,,##RisingMA(Test)(check-chart-buy)-2DayUp,",-0.5097593351181361,30,13,17
 "PCTChangeLT-1,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,sellUpTrend-2(Risky),***SELLPATTERN***",-1.3475177304964512,1,0,1
 "PCTChangeGT2,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT1,brokenToday,buyYearHigh-3,",1.7329545454545454,1,1,0
 "PCTChangeLT-2,LTGT1.3,maySellAfter10:20HighVolatileLastDayUp-GT10,",-6.881243063263029,1,0,1
@@ -1358,7 +1359,7 @@
 "PCTChangeGT0.5,,buySuperTrend-0,+-,set2,***SELLPATTERN***",-0.32665059461028095,2,1,1
 "PCTChangeLT-1,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyMorningStar-HighLowerTail-(checkChart),***SELLPATTERN***",-0.8606466715016965,4,1,3
 "PCTDayChangeLT0,LTGT1.3,LTGTPCTDayChange,$$MayBuy-CheckChart(downTrend-mayReverseAtMonth3High)-0,buyYearHigh-1,--,",-2.0771224886584547,1,0,1
-"PCTChangeLT-2,,(Test)checkCupDown,bar_low,",-0.22904255297664175,30,10,20
+"PCTChangeLT-2,,(Test)checkCupDown,bar_low,",-0.3179806869900702,26,8,18
 "PCTChangeGT3,HTGT1.3,(Test)check10DayLowReversal,buyUpTrend-1-YearHigh,ML:sellFinalContinue-(lastDayDown)-1,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***SELLPATTERN***",-2.167630057803468,1,0,1
 "PCTChangeGT3,,buyDownTrend-2(Risky),",0.1977758479432551,30,16,13
 "PCTChangeGT1,HTGT1.3,sellFinalContinue-(lastDayUp)-1,",1.300148588410104,1,1,0
@@ -1404,7 +1405,7 @@
 "PCTChangeGT4,HTGT3.0,LTGT1.3,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT4,weekHighGTweek2High,",0.28688524590163933,1,1,0
 "PCTChangeGT2,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1,week2BarHighChangeGT1,weekHighGTweek2High,",0.8504424018555186,1,1,0
 "PCTChangeLT-2,,ML:BuyRisingMA-Risky-1,",1.2934624190603867,14,8,6
-"PCTChangeGT2,,(Test)checkCupUp-inUpTrend,bar_high,buyDownTrend-2(Risky),",-1.7925618742668994,4,0,4
+"PCTChangeGT2,,(Test)checkCupUp-inUpTrend,bar_high,buyDownTrend-2(Risky),",-1.740688377043555,3,0,3
 "PCTChangeGT2,HTGT1.3,(Test)checkCupUp-mayReversalSell,",-0.05347838679927094,6,3,3
 "PCTChangeLT-2,HTGT1.3,sellUpTrend-2(Risky),***BUYPATTERN***",-1.1164231036882413,2,0,2
 "PCTChangeLT-2,,buyYearHigh-3,***SELLPATTERN***",-0.23987206823027113,1,0,1
@@ -1445,6 +1446,7 @@
 "PCTChangeGT1,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT0,weekHighGTweek2High,brokenToday,",-0.44477544496136545,5,2,3
 "PCTChangeLT-1,LTGT1.3,ML:BuyRisingMA-Risky-0,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",2.483498349834976,1,1,0
 "PCTChangeLT-3,LTGT1.3,##(Check-chart-buy):month3High-InMinus,ReversalHighMonth3,##DOWNTREND:sellMonth3HighReversal(InDownTrend),***SELLPATTERN***",-0.4301065421200082,2,0,2
+"PCTChangeGT0,HTGT3.0,,HTGTPCTDayChangeLTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,++,set2,",-1.8698635301213868,1,0,1
 "PCTChangeLT-2,HTGT1.3,HTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,##DOWNTREND:sellYearHigh(InDownTrend),",-0.1071428571428612,1,0,1
 "PCTDayChangeLT0,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,+-,set1,",1.1337706788362707,1,1,0
 "PCTChangeLT-0.5,LTGT1.3,LTGTPCTDayChange,buyMorningStar-HighLowerTail-(checkChart),buyMorningStar-dayDown,",-0.061149538416673664,3,2,1
@@ -1609,6 +1611,7 @@
 "PCTChangeLT-2,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)checkCupDown-3dayDown-mayReversalBuy,",2.863076694852389,1,1,0
 "PCTChangeLT-2,,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,ML:sellFinalCandidate-(lastDayUp),##sellTenDaysMoreThanTen,",-0.43966521877317266,1,0,1
 "PCTChangeGT4,HTGT1.3,##UPTREND:buyYear2Low,sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),***BUYPATTERN***",-1.3620491239837782,2,0,2
+"PCTChangeGT4,LTGT1.3,(check-chart):ML:buy-2week-breakoutup,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***BUYPATTERN***",2.8972366148531914,1,1,0
 "PCTChangeGT0.5,HTGT3.0,LTGT3.0LTGT1.3,sellPatterns-Risky-LT-0.9-SMALT0,(SMA4LT(-1.5)),",0.31804733727810314,1,1,0
 "PCTChangeGT1,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##RisingMA(Test)(check-chart-buy)-1DayUp,",1.59134899486098,3,2,1
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,-+,",9.33903576982892,1,1,0
@@ -1626,12 +1629,12 @@
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week-(risky)-year2Low,week2BarLowChangeLT-3,weekLowLTweek2Low,",-0.08604794099570319,1,0,1
 "PCTChangeLT-1,,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,brokenToday,",0.4341334708920218,2,2,0
 "PCTChangeGT0.5,LTGT1.3,LTGTPCTDayChange,(Test)sellSMA4Reversal,",0.05834779095401066,5,2,3
+"PCTChangeLT-2,LTGT1.3,ML:BuyRisingMA-Risky-0,",0.011477671386293964,2,1,1
+"PCTDayChangeLT0,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-1,",0.4459475141327172,1,1,0
 "PCTChangeGT2,HTGT3.0,,HTGTPCTDayChange,##RisingMA(check-chart-sell)-MaySellCheckChart,##UPTREND:buyYear2Low,buyYearLow,",2.2720000000000073,1,1,0
 "PCTChangeLT-0.5,HTGT3.0,,HTGTPCTDayChange,##(Test)(check-chart)-sellSMADownTrend-2DayUp-weekHighTouch,",-0.5084745762711896,1,0,1
 "PCTChangeLT-1,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,***SELLPATTERN***",-0.488182315833461,5,1,4
 "PCTChangeGT2,HTGT1.3,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,sellRisingMAuptrend-2,",-3.0372639101582526,1,0,1
-"PCTChangeGT1,,sellSuperTrend-2,++,set1,",1.3510178901912455,1,1,0
-"PCTChangeLT-2,LTGT1.3,ML:BuyRisingMA-Risky-0,(Test)checkCupDown,bar_low,",-1.3696808510638239,1,0,1
 "PCTDayChangeLT0,LTGT1.3,##(Test)(check-chart)-buySMAUpTrend,",-1.713521012166245,2,0,2
 "PCTChangeLT-4,LTGT3.0LTGT1.3,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,##DOWNTREND:sellMonth6High(InDownTrend),",2.149631190727079,1,1,0
 "PCTChangeGT0,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,weekHighGTweek2High,",-0.8268733850129169,1,0,1
@@ -1646,9 +1649,6 @@
 "PCTChangeLT-4,,sellRisingMA-1,***BUYPATTERN***",-3.0151515151515116,1,0,1
 "PCTDayChangeLT0,HTGT1.3,HTGTPCTDayChange,buyYearHigh-0,",-0.29885007816967246,25,10,14
 "PCTChangeGT2,LTGT1.3,buyTenDaysLessThanMinusTen,sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),***BUYPATTERN***",-0.6374203224596883,1,0,1
-"PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,(Test)MaySellCheckChart-monthHighReversal,monthHighChangeGT-1,",0.8338709677419325,1,1,0
-"PCTChangeGT4,HTGT1.3,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT4,",-0.6471954862263487,1,0,1
-"PCTChangeLT-3,,ML:buyRisingMA-down-Risky,(Test)checkCupDown-inDownTrend,bar_low,***SELLPATTERN***",0.03703703703704546,1,1,0
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChange,buyMayYear2LowBreakingUp,***SELLPATTERN***",-0.22251891410769914,1,0,1
 "PCTChangeLT-2,LTGT1.3,(Test)checkCupDown-3dayDown-mayReversalBuy,",0.7563849494366711,2,1,1
 "PCTChangeGT2,HTGT1.3,HTGTPCTDayChange,##RisingMA(check-chart-sell)-MaySellCheckChart,##UPTREND:buyYear2Low,",0.7588739290085734,1,1,0
@@ -1697,7 +1697,6 @@
 "PCTChangeGT1,,ML:sellFinalContinue-(lastDayDown)-1,buyDownTrend-0(Risky),",-0.6633333333333363,1,0,1
 "PCTChangeGT8,HTGT3.0,LTGT1.3,buyFinalContinue-00,buyDayHighVolLow-0,",2.015793848711552,1,1,0
 "PCTChangeGT1,HTGT1.3,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,sellYear2LowLT-40-last3DayDown(triggerAfter-9:15),***BUYPATTERN***",2.7700831024930745,1,1,0
-"PCTChangeGT4,LTGT1.3,sell-2week-breakoutup,sellDayHighVolLow-01-checkMorningTrend(.5SL),***BUYPATTERN***",3.4430733201225006,1,1,0
 "PCTChangeGT0.5,,maySellAfter10:20HighVolatileLastDayUp-GT10,",0.5366726296958855,1,1,0
 "PCTDayChangeLT0,LTGT1.3,LTGTPCTDayChange,sellSuperTrend-1,+-,set2,buyYear2LowMovingSMA,***SELLPATTERN***",-1.148648648648641,1,0,1
 "PCTChangeGT4,,##(Check-chart-sell):month3Low-InPlus,ReversalLowMonth3,",1.9322990126939414,1,1,0
@@ -1850,10 +1849,10 @@
 "PCTChangeLT-4,,sellPatternsML,sellPatterns-LT-1.5-SMALT0,(SMA9LT0),",1.542368796467159,2,2,0
 "PCTChangeGT0,,++,set2,",-0.47486817981840085,28,9,19
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-2dayDown,##DOWNTREND:sellYearHigh(InDownTrend),***SELLPATTERN***",0.16154897393497195,6,3,3
+"PCTChangeLT-4,HTGT1.3LTGT3.0LTGT1.3,##DOWNTREND:sellMonth3LowBreak,",-0.65046217048957,1,0,1
+"PCTChangeLT-2,LTGT1.3,ML:BuyRisingMA-Risky-0,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,",-1.3696808510638239,1,0,1
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,$$MaySellCheckChart-(|_|`|),(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend),***BUYPATTERN***",2.232779097387168,1,1,0
 "PCTChangeLT-8,HTGT1.3LTGT1.3,(check-chart)buyEMA6<EMA14,***SELLPATTERN***",4.798127559976588,1,1,0
-"PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,##RisingMA(check-chart-sell)-MaySellCheckChart,$$ML:(check-chart-2-3MidCapCross)MaySellCheckChart-Risky,",2.216482598974028,2,2,0
-"PCTChangeGT3,,ML:buyFinalContinue-00,",-1.5555555555555534,1,0,1
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,-+,",-3.2401972293965615,1,0,1
 "PCTChangeLT-2,,(Test)checkCupDown-2dayDown,##buyFinalContinue-2,##sellTenDaysMoreThanTen,***BUYPATTERN***",0.5095541401273957,1,1,0
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,buySuperTrend-0,+-,set2,***SELLPATTERN***",-1.475906870108785,2,0,2
@@ -1888,7 +1887,7 @@
 "PCTChangeLT-3,,sellDayLowVolLow-03-checkMorningTrend(.5SL),##(Test)(Check-chart-sell):year2Low-InMinus,",-7.584227224656283,1,0,1
 "PCTChangeGT1,,buyDownTrend-1,***SELLPATTERN***",-0.586734693877554,1,0,1
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buySuperTrend-0,+-,set2,***SELLPATTERN***",-0.2036199095022573,1,0,1
-"PCTChangeGT3,,(check-chart):ML:buy-2week-breakoutup,sell-2week-breakoutup,***BUYPATTERN***",-0.6675049555713767,2,0,2
+"PCTChangeGT3,,(check-chart):ML:buy-2week-breakoutup,sell-2week-breakoutup,***BUYPATTERN***",-0.5250875145857676,1,0,1
 "PCTChangeLT-3,HTGT1.3LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,***SELLPATTERN***",-2.4146454315215258,2,0,2
 "PCTChangeLT-1,,(Test)checkConsolidationBreakDown-2week-(risky)-PCTDayChangeGT-1,week2BarLowChangeLT-3,weekLowLTweek2Low,",0.796906289999335,3,3,0
 "PCTDayChangeLT0,HTGT1.3,HTGTPCTDayChange,ML:sellRisingMA-down-(Risky),",-1.264181523500803,1,0,1
@@ -1941,7 +1940,7 @@
 "PCTChangeLT-4,HTGT3.0,,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)buyLastDayHighDownReversal,ML:sellRisingMA-down-(Risky),***BUYPATTERN***",6.816584680252978,1,1,0
 "PCTChangeGT16,HTGT3.0,LTGT3.0LTGT1.3,sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),maySellAfter10:20HighVolatileLastDayUp-GT10,***BUYPATTERN***",13.916884314026726,2,1,1
 "PCTChangeGT0.5,HTGT3.0,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,maySellAfter10:20HighVolatileLastDayUp-GT10,",5.142857142857134,1,1,0
-"PCTChangeLT-4,,##Test:longDownTrend-0-IndexNotDownLastDay(checkBase),",0.33902408247002397,3,2,1
+"PCTChangeLT-4,,##Test:longDownTrend-0-IndexNotDownLastDay(checkBase),",-0.25590328739349655,2,1,1
 "PCTChangeLT-3,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,(Test)checkCupDown-2dayDown-mayReversalBuy,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",6.637490882567465,1,1,0
 "PCTChangeGT2,LTGT1.3,##UPTREND:buyYear2Low,sell-2week-breakoutup,",-2.9022259791490432,1,0,1
 "PCTChangeGT2,LTGT1.3,LTGTPCTDayChange,(Test)MayBuyCheckChart-monthLowReversal,monthLowChangeLT-2,weekLowLTweek2,",-0.8899297423887614,1,0,1
@@ -2054,14 +2053,14 @@
 "PCTChangeLT-4,HTGT1.3,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,***SELLPATTERN***",1.517654739915147,3,3,0
 "PCTChangeGT0,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyYear2Low,BreakLowYear2,",-3.4642032332563506,1,0,1
 "PCTChangeLT-2,HTGT1.3,(Test)checkCupDown-inDownTrend,bar_low,sellFinalCandidate-(lastDayDown)-(buyPattern),***BUYPATTERN***",0.043478260869562746,1,1,0
-"PCTChangeLT-0.5,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,ML:sellRisingMA-down-(Risky),",4.603729603729607,1,1,0
-"PCTChangeLT-1,,(Test)checkCupDown-inDownTrend,bar_low,sellFinal,",-1.4420062695924836,1,0,1
+"PCTChangeLT-1,,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,sellFinal,",-1.4420062695924836,1,0,1
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend),ML:BuyRisingMA-Risky-0,***SELLPATTERN***",0.6932773109243722,1,1,0
 "PCTChangeLT-3,,ML:buyFinalContinue-4,sellFinal,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),***SELLPATTERN***",2.7064346865506637,1,1,0
 "PCTChangeLT-3,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,***SELLPATTERN***",0.33348154735437974,1,1,0
 "PCTChangeGT1,,##finalBreakOutBuyContinue-1-test-atYearLow,",0.31191605554572016,7,4,3
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,buyYear2LowMovingSMA,***SELLPATTERN***",1.463700234192034,2,2,0
 "PCTChangeLT-3,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,##DOWNTREND:sellMonth3High(InDownTrend),***SELLPATTERN***",0.7374403015559489,3,2,1
+"PCTChangeLT-2,HTGT1.3,HTGTPCTDayChangeLTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,ML:buyRisingMA-down-Risky,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-1.2126189670998664,1,0,1
 "PCTChangeLT-3,HTGT3.0,,##sellTenDaysMoreThanTen,",-4.518072289156627,1,0,1
 "PCTChangeLT-3,LTGT3.0LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,***SELLPATTERN***",0.7915567282322014,1,1,0
 "PCTChangeLT-2,LTGT1.3,LTGTPCTDayChange,$$MayBuyCheckChart-(IndexNotUpInSecondHalf),##(Check-chart-buy):YearHigh-InMinus,NearHighYear,##DOWNTREND:sellYearHigh(InDownTrend),",-0.21874999999999648,1,0,1
@@ -2229,7 +2228,7 @@
 "PCTChangeLT-1,,buyYear2LowMovingSMA,##(Test)(check-chart)-buySMAUpTrend,***SELLPATTERN***",-0.1623376623376685,1,0,1
 "PCTChangeLT-3,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,***SELLPATTERN***",-0.5642633228840161,1,0,1
 "PCTChangeLT-1,LTGT1.3,ML:BuyRisingMA-Risky-1,",-0.8130657149164722,2,0,2
-"PCTChangeGT4,,sell-2week-breakoutup,***BUYPATTERN***",0.190458060131368,20,7,13
+"PCTChangeGT4,,sell-2week-breakoutup,***BUYPATTERN***",0.07175363863914642,19,6,13
 "PCTChangeGT1,,##(Check-chart)sellMonth3High-Continue,",-0.3808378432551568,1,0,1
 "PCTChangeLT-1,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,ML:BuyRisingMA-Risky-2,",-3.0230708035003953,1,0,1
 "PCTDayChangeLT0,HTGT1.3,HTGTPCTDayChange,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,ML:BuyRisingMA-Risky-2,",2.7195571955719493,1,1,0
@@ -2249,6 +2248,9 @@
 "PCTDayChangeLT0,HTGT1.3,HTGTPCTDayChange,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,##(Test)(check-chart)-buySMAUpTrend,",0.4482834025803655,1,1,0
 "PCTChangeGT2,HTGT3.0,,HTGTPCTDayChange,sellSuperTrend-0,--,set1,",4.139690013733563,1,1,0
 "PCTChangeLT-2,,ML:buyFinalContinue-3,##sellTenDaysMoreThanTen,***SELLPATTERN***",0.28792569659443285,1,1,0
+"PCTChangeGT2,,##UPTREND:buyYear2Low,(check-chart):ML:buy-2week-breakoutup,",-0.3347227020391544,5,3,2
+"PCTChangeGT1,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,buyDownTrend-2(Risky),",0.04999999999999716,1,1,0
+"PCTChangeGT2,,(check-chart):ML:buy-2week-breakoutup,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***BUYPATTERN***",-0.05439339910679761,2,1,1
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend)-Already10DayDown,",-4.2165898617511495,1,0,1
 "PCTChangeLT-4,HTGT1.3LTGT3.0LTGT1.3,(Test)sellUptrendReversal,",-6.740326713046082,2,0,2
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,$$ML:(check-chart-2-3MidCapCross)MayBuyCheckChart-Risky,(SMA9GT0),",1.6382252559726935,1,1,0
@@ -2267,11 +2269,8 @@
 "PCTChangeGT3,,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***BUYPATTERN***",-3.8067349926793614,1,0,1
 "PCTChangeGT2,HTGT1.3,sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),***BUYPATTERN***",-1.5948008097506998,3,0,3
 "PCTChangeLT-3,,(Test)buyMay5DayFloorReversal,",-0.5876068376068345,1,0,1
-"PCTChangeGT2,,(check-chart):ML:buy-2week-breakoutup,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***BUYPATTERN***",0.05394713181081721,1,1,0
-"PCTChangeGT2,,##UPTREND:buyYear2Low,(check-chart):ML:buy-2week-breakoutup,",-0.3347227020391544,5,3,2
-"PCTChangeGT1,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,buyDownTrend-2(Risky),",0.04999999999999716,1,1,0
 "PCTChangeGT0.5,,sellPatterns-Risky-LT-0.9-SMALT0,(SMA9LT0),***BUYPATTERN***",-0.30080457652488835,3,0,3
-"PCTChangeLT-4,,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",0.07612019842694151,4,2,2
+"PCTChangeLT-4,,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",0.3666719231809662,5,3,2
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyYearHigh-3,***SELLPATTERN***",2.1763731356192944,2,2,0
 "PCTChangeGT3,,##UPTREND:buyMonth6Low,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,brokenToday,(check-chart):ML:buy-2week-breakoutup,sell-2week-breakoutup,***BUYPATTERN***",-1.538461538461536,1,0,1
 "PCTChangeLT-3,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,",-0.08535726188421967,98,43,55
@@ -2327,7 +2326,7 @@
 "PCTChangeLT-4,HTGT1.3LTGT1.3,##DOWNTREND:sellMonth6HighReversal(InDownTrend),",12.972695808229705,1,1,0
 "PCTChangeLT-1,,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,***SELLPATTERN***",-5.099113197704735,1,0,1
 "PCTChangeGT2,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,(check-chart)buy-2week-breakoutup(|-|-| or --|),",0.13548369916073041,4,2,2
-"PCTChangeGT2,LTGT1.3,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",-0.7079274714888735,4,1,3
+"PCTChangeGT2,LTGT1.3,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",-0.8905777184327106,3,1,2
 "PCTChangeGT2,LTGT1.3,LTGTPCTDayChange,(Test)checkCupUp-3dayUp,sellFinalContinue-00,***BUYPATTERN***",0.821355236139642,1,1,0
 "PCTChangeGT2,HTGT1.3LTGT1.3,sellFinalContinue-(lastDayUp)-1,",0.7040795195692762,1,1,0
 "PCTDayChangeLT0,HTGT1.3,HTGTPCTDayChange,--,set2,",-1.9224017447259496,4,0,3
@@ -2463,6 +2462,8 @@
 "PCTChangeLT-2,,--,",0.05336179295624333,1,1,0
 "PCTChangeLT-16,LTGT1.3,buyYear2Low,NearLowYear2,***SELLPATTERN***",7.564102564102561,1,1,0
 "PCTChangeGT8,,sellYear2LowLT-40-last3DayDown(triggerAfter-9:15),***BUYPATTERN***",1.8270424147487647,2,1,1
+"PCTChangeGT3,,ML:buyFinalContinue-00,",-1.5555555555555534,1,0,1
+"PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,##RisingMA(check-chart-sell)-MaySellCheckChart,$$ML:(check-chart-2-3MidCapCross)MaySellCheckChart-Risky,",2.216482598974028,2,2,0
 "PCTChangeLT-3,,ML:buyFinalContinue-(lastDayUp),",-4.759740259740257,1,0,1
 "PCTChangeLT-2,HTGT1.3LTGT1.3,(Test)buyMay5DayFloorReversal,(Test)checkCupDown-3dayDown-mayReversalBuy,",-0.4927536231884025,1,0,1
 "PCTChangeGT3,,buyFinalCandidate-(lastDayDown),",0.2818817097140984,2,1,1
@@ -2678,6 +2679,8 @@
 "PCTChangeGT2,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT1,brokenToday,",-0.814691285623407,4,0,4
 "PCTChangeGT1,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT0,",0.7704402515723294,1,1,0
 "PCTDayChangeLT0,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT1,weekHighGTweek2High,buyYearHigh-3,",0.9364548494983234,1,1,0
+"PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,(Test)MaySellCheckChart-monthHighReversal,monthHighChangeGT-1,",0.8338709677419325,1,1,0
+"PCTChangeGT4,HTGT1.3,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT4,",-0.6471954862263487,1,0,1
 "PCTChangeGT3,,##UPTREND:buyYear2LowReversal(Confirm),sell-2week-breakoutup,buyYearLow,",-0.00888099467139512,1,0,1
 "PCTChangeLT-4,LTGT1.3,##DOWNTREND:sellMonth6High(InDownTrend),",-1.2857142857142938,1,0,1
 "PCTChangeLT-4,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)buyLastDayHighDownReversal,",-1.2573025146050263,1,0,1
@@ -2822,6 +2825,8 @@
 "PCTChangeGT2,,sellYear2LowLT-40-last3DayDown(triggerAfter-9:15),",-0.19098875249609196,3,1,2
 "PCTChangeGT3,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT1,",1.0573930927087185,3,2,1
 "PCTChangeGT0.5,LTGT1.3,LTGTPCTDayChange,sellSuperTrend-1,++,set2,",0.6378660481299059,1,1,0
+"PCTChangeGT3,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT0,",-0.4039775435623155,2,1,1
+"PCTChangeLT-3,,ML:buyRisingMA-down-Risky,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,***SELLPATTERN***",0.03703703703704546,1,1,0
 "PCTChangeLT-1,HTGT1.3,(Test)buyMay5DayFloorReversal,",0.6660899653979279,1,1,0
 "PCTDayChangeLT0,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week-(risky)-year2Low,week2BarLowChangeLT-1,",0.1573564122738024,1,1,0
 "PCTChangeGT2,,(Test)check10DayLowReversal,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,##UPTREND:buyMonth6Low,sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),",-3.1866666666666634,1,0,1
@@ -3107,8 +3112,6 @@
 "PCTChangeLT-0.5,,(Test)checkConsolidationBreakDown-2week-(risky)-year2Low,week2BarLowChangeLT-1,weekLowLTweek2Low,",-0.9013334722464249,4,1,3
 "PCTChangeLT-2,,buyYear2Low,BreakLowYear2,",-3.1791907514450837,1,0,1
 "PCTChangeGT2,HTGT1.3,##UPTREND:buyYear2Low,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT0,sell-2week-breakoutup,buyYearLow,***BUYPATTERN***",1.7283950617284023,1,1,0
-"PCTChangeLT-1,HTGT3.0,,HTGTPCTDayChange,(Test)checkCupDown-2dayDown,sellUpTrend-2(Risky),",4.410876132930521,1,1,0
-"PCTChangeLT-2,,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",0.710726883441391,3,2,0
 "PCTChangeLT-2,LTGT1.3,ML:BuyRisingMA-Risky-1,##sellTenDaysMoreThanTen,",-1.4088397790055311,1,0,1
 "PCTChangeLT-2,,sellFinalCandidate-(lastDayDown)-(buyPattern),***BUYPATTERN***",-2.905701754385971,1,0,1
 "PCTChangeLT-3,,sellFinal1,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",2.4431818181818246,1,1,0
@@ -3148,7 +3151,9 @@
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,$$ML:MayBuyCheckChart-last3DayDown,$$MayBuy-CheckChart(downTrend-mayReverseLast4DaysDown),buyMorningStar-(checkChart),",-1.4765100671140863,1,0,1
 "PCTChangeLT-1,,ML:BuyRisingMA-Risky-0,(Test)checkCupDown-2dayDown,",-0.384615384615381,1,0,1
 "PCTChangeGT0.5,,(Test)check10DayLowReversal,",-0.7217273112448043,2,1,1
-"PCTChangeLT-2,HTGT1.3,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-0.359947643979065,1,0,1
+"PCTDayChangeLT0,HTGT3.0,,HTGTPCTDayChange,buyYearHigh-0,***SELLPATTERN***",-1.7928286852589566,1,0,1
+"PCTChangeGT1,,ML:sellFinalContinue-(lastDayDown)-1,***BUYPATTERN***",1.912888731024495,2,2,0
+"PCTChangeLT-2,HTGT1.3,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-0.359947643979065,1,0,1
 "PCTChangeGT1,HTGT1.3,##(Check-chart):year2High-InPlus,$$ML:(check-chart-2-3MidCapCross)MaySellCheckChart-Risky,",0.3386277513504834,1,1,0
 "PCTChangeLT-1,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,brokenToday,",-1.2874109121483424,3,0,3
 "PCTChangeGT2,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT3,weekHighGTweek2High,",-0.6501873373660213,7,1,6
@@ -3196,6 +3201,8 @@
 "PCTChangeLT-4,LTGT1.3,ML:buyDayLowVolLow-03-checkMorningTrend(.5SL)-after10:30,##DOWNTREND:sellYear2HighReversal(InDownTrend),***SELLPATTERN***",5.143884892086335,1,1,0
 "PCTChangeLT-3,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,$$MayBuy-CheckChart(monthLow-minimumLast2DayDown),",-0.034482758620697496,1,0,1
 "PCTChangeLT-2,LTGT1.3,##(Check-chart-buy):month3High-InMinus,ReversalHighMonth3,***SELLPATTERN***",-1.9589067911950953,3,1,2
+"PCTDayChangeLT0,HTGT1.3,HTGTPCTDayChange,(Test)buySMA4Reversal,",0.22913515345636495,40,16,23
+"PCTChangeLT-2,HTGT1.3,(Test)checkCupDown,bar_low,",2.9074889867841387,1,1,0
 "PCTChangeLT-4,HTGT1.3LTGT1.3,##DOWNTREND:sellMonth6LowBreak,",1.9399101017269906,1,1,0
 "PCTChangeGT4,HTGT3.0,,sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),***BUYPATTERN***",-2.2616136919315335,1,0,1
 "PCTChangeLT-1,,buySuperTrend-0,+-,set2,***SELLPATTERN***",-0.4150238638721727,1,0,1
@@ -3231,8 +3238,6 @@
 "PCTChangeGT2,,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,##(Check-chart):yearHigh-InPlus,",0.46301339434710137,4,1,3
 "PCTChangeGT0.5,HTGT3.0,,HTGTPCTDayChange,buyMorningStar-HighUpperTail-(checkChart),***SELLPATTERN***",1.7316165597189948,5,4,1
 "PCTChangeLT-1,HTGT1.3LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,***SELLPATTERN***",-0.3931111943092517,1,0,1
-"PCTChangeLT-4,LTGT3.0LTGT1.3,##DOWNTREND:sellMonth6LowBreak,",0.5016340734076051,2,1,1
-"PCTChangeLT-2,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-0.9953504391251968,1,0,1
 "PCTChangeGT4,,##UPTREND:buyYear2Low,(check-chart):ML:buy-2week-breakoutup,",2.417027417027413,1,1,0
 "PCTChangeLT-0.5,LTGT1.3,LTGTPCTDayChange,buyMorningStar-HighLowerTail-(checkChart),##buyMorningStar-1-NotUpSecondHalfAndUp2to3,",-0.7284964929399586,3,1,2
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,--,",-1.9192702143125329,2,0,2
@@ -3396,7 +3401,7 @@
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,buyYearHigh-1,",-0.9952949692363372,1,0,1
 "PCTChangeLT-1,HTGT1.3LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,",2.33876935024356,3,2,1
 "PCTChangeGT4,,##UPTREND:buyMonth6Low,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,brokenToday,(check-chart):ML:buy-2week-breakoutup,",0.019256691700370258,1,1,0
-"PCTChangeGT2,,(Test)checkCupUp-month3HighMTmonth3Low,bar_high,",0.3140274130689824,38,23,15
+"PCTChangeGT2,,(Test)checkCupUp-month3HighMTmonth3Low,bar_high,",0.4600857711240877,39,24,15
 "PCTChangeLT-4,LTGT1.3,buyYear2Low,BreakLowYear2,***SELLPATTERN***",4.1161421103524445,3,3,0
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChangeLTGT1.3,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,",3.037570274079484,2,2,0
 "PCTChangeGT4,HTGT3.0,LTGT1.3,(Test)check10DayLowReversal,",7.8082191780821955,1,1,0
@@ -3452,11 +3457,12 @@
 "PCTChangeGT4,HTGT1.3,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT0,brokenToday,",1.0981912144702768,1,1,0
 "PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,ReversalHighMonth3,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-0.468384074941452,1,0,1
 "PCTChangeLT-2,,ML:buyRisingMA-down-Risky,(Test)checkCupDown-3dayDown,***SELLPATTERN***",0.7238508867173362,1,1,0
+"PCTChangeGT1,,sellSuperTrend-2,++,set1,",1.3510178901912455,1,1,0
 "PCTChangeGT3,HTGT1.3,(Test)checkCupUp-downTrendLastDayUp-mayReversalSell,",-0.5046936563756991,2,0,2
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,-+,set1,",-1.3345864661654179,1,0,1
-"PCTChangeGT3,,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,(check-chart):ML:buy-2week-breakoutup,",-2.4326269702393803,2,0,2
+"PCTChangeGT3,,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,(check-chart):ML:buy-2week-breakoutup,",-4.05786350148368,1,0,1
 "PCTChangeLT-2,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-4,weekLowLTweek2Low,",-0.4787234042553162,1,0,1
-"PCTChangeLT-3,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-2.5212915088896644,2,0,2
+"PCTChangeLT-3,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-1.7839052266177224,3,0,3
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,--,set1,",0.9216454142706275,2,2,0
 "PCTChangeLT-2,HTGT3.0,,HTGTPCTDayChange,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,",-0.8606949314631778,1,0,1
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1,week2BarHighChangeGT0,weekHighGTweek2High,brokenToday,",0.21897810218978933,1,1,0
@@ -3510,7 +3516,7 @@
 "PCTChangeGT1,,ML:buyFinalCandidate-2,",0.38392862816392437,5,4,1
 "PCTChangeGT2,LTGT1.3,##RisingMA(Test)(check-chart-buy)-1DayUp,",0.5462541634253888,5,3,2
 "PCTChangeLT-3,LTGT1.3,(Test)buyMay5DayFloorReversal,***SELLPATTERN***",0.6256684491978635,1,1,0
-"PCTChangeGT3,LTGT1.3,(check-chart):ML:buy-2week-breakoutup,",-0.634907690418352,2,1,1
+"PCTChangeGT3,LTGT1.3,(check-chart):ML:buy-2week-breakoutup,",0.17356475300399926,1,1,0
 "PCTChangeGT3,,(Test)check10DayLowReversal,##UPTREND:buyMonth3Low,buyFinal1,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***BUYPATTERN***",-0.11614401858303638,1,0,1
 "PCTChangeLT-4,HTGT3.0,,HTGTPCTDayChange,##(Check-chart-buy):month3High-InMinus,ReversalHighMonth3,##DOWNTREND:sellMonth3HighReversal(InDownTrend),",0.39473684210526566,1,1,0
 "PCTChangeLT-4,HTGT1.3LTGT1.3,ML:dayLowBuy,",0.6271013236204644,2,1,1
@@ -3550,8 +3556,6 @@
 "PCTChangeLT-2,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,",-0.7558915073366016,1,0,1
 "PCTChangeLT-1,,(Test)checkConsolidationBreakDown-2week-(risky)-PCTDayChangeGT-1,week2BarLowChangeLT-1,brokenToday,",-0.4931594654400935,5,1,4
 "PCTChangeGT4,HTGT1.3,sellYear2LowContinue,",-1.277729242266301,2,1,1
-"PCTChangeLT-1,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,",-0.1876523724726396,5,3,2
-"PCTChangeLT-3,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-0.6249999999999925,1,0,1
 "PCTChangeGT0,LTGT1.3,LTGTPCTDayChange,sellSuperTrend-1,++,set2,",2.126923076923084,1,1,0
 "PCTChangeLT-0.5,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-2,",-0.9744897959183704,1,0,1
 "PCTChangeLT-2,,(Test)checkCupDown-inDownTrend,bar_low,ML:buyFinalContinue-3,",-1.1880356337392928,2,1,1
@@ -3594,13 +3598,11 @@
 "PCTChangeGT2,HTGT3.0,,HTGTPCTDayChange,(Test)checkCupUp-inUpTrend,",-1.3798896088312937,1,0,1
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,buyYearHigh-3,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend)-Already10DayDown,***BUYPATTERN***",0.0,1,0,0
 "PCTDayChangeLT0,HTGT3.0,,HTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1,week2BarHighChangeGT1,weekHighGTweek2High,",-2.3963515754560607,1,0,1
-"PCTChangeGT1,,(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1,weekHighGTweek2High,brokenToday,",4.367231638418077,1,1,0
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)buySMA4Reversal,",-2.198527089280542,3,1,2
 "PCTChangeGT3,,##UPTREND:buyYearLowReversal(Confirm),buyYearLow,",-2.0903573836817415,1,0,1
 "PCTChangeGT4,LTGT1.3,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,brokenToday,sell-2week-breakoutup,",-2.08083233293318,1,0,1
 "PCTChangeGT0.5,,##RisingMA(Test)(check-chart-buy)-1DayUp,",-0.25309980629834145,38,15,23
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,",-2.157829839704069,1,0,1
-"PCTChangeGT2,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,brokenToday,(check-chart):ML:buy-2week-breakoutup,sell-2week-breakoutup,",-1.729106628242075,1,0,1
 "PCTChangeGT0.5,LTGT1.3,LTGTPCTDayChange,++,",3.6113328012769284,1,1,0
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,",-7.016509433962267,1,0,1
 "PCTChangeLT-3,,(Test)checkCupDown-inDownTrend,bar_low,ML:sellFinalCandidate-(lastDayUp),sellUpTrend-1,",2.1094264996704135,1,1,0
@@ -3651,7 +3653,6 @@
 "PCTChangeLT-3,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,##DOWNTREND:sellMonth6High(InDownTrend),",-2.16386554621849,1,0,1
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,",0.37700243241654663,19,13,6
 "PCTChangeGT2,LTGT1.3,sellRisingMAuptrend-0,***BUYPATTERN***",-2.927589187490176,2,0,2
-"PCTChangeLT-2,,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-0.2340425531914942,1,0,1
 "PCTChangeGT2,LTGT1.3,(Test)checkCupUp-2dayUp-mayReversalSell,##UPTREND:buyYear2LowReversal(Confirm),",1.9633855133987885,1,1,0
 "PCTChangeGT2,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT0,weekHighGTweek2High,",-1.8075818193117978,2,0,2
 "PCTChangeLT-8,HTGT3.0,LTGT1.3,RSISellCandidate(yearLow)-lessThanMinus5,",-8.907563025210079,1,0,1
@@ -3714,11 +3715,6 @@
 "PCTChangeLT-4,,mayBuyFromSellPattern-GT1.8,",4.024390243902439,1,1,0
 "PCTChangeLT-3,HTGT1.3LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkCupDown-2dayDown-mayReversalBuy,##DOWNTREND:sellYear2HighReversal(InDownTrend),",-5.307076101468636,1,0,1
 "PCTChangeGT3,,##RisingMA(Test)(check-chart-buy)-2DayUp,##UPTREND:buyYear2LowReversal(Confirm),buyYearLow,",1.2393162393162416,1,1,0
-"PCTChangeGT2,HTGT1.3,##RisingMA(check-chart-sell)-MaySellCheckChart,##UPTREND:buyYear2Low,***BUYPATTERN***",1.926229508196717,1,1,0
-"PCTChangeLT-2,,ML:BuyRisingMA-Risky-0,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",-0.2319109461966605,1,0,1
-"PCTChangeGT2,LTGT1.3,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,weekHighGTweek2High,",-0.1154249737670538,1,0,1
-"PCTChangeLT-2,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,##DOWNTREND:sellMonth6HighReversal(InDownTrend),***SELLPATTERN***",-0.5361930294906242,1,0,1
-"PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,buyYear2LowMovingSMA,***SELLPATTERN***",-2.1651918894470503,2,0,2
 "PCTChangeGT3,HTGT1.3,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT0,",-0.1508753580046401,3,1,2
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,ML:sellRisingMA-down-(Risky),",-3.628140899654987,2,0,2
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-1,weekLowLTweek2Low,",0.24267910556221506,3,2,1
@@ -3773,7 +3769,6 @@
 "PCTChangeLT-2,,##DOWNTREND:sellYear2HighReversal(InDownTrend),",1.500748190350306,6,4,2
 "PCTChangeGT3,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,weekHighGTweek2High,brokenToday,(check-chart):ML:buy-2week-breakoutup,",2.472382956338778,1,1,0
 "PCTChangeGT2,HTGT1.3LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##UPTREND:buyMonth6Low,",-0.12068965517242163,1,0,1
-"PCTChangeGT1,,ML:sellFinalContinue-(lastDayDown)-1,***BUYPATTERN***",1.912888731024495,2,2,0
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,brokenToday,",-0.1507223210785043,2,0,2
 "PCTChangeLT-2,LTGT1.3,LTGTPCTDayChange,(Test)checkCupDown-2dayDown,",2.161307327359,1,1,0
 "PCTChangeGT2,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,",-0.49999999999999184,1,0,1
@@ -3848,7 +3843,6 @@
 "PCTChangeGT0,,--,",-0.46802850156119735,3,1,1
 "PCTChangeLT-3,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,***SELLPATTERN***",-2.2020161290322564,2,0,2
 "PCTDayChangeLT0,HTGT3.0,,HTGTPCTDayChange,buyYearHigh-3,",-0.2567847568036104,3,2,1
-"PCTChangeLT-3,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-4.261774514494107,2,0,2
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,weekHighGTweek2High,buyYearHigh-1,",1.3358070500927728,1,1,0
 "PCTChangeGT4,,(check-chart):ML:buy-2week-breakoutup,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***BUYPATTERN***",1.8849206349206407,1,1,0
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChangeLTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)buyLastDayDownReversal,***SELLPATTERN***",2.460697197539299,1,1,0
@@ -3911,7 +3905,7 @@
 "PCTChangeGT3,,ML:sellFinalContinue-3,***BUYPATTERN***",-1.5442225073093891,2,0,2
 "PCTChangeLT-2,LTGT1.3,sellRisingMA,ML:buyFinalContinue-4,***SELLPATTERN***",1.4393420150788172,1,1,0
 "PCTChangeLT-1,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-2dayDown-mayReversalBuy,***SELLPATTERN***",0.22274962160097844,4,2,1
-"PCTChangeGT0,,$$MaySellCheckChart-(|_|`|),",0.2660748769935569,59,34,25
+"PCTChangeGT0,,$$MaySellCheckChart-(|_|`|),",0.20090919601438115,56,31,25
 "PCTChangeLT-2,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,##DOWNTREND:sellYear2HighReversal(InDownTrend),",0.14866487506432094,1,1,0
 "PCTChangeLT-4,LTGT1.3,(Test)MayBuyCheckChart-monthLowReversal,monthLowChangeLT-3,weekLowLTweek2,",-1.8365472910927456,1,0,1
 "PCTChangeLT-4,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyMorningStar-HighLowerTail,buyYear2Low,BreakLowYear2,",-5.552128315854412,1,0,1
@@ -3933,6 +3927,7 @@
 "PCTChangeLT-4,LTGT1.3,buyYear2Low,BreakLowYear2,",6.567320602630747,3,2,1
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,++,set1,",2.360682198109696,3,2,1
 "PCTChangeGT1,,buyUpTrend-1-YearHigh,***SELLPATTERN***",-1.1266359695371913,2,1,1
+"PCTChangeLT-2,,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,ML:sellFinalCandidate-1-(lastDayUp),sellFinal,",4.17843026538679,1,1,0
 "PCTChangeLT-3,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,finalBreakOutSell-0,sellUpTrend-0(Risky),***SELLPATTERN***",1.0311871227364098,1,1,0
 "PCTChangeGT3,,(Test)checkConsolidationBreakUp-forecastDayPCT7changeGT0,",0.10304659498208701,1,1,0
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,***SELLPATTERN***",-1.3993705318423588,4,0,4
@@ -4004,7 +3999,7 @@
 "PCTChangeLT-0.5,LTGT1.3,LTGTPCTDayChange,++,set2,",-0.9572512801582717,2,0,2
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,buyYearHigh-3,***SELLPATTERN***",0.4456491577627542,3,1,2
 "PCTChangeGT2,,##RisingMA(Test)(check-chart-buy)-2DayUp,##UPTREND:buyYearLow,",1.52872215709261,1,1,0
-"PCTChangeLT-3,,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",0.16910186811192188,6,3,3
+"PCTChangeLT-3,,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",0.14494445838164732,7,3,3
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT0,weekHighGTweek2High,",-0.6407181493951021,3,1,2
 "PCTChangeLT-3,HTGT1.3,HTGTPCTDayChange,buyYearHigh-1,",1.0195635816403277,1,1,0
 "PCTDayChangeLT0,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,weekLowLTweek2Low,",0.10383715117423342,8,4,4
@@ -4039,16 +4034,22 @@
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,(Test)MayBuyCheckChart-monthLowReversal-risky,monthLowChangeLT-1,weekLowLTweek2,$$ML:(check-chart-2-3MidCapCross)MayBuyCheckChart-Risky,$$MayBuyCheckChart-(IndexNotUpInSecondHalf),",-3.571428571428571,1,0,1
 "PCTChangeGT1,,ML:sellFinalContinue-(lastDayDown)-2,",-0.19166279931087524,5,1,4
 "PCTChangeGT1,HTGT3.0,,HTGTPCTDayChange,##RisingMA(check-chart-sell)-MaySellCheckChart,***BUYPATTERN***",0.5408393337528247,4,4,0
+"PCTChangeLT-2,LTGT1.3,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",0.1991997305767021,5,3,2
+"PCTChangeGT1,,(Test)checkCupUp-3dayUp,",0.979503712288626,3,2,1
+"PCTChangeLT-1,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",1.78773478162481,1,1,0
+"PCTChangeLT-1,HTGT3.0,LTGT1.3,maySellAfter10:20HighVolatileLastDayUp-GT10,",7.044609665427509,1,1,0
+"PCTChangeLT-4,HTGT3.0,,sellDayLowVolLow-0,",-2.1834061135371177,1,0,1
+"PCTChangeGT2,HTGT1.3,##UPTREND:buyMonth3LowReversal(Confirm),",3.7593984962406015,1,1,0
+"PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,(Test)checkCupDown-3dayDown,##DOWNTREND:sellMonth3High(InDownTrend),***SELLPATTERN***",-0.7050679429108624,1,0,1
+"PCTChangeLT-1,,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-0.24075095833809787,13,4,9
 "PCTChangeLT-3,,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,##DOWNTREND:sellMonth6HighReversal(InDownTrend),",-0.4917319408181106,1,0,1
 "PCTChangeLT-0.5,,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend),buyYear2LowMovingSMA,***SELLPATTERN***",0.3403675970047651,1,1,0
 "PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,ReversalHighMonth3,(Test)checkCupDown-2dayDown,ML:buyFinalContinue-3,***SELLPATTERN***",-0.6352087114337593,1,0,1
-"PCTChangeGT2,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,buyDownTrend-2(Risky),",0.2826565130716551,9,3,6
+"PCTChangeGT2,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,buyDownTrend-2(Risky),",0.05957262517079633,10,3,7
 "PCTChangeLT-1,HTGT1.3,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend),",-1.9678905500019943,2,1,1
 "PCTDayChangeLT0,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyMorningStar-HighLowerTail-(checkChart),buyMorningStar-dayDown,",0.04154078549848599,1,1,0
 "PCTChangeLT-2,HTGT3.0,,HTGTPCTDayChangeLTGT1.3,##sellTenDaysMoreThanTen,",-2.5379770285290726,1,0,1
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChange,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend),",-0.21809264062984218,5,2,3
-"PCTChangeGT3,,buyUpTrend-1-YearHigh,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT2,weekHighGTweek2High,brokenToday,***SELLPATTERN***",-4.759759759759766,1,0,1
-"PCTChangeLT-1,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,ML:sellRisingMA-down-(Risky),",1.069131832797424,1,1,0
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,$$MaySell-CheckChart(yearHigh-minimumLast2DayUp),",0.9383811315500716,14,9,5
 "PCTChangeLT-1,,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,",0.1756018726149735,15,9,6
 "PCTChangeGT4,LTGT3.0LTGT1.3,buyTenDaysLessThanMinusTen,",-1.2036271812811243,3,0,3
@@ -4090,7 +4091,7 @@
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-1,brokenToday,***SELLPATTERN***",9.065332916536418,1,1,0
 "PCTDayChangeLT0,HTGT1.3,HTGTPCTDayChange,(Test)MaySellCheckChart-monthHighReversal-risky,monthHighChangeGT0,weekHighGTweek2,",2.9949238578680233,1,1,0
 "PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,##DOWNTREND:sellYearHigh(InDownTrend),***SELLPATTERN***",0.7364222154035085,1,1,0
-"PCTChangeGT4,LTGT1.3,sell-2week-breakoutup,",0.6477496515925696,6,3,3
+"PCTChangeGT4,LTGT1.3,sell-2week-breakoutup,",1.0427676625347242,5,3,2
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChangeLTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,--,",0.928370786516859,1,1,0
 "PCTChangeGT2,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##RisingMA(Test)(check-chart-buy)-1DayUp,",-2.0400418369265556,3,0,3
 "PCTChangeLT-2,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-1,brokenToday,",-0.16971325252831354,30,16,14
@@ -4227,7 +4228,7 @@
 "PCTChangeLT-1,HTGT1.3,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,",-0.9611231101511855,1,0,1
 "PCTChangeGT1,,--,",-0.7054010565487666,2,1,1
 "PCTChangeGT2,,(Test)checkCupUp-month3HighMTmonth3Low,bar_high,##UPTREND:buyYearLowReversal(Confirm),",-0.6060606060606146,1,0,1
-"PCTChangeGT2,,(Test)checkConsolidationBreakUp-month3HighLTMonth3Low,",-0.5720614604061863,21,10,11
+"PCTChangeGT2,,(Test)checkConsolidationBreakUp-month3HighLTMonth3Low,",-0.6524663352282978,20,9,11
 "PCTChangeGT2,HTGT1.3,(Test)check10DayLowReversal,(Test)checkCupUp-3dayUp,ML:buyFinalCandidate-(lastDayUp),buyFinalContinue-00,",0.8684210526315819,1,1,0
 "PCTChangeLT-2,HTGT1.3LTGT1.3,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",1.104417670682731,1,1,0
 "PCTChangeLT-4,HTGT1.3LTGT1.3,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,",-1.2652800454508006,3,0,2
@@ -4263,8 +4264,6 @@
 "PCTChangeGT4,,##UPTREND:buyYearLowReversal(Confirm),buyYearLow,sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),",5.2,1,1,0
 "PCTChangeGT4,,buyDayHighVolLow-0,",-0.9622995557825169,10,3,7
 "PCTChangeGT3,,(Test)checkCupUp-downTrendLastDayUp-mayReversalSell,##UPTREND:buyYear2LowReversal(Confirm),sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),",1.3647058823529439,1,1,0
-"PCTChangeGT4,LTGT1.3,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT3,weekHighGTweek2High,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,",-0.275595976298746,1,0,1
-"PCTChangeLT-2,,(Test)checkCupDown-inDownTrend,bar_low,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-1.6761665539561308,1,0,1
 "PCTChangeGT3,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,##UPTREND:buyYearLowReversal(Confirm),",-1.7294626312538672,1,0,1
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,buyYearHigh-0,buyMorningStar-HighUpperTail-(checkChart),",1.2628624883068236,1,1,0
 "PCTChangeGT3,,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,##UPTREND:buyYearLowReversal(Confirm),",0.16114036577770152,2,1,1
@@ -4282,11 +4281,8 @@
 "PCTChangeLT-4,,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,(SMA9GT0),***SELLPATTERN***",4.866302112075465,1,1,0
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,++,set2,",-0.28814319561605134,12,5,7
 "PCTChangeGT3,,(Test)checkCupUp-inUpTrend,buyDownTrend-2(Risky),",-0.05274261603375228,1,0,1
-"PCTChangeGT1,LTGT1.3,(Test)checkConsolidationBreakUp-month3HighLTMonth3Low,",-3.050917336631613,1,0,1
 "PCTChangeGT4,,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,",0.2711752091598891,8,6,2
 "PCTChangeGT4,,##RisingMA(Test)(check-chart-buy)-2DayUp,##UPTREND:buyYear2Low,",-0.9223073315616837,1,0,1
-"PCTDayChangeLT0,HTGT1.3,HTGTPCTDayChange,(Test)buySMA4Reversal,",0.22913515345636495,40,16,23
-"PCTChangeLT-2,HTGT1.3,(Test)checkCupDown,bar_low,",-0.6237202953403251,2,1,1
 "PCTChangeGT4,,(check-chart)sellEMA6>EMA14,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT4,weekHighGTweek2High,***BUYPATTERN***",4.888888888888885,1,1,0
 "PCTChangeLT-4,,(Test)checkCupDown-3dayDown-mayReversalBuy,",3.398328690807796,1,1,0
 "PCTChangeGT3,HTGT1.3,HTGTPCTDayChange,##UPTREND:buyYearLowReversal(Confirm),",-1.4525445369976264,1,0,1
@@ -4296,9 +4292,9 @@
 "PCTChangeLT-1,LTGT1.3,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-1,weekLowLTweek2Low,brokenToday,",2.200902934537246,1,1,0
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,(Test)buyMay5DayCeilReversal,***SELLPATTERN***",4.231366459627329,1,1,0
 "PCTChangeLT-1,,sellPatterns-Risky-LT-0.9-SMALT0,(SMA4LT(-1.5)),",-1.583925774189659,1,0,1
-"PCTChangeLT-1,LTGT1.3,$$MayBuyCheckChart-(IndexNotUpInSecondHalf),(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-0.13824884792627254,1,0,1
 "PCTChangeLT-1,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",2.583139984532091,1,1,0
 "PCTChangeLT-3,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyMorningStar-(checkChart),buyYear2Low,",-6.026058631921817,1,0,1
+"PCTChangeLT-1,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,",-0.1876523724726396,5,3,2
 "PCTChangeLT-1,,##(Check-chart-buy):month3High-InMinus,ReversalHighMonth3,(Test)checkCupDown-2dayDown,",0.12796208530804826,1,1,0
 "PCTChangeLT-0.5,LTGT1.3,sellSMA25GT10,",1.3993174061433526,1,1,0
 "PCTChangeLT-2,,ML:BuyRisingMA-Risky-0,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,",0.17748853719862914,1,1,0
@@ -4344,7 +4340,7 @@
 "PCTChangeLT-1,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-1,weekLowLTweek2Low,brokenToday,",-0.2504618902658169,22,9,13
 "PCTChangeLT-1,,ML:BuyRisingMA-Risky-2,buyYear2LowMovingSMA,",1.0310281101060341,1,1,0
 "PCTChangeGT3,HTGT1.3,sellHeavyUpTrend-Reversal,***BUYPATTERN***",-1.2483258080234858,2,0,2
-"PCTChangeGT2,,(Test)checkCupUp,bar_high,",-0.2517343476356873,21,6,15
+"PCTChangeGT2,,(Test)checkCupUp,bar_high,",-0.5648362338783761,20,5,15
 "PCTChangeLT-3,,(Test)checkCupDown-inDownTrend,bar_low,sellPatterns-Risky-LT-0.9-SMALT0,(SMA9LT0),",-0.9443639383232656,1,0,1
 "PCTChangeLT-3,HTGT1.3LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-3dayDown-mayReversalBuy,##DOWNTREND:sellYearHigh(InDownTrend),",-0.2808988764044944,1,0,1
 "PCTChangeGT2,HTGT1.3,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,",-0.13071895424835858,1,0,1
@@ -4371,10 +4367,13 @@
 "PCTChangeGT3,,##(Check-chart):yearHigh-InPlus,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,",4.096593359206555,1,1,0
 "PCTChangeLT-2,LTGT1.3,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,***SELLPATTERN***",0.5757808029792082,6,3,3
 "PCTChangeLT-4,HTGT1.3LTGT3.0LTGT1.3,RSISellCandidate(yearLow)-lessThanMinus5,",3.8025818916308034,1,1,0
-"PCTChangeLT-3,,(Test)checkCupDown-inDownTrend,bar_low,",-0.4340819008554816,13,4,9
+"PCTChangeLT-3,,(Test)checkCupDown-inDownTrend,bar_low,",-0.70612669321843,9,2,7
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,mayBuyFromSellPattern-GT1.8,",0.680272108843531,1,1,0
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,",1.1154021996546108,4,4,0
 "PCTChangeLT-4,HTGT1.3,HTGTPCTDayChange,buyYearHigh-0,",-0.5104934770277968,1,0,1
+"PCTChangeGT4,HTGT1.3,##UPTREND:buyMonth6Low,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",0.6384105960264876,1,1,0
+"PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,##RisingMA(check-chart-sell)-MaySellCheckChart,$$ML:(check-chart-2-3MidCapCross)MaySellCheckChart-Risky,",-0.3480203181484543,2,0,2
+"PCTChangeGT1,HTGT3.0,,HTGTPCTDayChange,##RisingMA(check-chart-sell)-MaySellCheckChart,ML:sellEveningStar-2(Check2-3MidCapCross),",-0.9031304732852039,2,1,1
 "PCTDayChangeLT0,HTGT1.3,HTGTPCTDayChange,buyYearHigh-1,",-0.4076042427502564,12,4,8
 "PCTChangeGT0,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT0,brokenToday,",0.16601973114032828,3,2,1
 "PCTChangeGT2,,##UPTREND:buyYearLow,sell-2week-breakoutup,buyYearLow,",3.4567901234567864,1,1,0
@@ -4413,6 +4412,7 @@
 "PCTChangeLT-2,,ML:buyDayLowVolLow-03-checkMorningTrend(.5SL)-after10:30,##DOWNTREND:sellMonth3LowBreak,",-3.4115138592750416,1,0,1
 "PCTChangeLT-2,HTGT1.3LTGT1.3,LTGTPCTDayChange,(Test)MayBuyCheckChart-monthLowReversal-risky,monthLowChangeLT3,weekLowLTweek2,",-0.9473684210526375,1,0,1
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,",-0.5174024790692328,9,4,5
+"PCTChangeGT4,HTGT1.3,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT3,brokenToday,",2.057877813504816,1,1,0
 "PCTChangeLT-3,,##Test:longDownTrend-0-IndexNotDownLastDay(checkBase),",1.281301394572012,5,4,1
 "PCTChangeLT-3,,##(Check-chart-sell)Month3Low-Continue(InUpTrend),ReversalLowMonth3,",-0.8584905660377417,1,0,1
 "PCTChangeGT2,LTGT1.3,LTGTPCTDayChange,##UPTREND:buyYear2Low,",0.7815787291417811,2,2,0
@@ -4430,9 +4430,6 @@
 "PCTChangeGT4,,##UPTREND:buyYear2Low,buyYearLow,",-1.2474646704145462,3,1,2
 "PCTChangeLT-2,HTGT1.3LTGT1.3,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,##DOWNTREND:sellMonth6High(InDownTrend),",-3.0526315789473744,1,0,1
 "PCTChangeLT-1,,(Test)checkConsolidationBreakDown-2week-(risky)-year2Low,week2BarLowChangeLT-2,weekLowLTweek2Low,",-0.4928573302921626,11,6,5
-"PCTChangeGT1,,(Test)checkCupUp-3dayUp,",0.979503712288626,3,2,1
-"PCTChangeLT-1,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",1.03204346661185,2,2,0
-"PCTChangeLT-2,LTGT1.3,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",0.1991997305767021,5,3,2
 "PCTChangeGT0.5,,(Test)sellSMA4Reversal,***BUYPATTERN***",1.44466370792001,4,3,1
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week-(risky)-year2Low,week2BarLowChangeLT-2,",-0.5927180355630726,1,0,1
 "PCTChangeGT2,HTGT1.3,(Test)checkCupUp-3dayUp,##UPTREND:buyMonth6LowReversal(Confirm),",-5.853658536585363,1,0,1
@@ -4503,7 +4500,6 @@
 "PCTChangeLT-3,,ML:BuyRisingMA-Risky-0,",-0.34704333138060023,10,5,5
 "PCTChangeLT-1,HTGT1.3,ML:BuyRisingMA-Risky-1,",0.2449779519843214,1,1,0
 "PCTChangeGT4,HTGT1.3,buyYearLow1,",-3.096565893748169,1,0,1
-"PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,sellFinal1,***SELLPATTERN***",0.28438469493277296,1,1,0
 "PCTChangeGT3,,##UPTREND:buyYear2Low,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT5,weekHighGTweek2High,",0.8859975216852513,1,1,0
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week-(risky)-PCTDayChangeGT-1,week2BarLowChangeLT-1,weekLowLTweek2Low,",-0.16092935536578196,2,1,1
 "PCTChangeGT4,HTGT1.3,ML:sellRisingMAuptrend-1,***BUYPATTERN***",-4.5762455214104225,2,0,2
@@ -4520,7 +4516,7 @@
 "PCTChangeGT3,,##UPTREND:buyMonth3LowReversal(Confirm),",-1.2752486087836727,6,2,4
 "PCTChangeGT2,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,brokenToday,",-0.5651206605790472,7,3,4
 "PCTChangeLT-3,,ML:sellFinalCandidate-(lastDayUp),##sellTenDaysMoreThanTen,",-1.428779402992709,4,2,2
-"PCTChangeLT-2,HTGT1.3,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,",0.5153401873024268,2,1,1
+"PCTChangeLT-2,HTGT1.3,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,",-1.0414164009533116,3,1,2
 "PCTChangeLT-3,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,***SELLPATTERN***",3.9451827242524913,1,1,0
 "PCTChangeLT-4,HTGT1.3LTGT3.0LTGT1.3,##DOWNTREND:sellYearLowBreak,",0.5508474576271235,1,1,0
 "PCTChangeLT-3,,ML:buyFinalContinue-3,***SELLPATTERN***",1.2762453684643862,1,1,0
@@ -4598,8 +4594,9 @@
 "PCTChangeLT-2,,##(Test)(Check-chart-sell):yearLow-InMinus,",0.14397951763483266,3,2,1
 "PCTChangeLT-2,,(Test)checkCupDown-2dayDown,(SMA9GT0),",-0.624999999999994,1,0,1
 "PCTChangeGT3,HTGT1.3,buyHeavyUpTrend-Reversal-(Risky),",0.9855887215385485,2,2,0
-"PCTChangeGT1,,ML:sellFinalContinue-(lastDayDown)-1,",-0.8471130387638927,1,0,1
-"PCTChangeGT4,HTGT1.3,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT3,brokenToday,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",2.057877813504816,1,1,0
+"PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,sellFinal1,***SELLPATTERN***",0.28438469493277296,1,1,0
+"PCTChangeGT3,,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,",-0.24607136389396414,47,20,26
+"PCTChangeGT4,,(Test)check10DayLowReversal,##UPTREND:buyYear2Low,",-1.0036705786654845,4,2,2
 "PCTDayChangeLT0,,(SMA9LT0),",-0.503262025262598,5,3,2
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,sellUpTrend-2(Risky),",0.6390041493775972,1,1,0
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,",-0.2829275866825814,4,2,2
@@ -4611,7 +4608,7 @@
 "PCTChangeLT-2,HTGT1.3,(Test)checkCupDown,bar_low,ML:buyFinalContinue-4,sellFinal,##Test:longDownTrend-1-IndexNotDownLastDay(checkBase),***SELLPATTERN***",-5.139146567717994,1,0,1
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,buyYearHigh-0,",0.7692840241603424,7,4,3
 "PCTChangeGT1,HTGT3.0,,HTGTPCTDayChange,##(Check-chart)ML:buyMonth3High-Continue,",-0.3505976095617481,1,0,1
-"PCTChangeGT4,HTGT1.3,sell-2week-breakoutup,***BUYPATTERN***",-0.6343325934456271,6,1,5
+"PCTChangeGT4,HTGT1.3,sell-2week-breakoutup,***BUYPATTERN***",-0.6443761786289851,5,1,4
 "PCTChangeLT-8,,sellPatternsML,",-0.5532492270433592,4,2,2
 "PCTChangeLT-1,,sellSuperTrend-1,+-,set2,",-0.3764533356799397,3,1,2
 "PCTChangeLT-3,,ML:buyRisingMA-down-Risky,(Test)checkCupDown-upTrendLastDayDown-mayReversalBuy,***SELLPATTERN***",0.10570824524313799,1,1,0
@@ -4656,6 +4653,7 @@
 "PCTChangeGT2,LTGT1.3,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***BUYPATTERN***",1.9507997153063088,2,2,0
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,sellFinal1,",0.7848837209302293,1,1,0
 "PCTChangeLT-1,,(Test)checkConsolidationBreakDown-2week-(risky)-PCTDayChangeGT-1,week2BarLowChangeLT0,brokenToday,",-0.32746270500600866,27,12,15
+"PCTChangeGT4,LTGT1.3,sellDayHighVolLow-01-checkMorningTrend(.5SL),***BUYPATTERN***",3.4430733201225006,1,1,0
 "PCTChangeLT-4,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,##DOWNTREND:sellYearHigh(InDownTrend),***SELLPATTERN***",-0.3774249537265322,2,1,1
 "PCTChangeLT-2,,ML:buyRisingMA-down-Risky,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,***SELLPATTERN***",-3.17250213492742,1,0,1
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,--,set2,",-1.7183898690793753,2,0,2
@@ -4673,7 +4671,7 @@
 "PCTChangeGT2,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,##(Check-chart-sell):month3Low-InPlus,BreakLowMonth3,",0.47935103244837174,1,1,0
 "PCTChangeGT4,HTGT1.3,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,",-4.399330900243312,1,0,1
 "PCTChangeLT-2,LTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-2dayDown-mayReversalBuy,##DOWNTREND:sellYearHigh(InDownTrend),",0.6557377049180327,1,1,0
-"PCTChangeGT0,,$$MaySellCheckChart-(Risky)-(|_|`|),",-0.12835971376963587,67,29,37
+"PCTChangeGT0,,$$MaySellCheckChart-(Risky)-(|_|`|),",-0.059322829382158306,70,32,37
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,##DOWNTREND:sellYear2HighReversal(InDownTrend),",1.7614784868610986,1,1,0
 "PCTChangeLT-4,HTGT3.0,,HTGTPCTDayChangeLTGT1.3,##Test:longDownTrend-1-IndexNotDownLastDay(checkBase),",1.74995903653941,1,1,0
 "PCTChangeLT-2,HTGT1.3,(Test)checkCupUp-lastDayDown,",-3.238418939887521,2,0,2
@@ -4693,12 +4691,7 @@
 "PCTChangeGT3,,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***BUYPATTERN***",-0.2604469590310435,33,14,19
 "PCTChangeLT-3,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,sellUpTrend-2(Risky),",0.1309043307516016,1,1,0
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,$$MayBuy-CheckChart(downTrend-mayReverseAtMonth3High)-0,",0.36461331798118923,1,1,0
-"PCTChangeLT-1,HTGT3.0,LTGT1.3,maySellAfter10:20HighVolatileLastDayUp-GT10,",7.044609665427509,1,1,0
-"PCTChangeLT-4,HTGT3.0,,sellDayLowVolLow-0,",-2.1834061135371177,1,0,1
-"PCTChangeLT-1,,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-0.4447512911625909,17,5,12
-"PCTChangeGT2,HTGT1.3,##UPTREND:buyMonth3LowReversal(Confirm),",3.7593984962406015,1,1,0
-"PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,(Test)checkCupDown-3dayDown,##DOWNTREND:sellMonth3High(InDownTrend),***SELLPATTERN***",-0.7050679429108624,1,0,1
-"PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,***SELLPATTERN***",-2.151938694317545,5,1,4
+"PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,***SELLPATTERN***",-1.8996377262031008,3,1,2
 "PCTChangeLT-3,,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-2,***SELLPATTERN***",-0.3755054881571379,1,0,1
 "PCTChangeLT-3,,##DOWNTREND:sellYearHigh(InDownTrend),",-0.11351295219290804,8,4,4
 "PCTChangeGT2,LTGT1.3,LTGTPCTDayChange,buyDownTrend-1,",-1.1583597367560778,4,1,3
@@ -4708,11 +4701,12 @@
 "PCTChangeLT-2,HTGT1.3,HTGTPCTDayChange,sellFinal,",-1.175153889199773,1,0,1
 "PCTChangeGT8,,sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),***BUYPATTERN***",-0.4570451345443221,6,4,2
 "PCTChangeLT-1,LTGT1.3,(Test)checkCupDown-2dayDown,",-0.12881188747725053,6,3,3
+"PCTChangeGT4,LTGT1.3,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT3,weekHighGTweek2High,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,",-0.275595976298746,1,0,1
 "PCTDayChangeLT0,LTGT1.3,LTGTPCTDayChange,weekLowLTweek2,$$ML:(check-chart-2-3MidCapCross)MayBuyCheckChart-Risky,",1.702877275396346,1,1,0
 "PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,",-0.6655574043261208,1,0,1
 "PCTChangeLT-2,HTGT1.3,HTGTPCTDayChange,##sellTenDaysMoreThanTen,",3.0790452888854905,2,2,0
-"PCTChangeLT-4,HTGT1.3LTGT3.0LTGT1.3,##DOWNTREND:sellMonth3LowBreak,",-0.65046217048957,1,0,1
 "PCTChangeGT0.5,,buyMayYear2LowBreakingUp,***SELLPATTERN***",0.6903530853358525,16,9,7
+"PCTChangeLT-4,LTGT3.0LTGT1.3,##DOWNTREND:sellMonth6LowBreak,",0.5016340734076051,2,1,1
 "PCTChangeLT-1,LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,***SELLPATTERN***",-0.2774546693722308,14,6,8
 "PCTDayChangeLT0,,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,ML:BuyRisingMA-Risky-2,***SELLPATTERN***",-0.421484519866559,4,1,3
 "PCTChangeLT-3,HTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,***SELLPATTERN***",-0.4851213975129431,10,4,6
@@ -4809,7 +4803,6 @@
 "PCTChangeGT0,,buyYearHigh-1,(Test)sellSMA4Reversal,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend)-Already10DayDown,***BUYPATTERN***",2.318836035245062,1,1,0
 "PCTChangeGT2,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,ML:sellFinalContinue-(lastDayDown)-1,buyDownTrend-2(Risky),",-4.744333280496778,1,0,1
 "PCTChangeGT0.5,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT0,brokenToday,",0.7832441817829406,6,4,2
-"PCTChangeLT-2,HTGT1.3,HTGTPCTDayChangeLTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,ML:buyRisingMA-down-Risky,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-1.2126189670998664,1,0,1
 "PCTChangeGT2,HTGT1.3,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,ML:buyFinalCandidate-3,",-2.4605559729526716,1,0,1
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,",0.9662421981559293,4,3,1
 "PCTChangeGT2,,(Test)checkCupUp-month3HighMTmonth3Low,bar_high,##UPTREND:buyMonth6LowReversal(Confirm),",-0.5848673734110156,3,1,2
@@ -4821,8 +4814,6 @@
 "PCTChangeGT3,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,brokenToday,",-0.2480325221411209,20,8,12
 "PCTChangeLT-4,HTGT1.3LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,***SELLPATTERN***",-1.1498951971378004,2,1,1
 "PCTChangeLT-2,,(Test)checkCupDown-inDownTrend,bar_low,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",2.059982189877534,3,3,0
-"PCTChangeLT-8,HTGT3.0,,RSISellCandidate(yearLow)-lessThanMinus5,",-2.5316455696202422,1,0,1
-"PCTChangeLT-1,,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-0.039748122686512066,3,1,2
 "PCTChangeLT-2,,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,(Test)buyMay5DayFloorReversal,##DOWNTREND:sellMonth6HighReversal(InDownTrend),***SELLPATTERN***",-2.29155972721273,1,0,1
 "PCTChangeGT1,HTGT1.3LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,sellFinalContinue-(lastDayUp)-(volLow),",0.020868113522542305,1,1,0
 "PCTChangeGT0.5,HTGT3.0,,HTGTPCTDayChange,ML:sellEveningStar-2(Check2-3MidCapCross),",0.09224101170836936,7,4,3
@@ -4840,7 +4831,7 @@
 "PCTChangeGT3,,##(Check-chart-sell):month3Low-InPlus,ReversalLowMonth3,***BUYPATTERN***",-1.9284524205532856,3,1,2
 "PCTChangeLT-1,,ML:BuyRisingMA-Risky-2,",-0.035220146791954496,9,3,5
 "PCTChangeLT-3,,sellRisingMA,",-0.08193869926128358,5,3,2
-"PCTChangeLT-4,,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-0.8246068361194678,7,3,4
+"PCTChangeLT-4,,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-0.18989916652807898,7,4,3
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-3dayDown,##DOWNTREND:sellYearHigh(InDownTrend),***SELLPATTERN***",-0.15547979413702992,3,1,2
 "PCTChangeGT4,HTGT3.0,,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)sellLastDayHighUpReversal,",0.9221012105489838,3,1,2
 "PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,(Test)checkCupDown-2dayDown,##DOWNTREND:sellMonth3High(InDownTrend),ML:buyFinalContinue-4,sellFinal,***SELLPATTERN***",0.1963294921041361,1,1,0
@@ -4907,6 +4898,8 @@
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyYearHigh-0,",1.5847201210287476,1,1,0
 "PCTChangeLT-0.5,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,+-,",-1.9508326724821496,1,0,1
 "PCTChangeLT-1,HTGT3.0,,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,$$MayBuy-CheckChart(downTrend-mayReverseLast4DaysDown),",0.8702451345295399,4,2,2
+"PCTChangeGT2,HTGT1.3,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,##RisingMA(check-chart-sell)-MaySellCheckChart,",-0.17108639863131123,1,0,1
+"PCTChangeLT-3,,ML:buyRisingMA-down-Risky,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,***SELLPATTERN***",-2.8301886792452713,1,0,1
 "PCTDayChangeLT0,,##RisingMA(Test)(check-chart-buy)-1DayUp,",0.05836575875485497,1,1,0
 "PCTChangeLT-2,HTGT1.3,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,***SELLPATTERN***",-3.0490827962320166,1,0,1
 "PCTChangeLT-3,,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,",0.2705382444657173,10,6,4
@@ -4954,12 +4947,14 @@
 "PCTChangeLT-1,HTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,***SELLPATTERN***",0.13085589264323447,16,8,8
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend),***BUYPATTERN***",-0.2360887051458024,7,3,4
 "PCTChangeGT3,,ML:sellRisingMAuptrend-1,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,weekHighGTweek2High,brokenToday,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,***BUYPATTERN***",5.753968253968254,1,1,0
-"PCTChangeLT-4,,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-0.07378534990506169,6,4,2
+"PCTChangeLT-4,,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-0.25491093509179774,5,3,2
 "PCTChangeLT-3,,(Test)checkCupDown-3dayDown,",1.684547017026339,3,2,1
 "PCTChangeLT-3,,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,***SELLPATTERN***",0.814402057436767,1,1,0
 "PCTChangeLT-0.5,,(Test)checkConsolidationBreakDown-2week-(risky)-year2Low,week2BarLowChangeLT-3,weekLowLTweek2Low,",-0.8121016772342663,2,0,2
 "PCTChangeLT-4,HTGT1.3LTGT3.0LTGT1.3,##DOWNTREND:sellYearHighReversal(InDownTrend),",-1.225697379543536,1,0,1
-"PCTChangeGT4,,(check-chart)buy-2week-breakoutup(|-|-| or --|),",0.4777246740748867,62,32,30
+"PCTChangeGT2,LTGT1.3,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,weekHighGTweek2High,",-0.1154249737670538,1,0,1
+"PCTChangeLT-2,,ML:BuyRisingMA-Risky-0,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",-0.2319109461966605,1,0,1
+"PCTChangeGT4,,(check-chart)buy-2week-breakoutup(|-|-| or --|),",0.5445703699735478,68,37,31
 "PCTChangeGT3,HTGT1.3,(Test)checkCupUp-2dayUp-mayReversalSell,buyUpTrend-1-YearHigh,***SELLPATTERN***",0.58823529411764,1,1,0
 "PCTDayChangeLT0,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week-(risky)-year2Low,week2BarLowChangeLT0,weekLowLTweek2Low,",-0.4787234042553272,1,0,1
 "PCTChangeGT1,,buyDownTrend-1,",0.03545371932856772,16,9,7
@@ -5025,7 +5020,7 @@
 "PCTChangeGT2,,buyYear2LowBreakingUp,",0.7812499999999959,1,1,0
 "PCTChangeGT1,HTGT1.3LTGT1.3,(Test)checkCupUp-3dayUp-mayReversalSell,",-0.4155844155844215,1,0,1
 "PCTChangeGT0.5,,buyYearHigh-0,***SELLPATTERN***",-0.5146983079635289,12,5,7
-"PCTChangeGT1,,(Test)checkConsolidationBreakUp-month3HighLTMonth3Low,",0.21754983129889266,8,3,5
+"PCTChangeGT1,,(Test)checkConsolidationBreakUp-month3HighLTMonth3Low,",0.271774383626843,7,3,4
 "PCTChangeGT2,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,(check-chart):ML:buy-2week-breakoutup,sell-2week-breakoutup,",-0.15132408575032097,1,0,1
 "PCTChangeLT-1,,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,brokenToday,***SELLPATTERN***",-0.6003069887012046,3,1,2
 "PCTChangeLT-0.5,,ML:buySuperTrend-2,++,set1,",0.6543385490753945,1,1,0
@@ -5066,6 +5061,7 @@
 "PCTChangeGT3,LTGT1.3,##UPTREND:buyYearLow,",-0.7484062871810329,4,2,2
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChangeLTGT1.3,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend),***BUYPATTERN***",-1.4553314121037497,1,0,1
 "PCTChangeEQ0,,--,",-1.693958215697346,1,0,1
+"PCTChangeLT-4,LTGT1.3,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,",2.485313400612965,3,3,0
 "PCTChangeLT-3,LTGT1.3,$$MayBuyCheckChart-(IndexNotUpInSecondHalf),",-1.851220305173569,5,0,5
 "PCTChangeLT-1,HTGT1.3,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,***SELLPATTERN***",-0.7671693643300602,6,2,4
 "PCTChangeGT1,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT1,weekHighGTweek2High,",0.8457984196641859,3,1,2
@@ -5092,7 +5088,6 @@
 "PCTChangeLT-3,HTGT1.3,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,***SELLPATTERN***",4.294478527607362,1,1,0
 "PCTChangeGT1,LTGT1.3,LTGTPCTDayChange,(Test)checkCupDown-lastDayUp,",0.6341058196963165,6,4,2
 "PCTChangeLT-3,LTGT1.3,##DOWNTREND:sellMonth6High(InDownTrend),",1.683168316831686,1,1,0
-"PCTChangeLT-0.5,,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-0.3978328959290137,2,0,2
 "PCTChangeLT-0.5,LTGT1.3,LTGTPCTDayChange,(Test)buyLastDayDownReversal,",2.5887569861752326,3,2,1
 "PCTChangeLT-0.5,HTGT3.0,,HTGTPCTDayChangeLTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,buyYear2LowMovingSMA,",4.961757207295562,1,1,0
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-3dayDown,",1.221141151478099,10,7,3
@@ -5149,7 +5144,7 @@
 "PCTChangeLT-3,HTGT1.3LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,",0.6432748538011662,1,1,0
 "PCTChangeGT1,,(Test)check10DayLowReversal,buyFinal,",0.0574988021082807,1,1,0
 "PCTChangeGT4,,(check-chart)sellEMA6>EMA14,***BUYPATTERN***",-0.9804650743119961,16,5,11
-"PCTDayChangeLT0,,$$MayBuyCheckChart-(|`|_|),",-0.024276134150448898,41,19,22
+"PCTDayChangeLT0,,$$MayBuyCheckChart-(|`|_|),",0.004174238739652727,39,19,20
 "PCTChangeGT3,LTGT3.0LTGT1.3,##(Check-chart):year2High-InPlus,",-1.682176091624913,1,0,1
 "PCTChangeGT2,LTGT1.3,(Test)checkCupUp-2dayUp-mayReversalSell,",1.2503000715464792,3,3,0
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,+-,",-2.432562620423892,1,0,1
@@ -5178,12 +5173,10 @@
 "PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,(Test)checkCupDown-2dayDown,##DOWNTREND:sellMonth3High(InDownTrend),***SELLPATTERN***",-1.2207888998241787,3,2,1
 "PCTChangeGT4,HTGT1.3,##UPTREND:buyMonth6LowReversal(Confirm),(check-chart):ML:buy-2week-breakoutup,sell-2week-breakoutup,***BUYPATTERN***",0.0925925925925926,1,1,0
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,",0.11270882073181712,22,9,13
-"PCTChangeGT3,HTGT1.3,(check-chart):ML:buy-2week-breakoutup,",-0.2627258988109057,9,4,5
+"PCTChangeGT3,HTGT1.3,(check-chart):ML:buy-2week-breakoutup,",-0.6419497840160053,8,3,5
 "PCTChangeGT1,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT3,weekHighGTweek2High,",0.7162404376560221,3,3,0
 "PCTChangeLT-1,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,brokenToday,",-0.26006307690385616,174,74,99
 "PCTChangeLT-1,,(Test)checkConsolidationBreakDown-2week-(risky)-year2Low,week2BarLowChangeLT0,weekLowLTweek2Low,brokenToday,",-0.6324574085185047,7,2,5
-"PCTDayChangeLT0,,(Test)buySMA4Reversal,***SELLPATTERN***",-0.2815400119128166,43,18,25
-"PCTChangeGT2,HTGT1.3,(check-chart):ML:buy-2week-breakoutup,",2.30003903173367,3,3,0
 "PCTChangeGT3,LTGT1.3,##(Check-chart):year2High-InPlus,",-0.5770698057735584,8,1,7
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,buySuperTrend-1,--,set1,",0.1255886970172613,1,1,0
 "PCTChangeLT-1,,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,buyYear2LowMovingSMA,***SELLPATTERN***",-0.9430293602955407,1,0,1
@@ -5220,8 +5213,6 @@
 "PCTChangeGT2,HTGT3.0,,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyTenDaysLessThanMinusTen,sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),***BUYPATTERN***",1.1863615133115408,1,1,0
 "PCTChangeLT-1,,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-1,weekLowLTweek2Low,***SELLPATTERN***",-0.8833100883310088,1,0,1
 "PCTChangeGT2,,##(Check-chart)sellMonth3High-Continue,ML:sellFinalContinue-(lastDayDown)-1,buyFinal,sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),***BUYPATTERN***",2.553975776724589,1,1,0
-"PCTChangeGT3,,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,",-0.24607136389396414,47,20,26
-"PCTChangeGT4,,(Test)check10DayLowReversal,##UPTREND:buyYear2Low,",-1.0036705786654845,4,2,2
 "PCTChangeGT2,HTGT3.0,,HTGTPCTDayChangeLTGT1.3,maySellAfter10:20HighVolatileLastDayUp-GT10,",-3.2514517467047734,1,0,1
 "PCTChangeGT2,LTGT1.3,LTGTPCTDayChange,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,",1.952079663792832,2,2,0
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,##(Test)(check-chart)-buySMAUpTrend,***SELLPATTERN***",-0.38113350692168046,2,0,2
@@ -5308,7 +5299,7 @@
 "PCTChangeGT3,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)checkCupUp-inUpTrend,buyTenDaysLessThanMinusTen,",-2.0711711254378486,1,0,1
 "PCTChangeLT-3,,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,##Test:longDownTrend-0-IndexNotDownLastDay(checkBase),",-2.493859814849789,1,0,1
 "PCTChangeGT0.5,,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend)-Already10DayDown,***BUYPATTERN***",-0.02757517748240042,113,50,62
-"PCTChangeGT2,,(check-chart)buy-2week-breakoutup(|-|-| or --|),",0.215272097258822,73,37,35
+"PCTChangeGT2,,(check-chart)buy-2week-breakoutup(|-|-| or --|),",0.19468168690476498,79,39,39
 "PCTChangeGT4,HTGT3.0,,HTGTPCTDayChange,(Test)sellLastDayHighUpReversal,",-0.08030518343735397,3,1,2
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-1,weekLowLTweek2Low,brokenToday,***SELLPATTERN***",-0.2889606317855298,4,2,2
 "PCTChangeGT1,LTGT1.3,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,",-1.4180147793089606,1,0,1
@@ -5339,8 +5330,6 @@
 "PCTChangeLT-8,LTGT1.3,buyYear2Low,NearLowYear2,***SELLPATTERN***",-1.1609195402298877,1,0,1
 "PCTChangeGT1,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1,week2BarHighChangeGT1,",-0.7205764611689397,1,0,1
 "PCTChangeLT-3,LTGT1.3,LTGTPCTDayChange,ML:BuyRisingMA-Risky-1,",0.06726457399103394,1,1,0
-"PCTChangeGT4,HTGT1.3,(Test)checkCupUp-2dayUp-mayReversalSell,buyYearLow,",-1.4512471655328747,1,0,1
-"PCTChangeLT-3,,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,***SELLPATTERN***",0.9399199177136186,2,2,0
 "PCTChangeLT-2,HTGT1.3,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,##DOWNTREND:sellMonth6HighReversal(InDownTrend),",-4.4283483399352,2,1,1
 "PCTChangeGT0,LTGT1.3,LTGTPCTDayChange,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend)-Already10DayDown,",0.0017029965517339272,13,4,9
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,$$MayBuyCheckChart-(IndexNotUpInSecondHalf),$$MayBuy-CheckChart(monthLow-minimumLast2DayDown),",-0.7093952415973132,7,2,5
@@ -5370,11 +5359,15 @@
 "PCTChangeLT-3,,sellUpTrend-2(Risky),",-0.26198016636016347,10,5,5
 "PCTChangeGT3,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,##UPTREND:buyMonth3LowReversal(Confirm),##(Check-chart-sell):month3Low-InPlus,ReversalLowMonth3,***BUYPATTERN***",0.38330494037477736,1,1,0
 "PCTChangeGT0.5,LTGT1.3,LTGTPCTDayChange,+-,set2,",0.6200638167869956,1,1,0
+"PCTChangeGT2,HTGT1.3LTGT1.3,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,buyUpTrend-1-YearHigh,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,***SELLPATTERN***",1.0529674537332456,1,1,0
 "PCTDayChangeLT0,,sellUpTrend-0(Risky),",-0.788202390033069,1,0,1
 "PCTChangeLT-1,HTGT1.3,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,weekLowLTweek2Low,brokenToday,",1.9280205655526992,1,1,0
 "PCTChangeGT1,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT1,buyYearHigh-3,",0.08942021357806085,3,1,2
 "PCTChangeLT-4,LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,##DOWNTREND:sellYear2HighReversal(InDownTrend),",-0.641997714282683,5,2,3
 "PCTChangeLT-8,,ML:BuyRisingMA-Risky-2,finalBreakOutSell-0,",1.4361702127659515,1,1,0
+"PCTChangeGT1,,(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1,weekHighGTweek2High,brokenToday,",4.367231638418077,1,1,0
+"PCTChangeGT3,HTGT1.3,##(Check-chart-sell):month3Low-InPlus,BreakLowMonth3,***BUYPATTERN***",2.3283710629921344,1,1,0
+"PCTChangeLT-3,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-1.1444141689373266,1,0,1
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,",-2.48568453930245,1,0,1
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,##DOWNTREND:sellYearHigh(InDownTrend),***SELLPATTERN***",-0.3256998957195503,82,37,45
 "PCTChangeGT3,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyTenDaysLessThanMinusTen,",0.31019176443490437,5,3,2
@@ -5392,7 +5385,7 @@
 "PCTChangeGT2,,(Test)checkCupUp-2dayUp-mayReversalSell,##UPTREND:buyYearLowReversal(Confirm),",-0.3411913081747557,2,1,1
 "PCTChangeGT4,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT2,brokenToday,",-0.8845245030581304,11,4,7
 "PCTChangeGT1,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1,week2BarHighChangeGT0,",0.6238240662979203,4,3,1
-"PCTChangeLT-2,,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",0.18855376966489132,34,15,18
+"PCTChangeLT-2,,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",0.15863411579461945,36,15,19
 "PCTChangeLT-2,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,brokenToday,",-0.05450641837446785,4,2,2
 "PCTChangeGT2,HTGT1.3,HTGTPCTDayChange,buyYearHigh-0,$$MaySellCheckChart-(IndexNotDownInSecondHalf),",-1.0488728467896338,2,0,2
 "PCTChangeGT16,HTGT1.3,maySellAfter10:20HighVolatileLastDayUp-GT10,",-2.049144440411494,18,7,11
@@ -5442,8 +5435,8 @@
 "PCTChangeLT-2,HTGT1.3,ML:buyRisingMA-down-Risky,***SELLPATTERN***",-0.7623503637677793,9,2,6
 "PCTChangeGT4,,(Test)buyMay5DayCeilReversal,##UPTREND:buyMonth3LowReversal(Confirm),##(Check-chart-sell):month3Low-InPlus,ReversalLowMonth3,***BUYPATTERN***",1.4057910197230357,1,1,0
 "PCTChangeLT-3,,##(Test)(Check-chart-sell):yearLow-InMinus,",0.48550640838726405,3,2,1
-"PCTChangeLT-2,,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-0.22057836621589572,39,18,21
-"PCTChangeGT4,HTGT1.3,(check-chart):ML:buy-2week-breakoutup,",-1.3174148372613521,5,0,5
+"PCTChangeLT-2,,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-0.026981712167976284,33,17,16
+"PCTChangeGT4,HTGT1.3,(check-chart):ML:buy-2week-breakoutup,",-1.6188900966185094,4,0,4
 "PCTChangeLT-3,,ML:sellFinalCandidate-1-(lastDayUp),##sellTenDaysMoreThanTen,",-0.014233659656198236,3,1,2
 "PCTChangeGT2,HTGT3.0,,HTGTPCTDayChange,##UPTREND:buyYear2LowReversal(Confirm),buyEveningStar-0(Buy-After-1pc-down),",-2.890625000000002,1,0,1
 "PCTChangeLT-4,,ML:buyRisingMA-down-0,",3.74796825700352,1,1,0
@@ -5554,7 +5547,7 @@
 "PCTChangeGT0,LTGT1.3,LTGTPCTDayChange,buyYearHigh-3,",-0.06277554390793534,83,41,41
 "PCTChangeGT4,HTGT1.3LTGT1.3,sellDayHighVolLow-01-checkMorningTrend(.5SL),",0.05882352941176136,1,1,0
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week-(risky)-PCTDayChangeGT-1,week2BarLowChangeLT0,",0.38951898050502354,9,4,5
-"PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,***SELLPATTERN***",-0.25937515432380254,390,170,218
+"PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,***SELLPATTERN***",-0.2709619655083199,392,170,220
 "PCTChangeGT3,,(Test)checkCupUp-3dayUp,##UPTREND:buyYear2LowReversal(Confirm),buyYearLow,",-0.038961038961033055,1,0,1
 "PCTChangeGT4,,(check-chart)sellEMA6>EMA14,",0.8914928573326147,5,2,3
 "PCTChangeGT3,,##UPTREND:buyYearLow,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",0.8573258386690057,2,2,0
@@ -5574,7 +5567,7 @@
 "PCTChangeGT3,LTGT1.3,##UPTREND:buyYear2Low,sell-2week-breakoutup,buyYearLow,",-0.17004048582995215,1,0,1
 "PCTDayChangeLT0,,++,set2,",0.9496232247192804,6,5,1
 "PCTChangeLT-2,LTGT1.3,ML:BuyRisingMA-Risky-1,(SMA9GT0),",0.18879798615480362,1,1,0
-"PCTChangeGT3,,(check-chart):ML:buy-2week-breakoutup,",-0.07062142929576075,45,21,24
+"PCTChangeGT3,,(check-chart):ML:buy-2week-breakoutup,",-0.17878472719264976,41,17,24
 "PCTChangeLT-4,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-2,brokenToday,",0.9173043671853929,3,3,0
 "PCTChangeLT-2,,##Test:longDownTrend-0-IndexNotDownLastDay(checkBase),",0.829829608320425,1,1,0
 "PCTChangeGT2,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,buyUpTrend-1,",2.566182749786503,1,1,0
@@ -5617,7 +5610,6 @@
 "PCTChangeGT2,LTGT1.3,##UPTREND:buyMonth3Low,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,",2.708638360175708,1,1,0
 "PCTChangeLT-2,HTGT1.3LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkCupDown-2dayDown,",-0.023489144659569076,1,0,1
 "PCTChangeLT-2,LTGT1.3,(Test)checkCupDown-2dayDown,ML:buyFinalContinue-3,##sellTenDaysMoreThanTen,***SELLPATTERN***",2.673101995787785,2,2,0
-"PCTChangeLT-2,,(Test)checkCupDown-inDownTrend,bar_low,ML:sellFinalCandidate-1-(lastDayUp),sellFinal,",4.17843026538679,1,1,0
 "PCTDayChangeLT0,LTGT1.3,LTGTPCTDayChange,(SMA4GT(1.5)),",-1.4776785714285672,1,0,1
 "PCTChangeLT-1,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyMorningStar-HighLowerTail-(checkChart),buyMorningStar-dayDown,",1.266388557806913,1,1,0
 "PCTChangeGT3,HTGT1.3,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,",0.8568157118634878,3,2,1
@@ -5691,7 +5683,7 @@
 "PCTChangeLT-3,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)checkCupDown-2dayDown,",2.4066390041493824,1,1,0
 "PCTChangeGT2,LTGT1.3,(Test)checkCupUp-3dayUp-mayReversalSell,",-0.8885938815925996,2,0,2
 "PCTChangeLT-4,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,***SELLPATTERN***",0.15849101973445778,2,1,1
-"PCTChangeGT2,LTGT1.3,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,",-0.39853400842860537,13,5,8
+"PCTChangeGT2,LTGT1.3,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,",-0.4936936671672218,14,5,9
 "PCTChangeLT-3,HTGT1.3,HTGTPCTDayChange,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",1.5614634893095836,1,1,0
 "PCTChangeGT3,,##UPTREND:buyMonth3Low,",-0.45745992699904775,6,3,3
 "PCTChangeLT-2,LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-2dayDown-mayReversalBuy,***SELLPATTERN***",-1.417848206839036,1,0,1
@@ -5727,7 +5719,7 @@
 "PCTChangeLT-0.5,LTGT1.3,LTGTPCTDayChange,(Test)MayBuyCheckChart-monthLowReversal,monthLowChangeLT3,",2.5957170668397147,1,1,0
 "PCTChangeLT-1,LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,***SELLPATTERN***",0.3379953379953353,1,1,0
 "PCTChangeLT-3,,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,",0.009470221446809621,33,17,16
-"PCTChangeGT0,,##(Test)(check-chart)-buySMAUpTrend,",0.13636914080578652,13,6,7
+"PCTChangeGT0,,##(Test)(check-chart)-buySMAUpTrend,",-0.01034162576724992,14,6,8
 "PCTChangeLT-3,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,ML:sellFinalCandidate-1-(lastDayUp),",-5.375253549695738,1,0,1
 "PCTChangeGT4,HTGT1.3LTGT3.0LTGT1.3,sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),",1.4989016539328044,2,1,1
 "PCTChangeLT-2,HTGT1.3,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,",-0.4502023484509224,13,5,8
@@ -5763,7 +5755,7 @@
 "PCTChangeGT4,HTGT1.3LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##(Check-chart):year2High-InPlus,",1.7433751743375174,1,1,0
 "PCTChangeLT-1,HTGT1.3LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,",0.41791044776118724,1,1,0
 "PCTChangeLT-3,LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,##DOWNTREND:sellYear2HighReversal(InDownTrend),",0.4299325816360791,7,4,3
-"PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,***SELLPATTERN***",-0.7898061006841104,17,5,12
+"PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,***SELLPATTERN***",-0.9245434064972992,18,5,13
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,weekHighGTweek2,",-4.824025003397201,1,0,1
 "PCTChangeGT0,LTGT1.3,LTGTPCTDayChange,##(Test)(check-chart)-sellSMADownTrend,***BUYPATTERN***",-1.1933174224343674,1,0,1
 "PCTChangeLT-1,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,",0.09353429093981436,6,3,3
@@ -5798,7 +5790,6 @@
 "PCTChangeLT-2,,ML:buyRisingMA-down-Risky,(Test)checkCupDown-inDownTrend,bar_low,***SELLPATTERN***",-0.7003070003255087,14,5,9
 "PCTChangeLT-0.5,HTGT3.0,,HTGTPCTDayChange,buyYear2LowMovingSMA,***SELLPATTERN***",-1.4077790519877653,2,1,1
 "PCTChangeGT4,,##UPTREND:buyYear2LowReversal(Confirm),##finalBreakOutBuy-1test-atYearLow,buyYearLow,",-0.9482758620689606,1,0,1
-"PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown,bar_low,***SELLPATTERN***",-3.2150776053215075,1,0,1
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-upTrendLastDayDown-mayReversalBuy,",-1.3127294596378172,4,0,4
 "PCTChangeLT-3,,##DOWNTREND:sellMonth6LowBreak,",-0.10173774058059026,37,21,16
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,$$MayBuy-CheckChart(monthLow-minimumLast2DayDown),",-0.418765126435249,8,3,5
@@ -5855,7 +5846,7 @@
 "PCTChangeGT2,HTGT1.3,(Test)checkCupUp-month3HighMTmonth3Low,bar_high,",0.8014471393046969,5,2,3
 "PCTChangeGT4,LTGT1.3,buyDownTrend-2(Risky),",-1.492837944382559,2,0,2
 "PCTChangeLT-4,HTGT1.3,(check-chart)buyEMA6<EMA14,***SELLPATTERN***",0.3282122905027965,1,1,0
-"PCTChangeLT-3,LTGT1.3,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-2.179069154962639,4,0,4
+"PCTChangeLT-3,LTGT1.3,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-2.255714740488971,3,0,3
 "PCTChangeGT2,HTGT1.3,(Test)checkCupUp-month3HighMTmonth3Low,bar_high,##UPTREND:buyYear2LowReversal(Confirm),",-1.5488215488215564,1,0,1
 "PCTChangeGT16,HTGT1.3LTGT1.3,(check-chart)sellEMA6>EMA14,maySellAfter10:20HighVolatileLastDayUp-GT10,***BUYPATTERN***",-3.4633612832664964,1,0,1
 "PCTChangeGT4,HTGT1.3,##UPTREND:buyMonth3Low,",-0.9419152276295155,1,0,1
@@ -5935,7 +5926,7 @@
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1,week2BarHighChangeGT1,weekHighGTweek2High,",1.2312403106766803,5,3,2
 "PCTChangeLT-3,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,##DOWNTREND:sellYearHigh(InDownTrend),",-0.01683501683502066,1,0,1
 "PCTChangeGT4,HTGT1.3,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,",-0.20083201836178127,1,0,1
-"PCTChangeGT4,,(check-chart):ML:buy-2week-breakoutup,",0.8223688173876684,32,20,12
+"PCTChangeGT4,,(check-chart):ML:buy-2week-breakoutup,",0.7270748765710429,26,15,11
 "PCTChangeGT2,,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,##UPTREND:buyMonth6Low,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT0,brokenToday,",0.2482269503546059,1,1,0
 "PCTChangeGT1,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT3,weekHighGTweek2High,",0.5463576158940447,1,1,0
 "PCTChangeGT0,,+-,set1,",-0.3947228291843348,30,10,20
@@ -5943,6 +5934,9 @@
 "PCTChangeGT2,,##(Check-chart)sellMonth3High-Continue,",-0.8590542674312309,2,0,2
 "PCTChangeGT0,,(Test)checkConsolidationBreakDown-2week-(risky)-PCTDayChangeGT-1,week2BarLowChangeLT-1,weekLowLTweek2Low,",-0.2640796015139787,8,4,4
 "PCTChangeLT-2,HTGT3.0,,HTGTPCTDayChange,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,",-0.7073912468596998,1,0,1
+"PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,buyYear2LowMovingSMA,",-0.017937391829952312,11,5,6
+"PCTChangeGT2,,(Test)check10DayLowReversal,(Test)checkCupUp-month3HighMTmonth3Low,bar_high,##UPTREND:buyYear2LowReversal(Confirm),",-0.10303030303030578,1,0,1
+"PCTChangeLT-2,LTGT1.3,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,",-0.2728958891606863,26,10,16
 "PCTChangeLT-4,HTGT1.3,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-1,",4.738095238095233,1,1,0
 "PCTChangeLT-3,,##(Check-chart-buy):month3High-InMinus,ReversalHighMonth3,##DOWNTREND:sellMonth3HighReversal(InDownTrend),",-0.18421052631578647,1,0,1
 "PCTChangeGT4,HTGT1.3,##UPTREND:buyYear2LowReversal(Confirm),sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),",4.053765735011735,1,1,0
@@ -6054,14 +6048,14 @@
 "PCTChangeLT-2,,(Test)checkConsolidationBreakDown-2week-(risky)-year2Low,week2BarLowChangeLT-1,brokenToday,",0.5012690355330007,1,1,0
 "PCTChangeGT2,LTGT1.3,LTGTPCTDayChange,(Test)checkCupDown-lastDayUp,",-0.7320020743455196,2,1,1
 "PCTChangeGT3,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT1,brokenToday,",-0.17506094372261438,9,5,4
+"PCTChangeLT-3,,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,***SELLPATTERN***",1.6618911174785134,1,1,0
+"PCTChangeGT4,HTGT1.3,(Test)checkCupUp-2dayUp-mayReversalSell,buyYearLow,",-1.4512471655328747,1,0,1
 "PCTChangeLT-1,,##buyFinalContinue-2,***SELLPATTERN***",1.899171270718232,1,1,0
 "PCTChangeLT-3,LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,##DOWNTREND:sellYearHigh(InDownTrend),",-0.6233899002859021,6,2,4
 "PCTChangeGT1,,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend)-Already10DayDown,",-0.1845087920154467,37,14,22
 "PCTChangeGT4,,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,sell-2week-breakoutup,***BUYPATTERN***",0.2865812542144187,1,1,0
 "PCTChangeLT-3,HTGT1.3LTGT1.3,(check-chart)buyEMA6<EMA14,***SELLPATTERN***",-7.29508196721312,1,0,1
 "PCTDayChangeLT0,,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,+-,set1,buyYear2LowMovingSMA,***SELLPATTERN***",-2.1488294314381307,1,0,1
-"PCTChangeGT0,HTGT3.0,,HTGTPCTDayChangeLTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,++,set2,",-1.8698635301213868,1,0,1
-"PCTChangeGT0,,$$MayBuyCheckChart-(|`|_|),##(Test)(check-chart)-buySMAUpTrend,",-1.9175815912167242,1,0,1
 "PCTChangeGT4,HTGT1.3,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,",2.663769015833598,1,1,0
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,buyYearHigh-3,$$MaySellCheckChart-(IndexNotDownInSecondHalf),",-1.8547626532537043,1,0,1
 "PCTChangeLT-3,HTGT1.3,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",2.196485623003195,1,1,0
@@ -6069,6 +6063,7 @@
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,",0.16194636938837687,1,1,0
 "PCTChangeLT-4,HTGT1.3,RSISellCandidate(yearLow)-lessThanMinus5,",-1.0350765837868656,4,1,3
 "PCTChangeGT4,HTGT1.3,HTGTPCTDayChange,(Test)sellLastDayHighUpReversal,",-1.0800634329502308,4,0,4
+"PCTChangeGT4,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,(check-chart)buy-2week-breakoutup(|-|-| or --|),",-0.7114977951904113,2,0,2
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkCupDown-2dayDown-mayReversalBuy,##DOWNTREND:sellYear2HighReversal(InDownTrend),***SELLPATTERN***",-0.20254084823842775,6,2,4
 "PCTChangeLT-1,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-2dayDown-mayReversalBuy,",-2.0615854627774497,2,0,2
 "PCTChangeGT1,HTGT3.0,,HTGTPCTDayChange,##(Check-chart)sellMonth3High-Continue,***BUYPATTERN***",0.6462035541195453,1,1,0
@@ -6109,7 +6104,7 @@
 "PCTChangeGT3,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT0,brokenToday,",2.255174544331174,1,1,0
 "PCTChangeGT0.5,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT1,weekHighGTweek2High,buyYearHigh-3,",-0.06926577064203082,2,1,1
 "PCTChangeLT-0.5,,(Test)buySMA4Reversal,***SELLPATTERN***",-0.3110464661856366,10,4,6
-"PCTChangeGT3,,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,(check-chart):ML:buy-2week-breakoutup,",-0.1668397356467383,5,1,4
+"PCTChangeGT3,,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,(check-chart):ML:buy-2week-breakoutup,",-0.6781580476558633,5,1,4
 "PCTChangeGT2,LTGT1.3,LTGTPCTDayChange,ML:sellFinalContinue-(lastDayDown)-2,",-0.522312373225146,1,0,1
 "PCTChangeLT-0.5,LTGT1.3,LTGTPCTDayChange,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,sellSMA25GT10,buyYear2LowMovingSMA,",-0.5389736854024227,1,0,1
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,sellUpTrend-2(Risky),",-0.5987715935422055,16,7,9
@@ -6128,7 +6123,6 @@
 "PCTChangeLT-3,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-2dayDown-mayReversalBuy,***SELLPATTERN***",-0.8023799200269721,2,1,1
 "PCTChangeLT-4,LTGT1.3,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,##DOWNTREND:sellMonth6High(InDownTrend),***SELLPATTERN***",2.1580876228552346,2,2,0
 "PCTChangeGT3,,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT3,brokenToday,",-1.8791946308724907,1,0,1
-"PCTChangeGT2,HTGT1.3,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,##RisingMA(check-chart-sell)-MaySellCheckChart,",-0.17108639863131123,1,0,1
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1,week2BarHighChangeGT0,weekHighGTweek2High,brokenToday,",-1.0430038510911424,1,0,1
 "PCTChangeGT2,,(Test)check10DayLowReversal,(Test)checkCupUp-inUpTrend,bar_high,",0.05880605553844004,2,1,1
 "PCTChangeGT0.5,,sellSuperTrend-1,+-,set2,",1.4374032839676385,3,2,1
@@ -6159,11 +6153,12 @@
 "PCTChangeLT-4,LTGT1.3,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,##DOWNTREND:sellMonth3High(InDownTrend),***SELLPATTERN***",1.2547735951991177,1,1,0
 "PCTChangeLT-2,,ML:BuyRisingMA-Risky-2,",2.705796831314073,2,1,1
 "PCTChangeLT-1,,(Test)checkCupDown-3dayDown,",-0.6132890356055506,12,7,5
-"PCTChangeLT-2,,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,",0.520243120198804,47,29,18
+"PCTChangeLT-2,,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,",0.5068166259173795,51,31,20
 "PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,##DOWNTREND:sellMonth6High(InDownTrend),***SELLPATTERN***",1.604760252698157,5,4,1
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,$$ML:(check-chart-2-3MidCapCross)MayBuyCheckChart-Risky,buyYear2LowMovingSMA,***SELLPATTERN***",0.9677781825982409,2,1,1
+"PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,$$ML:(check-chart-2-3MidCapCross)MayBuyCheckChart-Risky,ML:buyFinalContinue-3,***SELLPATTERN***",-4.730191256830609,1,0,1
 "PCTChangeLT-1,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,",-4.523498694516968,1,0,1
-"PCTChangeGT3,,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",0.12316240821944664,15,8,7
+"PCTChangeGT3,,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",-0.09567200097088083,13,7,6
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,$$MayBuyCheckChart-(IndexNotUpInSecondHalf),$$MayBuy-CheckChart(downTrend-mayReverseLast4DaysDown)-Risky,",0.37927273150863705,7,4,3
 "PCTChangeGT1,,buyUpTrend-1,(Test)checkConsolidationBreakUp-forecastDayPCT7changeGT0,",0.41356492969396197,1,1,0
 "PCTChangeLT-8,LTGT3.0LTGT1.3,buyYear2Low,***SELLPATTERN***",3.220511057088409,6,5,1
@@ -6201,7 +6196,7 @@
 "PCTChangeLT-3,,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,sellDayLowVolLow-03-checkMorningTrend(.5SL),(Test)checkCupDown-3dayDown-mayReversalBuy,***SELLPATTERN***",-1.50471444623578,1,0,1
 "PCTDayChangeLT0,,##(Test)(check-chart)-buySMAUpTrend,",-0.17632710646846889,19,9,10
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChange,buyYearHigh-0,",-0.04550480155752389,29,12,17
-"PCTChangeLT-2,,(Test)checkCupDown-inDownTrend,bar_low,",-0.23471176312700281,94,40,54
+"PCTChangeLT-2,,(Test)checkCupDown-inDownTrend,bar_low,",-0.25391394530622546,87,36,51
 "PCTChangeGT2,HTGT1.3,(Test)checkCupUp-3dayUp,",1.0448911014594173,2,2,0
 "PCTChangeLT-3,LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,##DOWNTREND:sellYearHigh(InDownTrend),***SELLPATTERN***",1.0751269949089248,8,5,2
 "PCTDayChangeLT0,,(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1,week2BarHighChangeGT0,",-0.28162361513381295,2,0,2
@@ -6304,7 +6299,7 @@
 "PCTDayChangeLT0,,$$MaySellCheckChart-(|_|`|),",-0.38895975531836635,18,12,6
 "PCTChangeGT2,HTGT3.0,,HTGTPCTDayChange,sellEveningStar-0,",-0.24228267553819685,7,3,4
 "PCTChangeGT0.5,,##(Test)(check-chart)-sellSMADownTrend,***BUYPATTERN***",1.4285714285714246,1,1,0
-"PCTChangeGT3,,(check-chart)buy-2week-breakoutup(|-|-| or --|),",0.23174894349612618,72,38,34
+"PCTChangeGT3,,(check-chart)buy-2week-breakoutup(|-|-| or --|),",0.2926504198438817,79,43,36
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,buyYearHigh-3,$$ML:(check-chart-2-3MidCapCross)MaySellCheckChart-Risky,",1.7658128908128914,2,2,0
 "PCTChangeLT-3,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,",0.4143483203593995,39,24,15
 "PCTChangeGT2,HTGT1.3,(Test)checkCupUp-inUpTrend,bar_high,sellFinalContinue-(lastDayUp)-(volLow),",-1.1155734047300314,1,0,1
@@ -6332,8 +6327,6 @@
 "PCTDayChangeLT0,HTGT3.0,,HTGTPCTDayChange,--,",-1.9294377067254687,1,0,1
 "PCTChangeLT-2,,##DOWNTREND:sellYearLowBreak,sellPatternsML,",-4.498407643312095,1,0,1
 "PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,(Test)checkCupDown-3dayDown,***SELLPATTERN***",-0.5615060045439851,1,0,1
-"PCTChangeGT2,,(Test)check10DayLowReversal,(Test)checkCupUp-month3HighMTmonth3Low,bar_high,##UPTREND:buyYear2LowReversal(Confirm),",-0.10303030303030578,1,0,1
-"PCTChangeLT-2,LTGT1.3,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,",-0.2728958891606863,26,10,16
 "PCTDayChangeLT0,HTGT3.0,,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,buyYear2LowMovingSMA,***SELLPATTERN***",1.0099734881959348,1,1,0
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChangeLTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyYearHigh-3,",-1.2360639844886143,1,0,1
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,***SELLPATTERN***",-1.0914207005193883,5,1,4
@@ -6400,7 +6393,7 @@
 "PCTChangeLT-1,LTGT1.3,(Test)checkCupDown-mayReversalBuy,",-1.9717566855349429,5,1,4
 "PCTChangeGT4,,buyTenDaysLessThanMinusTen,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***BUYPATTERN***",-1.6441915684781065,1,0,1
 "PCTChangeLT-3,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,##DOWNTREND:sellYear2HighReversal(InDownTrend),***SELLPATTERN***",0.9606147934678195,1,1,0
-"PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,$$MaySellCheckChart-(|_|`|),",-0.36184072238799003,26,9,17
+"PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,$$MaySellCheckChart-(|_|`|),",-0.2314811600841525,24,9,15
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week-(risky)-PCTDayChangeGT-1,week2BarLowChangeLT-2,weekLowLTweek2Low,",1.2952132247420802,2,1,1
 "PCTChangeLT-2,LTGT1.3,##DOWNTREND:sellMonth6LowBreak,",0.3874323563687714,4,2,2
 "PCTChangeLT-4,HTGT3.0,,HTGTPCTDayChange,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,",-2.719298245614035,1,0,1
@@ -6435,11 +6428,6 @@
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-2dayDown,***SELLPATTERN***",-2.519659239842729,1,0,1
 "PCTChangeGT1,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend)-Already10DayDown,***BUYPATTERN***",1.0312989386245106,7,5,2
 "PCTChangeLT-3,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyMorningStar-HighLowerTail,***SELLPATTERN***",-0.9749847956149423,10,4,6
-"PCTChangeLT-1,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)buyMay5DayFloorReversal,***SELLPATTERN***",1.5432704977534042,2,1,1
-"PCTChangeLT-4,,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,(check-chart)buyEMA6<EMA14,",0.2519379844961152,1,1,0
-"PCTChangeLT-2,,(Test)checkCupDown-2dayDown,ML:buyFinalContinue-3,##sellTenDaysMoreThanTen,***SELLPATTERN***",0.6320224719101163,1,1,0
-"PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,sellPatterns-Risky-LT-0.9-SMALT0,(SMA9LT0),",-0.5605184795936122,1,0,1
-"PCTChangeGT2,HTGT1.3LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyTenDaysLessThanMinusTen,",-0.6138367558006688,11,6,5
 "PCTChangeGT0.5,HTGT3.0,,HTGTPCTDayChange,buyYearHigh-3,",-0.5040764736656058,2,1,1
 "PCTChangeGT2,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,buyTenDaysLessThanMinusTen,",2.0388000348032436,7,5,2
 "PCTChangeGT16,,maySellAfter10:20HighVolatileLastDayUp-GT10,",-0.017932088601693878,21,8,13
@@ -6463,8 +6451,6 @@
 "PCTChangeLT-2,HTGT1.3,sellPatternsML,sellPatterns-LT-1.5-SMALT0,(SMA9LT0),",-1.6298066069681727,2,0,2
 "PCTChangeLT-16,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,mayBuyFromSellPattern-GT1.8,",1.0310734463276878,1,1,0
 "PCTChangeLT-2,,ML:buyRisingMA-down-Risky,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),***SELLPATTERN***",-1.7919075144508694,1,0,1
-"PCTChangeGT3,,(Test)checkCupUp-2dayUp-mayReversalSell,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,",1.8282380141653565,3,2,1
-"PCTChangeGT4,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,(check-chart):ML:buy-2week-breakoutup,",-0.3475238922676065,1,0,1
 "PCTChangeLT-2,HTGT3.0,,HTGTPCTDayChangeLTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##sellTenDaysMoreThanTen,",0.9292489105357601,1,1,0
 "PCTChangeLT-1,,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,***SELLPATTERN***",-0.5216808750628742,24,7,17
 "PCTChangeGT2,HTGT1.3,(Test)check10DayLowReversal,buyYearLow,",-0.08340283569642079,1,0,1
@@ -6575,7 +6561,7 @@
 "PCTChangeLT-2,LTGT1.3,$$MayBuyCheckChart-(IndexNotUpInSecondHalf),$$MayBuy-CheckChart(monthLow-minimumLast2DayDown),##(Check-chart-buy):YearHigh-InMinus,NearHighYear,##DOWNTREND:sellYearHigh(InDownTrend),***SELLPATTERN***",-1.3288244112388063,3,2,1
 "PCTChangeGT3,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT1,brokenToday,(check-chart):ML:buy-2week-breakoutup,",-0.9217684276184291,2,0,2
 "PCTChangeLT-2,LTGT1.3,LTGTPCTDayChange,$$MayBuyCheckChart-(IndexNotUpInSecondHalf),(SMA9LT0),",-1.0406937958639133,1,0,1
-"PCTChangeGT3,,(Test)checkConsolidationBreakUp-month3HighLTMonth3Low,",0.0001383889513465094,6,3,3
+"PCTChangeGT3,,(Test)checkConsolidationBreakUp-month3HighLTMonth3Low,",0.6899689304641947,4,3,1
 "PCTChangeGT4,HTGT1.3,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT2,brokenToday,",-0.8189655172413858,1,0,1
 "PCTChangeLT-4,LTGT1.3,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,##DOWNTREND:sellYearHigh(InDownTrend),***SELLPATTERN***",-2.4270072992700733,1,0,1
 "PCTChangeLT-16,HTGT1.3LTGT1.3,maySellAfter10:20HighVolatileLastDayUp-GT10,",-6.220472440944887,1,0,1
@@ -6613,7 +6599,7 @@
 "PCTChangeLT-4,HTGT1.3,ML:BuyRisingMA-Risky-0,",-0.8052591672090044,2,1,1
 "PCTChangeGT0,,(SMA9LT0),",0.32605627066076515,4,2,2
 "PCTChangeGT1,HTGT1.3,buyYearHigh-0,",-1.1923755057831387,8,2,6
-"PCTChangeGT0,LTGT1.3,LTGTPCTDayChange,$$MayBuyCheckChart-(|`|_|),",-0.534696175715733,12,3,9
+"PCTChangeGT0,LTGT1.3,LTGTPCTDayChange,$$MayBuyCheckChart-(|`|_|),",-0.4359861210840085,11,3,8
 "PCTChangeLT-2,HTGT1.3,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,##DOWNTREND:sellMonth3High(InDownTrend),***SELLPATTERN***",2.6832752924368206,1,1,0
 "PCTChangeGT2,HTGT1.3,(Test)checkCupUp-inUpTrend,bar_high,##(Check-chart)ML:buyMonth3High-Continue,",-1.8712648182619793,1,0,1
 "PCTChangeGT3,HTGT1.3,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,",2.195282209297477,3,2,1
@@ -6692,7 +6678,6 @@
 "PCTChangeGT4,HTGT3.0,,HTGTPCTDayChange,sellEveningStar-0,***BUYPATTERN***",0.5478325599766365,5,3,2
 "PCTChangeGT0.5,,buyYearHigh-3,***SELLPATTERN***",0.16341383157549008,62,35,27
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week-(risky)-PCTDayChangeGT-1,week2BarLowChangeLT0,brokenToday,",0.3055067607843238,4,2,2
-"PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,buyYear2LowMovingSMA,",-0.017937391829952312,11,5,6
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkCupDown-3dayDown,",0.9788471530781595,4,3,1
 "PCTChangeGT3,HTGT1.3,(Test)checkCupUp-downTrendLastDayUp-mayReversalSell,##UPTREND:buyYear2Low,buyYearLow,",-4.599271402550088,1,0,1
 "PCTChangeLT-2,,##(Test)(Check-chart):year2Low-InMinus,",-0.1424792440136531,35,16,19
@@ -6722,7 +6707,7 @@
 "PCTChangeLT-4,LTGT1.3,sellDayLowVolLow-01,",1.043640092688656,6,4,2
 "PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,##DOWNTREND:sellYear2HighReversal(InDownTrend),***SELLPATTERN***",-0.4680028487129945,1,0,1
 "PCTChangeLT-1,,##(Check-chart-buy):month3High-InMinus,ReversalHighMonth3,***SELLPATTERN***",-0.7091700477185309,21,7,14
-"PCTChangeGT3,LTGT1.3,(check-chart)buy-2week-breakoutup(|-|-| or --|),",-1.5744519160384576,6,0,6
+"PCTChangeGT3,LTGT1.3,(check-chart)buy-2week-breakoutup(|-|-| or --|),",-1.5557273757244927,7,0,7
 "PCTChangeLT-16,LTGT1.3,sellDayLowVolLow-0,",-0.6757990867579992,1,0,1
 "PCTChangeLT-2,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week-(risky)-PCTDayChangeGT-1,week2BarLowChangeLT-1,weekLowLTweek2Low,",-1.906878802058956,1,0,1
 "PCTChangeLT-2,,ML:buyRisingMA-down-Risky,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,***SELLPATTERN***",-1.878137978057395,1,0,1
@@ -6730,7 +6715,6 @@
 "PCTChangeGT1,LTGT1.3,LTGTPCTDayChange,buyFinalCandidate-(lastDayUp)-(sellPattern),***SELLPATTERN***",0.3527336860670161,1,1,0
 "PCTChangeLT-2,HTGT1.3LTGT1.3,##DOWNTREND:sellYearLowBreak,",2.596284102344102,2,2,0
 "PCTChangeLT-2,LTGT1.3,ML:buyRisingMA-down-Risky,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,***SELLPATTERN***",-0.677710843373494,1,0,1
-"PCTChangeGT3,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT0,",-0.4039775435623155,2,1,1
 "PCTChangeLT-4,HTGT1.3,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",2.371076580201817,1,1,0
 "PCTChangeGT2,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,##UPTREND:buyMonth3Low,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***BUYPATTERN***",2.1708275906393455,2,2,0
 "PCTChangeLT-2,LTGT1.3,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,***SELLPATTERN***",-0.9120694235367002,1,0,1
@@ -6742,7 +6726,7 @@
 "PCTChangeLT-1,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,$$MayBuy-CheckChart(downTrend-mayReverseLast4DaysDown),",-0.6241027495964975,6,2,4
 "PCTChangeGT2,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",0.0,1,0,0
 "PCTChangeGT4,HTGT1.3,##UPTREND:buyYearLowReversal(Confirm),",-0.6257528300341149,2,1,1
-"PCTChangeGT2,,(Test)checkCupUp-inUpTrend,bar_high,",-0.25199228698748277,115,50,65
+"PCTChangeGT2,,(Test)checkCupUp-inUpTrend,bar_high,",-0.2913865800527739,107,46,61
 "PCTChangeGT2,HTGT1.3,##UPTREND:buyYear2Low,sellYear2LowLT-40-last3DayDown(triggerAfter-9:15),",-2.1515151515151585,1,0,1
 "PCTChangeLT-1,,buyYearHigh-0,",0.3875556564171818,6,3,3
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-2dayDown-mayReversalBuy,",-3.0920487369905127,2,0,2
@@ -6756,13 +6740,12 @@
 "PCTChangeLT-3,,ML:buyRisingMA-down-0,",0.8884539876531359,3,2,1
 "PCTChangeGT1,,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT0,",0.30526315789473446,1,1,0
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,buyYearHigh-3,(Test)checkConsolidationBreakDown-2week-(risky)-PCTDayChangeGT-1,week2BarLowChangeLT0,weekLowLTweek2Low,",-0.4909090909090946,1,0,1
-"PCTChangeLT-2,,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,",-0.140939703349912,272,133,139
+"PCTChangeLT-2,,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,",-0.14280056556224588,280,137,143
 "PCTChangeLT-2,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,",-0.6336895349297017,3,1,2
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-2dayDown,***SELLPATTERN***",-0.5993846988413767,20,8,12
 "PCTChangeLT-2,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,",-1.0322158625458422,11,4,7
 "PCTChangeGT1,HTGT1.3,buyUpTrend-1,",0.5788639113042443,2,2,0
 "PCTChangeLT-3,LTGT1.3,##DOWNTREND:sellMonth6LowBreak,",0.3348944634127238,13,5,8
-"PCTChangeLT-2,HTGT1.3LTGT1.3,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",1.2549019607843093,1,1,0
 "PCTChangeLT-2,HTGT1.3,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkCupDown-3dayDown,##DOWNTREND:sellYear2HighReversal(InDownTrend),",3.036328795926726,2,1,1
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,sellUpTrend-2(Risky),***BUYPATTERN***",-0.7377944092688373,9,4,5
 "PCTChangeLT-4,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,sellDayLowVolLow-03-checkMorningTrend(.5SL),##DOWNTREND:sellYearHigh(InDownTrend),***SELLPATTERN***",-2.65826429125828,2,0,2
@@ -6778,8 +6761,6 @@
 "PCTChangeGT4,,##UPTREND:buyYear2LowReversal(Confirm),sell-2week-breakoutup,***BUYPATTERN***",-1.9166666666666645,1,0,1
 "PCTChangeLT-4,LTGT3.0LTGT1.3,buyYear2Low,BreakLowYear2,",2.732711000159347,2,1,1
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,***SELLPATTERN***",-0.05873726961454903,9,5,4
-"PCTDayChangeLT0,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-1,",0.4459475141327172,1,1,0
-"PCTChangeLT-2,LTGT1.3,ML:BuyRisingMA-Risky-0,",0.011477671386293964,2,1,1
 "PCTChangeLT-0.5,HTGT3.0,,HTGTPCTDayChange,++,",-0.14611745059839523,1,0,1
 "PCTChangeGT1,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend),***BUYPATTERN***",1.0198411881599323,3,3,0
 "PCTChangeLT-4,,##DOWNTREND:sellMonth6High(InDownTrend),",-0.30654037765126546,6,2,4
@@ -6806,11 +6787,11 @@
 "PCTChangeGT1,,##RisingMA(Test)(check-chart-buy)-2DayUp,",-0.234147480338917,47,19,28
 "PCTChangeLT-2,LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,",-0.19348035271941086,22,12,10
 "PCTChangeGT0.5,HTGT1.3,HTGTPCTDayChange,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,$$ML:(check-chart-2-3MidCapCross)MaySellCheckChart-Risky,",1.0259000255371076,2,2,0
+"PCTChangeLT-1,LTGT1.3,$$MayBuyCheckChart-(IndexNotUpInSecondHalf),(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-0.13824884792627254,1,0,1
 "PCTChangeLT-4,,##DOWNTREND:sellMonth3LowBreak,",0.11425355402529036,50,29,21
 "PCTChangeGT0,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT1,weekHighGTweek2High,",-0.01395058925019505,11,5,6
 "PCTChangeLT-3,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,",1.0176991150442527,1,1,0
 "PCTChangeLT-1,,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,",-0.5518531713022742,24,7,16
-"PCTChangeGT2,,(check-chart):ML:buy-2week-breakoutup,sell-2week-breakoutup,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***BUYPATTERN***",-0.16273393002441242,1,0,1
 "PCTChangeLT-2,,(Test)checkCupDown-2dayDown,ML:buyFinalContinue-4,sellFinal,***SELLPATTERN***",0.11904761904761227,1,1,0
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,##RisingMA(check-chart-sell)-MaySellCheckChart,***BUYPATTERN***",-1.4516129032258003,1,0,1
 "PCTChangeGT0.5,,(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1,week2BarHighChangeGT3,weekHighGTweek2High,",3.3883019840247295,1,1,0
@@ -6827,7 +6808,7 @@
 "PCTChangeGT4,,ML:sellRisingMAuptrend-1,##UPTREND:buyYear2LowReversal(Confirm),buyYearLow,***BUYPATTERN***",1.1817791147400087,1,1,0
 "PCTChangeLT-2,,##DOWNTREND:sellYearHigh(InDownTrend),(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,",0.9198068675316242,1,1,0
 "PCTChangeLT-1,,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,***SELLPATTERN***",-0.6146854409669905,26,10,16
-"PCTChangeGT2,,(check-chart):ML:buy-2week-breakoutup,",-0.05631936222393604,56,27,29
+"PCTChangeGT2,,(check-chart):ML:buy-2week-breakoutup,",-0.14349483832653803,52,26,26
 "PCTChangeLT-4,,##DOWNTREND:sellYear2HighReversal(InDownTrend),",-0.45766020338340635,22,8,14
 "PCTChangeGT1,HTGT3.0,,HTGTPCTDayChange,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,",-0.15336807883740824,12,7,5
 "PCTChangeGT1,HTGT1.3LTGT1.3,LTGTPCTDayChange,maySellAfter10:20HighVolatileLastDayUp-GT10,",-4.599860821155178,1,0,1
@@ -6868,7 +6849,7 @@
 "PCTChangeLT-2,LTGT1.3,(Test)checkCupDown-3dayDown,",0.015356270546996917,6,2,4
 "PCTChangeGT3,,sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),***BUYPATTERN***",-0.2084610789960145,20,11,9
 "PCTChangeGT2,LTGT1.3,sellYear2LowContinue,",-2.4511492505128363,2,0,2
-"PCTChangeLT-2,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-0.3,1,0,1
+"PCTChangeLT-2,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-0.6476752195625984,2,0,2
 "PCTChangeLT-2,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,brokenToday,",-0.2179990965681183,69,31,38
 "PCTChangeLT-0.5,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyYearHigh-3,",0.6111091485779004,3,2,1
 "PCTChangeGT3,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,buyDownTrend-2(Risky),sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),***BUYPATTERN***",-1.3326410522672087,1,0,1
@@ -6882,8 +6863,8 @@
 "PCTChangeLT-2,HTGT1.3,##(Check-chart-buy):month3High-InMinus,ReversalHighMonth3,",-0.9849457789251783,5,2,3
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,buyYearHigh-3,***SELLPATTERN***",0.08429126576701539,12,6,6
 "PCTChangeGT2,,##UPTREND:buyMonth3LowReversal(Confirm),##(Check-chart-sell):month3Low-InPlus,ReversalLowMonth3,***BUYPATTERN***",0.3029785797888837,6,3,3
-"PCTChangeLT-3,,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",0.6898185019836655,12,9,2
-"PCTChangeLT-2,,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-1.0706596288768895,7,1,6
+"PCTChangeLT-3,,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",0.6871961304857488,10,8,2
+"PCTChangeLT-2,,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-0.9790193941338615,8,1,7
 "PCTChangeLT-1,,ML:sellFinalCandidate-3,",-0.24257538160934863,20,7,12
 "PCTChangeGT1,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT0,",0.18701473778458721,8,4,4
 "PCTChangeLT-0.5,LTGT1.3,LTGTPCTDayChange,buyYearHigh-3,",-0.02934099966636195,19,10,9
@@ -6899,7 +6880,7 @@
 "PCTDayChangeLT0,HTGT1.3,HTGTPCTDayChangeLTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)MaySellCheckChart-monthHighReversal-risky,monthHighChangeGT-2,",-4.357220021606038,1,0,1
 "PCTChangeLT-2,,ML:BuyRisingMA-Risky-0,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,***SELLPATTERN***",-6.250000000000007,1,0,1
 "PCTChangeGT4,LTGT1.3,##RisingMA(Test)(check-chart-buy)-2DayUp,",0.14124293785310735,1,1,0
-"PCTChangeLT-2,,##Test:longDownTrend-1-IndexNotDownLastDay(checkBase),",-0.16272950958290378,20,10,10
+"PCTChangeLT-2,,##Test:longDownTrend-1-IndexNotDownLastDay(checkBase),",-0.13445211535042478,19,10,9
 "PCTChangeGT0,LTGT1.3,LTGTPCTDayChange,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend),***BUYPATTERN***",-0.23137015595473595,14,5,9
 "PCTChangeLT-2,,sellUpTrend-2(Risky),",-0.9510182069960983,37,11,25
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,weekLowLTweek2Low,brokenToday,",0.6194690265486751,1,1,0
@@ -6913,8 +6894,6 @@
 "PCTChangeGT0,LTGT1.3,LTGTPCTDayChange,##(Test)(check-chart)-buySMAUpTrend,",-0.09254716753905134,25,11,14
 "PCTChangeGT3,LTGT1.3,##UPTREND:buyYear2Low,",-0.3791091142018466,4,1,3
 "PCTChangeGT2,,##RisingMA(Test)(check-chart-buy)-1DayUp,buyRisingMAuptrend-(Risky),",2.3015713037788283,2,2,0
-"PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week-(risky)-year2Low,week2BarLowChangeLT-1,weekLowLTweek2Low,",-1.5028901734104068,1,0,1
-"PCTChangeGT2,HTGT1.3LTGT1.3,(Test)checkCupUp-inUpTrend,bar_high,",-0.44444444444445075,1,0,1
 "PCTChangeGT0.5,,+-,set2,",1.0016153115504485,12,7,5
 "PCTChangeLT-0.5,,(Test)checkCupDown-3dayDown-mayReversalBuy,",0.1409035955939707,4,2,2
 "PCTChangeGT2,HTGT1.3,ML:buyRisingMAuptrend-Risky,buyYearLow1,",1.4374353671147857,1,1,0
@@ -6939,16 +6918,16 @@
 "PCTChangeGT0.5,,(SMA9LT0),",-0.6905210295040946,1,0,1
 "PCTChangeGT4,LTGT1.3,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,",-0.7974569800195601,8,3,5
 "PCTChangeLT-2,,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,finalBreakOutSell-0,",-1.744186046511628,1,0,1
-"PCTChangeLT-2,,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,",1.5189268859106144,2,2,0
+"PCTChangeLT-2,,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,",2.364819181802044,3,3,0
 "PCTDayChangeLT0,,buyYearHigh-3,",-0.003099169416363337,495,247,247
 "PCTChangeGT2,HTGT3.0,,HTGTPCTDayChangeLTGT1.3,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,",4.967989756722145,1,1,0
 "PCTChangeGT0,,buyMayYear2LowBreakingUp,",0.3941624184246486,48,26,21
-"PCTChangeGT2,,sell-2week-breakoutup,***BUYPATTERN***",-0.17446845889704365,18,10,8
+"PCTChangeGT2,,sell-2week-breakoutup,***BUYPATTERN***",-0.2016069121204953,17,9,8
 "PCTChangeLT-8,LTGT1.3,buyYear2Low,***SELLPATTERN***",1.0425026055237145,2,1,1
 "PCTChangeLT-2,,ML:buyFinalContinue-3,***SELLPATTERN***",0.7358727480769807,4,3,1
 "PCTChangeGT1,,sellFinalContinue-00,***BUYPATTERN***",1.821115721530654,1,1,0
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,$$ML:(check-chart-2-3MidCapCross)MaySellCheckChart-Risky,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend)-Already10DayDown,***BUYPATTERN***",2.9178272980501454,1,1,0
-"PCTChangeGT2,LTGT1.3,sell-2week-breakoutup,",0.1782982991819982,2,1,1
+"PCTChangeGT2,LTGT1.3,sell-2week-breakoutup,",1.1566265060240992,1,1,0
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyYear2LowMovingSMA,***SELLPATTERN***",-2.096577795732458,6,1,5
 "PCTChangeLT-1,,sellUpTrend-1,",0.6465343259560862,7,4,2
 "PCTChangeGT2,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT0,weekHighGTweek2High,brokenToday,",-0.3068613500521895,9,4,5
@@ -6960,7 +6939,7 @@
 "PCTDayChangeLT0,HTGT1.3,HTGTPCTDayChange,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend),",-1.333816063193194,13,6,7
 "PCTChangeLT-2,HTGT3.0,,HTGTPCTDayChange,(Test)checkCupDown-2dayDown,sellFinalCandidate-(lastDayDown)-(buyPattern),##sellTenDaysMoreThanTen,***BUYPATTERN***",-1.317757009345786,1,0,1
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,",-2.508854781582054,1,0,1
-"PCTChangeLT-2,LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,***SELLPATTERN***",-0.3865929690503606,39,21,18
+"PCTChangeLT-2,LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,***SELLPATTERN***",-0.2661392817150528,40,22,18
 "PCTChangeLT-0.5,LTGT1.3,LTGTPCTDayChange,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend),buyYear2LowMovingSMA,***SELLPATTERN***",-2.503501400560224,1,0,1
 "PCTChangeLT-1,,ML:sellFinalCandidate-3,sellFinal,",-0.7330145260744112,9,4,5
 "PCTChangeLT-3,,ML:sellFinalCandidate-1-(lastDayUp),sellFinal,",-0.44118379131820085,2,1,1
@@ -6988,7 +6967,7 @@
 "PCTChangeLT-2,HTGT1.3,ML:BuyRisingMA-Risky-0,",-1.1252770648278536,2,0,2
 "PCTChangeGT0.5,,##RisingMA(Test)(check-chart-buy)-2DayUp,",-1.0262589858894244,11,2,9
 "PCTChangeGT3,HTGT1.3,sellYear2LowContinue,***BUYPATTERN***",3.149516525591199,3,3,0
-"PCTChangeGT1,,##finalBreakOutBuyContinue-1-test-atYearLow,##finalBreakOutBuyContinue-0-test-atYearLow,",0.3107365372722602,26,14,12
+"PCTChangeGT1,,##finalBreakOutBuyContinue-1-test-atYearLow,##finalBreakOutBuyContinue-0-test-atYearLow,",0.2768865602243591,25,13,12
 "PCTChangeGT0,HTGT3.0,,HTGTPCTDayChangeLTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,maySellAfter10:20HighVolatileLastDayUp-GT10,",-3.5901271503365617,1,0,1
 "PCTChangeGT3,LTGT1.3,ML:buyFinalCandidate-(lastDayUp),buyFinal,",1.495144857442716,3,3,0
 "PCTChangeGT8,,buyDayHighVolLow-0,",0.18955385764222918,3,1,2
@@ -7022,12 +7001,15 @@
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,buyYearHigh-0,$$ML:(check-chart-2-3MidCapCross)MaySellCheckChart-Risky,***SELLPATTERN***",1.0676094906324263,1,1,0
 "PCTChangeLT-2,,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,##DOWNTREND:sellMonth6HighReversal(InDownTrend),***SELLPATTERN***",0.33546811684221767,17,8,9
 "PCTDayChangeLT0,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week-(risky)-PCTDayChangeGT-1,week2BarLowChangeLT0,weekLowLTweek2Low,",0.5066592831811574,9,6,3
+"PCTChangeLT-8,HTGT3.0,,RSISellCandidate(yearLow)-lessThanMinus5,",-2.5316455696202422,1,0,1
+"PCTChangeLT-1,,(Test)checkConsolidationBreakDown-forecastDayPCT7LT0,",-0.49892966876815575,5,1,4
 "PCTChangeGT0,,(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1,week2BarHighChangeGT0,weekHighGTweek2High,",-0.6894000561497188,17,5,12
 "PCTChangeGT1,LTGT1.3,LTGTPCTDayChange,+-,set2,",-0.668356618631,3,1,2
 "PCTChangeLT-2,,(Test)checkCupDown-upTrendLastDayDown-mayReversalBuy,",-0.6324484832177449,38,14,24
 "PCTChangeGT0,,++,set1,",-0.43459838344365836,24,8,16
-"PCTChangeGT3,,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,(check-chart):ML:buy-2week-breakoutup,sell-2week-breakoutup,***BUYPATTERN***",2.348427793213246,2,2,0
 "PCTChangeLT-1,,ML:BuyRisingMA-Risky-1,",0.7788448992027214,22,14,8
+"PCTChangeLT-2,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,##DOWNTREND:sellMonth6HighReversal(InDownTrend),***SELLPATTERN***",-0.5361930294906242,1,0,1
+"PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,buyYear2LowMovingSMA,***SELLPATTERN***",-2.1651918894470503,2,0,2
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,buyMorningStar-HighUpperTail-(checkChart),***SELLPATTERN***",0.5057967904702424,3,2,1
 "PCTChangeLT-1,,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,",-0.9102054622547506,5,1,4
 "PCTChangeGT1,,sellSuperTrend-1,+-,set2,",-0.18406790060332903,1,0,1
@@ -7100,15 +7082,15 @@
 "PCTChangeLT-4,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,##DOWNTREND:sellYearHigh(InDownTrend),",-0.5584003872472071,11,5,6
 "PCTChangeLT-2,HTGT1.3LTGT1.3,$$MayBuy-CheckChart(monthLow-minimumLast2DayDown),",0.593651327906673,4,2,2
 "PCTChangeLT-1,,(Test)checkConsolidationBreakDown-2week-(risky)-PCTDayChangeGT-1,week2BarLowChangeLT-1,weekLowLTweek2Low,",0.05348721230807918,23,10,13
-"PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,$$MaySellCheckChart-(Risky)-(|_|`|),",-0.15016400270971628,15,7,8
+"PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,$$MaySellCheckChart-(Risky)-(|_|`|),",-0.3591041753361073,17,7,10
 "PCTChangeGT8,HTGT1.3,(check-chart)sellEMA6>EMA14,",4.822695035461002,1,1,0
 "PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,(Test)checkCupDown-upTrendLastDayDown-mayReversalBuy,***SELLPATTERN***",-0.12803365937204436,3,1,2
 "PCTChangeLT-2,LTGT1.3,LTGTPCTDayChange,ML:buyRisingMA-down-Risky,",0.49114536030973277,9,5,4
 "PCTChangeLT-0.5,,buyYearHigh-1,***SELLPATTERN***",-0.14817748429023206,5,1,4
 "PCTChangeGT3,,(Test)checkCupUp-2dayUp-mayReversalSell,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,##finalBreakOutBuy-1test-atYearLow,",-1.8443627450980338,1,0,1
 "PCTChangeLT-4,,ML:dayLowBuy,",1.3490145409802108,4,2,2
-"PCTChangeGT2,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,",-0.3108134111541659,146,56,90
-"PCTChangeGT2,LTGT1.3,(Test)checkCupUp-inUpTrend,bar_high,",0.003915770906899281,6,3,3
+"PCTChangeGT2,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,bar_high,",-0.28038640887286953,154,60,94
+"PCTChangeGT2,LTGT1.3,(Test)checkCupUp-inUpTrend,bar_high,",0.35085277124212627,5,3,2
 "PCTChangeLT-1,,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,***SELLPATTERN***",0.37338194220777715,66,32,34
 "PCTChangeLT-2,,ML:buyRisingMA-down-Risky,***SELLPATTERN***",-0.26325558969808693,143,57,85
 "PCTChangeGT0,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT0,weekHighGTweek2High,",-0.2990600968384946,1,0,1
@@ -7164,12 +7146,11 @@
 "PCTDayChangeLT0,HTGT1.3,HTGTPCTDayChange,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,ML:BuyRisingMA-Risky-2,sellSuperTrend-1,+-,set2,buyYear2LowMovingSMA,",-0.8789369048864801,1,0,1
 "PCTDayChangeLT0,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week-(Risky)-PCTDayChangeLT1,week2BarHighChangeGT0,weekHighGTweek2High,",-0.9414738828738541,3,2,1
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,maySellAfter10:20HighVolatileLastDayUp-GT10,",0.2183125722357688,1,1,0
-"PCTChangeGT4,,sell-2week-breakoutup,",-0.6745504878967978,9,5,4
+"PCTChangeGT4,,sell-2week-breakoutup,",-0.20765402110612016,8,5,3
 "PCTChangeLT-2,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,##DOWNTREND:sellMonth3LowBreak,",1.5604139803964134,2,2,0
 "PCTChangeLT-2,LTGT1.3,LTGTPCTDayChange,##RisingMA(check-chart-buy)-MayBuyCheckChart,(Test)checkCupDown-upTrendLastDayDown-mayReversalBuy,",1.6269841269841272,1,1,0
 "PCTChangeGT0,,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend),",0.1703052716528323,7,3,4
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,##DOWNTREND:sellYearHigh(InDownTrend),##buyFinalContinue-2,***SELLPATTERN***",-1.1355884595321106,1,0,1
-"PCTChangeLT-3,,ML:buyRisingMA-down-Risky,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,***SELLPATTERN***",-2.8301886792452713,1,0,1
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,-+,set1,",-2.3535604180765604,1,0,1
 "PCTChangeGT4,HTGT1.3,##UPTREND:buyMonth3LowReversal(Confirm),##(Check-chart-sell):month3Low-InPlus,ReversalLowMonth3,***BUYPATTERN***",1.1000763941940483,1,1,0
 "PCTDayChangeLT0,,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,+-,set2,buyYear2LowMovingSMA,",-0.41666666666667523,1,0,1
@@ -7179,7 +7160,7 @@
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,sellSMA25GT10,buyYear2LowMovingSMA,***SELLPATTERN***",-0.8780487804878103,1,0,1
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,++,set1,",0.6430407967117943,14,9,5
 "PCTChangeLT-4,HTGT1.3LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,",-1.2933613295665691,2,0,2
-"PCTChangeLT-1,,(Test)checkCupDown-inDownTrend,bar_low,",0.5382501544097636,28,13,15
+"PCTChangeLT-1,,(Test)checkCupDown-inDownTrend,bar_low,",0.5588239149179157,27,13,14
 "PCTChangeGT0,LTGT1.3,LTGTPCTDayChange,buySuperTrend-1,++,set2,",1.1999999999999935,1,1,0
 "PCTChangeLT-1,,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,***SELLPATTERN***",0.7768434006768467,1,1,0
 "PCTChangeGT2,,(Test)checkCupUp-inUpTrend-month3HighMTmonth3Low,buyDownTrend-1,",1.0787992495309622,1,1,0
@@ -7280,8 +7261,8 @@
 "PCTChangeGT2,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT3,",0.21777620396600889,1,1,0
 "PCTChangeGT3,LTGT1.3,LTGTPCTDayChange,buyUpTrend-1-YearHigh,***SELLPATTERN***",0.040816326530609924,1,1,0
 "PCTChangeLT-4,,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,***SELLPATTERN***",-1.0744985673352436,1,0,1
-"PCTChangeGT2,LTGT1.3,sell-2week-breakoutup,***BUYPATTERN***",-2.0610224287734873,1,0,1
 "PCTChangeLT-3,,(check-chart)buyEMA6<EMA14,***SELLPATTERN***",-0.3650303327527323,3,0,3
+"PCTChangeLT-3,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-month3HighGTMonth3Low,",-7.379134860050887,1,0,1
 "PCTChangeGT2,,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,buyYearLow1,",0.6580763977574773,2,2,0
 "PCTChangeLT-3,,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,",-0.5613185721121159,35,13,21
 "PCTChangeLT-2,,(Test)checkCupDown-3dayDown,",-0.5833945627605526,40,18,22
@@ -7311,8 +7292,6 @@
 "PCTChangeGT0.5,LTGT1.3,LTGTPCTDayChange,+-,set1,",-1.0845136485500995,5,1,4
 "PCTChangeLT-0.5,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyMorningStar-HighLowerTail-(checkChart),***SELLPATTERN***",-1.2509581017336266,3,0,3
 "PCTChangeLT-4,,sellFinalCandidate-(lastDayUp)-(highChange),##sellTenDaysMoreThanTen,",-3.6231884057971016,1,0,1
-"PCTChangeGT1,,(Test)checkCupUp-2dayUp,##RisingMA(Test)(check-chart-buy)-2DayUp,##UPTREND:buyYear2Low,",-0.8685714285714312,1,0,1
-"PCTChangeGT2,,##RisingMA(Test)(check-chart-buy)-2DayUp,(Test)checkConsolidationBreakUp-month3HighLTMonth3Low,",0.3804347826086998,1,1,0
 "PCTChangeLT-1,LTGT1.3,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,(Test)checkCupDown-2dayDown,***SELLPATTERN***",-2.158360128617356,1,0,1
 "PCTChangeGT0.5,LTGT1.3,LTGTPCTDayChange,buyYearHigh-0,",-0.42974141109682373,10,3,7
 "PCTDayChangeLT0,LTGT1.3,LTGTPCTDayChange,buyYear2LowMovingSMA,***SELLPATTERN***",0.5039575150233127,10,6,4
@@ -7326,7 +7305,7 @@
 "PCTChangeLT-3,LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkCupDown-2dayDown-mayReversalBuy,##DOWNTREND:sellYear2HighReversal(InDownTrend),***SELLPATTERN***",0.21052975330485113,2,1,1
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,",-0.17065530912114438,22,10,12
 "PCTChangeLT-2,LTGT3.0LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,",-0.9872611464968153,1,0,1
-"PCTChangeGT3,,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,(check-chart)buy-2week-breakoutup(|-|-| or --|),",-0.3242424201233618,6,2,4
+"PCTChangeGT3,,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,(check-chart)buy-2week-breakoutup(|-|-| or --|),",0.3620972469465494,7,3,4
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,$$MaySellCheckChart-(IndexNotDownInSecondHalf),",-0.11739595785935204,41,16,25
 "PCTChangeLT-2,,sellUpTrend-0(Risky),",2.9411461143724287,2,2,0
 "PCTChangeGT4,,ML:sellRisingMAuptrend-1,##UPTREND:buyYear2Low,***BUYPATTERN***",0.9175850918697198,2,1,1
@@ -7378,7 +7357,6 @@
 "PCTChangeLT-4,HTGT3.0,,HTGTPCTDayChangeLTGT1.3,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,",-7.5972822730080365,1,0,1
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend)-Already10DayDown,",-0.4250953926934157,5,2,3
 "PCTChangeLT-0.5,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,$$MayBuy-CheckChart(downTrend-mayReverseAtMonth3High)-0,##TEST:buyMorningStar-3(Check2-3MidCapCross),##buyMorningStar-1-NotUpSecondHalfAndUp2to3,",-1.8170805572380373,1,0,1
-"PCTChangeGT2,HTGT1.3,(check-chart):ML:buy-2week-breakoutup,sell-2week-breakoutup,***BUYPATTERN***",4.4170518746790055,1,1,0
 "PCTChangeEQ0,,buySuperTrend-0,+-,set2,***SELLPATTERN***",3.9953111263065213,1,1,0
 "PCTChangeGT0,,+-,set2,buyYearHigh-0,",-2.1739130434782608,1,0,1
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT0,brokenToday,$$ML:(check-chart-2-3MidCapCross)MaySellCheckChart-Risky,",-2.670618196837558,2,0,2
@@ -7396,12 +7374,13 @@
 "PCTChangeLT-3,,finalBreakOutSell-0,",-6.564837278743584,1,0,1
 "PCTChangeGT2,LTGT1.3,##UPTREND:buyMonth3LowReversal(Confirm),",0.3470984458045645,2,1,1
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,sellRisingMA-1,buyYear2LowMovingSMA,***BUYPATTERN***",0.8752515090543306,1,1,0
+"PCTChangeGT2,,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,brokenToday,(check-chart)buy-2week-breakoutup(|-|-| or --|),",-1.729106628242075,1,0,1
 "PCTDayChangeLT0,LTGT1.3,LTGTPCTDayChange,$$MayBuy-CheckChart(downTrend-mayReverseAtMonth3High)-0,(Test)buySMA4Reversal,",-2.464258794089402,3,0,3
 "PCTChangeLT-3,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,ML:buyRisingMA-down-0,##Test:longDownTrend-2-IndexNotDownLastDay(checkBase),",-0.06863417982155373,1,0,1
 "PCTChangeLT-3,HTGT3.0,,HTGTPCTDayChange,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,##DOWNTREND:sellYear2HighReversal(InDownTrend),***SELLPATTERN***",4.256654910047038,2,2,0
 "PCTChangeLT-2,,ML:buyRisingMA-down-Risky,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,brokenToday,",-5.221476510067111,1,0,1
 "PCTChangeGT2,HTGT1.3,##UPTREND:buyYear2Low,buyYearLow,",-0.14218009478673524,1,0,1
-"PCTChangeLT-3,,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,***SELLPATTERN***",0.11190658990634143,70,35,35
+"PCTChangeLT-3,,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,***SELLPATTERN***",0.11340014100552989,71,36,35
 "PCTChangeGT1,LTGT1.3,LTGTPCTDayChange,ML:sellFinalContinue-(lastDayDown)-2,(Test)sellDowningMA-(check5MinuteDownTrendAndSellSupertrend)-Already10DayDown,",0.14727540500736377,1,1,0
 "PCTChangeLT-1,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-2,",-0.5162829644211085,14,6,8
 "PCTChangeGT1,HTGT1.3LTGT1.3,LTGTPCTDayChange,(Test)check10DayLowReversal,sellFinalContinue-(lastDayUp)-1,",1.6446700507614258,1,1,0
@@ -7420,6 +7399,8 @@
 "PCTChangeGT2,,(Test)checkCupUp-3dayUp,##UPTREND:buyMonth3LowReversal(Confirm),##(Check-chart-sell):month3Low-InPlus,ReversalLowMonth3,***BUYPATTERN***",1.08695652173912,1,1,0
 "PCTChangeGT4,HTGT1.3,buyTenDaysLessThanMinusTen,",-0.6715431729045915,7,3,4
 "PCTChangeLT-4,HTGT1.3,HTGTPCTDayChange,buyRisingMA-1,",2.178571428571437,1,1,0
+"PCTChangeGT3,,(Test)checkCupUp-2dayUp-mayReversalSell,(check-chart)mayBuy-EMA6-LT-May-MT-EMA14,",1.8282380141653565,3,2,1
+"PCTChangeGT3,,(Test)checkCupUp-near2WeekHigh-mayReveresalSell,(check-chart)buy-2week-breakoutup(|-|-| or --|),",-0.8073904389950806,1,0,1
 "PCTChangeLT-2,,(Test)checkCupDown-inDownTrend,bar_low,##Test:longDownTrend-1-IndexNotDownLastDay(checkBase),",-0.899840655179955,3,1,2
 "PCTChangeGT3,HTGT1.3,HTGTPCTDayChange,buyUpTrend-1-YearHigh,$$MaySellCheckChart-(IndexNotDownInSecondHalf),***SELLPATTERN***",-2.8034945886034683,1,0,1
 "PCTChangeGT1,HTGT1.3LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyYearHigh-0,",-2.078913873568106,1,0,1
@@ -7441,11 +7422,15 @@
 "PCTChangeGT3,,(Test)checkConsolidationBreakUp-2week-(Risky)-year2High,week2BarHighChangeGT2,brokenToday,",-1.0611953914349126,3,1,2
 "PCTChangeLT-2,,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,(Test)checkCupDown-3dayDown,",1.8649193548387113,2,2,0
 "PCTChangeGT0,LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,ML:buySuperTrend-0,",-2.750000000000002,1,0,1
+"PCTChangeLT-1,HTGT1.3,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)buyMay5DayFloorReversal,***SELLPATTERN***",1.5432704977534042,2,1,1
+"PCTChangeLT-4,,##(Check-chart-buy):month6High-InMinus,ReversalHighMonth6,(check-chart)buyEMA6<EMA14,",0.2519379844961152,1,1,0
+"PCTChangeLT-2,,(Test)checkCupDown-2dayDown,ML:buyFinalContinue-3,##sellTenDaysMoreThanTen,***SELLPATTERN***",0.6320224719101163,1,1,0
+"PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,sellPatterns-Risky-LT-0.9-SMALT0,(SMA9LT0),",-0.5605184795936122,1,0,1
+"PCTChangeGT2,HTGT1.3LTGT3.0,LTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,buyTenDaysLessThanMinusTen,",-0.6138367558006688,11,6,5
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,(Test)check10DayLowReversal,",1.7739425311586625,2,1,1
 "PCTChangeGT3,,(check-chart)sellEMA6>EMA14,ML:sellRisingMAuptrend-1,***BUYPATTERN***",-2.9093621782916865,1,0,1
 "PCTChangeGT1,LTGT1.3,##UPTREND:buyMonth3Low,",0.9784075573549375,1,1,0
 "PCTChangeGT0.5,,buyYearHigh-0,",0.14436312452843125,83,44,39
-"PCTChangeGT3,HTGT1.3,##(Check-chart-sell):month3Low-InPlus,BreakLowMonth3,***BUYPATTERN***",2.3283710629921344,1,1,0
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,(Test)buySMA4Reversal,***SELLPATTERN***",-0.3794584375810207,8,3,5
 "PCTChangeLT-4,LTGT1.3,##DOWNTREND:sellMonth6LowBreak,",-0.9123998088521056,10,4,6
 "PCTChangeGT1,,(Test)buyMay5DayCeilReversal,",-0.26052116968645506,6,3,3
@@ -7464,7 +7449,7 @@
 "PCTChangeLT-2,HTGT1.3LTGT1.3,(Test)checkCupDown-3dayDown-mayReversalBuy,",-4.779005524861882,1,0,1
 "PCTChangeLT-3,HTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,",0.18642041502664275,34,19,15
 "PCTChangeGT3,,buyUpTrend-1-YearHigh,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,weekHighGTweek2High,***SELLPATTERN***",-0.03666361136572786,1,0,1
-"PCTChangeLT-2,,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,",0.048950059782294976,41,19,22
+"PCTChangeLT-2,,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,",0.04221214042577613,42,19,23
 "PCTChangeGT0.5,LTGT1.3,LTGTPCTDayChange,buyYearHigh-3,",0.14289822778518133,90,44,45
 "PCTChangeGT1,HTGT3.0,,HTGTPCTDayChange,ML:sellEveningStar-2(Check2-3MidCapCross),",0.16885086186334303,11,6,5
 "PCTChangeLT-2,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,##(Check-chart-buy):month6High-InMinus,NearHighMonth6,",-1.7081917704794176,1,0,1
@@ -7524,6 +7509,7 @@
 "PCTChangeLT-2,LTGT1.3,LTGTPCTDayChange,ML:BuyRisingMA-Risky-1,",0.7647095999494493,1,1,0
 "PCTChangeLT-1,HTGT1.3,(Test)checkCupDown-3dayDown,",1.0173295752488245,4,3,1
 "PCTChangeLT-2,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-1,brokenToday,sellPatterns-Risky-LT-0.9-SMALT0,(SMA9LT0),",-1.4914425427872917,1,0,1
+"PCTChangeGT1,,ML:sellFinalContinue-(lastDayDown)-1,",-0.8471130387638927,1,0,1
 "PCTChangeLT-2,HTGT1.3,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,***SELLPATTERN***",0.3383903279472336,7,4,3
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-inDownTrend,bar_low,***SELLPATTERN***",2.3831347387717727,1,1,0
 "PCTChangeGT2,,##UPTREND:buyMonth3Low,",0.917735471595684,16,11,5
@@ -7610,6 +7596,7 @@
 "PCTChangeGT0,LTGT1.3,LTGTPCTDayChange,mayBuyFromSellPattern-GT1.8,",2.2852303523035262,2,1,1
 "PCTChangeLT-1,HTGT3.0,,HTGTPCTDayChangeLTGT1.3,LTGTPCTDayChange,(Test)checkCupDown-2dayDown-mayReversalBuy,",2.257557911268159,1,1,0
 "PCTChangeLT-1,LTGT1.3,LTGTPCTDayChange,$$ML:MayBuyCheckChart-last3DayDown,$$MayBuyCheckChart-(IndexNotUpInSecondHalf),",-1.1926921101414745,16,8,8
+"PCTChangeGT2,HTGT1.3,##RisingMA(check-chart-sell)-MaySellCheckChart,##UPTREND:buyYear2Low,***BUYPATTERN***",1.926229508196717,1,1,0
 "PCTChangeLT-0.5,HTGT1.3,HTGTPCTDayChange,+-,set1,",-0.7271846410042275,10,3,6
 "PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,***SELLPATTERN***",-0.6761449970682216,9,4,5
 "PCTChangeLT-3,,(check-chart)maySell-EMA6-MT-May-LT-EMA14,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkCupDown-2dayDown-mayReversalBuy,##DOWNTREND:sellYear2HighReversal(InDownTrend),***SELLPATTERN***",-1.2443822904394874,4,1,3
@@ -7711,6 +7698,7 @@
 "PCTChangeLT-1,HTGT3.0,,HTGTPCTDayChange,buyYearHigh-3,",-2.1556223884415537,2,0,2
 "PCTChangeLT-2,HTGT1.3,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,##DOWNTREND:sellYearHigh(InDownTrend),***SELLPATTERN***",-0.9038035080781232,5,2,3
 "PCTChangeLT-1,HTGT1.3,HTGTPCTDayChange,ML:BuyRisingMA-Risky-1,",-3.7812500000000067,1,0,1
+"PCTChangeGT1,,(Test)checkCupUp-2dayUp,##RisingMA(Test)(check-chart-buy)-2DayUp,##UPTREND:buyYear2Low,",-0.8685714285714312,1,0,1
 "PCTChangeLT-1,,buyRisingMA-1,",2.072956793728709,4,3,1
 "PCTChangeGT1,HTGT1.3,$$MaySell-CheckChart(downTrend-mayReverseLast4DaysUp)-Risky,",-1.3752586947379313,7,1,6
 "PCTChangeGT4,LTGT1.3,##UPTREND:buyYear2Low,sellYear2LowLT-40-last4DayDown(triggerAfter-9:15),***BUYPATTERN***",4.016064257028113,1,1,0
@@ -7719,7 +7707,7 @@
 "PCTChangeLT-3,LTGT1.3,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,##DOWNTREND:sellYear2HighReversal(InDownTrend),***SELLPATTERN***",0.21022121139980993,10,6,4
 "PCTChangeLT-3,,##(Check-chart-buy):YearHigh-InMinus,NearHighYear,(Test)checkCupDown-near2WeekDown-mayReveresalBuy,",-0.34503722084367966,1,0,1
 "PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,-+,set2,buyYearHigh-1,buyMorningStar-HighUpperTail-(checkChart),",-0.06440281030444432,1,0,1
-"PCTChangeLT-1,,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,",-0.15997882157077487,79,35,43
+"PCTChangeLT-1,,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,",-0.15819460354251944,80,35,44
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,++,set1,",0.29592157685049947,2,1,1
 "PCTDayChangeLT0,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT0,",-0.9145396253766789,4,1,3
 "PCTChangeLT-2,,##(Check-chart-buy):YearHigh-InMinus,ReversalHighYear,(Test)checkCupDown-3dayDown,##DOWNTREND:sellYear2HighReversal(InDownTrend),***SELLPATTERN***",-0.32064648501141096,3,1,2
@@ -7778,9 +7766,6 @@
 "PCTChangeGT2,,##(Check-chart)buyMonth3High-Continue,",-0.8821820149905248,4,1,3
 "PCTChangeGT3,HTGT1.3,HTGTPCTDayChange,(Test)check10DayLowReversal,##RisingMA(check-chart-sell)-MaySellCheckChart,buyUpTrend-1-YearHigh,***SELLPATTERN***",-0.8350730688935253,1,0,1
 "PCTChangeLT-0.5,LTGT1.3,LTGTPCTDayChange,(Test)checkConsolidationBreakDown-2week-(risky)-PCTDayChangeGT-1,week2BarLowChangeLT0,weekLowLTweek2Low,brokenToday,",-0.8745056426021344,3,1,2
-"PCTChangeGT4,HTGT1.3,##UPTREND:buyMonth6Low,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",0.6384105960264876,1,1,0
-"PCTChangeGT1,HTGT3.0,,HTGTPCTDayChange,##RisingMA(check-chart-sell)-MaySellCheckChart,ML:sellEveningStar-2(Check2-3MidCapCross),",-0.9031304732852039,2,1,1
-"PCTChangeGT0,HTGT1.3,HTGTPCTDayChange,##RisingMA(check-chart-sell)-MaySellCheckChart,$$ML:(check-chart-2-3MidCapCross)MaySellCheckChart-Risky,",-0.3480203181484543,2,0,2
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,(Test)checkConsolidationBreakUp-2week,week2BarHighChangeGT2,weekHighGTweek2High,$$MaySellCheckChart-(IndexNotDownInSecondHalf),",0.8388256440982659,1,1,0
 "PCTChangeLT-1,HTGT1.3,##(Check-chart-buy):month3High-InMinus,NearHighMonth3,(Test)MaySellCheckChart-monthHighReversal-risky,monthHighChangeGT-2,***SELLPATTERN***",-2.055800293685744,1,0,1
 "PCTChangeLT-2,,$$MayBuy-CheckChart(monthLow-minimumLast2DayDown),##(Check-chart-buy):month6High-InMinus,NearHighMonth6,##DOWNTREND:sellMonth6High(InDownTrend),",0.343726982568126,1,1,0
@@ -7795,9 +7780,9 @@
 "PCTChangeGT1,HTGT1.3,HTGTPCTDayChange,(Test)check10DayLowReversal,$$ML:(check-chart-2-3MidCapCross)MaySellCheckChart-Risky,",-2.295693555735587,2,0,2
 "PCTChangeLT-1,HTGT3.0,,HTGTPCTDayChange,maySellAfter10:20HighVolatileLastDayUp-GT10,",-1.7187497539834211,2,0,2
 "PCTChangeGT2,,buyFinal,buyDownTrend-1,",-0.7721280602636578,1,0,1
-"PCTChangeGT2,,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",0.3893260013571016,8,6,2
+"PCTChangeGT2,,(check-chart):ML:buy-2week-breakoutup,buy-2week-breakoutup,",1.292910858952325,6,5,1
 "PCTChangeLT-2,LTGT1.3,LTGTPCTDayChange,buyMorningStar-HighLowerTail-(checkChart),",1.8758060663959903,2,1,1
-"PCTChangeGT4,,(Test)checkConsolidationBreakUp-month3HighLTMonth3Low,",2.01982503100808,5,4,1
+"PCTChangeGT4,,(Test)checkConsolidationBreakUp-month3HighLTMonth3Low,",1.2747812887600976,4,3,1
 "PCTChangeLT-2,,buyYearHigh-3,",-0.6283628858144731,3,1,2
 "PCTChangeLT-1,HTGT1.3,(Test)checkCupDown-inDownTrend,bar_low,",-1.541555492027195,2,1,1
 "PCTChangeLT-2,,##(Check-chart-buy):month3High-InMinus,BreakHighMonth3,(Test)checkCupDown-month3HighLTmonth3Low,bar_low,##DOWNTREND:sellYearHigh(InDownTrend),***SELLPATTERN***",1.3822591477019643,2,1,1
@@ -7841,7 +7826,7 @@
 "PCTChangeGT2,,buyUpTrend-1-YearHigh,sell-2week-breakoutup,##(Check-chart-sell):month3Low-InPlus,NearLowMonth3,***SELLPATTERN***",-1.1170872983036775,1,0,1
 "PCTChangeGT2,HTGT1.3,buyUpTrend-1,",-0.8543252709190927,3,1,2
 "PCTChangeGT0.5,,buyDownTrend-1,",1.071319253137435,1,1,0
-"PCTChangeLT-3,,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,",-0.4304426665482254,21,7,14
+"PCTChangeLT-3,,(Test)checkCupDown-inDownTrend-month3HighLTmonth3Low,bar_low,",-0.3330888187867251,25,9,16
 "PCTChangeGT8,HTGT3.0,LTGT3.0LTGT1.3,maySellAfter10:20HighVolatileLastDayUp-GT10,",-2.6291931097008083,1,0,1
 "PCTChangeLT-2,,(Test)checkConsolidationBreakDown-2week,week2BarLowChangeLT-3,weekLowLTweek2Low,",0.03362564814294084,7,3,4
 "PCTChangeLT-1,,(Test)buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown,ML:BuyRisingMA-Risky-1,***SELLPATTERN***",-0.18080783591621774,2,1,1

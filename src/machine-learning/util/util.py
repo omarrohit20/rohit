@@ -607,7 +607,7 @@ def pct_change_negative_trend(regression_data):
         ):
         return '(trendDown10<7<3)'
     elif(pct_day_change_trend(regression_data) <= -3
-        and abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])
+        and abs_monthHigh_more_than_monthLow(regression_data)
         and regression_data['forecast_day_PCT5_change'] < 0
         and regression_data['forecast_day_PCT7_change'] < 0
         ):
@@ -619,12 +619,12 @@ def pct_change_negative_trend(regression_data):
              or (regression_data['forecast_day_PCT4_change'] > regression_data['forecast_day_PCT5_change'] > regression_data['forecast_day_PCT7_change'] > regression_data['forecast_day_PCT10_change'])
             )
         ):
-        if(abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])):
+        if(abs_monthHigh_more_than_monthLow(regression_data)):
             if(regression_data['forecast_day_PCT10_change'] < 0):
                 return '(mediumDownTrend)'  
             elif(regression_data['forecast_day_PCT10_change'] > 0):
                 return '(mediumDownTrend-crossed10Days)'
-        elif(abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])): 
+        elif(abs_monthHigh_less_than_monthLow(regression_data)): 
             if(regression_data['forecast_day_PCT10_change'] < 0):
                 return '(mediumDownTrend-monthLowGTmonthHigh)'  
             elif(regression_data['forecast_day_PCT10_change'] > 0):
@@ -706,7 +706,7 @@ def pct_change_positive_trend(regression_data):
         ):
         return '(trendUp10>7>3)'
     elif(pct_day_change_trend(regression_data) >= 3
-        and abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])
+        and abs_monthHigh_less_than_monthLow(regression_data)
         and regression_data['forecast_day_PCT5_change'] > 0
         and regression_data['forecast_day_PCT7_change'] > 0
         ):
@@ -718,12 +718,12 @@ def pct_change_positive_trend(regression_data):
              or (regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change'] < regression_data['forecast_day_PCT7_change'] < regression_data['forecast_day_PCT10_change'])
              )
         ):
-        if(abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])):
+        if(abs_monthHigh_less_than_monthLow(regression_data)):
             if(regression_data['forecast_day_PCT10_change'] > 0):
                 return '(mediumUpTrend)'
             elif(regression_data['forecast_day_PCT10_change'] < 0):
                 return '(mediumUpTrend-crossed10Days)'
-        elif(abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])):
+        elif(abs_monthHigh_more_than_monthLow(regression_data)):
             if(regression_data['forecast_day_PCT10_change'] > 0):
                 return '(mediumUpTrend-monthHighGTmonthLow)'
             elif(regression_data['forecast_day_PCT10_change'] < 0):
@@ -934,26 +934,82 @@ def all_between_zero_and_five_down_score(regression_data):
     else:
         return False           
 
+def abs_year2High_more_than_year2Low(regression_data):
+    if(regression_data['year2LowChange'] < 0
+        or (abs(regression_data['year2HighChange']) - 1 > abs(regression_data['year2LowChange'])
+            and regression_data['year2HighChange'] < 0
+            )
+        ):
+        return True;
+    else:
+        return False;
+
+def abs_year2High_less_than_year2Low(regression_data):
+    if(regression_data['year2HighChange'] > 0
+        or (abs(regression_data['year2HighChange']) + 1 < abs(regression_data['year2LowChange'])
+            and regression_data['year2LowChange'] > 0
+            )
+        ):
+        return True;
+    else:
+        return False;
+
 def abs_yearHigh_more_than_yearLow(regression_data):
-    if(abs(regression_data['yearHighChange']) > abs(regression_data['yearLowChange'])):
+    if(regression_data['yearLowChange'] < 0
+        or (abs(regression_data['yearHighChange']) - 1 > abs(regression_data['yearLowChange'])
+            and regression_data['yearHighChange'] < 0
+            )
+        ):
         return True;
     else:
         return False;
 
 def abs_yearHigh_less_than_yearLow(regression_data):
-    if(abs(regression_data['yearHighChange']) < abs(regression_data['yearLowChange'])):
+    if(regression_data['yearHighChange'] > 0
+        or (abs(regression_data['yearHighChange']) + 1 < abs(regression_data['yearLowChange'])
+            and regression_data['yearLowChange'] > 0
+            )
+        ):
+        return True;
+    else:
+        return False;
+
+def abs_month6High_more_than_month6Low(regression_data):
+    if(regression_data['month6LowChange'] < 0
+        or (abs(regression_data['month6HighChange']) - 1 > abs(regression_data['month6LowChange'])
+            and regression_data['month6HighChange'] < 0
+            )
+        ):
+        return True;
+    else:
+        return False;
+
+def abs_month6High_less_than_month6Low(regression_data):
+    if(regression_data['month6HighChange'] > 0
+        or (abs(regression_data['month6HighChange']) + 1 < abs(regression_data['month6LowChange'])
+            and regression_data['month6LowChange'] > 0
+            )
+        ):
         return True;
     else:
         return False;
 
 def abs_month3High_more_than_month3Low(regression_data):
-    if(abs(regression_data['month3HighChange']) > abs(regression_data['month3LowChange'])):
+    if(regression_data['month3LowChange'] < 0
+        or (abs(regression_data['month3HighChange']) - 1 > abs(regression_data['month3LowChange'])
+            and regression_data['month3HighChange'] < 0
+            )
+        ):
         return True;
     else:
         return False;
 
 def abs_month3High_less_than_month3Low(regression_data):
-    if(abs(regression_data['month3HighChange']) < abs(regression_data['month3LowChange'])):
+    if(regression_data['month3HighChange'] > 0
+        or (abs(regression_data['month3HighChange']) + 1 < abs(regression_data['month3LowChange'])
+            and regression_data['month3LowChange'] > 0
+            )
+        ):
         return True;
     else:
         return False;
@@ -970,7 +1026,7 @@ def abs_monthHigh_more_than_monthLow(regression_data):
 
 def abs_monthHigh_less_than_monthLow(regression_data):
     if(regression_data['monthHighChange'] > 0
-        or (abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange']) -1
+        or (abs(regression_data['monthHighChange']) + 1 < abs(regression_data['monthLowChange'])
             and regression_data['monthLowChange'] > 0
             )
         ):
@@ -990,7 +1046,7 @@ def abs_week2High_more_than_week2Low(regression_data):
 
 def abs_week2High_less_than_week2Low(regression_data):
     if(regression_data['week2HighChange'] > 0
-        or (abs(regression_data['week2HighChange']) < abs(regression_data['week2LowChange']) - 1
+        or (abs(regression_data['week2HighChange']) + 1 < abs(regression_data['week2LowChange'])
             and regression_data['week2LowChange'] > 0
             )
         ):
@@ -1884,7 +1940,7 @@ def base_line(regression_data, regressionResult, reg, ws):
         and (regression_data['month3HighChange'] < -7.5)   
         and (regression_data['monthLowChange'] > 5)
         and (regression_data['monthLowChange'] > 10 or regression_data['month3LowChange'] > 10)
-        and abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])
+        and abs_monthHigh_less_than_monthLow(regression_data)
         ):
         if(regression_data['monthHigh'] == regression_data['week2High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
@@ -1993,7 +2049,7 @@ def base_line(regression_data, regressionResult, reg, ws):
         and (regression_data['month3HighChange'] < -7.5) 
         and (regression_data['monthLowChange'] > 5)
         and (regression_data['monthLowChange'] > 10 or regression_data['month3LowChange'] > 10)
-        and abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])
+        and abs_monthHigh_less_than_monthLow(regression_data)
         ):
         if(regression_data['monthHigh'] == regression_data['week2High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
@@ -2100,7 +2156,7 @@ def base_line(regression_data, regressionResult, reg, ws):
         #and (regression_data['yearLowChange'] > 20)
         and (regression_data['monthHighChange'] < -5)
         and (regression_data['monthHighChange'] < -10 or regression_data['month3HighChange'] < -10)
-        and abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])
+        and abs_monthHigh_more_than_monthLow(regression_data)
         ):
         if(regression_data['monthLow'] == regression_data['week2Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
@@ -2215,7 +2271,7 @@ def base_line(regression_data, regressionResult, reg, ws):
         and (regression_data['month3LowChange'] > 7.5)
         and (regression_data['monthHighChange'] < -5)
         and (regression_data['monthHighChange'] < -10 or regression_data['month3HighChange'] < -10)
-        and abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])
+        and abs_monthHigh_more_than_monthLow(regression_data)
         ):
         if(regression_data['monthLow'] == regression_data['week2Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, '(Recent)')
@@ -3657,7 +3713,7 @@ def buy_high_volatility(regression_data, regressionResult):
         ) 
         and (regression_data['yearLowChange'] < 10
              or (regression_data['yearLowChange'] < 20
-                 and abs(regression_data['yearHighChange']) > abs(regression_data['yearLowChange'])
+                 and abs_yearHigh_more_than_yearLow(regression_data)
                  and abs(regression_data['PCT_day_change']) < high_tail_pct(regression_data)
                  and low_tail_pct(regression_data) > 1
                 )
@@ -3811,7 +3867,7 @@ def buy_high_volatility(regression_data, regressionResult):
             or 'MLBuy' in regression_data['filter']
             or 'brokenToday' in regression_data['filter']
             )
-        and (regression_data['month3HighChange'] < -5 or abs(regression_data['month3LowChange']) < abs(regression_data['month3HighChange']))
+        and (regression_data['month3HighChange'] < -5 or abs_month3High_more_than_month3Low(regression_data))
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, 'checkConsolidationBreakUp(NotShapeV)-2week')
         flag = True
@@ -3888,7 +3944,7 @@ def buy_high_volatility(regression_data, regressionResult):
             and regression_data['year2LowChange'] > 10
             and regression_data['week2LowChange'] == regression_data['month3LowChange']
             and regression_data['week2LowChange'] < 5
-            and (abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])
+            and (abs_monthHigh_less_than_monthLow(regression_data)
                  or regression_data['monthHighChange'] > 0
                  or regression_data['week2HighChange'] > 0
                 )
@@ -4493,7 +4549,7 @@ def buy_trend_break(regression_data, regressionResult, reg, ws):
         and regression_data['month3LowChange'] > 4
         and ('P@[' not in regression_data['sellIndia'])
         and abs_month3High_more_than_month3Low(regression_data)
-        and (abs(regression_data['month6HighChange']) > abs(regression_data['month6LowChange']))
+        and (abs_month6High_more_than_month6Low(regression_data))
         ):
         add_in_csv(regression_data, regressionResult, ws, 'buy-2week-breakoutup')
         flag = True
@@ -4508,7 +4564,7 @@ def buy_trend_break(regression_data, regressionResult, reg, ws):
         #and regression_data['month3LowChange'] > 4
         #and ('P@[' not in regression_data['sellIndia'])
         and abs_month3High_more_than_month3Low(regression_data)
-        and (abs(regression_data['month6HighChange']) > abs(regression_data['month6LowChange']))
+        and (abs_month6High_more_than_month6Low(regression_data))
         ):
         add_in_csv(regression_data, regressionResult, ws, 'sell-2week-breakoutup')
         flag = True
@@ -4655,7 +4711,7 @@ def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
         and 0 < regression_data['forecast_day_PCT3_change'] < 4
         and 0 < regression_data['forecast_day_PCT2_change'] < 4
         and 0 < regression_data['forecast_day_PCT_change'] < 3
-        and ((abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange']))
+        and ((abs_monthHigh_less_than_monthLow(regression_data))
             )
         and regression_data['SMA4'] > regression_data['SMA4_2daysBack']
         ):
@@ -7508,7 +7564,7 @@ def sell_high_volatility(regression_data, regressionResult):
             )
         ) 
         and (regression_data['PCT_day_change'] > 2.5 and regression_data['PCT_change'] > 2)
-        and abs(regression_data['month3HighChange']) < abs(regression_data['month3LowChange'])  
+        and abs_month3High_less_than_month3Low(regression_data)
         and regression_data['high'] < regression_data['high_pre2']  
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, 'downtrendReversalMayFail')
@@ -7524,7 +7580,7 @@ def sell_high_volatility(regression_data, regressionResult):
         ) 
         and (regression_data['yearHighChange'] > -10
              or (regression_data['yearHighChange'] > -20
-                 and abs(regression_data['yearHighChange']) < abs(regression_data['yearLowChange'])
+                 and abs_yearHigh_less_than_yearLow(regression_data)
                  and abs(regression_data['PCT_day_change']) < low_tail_pct(regression_data)
                  and low_tail_pct(regression_data) > 1
                 )
@@ -7648,7 +7704,7 @@ def sell_high_volatility(regression_data, regressionResult):
         and (regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']/2
              or 'MLSell' in regression_data['filter']
             )
-        and (regression_data['month3LowChange'] > 5 or abs(regression_data['month3LowChange']) > abs(regression_data['month3HighChange']))
+        and (regression_data['month3LowChange'] > 5 or abs_month3High_less_than_month3Low(regression_data))
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, 'checkConsolidationBreakDown(NotShapeA)-2week')
         flag = True
@@ -7723,7 +7779,7 @@ def sell_high_volatility(regression_data, regressionResult):
             and regression_data['year2LowChange'] > 10
             and regression_data['week2HighChange'] == regression_data['month3HighChange']
             and regression_data['week2HighChange'] > -5
-            and (abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])
+            and (abs_monthHigh_more_than_monthLow(regression_data)
                 or regression_data['monthLowChange'] < 0
                 or regression_data['week2LowChange'] < 0
                 )
@@ -8468,7 +8524,7 @@ def sell_consolidation_breakdown(regression_data, regressionResult, reg, ws):
         and -4 < regression_data['forecast_day_PCT3_change'] < 0
         and -4 < regression_data['forecast_day_PCT2_change'] < 0
         and -3 < regression_data['forecast_day_PCT_change'] < 0
-        and ((abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange']))
+        and ((abs_monthHigh_more_than_monthLow(regression_data))
             )
         and regression_data['SMA4'] < regression_data['SMA4_2daysBack']
         ):
