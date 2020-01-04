@@ -960,7 +960,7 @@ def abs_month3High_less_than_month3Low(regression_data):
 
 def abs_monthHigh_more_than_monthLow(regression_data):
     if(regression_data['monthLowChange'] < 0
-        or (abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange']) -1
+        or (abs(regression_data['monthHighChange']) - 1 > abs(regression_data['monthLowChange'])
             and regression_data['monthHighChange'] < 0
             )
         ):
@@ -980,7 +980,7 @@ def abs_monthHigh_less_than_monthLow(regression_data):
     
 def abs_week2High_more_than_week2Low(regression_data):
     if(regression_data['week2LowChange'] < 0
-        or (abs(regression_data['week2HighChange']) > abs(regression_data['week2LowChange']) - 1
+        or (abs(regression_data['week2HighChange']) - 1 > abs(regression_data['week2LowChange']) 
             and regression_data['week2HighChange'] < 0
             )
         ):
@@ -998,10 +998,6 @@ def abs_week2High_less_than_week2Low(regression_data):
     else:
         return False;
 
-                
-                
-
-    
 def last_5_day_all_up_except_today(regression_data):
     if(regression_data['PCT_day_change_pre1'] > 0
         and regression_data['PCT_day_change_pre2'] > 0
