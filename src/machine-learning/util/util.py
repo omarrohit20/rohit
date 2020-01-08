@@ -3831,7 +3831,7 @@ def buy_high_volatility(regression_data, regressionResult):
            add_in_csv(regression_data, regressionResult, ws, None, None, 'mayBuyShortUpTrend(after10:20orlessThan1%)')
         elif(high_tail_pct(regression_data) < 1.5 
            and low_tail_pct(regression_data) > 1.5
-           and -1.5 < regression_data['PCT_day_change'] 
+           and -1.5 < regression_data['PCT_day_change'] < 0
            and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0)
            and (regression_data['PCT_day_change_pre1'] > 2 or regression_data['PCT_day_change_pre2'] > 2)
            ):
@@ -3861,15 +3861,24 @@ def buy_high_volatility(regression_data, regressionResult):
         and 1 < regression_data['PCT_day_change'] < 4
         and 1 < regression_data['PCT_change'] < 4
         and (regression_data['PCT_day_change_pre1'] < regression_data['PCT_day_change']/2
-            or 'MLBuy' in regression_data['filter']
+            #or 'MLBuy' in regression_data['filter']
+            #or 'brokenToday' in regression_data['filter']
             )
         and (regression_data['PCT_day_change'] > 2 
-            or 'MLBuy' in regression_data['filter']
+            #or 'MLBuy' in regression_data['filter']
             or 'brokenToday' in regression_data['filter']
             )
         and (regression_data['month3HighChange'] < -5 or abs_month3High_more_than_month3Low(regression_data))
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, 'checkConsolidationBreakUp(NotShapeV)-2week')
+        flag = True
+    elif('checkConsolidationBreakUp-2week' in regression_data['filter']
+        and 0 < regression_data['PCT_day_change'] < 5
+        and 0 < regression_data['PCT_change'] < 5
+        and 'brokenToday' in regression_data['filter']
+        and 'MLBuy' in regression_data['filter']
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'RISKY:checkConsolidationBreakUp(NotShapeV)-2week')
         flag = True
         
     if(regression_data['PCT_day_change'] < 0
@@ -7697,11 +7706,24 @@ def sell_high_volatility(regression_data, regressionResult):
         and -4 < regression_data['PCT_day_change'] < -1
         and -4 < regression_data['PCT_change'] < -1
         and (regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']/2
-             or 'MLSell' in regression_data['filter']
+             #or 'MLSell' in regression_data['filter']
+             #or 'brokenToday' in regression_data['filter']
+            )
+        and (regression_data['PCT_day_change'] < -2
+             #or 'MLSell' in regression_data['filter']
+             or 'brokenToday' in regression_data['filter']
             )
         and (regression_data['month3LowChange'] > 5 or abs_month3High_less_than_month3Low(regression_data))
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, 'checkConsolidationBreakDown(NotShapeA)-2week')
+        flag = True
+    elif('checkConsolidationBreakDown-2week' in regression_data['filter']
+        and -5 < regression_data['PCT_day_change'] < 0
+        and -5 < regression_data['PCT_change'] < 0
+        and 'brokenToday' in regression_data['filter']
+        and 'MLSell' in regression_data['filter']
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'RISKY:checkConsolidationBreakDown(NotShapeA)-2week')
         flag = True
     
     if(regression_data['PCT_day_change'] > 0
@@ -10258,7 +10280,7 @@ def filter_accuracy_finder_all(regression_data, regression_high, regression_low,
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Buy')
             elif(regression_data[filter_avg] < 0):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Sell')
-        elif(regression_data[filter_count] >= 3
+        elif(regression_data[filter_count] >= 4
             and abs(regression_data[filter_pct]) >= 100
             and abs(regression_data[filter_avg]) > 2.5
             ):
@@ -10266,7 +10288,7 @@ def filter_accuracy_finder_all(regression_data, regression_high, regression_low,
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Buy')
             elif(regression_data[filter_avg] < 0):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-0-Sell')
-        elif(regression_data[filter_count] >= 2
+        elif(regression_data[filter_count] >= 3
             and abs(regression_data[filter_pct]) >= 100
             and abs(regression_data[filter_avg]) > 5
             ):
