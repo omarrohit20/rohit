@@ -37,13 +37,7 @@ Sell Common
 
 
 
-Good result and better than expected
-	* Check for no pre rally and last day no major selling
-	* Not yearly high
-	
-Bad result and worst than expected	
-    * Check for no pre sell rally and last day no major buying
-    * Not yearly low
+
 
 ##############################################################
 EMA6-LT-May-MT-EMA14 Buy
@@ -100,6 +94,26 @@ LowTail > 1.5
 	3 - Buy => PCT_DAY_Change and PCT_Change less than 0, PCT_day_change_pre > 0, 'bar_low' > 1
 	4 - Sell => PCT_DAY_Change and PCT_Change less than 0, PCT_day_change_pre > 0, 'bar_low' < 0
 ##############################################################	
+
+
+Good result and better than expected
+	* Check for no pre rally and last day no major selling
+	* Not yearly high
+	
+Bad result and worst than expected	
+    * Check for no pre sell rally and last day no major buying
+    * Not yearly low
+
+
+RISKY-BUY-UPTREND-CONT:		Sell after 9:30 or 10 after some point up
+
+UPTREND-MARKET
+BuyFilters:RISKY-UPTREND-SELL:		returns moderate usually. Fail If global down or market expected down
+BuyFilters:RISKY-DOWNTREND-BUY:		returns high usually
+SellFilters:RISKY-UPTREND-SELL:		returns high If global down or market expected down. Fail If global up or market expected up
+Sell:RISKY-UPTREND-SELL:			returns high If global down or market expected down. Fail If global up or market expected up
+
+DOWNTREND
 	
 	    
 		
