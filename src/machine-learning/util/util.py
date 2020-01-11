@@ -3687,20 +3687,20 @@ def buy_af_up_continued(regression_data, regressionResult, reg, ws):
         and regression_data['monthLowChange'] < 5
         and (regression_data['month3LowChange'] > 10 or regression_data['month6LowChange'] > 15)
         ):
-        if(1.9 < regression_data['PCT_day_change'] < 3 and 1 < regression_data['PCT_change'] < 3):
-            if(regression_data['PCT_day_change_pre1'] < 0.75 and regression_data['PCT_change_pre1'] < 1):
-                add_in_csv(regression_data, regressionResult, ws, '%%mayBuyUpContinueLT3')  
-            else:
-                add_in_csv(regression_data, regressionResult, ws, '%%mayBuyUpContinueLT3-Risky')
-                if(regression_data['SMA25'] > 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, '%%mayBuyUpContinueLT3-Risky')
-        elif(2.5 < regression_data['PCT_day_change'] < 4.0 and 2.5 < regression_data['PCT_change'] < 5):
+        if(2.5 < regression_data['PCT_day_change'] < 4.0 and 2.5 < regression_data['PCT_change'] < 5):
             if(regression_data['PCT_day_change_pre1'] < 0.75 and regression_data['PCT_change_pre1'] < 1):
                 add_in_csv(regression_data, regressionResult, ws, '%%mayBuyUpContinueGT3')
                 if(regression_data['SMA25'] > 0):
                     add_in_csv(regression_data, regressionResult, ws, None, '%%mayBuyUpContinueGT3')
             else:
                 add_in_csv(regression_data, regressionResult, ws, '%%mayBuyUpContinueGT3-Risky')
+        elif(1.9 < regression_data['PCT_day_change'] < 3 and 1 < regression_data['PCT_change'] < 4):
+            if(regression_data['PCT_day_change_pre1'] < 0.75 and regression_data['PCT_change_pre1'] < 1):
+                add_in_csv(regression_data, regressionResult, ws, '%%mayBuyUpContinueLT3')  
+            else:
+                add_in_csv(regression_data, regressionResult, ws, '%%mayBuyUpContinueLT3-Risky')
+                if(regression_data['SMA25'] > 0):
+                    add_in_csv(regression_data, regressionResult, ws, None, '%%mayBuyUpContinueLT3-Risky')
                 
 def buy_high_volatility(regression_data, regressionResult):
     flag = False
@@ -7551,20 +7551,21 @@ def sell_af_down_continued(regression_data, regressionResult, reg, ws):
         and regression_data['monthHighChange'] > -5
         and (regression_data['month3HighChange'] < -10 or regression_data['month6HighChange'] < -15)
         ):
-        if(-3 < regression_data['PCT_day_change'] < -1.9 and -3 < regression_data['PCT_change'] < -1):
-            if(regression_data['PCT_day_change_pre1'] > -0.75 and regression_data['PCT_change_pre1'] > -1):
-                add_in_csv(regression_data, regressionResult, ws, '%%maySellDownContinueGT-3')
-            else:
-                add_in_csv(regression_data, regressionResult, ws, '%%maySellDownContinueGT-3-Risky')
-                if(regression_data['SMA25'] < 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, '%%maySellDownContinueGT-3-Risky')
-        elif(-4.0 < regression_data['PCT_day_change'] < -2.5 and -5 < regression_data['PCT_change'] < -2.5):
+        if(-4.0 < regression_data['PCT_day_change'] < -2.5 and -5 < regression_data['PCT_change'] < -2.5):
             if(regression_data['PCT_day_change_pre1'] > -0.75 and regression_data['PCT_change_pre1'] > -1):
                 add_in_csv(regression_data, regressionResult, ws, '%%maySellDownContinueLT-3')
                 if(regression_data['SMA25'] < 0):
                     add_in_csv(regression_data, regressionResult, ws, None, '%%maySellDownContinueLT-3')
             else:
                 add_in_csv(regression_data, regressionResult, ws, '%%maySellDownContinueLT-3-Risky')
+        elif(-3 < regression_data['PCT_day_change'] < -1.9 and -4 < regression_data['PCT_change'] < -1):
+            if(regression_data['PCT_day_change_pre1'] > -0.75 and regression_data['PCT_change_pre1'] > -1):
+                add_in_csv(regression_data, regressionResult, ws, '%%maySellDownContinueGT-3')
+            else:
+                add_in_csv(regression_data, regressionResult, ws, '%%maySellDownContinueGT-3-Risky')
+                if(regression_data['SMA25'] < 0):
+                    add_in_csv(regression_data, regressionResult, ws, None, '%%maySellDownContinueGT-3-Risky')
+        
 
 def sell_high_volatility(regression_data, regressionResult):
     flag = False
