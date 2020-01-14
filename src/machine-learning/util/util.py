@@ -3684,8 +3684,16 @@ def buy_af_low_tail(regression_data, regressionResult, reg, ws):
     
 def buy_af_up_continued(regression_data, regressionResult, reg, ws):
     if(high_tail_pct(regression_data) < 1.1 and low_tail_pct(regression_data) < 2
-        and regression_data['monthLowChange'] < 5
+        and (regression_data['monthLowChange'] < 5 
+             or (regression_data['monthHighChange'] > 0 and regression_data['month3LowChange'] < 40)
+            )
+        and (regression_data['forecast_day_PCT10_change'] < 15)
+        and (regression_data['forecast_day_PCT5_change'] < 10 or regression_data['forecast_day_PCT10_change'] < 10)
         and (regression_data['month3LowChange'] > 10 or regression_data['month6LowChange'] > 15)
+        and ((regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0)
+             or regression_data['monthHighChange'] > 0 
+             or regression_data['month3HighChange'] > 0
+            )
         ):
         if(2.5 < regression_data['PCT_day_change'] < 4.0 and 2.5 < regression_data['PCT_change'] < 5):
             if(regression_data['PCT_day_change_pre1'] < 0.75 and regression_data['PCT_change_pre1'] < 1):
@@ -7548,8 +7556,16 @@ def sell_af_high_tail(regression_data, regressionResult, reg, ws):
                
 def sell_af_down_continued(regression_data, regressionResult, reg, ws):
     if(high_tail_pct(regression_data) < 2 and low_tail_pct(regression_data) < 1.1
-        and regression_data['monthHighChange'] > -5
+        and (regression_data['monthHighChange'] > -5
+             or (regression_data['monthLowChange'] < 0 and regression_data['month3HighChange'] > -40)
+            )
+        and (regression_data['forecast_day_PCT10_change'] > -15)
+        and (regression_data['forecast_day_PCT5_change'] > -10 or regression_data['forecast_day_PCT10_change'] > -10)
         and (regression_data['month3HighChange'] < -10 or regression_data['month6HighChange'] < -15)
+        and (regression_data['PCT_day_change_pre2'] > 0 or regression_data['PCT_day_change_pre3'] > 0
+             or regression_data['monthLowChange'] < 0
+             or regression_data['month3LowChange'] < 0
+            )
         ):
         if(-4.0 < regression_data['PCT_day_change'] < -2.5 and -5 < regression_data['PCT_change'] < -2.5):
             if(regression_data['PCT_day_change_pre1'] > -0.75 and regression_data['PCT_change_pre1'] > -1):
