@@ -67,7 +67,42 @@ filtertechbuy = patterns_to_dict('../../data-import/nselist/filter-tech-buy.csv'
 filtertechallbuy = patterns_to_dict('../../data-import/nselist/filter-tech-all-buy.csv')
 filtertechallpctchangebuy = patterns_to_dict('../../data-import/nselist/filter-tech-all-pct-change-buy.csv')
 
-    
+def all_withoutml(regression_data, regressionResult, ws):
+    tempRegressionResult = regressionResult.copy() 
+    tempRegressionResult.append(regression_data['filter1'])
+    tempRegressionResult.append(regression_data['filter2'])
+    tempRegressionResult.append(regression_data['filter3'])
+    tempRegressionResult.append(regression_data['filter4'])
+    tempRegressionResult.append(regression_data['filter5'])
+    tempRegressionResult.append(regression_data['filter'])
+    tempRegressionResult.append(regression_data['filter_345_avg'])
+    tempRegressionResult.append(regression_data['filter_345_count'])
+    tempRegressionResult.append(regression_data['filter_345_pct'])
+    tempRegressionResult.append(regression_data['filter_avg'])
+    tempRegressionResult.append(regression_data['filter_count'])
+    tempRegressionResult.append(regression_data['filter_pct'])
+    tempRegressionResult.append(regression_data['filter_pct_change_avg'])
+    tempRegressionResult.append(regression_data['filter_pct_change_count'])
+    tempRegressionResult.append(regression_data['filter_pct_change_pct'])
+    tempRegressionResult.append(regression_data['filter_all_avg'])
+    tempRegressionResult.append(regression_data['filter_all_count'])
+    tempRegressionResult.append(regression_data['filter_all_pct'])
+    tempRegressionResult.append(regression_data['filter_tech_avg'])
+    tempRegressionResult.append(regression_data['filter_tech_count'])
+    tempRegressionResult.append(regression_data['filter_tech_pct'])
+    tempRegressionResult.append(regression_data['filter_tech_all_avg'])
+    tempRegressionResult.append(regression_data['filter_tech_all_count'])
+    tempRegressionResult.append(regression_data['filter_tech_all_pct'])
+    tempRegressionResult.append(regression_data['filter_tech_all_pct_change_avg'])
+    tempRegressionResult.append(regression_data['filter_tech_all_pct_change_count'])
+    tempRegressionResult.append(regression_data['filter_tech_all_pct_change_pct'])
+    ws.append(tempRegressionResult) if (ws is not None) else False
+    if(db.resultScripFutures.find_one({'scrip':regression_data['scrip']}) is None):
+        db.resultScripFutures.insert_one({
+            "scrip": regression_data['scrip'],
+            "date": regression_data['date']
+            })
+
 def add_in_csv(regression_data, regressionResult, ws=None, filter=None, filter1=None, filter2=None, filter3=None, filter4=None, filter5=None, filter6=None):
     if(TEST != True):
         if(is_algo_buy(regression_data) and (filter is not None)):
@@ -99,40 +134,6 @@ def add_in_csv(regression_data, regressionResult, ws=None, filter=None, filter1=
             regression_data['filter4'] = filter4 + ',' + regression_data['filter4']  
         if ((filter5 is not None) and (filter5 not in regression_data['filter5'])):
             regression_data['filter5'] = filter5 + ',' + regression_data['filter5']
-        tempRegressionResult = regressionResult.copy() 
-        tempRegressionResult.append(regression_data['filter1'])
-        tempRegressionResult.append(regression_data['filter2'])
-        tempRegressionResult.append(regression_data['filter3'])
-        tempRegressionResult.append(regression_data['filter4'])
-        tempRegressionResult.append(regression_data['filter5'])
-        tempRegressionResult.append(regression_data['filter'])
-        tempRegressionResult.append(regression_data['filter_345_avg'])
-        tempRegressionResult.append(regression_data['filter_345_count'])
-        tempRegressionResult.append(regression_data['filter_345_pct'])
-        tempRegressionResult.append(regression_data['filter_avg'])
-        tempRegressionResult.append(regression_data['filter_count'])
-        tempRegressionResult.append(regression_data['filter_pct'])
-        tempRegressionResult.append(regression_data['filter_pct_change_avg'])
-        tempRegressionResult.append(regression_data['filter_pct_change_count'])
-        tempRegressionResult.append(regression_data['filter_pct_change_pct'])
-        tempRegressionResult.append(regression_data['filter_all_avg'])
-        tempRegressionResult.append(regression_data['filter_all_count'])
-        tempRegressionResult.append(regression_data['filter_all_pct'])
-        tempRegressionResult.append(regression_data['filter_tech_avg'])
-        tempRegressionResult.append(regression_data['filter_tech_count'])
-        tempRegressionResult.append(regression_data['filter_tech_pct'])
-        tempRegressionResult.append(regression_data['filter_tech_all_avg'])
-        tempRegressionResult.append(regression_data['filter_tech_all_count'])
-        tempRegressionResult.append(regression_data['filter_tech_all_pct'])
-        tempRegressionResult.append(regression_data['filter_tech_all_pct_change_avg'])
-        tempRegressionResult.append(regression_data['filter_tech_all_pct_change_count'])
-        tempRegressionResult.append(regression_data['filter_tech_all_pct_change_pct'])
-        ws.append(tempRegressionResult) if (ws is not None) else False
-        if(db.resultScripFutures.find_one({'scrip':regression_data['scrip']}) is None):
-            db.resultScripFutures.insert_one({
-                "scrip": regression_data['scrip'],
-                "date": regression_data['date']
-                })
     else:
         if ((filter is not None) and (filter not in regression_data['filterTest'])):
             list = regression_data['filterTest'].partition(']:')
@@ -2571,9 +2572,6 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regressionResult.append(regression_data['scrip'])
     return regressionResult
 
-def all_withoutml(regression_data, regressionResult, ws):
-    add_in_csv(regression_data, regressionResult, ws, '')
-
 def ten_days_more_than_fifteen(regression_data):
     if(25 > regression_data['forecast_day_PCT10_change'] > 5
        and (regression_data['forecast_day_PCT5_change'] > 15
@@ -3696,20 +3694,16 @@ def buy_af_up_continued(regression_data, regressionResult, reg, ws):
             )
         ):
         if(2.5 < regression_data['PCT_day_change'] < 4.0 and 2.5 < regression_data['PCT_change'] < 5):
-            if(regression_data['PCT_day_change_pre1'] < 0.75 and regression_data['PCT_change_pre1'] < 1):
+            if(regression_data['monthLowChange'] < 5):
                 add_in_csv(regression_data, regressionResult, ws, '%%mayBuyUpContinueGT3')
-                if(regression_data['SMA25'] > 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, '%%mayBuyUpContinueGT3')
             else:
                 add_in_csv(regression_data, regressionResult, ws, '%%mayBuyUpContinueGT3-Risky')
         elif(1.9 < regression_data['PCT_day_change'] < 3 and 1 < regression_data['PCT_change'] < 4):
-            if(regression_data['PCT_day_change_pre1'] < 0.75 and regression_data['PCT_change_pre1'] < 1):
+            if(regression_data['monthLowChange'] < 5):
                 add_in_csv(regression_data, regressionResult, ws, '%%mayBuyUpContinueLT3')  
             else:
                 add_in_csv(regression_data, regressionResult, ws, '%%mayBuyUpContinueLT3-Risky')
-                if(regression_data['SMA25'] > 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, '%%mayBuyUpContinueLT3-Risky')
-                
+        
 def buy_high_volatility(regression_data, regressionResult):
     flag = False
     ws = None
@@ -7568,19 +7562,15 @@ def sell_af_down_continued(regression_data, regressionResult, reg, ws):
             )
         ):
         if(-4.0 < regression_data['PCT_day_change'] < -2.5 and -5 < regression_data['PCT_change'] < -2.5):
-            if(regression_data['PCT_day_change_pre1'] > -0.75 and regression_data['PCT_change_pre1'] > -1):
+            if(regression_data['monthHighChange'] > -5):
                 add_in_csv(regression_data, regressionResult, ws, '%%maySellDownContinueLT-3')
-                if(regression_data['SMA25'] < 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, '%%maySellDownContinueLT-3')
             else:
                 add_in_csv(regression_data, regressionResult, ws, '%%maySellDownContinueLT-3-Risky')
         elif(-3 < regression_data['PCT_day_change'] < -1.9 and -4 < regression_data['PCT_change'] < -1):
-            if(regression_data['PCT_day_change_pre1'] > -0.75 and regression_data['PCT_change_pre1'] > -1):
+            if(regression_data['monthHighChange'] > -5):
                 add_in_csv(regression_data, regressionResult, ws, '%%maySellDownContinueGT-3')
             else:
                 add_in_csv(regression_data, regressionResult, ws, '%%maySellDownContinueGT-3-Risky')
-                if(regression_data['SMA25'] < 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, '%%maySellDownContinueGT-3-Risky')
         
 
 def sell_high_volatility(regression_data, regressionResult):
