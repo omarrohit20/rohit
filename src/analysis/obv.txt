@@ -96,6 +96,9 @@ LowTail > 1.5
 ##############################################################	
 
 
+Check for Sell nearMonth6Hih nearMonth3High -3 to -9, last 2 day change lt -1.5 both, pre2 or pre3 gt 0, and mlsell 
+
+
 Good result and better than expected
 	* Check for no pre rally and last day no major selling
 	* Not yearly high
