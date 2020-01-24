@@ -114,12 +114,16 @@ UPTREND-MARKET
 ###############################################################
 BuyFilters:RISKY-UPTREND-SELL:		returns moderate usually. Fail If global down or market expected down
 BuyFilters:RISKY-DOWNTREND-BUY:		returns high usually
-SellFilters:RISKY-BUY-UPTREND-CONT:	Sell after 9:30 or 10 after some point up. If last day UP more than 2% sell in the morning
 SellFilters:RISKY-UPTREND-SELL:		returns high If global down or market expected down. Fail If global up or market expected up
+SellFilters:RISKY-DOWNTREND-BUY:	returns high If global down or market expected down. Fail If global up or market expected up
+
+SellFilters:RISKY-BUY-UPTREND-CONT:	Sell after 9:30 or 10 after some point up. If last day UP more than 2% sell in the morning
+
 
 Sell => RISKY-UPTREND-SELL:			returns moderate If global down or market expected down. Fail If global up or market expected up
 
-DOWNTREND
+UPTREND-MARKET
+###############################################################
 	
 	    
 		
