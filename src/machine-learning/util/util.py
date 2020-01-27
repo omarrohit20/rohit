@@ -4002,10 +4002,29 @@ def buy_high_volatility(regression_data, regressionResult):
                 and regression_data['PCT_day_change_pre2'] > 0.5
                 and regression_data['PCT_day_change'] < 0
                 and regression_data['low'] > regression_data['low_pre1']
-                and low_tail_pct(regression_data) < high_tail_pct(regression_data) + 0.5
                 ): 
                 add_in_csv(regression_data, regressionResult, ws, None, None,'UPTREND-BUY')
-                 
+        elif(-3 < regression_data['PCT_change'] < 2
+           and regression_data['PCT_day_change_pre1'] > 0
+           and regression_data['PCT_day_change_pre2'] > 0
+           and regression_data['year2HighChange'] < -5
+           and regression_data['year2LowChange'] > 5
+           ):
+            if(regression_data['PCT_day_change_pre1'] > 0
+                and regression_data['PCT_day_change_pre2'] > 0
+                and regression_data['PCT_day_change'] < 0
+                and regression_data['low'] < regression_data['low_pre1']
+                and regression_data['low'] > regression_data['low_pre2']
+                and low_tail_pct(regression_data) < high_tail_pct(regression_data) + 0.5
+                ): 
+                add_in_csv(regression_data, regressionResult, ws, None, None,'UPTREND-BUY-RISKY, DOWNTREND-SELL-RISKY')
+            elif(regression_data['PCT_day_change_pre1'] > 0
+                and regression_data['PCT_day_change_pre2'] > 0
+                and regression_data['PCT_day_change'] < 0
+                and regression_data['low'] < regression_data['low_pre2']
+                and regression_data['low'] > regression_data['low_pre2']
+                ): 
+                add_in_csv(regression_data, regressionResult, ws, None, None,'UPTREND-BUY-RISKY')         
            
         if(-1.5 < regression_data['PCT_change'] < 0
            and -1 < regression_data['PCT_day_change'] < 0
@@ -4016,11 +4035,13 @@ def buy_high_volatility(regression_data, regressionResult):
                 and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change']) * 2
                 and high_tail_pct(regression_data) + 0.5 < low_tail_pct(regression_data) 
                 and regression_data['month3HighChange'] < -2
+                and low_tail_pct(regression_data) < 3.5
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'STOCK-IN-UPTREND-BUY')
             elif(regression_data['PCT_day_change_pre1'] > 0 
                 and abs(regression_data['PCT_day_change_pre1']) < abs(regression_data['PCT_day_change'])
                 and high_tail_pct(regression_data) > low_tail_pct(regression_data) + 0.5
+                and high_tail_pct(regression_data) < 3.5
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'STOCK-IN-UPTREND-SELL')           
         if(regression_data['PCT_change'] < 0
@@ -7954,25 +7975,27 @@ def sell_high_volatility(regression_data, regressionResult):
                 and regression_data['high'] < regression_data['high_pre1']
                 ): 
                 add_in_csv(regression_data, regressionResult, ws, None, None,'DOWNTREND-SELL')
-#         elif(-2 < regression_data['PCT_change'] < 3
-#            and regression_data['PCT_day_change_pre1'] < 0
-#            and regression_data['PCT_day_change_pre2'] < 0
-#            and regression_data['year2HighChange'] < -5
-#            and regression_data['year2LowChange'] > 5
-#            ):
-#             if(regression_data['PCT_day_change_pre1'] < 0
-#                 and regression_data['PCT_day_change_pre2'] < 0
-#                 and regression_data['PCT_day_change'] > 0
-#                 and regression_data['high'] < regression_data['high_pre2']
-#                 and high_tail_pct(regression_data) < low_tail_pct(regression_data) + 0.5
-#                 ): 
-#                 add_in_csv(regression_data, regressionResult, ws, None, None,'UPTREND-BUY-RISKY, DOWNTREND-SELL-RISKY')
-#             elif(regression_data['PCT_day_change_pre1'] < 0
-#                 and regression_data['PCT_day_change_pre2'] < 0
-#                 and regression_data['PCT_day_change'] > 0
-#                 and regression_data['high'] < regression_data['high_pre2']
-#                 ): 
-#                 add_in_csv(regression_data, regressionResult, ws, None, None,'DOWNTREND-SELL-RISKY')
+        elif(-2 < regression_data['PCT_change'] < 3
+           and regression_data['PCT_day_change_pre1'] < 0
+           and regression_data['PCT_day_change_pre2'] < 0
+           and regression_data['year2HighChange'] < -5
+           and regression_data['year2LowChange'] > 5
+           ):
+            if(regression_data['PCT_day_change_pre1'] < 0
+                and regression_data['PCT_day_change_pre2'] < 0
+                and regression_data['PCT_day_change'] > 0
+                and regression_data['high'] > regression_data['high_pre1']
+                and regression_data['high'] < regression_data['high_pre2']
+                and high_tail_pct(regression_data) < low_tail_pct(regression_data) + 0.5
+                ): 
+                add_in_csv(regression_data, regressionResult, ws, None, None,'UPTREND-BUY-RISKY, DOWNTREND-SELL-RISKY')
+            elif(regression_data['PCT_day_change_pre1'] < 0
+                and regression_data['PCT_day_change_pre2'] < 0
+                and regression_data['PCT_day_change'] > 0
+                and regression_data['high'] > regression_data['high_pre1']
+                and regression_data['high'] < regression_data['high_pre2']
+                ): 
+                add_in_csv(regression_data, regressionResult, ws, None, None,'DOWNTREND-SELL-RISKY')
            
                 
         if(0 < regression_data['PCT_change'] < 1.5
@@ -7983,12 +8006,14 @@ def sell_high_volatility(regression_data, regressionResult):
             if(regression_data['PCT_day_change_pre1'] < 0 
                 and abs(regression_data['PCT_day_change_pre1']) < abs(regression_data['PCT_day_change']) 
                 and high_tail_pct(regression_data) + 0.5 < low_tail_pct(regression_data)
+                and low_tail_pct(regression_data) < 3.5
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'STOCK-IN-DOWNTREND-BUY')
             elif(regression_data['PCT_day_change_pre1'] < 0 
                 and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])*2 
                 and high_tail_pct(regression_data) > low_tail_pct(regression_data) + 0.5
                 and regression_data['month3LowChange'] > 2
+                and high_tail_pct(regression_data) < 3.5
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'STOCK-IN-DOWNTREND-SELL')   
         if(regression_data['PCT_change'] > 0
