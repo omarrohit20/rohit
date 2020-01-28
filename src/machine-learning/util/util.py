@@ -3787,7 +3787,7 @@ def buy_high_volatility(regression_data, regressionResult):
             and regression_data['monthHighChange'] > -2
             and regression_data['monthLowChange'] > 10
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'checkForUptrendReversalMonthHigh')
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'checkForUptrendReversalMonthHigh(5to10-minute-baseline-if-uptrend)')
            
         add_in_csv(regression_data, regressionResult, ws, None, 'TEST:yearLowCheckUpTrendATRBuyOrSell')
         flag = True
@@ -3848,7 +3848,7 @@ def buy_high_volatility(regression_data, regressionResult):
             and regression_data['monthHighChange'] > -2
             and regression_data['monthLowChange'] > 10
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'checkForUptrendReversalMonthHigh')
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'checkForUptrendReversalMonthHigh(5to10-minute-baseline-if-uptrend)')
         if(high_tail_pct(regression_data) > 1.5 
            and 0 < regression_data['PCT_day_change'] < 1
            and 0 < regression_data['PCT_day_change_pre1'] < 1.5
@@ -7787,7 +7787,7 @@ def sell_high_volatility(regression_data, regressionResult):
             and regression_data['monthLowChange'] < 2
             and regression_data['monthHighChange'] < -10
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'checkForDowntrendReversalMonthLow')
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'checkForDowntrendReversalMonthLow(5to10-minute-baseline-if-downtrend)')
         elif(regression_data['PCT_day_change'] < 0
             and regression_data['PCT_day_change_pre1'] < 0
             and regression_data['PCT_day_change_pre2'] < 0
@@ -7852,7 +7852,7 @@ def sell_high_volatility(regression_data, regressionResult):
             and regression_data['monthLowChange'] < 2
             and regression_data['monthHighChange'] < -10
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'checkForDowntrendReversalMonthLow')
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'checkForDowntrendReversalMonthLow(5to10-minute-baseline-if-downtrend)')
         
         if(regression_data['PCT_day_change'] < -5
             and regression_data['PCT_change'] < -3
