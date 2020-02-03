@@ -10498,7 +10498,7 @@ def filter_accuracy_finder(regression_data, regression_high, regression_low, reg
             elif(regression_data[filter_avg] < 0):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-5-Sell')
         elif(regression_data[filter_count] >= 2
-            and((abs(regression_data[filter_pct]) >= 100 and abs(regression_data[filter_avg]) >= 2.5)
+            and((abs(regression_data[filter_pct]) >= 100 and abs(regression_data[filter_avg]) >= 2.5 and regression_data[filter_count] >= 3)
                  or (abs(regression_data[filter_pct]) >= 70 and abs(regression_data[filter_avg]) >= 3.5)
                  )
             ):
@@ -10509,7 +10509,7 @@ def filter_accuracy_finder(regression_data, regression_high, regression_low, reg
         elif(regression_data[filter_count] >= 2
             and abs(regression_data[filter_pct]) >= 80
             and abs(regression_data[filter_avg]) >= 2
-            and (abs(regression_data[filter_avg]) > 2.5 or regression_data[filter_count] > 3)
+            and (abs(regression_data[filter_avg]) > 3 or regression_data[filter_count] > 3)
             ):
             if(regression_data[filter_avg] >= 0 and is_algo_buy(regression_data)):
                 add_in_csv(regression_data, regressionResult, ws, None, 'STRONG-7-Buy')
@@ -10696,22 +10696,34 @@ def filter_accuracy_finder_stable(regression_data, regressionResult, reg, ws, fi
 
 def filter_accuracy_finder_stable_all(regression_data, regressionResult, reg, ws, filter_avg, filter_count, filter_pct):
     flagFilterAvgGT = False
-    if(((regression_data[filter_avg] < 0  
-         and regression_data[filter_avg] < regression_data['PCT_day_change'] - 0.5
-         and regression_data[filter_avg] < regression_data['PCT_change']
-         )
-         or regression_data[filter_avg] < -1.5
+    if(((-4 < regression_data['PCT_day_change'] < 2.5 and -4 < regression_data['PCT_change'] < 2.5)
+            or (5 < regression_data['PCT_day_change'] < 6.5 and 4.5 < regression_data['PCT_change'] < 6.5)
+        )
+        and ((regression_data[filter_avg] < 0  
+            and regression_data[filter_avg] < regression_data['PCT_day_change'] - 0.5
+            and regression_data[filter_avg] < regression_data['PCT_change']
+            and ("MLBuy" not in regression_data['filter'])
+            )
+            or (regression_data[filter_avg] < -3 and ("MLBuy" not in regression_data['filter']))
+            or (regression_data[filter_avg] < -1.5 and ("MLSell" in regression_data['filter']) and is_any_reg_algo_lt_minus1(regression_data))
+            or (regression_data['PCT_day_change'] > 5 and regression_data['PCT_change'] > 4.5 and regression_data[filter_avg] < -1)
         )
        #and(is_any_reg_algo_lt_minus1dot5(regression_data)
        #  or (is_any_reg_algo_lt_minus1(regression_data) and regression_data['PCT_day_change'] > -2)
        # )
        ):
        flagFilterAvgGT = True
-    if(((regression_data[filter_avg] > 0  
-         and regression_data[filter_avg] > regression_data['PCT_day_change'] + 0.5
-         and regression_data[filter_avg] > regression_data['PCT_change']
-         )
-         or regression_data[filter_avg] > 1.5
+    if(((-2.5 < regression_data['PCT_day_change'] < 4 and -2.5 < regression_data['PCT_change'] < 4)
+            or (-6.5 < regression_data['PCT_day_change'] < -5 and -6.5 < regression_data['PCT_change'] < -4.5)
+        )
+        and ((regression_data[filter_avg] > 0  
+            and regression_data[filter_avg] > regression_data['PCT_day_change'] + 0.5
+            and regression_data[filter_avg] > regression_data['PCT_change']
+            and ("MLSell" not in regression_data['filter'])
+            )
+            or (regression_data[filter_avg] > 3 and ("MLSell" not in regression_data['filter']))
+            or (regression_data[filter_avg] > 1.5 and ("MLBuy" in regression_data['filter']) and is_any_reg_algo_gt1(regression_data))
+            or (regression_data['PCT_day_change'] < -5 and regression_data['PCT_change'] < -4.5 and regression_data[filter_avg] > 1)
         )
        #and(is_any_reg_algo_gt1dot5(regression_data)
        #  or (is_any_reg_algo_gt1(regression_data) and regression_data['PCT_day_change'] < 2)
@@ -10724,15 +10736,13 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, reg, ws
              or (regression_data[filter_avg] < 0 and (low_tail_pct(regression_data) < 1.3 or regression_data['PCT_day_change'] > 0 or regression_data['PCT_day_change'] < -3))
             )
         and regression_data[filter_count] >= 2
-        and regression_data['close'] > 66
+        and abs(regression_data[filter_pct]) > 66
         #and (regression_data[filter_count_oth] >= 2
         #    or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2))
         ):
-        if("MLSell" not in regression_data['filter']
-            and flagFilterAvgGT and regression_data[filter_avg] > 0):
+        if(flagFilterAvgGT and regression_data[filter_avg] > 0):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'MLBuyAndHistory')
-        elif("MLBuy" not in regression_data['filter']
-            and flagFilterAvgGT and regression_data[filter_avg] < 0):
+        elif(flagFilterAvgGT and regression_data[filter_avg] < 0):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'MLSellAndHistory')
             
     if(abs(regression_data[filter_avg]) >= 0.5
