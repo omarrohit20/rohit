@@ -3846,6 +3846,16 @@ def buy_high_volatility(regression_data, regressionResult):
             and regression_data['PCT_day_change_pre1'] > 0.75
             and regression_data['PCT_day_change_pre2'] > 0.75
             and (regression_data['PCT_day_change_pre1'] > 1 or regression_data['PCT_day_change_pre2'] > 1)
+#             and regression_data['monthHighChange'] > -2
+#             and regression_data['monthLowChange'] > 10
+            and regression_data['month3HighChange'] < regression_data['monthHighChange']
+            and regression_data['month6HighChange'] < regression_data['month3HighChange']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'UPTRENDMARKET:checkForUptrendContinueMonthHigh')
+        elif(regression_data['PCT_day_change'] > 1
+            and regression_data['PCT_day_change_pre1'] > 0.75
+            and regression_data['PCT_day_change_pre2'] > 0.75
+            and (regression_data['PCT_day_change_pre1'] > 1 or regression_data['PCT_day_change_pre2'] > 1)
             and regression_data['monthHighChange'] > -2
             and regression_data['monthLowChange'] > 10
             ):
@@ -3903,6 +3913,16 @@ def buy_high_volatility(regression_data, regressionResult):
             ):
             #add_in_csv(regression_data, regressionResult, ws, None, None, 'checkForUptrendContinueWeek2HighNotReached')
             add_in_csv(regression_data, regressionResult, ws, None, None, None)
+        elif(regression_data['PCT_day_change'] > 1
+            and regression_data['PCT_day_change_pre1'] > 0.75
+            and regression_data['PCT_day_change_pre2'] > 0.75
+            and (regression_data['PCT_day_change_pre1'] > 1 or regression_data['PCT_day_change_pre2'] > 1)
+#             and regression_data['monthHighChange'] > -2
+#             and regression_data['monthLowChange'] > 10
+            and regression_data['month3HighChange'] < regression_data['monthHighChange']
+            and regression_data['month6HighChange'] < regression_data['month3HighChange']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'UPTRENDMARKET:checkForUptrendContinueMonthHigh')
         elif(regression_data['PCT_day_change'] > 1
             and regression_data['PCT_day_change_pre1'] > 0.75
             and regression_data['PCT_day_change_pre2'] > 0.75
@@ -7879,6 +7899,16 @@ def sell_high_volatility(regression_data, regressionResult):
             and regression_data['PCT_day_change_pre1'] < -0.75
             and regression_data['PCT_day_change_pre2'] < -0.75
             and (regression_data['PCT_day_change_pre1'] < -1 or regression_data['PCT_day_change_pre2'] < -1)
+            #and regression_data['monthLowChange'] < 2
+            #and regression_data['monthHighChange'] < -10
+            and regression_data['monthLowChange'] < regression_data['month3LowChange']
+            and regression_data['month3LowChange'] < regression_data['month6LowChange']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'DOWNTRENDMARKET:checkForDowntrendContinueMonthLow')
+        elif(regression_data['PCT_day_change'] < -1
+            and regression_data['PCT_day_change_pre1'] < -0.75
+            and regression_data['PCT_day_change_pre2'] < -0.75
+            and (regression_data['PCT_day_change_pre1'] < -1 or regression_data['PCT_day_change_pre2'] < -1)
             and regression_data['monthLowChange'] < 2
             and regression_data['monthHighChange'] < -10
             ):
@@ -7940,6 +7970,16 @@ def sell_high_volatility(regression_data, regressionResult):
             and regression_data['week2LowChange'] > 3
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'checkForDownTrendContinueWeek2LowNotReached')
+        elif(regression_data['PCT_day_change'] < -1
+            and regression_data['PCT_day_change_pre1'] < -0.75
+            and regression_data['PCT_day_change_pre2'] < -0.75
+            and (regression_data['PCT_day_change_pre1'] < -1 or regression_data['PCT_day_change_pre2'] < -1)
+            #and regression_data['monthLowChange'] < 2
+            #and regression_data['monthHighChange'] < -10
+            and regression_data['monthLowChange'] < regression_data['month3LowChange']
+            and regression_data['month3LowChange'] < regression_data['month6LowChange']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'DOWNTRENDMARKET:checkForDowntrendContinueMonthLow')
         elif(regression_data['PCT_day_change'] < -1
             and regression_data['PCT_day_change_pre1'] < -0.75
             and regression_data['PCT_day_change_pre2'] < -0.75
@@ -10708,13 +10748,13 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, reg, ws
     if(((-4 < regression_data['PCT_day_change'] < 2.5 and -4 < regression_data['PCT_change'] < 2.5)
             or (5 < regression_data['PCT_day_change'] < 6.5 and 4.5 < regression_data['PCT_change'] < 6.5)
         )
-        and ((regression_data[filter_avg] < 0  
+        and ((regression_data[filter_avg] < -2  
             and regression_data[filter_avg] < regression_data['PCT_day_change'] - 0.5
             and regression_data[filter_avg] < regression_data['PCT_change']
             and ("MLBuy" not in regression_data['filter'])
             )
             or (regression_data[filter_avg] < -3 and ("MLBuy" not in regression_data['filter']))
-            or (regression_data[filter_avg] < -1.5 and ("MLSell" in regression_data['filter']) and is_any_reg_algo_lt_minus1(regression_data))
+            or (regression_data[filter_avg] < -1.5 and regression_data[filter_avg] < regression_data['PCT_day_change'] and 2 < regression_data['PCT_day_change'] < 2.5 and ("MLSell" in regression_data['filter']) and is_any_reg_algo_lt_minus1(regression_data))
             or (regression_data['PCT_day_change'] > 5 and regression_data['PCT_change'] > 4.5 and regression_data[filter_avg] < -1)
         )
        #and(is_any_reg_algo_lt_minus1dot5(regression_data)
@@ -10725,13 +10765,13 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, reg, ws
     if(((-2.5 < regression_data['PCT_day_change'] < 4 and -2.5 < regression_data['PCT_change'] < 4)
             or (-6.5 < regression_data['PCT_day_change'] < -5 and -6.5 < regression_data['PCT_change'] < -4.5)
         )
-        and ((regression_data[filter_avg] > 0  
+        and ((regression_data[filter_avg] > 2  
             and regression_data[filter_avg] > regression_data['PCT_day_change'] + 0.5
             and regression_data[filter_avg] > regression_data['PCT_change']
             and ("MLSell" not in regression_data['filter'])
             )
             or (regression_data[filter_avg] > 3 and ("MLSell" not in regression_data['filter']))
-            or (regression_data[filter_avg] > 1.5 and ("MLBuy" in regression_data['filter']) and is_any_reg_algo_gt1(regression_data))
+            or (regression_data[filter_avg] > 1.5 and regression_data[filter_avg] > regression_data['PCT_day_change'] and -2.5 < regression_data['PCT_day_change'] < -2 and ("MLBuy" in regression_data['filter']) and is_any_reg_algo_gt1(regression_data))
             or (regression_data['PCT_day_change'] < -5 and regression_data['PCT_change'] < -4.5 and regression_data[filter_avg] > 1)
         )
        #and(is_any_reg_algo_gt1dot5(regression_data)
