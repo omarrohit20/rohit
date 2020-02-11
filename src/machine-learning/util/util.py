@@ -3851,7 +3851,7 @@ def buy_high_volatility(regression_data, regressionResult):
             and regression_data['month3HighChange'] < regression_data['monthHighChange']
             and regression_data['month6HighChange'] < regression_data['month3HighChange']
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'UPTRENDMARKET:checkForUptrendContinueMonthHigh')
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'UPTRENDMARKET:checkForUptrendContinueMonthHigh(NotMonth3HighMonth6High)')
         elif(regression_data['PCT_day_change'] > 1
             and regression_data['PCT_day_change_pre1'] > 0.75
             and regression_data['PCT_day_change_pre2'] > 0.75
@@ -3922,7 +3922,7 @@ def buy_high_volatility(regression_data, regressionResult):
             and regression_data['month3HighChange'] < regression_data['monthHighChange']
             and regression_data['month6HighChange'] < regression_data['month3HighChange']
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'UPTRENDMARKET:checkForUptrendContinueMonthHigh')
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'UPTRENDMARKET:checkForUptrendContinueMonthHigh(NotMonth3HighMonth6High)')
         elif(regression_data['PCT_day_change'] > 1
             and regression_data['PCT_day_change_pre1'] > 0.75
             and regression_data['PCT_day_change_pre2'] > 0.75
@@ -7904,7 +7904,7 @@ def sell_high_volatility(regression_data, regressionResult):
             and regression_data['monthLowChange'] < regression_data['month3LowChange']
             and regression_data['month3LowChange'] < regression_data['month6LowChange']
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'DOWNTRENDMARKET:checkForDowntrendContinueMonthLow')
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'DOWNTRENDMARKET:checkForDowntrendContinueMonthLow(NotMonth3LowMonth6Low)')
         elif(regression_data['PCT_day_change'] < -1
             and regression_data['PCT_day_change_pre1'] < -0.75
             and regression_data['PCT_day_change_pre2'] < -0.75
@@ -7979,7 +7979,7 @@ def sell_high_volatility(regression_data, regressionResult):
             and regression_data['monthLowChange'] < regression_data['month3LowChange']
             and regression_data['month3LowChange'] < regression_data['month6LowChange']
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'DOWNTRENDMARKET:checkForDowntrendContinueMonthLow')
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'DOWNTRENDMARKET:checkForDowntrendContinueMonthLow(NotMonth3LowMonth6Low)')
         elif(regression_data['PCT_day_change'] < -1
             and regression_data['PCT_day_change_pre1'] < -0.75
             and regression_data['PCT_day_change_pre2'] < -0.75
