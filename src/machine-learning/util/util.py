@@ -7429,7 +7429,7 @@ def sell_down_trend(regression_data, regressionResult, reg, ws):
        #and (regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0)
        and (regression_data['PCT_day_change_pre1'] > 0 or regression_data['PCT_day_change_pre2'] > 0 or regression_data['PCT_day_change_pre3'] > 0)
        ):
-       add_in_csv(regression_data, regressionResult, None, 'sellUpTrend-nearHigh')
+       add_in_csv(regression_data, regressionResult, None, 'sellDownTrend-nearHigh')
        return True
     if(regression_data['forecast_day_PCT10_change'] < -10
         and regression_data['year2HighChange'] < -60
