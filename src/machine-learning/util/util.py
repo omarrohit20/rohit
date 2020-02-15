@@ -7967,6 +7967,7 @@ def sell_high_volatility(regression_data, regressionResult):
         elif(regression_data['PCT_day_change'] < -1
             and regression_data['PCT_day_change_pre1'] < -1
             and regression_data['PCT_day_change_pre2'] < -1
+            and regression_data['yearHighChange'] < -10
             and regression_data['week2LowChange'] > 3
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'checkForDownTrendContinueWeek2LowNotReached')
