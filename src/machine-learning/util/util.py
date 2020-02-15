@@ -2906,6 +2906,15 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
     return False
 
 def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
+    if(2.9 < regression_data['PCT_day_change'] < 4.1 and 0 < regression_data['PCT_day_change'] < 4.5
+        and (regression_data['PCT_day_change_pre1'] < 0
+             or regression_data['PCT_day_change_pre2'] < 0
+             or regression_data['PCT_day_change_pre3'] < 0
+             )
+        and high_tail_pct(regression_data) < 1.3
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighUptrend')
+        
     if( ("upTrend" in regression_data['series_trend'])
         and (-1 < regression_data['PCT_day_change'] < 0) and (-1 < regression_data['PCT_change'] < 0)
         ):
@@ -5125,6 +5134,16 @@ def buy_oi(regression_data, regressionResult, reg, ws):
 def buy_up_trend(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
+    if(('NearLow' in regression_data['filter3'] or 'ReversalLow' in regression_data['filter3'])
+       and 'GT0' not in regression_data['filter3']
+       and regression_data['SMA4'] > 0
+       and regression_data['SMA4_2daysBack'] > 0
+       and regression_data['PCT_day_change'] > 0.5 and regression_data['PCT_change'] > 0
+       #and (regression_data['PCT_day_change_pre2'] > 0 or regression_data['PCT_day_change_pre3'] > 0)
+       and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0)
+       ):
+       add_in_csv(regression_data, regressionResult, None, 'buyUpTrend-nearLow')
+       return True
     if((regression_data['yearLowChange'] > 20 and regression_data['month3LowChange'] > 15)
        and (regression_data['yearHighChange'] < -15 or regression_data['month3HighChange'] < -10)
        and regression_data['forecast_day_PCT_change'] > 0
@@ -6822,6 +6841,15 @@ def sell_all_common(regression_data, regressionResult, reg, ws):
     return False
 
 def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
+    if(-2.9 > regression_data['PCT_day_change'] > -4.1 and 0 > regression_data['PCT_day_change'] > -4.5
+        and (regression_data['PCT_day_change_pre1'] > 0
+             or regression_data['PCT_day_change_pre2'] > 0
+             or regression_data['PCT_day_change_pre3'] > 0
+             )
+        and low_tail_pct(regression_data) < 1.3
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighDowntrend')
+    
     if( ("downTrend" in regression_data['series_trend'])
         and (0 < regression_data['PCT_day_change'] < 1) and (0 < regression_data['PCT_change'] < 1)
         ):
@@ -7393,6 +7421,16 @@ def sell_up_trend(regression_data, regressionResult, reg, ws):
 
 def sell_down_trend(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
+    if(('NearHigh' in regression_data['filter3'] or 'ReversalHigh' in regression_data['filter3'])
+       and 'LT0' not in regression_data['filter3']
+       and regression_data['SMA4'] < 0
+       and regression_data['SMA4_2daysBack'] < 0
+       and regression_data['PCT_day_change'] < -0.5 and regression_data['PCT_change'] < 0
+       #and (regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0)
+       and (regression_data['PCT_day_change_pre1'] > 0 or regression_data['PCT_day_change_pre2'] > 0 or regression_data['PCT_day_change_pre3'] > 0)
+       ):
+       add_in_csv(regression_data, regressionResult, None, 'sellUpTrend-nearHigh')
+       return True
     if(regression_data['forecast_day_PCT10_change'] < -10
         and regression_data['year2HighChange'] < -60
         and regression_data['month3LowChange'] < 10
