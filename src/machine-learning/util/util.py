@@ -3859,6 +3859,7 @@ def buy_high_volatility(regression_data, regressionResult):
             and (regression_data['PCT_day_change_pre1'] > 1 or regression_data['PCT_day_change_pre2'] > 1)
 #             and regression_data['monthHighChange'] > -2
 #             and regression_data['monthLowChange'] > 10
+            and regression_data['year2LowChange'] > 10
             and regression_data['month3HighChange'] < regression_data['monthHighChange']
             and regression_data['month6HighChange'] < regression_data['month3HighChange']
             ):
@@ -7957,6 +7958,7 @@ def sell_high_volatility(regression_data, regressionResult):
             and (regression_data['PCT_day_change_pre1'] < -1 or regression_data['PCT_day_change_pre2'] < -1)
             #and regression_data['monthLowChange'] < 2
             #and regression_data['monthHighChange'] < -10
+            and regression_data['year2HighChange'] < -10
             and regression_data['monthLowChange'] < regression_data['month3LowChange']
             and regression_data['month3LowChange'] < regression_data['month6LowChange']
             ):
