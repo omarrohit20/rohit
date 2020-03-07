@@ -10481,13 +10481,21 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
 #         superflag = True
 #     if(sell_high_volatility(regression_data, regressionResult, reg, ws)):
 #         superflag = True 
-    if(regression_data['filter_pct_change_avg'] > 2 and regression_data['filter_pct_change_count'] >= 2 and regression_data['filter_pct_change_pct'] > 70):
+    if(regression_data['filter_pct_change_avg'] > 2 and regression_data['filter_pct_change_count'] >= 2 and regression_data['filter_pct_change_pct'] > 70
+        and "MLSell" not in regression_data['filter']
+        ):
         add_in_csv(regression_data, regressionResult, ws, None,'Filter-All-Buy')
-    elif(regression_data['filter_pct_change_avg'] > 1.5 and regression_data['filter_pct_change_count'] >= 2 and regression_data['filter_pct_change_pct'] > 70):
+    elif(regression_data['filter_pct_change_avg'] > 1.5 and regression_data['filter_pct_change_count'] >= 2 and regression_data['filter_pct_change_pct'] > 70
+        and "MLSell" not in regression_data['filter'] 
+        ):
         add_in_csv(regression_data, regressionResult, ws, None,'Filter-All-Buy-risky')
-    if(regression_data['filter_pct_change_avg'] < -2 and regression_data['filter_pct_change_count'] >= 2 and regression_data['filter_pct_change_pct'] < -70):
+    if(regression_data['filter_pct_change_avg'] < -2 and regression_data['filter_pct_change_count'] >= 2 and regression_data['filter_pct_change_pct'] < -70
+        and "MLBuy" not in regression_data['filter']
+        ):
         add_in_csv(regression_data, regressionResult, ws, None,'Filter-All-Sell')
-    elif(regression_data['filter_pct_change_avg'] < -1.5 and regression_data['filter_pct_change_count'] >= 2 and regression_data['filter_pct_change_pct'] < -70):
+    elif(regression_data['filter_pct_change_avg'] < -1.5 and regression_data['filter_pct_change_count'] >= 2 and regression_data['filter_pct_change_pct'] < -70
+        and "MLBuy" not in regression_data['filter']
+        ):
         add_in_csv(regression_data, regressionResult, ws, None,'Filter-All-Sell-risky')
         
         
