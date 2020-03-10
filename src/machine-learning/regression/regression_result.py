@@ -331,6 +331,7 @@ def result_data_reg(scrip):
         if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, True, None)):
             all_withoutml(regression_data, regressionResult, ws_highBuyStrongFilterAcc)
         if (is_algo_buy(regression_data)):
+            #buy_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_highBuyReg)
         if (is_algo_buy(regression_high) and is_any_reg_algo_gt1_not_other(regression_data)):
             buy_all_common_High_Low(regression_data, regressionResult, True, None)
@@ -367,6 +368,7 @@ def result_data_reg(scrip):
         if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, True, None)):
             all_withoutml(regression_data, regressionResult, ws_lowSellStrongFilterAcc)
         if (is_algo_sell(regression_data)):
+            #buy_all_common_High_Low(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_lowSellReg)                               
         if (is_algo_sell(regression_high) and is_any_reg_algo_lt_minus1_not_other(regression_data)):
             sell_all_common_High_Low(regression_data, regressionResult, True, None)
@@ -435,7 +437,7 @@ def calculateParallel(threads=2, futures=None):
     for data in db.scrip.find({'futures':futures}):
         hsdata = db.history.find_one({'dataset_code':data['scrip']})
     
-        processing_date = '2020-03-05'
+        processing_date = '2020-03-06'
         if(hsdata is None or (np.array(hsdata['data'])).size < 1000):
             print('Missing or very less Data for ', data['scrip'])
         elif(hsdata['end_date'] != processing_date):
