@@ -122,7 +122,7 @@ SellFilters:RISKY-BUY-UPTREND-CONT:	Sell after 9:30 or 10 after some point up. I
 
 Sell => RISKY-UPTREND-SELL:			returns moderate If global down or market expected down. Fail If global up or market expected up
 
-UPTREND-MARKET
+DOWNTREND-MARKET
 ###############################################################
 	
 	    
