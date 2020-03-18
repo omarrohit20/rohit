@@ -124,6 +124,22 @@ Sell => RISKY-UPTREND-SELL:			returns moderate If global down or market expected
 
 DOWNTREND-MARKET
 ###############################################################
+
+
+
+HEAVYUPRENDMARKET:
+
+
+HEAVYUPTREND-CONSOLIDATION:
+
+
+HEAVYDOWNTRENDMARKET:
+BuyReversal(no-news-on-stock)(Nifty-down-last-3-days) : If MLBuy or PCT_Change < -10%
+
+HEAVYDOWNTREND-CONSOLIDATION:
+HighBuyReg : Check for heavy down for buy, global should up direction from morning
+LowSellReg : Check for heavy up for sell, global should down direction from morning
+
 	
 	    
 		

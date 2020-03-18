@@ -47,6 +47,8 @@ logname = '../../output/final' + '/all-result' + time.strftime("%d%m%y-%H%M%S")
 newsDict = {}
 wb = Workbook()
 
+ws_allFilterAcc = wb.create_sheet("AllFilterAcc")
+ws_allFilterAcc.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "forecast_mlpValue_reg", "forecast_kNeighboursValue_reg", "forecast_mlpValue_cla", "forecast_kNeighboursValue_cla", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "mHighChange", "mLowChange", "w2HighChange", "w2LowChange", "wHighChange", "wLowChange", "trend", "Score", "HighTail", "LowTail", "Close", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter345Acc", "Filter345Count", "Filter345Pct", "Filter1Acc", "Filter1Count", "Filter1Pct", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterPctDayChangePct", "FilterAllAcc", "FilterAllCount", "FilterAllPct", "FilterTechAcc", "FilterTechCount", "FilterTechPct", "FilterTechAllAcc", "FilterTechAllCount", "FilterTechAllPct", "FilterTechAllPctChangeAcc", "FilterTechAllPctChangeCount", "FilterTechAllPctChangePct"])
 ws_highBuyStrongFilterAcc = wb.create_sheet("HighBuyAllFilterAcc")
 ws_highBuyStrongFilterAcc.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "forecast_mlpValue_reg", "forecast_kNeighboursValue_reg", "forecast_mlpValue_cla", "forecast_kNeighboursValue_cla", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "mHighChange", "mLowChange", "w2HighChange", "w2LowChange", "wHighChange", "wLowChange", "trend", "Score", "HighTail", "LowTail", "Close", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter345Acc", "Filter345Count", "Filter345Pct", "Filter1Acc", "Filter1Count", "Filter1Pct", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterPctDayChangePct", "FilterAllAcc", "FilterAllCount", "FilterAllPct", "FilterTechAcc", "FilterTechCount", "FilterTechPct", "FilterTechAllAcc", "FilterTechAllCount", "FilterTechAllPct", "FilterTechAllPctChangeAcc", "FilterTechAllPctChangeCount", "FilterTechAllPctChangePct"])
 ws_lowSellStrongFilterAcc = wb.create_sheet("LowSellAllFilterAcc")
@@ -85,6 +87,7 @@ ws_low = wb.create_sheet("LowAll")
 ws_low.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "forecast_mlpValue_reg", "forecast_kNeighboursValue_reg", "forecast_mlpValue_cla", "forecast_kNeighboursValue_cla", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "mHighChange", "mLowChange", "w2HighChange", "w2LowChange", "wHighChange", "wLowChange", "trend", "Score", "HighTail", "LowTail", "Close", "PCT_Day_Change", "PCT_Change", "Symbol", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter345Acc", "Filter345Count", "Filter345Pct", "Filter1Acc", "Filter1Count", "Filter1Pct", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterPctDayChangePct", "FilterAllAcc", "FilterAllCount", "FilterAllPct", "FilterTechAcc", "FilterTechCount", "FilterTechPct", "FilterTechAllAcc", "FilterTechAllCount", "FilterTechAllPct", "FilterTechAllPctChangeAcc", "FilterTechAllPctChangeCount", "FilterTechAllPctChangePct"])
 
 def saveReports(run_type=None):
+    ws_allFilterAcc.append([""])
     ws_highBuyStrongFilterAcc.append([""])
     ws_lowSellStrongFilterAcc.append([""])
     
@@ -108,6 +111,13 @@ def saveReports(run_type=None):
     # Add a default style with striped rows and banded columns
     style = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False,
                showLastColumn=False, showRowStripes=True, showColumnStripes=True)
+    
+    count = 0
+    for row in ws_allFilterAcc.iter_rows(row_offset=1):
+        count += 1
+    tab = Table(displayName="Table1", ref="A1:CO" + str(count))
+    tab.tableStyleInfo = style
+    ws_allFilterAcc.add_table(tab)
     
     count = 0
     for row in ws_highBuyStrongBoth.iter_rows(row_offset=1):
@@ -392,7 +402,13 @@ def result_data_reg(scrip):
         regression_data = regression_low
         if (is_algo_buy(regression_high) != True and is_algo_buy(regression_low) != True):
             sell_indicator_after_filter_accuracy(regression_data, regressionResult, True, None)
-            all_withoutml(regression_data, regressionResult, ws_lowSell) 
+            all_withoutml(regression_data, regressionResult, ws_lowSell)
+            
+        if(is_filter_all_accuracy(regression_high, regression_high, regression_low, regressionResult, True, None)
+            and is_filter_all_accuracy(regression_low, regression_high, regression_low, regressionResult, True, None)
+            ):
+            all_withoutml(regression_high, regressionResult, ws_allFilterAcc) 
+            all_withoutml(regression_low, regressionResult, ws_allFilterAcc)
         
 def result_data_cla(scrip):
     regression_high = db.regressionhigh.find_one({'scrip':scrip})
@@ -437,7 +453,7 @@ def calculateParallel(threads=2, futures=None):
     for data in db.scrip.find({'futures':futures}):
         hsdata = db.history.find_one({'dataset_code':data['scrip']})
     
-        processing_date = '2020-03-09'
+        processing_date = '2020-03-17'
         if(hsdata is None or (np.array(hsdata['data'])).size < 1000):
             print('Missing or very less Data for ', data['scrip'])
         elif(hsdata['end_date'] != processing_date):
