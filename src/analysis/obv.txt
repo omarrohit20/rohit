@@ -134,11 +134,19 @@ HEAVYUPTREND-CONSOLIDATION:
 
 
 HEAVYDOWNTRENDMARKET:
+################################################################
 BuyReversal(no-news-on-stock)(Nifty-down-last-3-days) : If MLBuy or PCT_Change < -10%
 
-HEAVYDOWNTREND-CONSOLIDATION:
+
+
+HEAVYDOWNTREND-CONSOLIDATION(or following short uptrend after heavydowntrend):
+################################################################
 HighBuyReg : Check for heavy down for buy, global should up direction from morning
 LowSellReg : Check for heavy up for sell, global should down direction from morning
+
+TEST:%%mayBuyContinueHighVolatileLastDayUp-GT8 : global should up direction from morning and sgxnifty also
+HighBuyAllFilter : check for PCT_Day_change > 8 and filter2 buy indicators, but not MLSell
+LowSellAllFilter : check for PCT_Day_change > 8 and filter2 buy indicators, but not MLSell
 
 	
 	    

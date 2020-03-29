@@ -4198,7 +4198,8 @@ def buy_high_volatility(regression_data, regressionResult):
             and (regression_data['forecast_day_PCT5_change'] < 0 or regression_data['forecast_day_PCT7_change'] < 0 or regression_data['forecast_day_PCT10_change'] < 0)
             and (regression_data['forecast_day_PCT2_change'] > 0 or regression_data['forecast_day_PCT3_change'] > 0 or regression_data['forecast_day_PCT4_change'] > 0 or regression_data['forecast_day_PCT5_change'] > 0)
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:%%mayBuyHighVolatileUpContinueGT-5')
+            #add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:%%mayBuyHighVolatileUpContinueGT-5')
+            add_in_csv(regression_data, regressionResult, ws, None, None, None)
             flag = True
     
     if('%%maySellTail' in regression_data['filter']

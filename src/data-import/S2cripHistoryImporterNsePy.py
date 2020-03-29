@@ -39,7 +39,7 @@ if __name__ == "__main__":
     if(sys.argv[1] is None or sys.argv[1] != 'update'):
          db.drop_collection('history')
     end_date = (datetime.date.today() - datetime.timedelta(days=0))
-    start_date = (datetime.date.today() - datetime.timedelta(days=4000))
+    start_date = (datetime.date.today() - datetime.timedelta(days=5000))
     print(start_date.strftime('%d-%m-%Y') + ' to ' + end_date.strftime('%d-%m-%Y'))
     
     for data in db.scrip.find({'futures':sys.argv[2]}):
