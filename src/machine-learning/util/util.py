@@ -8261,9 +8261,15 @@ def sell_high_volatility(regression_data, regressionResult):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'DOWNTRENDMARKET:checkForDowntrendContinueLastDayDownPCT10GT-0.5') 
     
-    if(regression_data['forecast_day_PCT5_change'] < -15
-        and regression_data['PCT_day_change'] < -4
-        and (regression_data['PCT_change'] < -9 or "MLBuy" in regression_data['filter'])
+    if((regression_data['forecast_day_PCT5_change'] < -10 or regression_data['forecast_day_PCT4_change'] < -10 or regression_data['forecast_day_PCT3_change'] < -10)
+        and regression_data['PCT_day_change'] < -15
+        and regression_data['close'] > 50
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'HEAVYDOWNTRENDMARKET:SellIfOpenHigh-BuyReversalIfOpenInLow(no-news-on-stock)(Nifty-down-last-3-days)')
+        flag = True
+    elif((regression_data['forecast_day_PCT5_change'] < -15 or regression_data['forecast_day_PCT4_change'] < -15 or regression_data['forecast_day_PCT3_change'] < -10)
+        and regression_data['PCT_day_change'] < -5
+        and (regression_data['PCT_day_change'] < -9 or "MLBuy" in regression_data['filter'])
         and regression_data['close'] > 50
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, 'HEAVYDOWNTRENDMARKET:BuyReversal(no-news-on-stock)(Nifty-down-last-3-days)')
