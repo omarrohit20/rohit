@@ -2926,11 +2926,25 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         
     if(-3 < regression_data['PCT_day_change'] < 0 and -3 < regression_data['PCT_day_change'] < 1
         and 1 < low_tail_pct(regression_data) < 2
+        and high_tail_pct(regression_data) < 5
         ):
         if(high_tail_pct(regression_data) < low_tail_pct(regression_data)):
-            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighLowerTail')
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighLowerTail-Continue-LastDayMarketUp')
         else:
-            add_in_csv(regression_data, regressionResult, ws, 'CommonHL-Risky:HighLowerTail')
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL-Risky:HighLowerTail-Continue-LastDayMarketUp')
+    elif(2.5 < high_tail_pct(regression_data) < 5.5
+        and low_tail_pct(regression_data) > high_tail_pct(regression_data) 
+        and (regression_data['PCT_day_change'] < (high_tail_pct(regression_data)*2))
+        ):
+        if(regression_data['PCT_day_change'] < 1 and regression_data['PCT_change'] < 1):
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighLowerTail-Continue')         
+    elif(2.5 < high_tail_pct(regression_data) < 5.5
+        and (regression_data['PCT_day_change'] < (high_tail_pct(regression_data)*2))
+        ):
+        if(regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0):
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighUpperTail-Reversal-LastDayMarketDown-GlobalUp')
+        else:
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL-Risky:HighUpperTail-Reversal-LastDayMarketDown-GlobalUp')
         
     if((-2 < regression_data['PCT_day_change'] < 0) and (-2.5 < regression_data['PCT_change'] < 0)
         and (1 <= low_tail_pct(regression_data) < 3)
@@ -6894,13 +6908,28 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and high_tail_pct(regression_data) < 2.5
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HEAVYDOWNTRENDMARKET:HighDowntrend')
+    
     if(0 < regression_data['PCT_day_change'] < 3 and -1 < regression_data['PCT_day_change'] < 3
         and 1 < high_tail_pct(regression_data) < 2
+        and low_tail_pct(regression_data) < 5
         ):
         if(low_tail_pct(regression_data) < high_tail_pct(regression_data)):
-            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighUpperTail')
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighUpperTail-Continue-LastDayMarketUp')
         else:
-            add_in_csv(regression_data, regressionResult, ws, 'CommonHL-Risky:HighUpperTail')
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL-Risky:HighUpperTail-Continue-LastDayMarketUp')
+    elif(2.5 < low_tail_pct(regression_data) < 5.5
+        and high_tail_pct(regression_data) > low_tail_pct(regression_data) 
+        and (regression_data['PCT_day_change'] > -(low_tail_pct(regression_data)*2))
+        ):
+        if(regression_data['PCT_day_change'] > -1 and regression_data['PCT_change'] > -1):
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighUpperTail-Continue')       
+    elif(2.5 < low_tail_pct(regression_data) < 5.5
+        and (regression_data['PCT_day_change'] > -(low_tail_pct(regression_data)*2))
+        ):
+        if(regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0):
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighLowerTail-Reversal-LastDayMarketUp-TodayGlobalDown')
+        else:
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL-Risky:HighLowerTail-Reversal-LastDayMarketUp-TodayGlobalDown')
     
     if((0 < regression_data['PCT_day_change'] < 2) and (0 < regression_data['PCT_change'] < 2.5)
         and (1 <= high_tail_pct(regression_data) < 3)
