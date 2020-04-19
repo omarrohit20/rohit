@@ -338,7 +338,7 @@ def result_data_reg(scrip):
         buy_indicator_after_filter_accuracy(regression_data, regressionResult, True, None) 
         if(buy_high_volatility(regression_data, regressionResult)):
             all_withoutml(regression_data, regressionResult, ws_highAnalysis)
-        if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, True, None)):
+        if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, 'High', None)):
             all_withoutml(regression_data, regressionResult, ws_highBuyStrongFilterAcc)
         if (is_algo_buy(regression_data)):
             buy_all_rule(regression_data, regressionResult, True, None)
@@ -375,7 +375,7 @@ def result_data_reg(scrip):
         sell_indicator_after_filter_accuracy(regression_data, regressionResult, True, None)
         if(sell_high_volatility(regression_data, regressionResult)):
             all_withoutml(regression_data, regressionResult, ws_lowAnalysis)
-        if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, True, None)):
+        if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, 'Low', None)):
             all_withoutml(regression_data, regressionResult, ws_lowSellStrongFilterAcc)
         if (is_algo_sell(regression_data)):
             sell_all_rule(regression_data, regressionResult, True, None)
@@ -404,8 +404,8 @@ def result_data_reg(scrip):
             sell_indicator_after_filter_accuracy(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_lowSell)
             
-        if(is_filter_all_accuracy(regression_high, regression_high, regression_low, regressionResult, True, None)
-            and is_filter_all_accuracy(regression_low, regression_high, regression_low, regressionResult, True, None)
+        if(is_filter_all_accuracy(regression_high, regression_high, regression_low, regressionResult, "None", None)
+            and is_filter_all_accuracy(regression_low, regression_high, regression_low, regressionResult, "None", None)
             ):
             all_withoutml(regression_high, regressionResult, ws_allFilterAcc) 
             all_withoutml(regression_low, regressionResult, ws_allFilterAcc)
