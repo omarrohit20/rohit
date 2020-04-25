@@ -2811,7 +2811,9 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
                 and regression_data['PCT_day_change'] < high_tail_pct(regression_data)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'AF:HighUpperTail-Reversal-LastDayMarketDown')
-            else:
+            elif(regression_data['forecast_day_PCT7_change'] < 0
+                or regression_data['forecast_day_PCT10_change'] < 0
+                ):
                 add_in_csv(regression_data, regressionResult, ws, 'AF:HighUpperTail-Reversal-LastDayMarketDown-(GLOBAL-UP)')
         if(-15 < regression_data['PCT_day_change'] < -4.5 and -15 < regression_data['PCT_change'] < -4.5):
             add_in_csv(regression_data, regressionResult, ws, 'AF:mlBuyPCTDayChangeLT-4.5')
@@ -2821,12 +2823,19 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
             add_in_csv(regression_data, regressionResult, ws, 'AF:0-mlBuyWeek2HighLT-20')
         elif(regression_data['week2HighChange'] < -10 and regression_data['weekHighChange'] < -5
             and 4 > regression_data['PCT_day_change']
+            and is_sell_from_filter_all_filter_LTMinus2(regression_data) == False
             ):
             add_in_csv(regression_data, regressionResult, ws, 'AF:1-mlBuyWeek2HighLT-10')
-        elif(regression_data['week2HighChange'] < -5 and regression_data['weekHighChange'] < 0
-            and 4 > regression_data['PCT_day_change'] > -1 
+        elif(regression_data['week2HighChange'] < -5 and regression_data['weekHighChange'] < -10
+            and 5 > regression_data['PCT_day_change']
+            and is_sell_from_filter_all_filter_LTMinus2(regression_data) == False
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'AF:3-mlBuyWeek2HighLT-5')
+            add_in_csv(regression_data, regressionResult, ws, 'AF:1-mlBuyWeekHighLT-10')
+#         elif(regression_data['week2HighChange'] < -5 and regression_data['weekHighChange'] < 0
+#             and 4 > regression_data['PCT_day_change'] > -1 
+#             and is_sell_from_filter_all_filter_LTMinus2(regression_data) == False
+#             ):
+#             add_in_csv(regression_data, regressionResult, ws, 'AF:3-mlBuyWeek2HighLT-5')
     
     return False
 
@@ -6858,7 +6867,9 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
                 and abs(regression_data['PCT_day_change']) < low_tail_pct(regression_data)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'AF:HighLowerTail-Reversal-LastDayMarketUp')
-            else:
+            elif(regression_data['forecast_day_PCT7_change'] > 0
+                or regression_data['forecast_day_PCT10_change'] > 0
+                ):
                 add_in_csv(regression_data, regressionResult, ws, 'AF:HighLowerTail-Reversal-LastDayMarketUp-(GLOBAL-DOWN)')
         if(4.5 < regression_data['PCT_day_change'] < 15 and 4.5 < regression_data['PCT_change'] < 15):
             add_in_csv(regression_data, regressionResult, ws, 'AF:mlSellPCTDayChangeGT4.5')
@@ -6868,12 +6879,19 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
             add_in_csv(regression_data, regressionResult, ws, 'AF:0-mlSellWeek2LowGT20')
         elif(regression_data['week2LowChange'] > 10 and regression_data['weekLowChange'] > 5
             and -4 < regression_data['PCT_day_change']
+            and is_buy_from_filter_all_filter_GT2(regression_data) == False
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'AF:1-mlSellWeek2LowGT20')
-        elif(regression_data['week2LowChange'] > 5 and regression_data['weekLowChange'] > 0
-            and -4 < regression_data['PCT_day_change'] < 1
+            add_in_csv(regression_data, regressionResult, ws, 'AF:1-mlSellWeek2LowGT10')
+        elif(regression_data['week2LowChange'] > 5 and regression_data['weekLowChange'] > 10
+            and -5 < regression_data['PCT_day_change']
+            and is_buy_from_filter_all_filter_GT2(regression_data) == False
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'AF:3-mlSellWeek2LowGT20')
+            add_in_csv(regression_data, regressionResult, ws, 'AF:1-mlSellWeekLowGT10')
+#         elif(regression_data['week2LowChange'] > 5 and regression_data['weekLowChange'] > 0
+#             and -4 < regression_data['PCT_day_change'] < 1
+#             and is_buy_from_filter_all_filter_GT2(regression_data) == False
+#             ):
+#             add_in_csv(regression_data, regressionResult, ws, 'AF:3-mlSellWeek2LowGT5')
     
     return False
 
@@ -10764,6 +10782,44 @@ def is_sell_from_filter_relaxed(regression_data, filter_avg, filter_count, filte
        or (regression_data[filter_avg] < -1 and regression_data[filter_pct] <= -80)
        or (regression_data[filter_avg] < -0.75 and regression_data[filter_pct] <= -70 and regression_data[filter_count] >= 3)
        ):
+        return True
+    else:
+        return False
+
+def is_buy_from_filter_all_filter_GT2(regression_data):
+    if(is_buy_from_filter_GT2(regression_data, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
+        or is_buy_from_filter_GT2(regression_data, 'filter_avg', 'filter_count', 'filter_pct')
+        or is_buy_from_filter_GT2(regression_data, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
+        or is_buy_from_filter_GT2(regression_data, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
+        or is_buy_from_filter_GT2(regression_data, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
+        or is_buy_from_filter_GT2(regression_data, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
+        or is_buy_from_filter_GT2(regression_data, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
+        ):
+        return True
+    else:
+        return False
+       
+def is_sell_from_filter_all_filter_LTMinus2(regression_data):
+    if(is_sell_from_filter_LTMinus2(regression_data, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
+        or is_sell_from_filter_LTMinus2(regression_data, 'filter_avg', 'filter_count', 'filter_pct')
+        or is_sell_from_filter_LTMinus2(regression_data, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
+        or is_sell_from_filter_LTMinus2(regression_data, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
+        or is_sell_from_filter_LTMinus2(regression_data, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
+        or is_sell_from_filter_LTMinus2(regression_data, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
+        or is_sell_from_filter_LTMinus2(regression_data, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
+        ):
+        return True
+    else:
+        return False                      
+                       
+def is_buy_from_filter_GT2(regression_data, filter_avg, filter_count, filter_pct):
+    if(regression_data[filter_avg] > 2 and regression_data[filter_pct] >= 60):
+        return True
+    else:
+        return False
+   
+def is_sell_from_filter_LTMinus2(regression_data, filter_avg, filter_count, filter_pct):
+    if(regression_data[filter_avg] < -2 and regression_data[filter_pct] <= -60):
         return True
     else:
         return False
