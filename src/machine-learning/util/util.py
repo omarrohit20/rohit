@@ -256,10 +256,18 @@ def is_algo_buy(regression_data, resticted=False):
             or ((regression_data['mlpValue_reg'] + regression_data['kNeighboursValue_reg'] + regression_data['mlpValue_reg_other'] + regression_data['kNeighboursValue_reg_other']) > 4)
             ):
             if((regression_data['mlpValue_cla'] < 0) or (regression_data['kNeighboursValue_cla'] < 0)
-                or (regression_data['mlpValue_cla_other'] < 0) or (regression_data['kNeighboursValue_cla_other'] < 0)):
+                or (regression_data['mlpValue_cla_other'] < 0) or (regression_data['kNeighboursValue_cla_other'] < 0)
+                ):
                 if((regression_data['mlpValue_reg'] < 0) or (regression_data['kNeighboursValue_reg'] < 0)
-                    or (regression_data['mlpValue_reg_other'] < 0) or (regression_data['kNeighboursValue_reg_other'] < 0)):
+                    or (regression_data['mlpValue_reg_other'] < 0) or (regression_data['kNeighboursValue_reg_other'] < 0)
+                    ):
                     return False
+            if((regression_data['mlpValue_reg'] + regression_data['kNeighboursValue_reg']) < 1.5
+                and (regression_data['mlpValue_reg_other'] + regression_data['kNeighboursValue_reg_other']) < 1.5
+                and regression_data['PCT_day_change'] > 0
+                #and regression_data['PCT_change'] > 0
+                ):
+                return False
             if resticted:
                 if((regression_data['mlpValue_reg_other'] >= 0 or regression_data['kNeighboursValue_reg_other'] >= 0)):
                     return True
@@ -268,6 +276,11 @@ def is_algo_buy(regression_data, resticted=False):
     elif(regression_data['PCT_day_change'] < -3
          and ((regression_data['mlpValue_reg_other'] > -1 and regression_data['mlpValue_reg'] > -1 and regression_data['forecast_mlpValue_reg'] > 5)
               or (regression_data['kNeighboursValue_reg_other'] > -1 and regression_data['kNeighboursValue_reg'] > -1 and regression_data['forecast_kNeighboursValue_reg'] > 5)
+              or (regression_data['mlpValue_reg'] > -1.5
+                  and regression_data['kNeighboursValue_reg'] > -1.5
+                  and regression_data['mlpValue_reg_other'] > -1
+                  and regression_data['kNeighboursValue_reg_other'] > -1
+                 )
               )
         ):
         return True
@@ -295,10 +308,18 @@ def is_algo_sell(regression_data, resticted=False):
             or ((regression_data['mlpValue_reg'] + regression_data['kNeighboursValue_reg'] + regression_data['mlpValue_reg_other'] + regression_data['kNeighboursValue_reg_other']) < -4)
             ):
             if((regression_data['mlpValue_cla'] > 0) or (regression_data['kNeighboursValue_cla'] > 0)
-                or (regression_data['mlpValue_cla_other'] > 0) or (regression_data['kNeighboursValue_cla_other'] > 0)):
+                or (regression_data['mlpValue_cla_other'] > 0) or (regression_data['kNeighboursValue_cla_other'] > 0)
+                ):
                 if((regression_data['mlpValue_reg'] > 0) or (regression_data['kNeighboursValue_reg'] > 0)
-                    or (regression_data['mlpValue_reg_other'] > 0) or (regression_data['kNeighboursValue_reg_other'] > 0)):
+                    or (regression_data['mlpValue_reg_other'] > 0) or (regression_data['kNeighboursValue_reg_other'] > 0)
+                    ):
                     return False
+            if((regression_data['mlpValue_reg'] + regression_data['kNeighboursValue_reg']) > -1.5
+                and (regression_data['mlpValue_reg_other'] + regression_data['kNeighboursValue_reg_other']) > -1.5
+                and regression_data['PCT_day_change'] < 0
+                #and regression_data['PCT_change'] < 0
+                ):
+                return False
             if resticted:
                 if((-5 < regression_data['PCT_day_change'] < 0) and (regression_data['mlpValue_reg_other'] <= 0 or regression_data['kNeighboursValue_reg_other'] <= 0)):
                     return True
@@ -307,6 +328,11 @@ def is_algo_sell(regression_data, resticted=False):
     elif(regression_data['PCT_day_change'] > 3
          and ((regression_data['mlpValue_reg_other'] < 1 and regression_data['mlpValue_reg'] < 1 and regression_data['forecast_mlpValue_reg'] > 5)
               or (regression_data['kNeighboursValue_reg_other'] < 1 and regression_data['kNeighboursValue_reg'] < 1 and regression_data['forecast_kNeighboursValue_reg'] > 5)
+              or (regression_data['mlpValue_reg'] < 1.5
+                  and regression_data['kNeighboursValue_reg'] < 1.5
+                  and regression_data['mlpValue_reg_other'] < 1
+                  and regression_data['kNeighboursValue_reg_other'] < 1
+                 )
               )
         ):
         return True
