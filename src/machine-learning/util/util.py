@@ -2490,29 +2490,30 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regression_data['forecast_kNeighboursValue_cla'] = 0
     regression_data['forecast_mlpValue_cla'] = 0        
     
-    if((kNeighboursValue_reg > -1 and kNeighboursValue_reg_other > -1)
-        or (kNeighboursValue_reg < 1 and kNeighboursValue_reg_other < 1)
-        ):      
-        regression_data['forecast_kNeighboursValue_reg'] = (regression_data['high'] + (kNeighboursValue_reg*regression_data['high']/100)) - (regression_data['low'] + (kNeighboursValue_reg_other*regression_data['low']/100))
-        regression_data['forecast_kNeighboursValue_reg'] = (regression_data['forecast_kNeighboursValue_reg'])*100/regression_data['close']
-    
-    if((mlpValue_reg > -1 and mlpValue_reg_other > -1)
-        or (mlpValue_reg < 1 and mlpValue_reg_other < 1)
-        ):    
-        regression_data['forecast_mlpValue_reg'] = (regression_data['high'] + (mlpValue_reg*regression_data['high']/100)) - (regression_data['low'] + (mlpValue_reg_other*regression_data['low']/100))
-        regression_data['forecast_mlpValue_reg'] = (regression_data['forecast_mlpValue_reg'])*100/regression_data['close']
-    
-    if((kNeighboursValue_cla > -1 and kNeighboursValue_cla_other > -1)
-        or (kNeighboursValue_cla < 1 and kNeighboursValue_cla_other < 1)
-        ):    
-        regression_data['forecast_kNeighboursValue_cla'] = (regression_data['high'] + (kNeighboursValue_cla*regression_data['high']/100)) - (regression_data['low'] + (kNeighboursValue_cla_other*regression_data['low']/100))
-        regression_data['forecast_kNeighboursValue_cla'] = (regression_data['forecast_kNeighboursValue_cla'])*100/regression_data['close']
-    
-    if((mlpValue_cla > -1 and mlpValue_cla_other > -1)
-        or (mlpValue_cla < 1 and mlpValue_cla_other < 1)
-        ):    
-        regression_data['forecast_mlpValue_cla'] = (regression_data['high'] + (mlpValue_cla*regression_data['high']/100)) - (regression_data['low'] + (mlpValue_cla_other*regression_data['low']/100))
-        regression_data['forecast_mlpValue_cla'] = (regression_data['forecast_mlpValue_cla'])*100/regression_data['close']
+    if(high_tail_pct(regression_data) < 1.5 and low_tail_pct(regression_data) < 1.5):
+        if((kNeighboursValue_reg > -1 and kNeighboursValue_reg_other > -1)
+            or (kNeighboursValue_reg < 1 and kNeighboursValue_reg_other < 1)
+            ):      
+            regression_data['forecast_kNeighboursValue_reg'] = (regression_data['high'] + (kNeighboursValue_reg*regression_data['high']/100)) - (regression_data['low'] + (kNeighboursValue_reg_other*regression_data['low']/100))
+            regression_data['forecast_kNeighboursValue_reg'] = (regression_data['forecast_kNeighboursValue_reg'])*100/regression_data['close']
+        
+        if((mlpValue_reg > -1 and mlpValue_reg_other > -1)
+            or (mlpValue_reg < 1 and mlpValue_reg_other < 1)
+            ):    
+            regression_data['forecast_mlpValue_reg'] = (regression_data['high'] + (mlpValue_reg*regression_data['high']/100)) - (regression_data['low'] + (mlpValue_reg_other*regression_data['low']/100))
+            regression_data['forecast_mlpValue_reg'] = (regression_data['forecast_mlpValue_reg'])*100/regression_data['close']
+        
+        if((kNeighboursValue_cla > -1 and kNeighboursValue_cla_other > -1)
+            or (kNeighboursValue_cla < 1 and kNeighboursValue_cla_other < 1)
+            ):    
+            regression_data['forecast_kNeighboursValue_cla'] = (regression_data['high'] + (kNeighboursValue_cla*regression_data['high']/100)) - (regression_data['low'] + (kNeighboursValue_cla_other*regression_data['low']/100))
+            regression_data['forecast_kNeighboursValue_cla'] = (regression_data['forecast_kNeighboursValue_cla'])*100/regression_data['close']
+        
+        if((mlpValue_cla > -1 and mlpValue_cla_other > -1)
+            or (mlpValue_cla < 1 and mlpValue_cla_other < 1)
+            ):    
+            regression_data['forecast_mlpValue_cla'] = (regression_data['high'] + (mlpValue_cla*regression_data['high']/100)) - (regression_data['low'] + (mlpValue_cla_other*regression_data['low']/100))
+            regression_data['forecast_mlpValue_cla'] = (regression_data['forecast_mlpValue_cla'])*100/regression_data['close']
     
     regression_data['filter'] = " "
     regression_data['filter1'] = " "
@@ -3713,18 +3714,18 @@ def buy_af_high_indicators(regression_data, regressionResult, reg, ws):
             elif((5 <= mlpValue < 15 and 2 < mlpValue_other)
                 and (-1 <= kNeighboursValue < 15)
                 ):
-                add_in_csv(regression_data, regressionResult, ws, 'AF:(Test)buyHighMLPClaIndicators-Risky')
+                add_in_csv(regression_data, regressionResult, ws, 'AF:(Test)buyHighMLPClaIndicators-Risky-0')
                 flag = True
         elif((5 <= mlpValue < 15 and 2 < mlpValue_other)
             and (-1 <= kNeighboursValue < 15)
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'AF:(Test)buyHighMLPClaIndicators-Risky')
+            add_in_csv(regression_data, regressionResult, ws, 'AF:(Test)buyHighMLPClaIndicators-Risky-1')
             flag = True
     elif(regression_data['PCT_day_change'] < 5
         and (5 <= mlpValue < 15 and 2 < mlpValue_other)
         and (-1 <= kNeighboursValue < 15)
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'AF:(Test)buyHighMLPClaIndicators-Risky')
+        add_in_csv(regression_data, regressionResult, ws, 'AF:(Test)buyHighMLPClaIndicators-Risky-2')
         flag = True
     return flag
     
@@ -7897,18 +7898,18 @@ def sell_af_high_indicators(regression_data, regressionResult, reg, ws):
             elif((-15 < mlpValue < -5 and mlpValue_other < -2)
                 and (-15 <= kNeighboursValue < 1)
                 ):
-                add_in_csv(regression_data, regressionResult, ws, 'AF:(Test)sellHighMLPClaIndicators-Risky')
+                add_in_csv(regression_data, regressionResult, ws, 'AF:(Test)sellHighMLPClaIndicators-Risky-0')
                 flag = True
         elif((-15 < mlpValue < -5 and mlpValue_other < -2)
             and (-15 <= kNeighboursValue < 1)
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'AF:(Test)sellHighMLPClaIndicators-Risky') 
+            add_in_csv(regression_data, regressionResult, ws, 'AF:(Test)sellHighMLPClaIndicators-Risky-1') 
             flag = True       
     elif(regression_data['PCT_day_change'] > -5 and regression_data['PCT_change'] > -5
         and (-15 < mlpValue < -5 and mlpValue_other < -2)
         and (-15 <= kNeighboursValue < 1)
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'AF:(Test)sellHighMLPClaIndicators-Risky')
+        add_in_csv(regression_data, regressionResult, ws, 'AF:(Test)sellHighMLPClaIndicators-Risky-2')
         flag = True
     return flag
 
