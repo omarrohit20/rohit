@@ -274,6 +274,9 @@ def is_algo_buy(regression_data, resticted=False):
             else:
                 return True
     elif(regression_data['PCT_day_change'] < -3
+#          and ((regression_data['mlpValue_reg'] + regression_data['kNeighboursValue_reg']) > 1.5
+#                 or (regression_data['mlpValue_reg_other'] + regression_data['kNeighboursValue_reg_other']) > 1.5
+#              )
          and ((regression_data['mlpValue_reg_other'] > -1 and regression_data['mlpValue_reg'] > -1 and regression_data['forecast_mlpValue_reg'] > 5)
               or (regression_data['kNeighboursValue_reg_other'] > -1 and regression_data['kNeighboursValue_reg'] > -1 and regression_data['forecast_kNeighboursValue_reg'] > 5)
               or (regression_data['mlpValue_reg'] > -1.5
@@ -326,8 +329,11 @@ def is_algo_sell(regression_data, resticted=False):
             else:
                 return True
     elif(regression_data['PCT_day_change'] > 3
-         and ((regression_data['mlpValue_reg_other'] < 1 and regression_data['mlpValue_reg'] < 1 and regression_data['forecast_mlpValue_reg'] > 5)
-              or (regression_data['kNeighboursValue_reg_other'] < 1 and regression_data['kNeighboursValue_reg'] < 1 and regression_data['forecast_kNeighboursValue_reg'] > 5)
+#          and ((regression_data['mlpValue_reg'] + regression_data['kNeighboursValue_reg']) < -1.5
+#                 or (regression_data['mlpValue_reg_other'] + regression_data['kNeighboursValue_reg_other']) < -1.5
+#              )
+         and ((regression_data['mlpValue_reg_other'] < 1 and regression_data['mlpValue_reg'] < 1 and regression_data['forecast_mlpValue_reg'] < -5)
+              or (regression_data['kNeighboursValue_reg_other'] < 1 and regression_data['kNeighboursValue_reg'] < 1 and regression_data['forecast_kNeighboursValue_reg'] < -5)
               or (regression_data['mlpValue_reg'] < 1.5
                   and regression_data['kNeighboursValue_reg'] < 1.5
                   and regression_data['mlpValue_reg_other'] < 1
@@ -2478,17 +2484,35 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
         mlpValue_reg = regression_data['mlpValue_reg_other']
         kNeighboursValue_cla = regression_data['kNeighboursValue_cla_other']
         mlpValue_cla = regression_data['mlpValue_cla_other']
-            
-            
-    regression_data['forecast_kNeighboursValue_reg'] = (regression_data['high'] + kNeighboursValue_reg*regression_data['high']/100) - (regression_data['low'] + kNeighboursValue_reg_other*regression_data['low']/100)
-    regression_data['forecast_mlpValue_reg'] = (regression_data['high'] + mlpValue_reg*regression_data['high']/100) - (regression_data['low'] + mlpValue_reg_other*regression_data['low']/100)
-    regression_data['forecast_kNeighboursValue_cla'] = (regression_data['high'] + kNeighboursValue_cla*regression_data['high']/100) - (regression_data['low'] + kNeighboursValue_cla_other*regression_data['low']/100)
-    regression_data['forecast_mlpValue_cla'] = (regression_data['high'] + mlpValue_cla*regression_data['high']/100) - (regression_data['low'] + mlpValue_cla_other*regression_data['low']/100)
     
-    regression_data['forecast_kNeighboursValue_reg'] = (regression_data['forecast_kNeighboursValue_reg'])*100/regression_data['close']
-    regression_data['forecast_mlpValue_reg'] = (regression_data['forecast_mlpValue_reg'])*100/regression_data['close']
-    regression_data['forecast_kNeighboursValue_cla'] = (regression_data['forecast_kNeighboursValue_cla'])*100/regression_data['close']
-    regression_data['forecast_mlpValue_cla'] = (regression_data['forecast_mlpValue_cla'])*100/regression_data['close']
+    regression_data['forecast_kNeighboursValue_reg'] = 0
+    regression_data['forecast_mlpValue_reg'] = 0
+    regression_data['forecast_kNeighboursValue_cla'] = 0
+    regression_data['forecast_mlpValue_cla'] = 0        
+    
+    if((kNeighboursValue_reg > -1 and kNeighboursValue_reg_other > -1)
+        or (kNeighboursValue_reg < 1 and kNeighboursValue_reg_other < 1)
+        ):      
+        regression_data['forecast_kNeighboursValue_reg'] = (regression_data['high'] + (kNeighboursValue_reg*regression_data['high']/100)) - (regression_data['low'] + (kNeighboursValue_reg_other*regression_data['low']/100))
+        regression_data['forecast_kNeighboursValue_reg'] = (regression_data['forecast_kNeighboursValue_reg'])*100/regression_data['close']
+    
+    if((mlpValue_reg > -1 and mlpValue_reg_other > -1)
+        or (mlpValue_reg < 1 and mlpValue_reg_other < 1)
+        ):    
+        regression_data['forecast_mlpValue_reg'] = (regression_data['high'] + (mlpValue_reg*regression_data['high']/100)) - (regression_data['low'] + (mlpValue_reg_other*regression_data['low']/100))
+        regression_data['forecast_mlpValue_reg'] = (regression_data['forecast_mlpValue_reg'])*100/regression_data['close']
+    
+    if((kNeighboursValue_cla > -1 and kNeighboursValue_cla_other > -1)
+        or (kNeighboursValue_cla < 1 and kNeighboursValue_cla_other < 1)
+        ):    
+        regression_data['forecast_kNeighboursValue_cla'] = (regression_data['high'] + (kNeighboursValue_cla*regression_data['high']/100)) - (regression_data['low'] + (kNeighboursValue_cla_other*regression_data['low']/100))
+        regression_data['forecast_kNeighboursValue_cla'] = (regression_data['forecast_kNeighboursValue_cla'])*100/regression_data['close']
+    
+    if((mlpValue_cla > -1 and mlpValue_cla_other > -1)
+        or (mlpValue_cla < 1 and mlpValue_cla_other < 1)
+        ):    
+        regression_data['forecast_mlpValue_cla'] = (regression_data['high'] + (mlpValue_cla*regression_data['high']/100)) - (regression_data['low'] + (mlpValue_cla_other*regression_data['low']/100))
+        regression_data['forecast_mlpValue_cla'] = (regression_data['forecast_mlpValue_cla'])*100/regression_data['close']
     
     regression_data['filter'] = " "
     regression_data['filter1'] = " "
@@ -3838,12 +3862,42 @@ def high_volatility(regression_data, regressionResult, buy=True):
         and regression_data['PCT_day_change'] < -3 and regression_data['PCT_change'] < -3
         and buy == True
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:4-(GLOBAL-DOWN-Continue-LT(-2.0))%%maySellWeek2HighWeekHighGT20')
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:4-(GLOBAL-DOWN-Continue-LT(-2.0))%%maySellWeek2HighWeekHighGT10')
     elif(regression_data['week2HighChange'] < -10 and regression_data['weekHighChange'] < 5
         and regression_data['PCT_day_change'] > 3 and regression_data['PCT_change'] > 3
         and buy == False
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:4-(GLOBAL-UP-Continue-GT(2.0))%%mayBuyWeek2LowWeekLowLT-20')
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:4-(GLOBAL-UP-Continue-GT(2.0))%%mayBuyWeek2LowWeekLowLT-10')
+    elif(regression_data['week2LowChange'] > 5 and regression_data['weekLowChange'] > 0
+        and regression_data['PCT_day_change'] < -3 and regression_data['PCT_change'] < -3
+        and buy == True
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:5-(GLOBAL-DOWN-Continue-LT(-2.0))%%maySellWeek2HighWeekHighGT5')
+    elif(regression_data['week2HighChange'] < -5 and regression_data['weekHighChange'] < 0
+        and regression_data['PCT_day_change'] > 3 and regression_data['PCT_change'] > 3
+        and buy == False
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:5-(GLOBAL-UP-Continue-GT(2.0))%%mayBuyWeek2LowWeekLowLT-5')
+    elif(regression_data['week2LowChange'] > 5 and regression_data['weekLowChange'] > 0
+        and regression_data['PCT_day_change'] < -3 and regression_data['PCT_change'] < -3
+        and buy == True
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:5-(GLOBAL-DOWN-Continue-LT(-2.0))%%maySellWeek2HighWeekHighGT5')
+    elif(regression_data['week2HighChange'] < -5 and regression_data['weekHighChange'] < 0
+        and regression_data['PCT_day_change'] > 3 and regression_data['PCT_change'] > 3
+        and buy == False
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:5-(GLOBAL-UP-Continue-GT(2.0))%%mayBuyWeek2LowWeekLowLT-5')
+    elif(regression_data['week2LowChange'] > 0 and regression_data['weekLowChange'] > 0
+        and regression_data['PCT_day_change'] < -2 and regression_data['PCT_change'] < -2
+        and buy == True
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:6-(GLOBAL-DOWN-Continue-LT(-2.0))%%maySellWeek2HighWeekHighGT0')
+    elif(regression_data['week2HighChange'] < 0 and regression_data['weekHighChange'] < 0
+        and regression_data['PCT_day_change'] > 2 and regression_data['PCT_change'] > 2
+        and buy == False
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:6-(GLOBAL-UP-Continue-GT(2.0))%%mayBuyWeek2LowWeekLowLT0')
     elif(
         regression_data['forecast_day_PCT7_change'] < 0
         and regression_data['forecast_day_PCT10_change'] < 0
