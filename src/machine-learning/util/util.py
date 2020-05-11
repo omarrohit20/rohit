@@ -2933,13 +2933,15 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
     return False
 
 def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
-    if(2.9 < regression_data['PCT_day_change'] < 4.1 and 1 < regression_data['PCT_change'] < 4.5
-        and (regression_data['PCT_day_change_pre1'] < 0
-             or regression_data['PCT_day_change_pre2'] < 0
-             or regression_data['PCT_day_change_pre3'] < 0
-             )
-        and high_tail_pct(regression_data) < 1.29
-        and low_tail_pct(regression_data) < 2.5
+    if(2 < low_tail_pct_pre1(regression_data) < 6
+        and 2.9 < regression_data['PCT_day_change'] < 4.1
+        and abs(regression_data['PCT_day_change_pre1']) < 1.5
+        and regression_data['PCT_day_change_pre2'] < -1
+        and abs(regression_data['PCT_day_change_pre2']) > abs(regression_data['PCT_day_change_pre1'])
+        #and regression_data['high'] >= regression_data['bar_high_pre2']
+        #and abs(regression_data['month6HighChange']) < abs(regression_data['month6LowChange'])
+        and low_tail_pct(regression_data) < 1.5
+        and high_tail_pct(regression_data) < 1.5
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighUptrend')
     elif(2.9 < regression_data['PCT_day_change'] < 4.1
@@ -2949,6 +2951,7 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
              )
         and high_tail_pct(regression_data) < 2.5
         and low_tail_pct(regression_data) < 2.5
+        and low_tail_pct_pre1(regression_data) < 2.5
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HEAVYUPTRENDMARKET:HighUptrend-(NOT-GLOBAL-DOWN)')
         
@@ -3930,7 +3933,18 @@ def buy_af_low_tail(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, '%%AF-Risky:(GLOBAL-UP)buyHighUpperTail-Reversal-LastDayMarketDown')
         elif(3.5 < high_tail_pct(regression_data) < 6):
             add_in_csv(regression_data, regressionResult, ws, '%%AF-Last2DayMarketDown:(GLOBAL-UP)buyHighUpperTail-Reversal-LastDayMarketDown')
-    
+    elif(2 < low_tail_pct_pre1(regression_data) < 6
+        and 2.9 < regression_data['PCT_day_change'] < 4.1
+        and abs(regression_data['PCT_day_change_pre1']) < 1.5
+        and regression_data['PCT_day_change_pre2'] < -1
+        and abs(regression_data['PCT_day_change_pre2']) > abs(regression_data['PCT_day_change_pre1'])
+        #and regression_data['high'] >= regression_data['bar_high_pre2']
+        #and abs(regression_data['month6HighChange']) < abs(regression_data['month6LowChange'])
+        and low_tail_pct(regression_data) < 1.5
+        and high_tail_pct(regression_data) < 1.5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '%%AF-Last2DayMarketUp:(GLOBAL-DOWN)sellHighLowerTailPre1-Reversal-LastDayMarketUp')
+ 
 def buy_af_up_continued(regression_data, regressionResult, reg, ws):
     if(high_tail_pct(regression_data) < 1.1 and low_tail_pct(regression_data) < 2
         and (regression_data['monthLowChange'] < 5 
@@ -7083,7 +7097,18 @@ def sell_all_common(regression_data, regressionResult, reg, ws):
     return False
 
 def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
-    if(-2.9 > regression_data['PCT_day_change'] > -4.1 and -1 > regression_data['PCT_change'] > -4.5
+    if(2 < high_tail_pct_pre1(regression_data) < 6
+        and -2.9 > regression_data['PCT_day_change'] > -4.1
+        and abs(regression_data['PCT_day_change_pre1']) < 1.5
+        and regression_data['PCT_day_change_pre2'] > 1
+        and abs(regression_data['PCT_day_change_pre2']) > abs(regression_data['PCT_day_change_pre1'])
+        #and regression_data['low'] >= regression_data['bar_low_pre2']
+        #and abs(regression_data['month6HighChange']) > abs(regression_data['month6LowChange'])
+        and low_tail_pct(regression_data) < 1.5
+        and high_tail_pct(regression_data) < 1.5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None)
+    elif(-2.9 > regression_data['PCT_day_change'] > -4.1 and -1 > regression_data['PCT_change'] > -4.5
         and (regression_data['PCT_day_change_pre1'] > 0
              or regression_data['PCT_day_change_pre2'] > 0
              or regression_data['PCT_day_change_pre3'] > 0
@@ -7928,7 +7953,18 @@ def sell_af_high_tail(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, '%%AF-Risky:(GLOBAL-DOWN)sellHighLowerTail-Reversal-LastDayMarketUp')
         elif(3.5 < low_tail_pct(regression_data) < 6):
             add_in_csv(regression_data, regressionResult, ws, '%%AF-Last2DayMarketUp:(GLOBAL-DOWN)sellHighLowerTail-Reversal-LastDayMarketUp')
-                      
+    elif(2 < high_tail_pct_pre1(regression_data) < 6
+        and -2.9 > regression_data['PCT_day_change'] > -4.1
+        and abs(regression_data['PCT_day_change_pre1']) < 1.5
+        and regression_data['PCT_day_change_pre2'] > 1
+        and abs(regression_data['PCT_day_change_pre2']) > abs(regression_data['PCT_day_change_pre1'])
+        #and regression_data['low'] >= regression_data['bar_low_pre2']
+        #and abs(regression_data['month6HighChange']) > abs(regression_data['month6LowChange'])
+        and low_tail_pct(regression_data) < 1.5
+        and high_tail_pct(regression_data) < 1.5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '%%AF-Last2DayMarketDown:(GLOBAL-UP)buyHighUpperTailPre1-Reversal-LastDayMarketDown')
+                             
 def sell_af_down_continued(regression_data, regressionResult, reg, ws):
     if(high_tail_pct(regression_data) < 2 and low_tail_pct(regression_data) < 1.1
         and (regression_data['monthHighChange'] > -5
@@ -10743,81 +10779,44 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     if(flag):
         superflag = True 
         
-    
-    pct_filter_345_avg = ((regression_data['filter_345_avg'] - regression_data['PCT_day_change'])*100)/abs(regression_data['PCT_day_change'])
-    pct_filter_avg = ((regression_data['filter_avg'] - regression_data['PCT_day_change'])*100)/abs(regression_data['PCT_day_change'])
-    pct_filter_pct_change_avg = ((regression_data['filter_pct_change_avg'] - regression_data['PCT_day_change'])*100)/abs(regression_data['PCT_day_change'])
-    pct_filter_all_avg = ((regression_data['filter_all_avg'] - regression_data['PCT_day_change'])*100)/abs(regression_data['PCT_day_change'])
-    if(regression_data['PCT_day_change'] < 0
-       and ((pct_filter_345_avg < 10 and regression_data['filter_345_pct'] < -60)
-        or (pct_filter_avg < 10 and regression_data['filter_pct'] < -60)
-        or (pct_filter_pct_change_avg < 10 and regression_data['filter_pct_change_pct'] < -60)
-        or (pct_filter_all_avg < 10 and regression_data['filter_all_pct'] < -60)
-        )
-       and filter_avg_lt_minus_1_count(regression_data) >=2
-       and "MLBuy" not in regression_data['filter']
-       #and 'RISKYBASELINESELL' not in regression_data['filter1']
-       #and 'RISKY-DOWNTREND-SELL' not in regression_data['filter1']
-       ):
-       add_in_csv(regression_data, regressionResult, ws, None, None, 'Sell-SUPER')   
-    elif(regression_data['PCT_day_change'] > 0
-       and ((pct_filter_345_avg > -10 and regression_data['filter_345_pct'] > 60)
-        or (pct_filter_avg > -10 and regression_data['filter_pct'] > 60)
-        or (pct_filter_pct_change_avg > -10 and regression_data['filter_pct_change_pct'] > 60)
-        or (pct_filter_pct_change_avg > -10 and regression_data['filter_all_pct'] > 60)
-        )
-       and filter_avg_gt_1_count(regression_data) >= 2
-       and "MLSell" not in regression_data['filter']
-       #and 'RISKYBASELINEBUY' not in regression_data['filter1']
-       #and 'RISKY-UPTREND-BUY' not in regression_data['filter1']
-       ):
-       add_in_csv(regression_data, regressionResult, ws, None, None, 'Buy-SUPER')
-       
-    elif(
-#        regression_data['filter_345_avg'] < -0.75
-#        and regression_data['filter_all_avg'] < -0.75
-#        and regression_data['filter_avg'] < -0.75
-#        and ((regression_data['filter_345_avg'] < -2
-#         or regression_data['filter_avg'] < -2
-#         or regression_data['filter_pct_change_avg'] < -2
-#         or regression_data['filter_all_avg'] < -2 
-#         )
-#         or
-#         ((regression_data['filter_345_avg'] < -1 and regression_data['filter_345_count'] >= 5)
-#         or (regression_data['filter_avg'] < -1 and regression_data['filter_count'] >= 5)
-#         or (regression_data['filter_pct_change_avg'] < -1 and regression_data['filter_pct_change_count'] >= 5)
-#         or (regression_data['filter_all_avg'] < -1 and regression_data['filter_all_count'] >= 5)
-#         )
-#         )
-       filter_avg_lt_minus_1_count(regression_data) >= 2
-       and 'RISKYBASELINESELL' not in regression_data['filter5']
-       #and 'RISKY-DOWNTREND-SELL' not in regression_data['filter5']
-       #and "MLBuy" not in regression_data['filter']
-       ):
-       add_in_csv(regression_data, regressionResult, ws, None, None, 'Sell-SUPER-Risky')  
-    elif(
-#        regression_data['filter_345_avg'] > 0.75
-#        and regression_data['filter_all_avg'] > 0.75
-#        and regression_data['filter_avg'] > 0.75
-#        and ((regression_data['filter_345_avg'] > 2
-#         or regression_data['filter_avg'] > 2
-#         or regression_data['filter_pct_change_avg'] > 2
-#         or regression_data['filter_all_avg'] > 2
-#         )
-#         or
-#         ((regression_data['filter_345_avg'] > 1 and regression_data['filter_345_count'] >= 5)
-#         or (regression_data['filter_avg'] > 1 and regression_data['filter_count'] >= 5)
-#         or (regression_data['filter_pct_change_avg'] > 1 and regression_data['filter_pct_change_count'] >= 5)
-#         or (regression_data['filter_all_avg'] > 1 and regression_data['filter_all_count'] >= 5)
-#         )
-#         )
-       filter_avg_gt_1_count(regression_data) >= 2
-       and 'RISKYBASELINEBUY' not in regression_data['filter5']
-       #and 'RISKY-UPTREND-BUY' not in regression_data['filter5']
-       #and "MLSell" not in regression_data['filter']
-       ):
-       add_in_csv(regression_data, regressionResult, ws, None, None, 'Buy-SUPER-risky')
-       
+    pct_filter_345_avg = 0
+    pct_filter_avg = 0
+    pct_filter_pct_change_avg = 0
+    pct_filter_all_avg = 0
+    if(regression_data['PCT_day_change'] != 0):
+        pct_filter_345_avg = ((regression_data['filter_345_avg'] - regression_data['PCT_day_change'])*100)/abs(regression_data['PCT_day_change'])
+        pct_filter_avg = ((regression_data['filter_avg'] - regression_data['PCT_day_change'])*100)/abs(regression_data['PCT_day_change'])
+        pct_filter_pct_change_avg = ((regression_data['filter_pct_change_avg'] - regression_data['PCT_day_change'])*100)/abs(regression_data['PCT_day_change'])
+        pct_filter_all_avg = ((regression_data['filter_all_avg'] - regression_data['PCT_day_change'])*100)/abs(regression_data['PCT_day_change'])
+
+    if(filter_avg_lt_minus_1_count(regression_data) >= 2
+        and 'RISKYBASELINESELL' not in regression_data['filter5']
+        ):
+        if(regression_data['PCT_day_change'] < 0
+            and ((pct_filter_345_avg < 10 and regression_data['filter_345_pct'] < -60)
+                or (pct_filter_avg < 10 and regression_data['filter_pct'] < -60)
+                or (pct_filter_pct_change_avg < 10 and regression_data['filter_pct_change_pct'] < -60)
+                or (pct_filter_all_avg < 10 and regression_data['filter_all_pct'] < -60)
+            )
+            and "MLBuy" not in regression_data['filter']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'Sell-SUPER') 
+        else:
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'Sell-SUPER-Risky')  
+    elif(filter_avg_gt_1_count(regression_data) >= 2
+        and 'RISKYBASELINEBUY' not in regression_data['filter5']
+        ):
+        if(regression_data['PCT_day_change'] > 0
+            and ((pct_filter_345_avg > -10 and regression_data['filter_345_pct'] > 60)
+                or (pct_filter_avg > -10 and regression_data['filter_pct'] > 60)
+                or (pct_filter_pct_change_avg > -10 and regression_data['filter_pct_change_pct'] > 60)
+                or (pct_filter_pct_change_avg > -10 and regression_data['filter_all_pct'] > 60)
+            )
+            and "MLSell" not in regression_data['filter']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'Buy-SUPER')
+        else:
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'Buy-SUPER-risky')
     elif(filter_avg_lt_minus_point9_count(regression_data) >= 2
        and 'RISKYBASELINESELL' not in regression_data['filter5']
       ):
