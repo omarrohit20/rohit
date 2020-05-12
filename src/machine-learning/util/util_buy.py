@@ -728,14 +728,14 @@ def buy_af_low_tail(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, '%%AF-Risky9:30:maySellTail-tailGT2-7,10thDayGT15')
         else:
             add_in_csv(regression_data, regressionResult, ws, None) 
-    elif(-3 < regression_data['PCT_day_change'] < 0 and -3 < regression_data['PCT_day_change'] < 1
-        and 1.3 < low_tail_pct(regression_data) < 2
-        and high_tail_pct(regression_data) < 5
-        ):
-        if(high_tail_pct(regression_data) < low_tail_pct(regression_data)):
-            add_in_csv(regression_data, regressionResult, ws, None)
-        else:
-            add_in_csv(regression_data, regressionResult, ws, None)
+#     elif(-3 < regression_data['PCT_day_change'] < 0 and -3 < regression_data['PCT_day_change'] < 1
+#         and 1.3 < low_tail_pct(regression_data) < 2
+#         and high_tail_pct(regression_data) < 5
+#         ):
+#         if(high_tail_pct(regression_data) < low_tail_pct(regression_data)):
+#             add_in_csv(regression_data, regressionResult, ws, None)
+#         else:
+#             add_in_csv(regression_data, regressionResult, ws, None)
     elif(low_tail_pct(regression_data) <= 2 and 3 <= high_tail_pct(regression_data) <= 5
         and -5 < regression_data['PCT_day_change'] < 5 and -5 < regression_data['PCT_change'] < 5
         and regression_data['forecast_day_PCT3_change'] > 0
