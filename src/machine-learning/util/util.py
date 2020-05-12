@@ -37,28 +37,23 @@ filtertechallpctchangebuy = patterns_to_dict('../../data-import/nselist/filter-t
 
 def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):        
     if(is_algo_buy(regression_data)):    
-        if(-15 < regression_data['PCT_day_change'] < -4.5 and -15 < regression_data['PCT_change'] < -4.5):
+        if(-15 < regression_data['PCT_day_change'] < -3.5 and -15 < regression_data['PCT_change'] < -3.5):
             add_in_csv(regression_data, regressionResult, ws, 'AF:mlBuyPCTDayChangeLT-4.5')
         elif(regression_data['week2HighChange'] < -20 and regression_data['weekHighChange'] < -10
             and 10 > regression_data['PCT_day_change']
             ):
             add_in_csv(regression_data, regressionResult, ws, 'AF:0-mlBuyWeek2HighLT-20')
-        elif(regression_data['week2HighChange'] < -10 and regression_data['weekHighChange'] < -5
-            and 4 > regression_data['PCT_day_change']
+        elif(regression_data['week2HighChange'] < -10 and regression_data['weekHighChange'] < -10
+            and (regression_data['week2HighChange'] < -15 or regression_data['weekHighChange'] < -15)
+            and 4 > regression_data['PCT_day_change'] > 0
             and is_sell_from_filter_all_filter_LTMinus2(regression_data) == False
             ):
             add_in_csv(regression_data, regressionResult, ws, 'AF:1-mlBuyWeek2HighLT-10')
         elif(regression_data['week2HighChange'] < -5 and regression_data['weekHighChange'] < -10
-            and 5 > regression_data['PCT_day_change']
+            and 5 > regression_data['PCT_day_change'] > 2
             and is_sell_from_filter_all_filter_LTMinus2(regression_data) == False
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'AF:1-mlBuyWeekHighLT-10')
-#         elif(regression_data['week2HighChange'] < -5 and regression_data['weekHighChange'] < 0
-#             and 4 > regression_data['PCT_day_change'] > -1 
-#             and is_sell_from_filter_all_filter_LTMinus2(regression_data) == False
-#             ):
-#             add_in_csv(regression_data, regressionResult, ws, 'AF:3-mlBuyWeek2HighLT-5')
-    
+            add_in_csv(regression_data, regressionResult, ws, 'AF:1-mlBuyWeekHighLT-10')    
     return False
 
 def buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws):
@@ -661,22 +656,22 @@ def buy_filter_all_accuracy(regression_data, regressionResult):
     buy_filter_tech_all_accuracy(regression_data, regressionResult)
     buy_filter_tech_all_pct_change_accuracy(regression_data, regressionResult)
                            
-
 def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):           
     if(is_algo_sell(regression_data)):
-        if(4.5 < regression_data['PCT_day_change'] < 15 and 4.5 < regression_data['PCT_change'] < 15):
+        if(3.5 < regression_data['PCT_day_change'] < 15 and 3.5 < regression_data['PCT_change'] < 15):
             add_in_csv(regression_data, regressionResult, ws, 'AF:mlSellPCTDayChangeGT4.5')
         elif(regression_data['week2LowChange'] > 20 and regression_data['weekLowChange'] > 10
-            and -10 < regression_data['PCT_day_change']
+            and -10 < regression_data['PCT_day_change'] < 0
             ):
             add_in_csv(regression_data, regressionResult, ws, 'AF:0-mlSellWeek2LowGT20')
-        elif(regression_data['week2LowChange'] > 10 and regression_data['weekLowChange'] > 5
-            and -4 < regression_data['PCT_day_change']
+        elif(regression_data['week2LowChange'] > 10 and regression_data['weekLowChange'] > 10
+            and (regression_data['week2LowChange'] > 15 or regression_data['weekLowChange'] > 15) 
+            and -4 < regression_data['PCT_day_change'] < -1
             and is_buy_from_filter_all_filter_GT2(regression_data) == False
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'AF:1-mlSellWeek2LowGT10')
+            add_in_csv(regression_data, regressionResult, ws, 'AF:1-mlSellWeek2LowOrWeekLowGT15')
         elif(regression_data['week2LowChange'] > 5 and regression_data['weekLowChange'] > 10
-            and -5 < regression_data['PCT_day_change']
+            and -5 < regression_data['PCT_day_change'] < -2
             and is_buy_from_filter_all_filter_GT2(regression_data) == False
             ):
             add_in_csv(regression_data, regressionResult, ws, 'AF:1-mlSellWeekLowGT10')
