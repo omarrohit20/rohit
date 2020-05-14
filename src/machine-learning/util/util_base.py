@@ -1520,12 +1520,9 @@ def tail_change_filter(regression_data, regressionResult, save):
     
     if(high_tail_pct(regression_data) > 3.0):
         filterTail = filterTail + 'HTGT3.0,'
-        if(high_tail_pct(regression_data) > abs(regression_data['PCT_day_change'])):
-            filterTail = filterTail + ',HTGTPCTDayChange'
     elif(high_tail_pct(regression_data) > 1.3):
         filterTail = filterTail + 'HTGT1.3'
-        if(high_tail_pct(regression_data) > abs(regression_data['PCT_day_change'])):
-            filterTail = filterTail + ',HTGTPCTDayChange'
+        
 #     elif(high_tail_pct(regression_data) > 2.5):
 #         filterTail = filterTail + 'HTGT2.5'
 #     elif(high_tail_pct(regression_data) > 1.5):
@@ -1536,19 +1533,20 @@ def tail_change_filter(regression_data, regressionResult, save):
     
     if(low_tail_pct(regression_data) > 3.0):
         filterTail = filterTail + 'LTGT3.0'
-        if(low_tail_pct(regression_data) > abs(regression_data['PCT_day_change'])):
-            filterTail = filterTail + ',LTGTPCTDayChange'
     if(low_tail_pct(regression_data) > 1.3):
         filterTail = filterTail + 'LTGT1.3'
-        if(low_tail_pct(regression_data) > abs(regression_data['PCT_day_change'])):
-            filterTail = filterTail + ',LTGTPCTDayChange'
 #     elif(low_tail_pct(regression_data) > 2.5):
 #         filterTail = filterTail + 'LTGT2.5'
 #     elif(low_tail_pct(regression_data) > 1.5):
 #         filterTail = filterTail + 'LTGT1.5'
 #     elif(low_tail_pct(regression_data) < 1):
 #         filterTail = filterTail + 'LTLT1'
-        
+    
+    if(high_tail_pct(regression_data) > abs(regression_data['PCT_day_change']) and abs(regression_data['PCT_day_change']) > 1):
+            filterTail = filterTail + 'HTGTPCTDayChange'    
+    if(low_tail_pct(regression_data) > abs(regression_data['PCT_day_change']) and abs(regression_data['PCT_day_change']) > 1):
+            filterTail = filterTail + 'LTGTPCTDayChange'
+            
     if(save):
         add_in_csv(regression_data, regressionResult, None, filterTail)
     else:
