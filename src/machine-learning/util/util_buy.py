@@ -780,7 +780,12 @@ def buy_af_low_tail(regression_data, regressionResult, reg, ws):
         if(regression_data['PCT_day_change'] > 1 and regression_data['PCT_change'] > 1
             and regression_data['PCT_day_change'] < high_tail_pct(regression_data)
             ):
-            add_in_csv(regression_data, regressionResult, ws, '%%AF:buyHighUpperTail-Reversal-LastDayMarketDown')
+            if(regression_data['forecast_day_PCT7_change'] < 0 or regression_data['forecast_day_PCT10_change'] < 0
+                #or (is_algo_buy(regression_data) and regression_data['PCT_day_change'] < 4 and abs(regression_data['PCT_day_change']) < low_tail_pct(regression_data))
+                ):
+                add_in_csv(regression_data, regressionResult, ws, '%%AF:buyHighUpperTail-Reversal-LastDayMarketDown')
+            else:
+                add_in_csv(regression_data, regressionResult, ws, None)
         elif((regression_data['forecast_day_PCT7_change'] < 5 and regression_data['forecast_day_PCT10_change'] < 5
             and (regression_data['forecast_day_PCT7_change'] < 0 or regression_data['forecast_day_PCT10_change'] < 0))
             or regression_data['forecast_day_PCT10_change'] < 0
@@ -788,12 +793,15 @@ def buy_af_low_tail(regression_data, regressionResult, reg, ws):
             if(regression_data['forecast_day_PCT_change'] > 0
                 and regression_data['forecast_day_PCT2_change'] > 0
                 and regression_data['forecast_day_PCT3_change'] > 0
-                #and is_algo_sell(regression) 
+                #and is_algo_sell(regression_data) 
+                and regression_data['forecast_day_PCT7_change'] < 0
+                and regression_data['forecast_day_PCT10_change'] < 0
+                and is_algo_buy(regression_data) == False
                 ):
                 add_in_csv(regression_data, regressionResult, ws, '%%AF:(Not-GLOBAL-UP)maySellTail-tailGT2')
             elif(regression_data['forecast_day_PCT7_change'] < 0 and regression_data['forecast_day_PCT10_change'] < 0):
                 add_in_csv(regression_data, regressionResult, ws, '%%AF:(GLOBAL-UP)buyHighUpperTail-Reversal-LastDayMarketDown')
-            elif(is_algo_buy(regression_data, True)):
+            elif(is_algo_sell(regression_data) == False):
                 add_in_csv(regression_data, regressionResult, ws, '%%AF:(GLOBAL-UP)buyHighUpperTail-Reversal-LastDayMarketDown')
         elif(regression_data['PCT_day_change'] < 1
             and is_algo_buy(regression_data)
