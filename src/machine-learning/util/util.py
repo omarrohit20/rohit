@@ -132,6 +132,13 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HEAVYUPTRENDMARKET:HighUptrend-(NOT-GLOBAL-DOWN)')
         
+    if((regression_data['forecast_day_PCT7_change'] > 15 or regression_data['forecast_day_PCT5_change'] > 15)
+        and low_tail_pct(regression_data) < 2.5
+        and high_tail_pct(regression_data) < 2.5
+        and ('set1' in regression_data['filter'] or 'set2' in regression_data['filter'])
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighSuperUpTrend')
+        
     if((0.3 < regression_data['PCT_day_change'] < 2) and (0.3 < regression_data['PCT_change'] < 2)
         and (1 <= high_tail_pct(regression_data) < 2)
         ):
@@ -767,7 +774,13 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HEAVYDOWNTRENDMARKET:HighDowntrend-(NOT-GLOBAL-UP)')
     
-    
+    if((regression_data['forecast_day_PCT7_change'] < -15 or regression_data['forecast_day_PCT5_change'] < -15)
+        and low_tail_pct(regression_data) < 2.5
+        and high_tail_pct(regression_data) < 2.5
+        and ('set1' in regression_data['filter'] or 'set2' in regression_data['filter'])
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighSuperDownTrend')
+        
     if((-2 < regression_data['PCT_day_change'] < -0.3) and (-2 < regression_data['PCT_change'] < -0.3)
         and (1 <= low_tail_pct(regression_data) < 2)
         ):
