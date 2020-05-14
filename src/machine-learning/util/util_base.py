@@ -19,7 +19,7 @@ BUY_VERY_LESS_DATA=True
 SELL_VERY_LESS_DATA=True
 MARKET_IN_UPTREND=False
 MARKET_IN_DOWNTREND=False
-TEST = False
+TEST = True
 
 buyMLP = 0.1
 buyMLP_MIN = 0
@@ -1519,9 +1519,9 @@ def tail_change_filter(regression_data, regressionResult, save):
     filterTail = ''
     
     if(high_tail_pct(regression_data) > 3.0):
-        filterTail = filterTail + 'HTGT3.0,'
+        filterTail = filterTail + '_HTGT3.0_'
     elif(high_tail_pct(regression_data) > 1.3):
-        filterTail = filterTail + 'HTGT1.3'
+        filterTail = filterTail + '_HTGT1.3_'
         
 #     elif(high_tail_pct(regression_data) > 2.5):
 #         filterTail = filterTail + 'HTGT2.5'
@@ -1532,9 +1532,9 @@ def tail_change_filter(regression_data, regressionResult, save):
         
     
     if(low_tail_pct(regression_data) > 3.0):
-        filterTail = filterTail + 'LTGT3.0'
-    if(low_tail_pct(regression_data) > 1.3):
-        filterTail = filterTail + 'LTGT1.3'
+        filterTail = filterTail + '_LTGT3.0_'
+    elif(low_tail_pct(regression_data) > 1.3):
+        filterTail = filterTail + '_LTGT1.3_'
 #     elif(low_tail_pct(regression_data) > 2.5):
 #         filterTail = filterTail + 'LTGT2.5'
 #     elif(low_tail_pct(regression_data) > 1.5):
@@ -1542,10 +1542,13 @@ def tail_change_filter(regression_data, regressionResult, save):
 #     elif(low_tail_pct(regression_data) < 1):
 #         filterTail = filterTail + 'LTLT1'
     
-    if(high_tail_pct(regression_data) > abs(regression_data['PCT_day_change']) and abs(regression_data['PCT_day_change']) > 1):
-            filterTail = filterTail + 'HTGTPCTDayChange'    
-    if(low_tail_pct(regression_data) > abs(regression_data['PCT_day_change']) and abs(regression_data['PCT_day_change']) > 1):
-            filterTail = filterTail + 'LTGTPCTDayChange'
+    if(abs(regression_data['PCT_day_change']) > 1
+        and (high_tail_pct(regression_data) > 1.5 or high_tail_pct(regression_data) > 1.5)
+        ):
+        if(high_tail_pct(regression_data) > abs(regression_data['PCT_day_change'])):
+            filterTail = filterTail + '_HTGTPCTDayChange_'    
+        if(low_tail_pct(regression_data) > abs(regression_data['PCT_day_change'])):
+            filterTail = filterTail + '_LTGTPCTDayChange_'
             
     if(save):
         add_in_csv(regression_data, regressionResult, None, filterTail)
