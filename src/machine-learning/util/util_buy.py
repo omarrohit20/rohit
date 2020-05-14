@@ -2591,7 +2591,7 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
             and regression_data['forecast_day_PCT5_change'] > 5
             and regression_data['forecast_day_PCT10_change'] < regression_data['forecast_day_PCT5_change']
             and regression_data['forecast_day_PCT10_change'] < regression_data['forecast_day_PCT7_change']
-            and -0.75 < regression_data['PCT_day_change_pre1'] < 2.5
+            and -0.75 < regression_data['PCT_day_change_pre1'] < 5
             and -0.75 < regression_data['PCT_day_change'] < 0.5
             and regression_data['yearHighChange'] < -5
             and regression_data['yearLowChange'] > 15
@@ -2670,7 +2670,7 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
                     add_in_csv(regression_data, regressionResult, ws, 'buySuperTrend-1')
         elif(0 < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change']
             and regression_data['forecast_day_PCT5_change'] > 5
-            and -0.75 < regression_data['PCT_day_change_pre1'] < 2.5
+            and -0.75 < regression_data['PCT_day_change_pre1'] < 5
             and -0.75 < regression_data['PCT_day_change'] < 0.5
             and regression_data['yearHighChange'] < -5
             and regression_data['yearLowChange'] > 15

@@ -2408,13 +2408,14 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         ):
         if(0 > regression_data['forecast_day_PCT2_change'] > regression_data['forecast_day_PCT3_change'] > regression_data['forecast_day_PCT4_change'] > regression_data['forecast_day_PCT5_change']
             and regression_data['forecast_day_PCT5_change'] < -5
-            and -1.5 < regression_data['PCT_day_change_pre1'] < 0.5
+            and -5 < regression_data['PCT_day_change_pre1'] < 0.5
             and -0.5 < regression_data['PCT_day_change'] < 0.5
-            and regression_data['yearHighChange'] < -5
+            and regression_data['yearHighChange'] < -15
             and regression_data['yearLowChange'] > 5
-            and regression_data['month3LowChange'] > 5
+            and regression_data['month3HighChange'] < -10
             #and regression_data['high'] < regression_data['high_pre1']
             ):
+            add_in_csv(regression_data, regressionResult, ws, 'set1')
             if(regression_data['PCT_day_change_pre1'] < 0
                 and -0.75 < regression_data['PCT_day_change'] < 0):
                 add_in_csv(regression_data, regressionResult, ws, '--')
