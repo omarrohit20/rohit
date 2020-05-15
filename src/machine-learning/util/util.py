@@ -138,7 +138,14 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and low_tail_pct(regression_data) < 2.5
         and high_tail_pct(regression_data) < 2.5
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighSuperUpTrend')
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighSuperUpTrend') 
+    elif((('MayBuy-CheckChart' in regression_data['filter1']) or ('MayBuyCheckChart' in regression_data['filter1']))
+        and (-1 < regression_data['PCT_day_change'] < 1) and (-1 < regression_data['PCT_change'] < 1)
+        and high_tail_pct(regression_data) < 2
+        and 1.5 < low_tail_pct(regression_data) < 3
+        and low_tail_pct(regression_data) > high_tail_pct(regression_data)
+        ): 
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MayBuyLowTail-LastDayMarketDown')   
         
     if((0.3 < regression_data['PCT_day_change'] < 2) and (0.3 < regression_data['PCT_change'] < 2)
         and (1 <= high_tail_pct(regression_data) < 2)
@@ -782,6 +789,13 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and high_tail_pct(regression_data) < 2.5
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighSuperDownTrend')
+    elif((('MaySell-CheckChart' in regression_data['filter1']) or ('MaySellCheckChart' in regression_data['filter1']))
+        and (-1 < regression_data['PCT_day_change'] < 1) and (-1 < regression_data['PCT_change'] < 1)
+        and low_tail_pct(regression_data) < 2
+        and 1.5 < high_tail_pct(regression_data) < 3
+        and high_tail_pct(regression_data) > low_tail_pct(regression_data)
+        ): 
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:MaySellHighTail-LastDayMarketUp') 
         
     if((-2 < regression_data['PCT_day_change'] < -0.3) and (-2 < regression_data['PCT_change'] < -0.3)
         and (1 <= low_tail_pct(regression_data) < 2)
