@@ -712,6 +712,7 @@ def sell_af_high_tail(regression_data, regressionResult, reg, ws):
     elif(low_tail_pct(regression_data) < 2 and 1.5 < high_tail_pct(regression_data) < 2.1
         and (('MaySell-CheckChart' in regression_data['filter1']) or ('MaySellCheckChart' in regression_data['filter1']))
         and (-0.75 < regression_data['PCT_day_change'] < 0.75) and (-2.5 < regression_data['PCT_change'] < 2.5)
+        and (regression_data['PCT_day_change'] < 0 or regression_data['PCT_change_pre1'] < 0)
         and high_tail_pct(regression_data) > low_tail_pct(regression_data)
         ): 
         add_in_csv(regression_data, regressionResult, ws, '%%AF-LastDayUp:(GLOBAL-DOWN)MaySellHighTail-LastDayMarketUp')

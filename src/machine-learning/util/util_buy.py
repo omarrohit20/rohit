@@ -675,6 +675,7 @@ def buy_af_low_tail(regression_data, regressionResult, reg, ws):
     elif(high_tail_pct(regression_data) < 2 and 1.5 < low_tail_pct(regression_data) < 2.1
         and (('MayBuy-CheckChart' in regression_data['filter1']) or ('MayBuyCheckChart' in regression_data['filter1']))
         and (-0.75 < regression_data['PCT_day_change'] < 0.75) and (-2.5 < regression_data['PCT_change'] < 2.5)
+        and (regression_data['PCT_day_change'] > 0 or regression_data['PCT_change_pre1'] > 0)
         and low_tail_pct(regression_data) > high_tail_pct(regression_data)
         ): 
         add_in_csv(regression_data, regressionResult, ws, '%%AF-LastDayDown:(GLOBAL-UP)MayBuyLowTail-LastDayMarketDown')
