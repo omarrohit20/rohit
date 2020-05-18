@@ -1094,6 +1094,27 @@ def sell_af_others(regression_data, regressionResult, reg, ws):
     mlpValue_cla, kNeighboursValue_cla = get_reg_or_cla(regression_data, False)
     mlpValue_other_cla, kNeighboursValue_other_cla = get_reg_or_cla_other(regression_data, False)
     
+    if(-1 < regression_data['PCT_day_change'] < 0 and -1.5 < regression_data['PCT_change'] < 1.5
+        and (-5 < regression_data['PCT_day_change_pre1'] < -1 and -5 < regression_data['PCT_day_change_pre2'] < -1)
+        and (regression_data['PCT_day_change_pre1'] < -3 
+             or (regression_data['PCT_day_change_pre1'] < -2 and regression_data['PCT_day_change_pre2'] < -2)
+            )
+        and (regression_data['monthLowChange'] > 10 or regression_data['month3LowChange'] > 15)
+        and low_tail_pct(regression_data) <= 2.5 
+        and high_tail_pct(regression_data) <= 2.5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '%%AF:maySellStockInDowntrend') 
+    elif(-1 < regression_data['PCT_day_change'] < 0 and -1.5 < regression_data['PCT_change'] < 1.5
+        and -5 < regression_data['PCT_day_change_pre1'] < -2.5 
+        and 2.5 < regression_data['PCT_day_change_pre2'] < 5
+        and regression_data['low'] < regression_data['low_pre1']
+        and abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])
+        and abs(regression_data['week2HighChange']) < abs(regression_data['week2LowChange'])
+        and low_tail_pct(regression_data) <= 2.5 
+        and high_tail_pct(regression_data) <= 2.5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '%%AF:maySellStock-DowntrendStart')
+    
 #     if(len(regression_data['filter']) > 9
 #         and -4 < regression_data['PCT_day_change'] < -2
 #         and -4 < regression_data['PCT_change'] < -2
