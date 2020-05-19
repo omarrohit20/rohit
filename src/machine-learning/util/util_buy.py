@@ -571,6 +571,51 @@ def buy_high_volatility(regression_data, regressionResult):
         flag = True    
     return flag
 
+def buy_common_up_continued(regression_data, regressionResult, reg, ws):
+    if(high_tail_pct(regression_data) < 1.1 and low_tail_pct(regression_data) < 2
+        and regression_data['monthHighChange'] > 0 and regression_data['month3LowChange'] < 40
+        and (regression_data['month3LowChange'] > 10 or regression_data['month6LowChange'] > 15)
+        and (regression_data['forecast_day_PCT10_change'] < 15)
+        and (regression_data['forecast_day_PCT5_change'] < 10 or regression_data['forecast_day_PCT10_change'] < 10)
+        
+        and ((regression_data['PCT_day_change_pre1'] > 0
+                and (regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0)
+                and (regression_data['forecast_day_PCT5_change'] > 10 or regression_data['forecast_day_PCT7_change'] > 10 or regression_data['forecast_day_PCT10_change'] > 10)
+                )
+             or (regression_data['PCT_day_change_pre1'] > 0 
+                and regression_data['PCT_day_change_pre2'] < 0 
+                and (regression_data['forecast_day_PCT5_change'] < 5)
+                )
+             or ((regression_data['monthHighChange'] > 0 or regression_data['month3HighChange'] > 0)
+                and regression_data['yearHighChange'] > -10
+                )
+            )
+        and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0)
+        ):
+        if(2.5 < regression_data['PCT_day_change'] < 4.0 and 2.5 < regression_data['PCT_change'] < 5):
+            if(regression_data['monthLowChange'] < 5):
+                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:mayBuyUpContinueGT3')
+            elif(regression_data['forecast_day_PCT5_change'] < 10 
+                and regression_data['forecast_day_PCT10_change'] < 10
+                and regression_data['yearHighChange'] < -5
+                ):
+                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:mayBuyUpContinueGT3-Risky')
+        elif(2 < regression_data['PCT_day_change'] < 4 and 1 < regression_data['PCT_change'] < 5):
+            if(regression_data['monthLowChange'] < 5):
+                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:mayBuyUpContinueLT3')  
+            else:
+                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:mayBuyUpContinueLT3-Risky')
+                
+    elif(high_tail_pct(regression_data) < 2 and low_tail_pct(regression_data) < 2
+        and (regression_data['monthLowChange'] < 5 and regression_data['month3LowChange'] < 5 
+             and regression_data['month3HighChange'] < 0 and regression_data['month6HighChange'] < -5)
+        and (regression_data['forecast_day_PCT10_change'] < 15)
+        and (regression_data['forecast_day_PCT5_change'] < 10 or regression_data['forecast_day_PCT10_change'] < 10)  
+        and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0)
+        ):
+        if(3.5 < regression_data['PCT_day_change'] < 6.0 and 3.5 < regression_data['PCT_change'] < 7):
+                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:mayBuyUpContinueGT3AfterSomeDownCheckBase')
+
 def buy_af_high_indicators(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_cla, kNeighboursValue_cla = get_reg_or_cla(regression_data, False)
@@ -835,9 +880,7 @@ def buy_af_low_tail(regression_data, regressionResult, reg, ws):
  
 def buy_af_up_continued(regression_data, regressionResult, reg, ws):
     if(high_tail_pct(regression_data) < 1.1 and low_tail_pct(regression_data) < 2
-        and (regression_data['monthLowChange'] < 5 
-             or (regression_data['monthHighChange'] > 0 and regression_data['month3LowChange'] < 40)
-            )
+        and regression_data['monthLowChange'] < 5
         and (regression_data['month3LowChange'] > 10 or regression_data['month6LowChange'] > 15)
         and (regression_data['forecast_day_PCT10_change'] < 15)
         and (regression_data['forecast_day_PCT5_change'] < 10 or regression_data['forecast_day_PCT10_change'] < 10)
@@ -869,16 +912,6 @@ def buy_af_up_continued(regression_data, regressionResult, reg, ws):
                 add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyUpContinueLT3')  
             else:
                 add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyUpContinueLT3-Risky')
-                
-    elif(high_tail_pct(regression_data) < 2 and low_tail_pct(regression_data) < 2
-        and (regression_data['monthLowChange'] < 5 and regression_data['month3LowChange'] < 5 
-             and regression_data['month3HighChange'] < 0 and regression_data['month6HighChange'] < -5)
-        and (regression_data['forecast_day_PCT10_change'] < 15)
-        and (regression_data['forecast_day_PCT5_change'] < 10 or regression_data['forecast_day_PCT10_change'] < 10)  
-        and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0)
-        ):
-        if(3.5 < regression_data['PCT_day_change'] < 6.0 and 3.5 < regression_data['PCT_change'] < 7):
-                add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyUpContinueGT3AfterSomeDownCheckBase')
 
 def buy_af_oi_negative(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
