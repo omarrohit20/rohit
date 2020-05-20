@@ -756,6 +756,7 @@ def sell_af_high_tail(regression_data, regressionResult, reg, ws):
         and (('MaySell-CheckChart' in regression_data['filter1']) or ('MaySellCheckChart' in regression_data['filter1']))
         and (-0.75 < regression_data['PCT_day_change'] < 0.75) and (-2.5 < regression_data['PCT_change'] < 2.5)
         and (regression_data['PCT_day_change'] < 0 or regression_data['PCT_change_pre1'] < 0)
+        and (is_algo_sell(regression_data) or regression_data['PCT_change_pre2'] > 0 or regression_data['PCT_change_pre3'] > 0)
         and high_tail_pct(regression_data) > low_tail_pct(regression_data)
         ): 
         add_in_csv(regression_data, regressionResult, ws, '%%AF-LastDayUp:(GLOBAL-DOWN)MaySellHighTail-LastDayMarketUp')
@@ -1126,16 +1127,16 @@ def sell_af_others(regression_data, regressionResult, reg, ws):
     mlpValue_cla, kNeighboursValue_cla = get_reg_or_cla(regression_data, False)
     mlpValue_other_cla, kNeighboursValue_other_cla = get_reg_or_cla_other(regression_data, False)
     
-    if(-1 < regression_data['PCT_day_change'] < 0 and -1.5 < regression_data['PCT_change'] < 1.5
+    if(-1 < regression_data['PCT_day_change'] < 1 and -1.5 < regression_data['PCT_change'] < 1.5
         and (-5 < regression_data['PCT_day_change_pre1'] < -1 and -5 < regression_data['PCT_day_change_pre2'] < -1)
         and (regression_data['PCT_day_change_pre1'] < -3 
              or (regression_data['PCT_day_change_pre1'] < -2 and regression_data['PCT_day_change_pre2'] < -2)
             )
-        and (regression_data['monthLowChange'] > 10 or regression_data['month3LowChange'] > 15)
-        and low_tail_pct(regression_data) <= 2.5 
-        and high_tail_pct(regression_data) <= 2.5
+        #and (regression_data['monthLowChange'] > 10 or regression_data['month3LowChange'] > 15)
+        and 0.9 < low_tail_pct(regression_data) <= 2.5 
+        and 0.9 < high_tail_pct(regression_data) <= 2.5
         ):
-        add_in_csv(regression_data, regressionResult, ws, '%%AF:maySellStockInDowntrend') 
+        add_in_csv(regression_data, regressionResult, ws, '%%AF:(Last-Day-Up)sellDowntrendContinue(Last-Day-Down)buyDowntrendReverse') 
     elif(-1 < regression_data['PCT_day_change'] < 0 and -1.5 < regression_data['PCT_change'] < 1.5
         and -5 < regression_data['PCT_day_change_pre1'] < -2.5 
         and 2.5 < regression_data['PCT_day_change_pre2'] < 5
