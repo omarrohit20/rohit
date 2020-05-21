@@ -663,47 +663,48 @@ def sell_af_high_indicators(regression_data, regressionResult, reg, ws):
     if(regression_data['PCT_day_change'] == 0):
         return False
     flag = False
-    if(is_algo_sell(regression_data, True)
-        and (mlpValue <= -2.5 or kNeighboursValue <= -2.5)
-        and (mlpValue_other <= 0 and kNeighboursValue_other <= 0)
-        and regression_data['PCT_day_change'] > -5
-        ):
-        if(((-10 < mlpValue < -4 and -10 <= kNeighboursValue <= -2) or (-10 < mlpValue <= -2 and -10 < kNeighboursValue <= -4))
+    if(regression_data['PCT_day_change'] > -1.5 and regression_data['PCT_change'] > -1.5):
+        if(is_algo_sell(regression_data, True)
+            and (mlpValue <= -2.5 or kNeighboursValue <= -2.5)
+            and (mlpValue_other <= 0 and kNeighboursValue_other <= 0)
+            and regression_data['PCT_day_change'] > -5
             ):
-            if(mlpValue_cla < 0 or kNeighboursValue_cla < 0):
-                add_in_csv(regression_data, regressionResult, ws, 'sellHighIndicators')
+            if(((-10 < mlpValue < -4 and -10 <= kNeighboursValue <= -2) or (-10 < mlpValue <= -2 and -10 < kNeighboursValue <= -4))
+                ):
+                if(mlpValue_cla < 0 or kNeighboursValue_cla < 0):
+                    add_in_csv(regression_data, regressionResult, ws, 'sellHighIndicators')
+                    flag = True
+            elif((-10 < mlpValue < -2 and -10 < kNeighboursValue < 0)
+                and (mlpValue_other < -2 or regression_data['PCT_day_change'] > 2) 
+                and (mlpValue_cla <= 0)
+                ):
+                add_in_csv(regression_data, regressionResult, ws, 'sellHighMLPClaIndicators')
                 flag = True
-        elif((-10 < mlpValue < -2 and -10 < kNeighboursValue < 0)
-            and (mlpValue_other < -2 or regression_data['PCT_day_change'] > 2) 
-            and (mlpValue_cla <= 0)
+            elif((-10 < mlpValue < 0 and -10 < kNeighboursValue < -2)
+                and (kNeighboursValue_other < -2 or regression_data['PCT_day_change'] > 2) 
+                and (kNeighboursValue_cla <= 0)
+                ):
+                add_in_csv(regression_data, regressionResult, ws, 'sellHighKNClaIndicators')
+                flag = True
+        elif((mlpValue_other <= 0 and kNeighboursValue_other <= 0)
+            #and (mlpValue_cla > 0 or kNeighboursValue_cla > 0)
+            and (-10 < mlpValue < -2 and -10 < kNeighboursValue < -2)
+            and ((mlpValue + kNeighboursValue) < -5)
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'sellHighMLPClaIndicators')
+            add_in_csv(regression_data, regressionResult, ws, 'sellHighIndicators-Risky')
             flag = True
-        elif((-10 < mlpValue < 0 and -10 < kNeighboursValue < -2)
-            and (kNeighboursValue_other < -2 or regression_data['PCT_day_change'] > 2) 
-            and (kNeighboursValue_cla <= 0)
+        elif((mlpValue_other <= 0 and kNeighboursValue_other <= 0)
+            and (-10 < mlpValue < -2 and -10 < kNeighboursValue < 0)
+            and (mlpValue_other < -2 or regression_data['PCT_day_change'] > 2)
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'sellHighKNClaIndicators')
+            add_in_csv(regression_data, regressionResult, ws, 'sellHighMLPClaIndicators-risky')
             flag = True
-    elif((mlpValue_other <= 0 and kNeighboursValue_other <= 0)
-        #and (mlpValue_cla > 0 or kNeighboursValue_cla > 0)
-        and (-10 < mlpValue < -2 and -10 < kNeighboursValue < -2)
-        and ((mlpValue + kNeighboursValue) < -5)
-        ):
-        add_in_csv(regression_data, regressionResult, ws, 'sellHighIndicators-Risky')
-        flag = True
-    elif((mlpValue_other <= 0 and kNeighboursValue_other <= 0)
-        and (-10 < mlpValue < -2 and -10 < kNeighboursValue < 0)
-        and (mlpValue_other < -2 or regression_data['PCT_day_change'] > 2)
-        ):
-        add_in_csv(regression_data, regressionResult, ws, 'sellHighMLPClaIndicators-risky')
-        flag = True
-    elif((mlpValue_other <= 0 and kNeighboursValue_other <= 0)
-        and (-10 < mlpValue < 0 and -10 < kNeighboursValue < -2)
-        and (kNeighboursValue_other < -2 or regression_data['PCT_day_change'] > 2)
-        ):
-        add_in_csv(regression_data, regressionResult, ws, 'sellHighKNClaIndicators-risky')
-        flag = True
+        elif((mlpValue_other <= 0 and kNeighboursValue_other <= 0)
+            and (-10 < mlpValue < 0 and -10 < kNeighboursValue < -2)
+            and (kNeighboursValue_other < -2 or regression_data['PCT_day_change'] > 2)
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'sellHighKNClaIndicators-risky')
+            flag = True
     return flag
 
 def sell_af_high_tail(regression_data, regressionResult, reg, ws):
