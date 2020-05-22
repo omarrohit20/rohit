@@ -757,7 +757,11 @@ def sell_af_high_tail(regression_data, regressionResult, reg, ws):
         and (('MaySell-CheckChart' in regression_data['filter1']) or ('MaySellCheckChart' in regression_data['filter1']))
         and (-0.75 < regression_data['PCT_day_change'] < 0.75) and (-2.5 < regression_data['PCT_change'] < 2.5)
         and (regression_data['PCT_day_change'] < 0 or regression_data['PCT_change_pre1'] < 0)
-        and (is_algo_sell(regression_data) or regression_data['PCT_change_pre2'] > 0 or regression_data['PCT_change_pre3'] > 0)
+        and (is_algo_sell(regression_data) 
+             or ((regression_data['PCT_change_pre2'] > 0 or regression_data['PCT_change_pre3'] > 0)
+                 and regression_data['PCT_day_change'] < 0
+                )
+             )
         and high_tail_pct(regression_data) > low_tail_pct(regression_data)
         ): 
         add_in_csv(regression_data, regressionResult, ws, '%%AF-LastDayUp:(GLOBAL-DOWN)MaySellHighTail-LastDayMarketUp')
@@ -937,20 +941,16 @@ def sell_af_down_continued(regression_data, regressionResult, reg, ws):
             )
         and (regression_data['PCT_day_change_pre1'] > 0 or regression_data['PCT_day_change_pre2'] > 0 or regression_data['PCT_day_change_pre3'] > 0)
         ):
-        if(-4.0 < regression_data['PCT_day_change'] < -2.5 and -5 < regression_data['PCT_change'] < -2.5):
-            if(regression_data['monthHighChange'] > -5):
-                add_in_csv(regression_data, regressionResult, ws, '%%AF:maySellDownContinueLT-3')
-            elif(regression_data['forecast_day_PCT5_change'] > -10 
-                and regression_data['forecast_day_PCT10_change'] > -10
-                and regression_data['yearLowChange'] > 5
-                ):
-                add_in_csv(regression_data, regressionResult, ws, '%%AF:maySellDownContinueLT-3-Risky')
+        if(-4 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['PCT_change'] < -1
+            and (regression_data['PCT_day_change_pre1'] < -1 and regression_data['PCT_day_change_pre2'] > 0) 
+            and (regression_data['forecast_day_PCT7_change'] > -1 and regression_data['forecast_day_PCT10_change'] > -1)
+            ):
+            add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyReversalInSmallDowntrend')
+        elif(-4.0 < regression_data['PCT_day_change'] < -2.5 and -5 < regression_data['PCT_change'] < -2.5):
+            add_in_csv(regression_data, regressionResult, ws, '%%AF:maySellDownContinueLT-3')
         elif(-4 < regression_data['PCT_day_change'] < -2 and -4 < regression_data['PCT_change'] < -1):
-            if(regression_data['monthHighChange'] > -5):
-                add_in_csv(regression_data, regressionResult, ws, '%%AF:maySellDownContinueGT-3')
-            else:
-                add_in_csv(regression_data, regressionResult, ws, '%%AF:maySellDownContinueGT-3-Risky')
-        
+            add_in_csv(regression_data, regressionResult, ws, '%%AF:maySellDownContinueGT-3')
+                  
 def sell_af_oi_negative(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     if(regression_data['greentrend'] == 1

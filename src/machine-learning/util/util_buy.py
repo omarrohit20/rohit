@@ -722,7 +722,11 @@ def buy_af_low_tail(regression_data, regressionResult, reg, ws):
         and (('MayBuy-CheckChart' in regression_data['filter1']) or ('MayBuyCheckChart' in regression_data['filter1']))
         and (-0.75 < regression_data['PCT_day_change'] < 0.75) and (-2.5 < regression_data['PCT_change'] < 2.5)
         and (regression_data['PCT_day_change'] > 0 or regression_data['PCT_change_pre1'] > 0)
-        and (is_algo_buy(regression_data) or regression_data['PCT_change_pre2'] < 0 or regression_data['PCT_change_pre3'] < 0)
+        and (is_algo_buy(regression_data) 
+             or ((regression_data['PCT_change_pre2'] < 0 or regression_data['PCT_change_pre3'] < 0)
+                 and regression_data['PCT_day_change'] > 0
+                 )
+            )
         and low_tail_pct(regression_data) > high_tail_pct(regression_data)
         ): 
         add_in_csv(regression_data, regressionResult, ws, '%%AF-LastDayDown:(GLOBAL-UP)MayBuyLowTail-LastDayMarketDown')
@@ -901,19 +905,15 @@ def buy_af_up_continued(regression_data, regressionResult, reg, ws):
             )
         and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0)
         ):
-        if(2.5 < regression_data['PCT_day_change'] < 4.0 and 2.5 < regression_data['PCT_change'] < 5):
-            if(regression_data['monthLowChange'] < 5):
-                add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyUpContinueGT3')
-            elif(regression_data['forecast_day_PCT5_change'] < 10 
-                and regression_data['forecast_day_PCT10_change'] < 10
-                and regression_data['yearHighChange'] < -5
-                ):
-                add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyUpContinueGT3-Risky')
+        if(2 < regression_data['PCT_day_change'] < 4 and 2 < regression_data['PCT_change'] < 4
+            and (regression_data['PCT_day_change_pre1'] > 1 and regression_data['PCT_day_change_pre2'] < 0)
+            and (regression_data['forecast_day_PCT7_change'] < 1 and regression_data['forecast_day_PCT10_change'] < 1)
+            ):
+            add_in_csv(regression_data, regressionResult, ws, '%%AF:maySellReversalInSmallUptrend')
+        elif(2.5 < regression_data['PCT_day_change'] < 4.0 and 2.5 < regression_data['PCT_change'] < 5):
+            add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyUpContinueGT3')
         elif(2 < regression_data['PCT_day_change'] < 4 and 1 < regression_data['PCT_change'] < 5):
-            if(regression_data['monthLowChange'] < 5):
-                add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyUpContinueLT3')  
-            else:
-                add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyUpContinueLT3-Risky')
+            add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyUpContinueLT3')
 
 def buy_af_oi_negative(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
