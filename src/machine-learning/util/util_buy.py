@@ -720,10 +720,11 @@ def buy_af_low_tail(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, '%%AF:(GLOBAL-UP)mayBuyTail-tailGT2-2,3,4thDayLT0')
     elif(high_tail_pct(regression_data) < 2 and 1.5 < low_tail_pct(regression_data) < 2.1
         and (('MayBuy-CheckChart' in regression_data['filter1']) or ('MayBuyCheckChart' in regression_data['filter1']))
-        and (-0.75 < regression_data['PCT_day_change'] < 0.75) and (-2.5 < regression_data['PCT_change'] < 2.5)
+        and (-0.75 < regression_data['PCT_day_change'] < 0.75) and (-1 < regression_data['PCT_change'] < 2.5)
         and (regression_data['PCT_day_change'] > 0 or regression_data['PCT_change_pre1'] > 0)
         and (is_algo_buy(regression_data) 
              or ((regression_data['PCT_change_pre2'] < 0 or regression_data['PCT_change_pre3'] < 0)
+                 and (regression_data['PCT_change_pre1'] > 0 or regression_data['PCT_change_pre2'] > 0 or regression_data['PCT_change_pre3'] > 0)
                  and regression_data['PCT_day_change'] > 0
                  )
             )
@@ -771,6 +772,15 @@ def buy_af_low_tail(regression_data, regressionResult, reg, ws):
 #                 ):
 #                 add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyTail-Risky')
     
+    if((3.5 < high_tail_pct(regression_data) < 5 or (2.5 < high_tail_pct(regression_data) < 5 and low_tail_pct(regression_data) < 1.5))
+        and low_tail_pct(regression_data) < 3.5
+        and regression_data['SMA4'] < 0 and regression_data['SMA4_2daysBack'] < 0
+        and regression_data['SMA9'] < 0 and regression_data['SMA9_2daysBack'] < 0
+        and regression_data['SMA25'] < -1
+        and regression_data['forecast_day_PCT7_change'] > -15 and regression_data['forecast_day_PCT10_change'] > -15
+        and regression_data['PCT_day_change'] > -3 and regression_data['PCT_change'] > -5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '%%AF:(GLOBAL-DOWN)sellHighUpperTail-Continue')
     
     if(low_tail_pct(regression_data) <= 2 and 2 <= high_tail_pct(regression_data) <= 5.5
         and -5 < regression_data['PCT_day_change'] < 5
