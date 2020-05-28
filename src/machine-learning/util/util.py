@@ -121,11 +121,16 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and high_tail_pct(regression_data) < 1.5
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighUptrend')
-    elif(2.7 < regression_data['PCT_day_change'] < 4.1
+    elif(2.7 < regression_data['PCT_day_change'] < 5.5
+        and regression_data['PCT_day_change_pre1'] > -1.3 
         and (regression_data['PCT_day_change_pre1'] < -1
              or regression_data['PCT_day_change_pre2'] < -1
              or regression_data['PCT_day_change_pre3'] < -1
              )
+        and regression_data['forecast_day_PCT4_change'] > 0
+        and regression_data['forecast_day_PCT5_change'] > 0
+        and regression_data['SMA4'] > 2
+        and regression_data['SMA9'] > 2
         and high_tail_pct(regression_data) < 2.5
         and low_tail_pct(regression_data) < 2.5
         and low_tail_pct_pre1(regression_data) < 2.5
@@ -700,7 +705,7 @@ def sell_all_common(regression_data, regressionResult, reg, ws):
 def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
     if(2 < high_tail_pct_pre1(regression_data) < 6
         and -2.9 > regression_data['PCT_day_change'] > -4.1
-        and abs(regression_data['PCT_day_change_pre1']) < 1.5
+        and abs(regression_data['PCT_day_change_pre1']) < 1.3
         and regression_data['PCT_day_change_pre2'] > 1
         and abs(regression_data['PCT_day_change_pre2']) > abs(regression_data['PCT_day_change_pre1'])
         #and regression_data['low'] >= regression_data['bar_low_pre2']
@@ -718,11 +723,16 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and high_tail_pct(regression_data) < 2.5
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighDowntrend')
-    elif(-2.7 > regression_data['PCT_day_change'] > -4.1
+    elif(-2.7 > regression_data['PCT_day_change'] > -5.5
+        and regression_data['PCT_day_change_pre1'] < 1.5
         and (regression_data['PCT_day_change_pre1'] > 1
-        or regression_data['PCT_day_change_pre2'] > 1
-        or regression_data['PCT_day_change_pre3'] > 1
+             or regression_data['PCT_day_change_pre2'] > 1
+             or regression_data['PCT_day_change_pre3'] > 1
         )
+        and regression_data['forecast_day_PCT4_change'] < 0
+        and regression_data['forecast_day_PCT5_change'] < 0
+        and regression_data['SMA4'] < -2
+        and regression_data['SMA9'] < -2 
         and low_tail_pct(regression_data) < 2.5
         and high_tail_pct(regression_data) < 2.5
         ):
