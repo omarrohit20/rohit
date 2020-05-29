@@ -720,7 +720,7 @@ def buy_af_low_tail(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, '%%AF:(GLOBAL-UP)mayBuyTail-tailGT2-2,3,4thDayLT0')
     elif(high_tail_pct(regression_data) < 2 and 1.5 < low_tail_pct(regression_data) < 2.1
         and (('MayBuy-CheckChart' in regression_data['filter1']) or ('MayBuyCheckChart' in regression_data['filter1']))
-        and (-0.75 < regression_data['PCT_day_change'] < 0.75) and (-1 < regression_data['PCT_change'] < 2.5)
+        and (0 < regression_data['PCT_day_change'] < 0.75) and (-1 < regression_data['PCT_change'] < 2.5)
         and (regression_data['PCT_day_change'] > 0 or regression_data['PCT_change_pre1'] > 0)
         and (is_algo_buy(regression_data) 
              or ((regression_data['PCT_change_pre2'] < 0 or regression_data['PCT_change_pre3'] < 0)
@@ -875,11 +875,13 @@ def buy_af_low_tail(regression_data, regressionResult, reg, ws):
                 add_in_csv(regression_data, regressionResult, ws, '%%AF:(GLOBAL-UP)buyHighUpperTail-Reversal-LastDayMarketDown')
             elif(is_algo_sell(regression_data) == False):
                 add_in_csv(regression_data, regressionResult, ws, '%%AF:(GLOBAL-UP)buyHighUpperTail-Reversal-LastDayMarketDown')
-        elif(regression_data['PCT_day_change'] < 1
+        elif(regression_data['PCT_day_change'] < -1 and regression_data['PCT_change'] < -1
             and is_algo_buy(regression_data)
             ):
             add_in_csv(regression_data, regressionResult, ws, '%%AF-Risky:(GLOBAL-UP)buyHighUpperTail-Reversal-LastDayMarketDown')
-        elif(3.5 < high_tail_pct(regression_data) < 6):
+        elif(3.5 < high_tail_pct(regression_data) < 6
+            and (regression_data['PCT_day_change_pre1'] < -1.5 or regression_data['PCT_day_change_pre2'] < -1.5)
+            ):
             add_in_csv(regression_data, regressionResult, ws, '%%AF-Last2DayMarketDown:(GLOBAL-UP)buyHighUpperTail-Reversal-LastDayMarketDown')
     elif(2 < low_tail_pct_pre1(regression_data) < 6
         and 2.9 < regression_data['PCT_day_change'] < 4.1
