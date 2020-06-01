@@ -122,7 +122,8 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighUptrend')
     elif(2.7 < regression_data['PCT_day_change'] < 5.5
-        and regression_data['PCT_day_change_pre1'] > -1.3 
+        and regression_data['PCT_day_change_pre1'] > -1.5
+        and (regression_data['PCT_day_change_pre2'] > -1.5 or (regression_data['PCT_day_change_pre1'] > 0 and regression_data['PCT_day_change_pre3'] > 0))
         and (regression_data['PCT_day_change_pre1'] < -1
              or regression_data['PCT_day_change_pre2'] < -1
              or regression_data['PCT_day_change_pre3'] < -1
@@ -725,6 +726,7 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighDowntrend')
     elif(-2.7 > regression_data['PCT_day_change'] > -5.5
         and regression_data['PCT_day_change_pre1'] < 1.5
+        and (regression_data['PCT_day_change_pre2'] < 1.5 or (regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre3'] < 0))
         and (regression_data['PCT_day_change_pre1'] > 1
              or regression_data['PCT_day_change_pre2'] > 1
              or regression_data['PCT_day_change_pre3'] > 1
@@ -1960,7 +1962,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                 and abs(regression_data[filter_avg]) > 1.75
                 and regression_data['PCT_day_change'] < 2
                 and regression_data[filter_avg] > regression_data['PCT_day_change']
-                and 'MLSell' not in regression_data['filter1']
+                and 'MLSell' not in regression_data['filter']
                 and ('Buy-SUPER' in regression_data['filter2'] or 'Buy-SUPER-risky' in regression_data['filter2'])
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, 'SUPER-Buy')
@@ -1969,7 +1971,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                 and abs(regression_data[filter_avg]) > 1.75
                 and regression_data['PCT_day_change'] > -2
                 and regression_data[filter_avg] < regression_data['PCT_day_change']
-                and 'MLBuy' not in regression_data['filter1']
+                and 'MLBuy' not in regression_data['filter']
                 and ('Sell-SUPER' in regression_data['filter2'] or 'Sell-SUPER-risky' in regression_data['filter2'])
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, 'SUPER-Sell')
@@ -1982,7 +1984,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                      or high_or_low == 'High'
                      or high_or_low == 'None'
                      )
-                and 'MLSell' not in regression_data['filter1']
+                and 'MLSell' not in regression_data['filter']
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, 'WEAK-Buy')
                 flag = True
@@ -1994,7 +1996,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                      or high_or_low == 'Low'
                      or high_or_low == 'None'
                      )
-                and 'MLBuy' not in regression_data['filter1'] 
+                and 'MLBuy' not in regression_data['filter'] 
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, 'WEAK-Sell')
                 flag = True
@@ -2006,8 +2008,8 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                      or high_or_low == 'High'
                      or high_or_low == 'None'
                      )
-                and 'MLSell' not in regression_data['filter1']  
-                and ('MLBuy' in regression_data['filter1'] or 'Buy-SUPER-risky' in regression_data['filter2'])
+                and 'MLSell' not in regression_data['filter']  
+                and ('MLBuy' in regression_data['filter'] or 'Buy-SUPER-risky' in regression_data['filter2'])
                 and is_any_sell_from_all_filter(regression_data) == False
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, 'WEAK-Buy')
@@ -2020,8 +2022,8 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                      or high_or_low == 'Low'
                      or high_or_low == 'None'
                      )
-                and 'MLBuy' not in regression_data['filter1']
-                and ('MLSell' in regression_data['filter1'] or 'Sell-SUPER-risky' in regression_data['filter2']) 
+                and 'MLBuy' not in regression_data['filter']
+                and ('MLSell' in regression_data['filter'] or 'Sell-SUPER-risky' in regression_data['filter2']) 
                 and is_any_buy_from_all_filter(regression_data) == False
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, 'WEAK-Sell')
