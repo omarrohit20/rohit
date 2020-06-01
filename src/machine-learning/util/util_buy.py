@@ -2742,16 +2742,17 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
                 and -0.75 < regression_data['PCT_day_change'] < 0):
                 add_in_csv(regression_data, regressionResult, ws, '+-')
             return True
-        elif(-0.75 < regression_data['PCT_day_change_pre1'] < 5
-            and -0.75 < regression_data['PCT_day_change'] < 0.5
+        elif(1.5 < regression_data['PCT_day_change_pre1'] < 5 and (abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change']))
+            and -1.5 < regression_data['PCT_day_change'] < 0
             and (regression_data['PCT_day_change'] > 0 or regression_data['PCT_day_change_pre1'] > 0)
-            and 0 < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change']
+            and 0 < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT4_change'] 
             and regression_data['forecast_day_PCT5_change'] > 5
-            and regression_data['forecast_day_PCT7_change'] < 15
-            and regression_data['forecast_day_PCT10_change'] < 15
-            and regression_data['yearHighChange'] < -5
-            and regression_data['yearLowChange'] > 15
-            and regression_data['month3LowChange'] > 10   
+            and (regression_data['forecast_day_PCT7_change'] < 15 or regression_data['forecast_day_PCT10_change'] < 15)
+            and (regression_data['forecast_day_PCT7_change'] < 20 and regression_data['forecast_day_PCT10_change'] < 20)
+            and regression_data['yearHighChange'] < -10
+            and regression_data['yearLowChange'] > 10
+            #and regression_data['month3LowChange'] > 10
+            #and high_tail_pct(regression_data) < 2.5   
             ):
             add_in_csv(regression_data, regressionResult, ws, 'buySuper2')
             if(regression_data['PCT_day_change_pre1'] < 0
