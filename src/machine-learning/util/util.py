@@ -1963,7 +1963,9 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
             if(regression_data[filter_avg] >= 0
                 and abs(regression_data[filter_avg]) > 1.75
                 and regression_data['PCT_day_change'] < 2
-                and (regression_data[filter_count] >= 3 or (regression_data[filter_avg] - regression_data['PCT_day_change']) > 3)
+                and (regression_data[filter_count] >= 3 
+                     or (regression_data[filter_avg] - regression_data['PCT_day_change']) > 2
+                    )
                 and regression_data[filter_avg] > regression_data['PCT_day_change']
                 and 'MLSell' not in regression_data['filter']
                 and ('Buy-SUPER' in regression_data['filter2'] or 'Buy-SUPER-risky' in regression_data['filter2'])
@@ -1973,7 +1975,9 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
             elif(regression_data[filter_avg] <= 0
                 and abs(regression_data[filter_avg]) > 1.75
                 and regression_data['PCT_day_change'] > -2
-                and (regression_data[filter_count] >= 3 or (regression_data[filter_avg] - regression_data['PCT_day_change']) < -3)
+                and (regression_data[filter_count] >= 3 
+                     or (regression_data[filter_avg] - regression_data['PCT_day_change']) < -2
+                     )
                 and regression_data[filter_avg] < regression_data['PCT_day_change']
                 and 'MLBuy' not in regression_data['filter']
                 and ('Sell-SUPER' in regression_data['filter2'] or 'Sell-SUPER-risky' in regression_data['filter2'])
