@@ -122,11 +122,17 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighUptrend')
     elif(2.7 < regression_data['PCT_day_change'] < 5.5
-        and regression_data['PCT_day_change_pre1'] > -1.5
-        and (regression_data['PCT_day_change_pre2'] > -1.5 or (regression_data['PCT_day_change_pre1'] > 0 and regression_data['PCT_day_change_pre3'] > 0))
-        and (regression_data['PCT_day_change_pre1'] < -1
-             or regression_data['PCT_day_change_pre2'] < -1
-             or regression_data['PCT_day_change_pre3'] < -1
+        and regression_data['PCT_day_change_pre1'] > -1.3
+        and (regression_data['PCT_day_change_pre2'] > -1.3 
+             or (regression_data['PCT_day_change_pre1'] > 0 
+                 and regression_data['PCT_day_change_pre3'] > 0
+                 and regression_data['low_pre2'] > regression_data['low_pre3'] 
+                 and regression_data['high_pre2'] > regression_data['high_pre3']
+                 )
+             )
+        and (regression_data['PCT_day_change_pre1'] < 1
+             or regression_data['PCT_day_change_pre2'] < 1
+             or regression_data['PCT_day_change_pre3'] < 1
              )
         and regression_data['forecast_day_PCT4_change'] > 0
         and regression_data['forecast_day_PCT5_change'] > 0
@@ -715,7 +721,7 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, None)
     elif(-2.9 > regression_data['PCT_day_change'] > -4.1 and -1 > regression_data['PCT_change'] > -4.5
-        and regression_data['PCT_day_change_pre1'] < 1.5
+        and regression_data['PCT_day_change_pre1'] < 1.3
         and (regression_data['PCT_day_change_pre1'] > 0
              or regression_data['PCT_day_change_pre2'] > 0
              or regression_data['PCT_day_change_pre3'] > 0
@@ -725,11 +731,17 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighDowntrend')
     elif(-2.7 > regression_data['PCT_day_change'] > -5.5
-        and regression_data['PCT_day_change_pre1'] < 1.5
-        and (regression_data['PCT_day_change_pre2'] < 1.5 or (regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre3'] < 0))
-        and (regression_data['PCT_day_change_pre1'] > 1
-             or regression_data['PCT_day_change_pre2'] > 1
-             or regression_data['PCT_day_change_pre3'] > 1
+        and regression_data['PCT_day_change_pre1'] < 1.3
+        and (regression_data['PCT_day_change_pre2'] < 1.3 
+             or (regression_data['PCT_day_change_pre1'] < 0 
+                 and regression_data['PCT_day_change_pre3'] < 0
+                 and regression_data['low_pre2'] < regression_data['low_pre3'] 
+                 and regression_data['high_pre2'] < regression_data['high_pre3']
+                 )
+             )
+        and (regression_data['PCT_day_change_pre1'] > -1
+             or regression_data['PCT_day_change_pre2'] > -1
+             or regression_data['PCT_day_change_pre3'] > -1
         )
         and regression_data['forecast_day_PCT4_change'] < 0
         and regression_data['forecast_day_PCT5_change'] < 0
