@@ -2037,6 +2037,20 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                 add_in_csv(regression_data, regressionResult, ws, None, 'WEAK-Sell')
                 flag = True
                 
+        if('STRONG' not in regression_data['filter1']
+            ):
+            if(regression_data[filter_avg] >= 5
+                and is_any_sell_from_all_filter(regression_data) == False
+                and 'MLSell' not in regression_data['filter']
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, '**DUPER-Buy')
+                flag = True
+            elif(regression_data[filter_avg] < -5
+                and is_any_buy_from_all_filter(regression_data) == False
+                and 'MLBuy' not in regression_data['filter']
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, '**DUPER-Sell')
+                flag = True
         
         if(abs(float(regression_data[filter_avg])) > 1
             and abs(regression_data[filter_pct]) > 66

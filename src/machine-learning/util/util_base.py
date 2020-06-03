@@ -2893,3 +2893,95 @@ def high_volatility(regression_data, regressionResult, buy=True):
             flag = True
     return flag
         
+def sell_uptrend_common(regression_data, regressionResult, reg, ws):
+    if(low_tail_pct(regression_data) <= 2 and 2 <= high_tail_pct(regression_data) <= 5.5
+        and -5 < regression_data['PCT_day_change'] < 5
+        and regression_data['PCT_day_change_pre1'] < 7
+        and regression_data['forecast_day_PCT7_change'] > 5
+        and regression_data['forecast_day_PCT10_change'] > 5
+        and (regression_data['forecast_day_PCT7_change'] > 15
+             or regression_data['forecast_day_PCT10_change'] > 15)
+        ):
+        if((regression_data['PCT_day_change_pre1'] > 1.5 and regression_data['PCT_day_change_pre2'] > 1.5)
+            or (regression_data['PCT_day_change_pre1'] > 0 and regression_data['PCT_day_change_pre2'] > 0 and regression_data['PCT_day_change_pre3'] > 0)
+            or (regression_data['forecast_day_PCT_change'] > regression_data['forecast_day_PCT2_change']
+                and regression_data['forecast_day_PCT_change'] > regression_data['forecast_day_PCT3_change']
+                and regression_data['forecast_day_PCT2_change'] > regression_data['forecast_day_PCT4_change']
+                )
+            or regression_data['PCT_day_change_pre1'] > 3 
+            ):
+            if(high_tail_pct(regression_data) > 3.5
+                or (high_tail_pct(regression_data) > 2.5 and is_algo_sell(regression_data))
+                ):
+                if(-3 < regression_data['PCT_day_change'] 
+                    and(regression_data['forecast_day_PCT7_change'] > 20
+                        or regression_data['forecast_day_PCT10_change'] > 20)
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, '%%AF:maySellTail-tailGT2-7,10thDayGT20') 
+                    return True
+                elif(-3 < regression_data['PCT_day_change']):
+                    add_in_csv(regression_data, regressionResult, ws, '%%AF-Risky9:30:maySellTail-tailGT2-7,10thDayGT15')
+                    return True
+            else:
+                add_in_csv(regression_data, regressionResult, ws, None)
+                return True
+        elif(-3 < regression_data['PCT_day_change'] 
+            and(regression_data['forecast_day_PCT7_change'] > 20
+                or regression_data['forecast_day_PCT10_change'] > 20)
+            ):
+            add_in_csv(regression_data, regressionResult, ws, '%%AF:maySellTail-tailGT2-7,10thDayGT20') 
+            return True
+        elif(-3 < regression_data['PCT_day_change']):
+            add_in_csv(regression_data, regressionResult, ws, '%%AF-Risky9:30:maySellTail-tailGT2-7,10thDayGT15')
+            return True
+        else:
+            add_in_csv(regression_data, regressionResult, ws, None)
+            return True
+        
+def buy_downtrend_common(regression_data, regressionResult, reg, ws):
+    if(high_tail_pct(regression_data) <= 2 and 2 <= low_tail_pct(regression_data) <= 5.5
+        and -5 < regression_data['PCT_day_change'] < 5
+        and -7 < regression_data['PCT_day_change_pre1'] 
+        and regression_data['forecast_day_PCT7_change'] < -5
+        and regression_data['forecast_day_PCT10_change'] < -5
+        and (regression_data['forecast_day_PCT7_change'] < -15
+             or regression_data['forecast_day_PCT10_change'] < -15)
+        ):
+        if((regression_data['PCT_day_change_pre1'] < -1.5 and regression_data['PCT_day_change_pre2'] < -1.5)
+            or (regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre2'] < 0 and regression_data['PCT_day_change_pre3'] < 0)
+            or (regression_data['forecast_day_PCT_change'] < regression_data['forecast_day_PCT2_change']
+                and regression_data['forecast_day_PCT_change'] < regression_data['forecast_day_PCT3_change']
+                and regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT4_change']
+                )
+            or regression_data['PCT_day_change_pre1'] < -3
+            ):
+            if(low_tail_pct(regression_data) > 3.5
+                or (low_tail_pct(regression_data) > 2.5 and is_algo_buy(regression_data))
+                ):
+                if(regression_data['PCT_day_change'] < 3
+                    and (regression_data['forecast_day_PCT7_change'] < -20
+                         or regression_data['forecast_day_PCT10_change'] < -20)
+                    ):
+                    add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyTail-tailGT2-7,10thDayLT(-20)')
+                    return True
+                elif(regression_data['PCT_day_change'] < 3):
+                    add_in_csv(regression_data, regressionResult, ws, '%%AF-Risky9:30:mayBuyTail-tailGT2-7,10thDayLT(-15)')
+                    return True
+            else:
+                add_in_csv(regression_data, regressionResult, ws, None)
+                return True
+        elif(regression_data['PCT_day_change'] < 3
+            and (regression_data['forecast_day_PCT7_change'] < -20
+                 or regression_data['forecast_day_PCT10_change'] < -20)
+            ):
+            add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyTail-tailGT2-7,10thDayLT(-20)')
+            return True
+        elif(regression_data['PCT_day_change'] < 3):
+            add_in_csv(regression_data, regressionResult, ws, '%%AF-Risky9:30:mayBuyTail-tailGT2-7,10thDayLT(-15)')
+            return True
+        else:
+            add_in_csv(regression_data, regressionResult, ws, None)
+            return True     
+        
+        
+        
