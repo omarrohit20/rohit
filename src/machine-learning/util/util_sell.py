@@ -2516,7 +2516,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             and regression_data['month3HighChange'] < -10
             #and regression_data['low'] > regression_data['low_pre1']
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'sellSuper0') 
+            add_in_csv(regression_data, regressionResult, ws, 'sellSuper1') 
         elif(-5 < regression_data['PCT_day_change_pre1'] < 0.75
             and -0.5 < regression_data['PCT_day_change'] < 0.75
             and (regression_data['PCT_day_change'] < 0 or regression_data['PCT_day_change_pre1'] < 0)
@@ -2540,7 +2540,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             and regression_data['month3HighChange'] < -10
             #and regression_data['high'] < regression_data['high_pre1']
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'sellSuper1')
+            add_in_csv(regression_data, regressionResult, ws, 'sellSuper-Risky')
             if(regression_data['PCT_day_change_pre1'] < 0
                 and -0.75 < regression_data['PCT_day_change'] < 0):
                 add_in_csv(regression_data, regressionResult, ws, '--')

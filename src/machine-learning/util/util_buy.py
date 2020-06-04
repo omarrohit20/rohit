@@ -2693,26 +2693,7 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
             and regression_data['month3LowChange'] > 10 
             #and regression_data['low'] > regression_data['low_pre1']
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'buySuper0')
-        if(-0.75 < regression_data['PCT_day_change'] < 0.75
-            and -0.75 < regression_data['PCT_day_change_pre1'] < 0.75
-            and -0.75 < regression_data['PCT_day_change_pre2'] < 0.75
-            and -10 < regression_data['PCT_day_change_pre3'] < -3
-            and regression_data['forecast_day_PCT7_change'] < -10
-            and regression_data['forecast_day_PCT10_change'] < -10
-            and 0 > regression_data['forecast_day_PCT_change']
-            and 0 > regression_data['forecast_day_PCT2_change']
-            and 0 > regression_data['forecast_day_PCT3_change']
-            and 0 > regression_data['forecast_day_PCT4_change']
-            and regression_data['high'] > regression_data['high_pre1'] 
-            and regression_data['high'] > regression_data['high_pre2'] 
-            and regression_data['high'] > regression_data['high_pre3'] 
-            and regression_data['yearHighChange'] < -5
-            and regression_data['yearLowChange'] > 15
-            and regression_data['month3LowChange'] > 10 
-            #and regression_data['low'] > regression_data['low_pre1']
-            ):
-            add_in_csv(regression_data, regressionResult, ws, 'buySuper0')    
+            add_in_csv(regression_data, regressionResult, ws, 'buySuper1')   
         elif(-0.75 < regression_data['PCT_day_change_pre1'] < 5
             and -0.75 < regression_data['PCT_day_change'] < 0.5
             and (regression_data['PCT_day_change'] > 0 or regression_data['PCT_day_change_pre1'] > 0)
@@ -2736,7 +2717,7 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
             and regression_data['month3LowChange'] > 10 
             #and regression_data['low'] > regression_data['low_pre1']
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'buySuper1')
+            add_in_csv(regression_data, regressionResult, ws, 'buySuper-Risky')
             if(regression_data['PCT_day_change_pre1'] < 0
                 and -0.75 < regression_data['PCT_day_change'] < 0):
                 add_in_csv(regression_data, regressionResult, ws, '--')
