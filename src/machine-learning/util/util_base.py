@@ -2895,7 +2895,8 @@ def high_volatility(regression_data, regressionResult, buy=True):
         
 def sell_uptrend_common(regression_data, regressionResult, reg, ws):
     if(low_tail_pct(regression_data) <= 2 and 2 <= high_tail_pct(regression_data) <= 5.5
-        and -5 < regression_data['PCT_day_change'] < 5
+        and -5 < regression_data['PCT_day_change'] < 3
+        and (regression_data['PCT_day_change'] > 0 or regression_data['PCT_day_change'] < -1)
         and regression_data['PCT_day_change_pre1'] < 7
         and regression_data['forecast_day_PCT7_change'] > 5
         and regression_data['forecast_day_PCT10_change'] > 5
@@ -2940,7 +2941,8 @@ def sell_uptrend_common(regression_data, regressionResult, reg, ws):
         
 def buy_downtrend_common(regression_data, regressionResult, reg, ws):
     if(high_tail_pct(regression_data) <= 2 and 2 <= low_tail_pct(regression_data) <= 5.5
-        and -5 < regression_data['PCT_day_change'] < 5
+        and -3 < regression_data['PCT_day_change'] < 5
+        and (regression_data['PCT_day_change'] < 0 or regression_data['PCT_day_change'] > 1)
         and -7 < regression_data['PCT_day_change_pre1'] 
         and regression_data['forecast_day_PCT7_change'] < -5
         and regression_data['forecast_day_PCT10_change'] < -5
