@@ -565,7 +565,8 @@ def buy_common_up_continued(regression_data, regressionResult, reg, ws):
             if(regression_data['monthLowChange'] < 5):
                 add_in_csv(regression_data, regressionResult, ws, 'CommonHL:mayBuyUpContinueLT3')  
             else:
-                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:mayBuyUpContinueLT3-Risky')
+                #add_in_csv(regression_data, regressionResult, ws, 'CommonHL:mayBuyUpContinueLT3-Risky')
+                add_in_csv(regression_data, regressionResult, ws, None)
                 
     elif(high_tail_pct(regression_data) < 2 and low_tail_pct(regression_data) < 2
         and (regression_data['monthLowChange'] < 5 and regression_data['month3LowChange'] < 5 

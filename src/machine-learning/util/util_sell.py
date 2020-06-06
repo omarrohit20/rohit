@@ -606,7 +606,8 @@ def sell_common_down_continued(regression_data, regressionResult, reg, ws):
             if(regression_data['monthHighChange'] > -5):
                 add_in_csv(regression_data, regressionResult, ws, 'CommonHL:maySellDownContinueGT-3')
             else:
-                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:maySellDownContinueGT-3-Risky')
+                #add_in_csv(regression_data, regressionResult, ws, 'CommonHL:maySellDownContinueGT-3-Risky')
+                add_in_csv(regression_data, regressionResult, ws, None)
     elif(high_tail_pct(regression_data) < 2 and low_tail_pct(regression_data) < 2
         and (regression_data['monthHighChange'] > -5 and regression_data['month3HighChange'] > -5 
              and regression_data['month3LowChange'] > 0 and regression_data['month6LowChange'] > 5)
