@@ -3423,9 +3423,9 @@ def buy_random_filters(regression_data, regressionResult, reg, ws):
             ):
                 add_in_csv(regression_data, regressionResult, ws, None)
         elif(regression_data['week2HighChange'] < -1):
-            add_in_csv(regression_data, regressionResult, ws, 'buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)')
+            add_in_csv(regression_data, regressionResult, ws, 'buyRisingMA-(check5MinuteUpTrendAndBuyUptrend)')
         elif(is_algo_buy(regression_data)):
-            add_in_csv(regression_data, regressionResult, ws, 'buyRisingMA-(check5MinuteUpTrendAndBuySupertrend)-Already10DayDown')
+            add_in_csv(regression_data, regressionResult, ws, 'buyRisingMA-(check5MinuteUpTrendAndBuyUptrend)-Already10DayDown')
     
     if((-0.75 < regression_data['PCT_day_change'] < 0) and (-0.75 < regression_data['PCT_change'] < 0)
         and (regression_data['SMA4_2daysBack'] > 0 or regression_data['SMA9_2daysBack'] > 0)

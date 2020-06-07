@@ -2991,9 +2991,9 @@ def sell_random_filter(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, None)
         elif(regression_data['week2LowChange'] > 1):
-            add_in_csv(regression_data, regressionResult, ws, 'sellDowningMA-(check5MinuteDownTrendAndSellSupertrend)')
+            add_in_csv(regression_data, regressionResult, ws, 'sellDowningMA-(check5MinuteDownTrendAndSellDowntrend)')
         elif(is_algo_sell(regression_data)):
-            add_in_csv(regression_data, regressionResult, ws, 'sellDowningMA-(check5MinuteDownTrendAndSellSupertrend)-Already10DayDown')
+            add_in_csv(regression_data, regressionResult, ws, 'sellDowningMA-(check5MinuteDownTrendAndSellDowntrend)-Already10DayDown')
     
     if((0 < regression_data['PCT_day_change'] < 0.75) and (0 < regression_data['PCT_change'] < 0.75)
         and (regression_data['SMA4_2daysBack'] < 0 or regression_data['SMA9_2daysBack'] < 0)
