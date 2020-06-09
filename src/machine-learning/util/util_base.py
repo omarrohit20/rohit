@@ -2918,6 +2918,21 @@ def high_volatility(regression_data, regressionResult, buy=True):
         
 def sell_uptrend_common(regression_data, regressionResult, reg, ws):
     if(low_tail_pct(regression_data) <= 2 and 2 <= high_tail_pct(regression_data) <= 5.5
+        and regression_data['PCT_day_change'] < high_tail_pct(regression_data)
+        and regression_data['PCT_day_change'] < 3
+        #and (regression_data['PCT_day_change'] > 0 or regression_data['PCT_day_change'] < -1)
+        and -0.5 < regression_data['PCT_day_change_pre1'] < 7
+        and regression_data['forecast_day_PCT7_change'] > 5
+        and regression_data['forecast_day_PCT10_change'] > 5
+        and (regression_data['forecast_day_PCT7_change'] > 15
+             or regression_data['forecast_day_PCT10_change'] > 15)
+        ):
+        if(high_tail_pct(regression_data) > 3 and regression_data['PCT_day_change'] > 0
+            and regression_data['yearHighChange'] < -5
+            ):
+            add_in_csv(regression_data, regressionResult, ws, '%%AF-9:30:(UPTREND-GLOBAL/SGX-UP)BuyHighUpperTail-Reversal-7,10thDayGT15-LastDayMarketDown') 
+    
+    if(low_tail_pct(regression_data) <= 2 and 2 <= high_tail_pct(regression_data) <= 5.5
         and -5 < regression_data['PCT_day_change'] < 3
         and (regression_data['PCT_day_change'] > 0 or regression_data['PCT_day_change'] < -1)
         and -0.5 < regression_data['PCT_day_change_pre1'] < 7
@@ -2984,9 +2999,24 @@ def sell_uptrend_common(regression_data, regressionResult, reg, ws):
             or regression_data['forecast_day_PCT10_change'] > 10
             )
         ):
-        add_in_csv(regression_data, regressionResult, ws, '%%AF:(UPTREND-MorningTrend-UP)mayBuyTail-highTailGT2-7,10thDayGT15-Last2DayStockDown') 
+        add_in_csv(regression_data, regressionResult, ws, '%%AF:(UPTREND-MorningTrend-UP)mayBuyTail-highTailGT2-7,10thDayGT10-Last2DayStockDown')
             
 def buy_downtrend_common(regression_data, regressionResult, reg, ws):
+    if(high_tail_pct(regression_data) <= 2 and 2 <= low_tail_pct(regression_data) <= 5.5
+        and regression_data['PCT_day_change'] < low_tail_pct(regression_data)
+        and -3 < regression_data['PCT_day_change']
+        #and (regression_data['PCT_day_change'] < 0 or regression_data['PCT_day_change'] > 1)
+        and -7 < regression_data['PCT_day_change_pre1'] < 0.5
+        and regression_data['forecast_day_PCT7_change'] < -5
+        and regression_data['forecast_day_PCT10_change'] < -5
+        and (regression_data['forecast_day_PCT7_change'] < -15
+             or regression_data['forecast_day_PCT10_change'] < -15)
+        and regression_data['year2HighChange'] < -5
+        ):
+        if(low_tail_pct(regression_data) > 3 and regression_data['PCT_day_change'] < 0
+            and regression_data['yearLowChange'] > 5
+            ):
+            add_in_csv(regression_data, regressionResult, ws, '%%AF-9:30:(DOWNTREND-GLOBAL/SGX-DOWN)SellHighLowerTail-Reversal-7,10thDayLT(-15)-LastDayMarketUp')
     if(high_tail_pct(regression_data) <= 2 and 2 <= low_tail_pct(regression_data) <= 5.5
         and -3 < regression_data['PCT_day_change'] < 5
         and (regression_data['PCT_day_change'] < 0 or regression_data['PCT_day_change'] > 1)
