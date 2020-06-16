@@ -2627,6 +2627,7 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regressionResult.append(regression_data['PCT_day_change'])
     regressionResult.append(regression_data['PCT_change'])
     regressionResult.append(regression_data['scrip'])
+    regressionResult.append(regression_data['industry'])
     return regressionResult
 
 def ten_days_more_than_fifteen(regression_data):

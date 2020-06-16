@@ -453,9 +453,11 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     high_week = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_week = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
+    scripinfo = db.scrip.find_one({'scrip':scrip})
     technical = db.technical.find_one({'dataset_code':scrip})
     regression_data['date'] = forecast_day_date
     regression_data['scrip'] = str(scrip)
+    regression_data['industry'] = scripinfo['industry']
     regression_data['buyIndia'] = str(technical['BuyIndicators'])
     regression_data['sellIndia'] = str(technical['SellIndicators'])
     regression_data['forecast_day_VOL_change'] = float(forecast_day_VOL_change)
