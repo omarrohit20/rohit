@@ -36,7 +36,7 @@ from lasagne import layers
 from lasagne.updates import nesterov_momentum
 #from nolearn.lasagne import NeuralNet as nlNeuralNet
 
-import tflearn
+#import tflearn
 
 import logging
 from sklearn.ensemble.bagging import BaggingClassifier

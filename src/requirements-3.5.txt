@@ -70,7 +70,6 @@ soupsieve==1.9.5
 TA-Lib==0.4.10
 tabulate==0.8.3
 tensorflow-tensorboard==0.4.0rc3
-tflearn==0.3.2
 Theano==1.0.4
 typing-extensions==3.7.4.1
 urllib3==1.25.9
