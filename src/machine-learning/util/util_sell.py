@@ -913,7 +913,8 @@ def sell_af_down_continued(regression_data, regressionResult, reg, ws):
             and (regression_data['PCT_day_change_pre1'] < -1.5 and regression_data['PCT_day_change_pre2'] > 1.5) 
             and (regression_data['forecast_day_PCT7_change'] > -1 and regression_data['forecast_day_PCT10_change'] > -1)
             ):
-            add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyReversalInSmallDowntrend')
+            #add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyReversalInSmallDowntrend')
+            add_in_csv(regression_data, regressionResult, ws, None)
         elif(-4.0 < regression_data['PCT_day_change'] < -3 and -5 < regression_data['PCT_change'] < -1
             and ((regression_data['forecast_day_PCT3_change'] < 0 and regression_data['forecast_day_PCT4_change'] < 0)
                 or regression_data['forecast_day_PCT5_change'] < 0
@@ -1125,6 +1126,19 @@ def sell_af_others(regression_data, regressionResult, reg, ws):
         and high_tail_pct(regression_data) <= 2.5
         ):
         add_in_csv(regression_data, regressionResult, ws, '%%AF:maySellStock-DowntrendStart')
+    
+    if(regression_data['PCT_day_change'] < -0.5 and regression_data['PCT_day_change_pre1'] > 1 and regression_data['PCT_day_change_pre2'] > 1
+        and (regression_data['forecast_day_PCT4_change'] > 5
+            or regression_data['forecast_day_PCT7_change'] > 5
+            or regression_data['forecast_day_PCT10_change'] > 5
+            )
+        and regression_data['monthHighChange'] < -5
+        and regression_data['monthLowChange'] > 5
+        ):
+        if(regression_data['forecast_day_PCT3_change'] < 0 and regression_data['forecast_day_PCT4_change'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, '%%AF:mayBuyStock-smallUptrendContinue')
+        elif(regression_data['forecast_day_PCT4_change'] > 0 or regression_data['forecast_day_PCT5_change'] > 0):
+            add_in_csv(regression_data, regressionResult, ws, '%%AF(DOWNTREND-OR-GLOBALDOWN):maySellStock-smallUptrendReversal')
     
 #     if(len(regression_data['filter']) > 9
 #         and -4 < regression_data['PCT_day_change'] < -2

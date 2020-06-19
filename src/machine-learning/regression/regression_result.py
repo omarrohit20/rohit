@@ -453,8 +453,8 @@ def calculateParallel(threads=2, futures=None):
     scrips = []
     for data in db.scrip.find({'futures':futures}):
         hsdata = db.history.find_one({'dataset_code':data['scrip']})
-        #processing_date = '2020-06-18'
-        processing_date = (datetime.date.today() - datetime.timedelta(days=0)).strftime('%Y-%m-%d')
+        processing_date = '2020-06-18'
+        #processing_date = (datetime.date.today() - datetime.timedelta(days=0)).strftime('%Y-%m-%d')
         if(hsdata is None or (np.array(hsdata['data'])).size < 1000):
             print('Missing or very less Data for ', data['scrip'])
         elif(hsdata['end_date'] != processing_date):
