@@ -1111,7 +1111,7 @@ def buy_af_others(regression_data, regressionResult, reg, ws):
             or  regression_data['PCT_day_change'] > 2
             ) 
         ):
-        add_in_csv(regression_data, regressionResult, ws, '%%:FlagWeek')
+        add_in_csv(regression_data, regressionResult, ws, '%%:buyFlagWeek')
     elif(abs(regression_data['month3HighChange']) < abs(regression_data['month3LowChange'])
         and regression_data['monthHighChange'] == regression_data['week2HighChange']
         and regression_data['monthLowChange'] != regression_data['week2LowChange']
@@ -1121,7 +1121,7 @@ def buy_af_others(regression_data, regressionResult, reg, ws):
             or  regression_data['PCT_day_change'] > 2
             ) 
         ):
-        add_in_csv(regression_data, regressionResult, ws, '%%:Flag2Week') 
+        add_in_csv(regression_data, regressionResult, ws, '%%:buyFlag2Week') 
     elif(regression_data['week2HighChange'] >= regression_data['weekHighChange']
         and regression_data['week2LowChange'] != regression_data['weekLowChange']
         and regression_data['weekHighChange'] < -1
@@ -1130,7 +1130,7 @@ def buy_af_others(regression_data, regressionResult, reg, ws):
             or  regression_data['PCT_day_change'] > 2
             )
         ):
-        add_in_csv(regression_data, regressionResult, ws, '%%:FlagWeek-Risky')
+        add_in_csv(regression_data, regressionResult, ws, '%%:buyFlagWeek-Risky')
     elif(regression_data['monthHighChange'] >= regression_data['week2HighChange']
         and regression_data['monthLowChange'] != regression_data['week2LowChange']
         and regression_data['week2HighChange'] < -1
@@ -1142,7 +1142,7 @@ def buy_af_others(regression_data, regressionResult, reg, ws):
                 )
             )
         ):
-        add_in_csv(regression_data, regressionResult, ws, '%%:Flag2Week-Risky')  
+        add_in_csv(regression_data, regressionResult, ws, '%%:buyFlag2Week-Risky')  
     
     
     if(regression_data['week2HighChange'] == regression_data['weekHighChange']
@@ -1162,7 +1162,7 @@ def buy_af_others(regression_data, regressionResult, reg, ws):
             or regression_data['PCT_day_change'] > 3
             )
         ):
-        add_in_csv(regression_data, regressionResult, ws, '%%:FlagMonth')
+        add_in_csv(regression_data, regressionResult, ws, '%%:buyFlagMonth')
         
     
                        
