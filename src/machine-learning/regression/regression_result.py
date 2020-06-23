@@ -87,7 +87,7 @@ ws_high.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_
 ws_low = wb.create_sheet("LowAll")
 ws_low.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "forecast_mlpValue_reg", "forecast_kNeighboursValue_reg", "forecast_mlpValue_cla", "forecast_kNeighboursValue_cla", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "mHighChange", "mLowChange", "w2HighChange", "w2LowChange", "wHighChange", "wLowChange", "trend", "Score", "HighTail", "LowTail", "Close", "PCT_Day_Change", "PCT_Change", "Symbol", "Industry", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "Filter345Acc", "Filter345Count", "Filter345Pct", "Filter1Acc", "Filter1Count", "Filter1Pct", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterPctDayChangePct", "FilterAllAcc", "FilterAllCount", "FilterAllPct", "FilterTechAcc", "FilterTechCount", "FilterTechPct", "FilterTechAllAcc", "FilterTechAllCount", "FilterTechAllPct", "FilterTechAllPctChangeAcc", "FilterTechAllPctChangeCount", "FilterTechAllPctChangePct"])
 
-def saveReports(run_type=None):
+def saveReports():
     ws_allFilterAcc.append([""])
     ws_highBuyStrongFilterAcc.append([""])
     ws_lowSellStrongFilterAcc.append([""])
@@ -451,10 +451,18 @@ def result_data_cla(scrip):
 def calculateParallel(threads=2, futures=None):
     pool = ThreadPool(threads)
     scrips = []
-    for data in db.scrip.find({'futures':futures}):
+    processing_date = '2020-06-22'
+    #processing_date = (datetime.date.today() - datetime.timedelta(days=0)).strftime('%Y-%m-%d')
+    for data in db.scrip.find({'futures':'Yes'}):
         hsdata = db.history.find_one({'dataset_code':data['scrip']})
-        processing_date = '2020-06-18'
-        #processing_date = (datetime.date.today() - datetime.timedelta(days=0)).strftime('%Y-%m-%d')
+        if(hsdata is None or (np.array(hsdata['data'])).size < 1000):
+            print('Missing or very less Data for ', data['scrip'])
+        elif(hsdata['end_date'] != processing_date):
+            print('End Date ', hsdata['end_date'], 'not recent for', data['scrip'])
+        else: 
+            scrips.append(data['scrip'])
+    for data in db.scrip.find({'futures':'No'}):
+        hsdata = db.history.find_one({'dataset_code':data['scrip']})
         if(hsdata is None or (np.array(hsdata['data'])).size < 1000):
             print('Missing or very less Data for ', data['scrip'])
         elif(hsdata['end_date'] != processing_date):
@@ -470,6 +478,6 @@ def calculateParallel(threads=2, futures=None):
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(1, sys.argv[1])
+    calculateParallel(1)
     connection.close()
-    saveReports(sys.argv[1])
+    saveReports()
