@@ -451,8 +451,8 @@ def result_data_cla(scrip):
 def calculateParallel(threads=2, futures=None):
     pool = ThreadPool(threads)
     scrips = []
-    #processing_date = '2020-06-23'
     processing_date = (datetime.date.today() - datetime.timedelta(days=0)).strftime('%Y-%m-%d')
+    #processing_date = '2020-06-24'
     for data in db.scrip.find({'futures':'Yes'}):
         hsdata = db.history.find_one({'dataset_code':data['scrip']})
         if(hsdata is None or (np.array(hsdata['data'])).size < 1000):
