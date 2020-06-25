@@ -29,11 +29,16 @@ forecast_out = 1
 run_ml_algo = True
 
 def regression_ta_data(scrip):
+    data = db.history.find_one({'dataset_code':scrip})
     regression_data_db = db.regressionlow.find_one({'scrip':scrip})
     if(regression_data_db is not None):
-        return
+        if(regression_data_db['date'] != data['end_date']):
+            db.regressionhigh.delete_many({'scrip':scrip})
+            db.regressionlow.delete_many({'scrip':scrip})
+        else:
+            return
     
-    data = db.history.find_one({'dataset_code':scrip})
+    
     if(data is None or (np.array(data['data'])).size < 1000):
         print('Missing or very less Data for ', scrip)
         return
