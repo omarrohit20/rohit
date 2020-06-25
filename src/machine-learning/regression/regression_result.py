@@ -451,22 +451,19 @@ def result_data_cla(scrip):
 def calculateParallel(threads=2, futures=None):
     pool = ThreadPool(threads)
     scrips = []
+    
     processing_date = (datetime.date.today() - datetime.timedelta(days=0)).strftime('%Y-%m-%d')
     #processing_date = '2020-06-24'
     for data in db.scrip.find({'futures':'Yes'}):
-        hsdata = db.history.find_one({'dataset_code':data['scrip']})
-        if(hsdata is None or (np.array(hsdata['data'])).size < 1000):
-            print('Missing or very less Data for ', data['scrip'])
-        elif(hsdata['end_date'] != processing_date):
-            print('End Date ', hsdata['end_date'], 'not recent for', data['scrip'])
+        regdata = db.regressionlow.find_one({'scrip':data['scrip']})
+        if(regdata['date'] != processing_date):
+            print('End Date ', regdata['date'], 'not recent for', data['scrip'])
         else: 
             scrips.append(data['scrip'])
     for data in db.scrip.find({'futures':'No'}):
-        hsdata = db.history.find_one({'dataset_code':data['scrip']})
-        if(hsdata is None or (np.array(hsdata['data'])).size < 1000):
-            print('Missing or very less Data for ', data['scrip'])
-        elif(hsdata['end_date'] != processing_date):
-            print('End Date ', hsdata['end_date'], 'not recent for', data['scrip'])
+        regdata = db.regressionlow.find_one({'scrip':data['scrip']})
+        if(regdata['date'] != processing_date):
+            print('End Date ', regdata['date'], 'not recent for', data['scrip'])
         else: 
             scrips.append(data['scrip'])
     scrips.sort()
