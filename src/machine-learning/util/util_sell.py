@@ -2617,7 +2617,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         elif(0 < regression_data['PCT_day_change'] < 2 and (abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change']))
             and (-5 < regression_data['PCT_day_change_pre1'] < -2 and -5 < regression_data['PCT_day_change_pre2'] < -2)
             and 0 > regression_data['forecast_day_PCT_change'] > regression_data['forecast_day_PCT2_change'] > regression_data['forecast_day_PCT3_change']
-            and regression_data['low_pre2'] > regression_data['low_pre1'] > regression_data['low_pre'] 
+            and regression_data['low_pre2'] > regression_data['low_pre1'] > regression_data['low'] 
             and regression_data['forecast_day_PCT7_change'] > -15
             and regression_data['forecast_day_PCT10_change'] > -15
             and (regression_data['month3HighChange'] > 10
