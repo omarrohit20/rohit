@@ -1146,7 +1146,7 @@ def sell_af_others(regression_data, regressionResult, reg, ws):
         and regression_data['weekHighChange'] < -2
         and regression_data['weekLowChange'] > 2
         and ((0 < regression_data['PCT_day_change'] < 0.75)
-            or regression_data['PCT_day_change'] < -2
+            or (regression_data['PCT_day_change'] < -2 and regression_data['PCT_day_change'] < 0)
             ) 
         ):
         add_in_csv(regression_data, regressionResult, ws, '%%:sellFlagWeek')
@@ -1155,8 +1155,13 @@ def sell_af_others(regression_data, regressionResult, reg, ws):
         and regression_data['monthLowChange'] == regression_data['week2LowChange']
         and regression_data['weekHighChange'] < -2
         and regression_data['weekLowChange'] > 2
-        and ((0 < regression_data['PCT_day_change'] < 0.75)
-            or regression_data['PCT_day_change'] < -2
+        and ((0 < regression_data['PCT_day_change'] < 0.75
+                and regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']
+                and regression_data['PCT_day_change_pre2'] > 0
+                )
+            or(-4 < regression_data['PCT_day_change'] < -2 and regression_data['PCT_change'] < 0
+                and regression_data['PCT_day_change_pre1'] < 1.5
+                )
             ) 
         ):
         add_in_csv(regression_data, regressionResult, ws, '%%:sellFlag2Week') 
@@ -1164,8 +1169,13 @@ def sell_af_others(regression_data, regressionResult, reg, ws):
         and regression_data['week2LowChange'] <= regression_data['weekLowChange']
         and regression_data['weekHighChange'] < -1
         and regression_data['weekLowChange'] > 1
-        and ((0 < regression_data['PCT_day_change'] < 0.75 and regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']) 
-            or regression_data['PCT_day_change'] < -2
+        and ((0 < regression_data['PCT_day_change'] < 0.75
+                and regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']
+                and regression_data['PCT_day_change_pre2'] > 0
+                )
+            or(-4 < regression_data['PCT_day_change'] < -2 and regression_data['PCT_change'] < 0
+                and regression_data['PCT_day_change_pre1'] < 1.5
+                )
             )
         ):
         add_in_csv(regression_data, regressionResult, ws, '%%:sellFlagWeek-Risky')
@@ -1173,8 +1183,12 @@ def sell_af_others(regression_data, regressionResult, reg, ws):
         and regression_data['monthLowChange'] <= regression_data['week2LowChange']
         and regression_data['week2HighChange'] < -1
         and regression_data['week2LowChange'] > 1
-        and ((0 < regression_data['PCT_day_change'] < 0.75 and regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change'])
-            or (regression_data['PCT_day_change'] < -2 
+        and ((0 < regression_data['PCT_day_change'] < 0.75
+                and regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']
+                and regression_data['PCT_day_change_pre2'] > 0
+                )
+            or(-4 < regression_data['PCT_day_change'] < -2 and regression_data['PCT_change'] < 0
+                and regression_data['PCT_day_change_pre1'] < 1.5
                 and regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']
                 and regression_data['PCT_day_change_pre2'] > regression_data['PCT_day_change']
                 )
