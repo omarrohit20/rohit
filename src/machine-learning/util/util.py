@@ -246,11 +246,11 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         buy_check_chart(regression_data, regressionResult, reg, ws)
         buy_month3_high_continue(regression_data, regressionResult, reg, ws)
         buy_heavy_uptrend_reversal(regression_data, regressionResult, reg, ws)
-        buy_supertrend(regression_data, regressionResult, reg, ws)
         buy_risingMA(regression_data, regressionResult, reg, ws)
         buy_study_risingMA(regression_data, regressionResult, reg, ws)
         buy_random_filters(regression_data, regressionResult, reg, ws)
         buy_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        buy_supertrend(regression_data, regressionResult, reg, ws)
         
         sell_up_trend(regression_data, regressionResult, reg, ws)
         sell_down_trend(regression_data, regressionResult, reg, ws)
@@ -268,11 +268,11 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         sell_downingMA(regression_data, regressionResult, reg, ws)
         sell_study_downingMA(regression_data, regressionResult, reg, ws)
         sell_market_downtrend(regression_data, regressionResult, reg, ws)
-        sell_supertrend(regression_data, regressionResult, reg, ws)
         sell_heavy_downtrend(regression_data, regressionResult, reg, ws)
         sell_check_chart(regression_data, regressionResult, reg, ws)
         sell_random_filter(regression_data, regressionResult, reg, ws)
         sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        sell_supertrend(regression_data, regressionResult, reg, ws)
         return True
     if(buy_skip_close_lt_50(regression_data, regressionResult, reg, ws)):
         return True
@@ -1266,13 +1266,13 @@ def filter_avg_gt_count(regression_data, val):
         count = count + 1
         if(regression_data['filter_tech_count'] > 1):
             cnt = cnt + 1
-    if(regression_data['filter_tech_all_avg'] > 2
+    if(regression_data['filter_tech_all_avg'] > 3
         and (regression_data['filter_tech_all_pct'] >= 70 or regression_data['filter_tech_all_pct'] == 0)
         ):
         count = count + 1
         if(regression_data['filter_tech_all_count'] > 1):
             cnt = cnt + 1
-    if(regression_data['filter_tech_all_pct_change_avg'] > 2
+    if(regression_data['filter_tech_all_pct_change_avg'] > 3
         and (regression_data['filter_tech_all_pct_change_pct'] >= 70 or regression_data['filter_tech_all_pct_change_pct'] == 0)
         ):
         count = count + 1
@@ -1315,13 +1315,13 @@ def filter_avg_lt_count(regression_data, val):
         count = count + 1
         if(regression_data['filter_tech_count'] > 1):
             cnt = cnt + 1
-    if(regression_data['filter_tech_all_avg'] < -2
+    if(regression_data['filter_tech_all_avg'] < -3
         and (regression_data['filter_tech_all_pct'] < -70 or regression_data['filter_tech_all_pct'] == 0)
         ):
         count = count + 1
         if(regression_data['filter_tech_all_count'] > 1):
             cnt = cnt + 1
-    if(regression_data['filter_tech_all_pct_change_avg'] < -2
+    if(regression_data['filter_tech_all_pct_change_avg'] < -3
         and (regression_data['filter_tech_all_pct_change_pct'] < -70 or regression_data['filter_tech_all_pct_change_pct'] == 0)
         ):
         count = count + 1

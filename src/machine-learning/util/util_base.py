@@ -2768,35 +2768,41 @@ def high_volatility(regression_data, regressionResult, buy=True):
             and buy == True
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:2-(GLOBALDOWN-LT(-2.0))%%maySellWeek2LowWeekLowGT20')
+            flag = True
         elif(regression_data['week2LowChange'] > 20 and regression_data['weekLowChange'] > 0
             and regression_data['PCT_day_change'] < -3 and regression_data['PCT_change'] < -3
             and buy == True
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:3-(GLOBALDOWN-Continue-LT(-2.0))%%maySellWeek2LowWeekLowGT20')
+            flag = True
         elif(regression_data['week2LowChange'] > 10 and regression_data['weekLowChange'] > -5
             and regression_data['PCT_day_change'] < -3 and regression_data['PCT_change'] < -3
             and buy == True
             and is_algo_sell(regression_data)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:4-(GLOBALDOWN-Continue-LT(-2.0))%%maySellWeek2LowWeekLowGT10')
+            flag = True
         elif(regression_data['week2LowChange'] > 5 and regression_data['weekLowChange'] > 0
             and regression_data['PCT_day_change'] < -3 and regression_data['PCT_change'] < -3
             and buy == True
             and is_algo_sell(regression_data)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:5-(GLOBALDOWN-Continue-LT(-2.0))%%maySellWeek2LowWeekLowGT5')
+            flag = True
         elif(regression_data['week2LowChange'] > 5 and regression_data['weekLowChange'] > 0
             and regression_data['PCT_day_change'] < -3 and regression_data['PCT_change'] < -3
             and buy == True
             and is_algo_sell(regression_data)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:5-(GLOBALDOWN-Continue-LT(-2.0))%%maySellWeek2LowWeekLowGT5')
+            flag = True
         elif(regression_data['week2LowChange'] > 0 and regression_data['weekLowChange'] > 0
             and regression_data['PCT_day_change'] < -2 and regression_data['PCT_change'] < -2
             and buy == True
             and is_algo_sell(regression_data)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:6-(GLOBALDOWN-Continue-LT(-2.0))%%maySellWeek2LowWeekLowGT0')
+            flag = True
     elif(buy == False
         and is_algo_sell(regression_data) == False
         ):
@@ -2805,34 +2811,40 @@ def high_volatility(regression_data, regressionResult, buy=True):
             and buy == False
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:2-(GLOBALUP-GT(2.0))%%mayBuyWeek2HighWeekHighLT-20')
+            flag = True
         elif(regression_data['week2HighChange'] < -20 and regression_data['weekHighChange'] < 0
             and regression_data['PCT_day_change'] > 3 and regression_data['PCT_change'] > 3
             and buy == False
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:3-(GLOBALUP-Continue-GT(2.0))%%mayBuyWeek2HighWeekHighLT-20')
+            flag = True
         elif(regression_data['week2HighChange'] < -10 and regression_data['weekHighChange'] < 5
             and regression_data['PCT_day_change'] > 3 and regression_data['PCT_change'] > 3
             and buy == False
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:4-(GLOBALUP-Continue-GT(2.0))%%mayBuyWeek2HighWeekHighLT-10')
+            flag = True
         elif(regression_data['week2HighChange'] < -5 and regression_data['weekHighChange'] < 0
             and regression_data['PCT_day_change'] > 3 and regression_data['PCT_change'] > 3
             and buy == False
             and is_algo_buy(regression_data)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:5-(GLOBALUP-Continue-GT(2.0))%%mayBuyWeek2HighWeekHighLT-5')
+            flag = True
         elif(regression_data['week2HighChange'] < -5 and regression_data['weekHighChange'] < 0
             and regression_data['PCT_day_change'] > 3 and regression_data['PCT_change'] > 3
             and buy == False
             and is_algo_buy(regression_data)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:5-(GLOBALUP-Continue-GT(2.0))%%mayBuyWeek2HighWeekHighLT-5')
+            flag = True
         elif(regression_data['week2HighChange'] < 0 and regression_data['weekHighChange'] < 0
             and regression_data['PCT_day_change'] > 2 and regression_data['PCT_change'] > 2
             and buy == False
             and is_algo_buy(regression_data)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:6-(GLOBALUP-Continue-GT(2.0))%%mayBuyWeek2HighWeekHighLT0')
+            flag = True
     
     if(buy == True
         and regression_data['PCT_day_change'] < -8
@@ -2841,18 +2853,7 @@ def high_volatility(regression_data, regressionResult, buy=True):
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:(UPTREND-LastDayMarketDown)%%mayBuyMorningHighVolatileLastDayDown-LT(-8)')
         flag = True
-    elif(buy == True
-        and regression_data['week2LowChange'] > 10 and regression_data['weekLowChange'] > 5
-        and regression_data['PCT_day_change'] < -3 and regression_data['PCT_change'] < -3
-        and (regression_data['forecast_day_PCT7_change'] < 20
-            or regression_data['forecast_day_PCT10_change'] < 20
-            )
-        and regression_data['forecast_day_PCT2_change'] > -1
-        and regression_data['forecast_day_PCT3_change'] > -1
-        and regression_data['forecast_day_PCT4_change'] > -1
-        and regression_data['forecast_day_PCT5_change'] > 5
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:(GLOBAL-UP-Continue)%%mayBuyWeek2LowWeekLowGT5LastDayStockDown')
+    
         
     if(buy == False
         and regression_data['PCT_day_change'] > 8
@@ -2861,19 +2862,8 @@ def high_volatility(regression_data, regressionResult, buy=True):
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:(DOWNTREND-LastDayMarketUp)%%maySellMorningHighVolatileLastDayUp-GT8')
         flag = True
-    elif(buy == False
-        and regression_data['week2HighChange'] < -10 and regression_data['weekHighChange'] < -5
-        and regression_data['PCT_day_change'] > 3 and regression_data['PCT_change'] > 3
-        and (regression_data['forecast_day_PCT7_change'] > -20
-            or regression_data['forecast_day_PCT10_change'] > -20
-            )
-        and regression_data['forecast_day_PCT2_change'] < 1
-        and regression_data['forecast_day_PCT3_change'] < 1
-        and regression_data['forecast_day_PCT4_change'] < 1
-        and regression_data['forecast_day_PCT5_change'] < -5
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, 'TEST:(GLOBAL-DOWN-Continue)%%maySellWeek2HighWeekHighLT-5LastDayUp')
     
+        
     if(buy == True
         and regression_data['forecast_day_PCT7_change'] < 0
         and regression_data['forecast_day_PCT10_change'] < 0
