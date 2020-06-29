@@ -655,5 +655,17 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     else:
         regression_data['lowTail_pre1'] = (((regression_data['bar_low_pre1'] - regression_data['low_pre1'])/regression_data['bar_low_pre1'])*100)
     
+    regression_data['highTail_pre2'] = 0
+    regression_data['lowTail_pre2'] = 0
+    if(regression_data['high_pre2'] - regression_data['bar_high_pre2'] == 0):
+        regression_data['highTail_pre2'] = 0
+    else:
+        regression_data['highTail_pre2'] = (((regression_data['high_pre2'] - regression_data['bar_high_pre2'])/regression_data['bar_high_pre2'])*100)
+    
+    if((regression_data['bar_low_pre2'] - regression_data['low_pre2']) == 0):
+        regression_data['lowTail_pre2'] = 0
+    else:
+        regression_data['lowTail_pre2'] = (((regression_data['bar_low_pre2'] - regression_data['low_pre2'])/regression_data['bar_low_pre2'])*100)
+    
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     create_csv(regression_data)
