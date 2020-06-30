@@ -703,9 +703,9 @@ def sell_af_high_tail(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, '%%AF:maySellTail-tailGT2-7,10thDayGT0')
     elif(low_tail_pct(regression_data) <= 1 and 2 <= high_tail_pct(regression_data) <= 6
         and 1 < regression_data['PCT_day_change'] < 5 and 1 < regression_data['PCT_change'] < 5
-        and regression_data['forecast_day_PCT2_change'] > 0
-        and regression_data['forecast_day_PCT3_change'] > 0
-        and regression_data['forecast_day_PCT4_change'] > 0
+        and regression_data['forecast_day_PCT2_change'] > 0 and regression_data['low'] > regression_data['high_pre2']
+        and regression_data['forecast_day_PCT3_change'] > 0 and regression_data['low'] > regression_data['high_pre3']
+        and regression_data['forecast_day_PCT4_change'] > 0 and regression_data['low'] > regression_data['high_pre4']
         and regression_data['forecast_day_PCT5_change'] > -5
         #and regression_data['forecast_day_PCT7_change'] > -10
         #and regression_data['forecast_day_PCT10_change'] > -10
@@ -731,6 +731,7 @@ def sell_af_high_tail(regression_data, regressionResult, reg, ws):
         ):
         if(0.5 < regression_data['PCT_day_change'] < 3 and 0.5 < regression_data['PCT_change'] < 3
            and (1 < regression_data['PCT_day_change'] or 1 < regression_data['PCT_change'])
+           and abs(regression_data['PCT_day_change']) < high_tail_pct(regression_data)
            and regression_data['forecast_day_PCT2_change'] > 0
            and regression_data['forecast_day_PCT3_change'] > 0
            and regression_data['forecast_day_PCT4_change'] > 0
