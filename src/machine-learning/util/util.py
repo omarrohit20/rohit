@@ -227,6 +227,28 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
     filterMA(regression_data, regressionResult)
     tail_reversal_filter(regression_data, regressionResult)
     if(regression_data['close'] > 50):
+        sell_up_trend(regression_data, regressionResult, reg, ws)
+        sell_down_trend(regression_data, regressionResult, reg, ws)
+        sell_final(regression_data, regressionResult, reg, ws, ws)
+        sell_pattern(regression_data, regressionResult, reg, ws, ws)
+        sell_base_line_buy(regression_data, regressionResult, reg, ws)
+        sell_morning_star_buy(regression_data, regressionResult, reg, ws)
+        sell_evening_star_sell(regression_data, regressionResult, reg, ws)
+        sell_day_high(regression_data, regressionResult, reg, ws)
+        sell_trend_reversal(regression_data, regressionResult, reg, ws)
+        sell_trend_break(regression_data, regressionResult, reg, ws)
+        sell_consolidation_breakdown(regression_data, regressionResult, reg, ws)
+        sell_final_candidate(regression_data, regressionResult, reg, ws)
+        sell_oi(regression_data, regressionResult, reg, ws)
+        sell_downingMA(regression_data, regressionResult, reg, ws)
+        sell_study_downingMA(regression_data, regressionResult, reg, ws)
+        sell_market_downtrend(regression_data, regressionResult, reg, ws)
+        sell_heavy_downtrend(regression_data, regressionResult, reg, ws)
+        sell_check_chart(regression_data, regressionResult, reg, ws)
+        sell_random_filter(regression_data, regressionResult, reg, ws)
+        sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        #sell_supertrend(regression_data, regressionResult, reg, ws)
+        
         buy_year_high(regression_data, regressionResult, reg, ws)
         buy_year_low(regression_data, regressionResult, reg, ws, ws)
         buy_down_trend(regression_data, regressionResult, reg, ws)
@@ -250,28 +272,6 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         buy_random_filters(regression_data, regressionResult, reg, ws)
         buy_tail_reversal_filter(regression_data, regressionResult, reg, ws)
         buy_supertrend(regression_data, regressionResult, reg, ws)
-        
-        sell_up_trend(regression_data, regressionResult, reg, ws)
-        sell_down_trend(regression_data, regressionResult, reg, ws)
-        sell_final(regression_data, regressionResult, reg, ws, ws)
-        sell_pattern(regression_data, regressionResult, reg, ws, ws)
-        sell_base_line_buy(regression_data, regressionResult, reg, ws)
-        sell_morning_star_buy(regression_data, regressionResult, reg, ws)
-        sell_evening_star_sell(regression_data, regressionResult, reg, ws)
-        sell_day_high(regression_data, regressionResult, reg, ws)
-        sell_trend_reversal(regression_data, regressionResult, reg, ws)
-        sell_trend_break(regression_data, regressionResult, reg, ws)
-        sell_consolidation_breakdown(regression_data, regressionResult, reg, ws)
-        sell_final_candidate(regression_data, regressionResult, reg, ws)
-        sell_oi(regression_data, regressionResult, reg, ws)
-        sell_downingMA(regression_data, regressionResult, reg, ws)
-        sell_study_downingMA(regression_data, regressionResult, reg, ws)
-        sell_market_downtrend(regression_data, regressionResult, reg, ws)
-        sell_heavy_downtrend(regression_data, regressionResult, reg, ws)
-        sell_check_chart(regression_data, regressionResult, reg, ws)
-        sell_random_filter(regression_data, regressionResult, reg, ws)
-        sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
-        #sell_supertrend(regression_data, regressionResult, reg, ws)
         return True
     if(buy_skip_close_lt_50(regression_data, regressionResult, reg, ws)):
         return True
@@ -790,28 +790,6 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
     filterMA(regression_data, regressionResult)
     tail_reversal_filter(regression_data, regressionResult)
     if(regression_data['close'] > 50):
-        sell_up_trend(regression_data, regressionResult, reg, ws)
-        sell_down_trend(regression_data, regressionResult, reg, ws)
-        sell_final(regression_data, regressionResult, reg, ws, ws)
-        sell_pattern(regression_data, regressionResult, reg, ws, ws)
-        sell_base_line_buy(regression_data, regressionResult, reg, ws)
-        sell_morning_star_buy(regression_data, regressionResult, reg, ws)
-        sell_evening_star_sell(regression_data, regressionResult, reg, ws)
-        sell_day_high(regression_data, regressionResult, reg, ws)
-        sell_trend_reversal(regression_data, regressionResult, reg, ws)
-        sell_trend_break(regression_data, regressionResult, reg, ws)
-        sell_consolidation_breakdown(regression_data, regressionResult, reg, ws)
-        sell_final_candidate(regression_data, regressionResult, reg, ws)
-        sell_oi(regression_data, regressionResult, reg, ws)
-        sell_downingMA(regression_data, regressionResult, reg, ws)
-        sell_study_downingMA(regression_data, regressionResult, reg, ws)
-        sell_market_downtrend(regression_data, regressionResult, reg, ws)
-        sell_heavy_downtrend(regression_data, regressionResult, reg, ws)
-        sell_check_chart(regression_data, regressionResult, reg, ws)
-        sell_random_filter(regression_data, regressionResult, reg, ws)
-        sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
-        sell_supertrend(regression_data, regressionResult, reg, ws)
-        
         buy_year_high(regression_data, regressionResult, reg, ws)
         buy_year_low(regression_data, regressionResult, reg, ws, ws)
         buy_down_trend(regression_data, regressionResult, reg, ws)
@@ -835,6 +813,28 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         buy_random_filters(regression_data, regressionResult, reg, ws)
         buy_tail_reversal_filter(regression_data, regressionResult, reg, ws)
         #buy_supertrend(regression_data, regressionResult, reg, ws)
+        
+        sell_up_trend(regression_data, regressionResult, reg, ws)
+        sell_down_trend(regression_data, regressionResult, reg, ws)
+        sell_final(regression_data, regressionResult, reg, ws, ws)
+        sell_pattern(regression_data, regressionResult, reg, ws, ws)
+        sell_base_line_buy(regression_data, regressionResult, reg, ws)
+        sell_morning_star_buy(regression_data, regressionResult, reg, ws)
+        sell_evening_star_sell(regression_data, regressionResult, reg, ws)
+        sell_day_high(regression_data, regressionResult, reg, ws)
+        sell_trend_reversal(regression_data, regressionResult, reg, ws)
+        sell_trend_break(regression_data, regressionResult, reg, ws)
+        sell_consolidation_breakdown(regression_data, regressionResult, reg, ws)
+        sell_final_candidate(regression_data, regressionResult, reg, ws)
+        sell_oi(regression_data, regressionResult, reg, ws)
+        sell_downingMA(regression_data, regressionResult, reg, ws)
+        sell_study_downingMA(regression_data, regressionResult, reg, ws)
+        sell_market_downtrend(regression_data, regressionResult, reg, ws)
+        sell_heavy_downtrend(regression_data, regressionResult, reg, ws)
+        sell_check_chart(regression_data, regressionResult, reg, ws)
+        sell_random_filter(regression_data, regressionResult, reg, ws)
+        sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        sell_supertrend(regression_data, regressionResult, reg, ws)
         return True
     if(sell_skip_close_lt_50(regression_data, regressionResult, reg, ws)):
         return True
@@ -1647,19 +1647,40 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
         and "MLSell" not in regression_data['filter']
         ):
         add_in_csv(regression_data, regressionResult, ws, None,'Filter-All-Buy')
-    elif(regression_data['filter_pct_change_avg'] > 1.5 and regression_data['filter_pct_change_count'] >= 2 and regression_data['filter_pct_change_pct'] > 70
-        and "MLSell" not in regression_data['filter'] 
+        superflag = True
+    elif(regression_data['filter_pct_change_avg'] > 1 and regression_data['filter_pct_change_count'] >= 2 and regression_data['filter_pct_change_pct'] > 70
+        and "MLBuy" in regression_data['filter']
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None,'Filter-All-Buy')
+        superflag = True
+    elif(regression_data['filter_pct_change_avg'] > 3 and regression_data['filter_pct_change_count'] >= 2 and regression_data['filter_pct_change_pct'] > 70
         ):
         add_in_csv(regression_data, regressionResult, ws, None,'Filter-All-Buy-risky')
+        superflag = True
     if(regression_data['filter_pct_change_avg'] < -2 and regression_data['filter_pct_change_count'] >= 2 and regression_data['filter_pct_change_pct'] < -70
         and "MLBuy" not in regression_data['filter']
         ):
         add_in_csv(regression_data, regressionResult, ws, None,'Filter-All-Sell')
-    elif(regression_data['filter_pct_change_avg'] < -1.5 and regression_data['filter_pct_change_count'] >= 2 and regression_data['filter_pct_change_pct'] < -70
-        and "MLBuy" not in regression_data['filter']
+        superflag = True
+    elif(regression_data['filter_pct_change_avg'] < -1 and regression_data['filter_pct_change_count'] >= 2 and regression_data['filter_pct_change_pct'] < -70
+        and "MLSell" in regression_data['filter']
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None,'Filter-All-Sell')
+        superflag = True
+    elif(regression_data['filter_pct_change_avg'] < -3 and regression_data['filter_pct_change_count'] >= 2 and regression_data['filter_pct_change_pct'] < -70
         ):
         add_in_csv(regression_data, regressionResult, ws, None,'Filter-All-Sell-risky')
+        superflag = True
         
+        
+    if(regression_data['filter_pct_change_avg'] > 1 and regression_data['filter_pct_change_count'] >= 1 and regression_data['filter_pct_change_pct'] > 66
+        and "MLSell" not in regression_data['filter']
+        ):
+        superflag = True
+    if(regression_data['filter_pct_change_avg'] < -2 and regression_data['filter_pct_change_count'] >= 1 and regression_data['filter_pct_change_pct'] < -66
+        and "MLBuy" not in regression_data['filter']
+        ):
+        superflag = True
     
     is_filter_risky(regression_data, regressionResult, high_or_low, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
     is_filter_risky(regression_data, regressionResult, high_or_low, ws, 'filter_avg', 'filter_count', 'filter_pct')
