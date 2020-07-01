@@ -117,7 +117,7 @@ def sell_high_volatility(regression_data, regressionResult):
             )
         and (regression_data['month3LowChange'] > 5 or abs_month3High_less_than_month3Low(regression_data))
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, 'checkConsolidationBreakDown(NotShapeA)-2week')
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'checkSellConsolidationBreakDown(NotShapeA)-2week')
         flag = True
 #     elif('checkConsolidationBreakDown-2week' in regression_data['filter']
 #         and -5 < regression_data['PCT_day_change'] < 0
@@ -126,7 +126,7 @@ def sell_high_volatility(regression_data, regressionResult):
 #         and 'brokenToday' in regression_data['filter']
 #         and 'MLSell' in regression_data['filter']
 #         ):
-#         add_in_csv(regression_data, regressionResult, ws, None, None, 'RISKY:checkConsolidationBreakDown(NotShapeA)-2week')
+#         add_in_csv(regression_data, regressionResult, ws, None, None, 'RISKY:checkSellConsolidationBreakDown(NotShapeA)-2week')
 #         flag = True
     
     if(regression_data['PCT_day_change'] < 0
@@ -900,8 +900,8 @@ def sell_af_high_tail(regression_data, regressionResult, reg, ws):
         and (0 < regression_data['PCT_day_change'] < 2)
         #and (regression_data['forecast_day_PCT2_change'] < 0 or regression_data['forecast_day_PCT3_change'] < 0 or regression_data['forecast_day_PCT4_change'] < 0)
         #and (regression_data['forecast_day_PCT5_change'] > 0 or regression_data['forecast_day_PCT7_change'] > 0 or regression_data['forecast_day_PCT10_change'] > 0)
-        and (abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])
-            or abs(regression_data['week2HighChange']) > abs(regression_data['week2LowChange'])
+        and (#abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])
+            abs(regression_data['week2HighChange']) > abs(regression_data['week2LowChange'])
             )
         ):
         add_in_csv(regression_data, regressionResult, ws, '%%AF-Last2LowTail:(GLOBAL-UP)buyHighLowerTailPre')
@@ -3039,7 +3039,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             and regression_data['month3HighChange'] < -10
             #and regression_data['low'] > regression_data['low_pre1']
             ):
-            add_in_csv(regression_data, regressionResult, ws, '%%sellSuper1') 
+            add_in_csv(regression_data, regressionResult, ws, '%%checkSellSuper1') 
             flag = True
         elif(-5 < regression_data['PCT_day_change_pre1'] < 0.75
             and -0.5 < regression_data['PCT_day_change'] < 0.75
@@ -3065,7 +3065,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             and regression_data['month3HighChange'] < -10
             #and regression_data['high'] < regression_data['high_pre1']
             ):
-            add_in_csv(regression_data, regressionResult, ws, '%%sellSuper-Risky')
+            add_in_csv(regression_data, regressionResult, ws, '%%checkSellSuper-Risky')
             if(regression_data['PCT_day_change_pre1'] < 0
                 and -0.75 < regression_data['PCT_day_change'] < 0):
                 add_in_csv(regression_data, regressionResult, ws, '--')
@@ -3092,7 +3092,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             #and regression_data['month3HighChange'] < -10
             #and low_tail_pct(regression_data) < 2.5
             ):
-            add_in_csv(regression_data, regressionResult, ws, '%%sellSuper2')
+            add_in_csv(regression_data, regressionResult, ws, '%%checkSellSuper2')
             if(regression_data['PCT_day_change_pre1'] < 0
                 and -0.75 < regression_data['PCT_day_change'] < 0):
                 add_in_csv(regression_data, regressionResult, ws, '--')
@@ -3125,7 +3125,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
                 and regression_data['forecast_day_PCT7_change'] > -13
                 and regression_data['forecast_day_PCT10_change'] > -13
                 ):
-                add_in_csv(regression_data, regressionResult, ws, '%%sellSuper3')
+                add_in_csv(regression_data, regressionResult, ws, '%%checkSellSuper3')
                 flag = True
             elif(high_tail_pct(regression_data) > 2.5
                 and low_tail_pct(regression_data) > 1.5
@@ -3150,7 +3150,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             if(low_tail_pct(regression_data) < 3.5 
                 and high_tail_pct(regression_data) < 2.5
                 ):
-                add_in_csv(regression_data, regressionResult, ws, '%%sellSuper4')
+                add_in_csv(regression_data, regressionResult, ws, '%%checkSellSuper4')
                 flag = True
             elif(high_tail_pct(regression_data) > 2.5
                 and low_tail_pct(regression_data) > 1.5
@@ -3164,7 +3164,14 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         and regression_data['weekHighChange'] < -2
         and regression_data['weekLowChange'] > 2
         ):
-        if (0 < regression_data['PCT_day_change'] < 0.75):
+        if (0 < regression_data['PCT_day_change'] < 0.75
+            and(regression_data['PCT_day_change_pre1'] < -2
+                or regression_data['PCT_day_change_pre2'] < -2
+                or regression_data['PCT_day_change_pre3'] < -2
+                or regression_data['PCT_day_change_pre4'] < -2
+                or regression_data['PCT_day_change_pre5'] < -2
+               )
+            ):
             add_in_csv(regression_data, regressionResult, ws, '%%checkSellFlagWeek-doji')
             flag = True
         elif (regression_data['PCT_day_change'] < -2 and regression_data['PCT_day_change'] < 0):
@@ -3201,6 +3208,10 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             and (regression_data['high'] > regression_data['high_pre1']
                  or regression_data['PCT_day_change_pre1'] > 1
                 )
+            and(regression_data['PCT_day_change_pre3'] < -2
+                or regression_data['PCT_day_change_pre4'] < -2
+                or regression_data['PCT_day_change_pre5'] < -2
+               )
             ):
             add_in_csv(regression_data, regressionResult, ws, '%%checkSellFlagWeek-doji-Risky')
             flag = True
@@ -3239,12 +3250,10 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, None)
     elif(regression_data['monthHighChange'] == regression_data['week2HighChange']
         and regression_data['monthLowChange'] == regression_data['week2LowChange']
-        and regression_data['week2HighChange'] < -2
-        and regression_data['week2LowChange'] > 2
+        and regression_data['week2HighChange'] < -4
+        and regression_data['week2LowChange'] > 4
         ):
         if(0 < regression_data['PCT_day_change'] < 0.75
-            and regression_data['week2HighChange'] < -4
-            and regression_data['week2LowChange'] > 4
             ):
             add_in_csv(regression_data, regressionResult, ws, '%%checkSellFlagMonth-doji')
             flag = True
@@ -3265,7 +3274,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             )
         and (regression_data['month3LowChange'] > 5 or abs_month3High_less_than_month3Low(regression_data))
         ):
-        add_in_csv(regression_data, regressionResult, ws, '%%checkConsolidationBreakDown(NotShapeA)-2week')
+        add_in_csv(regression_data, regressionResult, ws, '%%checkSellConsolidationBreakDown(NotShapeA)-2week')
         flag = True
     elif('checkConsolidationBreakDown-2week' in regression_data['filter']
         and -5 < regression_data['PCT_day_change'] < 0
@@ -3274,7 +3283,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         and 'brokenToday' in regression_data['filter']
         and 'MLSell' in regression_data['filter']
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'RiskyCheckConsolidationBreakDown(NotShapeA)-2week')
+        add_in_csv(regression_data, regressionResult, ws, 'RiskycheckSellConsolidationBreakDown(NotShapeA)-2week')
         flag = True
           
     return flag

@@ -161,18 +161,17 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
             and low_tail_pct_pre1(regression_data) < 2.5
             ):
             if(regression_data['PCT_day_change'] < 2.95
-    #             and (regression_data['PCT_day_change_pre1'] > 0
-    #                 or regression_data['PCT_day_change_pre2'] > 0
-    #                 or regression_data['PCT_day_change_pre3'] > 0
-    #                 or regression_data['PCT_day_change_pre4'] > 0
-    #                 )
+                or (regression_data['PCT_day_change_pre1'] < 0
+                    or regression_data['PCT_day_change_pre2'] < 0
+                    or regression_data['PCT_day_change_pre3'] < 0
+                    )
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HEAVYUPTRENDMARKET:HighUptrend')
             elif(regression_data['PCT_day_change_pre1'] > 0
                 or regression_data['PCT_day_change_pre2'] > 0
                 or regression_data['PCT_day_change_pre3'] > 0
                 ):
-                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HEAVYUPTRENDMARKET:HighUptrend-(NOT-GLOBAL-DOWN)')
+                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HEAVYUPTRENDMARKET:HighUptrend-(UPTREND-GLOBALUP)')
         
     if(('buySuper' in regression_data['filter'])
         and low_tail_pct(regression_data) < 2.5
@@ -272,7 +271,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         sell_check_chart(regression_data, regressionResult, reg, ws)
         sell_random_filter(regression_data, regressionResult, reg, ws)
         sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
-        sell_supertrend(regression_data, regressionResult, reg, ws)
+        #sell_supertrend(regression_data, regressionResult, reg, ws)
         return True
     if(buy_skip_close_lt_50(regression_data, regressionResult, reg, ws)):
         return True
@@ -765,18 +764,17 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
             and high_tail_pct(regression_data) < 2.5
             ):
             if(-2.95 > regression_data['PCT_day_change']
-    #             and(regression_data['PCT_day_change_pre1'] < 0
-    #                 or regression_data['PCT_day_change_pre2'] < 0
-    #                 or regression_data['PCT_day_change_pre3'] < 0
-    #                 or regression_data['PCT_day_change_pre4'] < 0
-    #                 )
+                or (regression_data['PCT_day_change_pre1'] > 0
+                    or regression_data['PCT_day_change_pre2'] > 0
+                    or regression_data['PCT_day_change_pre3'] > 0
+                    )
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HEAVYDOWNTRENDMARKET:HighDowntrend')
             elif(regression_data['PCT_day_change_pre1'] < 0
                 or regression_data['PCT_day_change_pre2'] < 0
                 or regression_data['PCT_day_change_pre3'] < 0
                 ):
-                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HEAVYDOWNTRENDMARKET:HighDowntrend-(NOT-GLOBAL-UP)')
+                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HEAVYDOWNTRENDMARKET:HighDowntrend-(DOWNTREND-GLOBALDOWN)')
     
     if(('sellSuper' in regression_data['filter'])
         and low_tail_pct(regression_data) < 2.5
@@ -808,11 +806,11 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         sell_downingMA(regression_data, regressionResult, reg, ws)
         sell_study_downingMA(regression_data, regressionResult, reg, ws)
         sell_market_downtrend(regression_data, regressionResult, reg, ws)
-        sell_supertrend(regression_data, regressionResult, reg, ws)
         sell_heavy_downtrend(regression_data, regressionResult, reg, ws)
         sell_check_chart(regression_data, regressionResult, reg, ws)
         sell_random_filter(regression_data, regressionResult, reg, ws)
         sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        sell_supertrend(regression_data, regressionResult, reg, ws)
         
         buy_year_high(regression_data, regressionResult, reg, ws)
         buy_year_low(regression_data, regressionResult, reg, ws, ws)
@@ -832,11 +830,11 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         buy_check_chart(regression_data, regressionResult, reg, ws)
         buy_month3_high_continue(regression_data, regressionResult, reg, ws)
         buy_heavy_uptrend_reversal(regression_data, regressionResult, reg, ws)
-        buy_supertrend(regression_data, regressionResult, reg, ws)
         buy_risingMA(regression_data, regressionResult, reg, ws)
         buy_study_risingMA(regression_data, regressionResult, reg, ws)
         buy_random_filters(regression_data, regressionResult, reg, ws)
         buy_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        #buy_supertrend(regression_data, regressionResult, reg, ws)
         return True
     if(sell_skip_close_lt_50(regression_data, regressionResult, reg, ws)):
         return True
