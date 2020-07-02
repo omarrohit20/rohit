@@ -38,7 +38,7 @@ filtertechallpctchangebuy = patterns_to_dict('../../data-import/nselist/filter-t
 def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):        
     if(is_algo_buy(regression_data)):    
         if(-15 < regression_data['PCT_day_change'] < -3.5 and -15 < regression_data['PCT_change'] < -3.5):
-            add_in_csv(regression_data, regressionResult, ws, 'AF:mlBuyPCTDayChangeLT-4.5')
+            add_in_csv(regression_data, regressionResult, ws, 'AF:mlBuyPCTDayChangeLT-3.5')
         elif(regression_data['week2HighChange'] < -20 and regression_data['weekHighChange'] < -10
             and 5 > regression_data['PCT_day_change'] > 2
             ):
@@ -54,6 +54,16 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
 #             and is_any_sell_LTMinus2_from_all_filter_(regression_data) == False
 #             ):
 #             add_in_csv(regression_data, regressionResult, ws, 'AF:1-mlBuyWeekHighLT-10')    
+        if('NearLow' in regression_data['filter3']
+            and'GT0' in regression_data['filter3']
+            and regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 1
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'AF:(UPTRENDMARKET)buyNearLowReversal')
+        if(('BreakHighMonth3' in regression_data['filter3']) or ('BreakHighMonth6' in regression_data['filter3'])
+            and'GT0' in regression_data['filter3']
+            and regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 1
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'AF:(UPTRENDMARKET)buyBreakHighContinue')
     return False
 
 def buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws):
@@ -646,7 +656,7 @@ def buy_filter_all_accuracy(regression_data, regressionResult):
 def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):           
     if(is_algo_sell(regression_data)):
         if(3.5 < regression_data['PCT_day_change'] < 15 and 3.5 < regression_data['PCT_change'] < 15):
-            add_in_csv(regression_data, regressionResult, ws, 'AF:mlSellPCTDayChangeGT4.5')
+            add_in_csv(regression_data, regressionResult, ws, 'AF:mlSellPCTDayChangeGT3.5')
         elif(regression_data['week2LowChange'] > 20 and regression_data['weekLowChange'] > 10
             and -5 < regression_data['PCT_day_change'] < -2
             ):
@@ -667,7 +677,16 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
 #             and is_any_buy_GT2_from_all_filter(regression_data) == False
 #             ):
 #             add_in_csv(regression_data, regressionResult, ws, 'AF:3-mlSellWeek2LowGT5')
-    
+        if('NearHigh' in regression_data['filter3']
+            and'LT0' in regression_data['filter3']
+            and regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > -1
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'AF:(DOWNTRENDMARKET)sellNearHighReversal')
+        if(('BreakLowMonth3' in regression_data['filter3']) or ('BreakLowMonth6' in regression_data['filter3'])
+            and'LT0' in regression_data['filter3']
+            and regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 1
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'AF:(DOWNTRENDMARKET)sellBreakLowContinue')
     return False
 
 def sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws):

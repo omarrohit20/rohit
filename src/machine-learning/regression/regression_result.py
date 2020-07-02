@@ -453,7 +453,7 @@ def calculateParallel(threads=2, futures=None):
     scrips = []
     
     processing_date = (datetime.date.today() - datetime.timedelta(days=0)).strftime('%Y-%m-%d')
-    #processing_date = '2020-06-30'
+    #processing_date = '2020-07-01'
     for data in db.scrip.find({'futures':'Yes'}):
         regdata = db.regressionlow.find_one({'scrip':data['scrip']})
         if(regdata['date'] != processing_date):
