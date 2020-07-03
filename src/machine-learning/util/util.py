@@ -262,8 +262,8 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         sell_market_downtrend(regression_data, regressionResult, reg, ws)
         sell_heavy_downtrend(regression_data, regressionResult, reg, ws)
         sell_check_chart(regression_data, regressionResult, reg, ws)
-        sell_random_filter(regression_data, regressionResult, reg, ws)
         sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        #sell_random_filter(regression_data, regressionResult, reg, ws)
         #sell_supertrend(regression_data, regressionResult, reg, ws)
         
         buy_year_high(regression_data, regressionResult, reg, ws)
@@ -286,8 +286,8 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         buy_heavy_uptrend_reversal(regression_data, regressionResult, reg, ws)
         buy_risingMA(regression_data, regressionResult, reg, ws)
         buy_study_risingMA(regression_data, regressionResult, reg, ws)
-        buy_random_filters(regression_data, regressionResult, reg, ws)
         buy_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        buy_random_filters(regression_data, regressionResult, reg, ws)
         buy_supertrend(regression_data, regressionResult, reg, ws)
         return True
     if(buy_skip_close_lt_50(regression_data, regressionResult, reg, ws)):
@@ -843,8 +843,8 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         buy_heavy_uptrend_reversal(regression_data, regressionResult, reg, ws)
         buy_risingMA(regression_data, regressionResult, reg, ws)
         buy_study_risingMA(regression_data, regressionResult, reg, ws)
-        buy_random_filters(regression_data, regressionResult, reg, ws)
         buy_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        #buy_random_filters(regression_data, regressionResult, reg, ws)
         #buy_supertrend(regression_data, regressionResult, reg, ws)
         
         sell_up_trend(regression_data, regressionResult, reg, ws)
@@ -865,8 +865,8 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         sell_market_downtrend(regression_data, regressionResult, reg, ws)
         sell_heavy_downtrend(regression_data, regressionResult, reg, ws)
         sell_check_chart(regression_data, regressionResult, reg, ws)
-        sell_random_filter(regression_data, regressionResult, reg, ws)
         sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        sell_random_filter(regression_data, regressionResult, reg, ws)
         sell_supertrend(regression_data, regressionResult, reg, ws)
         return True
     if(sell_skip_close_lt_50(regression_data, regressionResult, reg, ws)):

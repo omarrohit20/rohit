@@ -3192,7 +3192,41 @@ def buy_study_risingMA(regression_data, regressionResult, reg, ws):
         return True
 
 def buy_random_filters(regression_data, regressionResult, reg, ws):
-    if(1 < regression_data['PCT_day_change'] < 5
+    if(-2.5 < regression_data['PCT_day_change'] < 2.5
+        and -3.5 < regression_data['PCT_change'] < 3.5
+        and regression_data['PCT_day_change_pre1'] > 1
+        and abs(regression_data['PCT_day_change_pre1']) > 2*(abs(regression_data['PCT_day_change']))
+        and (regression_data['forecast_day_PCT5_change'] < 0
+            and regression_data['forecast_day_PCT7_change'] < 0
+            )
+        and (regression_data['forecast_day_PCT2_change'] > 0 or regression_data['forecast_day_PCT_change'] > 0)
+        and regression_data['weekLowChange'] > 3
+        ):
+        if(regression_data['week2HighChange'] < -5
+            and abs(regression_data['week2HighChange']) > regression_data['week2LowChange']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'checkCupUpDoji')  
+        
+    elif(-5.5 < regression_data['PCT_day_change'] < -2
+        and -5.5 < regression_data['PCT_change'] <  1
+        and regression_data['PCT_day_change_pre1'] > 2
+        and (regression_data['PCT_day_change_pre2'] > 0
+            or regression_data['PCT_day_change_pre3'] > 0
+            )
+        #and (regression_data['forecast_day_PCT5_change'] < 2)
+        and (regression_data['forecast_day_PCT7_change'] < 0
+            and regression_data['forecast_day_PCT10_change'] < 0
+            )
+        and regression_data['forecast_day_PCT2_change'] > 0
+        and regression_data['weekLowChange'] > 3
+        ):
+        if(regression_data['week2HighChange'] < -5
+            and abs(regression_data['week2HighChange']) > regression_data['week2LowChange']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, 'checkCupUp-lastDayDown')  
+        elif(regression_data['week2HighChange'] > -0.5):
+            add_in_csv(regression_data, regressionResult, ws, 'checkCupUp-lastDayDown-near2WeekHigh-mayReveresalSell')
+    elif(2 < regression_data['PCT_day_change'] < 5
         and (regression_data['PCT_day_change']-0.5) < regression_data['PCT_change'] < (regression_data['PCT_day_change'] + 0.5)
         and (regression_data['forecast_day_PCT10_change'] < 1)
         and (regression_data['forecast_day_PCT7_change'] < 0
@@ -3203,6 +3237,7 @@ def buy_random_filters(regression_data, regressionResult, reg, ws):
             or regression_data['forecast_day_PCT3_change'] > 0
             )
         and (((regression_data['low'] - regression_data['low_pre1'])/regression_data['low_pre1'])*100) > 0
+        and regression_data['weekLowChange'] > 3
         ):
         if(regression_data['week2HighChange'] > -0.5):
             add_in_csv(regression_data, regressionResult, ws, 'checkCupUp-near2WeekHigh-mayReveresalSell')
@@ -3271,30 +3306,6 @@ def buy_random_filters(regression_data, regressionResult, reg, ws):
                 and regression_data['bar_high'] < regression_data['bar_high_pre1']
                 ):
                 add_in_csv(regression_data, regressionResult, ws, 'checkCupUp-mayReversalSell')
-            
-    if(-2.5 < regression_data['PCT_day_change'] < -1
-        and -3.5 < regression_data['PCT_change'] < -1
-        and regression_data['PCT_day_change_pre1'] > 1.5
-        and (regression_data['PCT_day_change_pre2'] > 1
-            or regression_data['PCT_day_change_pre3'] > 1
-            )
-        #and (regression_data['forecast_day_PCT5_change'] < 2)
-        and (regression_data['forecast_day_PCT7_change'] < 2)
-        and (regression_data['forecast_day_PCT10_change'] < 2)
-        and (regression_data['forecast_day_PCT5_change'] < 0
-            or regression_data['forecast_day_PCT7_change'] < 0
-            or regression_data['forecast_day_PCT10_change'] < 0
-            )
-        and (regression_data['forecast_day_PCT2_change'] > 0
-            and regression_data['forecast_day_PCT3_change'] > 0
-            )
-        and (((regression_data['low'] - regression_data['low_pre1'])/regression_data['low_pre1'])*100) > 0
-        and (((regression_data['low'] - regression_data['bar_low_pre1'])/regression_data['bar_low_pre1'])*100) > 0 
-        ):
-        if(regression_data['week2HighChange'] > -0.5):
-            add_in_csv(regression_data, regressionResult, ws, 'checkCupUp-lastDayDown-near2WeekHigh-mayReveresalSell')
-        elif(regression_data['week2HighChange'] < -2):
-            add_in_csv(regression_data, regressionResult, ws, 'checkCupUp-lastDayDown')  
         
     if((-0.5 < regression_data['forecast_day_PCT4_change'] < 0.5
         or -0.5 < regression_data['forecast_day_PCT5_change'] < 0.5
