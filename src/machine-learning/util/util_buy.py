@@ -3438,6 +3438,7 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
                 add_in_csv(regression_data, regressionResult, ws, '+-')
             flag = True
         elif(1.5 < regression_data['PCT_day_change_pre1'] < 5 and (abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change']))
+            and (regression_data['PCT_day_change_pre2'] > 1.5 or regression_data['PCT_day_change_pre3'] > 1.5)
             and -1.5 < regression_data['PCT_day_change'] < 0
             #and (regression_data['PCT_day_change'] > 0 or regression_data['PCT_day_change_pre1'] > 0)
             and 0 < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT4_change'] 
@@ -3561,6 +3562,7 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, '%%:checkBuy:Flag2Week')
             flag = True
+            
     elif(regression_data['week2HighChange'] >= regression_data['weekHighChange']
         and regression_data['week2LowChange'] != regression_data['weekLowChange']
         and regression_data['weekHighChange'] < -1
@@ -3579,8 +3581,9 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, '%%:checkBuy:FlagWeek-doji-Risky')
             flag = True
-        elif(2 < regression_data['PCT_day_change'] < 4 and 0 < regression_data['PCT_change']
+        elif(2 < regression_data['PCT_day_change'] < 4 and 0 < regression_data['PCT_change'] 
             and regression_data['PCT_day_change_pre1'] > -1.5
+            and regression_data['weekLowChange'] > 2
             ):
             add_in_csv(regression_data, regressionResult, ws, '%%:checkBuy:FlagWeek-Risky')
             flag = True
@@ -3602,6 +3605,7 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
             and regression_data['PCT_day_change_pre1'] > -1.5
             and regression_data['PCT_day_change_pre1'] < regression_data['PCT_day_change']
             and regression_data['PCT_day_change_pre2'] < regression_data['PCT_day_change']
+            and regression_data['weekLowChange'] > 2
             ):
             add_in_csv(regression_data, regressionResult, ws, '%%:checkBuy:Flag2Week-Risky')
             flag = True
