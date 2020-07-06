@@ -442,10 +442,10 @@ def sell_high_volatility(regression_data, regressionResult):
                 ): 
                 add_in_csv(regression_data, regressionResult, ws, None, None,'[DOWNTREND-SELL-RISKY]')   
         
-        if(((regression_data['weekHighChange'] < -1 and regression_data['weekLowChange'] > 3)
-            or regression_data['week2HighChange'] < -3 and regression_data['week2LowChange'] > 5
+        if(((regression_data['weekHighChange'] < -2 and regression_data['weekLowChange'] > 1.5)
+            #or regression_data['week2HighChange'] < -3 and regression_data['week2LowChange'] > 5
             )
-            and regression_data['PCT_day_change'] > 0.75
+            and regression_data['PCT_day_change'] > 0
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None,'DOWNTREND-GLOBALDOWN:checkForDowntrendContinueLastDayUp')
                   
