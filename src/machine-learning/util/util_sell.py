@@ -441,6 +441,13 @@ def sell_high_volatility(regression_data, regressionResult):
                 and regression_data['high'] < regression_data['high_pre2']
                 ): 
                 add_in_csv(regression_data, regressionResult, ws, None, None,'[DOWNTREND-SELL-RISKY]')   
+        
+        if(((regression_data['weekHighChange'] < -1 and regression_data['weekLowChange'] > 3)
+            or regression_data['week2HighChange'] < -3 and regression_data['week2LowChange'] > 5
+            )
+            and regression_data['PCT_day_change'] > 0.75
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None,'DOWNTREND-GLOBALDOWN:checkForDowntrendContinueLastDayUp')
                   
         if(regression_data['PCT_change'] > 0
             and -5 < regression_data['PCT_day_change_pre1']
@@ -3309,8 +3316,9 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             if(regression_data['PCT_day_change_pre1'] < -2 
                 and regression_data['PCT_day_change'] > 0
                 ):
-                add_in_csv(regression_data, regressionResult, ws, '%%:checkSell:CupDownDoji')
-                flag = True
+                if(regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0):
+                    add_in_csv(regression_data, regressionResult, ws, '%%:checkSell:CupDownDoji')
+                    flag = True
             else:
                 add_in_csv(regression_data, regressionResult, ws, '%%:checkSell(9:30):CupDownDoji')
                 flag = True
