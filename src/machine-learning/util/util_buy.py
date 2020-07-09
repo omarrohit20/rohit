@@ -2241,7 +2241,7 @@ def buy_trend_break(regression_data, regressionResult, reg, ws):
 
 def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
     week2BarHighChange = ((regression_data['bar_high'] - regression_data['week2BarHigh'])/regression_data['bar_high'])*100
-    if(0 < regression_data['PCT_day_change'] < 6
+    if(2 < regression_data['PCT_day_change'] < 6
         and regression_data['PCT_change'] < 6
         and (regression_data['PCT_day_change_pre1'] < 2 
              or regression_data['PCT_day_change_pre1'] < regression_data['PCT_day_change']
@@ -2289,7 +2289,7 @@ def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
         elif(regression_data['year2HighChange'] >= -5):
             add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakUp-2week-(Risky)-year2High')
             
-    elif(1.5 < regression_data['PCT_day_change'] < 6
+    elif(2 < regression_data['PCT_day_change'] < 6
         and regression_data['PCT_change'] < 6
         and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0)
         #and regression_data['high'] > regression_data['high_pre3']
@@ -2304,7 +2304,7 @@ def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
         and regression_data['SMA4'] > regression_data['SMA4_2daysBack']
         ):
         add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakUp-month3HighLTMonth3Low')
-    elif(1.5 < regression_data['PCT_day_change'] < 6
+    elif(2 < regression_data['PCT_day_change'] < 6
         and regression_data['PCT_change'] < 6
         and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0)
         #and regression_data['high'] > regression_data['high_pre3']
@@ -2321,6 +2321,31 @@ def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
         and regression_data['SMA4'] > regression_data['SMA4_2daysBack']
         ):
         add_in_csv(regression_data, regressionResult, ws, '(Test)checkConsolidationBreakUp-forecastDayPCT7changeGT0')
+        
+    if(regression_data['high'] > regression_data['high_pre1']
+        and regression_data['high'] > regression_data['high_pre2']
+        and regression_data['high'] > regression_data['high_pre3']
+        and regression_data['high'] > regression_data['high_pre4']
+        ):
+        if(regression_data['forecast_day_PCT_change'] > 0
+            and 2.5 < regression_data['PCT_day_change'] < 7
+            and -1.5 < regression_data['PCT_day_change_pre1'] < 0
+            and -1.5 < regression_data['PCT_day_change_pre2'] < 0
+            and -1.5 < regression_data['PCT_day_change_pre3'] < 0 
+            and -1.5 < regression_data['PCT_day_change_pre4'] < 1.5
+            and (regression_data['yearHighChange'] < -10 or regression_data['PCT_day_change_pre3'] < 0)
+            ):
+            add_in_csv(regression_data, regressionResult, ws, '(check-chart)consolidationBreakout-allPreLT0')
+        elif(regression_data['forecast_day_PCT_change'] > 0
+            and 2.5 < regression_data['PCT_day_change'] < 7
+            and -1.5 < regression_data['PCT_day_change_pre1'] < 1.5
+            and -1.5 < regression_data['PCT_day_change_pre2'] < 1.5
+            and -1.5 < regression_data['PCT_day_change_pre3'] < 1.5 
+            and -1.5 < regression_data['PCT_day_change_pre4'] < 1.5
+            and (regression_data['yearHighChange'] < -10 or regression_data['PCT_day_change_pre3'] < 0)
+            ):
+            add_in_csv(regression_data, regressionResult, ws, '(check-chart)consolidationBreakout')
+
      
 def buy_final_candidate(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
@@ -3673,8 +3698,8 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
             flag = True 
             
     if('checkConsolidationBreakUp-2week' in regression_data['filter']
-        and 1 < regression_data['PCT_day_change'] < 4
-        and 1 < regression_data['PCT_change'] < 4
+        and 1.5 < regression_data['PCT_day_change'] < 5
+        and 1.5 < regression_data['PCT_change'] < 5
         and (regression_data['PCT_day_change_pre1'] < regression_data['PCT_day_change']/2
             #or 'MLBuy' in regression_data['filter']
             #or 'brokenToday' in regression_data['filter']
@@ -3688,8 +3713,8 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, '%%:checkBuy:ConsolidationBreakUp(NotShapeV)-2week')
         flag = True
     elif('checkConsolidationBreakUp-2week' in regression_data['filter']
-        and 0 < regression_data['PCT_day_change'] < 5
-        and 0 < regression_data['PCT_change'] < 5
+        and 2 < regression_data['PCT_day_change'] < 5
+        and 2 < regression_data['PCT_change'] < 5
         and regression_data['PCT_day_change_pre1'] < 1.5  and regression_data['PCT_change_pre1'] < 1.5
         and 'brokenToday' in regression_data['filter']
         and 'MLBuy' in regression_data['filter']
