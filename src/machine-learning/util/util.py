@@ -16,6 +16,8 @@ from util.util_buy import *
 from util.util_sell import *
 from util.util_base import *
 
+CLOSEPRICE = 40
+
 connection = MongoClient('localhost',27017)
 db = connection.Nsedata
 
@@ -664,13 +666,14 @@ def buy_filter_tech_all_pct_change_accuracy(regression_data, regressionResult):
                 regression_data['filter_tech_all_pct_change_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
 
 def buy_filter_all_accuracy(regression_data, regressionResult):
-    buy_filter_345_accuracy(regression_data, regressionResult)
-    buy_filter_accuracy(regression_data, regressionResult)
-    buy_filter_pct_change_accuracy(regression_data, regressionResult) 
-    buy_filter_345_all_accuracy(regression_data, regressionResult)
-    buy_filter_tech_accuracy(regression_data, regressionResult)
-    buy_filter_tech_all_accuracy(regression_data, regressionResult)
-    buy_filter_tech_all_pct_change_accuracy(regression_data, regressionResult)
+    if(regression_data['close'] > CLOSEPRICE):
+        buy_filter_345_accuracy(regression_data, regressionResult)
+        buy_filter_accuracy(regression_data, regressionResult)
+        buy_filter_pct_change_accuracy(regression_data, regressionResult) 
+        buy_filter_345_all_accuracy(regression_data, regressionResult)
+        buy_filter_tech_accuracy(regression_data, regressionResult)
+        buy_filter_tech_all_accuracy(regression_data, regressionResult)
+        buy_filter_tech_all_pct_change_accuracy(regression_data, regressionResult)
                            
 def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):           
     if(is_algo_sell(regression_data)):
@@ -1260,13 +1263,14 @@ def sell_filter_tech_all_pct_change_accuracy(regression_data, regressionResult):
                 regression_data['filter_tech_all_pct_change_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
 
 def sell_filter_all_accuracy(regression_data, regressionResult):
-    sell_filter_345_accuracy(regression_data, regressionResult)
-    sell_filter_accuracy(regression_data, regressionResult)
-    sell_filter_pct_change_accuracy(regression_data, regressionResult) 
-    sell_filter_345_all_accuracy(regression_data, regressionResult)
-    sell_filter_tech_accuracy(regression_data, regressionResult)
-    sell_filter_tech_all_accuracy(regression_data, regressionResult)
-    sell_filter_tech_all_pct_change_accuracy(regression_data, regressionResult)
+    if(regression_data['close'] > CLOSEPRICE):
+        sell_filter_345_accuracy(regression_data, regressionResult)
+        sell_filter_accuracy(regression_data, regressionResult)
+        sell_filter_pct_change_accuracy(regression_data, regressionResult) 
+        sell_filter_345_all_accuracy(regression_data, regressionResult)
+        sell_filter_tech_accuracy(regression_data, regressionResult)
+        sell_filter_tech_all_accuracy(regression_data, regressionResult)
+        sell_filter_tech_all_pct_change_accuracy(regression_data, regressionResult)
         
 def is_reg_buy_from_filter(regression_data, filter_avg, filter_count, filter_pct):
     if(regression_data[filter_avg] > 1.5

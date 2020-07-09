@@ -14,6 +14,7 @@ from util.util import buy_all_filter, buy_all_common, sell_all_filter, sell_all_
 from util.util import buy_all_rule_classifier, sell_all_rule_classifier
 from util.util import is_algo_buy_classifier, is_algo_sell_classifier
 from util.util import sell_day_high, buy_day_low
+from util.util import CLOSEPRICE
 from bson.son import SON
 
 connection = MongoClient('localhost', 27017)
@@ -92,11 +93,12 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('buy_test_345')       
     curs = db.ws_high.find({})
     for data in curs:
-        data['filterTest'] = ''
-        flag = buy_test_345(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.buy_test_345.insert_one(json.loads(json.dumps(data)))
+        if(data['close'] > CLOSEPRICE):
+            data['filterTest'] = ''
+            flag = buy_test_345(data, data, True, None)
+            if(flag):
+                del data['_id']
+                dbresult.buy_test_345.insert_one(json.loads(json.dumps(data)))
     print('buy_test_345')
     curser = dbresult.buy_test_345.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-345-buy.csv')
@@ -107,11 +109,12 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('buy_test')
     curs = db.ws_high.find({})
     for data in curs:
-        data['filterTest'] = ''
-        flag = buy_test(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.buy_test.insert_one(json.loads(json.dumps(data)))
+        if(data['close'] > CLOSEPRICE):
+            data['filterTest'] = ''
+            flag = buy_test(data, data, True, None)
+            if(flag):
+                del data['_id']
+                dbresult.buy_test.insert_one(json.loads(json.dumps(data)))
     print('buy_test')
     curser = dbresult.buy_test.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-buy.csv')
@@ -122,11 +125,12 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('buy_test_pct_change')
     curs = db.ws_high.find({})
     for data in curs:
-        data['filterTest'] = ''
-        flag = buy_test_pct_change(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.buy_test_pct_change.insert_one(json.loads(json.dumps(data)))
+        if(data['close'] > CLOSEPRICE):
+            data['filterTest'] = ''
+            flag = buy_test_pct_change(data, data, True, None)
+            if(flag):
+                del data['_id']
+                dbresult.buy_test_pct_change.insert_one(json.loads(json.dumps(data)))
     print('buy_test_pct_change')
     curser = dbresult.buy_test_pct_change.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-pct-change-buy.csv')
@@ -137,11 +141,12 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('buy_test_all')         
     curs = db.ws_high.find({})
     for data in curs:
-        data['filterTest'] = ''
-        flag = buy_test_all(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.buy_test_all.insert_one(json.loads(json.dumps(data)))
+        if(data['close'] > CLOSEPRICE):
+            data['filterTest'] = ''
+            flag = buy_test_all(data, data, True, None)
+            if(flag):
+                del data['_id']
+                dbresult.buy_test_all.insert_one(json.loads(json.dumps(data)))
     print('buy_test_all')
     curser = dbresult.buy_test_all.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-all-buy.csv')
@@ -152,11 +157,12 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('buy_test_tech')     
     curs = db.ws_high.find({})
     for data in curs:
-        data['filterTest'] = ''
-        flag = buy_test_tech(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.buy_test_tech.insert_one(json.loads(json.dumps(data)))
+        if(data['close'] > CLOSEPRICE):
+            data['filterTest'] = ''
+            flag = buy_test_tech(data, data, True, None)
+            if(flag):
+                del data['_id']
+                dbresult.buy_test_tech.insert_one(json.loads(json.dumps(data)))
     print('buy_test_tech')
     curser = dbresult.buy_test_tech.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-buy.csv')
@@ -167,11 +173,12 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('buy_test_tech_all')       
     curs = db.ws_high.find({})
     for data in curs:
-        data['filterTest'] = ''
-        flag = buy_test_tech_all(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.buy_test_tech_all.insert_one(json.loads(json.dumps(data)))
+        if(data['close'] > CLOSEPRICE):
+            data['filterTest'] = ''
+            flag = buy_test_tech_all(data, data, True, None)
+            if(flag):
+                del data['_id']
+                dbresult.buy_test_tech_all.insert_one(json.loads(json.dumps(data)))
     print('buy_test_tech_all')
     curser = dbresult.buy_test_tech_all.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-buy.csv')
@@ -182,11 +189,12 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('buy_test_tech_all_pct_change')       
     curs = db.ws_high.find({})
     for data in curs:
-        data['filterTest'] = ''
-        flag = buy_test_tech_all_pct_change(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.buy_test_tech_all_pct_change.insert_one(json.loads(json.dumps(data)))  
+        if(data['close'] > CLOSEPRICE):
+            data['filterTest'] = ''
+            flag = buy_test_tech_all_pct_change(data, data, True, None)
+            if(flag):
+                del data['_id']
+                dbresult.buy_test_tech_all_pct_change.insert_one(json.loads(json.dumps(data)))  
     print('buy_test_tech_all_pct_change')
     curser = dbresult.buy_test_tech_all_pct_change.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-pct-change-buy.csv')
@@ -198,11 +206,12 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('sell_test_345') 
     curs = db.ws_low.find({})
     for data in curs:
-        data['filterTest'] = ''
-        flag = sell_test_345(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.sell_test_345.insert_one(json.loads(json.dumps(data))) 
+        if(data['close'] > CLOSEPRICE):
+            data['filterTest'] = ''
+            flag = sell_test_345(data, data, True, None)
+            if(flag):
+                del data['_id']
+                dbresult.sell_test_345.insert_one(json.loads(json.dumps(data))) 
     print('sell_test_345')
     curser = dbresult.sell_test_345.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-345-sell.csv')
@@ -213,11 +222,12 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('sell_test')
     curs = db.ws_low.find({})
     for data in curs:
-        data['filterTest'] = ''
-        flag = sell_test(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.sell_test.insert_one(json.loads(json.dumps(data))) 
+        if(data['close'] > CLOSEPRICE):
+            data['filterTest'] = ''
+            flag = sell_test(data, data, True, None)
+            if(flag):
+                del data['_id']
+                dbresult.sell_test.insert_one(json.loads(json.dumps(data))) 
     print('sell_test')
     curser = dbresult.sell_test.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-sell.csv')
@@ -228,11 +238,12 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('sell_test_pct_change')
     curs = db.ws_low.find({})        
     for data in curs:
-        data['filterTest'] = ''
-        flag = sell_test_pct_change(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.sell_test_pct_change.insert_one(json.loads(json.dumps(data)))
+        if(data['close'] > CLOSEPRICE):
+            data['filterTest'] = ''
+            flag = sell_test_pct_change(data, data, True, None)
+            if(flag):
+                del data['_id']
+                dbresult.sell_test_pct_change.insert_one(json.loads(json.dumps(data)))
     print('sell_test_pct_change')
     curser = dbresult.sell_test_pct_change.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-pct-change-sell.csv') 
@@ -242,11 +253,12 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('sell_test_all')
     curs = db.ws_low.find({})        
     for data in curs:
-        data['filterTest'] = ''
-        flag = sell_test_all(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.sell_test_all.insert_one(json.loads(json.dumps(data)))
+        if(data['close'] > CLOSEPRICE):
+            data['filterTest'] = ''
+            flag = sell_test_all(data, data, True, None)
+            if(flag):
+                del data['_id']
+                dbresult.sell_test_all.insert_one(json.loads(json.dumps(data)))
     print('sell_test_all')
     curser = dbresult.sell_test_all.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-all-sell.csv') 
@@ -256,11 +268,12 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('sell_test_tech')      
     curs = db.ws_low.find({})
     for data in curs:
-        data['filterTest'] = ''
-        flag = sell_test_tech(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.sell_test_tech.insert_one(json.loads(json.dumps(data)))
+        if(data['close'] > CLOSEPRICE):
+            data['filterTest'] = ''
+            flag = sell_test_tech(data, data, True, None)
+            if(flag):
+                del data['_id']
+                dbresult.sell_test_tech.insert_one(json.loads(json.dumps(data)))
     print('sell_test_tech')
     curser = dbresult.sell_test_tech.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-sell.csv')
@@ -271,11 +284,12 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('sell_test_tech_all')       
     curs = db.ws_low.find({})
     for data in curs:
-        data['filterTest'] = ''
-        flag = sell_test_tech_all(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.sell_test_tech_all.insert_one(json.loads(json.dumps(data)))
+        if(data['close'] > CLOSEPRICE):
+            data['filterTest'] = ''
+            flag = sell_test_tech_all(data, data, True, None)
+            if(flag):
+                del data['_id']
+                dbresult.sell_test_tech_all.insert_one(json.loads(json.dumps(data)))
     print('sell_test_tech_all')
     curser = dbresult.sell_test_tech_all.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-sell.csv')
@@ -285,11 +299,12 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('sell_test_tech_all_pct_change')      
     curs = db.ws_low.find({})
     for data in curs:
-        data['filterTest'] = ''
-        flag = sell_test_tech_all_pct_change(data, data, True, None)
-        if(flag):
-            del data['_id']
-            dbresult.sell_test_tech_all_pct_change.insert_one(json.loads(json.dumps(data)))
+        if(data['close'] > CLOSEPRICE):
+            data['filterTest'] = ''
+            flag = sell_test_tech_all_pct_change(data, data, True, None)
+            if(flag):
+                del data['_id']
+                dbresult.sell_test_tech_all_pct_change.insert_one(json.loads(json.dumps(data)))
     print('sell_test_tech_all_pct_change')
     curser = dbresult.sell_test_tech_all_pct_change.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-pct-change-sell.csv') 
