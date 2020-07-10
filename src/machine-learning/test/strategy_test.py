@@ -14,7 +14,7 @@ from util.util import buy_all_filter, buy_all_common, sell_all_filter, sell_all_
 from util.util import buy_all_rule_classifier, sell_all_rule_classifier
 from util.util import is_algo_buy_classifier, is_algo_sell_classifier
 from util.util import sell_day_high, buy_day_low
-from util.util import CLOSEPRICE
+from util.util_base import CLOSEPRICE
 from bson.son import SON
 
 connection = MongoClient('localhost', 27017)
@@ -93,7 +93,7 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('buy_test_345')       
     curs = db.ws_high.find({})
     for data in curs:
-        if(data['close'] > CLOSEPRICE):
+        if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
             flag = buy_test_345(data, data, True, None)
             if(flag):
@@ -109,7 +109,7 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('buy_test')
     curs = db.ws_high.find({})
     for data in curs:
-        if(data['close'] > CLOSEPRICE):
+        if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
             flag = buy_test(data, data, True, None)
             if(flag):
@@ -125,7 +125,7 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('buy_test_pct_change')
     curs = db.ws_high.find({})
     for data in curs:
-        if(data['close'] > CLOSEPRICE):
+        if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
             flag = buy_test_pct_change(data, data, True, None)
             if(flag):
@@ -141,7 +141,7 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('buy_test_all')         
     curs = db.ws_high.find({})
     for data in curs:
-        if(data['close'] > CLOSEPRICE):
+        if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
             flag = buy_test_all(data, data, True, None)
             if(flag):
@@ -157,7 +157,7 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('buy_test_tech')     
     curs = db.ws_high.find({})
     for data in curs:
-        if(data['close'] > CLOSEPRICE):
+        if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
             flag = buy_test_tech(data, data, True, None)
             if(flag):
@@ -173,7 +173,7 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('buy_test_tech_all')       
     curs = db.ws_high.find({})
     for data in curs:
-        if(data['close'] > CLOSEPRICE):
+        if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
             flag = buy_test_tech_all(data, data, True, None)
             if(flag):
@@ -189,7 +189,7 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('buy_test_tech_all_pct_change')       
     curs = db.ws_high.find({})
     for data in curs:
-        if(data['close'] > CLOSEPRICE):
+        if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
             flag = buy_test_tech_all_pct_change(data, data, True, None)
             if(flag):
@@ -206,7 +206,7 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('sell_test_345') 
     curs = db.ws_low.find({})
     for data in curs:
-        if(data['close'] > CLOSEPRICE):
+        if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
             flag = sell_test_345(data, data, True, None)
             if(flag):
@@ -222,7 +222,7 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('sell_test')
     curs = db.ws_low.find({})
     for data in curs:
-        if(data['close'] > CLOSEPRICE):
+        if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
             flag = sell_test(data, data, True, None)
             if(flag):
@@ -238,7 +238,7 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('sell_test_pct_change')
     curs = db.ws_low.find({})        
     for data in curs:
-        if(data['close'] > CLOSEPRICE):
+        if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
             flag = sell_test_pct_change(data, data, True, None)
             if(flag):
@@ -253,7 +253,7 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('sell_test_all')
     curs = db.ws_low.find({})        
     for data in curs:
-        if(data['close'] > CLOSEPRICE):
+        if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
             flag = sell_test_all(data, data, True, None)
             if(flag):
@@ -268,7 +268,7 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('sell_test_tech')      
     curs = db.ws_low.find({})
     for data in curs:
-        if(data['close'] > CLOSEPRICE):
+        if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
             flag = sell_test_tech(data, data, True, None)
             if(flag):
@@ -284,7 +284,7 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('sell_test_tech_all')       
     curs = db.ws_low.find({})
     for data in curs:
-        if(data['close'] > CLOSEPRICE):
+        if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
             flag = sell_test_tech_all(data, data, True, None)
             if(flag):
@@ -299,7 +299,7 @@ def import_data_in_db_and_save():
     dbresult.drop_collection('sell_test_tech_all_pct_change')      
     curs = db.ws_low.find({})
     for data in curs:
-        if(data['close'] > CLOSEPRICE):
+        if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
             flag = sell_test_tech_all_pct_change(data, data, True, None)
             if(flag):

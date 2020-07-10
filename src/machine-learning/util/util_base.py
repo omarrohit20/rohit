@@ -19,6 +19,7 @@ BUY_VERY_LESS_DATA=True
 SELL_VERY_LESS_DATA=True
 MARKET_IN_UPTREND=False
 MARKET_IN_DOWNTREND=False
+CLOSEPRICE = 40
 TEST = False
 
 buyMLP = 0.1
@@ -219,7 +220,6 @@ def is_any_reg_algo_lt_minus1_not_other(regression_data):
     else:
         return False
 
-
 def is_algo_buy(regression_data, resticted=False):
     if TEST:
         return True
@@ -238,7 +238,9 @@ def is_algo_buy(regression_data, resticted=False):
         if((regression_data['mlpValue_reg'] > buyMLP and regression_data['kNeighboursValue_reg'] >= buyKN_MIN) 
             or (regression_data['mlpValue_reg'] >= buyMLP_MIN and regression_data['kNeighboursValue_reg'] > buyKN)
             or (regression_data['mlpValue_reg'] > 0.5 and regression_data['kNeighboursValue_reg'] > 0.5)
-            or ((regression_data['mlpValue_reg'] + regression_data['kNeighboursValue_reg'] + regression_data['mlpValue_reg_other'] + regression_data['kNeighboursValue_reg_other']) > 4)
+            or ((regression_data['mlpValue_reg'] + regression_data['kNeighboursValue_reg'] + regression_data['mlpValue_reg_other'] + regression_data['kNeighboursValue_reg_other']) > 4
+                and regression_data['mlpValue_reg'] + regression_data['kNeighboursValue_reg'] > 2
+                )
             ):
             if((regression_data['mlpValue_cla'] < 0) or (regression_data['kNeighboursValue_cla'] < 0)
                 or (regression_data['mlpValue_cla_other'] < 0) or (regression_data['kNeighboursValue_cla_other'] < 0)
@@ -293,7 +295,9 @@ def is_algo_sell(regression_data, resticted=False):
         if((regression_data['mlpValue_reg'] < sellMLP and regression_data['kNeighboursValue_reg'] <= sellKN_MIN)
             or (regression_data['mlpValue_reg'] <= sellMLP_MIN and regression_data['kNeighboursValue_reg'] < sellKN)
             or (regression_data['mlpValue_reg'] < -0.5 and regression_data['kNeighboursValue_reg'] < -0.5)
-            or ((regression_data['mlpValue_reg'] + regression_data['kNeighboursValue_reg'] + regression_data['mlpValue_reg_other'] + regression_data['kNeighboursValue_reg_other']) < -4)
+            or ((regression_data['mlpValue_reg'] + regression_data['kNeighboursValue_reg'] + regression_data['mlpValue_reg_other'] + regression_data['kNeighboursValue_reg_other']) < -4
+               and regression_data['mlpValue_reg'] + regression_data['kNeighboursValue_reg'] < -2
+               )
             ):
             if((regression_data['mlpValue_cla'] > 0) or (regression_data['kNeighboursValue_cla'] > 0)
                 or (regression_data['mlpValue_cla_other'] > 0) or (regression_data['kNeighboursValue_cla_other'] > 0)
@@ -2949,6 +2953,7 @@ def buy_downtrend_common(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, '%%AF:(DOWNTREND-MT-DOWN)maySellTail-LowTailGT2-7,10thDayLT(-15)-Last2DayUP')  
      
-        
+
+   
         
         
