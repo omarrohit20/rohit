@@ -1543,17 +1543,7 @@ def buy_year_high(regression_data, regressionResult, reg, ws):
 
 def buy_year_low(regression_data, regressionResult, reg, ws, ws1):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
-    if((-1.5 < regression_data['PCT_day_change'] < 0) and (-2 < regression_data['PCT_change'] < 0)
-        and regression_data['year2HighChange'] < -50
-        and regression_data['yearHighChange'] < -30
-        and regression_data['month3LowChange'] > 10
-        and regression_data['monthLowChange'] > 10
-        and 0 < regression_data['SMA4'] < 10
-        and 2 < regression_data['SMA9'] < 10
-        ):   
-        add_in_csv(regression_data, regressionResult, ws, 'buyYear2LowMovingSMA')
-        return True
-    elif(1 < regression_data['yearLowChange'] < 5 and regression_data['yearHighChange'] < -30 
+    if(1 < regression_data['yearLowChange'] < 5 and regression_data['yearHighChange'] < -30 
         and 2 < regression_data['PCT_day_change'] < 6 and 2 < regression_data['PCT_day_change'] < 6
         and regression_data['forecast_day_PCT2_change'] > 0 and regression_data['forecast_day_PCT_change'] > 0
         and float(regression_data['forecast_day_VOL_change']) > 35
@@ -3220,6 +3210,17 @@ def buy_risingMA(regression_data, regressionResult, reg, ws):
             and regression_data['low'] > regression_data['low_pre1']
             ):
             add_in_csv(regression_data, regressionResult, ws, 'buyMayYear2LowBreakingUp')
+    
+    if((-1.5 < regression_data['PCT_day_change'] < 0) and (-2 < regression_data['PCT_change'] < 0)
+        and regression_data['year2HighChange'] < -50
+        and regression_data['yearHighChange'] < -30
+        and regression_data['month3LowChange'] > 10
+        and regression_data['monthLowChange'] > 10
+        and 0 < regression_data['SMA4'] < 10
+        and 2 < regression_data['SMA9'] < 10
+        ):   
+        add_in_csv(regression_data, regressionResult, ws, '##buyYear2LowMovingSMA')
+        return True
     
     if(is_algo_buy(regression_data)
         and regression_data['SMA4'] > 0
