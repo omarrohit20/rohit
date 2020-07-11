@@ -363,7 +363,6 @@ def buy_test(regression_data, regressionResult, reg, ws):
                                     + filterNameTail + ',' \
                                     + pctChange5Day + ','\
                                     + regression_data['filter2'] + ',' \
-                                    + regression_data['filter3'] + ',' \
                                     + regression_data['filter4'] + ',' \
                                     + regression_data['filter5']
                                     
@@ -407,14 +406,14 @@ def buy_test_all(regression_data, regressionResult, reg, ws):
     flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filterNameTail = tail_change_filter(regression_data, regressionResult, False)
+    filterOrFilter3 = regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+    if(filterOrFilter3 == ""):
+        filterOrFilter3 = regression_data['filter3']
+        
     regression_data['filterTest'] = filterName + ',' \
                                     + filterNameTail + ',' \
                                     + regression_data['series_trend'] + ',' \
-                                    + regression_data['filter2'] + ',' \
-                                    + regression_data['filter3'] + ',' \
-                                    + regression_data['filter4'] + ',' \
-                                    + regression_data['filter5'] + ',' \
-                                    + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+                                    + filterOrFilter3
     if regression_data['filterTest'] != '':
         return True  
     return False
@@ -560,7 +559,6 @@ def buy_filter_accuracy(regression_data, regressionResult):
             + filterNameTail + ',' \
             + pctChange5Day + ','\
             + regression_data['filter2'] + ',' \
-            + regression_data['filter3'] + ',' \
             + regression_data['filter4'] + ',' \
             + regression_data['filter5']
             
@@ -594,14 +592,14 @@ def buy_filter_345_all_accuracy(regression_data, regressionResult):
     filtersDict=filterallbuy
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filterNameTail = tail_change_filter(regression_data, regressionResult, False)
+    filterOrFilter3 = regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+    if(filterOrFilter3 == ""):
+        filterOrFilter3 = regression_data['filter3']
     filter = filterName + ',' \
             + filterNameTail + ',' \
             + regression_data['series_trend'] + ',' \
-            + regression_data['filter2'] + ',' \
-            + regression_data['filter3'] + ',' \
-            + regression_data['filter4'] + ',' \
-            + regression_data['filter5'] + ',' \
-            + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+            + filterOrFilter3
+            
     if (filter != '') and (filter in filtersDict):
         regression_data['filter_all_avg'] = float(filtersDict[filter]['avg'])
         regression_data['filter_all_count'] = float(filtersDict[filter]['count'])
@@ -961,7 +959,6 @@ def sell_test(regression_data, regressionResult, reg, ws):
                                     + filterNameTail + ',' \
                                     + pctChange5Day + ',' \
                                     + regression_data['filter2'] + ',' \
-                                    + regression_data['filter3'] + ',' \
                                     + regression_data['filter4'] + ',' \
                                     + regression_data['filter5']
                                     
@@ -1003,14 +1000,14 @@ def sell_test_all(regression_data, regressionResult, reg, ws):
     flag = sell_other_indicator(regression_data, regressionResult, reg, ws)
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filterNameTail = tail_change_filter(regression_data, regressionResult, False)
+    filterOrFilter3 = regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+    if(filterOrFilter3 == ""):
+        filterOrFilter3 = regression_data['filter3']
     regression_data['filterTest'] = filterName + ',' \
                                     + filterNameTail + ',' \
                                     + regression_data['series_trend'] + ',' \
-                                    + regression_data['filter2'] + ',' \
-                                    + regression_data['filter3'] + ',' \
-                                    + regression_data['filter4'] + ',' \
-                                    + regression_data['filter5'] + ',' \
-                                    + regression_data['filterTest'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+                                    + filterOrFilter3
+                                    
     if regression_data['filterTest'] != '':
         return True  
     return False
@@ -1159,7 +1156,6 @@ def sell_filter_accuracy(regression_data, regressionResult):
             + filterNameTail + ',' \
             + pctChange5Day + ',' \
             + regression_data['filter2'] + ',' \
-            + regression_data['filter3'] + ',' \
             + regression_data['filter4'] + ',' \
             + regression_data['filter5']
             
@@ -1193,14 +1189,13 @@ def sell_filter_345_all_accuracy(regression_data, regressionResult):
     filtersDict=filterallsell
     filterName = pct_change_filter(regression_data, regressionResult, False)
     filterNameTail = tail_change_filter(regression_data, regressionResult, False)
+    filterOrFilter3 = regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+    if(filterOrFilter3 == ""):
+        filterOrFilter3 = regression_data['filter3']
     filter = filterName + ',' \
                 + filterNameTail + ',' \
                 + regression_data['series_trend'] + ',' \
-                + regression_data['filter2'] + ',' \
-                + regression_data['filter3'] + ',' \
-                + regression_data['filter4'] + ',' \
-                + regression_data['filter5'] + ',' \
-                + regression_data['filter'].replace("[MLBuy]:", "").replace("[MLSell]:", "").strip()
+                + filterOrFilter3         
     if (filter != '') and (filter in filtersDict):
         regression_data['filter_all_avg'] = float(filtersDict[filter]['avg'])
         regression_data['filter_all_count'] = float(filtersDict[filter]['count'])

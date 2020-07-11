@@ -1524,8 +1524,10 @@ def tail_change_filter(regression_data, regressionResult, save):
     
     if(high_tail_pct(regression_data) > 3.0):
         filterTail = filterTail + '_HTGT3.0_'
-    elif(high_tail_pct(regression_data) > 1.3):
-        filterTail = filterTail + '_HTGT1.3_'
+    elif(high_tail_pct(regression_data) > 1.5):
+        filterTail = filterTail + '_HTGT1.5_'
+#     elif(high_tail_pct(regression_data) > 0.5):
+#         filterTail = filterTail + '_HTGT0.5_'
         
 #     elif(high_tail_pct(regression_data) > 2.5):
 #         filterTail = filterTail + 'HTGT2.5'
@@ -1537,8 +1539,10 @@ def tail_change_filter(regression_data, regressionResult, save):
     
     if(low_tail_pct(regression_data) > 3.0):
         filterTail = filterTail + '_LTGT3.0_'
-    elif(low_tail_pct(regression_data) > 1.3):
-        filterTail = filterTail + '_LTGT1.3_'
+    elif(low_tail_pct(regression_data) > 1.5):
+        filterTail = filterTail + '_LTGT1.5_'
+#     elif(low_tail_pct(regression_data) > 0.5):
+#         filterTail = filterTail + '_LTGT0.5_'
 #     elif(low_tail_pct(regression_data) > 2.5):
 #         filterTail = filterTail + 'LTGT2.5'
 #     elif(low_tail_pct(regression_data) > 1.5):
