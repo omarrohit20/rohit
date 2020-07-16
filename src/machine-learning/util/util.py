@@ -1471,7 +1471,19 @@ def filter_avg_lt_minus_1dot5_count_any(regression_data):
     cnt = 0
     count, cnt = filter_avg_lt_count(regression_data, -1.5)
     return count
-   
+
+def filter_avg_gt_1_count_any(regression_data):
+    count = 0
+    cnt = 0
+    count, cnt = filter_avg_gt_count(regression_data, 1)
+    return count
+    
+def filter_avg_lt_minus_1_count_any(regression_data):
+    count = 0
+    cnt = 0
+    count, cnt = filter_avg_lt_count(regression_data, -1)
+    return count
+ 
 def is_any_buy_GT2_from_all_filter(regression_data):
     if(is_buy_GT2_from_filter(regression_data, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
         or is_buy_GT2_from_filter(regression_data, 'filter_avg', 'filter_count', 'filter_pct')
@@ -1585,10 +1597,10 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
         pct_filter_pct_change_avg = ((regression_data['filter_pct_change_avg'] - regression_data['PCT_day_change'])*100)/abs(regression_data['PCT_day_change'])
         pct_filter_all_avg = ((regression_data['filter_all_avg'] - regression_data['PCT_day_change'])*100)/abs(regression_data['PCT_day_change'])
 
-    if(filter_avg_lt_minus_1dot5_count_any(regression_data) >= 1
+    if(filter_avg_lt_minus_1_count_any(regression_data) >= 1
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, 'Sell-Any')  
-    elif(filter_avg_gt_1dot5_count_any(regression_data) >= 1
+    elif(filter_avg_gt_1_count_any(regression_data) >= 1
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, 'Buy-Any')
     
