@@ -1120,7 +1120,19 @@ def sell_af_others(regression_data, regressionResult, reg, ws):
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, True)
     mlpValue_cla, kNeighboursValue_cla = get_reg_or_cla(regression_data, False)
     mlpValue_other_cla, kNeighboursValue_other_cla = get_reg_or_cla_other(regression_data, False)
-                
+    
+    if( -7.5 < regression_data['PCT_day_change_pre1'] < -2 and -8 < regression_data['PCT_change_pre1'] < -1.5
+        and 0 < regression_data['PCT_day_change'] < 3
+        and regression_data['bar_high'] < regression_data['bar_high_pre1']
+        and regression_data['high'] < regression_data['high_pre1']
+        and ((regression_data['forecast_day_PCT2_change'] < 0 and regression_data['forecast_day_PCT3_change'] < 0)
+            or (regression_data['forecast_day_PCT3_change'] < 0 and regression_data['forecast_day_PCT4_change'] < 0)
+            )
+        and regression_data['forecast_day_PCT10_change'] > -15
+        and high_tail_pct(regression_data) > 1
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '%%AF-Test:downtrend-lastDayUp-Reversal')
+        return True      
     return False
 
 def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
@@ -2844,7 +2856,9 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
                 if(regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0):
                     add_in_csv(regression_data, regressionResult, ws, '%%:checkSell:CupDownDoji')
                     flag = True
-            else:
+            elif(regression_data['PCT_day_change_pre2'] < 0 
+                or regression_data['PCT_day_change'] > 0
+                ):
                 add_in_csv(regression_data, regressionResult, ws, '%%:checkSell(9:30):CupDownDoji')
                 flag = True
         elif(regression_data['weekHighChange'] > -2.5

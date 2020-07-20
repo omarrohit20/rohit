@@ -1087,35 +1087,19 @@ def buy_af_others(regression_data, regressionResult, reg, ws):
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, True)
     mlpValue_cla, kNeighboursValue_cla = get_reg_or_cla(regression_data, False)
     mlpValue_other_cla, kNeighboursValue_other_cla = get_reg_or_cla_other(regression_data, False)
-    return False
-            
-                       
-#     if(len(regression_data['filter']) > 9
-#         and 2 < regression_data['PCT_day_change'] < 4
-#         and 2 < regression_data['PCT_change'] < 4
-#         and high_tail_pct(regression_data) < 1.3
-#         and is_buy_from_filter_all_filter_relaxed(regression_data)
-#         and regression_data['SMA25'] > 0
-#         ):
-#         if(regression_data['PCT_day_change_pre1'] < -1
-#             and regression_data['PCT_day_change_pre2'] > 1
-#             ):
-#             add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Buy-Relaxed-01')
-#         elif(-1 < regression_data['PCT_day_change_pre1'] < 1
-#             and regression_data['PCT_day_change_pre2'] < -1
-#             and regression_data['PCT_day_change_pre3'] < -1
-#             ):
-#             add_in_csv(regression_data, regressionResult, ws, None, 'Filter-Buy-Relaxed-02')
-#         elif(regression_data['PCT_day_change_pre1'] > 1
-#             and regression_data['PCT_day_change_pre2'] > 1
-#             ):
-#             add_in_csv(regression_data, regressionResult, ws, None, None)
-#         else:
-#             add_in_csv(regression_data, regressionResult, ws, None, None)
-#     
-#     if('NA$NA:(shortUpTrend)$NA' in regression_data['series_trend']):
-#         add_in_csv(regression_data, regressionResult, ws, None, 'shortUpTrend')
-                   
+    
+    if( 2 < regression_data['PCT_day_change_pre1'] < 7.5 and 1 < regression_data['PCT_change_pre1'] < 8
+        and -3 < regression_data['PCT_day_change'] < 0
+        and regression_data['bar_low'] >  regression_data['bar_low_pre1']
+        and regression_data['low'] >  regression_data['low_pre1']
+        and ((regression_data['forecast_day_PCT2_change'] > 0 and regression_data['forecast_day_PCT3_change'] > 0)
+            or (regression_data['forecast_day_PCT3_change'] > 0 and regression_data['forecast_day_PCT4_change'] > 0)
+            )
+        and regression_data['forecast_day_PCT10_change'] < 15
+        and low_tail_pct(regression_data) > 1
+        ):
+        add_in_csv(regression_data, regressionResult, ws, '%%AF-Test:uptrend-lastDayDown-Reversal')
+        return True                  
     return False
    
 def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
@@ -2938,7 +2922,9 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
                 if(regression_data['PCT_day_change_pre2'] > 0 or regression_data['PCT_day_change_pre3'] > 0):
                     add_in_csv(regression_data, regressionResult, ws, '%%:checkBuy:CupUpDoji')
                     flag = True    
-            else:
+            if(regression_data['PCT_day_change_pre2'] > 0 
+                or regression_data['PCT_day_change'] < 0
+                ):
                 add_in_csv(regression_data, regressionResult, ws, '%%:checkBuy(9:30):CupUpDoji')
                 flag = True
         elif(regression_data['weekLowChange'] < 2.5
