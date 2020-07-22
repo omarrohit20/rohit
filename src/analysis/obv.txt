@@ -1,3 +1,14 @@
+To-Do - Sell
+Last 2 day up
+Last 2 day volume cross
+Last 3rd day up or volume cross
+
+To-Do - Buy
+Last 2 day down
+Last 2 day volume cross
+Last 3rd day down or volume cross
+
+
 More than 40 points up(down) on following day. Market will not go down, If day earlier down or downtrend couple of days
 	take opposite call if day earlier also up(down) or up-trend earlier
 
