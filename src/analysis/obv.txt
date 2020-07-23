@@ -1,12 +1,19 @@
-To-Do - Sell
+To-Do - Sell 
+abs(day change) > 2
 Last 2 day up
 Last 2 day volume cross
-Last 3rd day up or volume cross
+Last 3rd day up and volume cross
+at week2high sell 
+at week2low reversal buy
+
+4th day down and volume cross
+at week2high sell
 
 To-Do - Buy
 Last 2 day down
 Last 2 day volume cross
-Last 3rd day down or volume cross
+Last 3rd day down and volume cross
+at week2low, at week2High reversal buy
 
 
 More than 40 points up(down) on following day. Market will not go down, If day earlier down or downtrend couple of days
