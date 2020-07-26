@@ -325,6 +325,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     volume_pre1 = df.tail(2).loc[-forecast_out:, 'volume'].values[0]
     volume_pre2 = df.tail(3).loc[-forecast_out:, 'volume'].values[0]
     volume_pre3 = df.tail(4).loc[-forecast_out:, 'volume'].values[0]
+    volume_pre4 = df.tail(5).loc[-forecast_out:, 'volume'].values[0]
+    volume_pre5 = df.tail(6).loc[-forecast_out:, 'volume'].values[0]
     open = df.tail(1).loc[-forecast_out:, 'open'].values[0]
     open_pre1 = df.tail(2).loc[-forecast_out:, 'open'].values[0]
     open_pre2 = df.tail(3).loc[-forecast_out:, 'open'].values[0]
@@ -554,6 +556,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     regression_data['volume_pre1'] = float(volume_pre1)
     regression_data['volume_pre2'] = float(volume_pre2)
     regression_data['volume_pre3'] = float(volume_pre3)
+    regression_data['volume_pre4'] = float(volume_pre4)
+    regression_data['volume_pre5'] = float(volume_pre5)
     regression_data['open'] = float(open)
     regression_data['open_pre1'] = float(open_pre1)
     regression_data['open_pre2'] = float(open_pre2)
