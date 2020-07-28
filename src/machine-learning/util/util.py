@@ -66,7 +66,7 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
         add_in_csv(regression_data, regressionResult, ws, 'AF:(UPTRENDMARKET)buyBreakHighBaseContinue')
 #     if( 2.0 < regression_data['PCT_day_change'] < 4.1 and -2 < regression_data['PCT_change'] < 4.5
 #         and regression_data['PCT_day_change_pre1'] > 0
-#         and abs(regression_data['week2HighChange']) > abs(regression_data['week2LowChange'])
+#         and abs_week2High_more_than_week2Low(regression_data)
 #         and high_tail_pct(regression_data) < 1.29
 #         and low_tail_pct(regression_data) < 2.5
 #         ):
@@ -139,7 +139,7 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
 #             and regression_data['PCT_day_change_pre2'] < -1
 #             and abs(regression_data['PCT_day_change_pre2']) > abs(regression_data['PCT_day_change_pre1'])
 #             #and regression_data['high'] >= regression_data['bar_high_pre2']
-#             #and abs(regression_data['month6HighChange']) < abs(regression_data['month6LowChange'])
+#             #and abs_month6High_less_than_month6Low(regression_data)
 #             and low_tail_pct(regression_data) < 1.5
 #             and high_tail_pct(regression_data) < 1.5
 #             ):
@@ -691,7 +691,7 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
         add_in_csv(regression_data, regressionResult, ws, 'AF:(DOWNTRENDMARKET)sellBreakLowBaseContinue')
 #     if( -4.1 < regression_data['PCT_day_change'] < -2 and -4.5 < regression_data['PCT_change'] < -2
 #         and regression_data['PCT_day_change_pre1'] < 0
-#         and abs(regression_data['week2HighChange']) < abs(regression_data['week2LowChange'])
+#         and abs_week2High_less_than_week2Low(regression_data)
 #         and low_tail_pct(regression_data) < 1.29
 #         and high_tail_pct(regression_data) < 2.5
 #         ):

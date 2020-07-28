@@ -1077,7 +1077,11 @@ def abs_monthHigh_less_than_monthLow(regression_data):
         return False;
     
 def abs_week2High_more_than_week2Low(regression_data):
-    if(regression_data['week2LowChange'] < 0
+    if((regression_data['week2LowChange'] < 0 and regression_data['week2HighChange'] > -5)
+        or regression_data['week2HighChange'] > -2
+        ):
+        return False
+    elif(regression_data['week2LowChange'] < 0
         or (abs(regression_data['week2HighChange']) - 1 > abs(regression_data['week2LowChange']) 
             and regression_data['week2HighChange'] < 0
             )
@@ -1087,7 +1091,12 @@ def abs_week2High_more_than_week2Low(regression_data):
         return False;
 
 def abs_week2High_less_than_week2Low(regression_data):
-    if(regression_data['week2HighChange'] > 0
+    if((regression_data['week2HighChange'] > 0 and regression_data['week2LowChange'] < 5)
+        or regression_data['week2LowChange'] < 2
+        ):
+        return False
+    
+    elif(regression_data['week2HighChange'] > 0
         or (abs(regression_data['week2HighChange']) + 1 < abs(regression_data['week2LowChange'])
             and regression_data['week2LowChange'] > 0
             )
@@ -1095,6 +1104,27 @@ def abs_week2High_less_than_week2Low(regression_data):
         return True;
     else:
         return False;
+
+def abs_weekHigh_more_than_weekLow(regression_data):
+    if(regression_data['weekLowChange'] < 0
+        or (abs(regression_data['weekHighChange']) - 1 > abs(regression_data['weekLowChange']) 
+            and regression_data['weekHighChange'] < 0
+            )
+        ):
+        return True;
+    else:
+        return False;
+
+def abs_weekHigh_less_than_weekLow(regression_data):
+    if(regression_data['weekHighChange'] > 0
+        or (abs(regression_data['weekHighChange']) + 1 < abs(regression_data['weekLowChange'])
+            and regression_data['weekLowChange'] > 0
+            )
+        ):
+        return True;
+    else:
+        return False;
+
 
 def last_5_day_all_up_except_today(regression_data):
     if(regression_data['PCT_day_change_pre1'] > 0
