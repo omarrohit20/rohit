@@ -2219,7 +2219,6 @@ def buy_oi(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, 'VOL:sellContinueZigZagVolCrossed')
         
-        
     if(regression_data['PCT_day_change'] > 2 and regression_data['PCT_change'] > 1
         and regression_data['PCT_day_change_pre1'] > 0
         and regression_data['PCT_day_change_pre2'] < 0
@@ -2230,25 +2229,39 @@ def buy_oi(regression_data, regressionResult, reg, ws):
         and regression_data['volume'] > regression_data['volume_pre3']
         #and regression_data['volume'] > regression_data['volume_pre4']
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'VOL:buyVolumeUpsergedLast2n3n4DayDown')
+        add_in_csv(regression_data, regressionResult, ws, 'VOL:volumeUpsergedLast2n3n4DayDown')
     elif(regression_data['PCT_day_change'] > 2 and regression_data['PCT_change'] > 1
-        and regression_data['PCT_day_change_pre1'] > 0
+        and regression_data['PCT_day_change_pre1'] > 1
         and regression_data['PCT_day_change_pre2'] < 0
         and regression_data['PCT_day_change_pre3'] < 0
         and regression_data['PCT_day_change_pre4'] > 0
+        and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change_pre2'])
         and regression_data['volume'] > regression_data['volume_pre1']
         and regression_data['volume'] > regression_data['volume_pre2']
         and regression_data['volume'] > regression_data['volume_pre3']
         ):
         add_in_csv(regression_data, regressionResult, ws, 'VOL:sellVolumeUpsergedLast2n3DayDown')
+    elif(regression_data['PCT_day_change'] > 2 and regression_data['PCT_change'] > 1
+        and 0 < regression_data['PCT_day_change_pre1'] < 1
+        and regression_data['PCT_day_change_pre2'] < 0
+        and regression_data['PCT_day_change_pre3'] < 0
+        and regression_data['PCT_day_change_pre4'] > 0
+        and abs(regression_data['PCT_day_change_pre1']) < abs(regression_data['PCT_day_change_pre2'])
+        and regression_data['volume'] > regression_data['volume_pre1']
+        and regression_data['volume'] > regression_data['volume_pre2']
+        and regression_data['volume'] > regression_data['volume_pre3']
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'VOL:buyVolumeUpsergedLast2n3DayDown')
     elif(regression_data['PCT_day_change'] > 2.5 and regression_data['PCT_change'] > 1
         and regression_data['PCT_day_change_pre1'] < 0
         and regression_data['PCT_day_change_pre2'] < 0
         and regression_data['volume'] > regression_data['volume_pre1']
         and regression_data['volume'] > regression_data['volume_pre2']
+        and (regression_data['forecast_day_VOL_change'] > 50 or regression_data['PCT_day_change'] > 3)
         and 0 < regression_data['forecast_day_VOL_change'] < 150
         and 20 < regression_data['contract'] < 150 
         and 50 < regression_data['oi_next'] < 150
+        and ()
         ):
         add_in_csv(regression_data, regressionResult, ws, 'VOL:buyVolumeUpsergedLast1n2DayDown')
         
@@ -2319,8 +2332,7 @@ def buy_oi(regression_data, regressionResult, reg, ws):
 #             else:
 #                 add_in_csv(regression_data, regressionResult, ws, 'openInterest-2-checkConsolidation-Risky')
 #                 return True    
-    
-    
+       
 def buy_heavy_uptrend_reversal(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
@@ -2910,6 +2922,7 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
             flag = True
         elif(2 < regression_data['PCT_day_change'] < 4 and 0 < regression_data['PCT_change'] 
             and regression_data['PCT_day_change_pre1'] > -1.5
+            and regression_data['week2HighChange'] < -2
             and regression_data['weekLowChange'] > 2
             ):
             add_in_csv(regression_data, regressionResult, ws, '%%:checkBuy:FlagWeek-Risky')
@@ -2937,6 +2950,7 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
             and regression_data['PCT_day_change_pre1'] > -1.5
             and regression_data['PCT_day_change_pre1'] < regression_data['PCT_day_change']
             and regression_data['PCT_day_change_pre2'] < regression_data['PCT_day_change']
+            and regression_data['week2HighChange'] < -2
             and regression_data['weekLowChange'] > 2
             ):
             add_in_csv(regression_data, regressionResult, ws, '%%:checkBuy:Flag2Week-Risky')

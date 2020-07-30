@@ -197,10 +197,13 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
             and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0)
             and (regression_data['PCT_day_change_pre1'] < 0.75 or regression_data['PCT_day_change_pre2'] < 0.75)
             and (regression_data['PCT_day_change_pre2'] < 0.75 or regression_data['PCT_day_change_pre3'] < 0.75)
-            and high_tail_pct(regression_data) < 1.29
+            and high_tail_pct(regression_data) < abs(regression_data['PCT_day_change'])/3
             and low_tail_pct(regression_data) < 2.5
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighUptrend-2')
+            if(regression_data['PCT_day_change_pre1'] < 0): 
+                add_in_csv(regression_data, regressionResult, ws, 'CommonHL(9:30):HighUptrend-2')
+            else:
+                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighUptrend-2')
         
     buy_common_up_continued(regression_data, regressionResult, reg, ws)
          
@@ -812,9 +815,12 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
             and (regression_data['PCT_day_change_pre1'] > -0.75 or regression_data['PCT_day_change_pre2'] > -0.75)
             and (regression_data['PCT_day_change_pre2'] > -0.75 or regression_data['PCT_day_change_pre3'] > -0.75)
             and high_tail_pct(regression_data) < 2.5
-            and low_tail_pct(regression_data) < 1.29
+            and low_tail_pct(regression_data) < abs(regression_data['PCT_day_change'])/3
             ):
-            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighDowntrend-2')
+            if(regression_data['PCT_day_change_pre1'] > 0):
+                add_in_csv(regression_data, regressionResult, ws, 'CommonHL(9:30):HighDowntrend-2')
+            else:
+                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighDowntrend-2')
     
     sell_common_down_continued(regression_data, regressionResult, reg, ws)
           
