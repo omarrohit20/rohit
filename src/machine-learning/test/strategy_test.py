@@ -103,8 +103,8 @@ def import_data_in_db_and_save():
     curser = dbresult.buy_test_345.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-345-buy.csv')
     dbresult.drop_collection('buy_test_345')    
-        
          
+          
     print('buy_test')
     dbresult.drop_collection('buy_test')
     curs = db.ws_high.find({})
@@ -119,8 +119,8 @@ def import_data_in_db_and_save():
     curser = dbresult.buy_test.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-buy.csv')
     dbresult.drop_collection('buy_test')
-         
-         
+          
+          
     print('buy_test_pct_change')
     dbresult.drop_collection('buy_test_pct_change')
     curs = db.ws_high.find({})
@@ -151,8 +151,8 @@ def import_data_in_db_and_save():
     curser = dbresult.buy_test_all.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-all-buy.csv')
     dbresult.drop_collection('buy_test_all')
-        
-                
+         
+                 
     print('buy_test_tech')
     dbresult.drop_collection('buy_test_tech')     
     curs = db.ws_high.find({})
@@ -167,8 +167,8 @@ def import_data_in_db_and_save():
     curser = dbresult.buy_test_tech.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-buy.csv')
     dbresult.drop_collection('buy_test_tech')
-       
-                
+        
+                 
     print('buy_test_tech_all')
     dbresult.drop_collection('buy_test_tech_all')       
     curs = db.ws_high.find({})
@@ -183,8 +183,8 @@ def import_data_in_db_and_save():
     curser = dbresult.buy_test_tech_all.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-buy.csv')
     dbresult.drop_collection('buy_test_tech_all')
-     
-              
+      
+               
     print('buy_test_tech_all_pct_change')
     dbresult.drop_collection('buy_test_tech_all_pct_change')       
     curs = db.ws_high.find({})
@@ -199,9 +199,9 @@ def import_data_in_db_and_save():
     curser = dbresult.buy_test_tech_all_pct_change.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-pct-change-buy.csv')
     dbresult.drop_collection('buy_test_tech_all_pct_change')
-     
- 
-     
+      
+  
+      
     print('sell_test_345')
     dbresult.drop_collection('sell_test_345') 
     curs = db.ws_low.find({})
@@ -216,8 +216,8 @@ def import_data_in_db_and_save():
     curser = dbresult.sell_test_345.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-345-sell.csv')
     dbresult.drop_collection('sell_test_345') 
-      
        
+        
     print('sell_test')
     dbresult.drop_collection('sell_test')
     curs = db.ws_low.find({})
@@ -263,7 +263,7 @@ def import_data_in_db_and_save():
     curser = dbresult.sell_test_all.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-all-sell.csv') 
     dbresult.drop_collection('sell_test_all')
-              
+               
     print('sell_test_tech')  
     dbresult.drop_collection('sell_test_tech')      
     curs = db.ws_low.find({})
@@ -278,8 +278,8 @@ def import_data_in_db_and_save():
     curser = dbresult.sell_test_tech.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-sell.csv')
     dbresult.drop_collection('sell_test_tech')
-      
-              
+       
+               
     print('sell_test_tech_all') 
     dbresult.drop_collection('sell_test_tech_all')       
     curs = db.ws_low.find({})
@@ -294,7 +294,7 @@ def import_data_in_db_and_save():
     curser = dbresult.sell_test_tech_all.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-sell.csv')
     dbresult.drop_collection('sell_test_tech_all')
-             
+              
     print('sell_test_tech_all_pct_change')  
     dbresult.drop_collection('sell_test_tech_all_pct_change')      
     curs = db.ws_low.find({})
