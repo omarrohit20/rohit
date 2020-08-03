@@ -1169,6 +1169,7 @@ def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
         and regression_data['weekHighChange'] > 0
         and abs(regression_data['month3HighChange']) > abs(regression_data['month3LowChange']) and regression_data['month3HighChange'] < -15
         and regression_data['year2HighChange'] < 0
+        and (regression_data['PCT_day_change_pre3'] > 1 or regression_data['PCT_day_change_pre4'] > 1)
         and (high_tail_pct(regression_data) >= 1 or (high_tail_pct(regression_data) > (abs(regression_data['PCT_day_change'])/3)))
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, '$$MaySell-CheckChart-baseLine(inDownTrend-monthLow)')
@@ -2109,30 +2110,67 @@ def sell_oi(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'VOL:sell3dayUpVolCrossedAtWeek2High')
         elif(regression_data['week2HighChange'] < 0
+            and (regression_data['low']-regression_data['high']) < regression_data['PCT_day_change_pre1']
             and abs_week2High_more_than_week2Low(regression_data)
             and abs_monthHigh_more_than_monthLow(regression_data)
             and abs_month3High_more_than_month3Low(regression_data)
-            #and low_tail_pct(regression_data) < abs(regression_data['PCT_day_change'])/2
+            and low_tail_pct(regression_data) < 2
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'VOL:buy3dayDownVolCrossedAtWeek2Low')
-        
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'VOL:buy3dayDownVolCrossedAtWeek2Low')       
+     
+    if(abs(regression_data['month3HighChange']) > abs(regression_data['month3LowChange'])
+        and abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])
+        and regression_data['PCT_day_change'] > 0
+        and regression_data['PCT_day_change_pre1'] > 0
+        and regression_data['PCT_day_change_pre2'] > 0
+        and (regression_data['forecast_day_PCT3_change'] > 5 or regression_data['forecast_day_PCT4_change'] > 5)
+        ):
+        if(regression_data['PCT_day_change'] > 1
+            and regression_data['PCT_day_change_pre1'] > 1
+            and regression_data['PCT_day_change_pre2'] > 1
+            and -1 < regression_data['PCT_day_change_pre3'] < 0
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSellRevarsalLast3DayUpAtMonth3Low') 
+        if(regression_data['PCT_day_change'] > 1
+            and regression_data['PCT_day_change_pre1'] > 1
+            and regression_data['PCT_day_change_pre2'] > 1
+            and ((abs(regression_data['PCT_day_change']) > abs(regression_data['PCT_day_change_pre1']) and regression_data['forecast_day_VOL_change'] < -10)
+                or (abs(regression_data['PCT_day_change']) < abs(regression_data['PCT_day_change_pre1']) and regression_data['forecast_day_VOL_change'] > 10)
+                or (abs(regression_data['PCT_day_change']) > (1.5*abs(regression_data['PCT_day_change_pre1'])) and regression_data['volume'] < regression_data['volume_pre1'])
+                or ((1.5*abs(regression_data['PCT_day_change'])) < abs(regression_data['PCT_day_change_pre1']) and regression_data['volume'] > regression_data['volume_pre1'])
+                )
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'VOL:sellRevarsalVolCrossed')
             
-    if(regression_data['PCT_day_change'] > 2 and regression_data['PCT_change'] > 1
-        and regression_data['PCT_day_change_pre1'] < -1
+    if(regression_data['PCT_day_change'] > 1 and regression_data['PCT_change'] > 1
+        and regression_data['PCT_day_change_pre1'] < 0
         and regression_data['PCT_day_change_pre2'] > 1
         and regression_data['volume'] > regression_data['volume_pre1']
         ):
-        if(abs(regression_data['PCT_day_change']) < 2*abs(regression_data['PCT_day_change_pre1'])
-            and regression_data['PCT_day_change_pre3'] < 0
+        if(abs(regression_data['PCT_day_change']) > abs(regression_data['PCT_day_change_pre1'])
+            and 0 < regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT5_change']
+            and 1 < regression_data['PCT_day_change'] < 3
+            and regression_data['PCT_day_change_pre3'] > 0
+            and 0 < regression_data['forecast_day_VOL_change'] < 150
+            and 0 < regression_data['contract'] < 150 
+            and 0 < regression_data['oi_next'] < 150
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'VOL:sellZigZagVolCrossed')
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'VOL:buyContinueZigZagVolCrossedUptrend')
         elif(abs(regression_data['PCT_day_change']) > 2*abs(regression_data['PCT_day_change_pre1'])
             and regression_data['PCT_day_change'] > 4
+            and regression_data['PCT_day_change_pre1'] < -1
             and 0 < regression_data['forecast_day_VOL_change'] < 150
             and 20 < regression_data['contract'] < 150 
             and 50 < regression_data['oi_next'] < 150
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'VOL:buyContinueZigZagVolCrossed')
+        elif(abs(regression_data['PCT_day_change']) < 2*abs(regression_data['PCT_day_change_pre1'])
+            and regression_data['PCT_day_change'] > 2
+            and regression_data['PCT_day_change_pre1'] < -1 
+            and regression_data['PCT_day_change_pre3'] < 0
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'VOL:sellZigZagVolCrossed')
+        
             
     if(regression_data['PCT_day_change'] < -2 and regression_data['PCT_change'] < -1
         and regression_data['PCT_day_change_pre1'] < 0
