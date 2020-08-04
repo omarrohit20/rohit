@@ -127,11 +127,16 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
     return False
 
 def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
-    if((regression_data['forecast_day_PCT_change'] > 0.5 and regression_data['forecast_day_PCT2_change'] > regression_data['forecast_day_PCT_change'])
-        or (regression_data['forecast_day_PCT3_change'] > 0 and regression_data['forecast_day_PCT4_change'] > 0)
-        or regression_data['forecast_day_PCT5_change'] > 0
-        or regression_data['forecast_day_PCT7_change'] > 0
-        or regression_data['forecast_day_PCT10_change'] > 0
+    if(((regression_data['forecast_day_PCT_change'] > 0.5 and regression_data['forecast_day_PCT2_change'] > regression_data['forecast_day_PCT_change'])
+            or (regression_data['forecast_day_PCT3_change'] > 0 and regression_data['forecast_day_PCT4_change'] > 0)
+            or regression_data['forecast_day_PCT5_change'] > 0
+            or regression_data['forecast_day_PCT7_change'] > 0
+            or regression_data['forecast_day_PCT10_change'] > 0
+            )
+        and(regression_data['month3HighChange'] > 0
+            or regression_data['monthHighChange'] > 0
+            or abs(regression_data['week2HighChange']) > abs(regression_data['week2LowChange'])
+            )
         ):
 #         if(2 < low_tail_pct_pre1(regression_data) < 6 and 2.9 < regression_data['PCT_day_change'] < 4.1
 #             and regression_data['PCT_day_change_pre1'] > -1.3 
@@ -780,11 +785,17 @@ def sell_all_common(regression_data, regressionResult, reg, ws):
     return False
 
 def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
-    if((regression_data['forecast_day_PCT_change'] < -0.5 and regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT_change'])
-        or (regression_data['forecast_day_PCT3_change'] < 0 and regression_data['forecast_day_PCT4_change'] < 0)
-        or regression_data['forecast_day_PCT5_change'] < 0
-        or regression_data['forecast_day_PCT7_change'] < 0
-        or regression_data['forecast_day_PCT10_change'] < 0
+    if(((regression_data['forecast_day_PCT_change'] < -0.5 and regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT_change'])
+            or (regression_data['forecast_day_PCT3_change'] < 0 and regression_data['forecast_day_PCT4_change'] < 0)
+            or regression_data['forecast_day_PCT5_change'] < 0
+            or regression_data['forecast_day_PCT7_change'] < 0
+            or regression_data['forecast_day_PCT10_change'] < 0
+            )
+        and (
+            regression_data['month3LowChange'] < 0
+            or regression_data['monthLowChange'] < 0
+            or abs(regression_data['week2HighChange']) < abs(regression_data['week2LowChange'])
+            )
         ):
         if(-2.9 > regression_data['PCT_day_change'] > -4.1 and -3 > regression_data['PCT_change'] > -4.5
             and -4 < regression_data['PCT_day_change_pre1'] < 0.75
