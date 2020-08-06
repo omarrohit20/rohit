@@ -136,6 +136,13 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and(regression_data['month3HighChange'] > 0
             or regression_data['monthHighChange'] > 0
             or abs(regression_data['week2HighChange']) > abs(regression_data['week2LowChange'])
+            or (regression_data['week2HighChange'] < -2
+                and regression_data['week2LowChange'] > 0
+                and abs(regression_data['week2HighChange']) < abs(regression_data['week2LowChange'])
+                and (abs(regression_data['monthHighChange']) < (regression_data['monthLowChange'])
+                    or abs(regression_data['month3HighChange']) < abs(regression_data['month3LowChange'])
+                    )
+               )
             )
         ):
 #         if(2 < low_tail_pct_pre1(regression_data) < 6 and 2.9 < regression_data['PCT_day_change'] < 4.1
@@ -795,6 +802,13 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
             regression_data['month3LowChange'] < 0
             or regression_data['monthLowChange'] < 0
             or abs(regression_data['week2HighChange']) < abs(regression_data['week2LowChange'])
+            or (regression_data['week2HighChange'] < 0
+                and regression_data['week2LowChange'] > 2
+                and abs(regression_data['week2HighChange']) > abs(regression_data['week2LowChange'])
+                and (abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])
+                    or abs(regression_data['month3HighChange']) > abs(regression_data['month3LowChange'])
+                    )
+               )
             )
         ):
         if(-2.9 > regression_data['PCT_day_change'] > -4.1 and -3 > regression_data['PCT_change'] > -4.5

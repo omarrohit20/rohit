@@ -2214,10 +2214,14 @@ def buy_trend_break(regression_data, regressionResult, reg, ws):
 def buy_oi(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     if(regression_data['PCT_day_change'] > 2 and regression_data['PCT_change'] > 2
+        and abs(regression_data['PCT_day_change']) > abs(regression_data['PCT_day_change_pre1'])
         and regression_data['PCT_day_change_pre1'] > 0
-        and regression_data['PCT_day_change_pre2'] > 0
+        and regression_data['PCT_day_change_pre2'] > -0.5
         and regression_data['volume'] > regression_data['volume_pre1']
         and regression_data['volume'] > regression_data['volume_pre2']
+        and (regression_data['forecast_day_VOL_change'] > 20
+             or regression_data['volume'] > regression_data['volume_pre1'] > regression_data['volume_pre2']
+            )
         ):
         if(regression_data['week2LowChange'] > 0
             and abs_week2High_less_than_week2Low(regression_data)
@@ -2243,7 +2247,17 @@ def buy_oi(regression_data, regressionResult, reg, ws):
             and high_tail_pct(regression_data) < 2
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'VOL:sell3dayUpVolCrossedAtWeek2High')
-        
+    elif(regression_data['PCT_day_change'] > 2 and regression_data['PCT_change'] > 2
+        #and abs(regression_data['PCT_day_change']) > abs(regression_data['PCT_day_change_pre1'])
+        and regression_data['PCT_day_change_pre1'] > 0
+        #and regression_data['PCT_day_change_pre2'] > 0
+        and regression_data['PCT_day_change_pre3'] < 0
+        and regression_data['volume'] < regression_data['volume_pre1']
+        #and regression_data['volume'] < regression_data['volume_pre2']
+        and regression_data['forecast_day_VOL_change'] < 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'VOL(Test):buyContinueVolDown')
+           
     if(abs(regression_data['month3HighChange']) < abs(regression_data['month3LowChange'])
         and abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])
         and regression_data['PCT_day_change'] < 0
