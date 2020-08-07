@@ -134,7 +134,7 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
             or regression_data['forecast_day_PCT10_change'] > 0
             )
         and(regression_data['month3HighChange'] > 0
-            or regression_data['monthHighChange'] > 0
+            #or regression_data['monthHighChange'] > 0
             or abs(regression_data['week2HighChange']) > abs(regression_data['week2LowChange'])
             or (regression_data['week2HighChange'] < -2
                 and regression_data['week2LowChange'] > 0
@@ -800,7 +800,7 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
             )
         and (
             regression_data['month3LowChange'] < 0
-            or regression_data['monthLowChange'] < 0
+            #or regression_data['monthLowChange'] < 0
             or abs(regression_data['week2HighChange']) < abs(regression_data['week2LowChange'])
             or (regression_data['week2HighChange'] < 0
                 and regression_data['week2LowChange'] > 2
