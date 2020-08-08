@@ -1478,6 +1478,55 @@ def tail_reversal_filter(regression_data, regressionResult):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Strong', None)
 
+def base_change_filter(regression_data, regressionResult, save=False):
+    filterName = ""
+    if(regression_data['year2HighChange'] > 0):
+        filterName = filterName + ':' + 'AtYear2High'
+    elif(regression_data['year2HighChange'] < 0 and regression_data['year2LowChange'] > 0 and abs(regression_data['year2HighChange']) < abs(regression_data['year2LowChange'])):
+        filterName = filterName + ':' + 'AtAboveYear2Midline'
+    elif(regression_data['year2HighChange'] < 0 and regression_data['year2LowChange'] > 0 and abs(regression_data['year2HighChange']) > abs(regression_data['year2LowChange'])):
+        filterName = filterName + ':' + 'AtBelowYear2Midline'
+    elif(regression_data['year2LowChange'] < 0):
+        filterName = filterName + ':' + 'AtYear2Low'
+     
+    if(regression_data['yearHighChange'] > 0):
+        filterName = filterName + ':' + 'AtYearHigh'        
+    elif(regression_data['yearHighChange'] < 0 and regression_data['yearLowChange'] > 0 and abs(regression_data['yearHighChange']) < abs(regression_data['yearLowChange'])):
+        filterName = filterName + ':' + 'AtAboveYearMidline'
+    elif(regression_data['yearHighChange'] < 0 and regression_data['yearLowChange'] > 0 and abs(regression_data['yearHighChange']) > abs(regression_data['yearLowChange'])):
+        filterName = filterName + ':' + 'AtBelowYearMidline'
+    elif(regression_data['yearLowChange'] < 0):
+        filterName = filterName + ':' + 'AtYearLow'
+    
+    if(regression_data['month6HighChange'] > 0):
+        filterName = filterName + ':' + 'AtMonth6High'     
+    elif(regression_data['month6HighChange'] < 0 and regression_data['month6LowChange'] > 0 and abs(regression_data['month6HighChange']) < abs(regression_data['month6LowChange'])):
+        filterName = filterName + ':' + 'AtAboveMonth6Midline'
+    elif(regression_data['month6HighChange'] < 0 and regression_data['month6LowChange'] > 0 and abs(regression_data['month6HighChange']) > abs(regression_data['month6LowChange'])):
+        filterName = filterName + ':' + 'AtBelowMonth6Midline'
+    elif(regression_data['month6LowChange'] < 0):
+        filterName = filterName + ':' + 'AtMonth6Low'
+    
+    if(regression_data['month3HighChange'] > 0 ):
+        filterName = filterName + ':' + 'AtMonth3High'    
+    elif(regression_data['month3HighChange'] < 0 and regression_data['month3LowChange'] > 0 and abs(regression_data['month3HighChange']) < abs(regression_data['month3LowChange'])):
+        filterName = filterName + ':' + 'AtAboveMonth3Midline'
+    elif(regression_data['month3HighChange'] < 0 and regression_data['month3LowChange'] > 0 and abs(regression_data['month3HighChange']) > abs(regression_data['month3LowChange'])):
+        filterName = filterName + ':' + 'AtBelowMonth3Midline'
+    elif(regression_data['month3LowChange'] < 0):
+        filterName = filterName + ':' + 'AtMonth3Low'
+    
+    if(regression_data['monthHighChange'] > 0 ):
+        filterName = filterName + ':' + 'AtMonthHigh'
+    elif(regression_data['monthHighChange'] < 0 and regression_data['monthLowChange'] > 0 and abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])):
+        filterName = filterName + ':' + 'AtAboveMonthMidline'
+    elif(regression_data['monthHighChange'] < 0 and regression_data['monthLowChange'] > 0 and abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])):
+        filterName = filterName + ':' + 'AtBelowMonthMidline'
+    elif(regression_data['monthLowChange'] < 0):
+        filterName = filterName + ':' + 'AtMonthLow'
+    
+    return filterName
+
 def pct_change_filter(regression_data, regressionResult, save=False):
     filterName = ''
     if(regression_data['PCT_change'] < 0):
