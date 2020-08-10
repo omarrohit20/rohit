@@ -1623,7 +1623,9 @@ def is_reg_buyorsell_defined_filter(regression_data, regressionResult, high_or_l
     flag = False
     if(regression_data['filter'] == '' or regression_data['filter'] == ' ' or regression_data['filter'] == '[MLBuy]:' or regression_data['filter'] == '[MLSell]:'):
         return flag
-    if(is_reg_buy_pct_filter(regression_data)):
+    if(is_reg_buy_pct_filter(regression_data)
+        and ('Buy-AnyGT2' in regression_data['filter2'] or ('buy' in regression_data['filter']) or ('Buy' in regression_data['filter']))
+        ):
         if(regression_data[filter_avg] > 2 and regression_data[filter_count] >= 2 and regression_data[filter_pct] > 70
             and "MLSell" not in regression_data['filter']
             ):
@@ -1639,7 +1641,9 @@ def is_reg_buyorsell_defined_filter(regression_data, regressionResult, high_or_l
             add_in_csv(regression_data, regressionResult, ws, None, None, None,'Filter-All-Buy-risky')
             flag = True
     
-    if(is_reg_sell_pct_filter(regression_data)):
+    if(is_reg_sell_pct_filter(regression_data)
+        and ('Sell-AnyGT2' in regression_data['filter2'] or ('sell' in regression_data['filter']) or ('Sell' in regression_data['filter']))
+        ):
         if(regression_data[filter_avg] < -2 and regression_data[filter_count] >= 2 and regression_data[filter_pct] < -70
             and "MLBuy" not in regression_data['filter']
             ):
