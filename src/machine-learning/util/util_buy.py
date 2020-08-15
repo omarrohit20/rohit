@@ -932,7 +932,7 @@ def buy_af_low_tail(regression_data, regressionResult, reg, ws):
         and (abs_week2High_less_than_week2Low(regression_data))
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, '%%AF-Last2HighTail:(UPTREND)buyHighUpperTailPre')
-    elif((high_tail_pct(regression_data) > 1.5 and high_tail_pct(regression_data) > 1.5)
+    elif((high_tail_pct(regression_data) > 1.5 and low_tail_pct(regression_data) > 1.5)
         and (high_tail_pct_pre1(regression_data) > 1.5 and regression_data['low_pre1'] < regression_data['low'] and high_tail_pct_pre1(regression_data) > low_tail_pct_pre1(regression_data))
         and (-2 < regression_data['PCT_day_change'] < 0)
         and (regression_data['forecast_day_PCT2_change'] > 0 and regression_data['forecast_day_PCT3_change'] > 0)
@@ -3206,19 +3206,7 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
         and regression_data['weekLowChange'] > 2
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None)
-    elif(regression_data['monthHighChange'] == regression_data['week2HighChange']
-        and regression_data['monthLowChange'] == regression_data['week2LowChange']
-        and regression_data['week2HighChange'] < -4
-        and regression_data['week2LowChange'] > 4
-        ):
-        if (-0.75 < regression_data['PCT_day_change'] < 0
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkBuy:FlagMonth-doji')
-            flag = True
-        elif(regression_data['PCT_day_change'] > 3):
-            add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkBuy:FlagMonth')
-            flag = True 
-            
+    
     if('checkBuyConsolidationBreakUp-2week' in regression_data['filter']
         and 1.5 < regression_data['PCT_day_change'] < 5
         and 1.5 < regression_data['PCT_change'] < 5
@@ -3304,7 +3292,6 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
 
 
 #
-
 
 
 
@@ -4060,4 +4047,26 @@ def buy_base_line_buy(regression_data, regressionResult, reg, ws):
 #                 return True
     
     return False   
+
+
+
+def buy_test(regression_data, regressionResult, reg, ws):
+    mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
+    regression_data['filter'] = ""
+    flag = False
+    
+    if(-7 < regression_data['PCT_day_change'] < -4 and -7 < regression_data['PCT_day_change_pre1'] < -4
+        and (regression_data['PCT_day_change'] < -5.5 and regression_data['PCT_day_change_pre1'] < -5.5 and regression_data['PCT_day_change_pre2'] > -2)
+        and regression_data['PCT_day_LC'] >= 1
+        and (regression_data['month3LowChange'] > 15 or regression_data['month3LowChange'] < 0)
+        and (regression_data['month3HighChange'] < -10 or regression_data['month3HighChange'] > 0)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%ACU(70%):buyReversalDay2Low')
+        flag = True
+    elif(-7 < regression_data['PCT_day_change'] < -4 and -7 < regression_data['PCT_day_change_pre1'] < -4
+        and (regression_data['PCT_day_change'] < -5.5 and regression_data['PCT_day_change_pre1'] < -5.5)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'checkDay2Low(LT-4)')
+        flag = True 
         
+    return flag

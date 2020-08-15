@@ -214,28 +214,20 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
                 or regression_data['PCT_day_change_pre3'] > 0
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:HEAVYUPTRENDMARKET:HighUptrend-(UPTREND-GLOBALUP)')
-        
-        if(((regression_data['forecast_day_PCT_change'] > 0.5 and regression_data['forecast_day_PCT2_change'] > regression_data['forecast_day_PCT_change'])
-            or (regression_data['forecast_day_PCT3_change'] > 0 and regression_data['forecast_day_PCT4_change'] > 0)
-            or regression_data['forecast_day_PCT5_change'] > 0
-            or regression_data['forecast_day_PCT7_change'] > 0
-            or regression_data['forecast_day_PCT10_change'] > 0
-            )
+        if( 4 < regression_data['PCT_day_change'] < 8 and 3 < regression_data['PCT_change'] < 10
+            and (5 < regression_data['PCT_day_change'] or 5 < regression_data['PCT_change'])  
+            and -0.75 < regression_data['PCT_day_change_pre1'] < 4
+            and regression_data['PCT_day_change_pre2'] < 4
+            and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0)
+            and (regression_data['PCT_day_change_pre1'] < 0.75 or regression_data['PCT_day_change_pre2'] < 0.75)
+            and (regression_data['PCT_day_change_pre2'] < 0.75 or regression_data['PCT_day_change_pre3'] < 0.75)
+            and high_tail_pct(regression_data) < abs(regression_data['PCT_day_change'])/3
+            and low_tail_pct(regression_data) < 2.5
             ):
-            if( 4 < regression_data['PCT_day_change'] < 8 and 3 < regression_data['PCT_change'] < 10
-                and (5 < regression_data['PCT_day_change'] or 5 < regression_data['PCT_change'])  
-                and -0.75 < regression_data['PCT_day_change_pre1'] < 4
-                and regression_data['PCT_day_change_pre2'] < 4
-                and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0)
-                and (regression_data['PCT_day_change_pre1'] < 0.75 or regression_data['PCT_day_change_pre2'] < 0.75)
-                and (regression_data['PCT_day_change_pre2'] < 0.75 or regression_data['PCT_day_change_pre3'] < 0.75)
-                and high_tail_pct(regression_data) < abs(regression_data['PCT_day_change'])/3
-                and low_tail_pct(regression_data) < 2.5
-                ):
-                if(regression_data['PCT_day_change_pre1'] < 0): 
-                    add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL(9:30):HighUptrend-2')
-                else:
-                    add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:HighUptrend-2')
+            if(regression_data['PCT_day_change_pre1'] < 0): 
+                add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL(9:30):HighUptrend-2')
+            else:
+                add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:HighUptrend-2')
         
     buy_common_up_continued(regression_data, regressionResult, reg, ws)
          
@@ -890,27 +882,20 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:HEAVYDOWNTRENDMARKET:HighDowntrend-(DOWNTREND-GLOBALDOWN)')
         
-        if(((regression_data['forecast_day_PCT_change'] < -0.5 and regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT_change'])
-            or (regression_data['forecast_day_PCT3_change'] < 0 and regression_data['forecast_day_PCT4_change'] < 0)
-            or regression_data['forecast_day_PCT5_change'] < 0
-            or regression_data['forecast_day_PCT7_change'] < 0
-            or regression_data['forecast_day_PCT10_change'] < 0
-            )
+        if( -8 < regression_data['PCT_day_change'] < -4 and -10 < regression_data['PCT_change'] < -3
+            and (regression_data['PCT_day_change'] < -5 or regression_data['PCT_change'] < -5)  
+            and -4 < regression_data['PCT_day_change_pre1'] < 0.75
+            and -4 < regression_data['PCT_day_change_pre2']
+            and (regression_data['PCT_day_change_pre1'] > 0 or regression_data['PCT_day_change_pre2'] > 0 or regression_data['PCT_day_change_pre3'] > 0)
+            and (regression_data['PCT_day_change_pre1'] > -0.75 or regression_data['PCT_day_change_pre2'] > -0.75)
+            and (regression_data['PCT_day_change_pre2'] > -0.75 or regression_data['PCT_day_change_pre3'] > -0.75)
+            and high_tail_pct(regression_data) < 2.5
+            and low_tail_pct(regression_data) < abs(regression_data['PCT_day_change'])/3
             ):
-            if( -8 < regression_data['PCT_day_change'] < -4 and -10 < regression_data['PCT_change'] < -3
-                and (regression_data['PCT_day_change'] < -5 or regression_data['PCT_change'] < -5)  
-                and -4 < regression_data['PCT_day_change_pre1'] < 0.75
-                and -4 < regression_data['PCT_day_change_pre2']
-                and (regression_data['PCT_day_change_pre1'] > 0 or regression_data['PCT_day_change_pre2'] > 0 or regression_data['PCT_day_change_pre3'] > 0)
-                and (regression_data['PCT_day_change_pre1'] > -0.75 or regression_data['PCT_day_change_pre2'] > -0.75)
-                and (regression_data['PCT_day_change_pre2'] > -0.75 or regression_data['PCT_day_change_pre3'] > -0.75)
-                and high_tail_pct(regression_data) < 2.5
-                and low_tail_pct(regression_data) < abs(regression_data['PCT_day_change'])/3
-                ):
-                if(regression_data['PCT_day_change_pre1'] > 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL(9:30):HighDowntrend-2')
-                else:
-                    add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:HighDowntrend-2')
+            if(regression_data['PCT_day_change_pre1'] > 0):
+                add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL(9:30):HighDowntrend-2')
+            else:
+                add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:HighDowntrend-2')
     
     sell_common_down_continued(regression_data, regressionResult, reg, ws)
           

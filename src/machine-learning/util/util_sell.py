@@ -3082,18 +3082,6 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         and regression_data['weekLowChange'] > 2
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None)
-    elif(regression_data['monthHighChange'] == regression_data['week2HighChange']
-        and regression_data['monthLowChange'] == regression_data['week2LowChange']
-        and regression_data['week2HighChange'] < -4
-        and regression_data['week2LowChange'] > 4
-        ):
-        if(0 < regression_data['PCT_day_change'] < 0.75
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:FlagMonth-doji')
-            flag = True
-        elif(regression_data['PCT_day_change'] < -3):
-            add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:FlagMonth')
-            flag = True 
             
     if('checkSellConsolidationBreakDown-2week' in regression_data['filter']
         and -5 < regression_data['PCT_day_change'] < -1.5
@@ -3419,3 +3407,30 @@ def sell_study_downingMA(regression_data, regressionResult, reg, ws):
         ):  
         add_in_csv(regression_data, regressionResult, ws, None, None, "##(Test)(check-chart)-buySMAUpTrend-2DayDown-weekLowTouch")
     return True
+
+
+def sell_test(regression_data, regressionResult, reg, ws):
+    mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
+    regression_data['filter'] = ""
+    flag = False
+    
+    if(4 < regression_data['PCT_day_change'] < 7 and 4 < regression_data['PCT_day_change_pre1'] < 7
+        and (5.5 < regression_data['PCT_day_change'] and 5.5 < regression_data['PCT_day_change_pre1'] and regression_data['PCT_day_change_pre2'] < 2)
+        and regression_data['PCT_day_CH'] <= -1
+        and (regression_data['month3LowChange'] > 10 or regression_data['month3LowChange'] < 0)
+        and (regression_data['month3HighChange'] < -15 or regression_data['month3HighChange'] > 0)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%ACU:sellReversalDay2High')
+        flag = True
+    elif(4 < regression_data['PCT_day_change'] < 7 and 4 < regression_data['PCT_day_change_pre1'] < 7
+        and (5.5 < regression_data['PCT_day_change'] and 5.5 < regression_data['PCT_day_change_pre1'] and regression_data['PCT_day_change_pre2'] > 2)
+        and regression_data['PCT_day_CH'] >= -1
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%ACU:buyContinueDay2High')
+        flag = True 
+    elif(4 < regression_data['PCT_day_change'] < 7 and 4 < regression_data['PCT_day_change_pre1'] < 7
+        and (5.5 < regression_data['PCT_day_change'] and 5.5 < regression_data['PCT_day_change_pre1'])
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'checkDay2HighGT4')
+        flag = True 
+    return flag
