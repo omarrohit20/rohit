@@ -3164,6 +3164,21 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         and regression_data['high'] < regression_data['high_pre1']
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:lastDayLT-(-4.5)') 
+        
+    if(4 < regression_data['PCT_day_change'] < 7 and 4 < regression_data['PCT_day_change_pre1'] < 7
+        and (5.5 < regression_data['PCT_day_change'] and 5.5 < regression_data['PCT_day_change_pre1'] and regression_data['PCT_day_change_pre2'] < 2)
+        and regression_data['PCT_day_CH'] <= -1
+        and (regression_data['month3LowChange'] > 10 or regression_data['month3LowChange'] < 0)
+        and (regression_data['month3HighChange'] < -15 or regression_data['month3HighChange'] > 0)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%ACU:sellReversalLast2DayHighGT4')
+        flag = True
+    elif(2 < regression_data['PCT_day_change'] and 2 < regression_data['PCT_day_change_pre1'] < 7
+        and (5.5 < regression_data['PCT_day_change'] and 5.5 < regression_data['PCT_day_change_pre1'] and (regression_data['PCT_day_change_pre2'] > 2 or regression_data['PCT_change_pre2'] > 2))
+        and ((regression_data['PCT_day_CH'] >= -1 and regression_data['PCT_day_change'] < 7) or (regression_data['PCT_day_change'] > 7 and regression_data['PCT_day_CH'] < -2.5 and regression_data['PCT_day_change_pre3'] > 0))
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%ACU:buyContinueLast2DayHighGT4')
+        flag = True
             
     return flag
 
@@ -3173,6 +3188,18 @@ def sell_market_downtrend(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
     #return False
+    
+    if(-7 < regression_data['PCT_day_change'] < -3 and -7 < regression_data['PCT_day_change_pre1'] < -3 and -7 < regression_data['PCT_day_change_pre2'] < -3
+        and (regression_data['PCT_change'] < -3 and regression_data['PCT_change_pre1'] < -3)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '##last3DayLow(LT-3)')
+        flag = True
+    elif(-7 < regression_data['PCT_day_change'] < -3 and -7 < regression_data['PCT_day_change_pre1'] < -3
+        and (regression_data['PCT_change'] < -3)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '##last2DayLow(LT-3)')
+        flag = True 
+    
     if(('P@' not in regression_data['buyIndia'])
         and ((-6 < regression_data['PCT_change'] < -2) 
             and (-6 < regression_data['PCT_day_change'] < -2)
@@ -3414,23 +3441,4 @@ def sell_test(regression_data, regressionResult, reg, ws):
     regression_data['filter'] = ""
     flag = False
     
-    if(4 < regression_data['PCT_day_change'] < 7 and 4 < regression_data['PCT_day_change_pre1'] < 7
-        and (5.5 < regression_data['PCT_day_change'] and 5.5 < regression_data['PCT_day_change_pre1'] and regression_data['PCT_day_change_pre2'] < 2)
-        and regression_data['PCT_day_CH'] <= -1
-        and (regression_data['month3LowChange'] > 10 or regression_data['month3LowChange'] < 0)
-        and (regression_data['month3HighChange'] < -15 or regression_data['month3HighChange'] > 0)
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, '%%ACU:sellReversalDay2High')
-        flag = True
-    elif(4 < regression_data['PCT_day_change'] < 7 and 4 < regression_data['PCT_day_change_pre1'] < 7
-        and (5.5 < regression_data['PCT_day_change'] and 5.5 < regression_data['PCT_day_change_pre1'] and regression_data['PCT_day_change_pre2'] > 2)
-        and regression_data['PCT_day_CH'] >= -1
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, '%%ACU:buyContinueDay2High')
-        flag = True 
-    elif(4 < regression_data['PCT_day_change'] < 7 and 4 < regression_data['PCT_day_change_pre1'] < 7
-        and (5.5 < regression_data['PCT_day_change'] and 5.5 < regression_data['PCT_day_change_pre1'])
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, 'checkDay2HighGT4')
-        flag = True 
     return flag

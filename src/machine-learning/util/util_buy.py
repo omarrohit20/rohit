@@ -3288,6 +3288,16 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
         and regression_data['low'] > regression_data['low_pre1']
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkBuy:lastDayGT-(4.5)')                             
+    
+    if(-7 < regression_data['PCT_day_change'] < -4 and -7 < regression_data['PCT_day_change_pre1'] < -4
+        and (regression_data['PCT_day_change'] < -5.5 and regression_data['PCT_day_change_pre1'] < -5.5 and regression_data['PCT_day_change_pre2'] > -2)
+        and regression_data['PCT_day_LC'] >= 1
+        and (regression_data['month3LowChange'] > 15 or regression_data['month3LowChange'] < 0)
+        and (regression_data['month3HighChange'] < -10 or regression_data['month3HighChange'] > 0)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%ACU(70%):buyReversalLast2DayLow(LT-4)')
+        flag = True
+    
     return flag
 
 
@@ -3334,6 +3344,18 @@ def buy_market_uptrend(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
 #    return False
+    
+    if(3 < regression_data['PCT_day_change'] < 7 and 3 < regression_data['PCT_day_change_pre1'] < 7 and 3 < regression_data['PCT_day_change_pre2'] < 7
+        and (3 < regression_data['PCT_change'] and 3 < regression_data['PCT_change_pre1'])
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '##last3DayHighGT3')
+        flag = True
+    elif(3 < regression_data['PCT_day_change'] < 7 and 3 < regression_data['PCT_day_change_pre1'] < 7
+        and (3 < regression_data['PCT_change'])
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '##last2DayHighGT3')
+        flag = True 
+    
     if(('[' not in regression_data['sellIndia'])
         and ((1.5 < regression_data['PCT_change'] < 6) 
             and (1.5 < regression_data['PCT_day_change'] < 6)
@@ -4054,19 +4076,5 @@ def buy_test(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
     regression_data['filter'] = ""
     flag = False
-    
-    if(-7 < regression_data['PCT_day_change'] < -4 and -7 < regression_data['PCT_day_change_pre1'] < -4
-        and (regression_data['PCT_day_change'] < -5.5 and regression_data['PCT_day_change_pre1'] < -5.5 and regression_data['PCT_day_change_pre2'] > -2)
-        and regression_data['PCT_day_LC'] >= 1
-        and (regression_data['month3LowChange'] > 15 or regression_data['month3LowChange'] < 0)
-        and (regression_data['month3HighChange'] < -10 or regression_data['month3HighChange'] > 0)
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, '%%ACU(70%):buyReversalDay2Low')
-        flag = True
-    elif(-7 < regression_data['PCT_day_change'] < -4 and -7 < regression_data['PCT_day_change_pre1'] < -4
-        and (regression_data['PCT_day_change'] < -5.5 and regression_data['PCT_day_change_pre1'] < -5.5)
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, 'checkDay2Low(LT-4)')
-        flag = True 
         
     return flag
