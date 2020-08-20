@@ -1165,7 +1165,7 @@ def sell_af_others(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, '%%AF:sellDowntrend-lastDayDown-ReversalHighTail')
         return True
-     
+    
     return False
 
 def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
@@ -3181,7 +3181,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         and regression_data['low'] < regression_data['low_pre1']
         and regression_data['high'] < regression_data['high_pre1']
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:lastDayLT-(-4.5)') 
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:lastDayLT(-4.5)') 
         
     if(4 < regression_data['PCT_day_change'] < 7 and 4 < regression_data['PCT_day_change_pre1'] < 7
         and (5.5 < regression_data['PCT_day_change'] and 5.5 < regression_data['PCT_day_change_pre1'] and regression_data['PCT_day_change_pre2'] < 2)
