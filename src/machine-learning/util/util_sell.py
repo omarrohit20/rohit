@@ -1130,12 +1130,16 @@ def sell_af_others(regression_data, regressionResult, reg, ws):
     
     if( -7.5 < regression_data['PCT_day_change_pre1'] < -1.5 and -8 < regression_data['PCT_change_pre1'] < -0.75
         and regression_data['PCT_day_change_pre2'] < 0
+        and (regression_data['PCT_day_change_pre2'] < -2
+             or regression_data['PCT_day_change_pre2'] < -2
+             or (regression_data['PCT_day_change_pre2'] < -1 and regression_data['PCT_day_change_pre2'] < -1)
+            )
         and (regression_data['PCT_day_change_pre3'] < 0 
              or regression_data['PCT_day_change_pre4'] < 0
              or high_tail_pct(regression_data) > 1.5
             )
         and (regression_data['PCT_day_change_pre1'] > 0 or regression_data['PCT_day_change_pre2'] > 0 or regression_data['PCT_day_change_pre3'] > 0 or regression_data['PCT_day_change_pre4'] > 0)
-        and 0 < regression_data['PCT_day_change'] < 3
+        and -1.5 < regression_data['PCT_day_change'] < 3
         and regression_data['bar_high'] < regression_data['bar_high_pre1']
         and (regression_data['high'] < regression_data['high_pre1'] or regression_data['low'] < regression_data['low_pre1'])
         and ((regression_data['forecast_day_PCT2_change'] < 0 and regression_data['forecast_day_PCT3_change'] < 0)
@@ -1150,11 +1154,18 @@ def sell_af_others(regression_data, regressionResult, reg, ws):
                 and regression_data['forecast_day_PCT10_change'] < 0
                 )
             )
-        and high_tail_pct(regression_data) > 1
+        and high_tail_pct(regression_data) > 0.9
         #and regression_data['year2LowChange'] > 0
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, '%%AF:sellDowntrend-lastDayUp-ReversalHighTail')
-        return True      
+        if(regression_data['PCT_day_change'] > 0
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '%%AF:sellDowntrend-lastDayUp-ReversalHighTail')
+        elif(regression_data['PCT_day_change'] < 0
+            and regression_data['PCT_day_change_pre1'] < -4
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '%%AF:sellDowntrend-lastDayDown-ReversalHighTail')
+        return True
+     
     return False
 
 def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):

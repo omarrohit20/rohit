@@ -310,10 +310,10 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
 def buy_indicator_after_filter_accuracy(regression_data, regressionResult, reg, ws):
     if(is_any_sell_from_all_filter(regression_data) != True):
         buy_af_high_indicators(regression_data, regressionResult, reg, ws)
-        buy_af_oi_negative(regression_data, regressionResult, reg, ws)
-        buy_af_vol_contract(regression_data, regressionResult, reg, ws)
-        buy_af_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
-        buy_af_others(regression_data, regressionResult, reg, ws)
+    buy_af_oi_negative(regression_data, regressionResult, reg, ws)
+    buy_af_vol_contract(regression_data, regressionResult, reg, ws)
+    buy_af_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
+    buy_af_others(regression_data, regressionResult, reg, ws)
         #buy_af_high_volatility(regression_data, regressionResult, reg, ws)
     buy_af_low_tail(regression_data, regressionResult, reg, ws)
     buy_af_up_continued(regression_data, regressionResult, reg, ws)
@@ -960,10 +960,10 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
 def sell_indicator_after_filter_accuracy(regression_data, regressionResult, reg, ws):
     if(is_any_buy_from_all_filter(regression_data) != True):
         sell_af_high_indicators(regression_data, regressionResult, reg, ws)
-        sell_af_oi_negative(regression_data, regressionResult, reg, ws)
-        sell_af_vol_contract(regression_data, regressionResult, reg, ws)
-        sell_af_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
-        sell_af_others(regression_data, regressionResult, reg, ws)
+    sell_af_oi_negative(regression_data, regressionResult, reg, ws)
+    sell_af_vol_contract(regression_data, regressionResult, reg, ws)
+    sell_af_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
+    sell_af_others(regression_data, regressionResult, reg, ws)
         #sell_af_high_volatility(regression_data, regressionResult, reg, ws)
     sell_af_high_tail(regression_data, regressionResult, reg, ws)
     sell_af_down_continued(regression_data, regressionResult, reg, ws)

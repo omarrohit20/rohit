@@ -1097,12 +1097,16 @@ def buy_af_others(regression_data, regressionResult, reg, ws):
     
     if( 1.5 < regression_data['PCT_day_change_pre1'] < 7.5 and 0.75 < regression_data['PCT_change_pre1'] < 8
         and regression_data['PCT_day_change_pre2'] > 0
+        and (regression_data['PCT_day_change_pre2'] > 2
+             or regression_data['PCT_day_change_pre2'] > 2
+             or (regression_data['PCT_day_change_pre2'] > 1 and regression_data['PCT_day_change_pre2'] > 1)
+            )
         and (regression_data['PCT_day_change_pre3'] > 0 
              or regression_data['PCT_day_change_pre4'] > 0
              or low_tail_pct(regression_data) > 1.5
             )
         and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0 or regression_data['PCT_day_change_pre4'] < 0)     
-        and -3 < regression_data['PCT_day_change'] < 0
+        and -3 < regression_data['PCT_day_change'] < 1.5
         and regression_data['bar_low'] >  regression_data['bar_low_pre1']
         and (regression_data['low'] >  regression_data['low_pre1'] or regression_data['high'] >  regression_data['high_pre1']) 
         and ((regression_data['forecast_day_PCT2_change'] > 0 and regression_data['forecast_day_PCT3_change'] > 0)
@@ -1117,11 +1121,24 @@ def buy_af_others(regression_data, regressionResult, reg, ws):
                 and regression_data['forecast_day_PCT10_change'] > 0
                 )
             )
-        and low_tail_pct(regression_data) > 1
+        and low_tail_pct(regression_data) >= 0.9
         #and regression_data['year2HighChange'] < 0
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, '%%AF:buyUptrend-lastDayDown-ReversalLowTail')
-        return True                  
+        if(regression_data['PCT_day_change'] < 0
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '%%AF:buyUptrend-lastDayDown-ReversalLowTail')
+        elif(regression_data['PCT_day_change'] > 0
+            and regression_data['PCT_day_change_pre1'] > 4
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '%%AF:buyUptrend-lastDayUp-ReversalLowTail')
+            
+        return True
+    
+#     if('DOJI' in regression_data['filter5']
+#         and 'UPTREND:OR:GLOBALUP-DONT-SELL' in regression_data['filter5']
+#         ):
+#         print(regression_data['scrip']) 
+                   
     return False
    
 def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
@@ -2954,6 +2971,29 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
     
     flag = False
     if(regression_data['close'] > 50
+        and regression_data['forecast_day_PCT7_change'] > 0
+        and regression_data['forecast_day_PCT10_change'] > 0
+        and high_tail_pct(regression_data) > regression_data['PCT_day_change']
+        and low_tail_pct(regression_data) > regression_data['PCT_day_change']
+        and regression_data['year2HighChange'] < -5
+        and regression_data['yearLowChange'] > 15
+        and regression_data['month3LowChange'] > 10 
+        ):
+        if(-0.75 < regression_data['PCT_day_change'] < 3
+            and ((regression_data['PCT_day_change_pre1'] > 5 and high_tail_pct(regression_data) < 1.5)
+                 or (regression_data['PCT_day_change_pre2'] > 5 and high_tail_pct(regression_data) < 1.5)
+                )
+            and 0 < regression_data['forecast_day_PCT_change']
+            and 0 < regression_data['forecast_day_PCT2_change']
+            and 0 < regression_data['forecast_day_PCT3_change']
+            and 0 < regression_data['forecast_day_PCT4_change']
+            
+            #and regression_data['low'] > regression_data['low_pre1']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkBuy:Super0') 
+            flag = True
+    
+    elif(regression_data['close'] > 50
         and regression_data['forecast_day_PCT7_change'] > 0
         and regression_data['forecast_day_PCT10_change'] > 0
         and high_tail_pct(regression_data) < 3.5 
