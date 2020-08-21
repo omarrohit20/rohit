@@ -64,6 +64,15 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
             and regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 1
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'AFML:(UPTRENDMARKET)buyBreakHighBaseContinue')
+        if(regression_data['monthHighChange'] < -0.5 
+            and 1 < regression_data['PCT_day_change'] < 4 and 1 < regression_data['PCT_change'] < 5
+            and regression_data['PCT_day_change'] > regression_data['PCT_day_change_pre1']
+            and regression_data['PCT_day_change_pre1'] > 0
+            and regression_data['PCT_day_change_pre2'] > 0
+            and high_tail_pct(regression_data) < 1
+            and low_tail_pct(regression_data) < 1
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'AFML:(UPTRENDMARKET)buyContinueLessThanMonthHigh')
     return False
 
 def buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws):
@@ -740,6 +749,15 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
             and regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 1
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'AFML:(DOWNTRENDMARKET)sellBreakLowBaseContinue')
+        if(regression_data['monthLowChange'] > 0.5 
+            and -4 < regression_data['PCT_day_change'] < -1 and -5 < regression_data['PCT_change'] < -1
+            and regression_data['PCT_day_change'] < regression_data['PCT_day_change_pre1']
+            and regression_data['PCT_day_change_pre1'] < 0
+            and regression_data['PCT_day_change_pre2'] < 0
+            and high_tail_pct(regression_data) < 1
+            and low_tail_pct(regression_data) < 1
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'AFML:(DOWNTRENDMARKET)sellContinueMoreThanMonthLow')
     return False
 
 def sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws):

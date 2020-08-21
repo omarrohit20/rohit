@@ -2966,7 +2966,7 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
     flag = False
     
     if(-0.5 < regression_data['PCT_day_change'] < 0.5
-        and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0)
+        and (regression_data['PCT_day_change'] < 0 or regression_data['PCT_day_change_pre1'] < 0)
         and (regression_data['PCT_day_change_pre1'] > 1 or regression_data['PCT_day_change_pre2'] > 1)
         and (regression_data['bar_low'] > regression_data['bar_low_pre1'] > regression_data['bar_low_pre2'])
         and (high_tail_pct(regression_data) > 1 or high_tail_pct(regression_data) > 1)
@@ -2979,7 +2979,7 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, None, None, '%%:buyUpTrendDoji-0')
         return True
     elif(-0.5 < regression_data['PCT_day_change'] < 0.5
-        and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0)
+        and (regression_data['PCT_day_change'] < 0 or regression_data['PCT_day_change_pre1'] < 0)
         and (regression_data['PCT_day_change_pre1'] > 1 or regression_data['PCT_day_change_pre2'] > 1)
         and (regression_data['low'] > regression_data['low_pre1'] > regression_data['low_pre2'])
         and (high_tail_pct(regression_data) > 1 or high_tail_pct(regression_data) > 1)
