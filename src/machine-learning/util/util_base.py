@@ -1529,13 +1529,15 @@ def base_change_filter(regression_data, regressionResult, save=False):
 
 def pct_change_filter(regression_data, regressionResult, save=False):
     filterName = ''
-    if(regression_data['PCT_change'] < 0):
+    if(regression_data['PCT_change'] < 0 and regression_data['PCT_day_change'] <= 0):
         if(regression_data['PCT_change'] < -16):
             filterName = 'PCTChangeLT-16'
+        elif(regression_data['PCT_change'] < -12):
+            filterName = 'PCTChangeLT-12'
         elif(regression_data['PCT_change'] < -8):
             filterName = 'PCTChangeLT-8'
-        elif(regression_data['PCT_change'] < -4):
-            filterName = 'PCTChangeLT-4'
+        elif(regression_data['PCT_change'] < -5):
+            filterName = 'PCTChangeLT-5'
         elif(regression_data['PCT_change'] < -3):
             filterName = 'PCTChangeLT-3'
         elif(regression_data['PCT_change'] < -2):
@@ -1546,13 +1548,15 @@ def pct_change_filter(regression_data, regressionResult, save=False):
             filterName = 'PCTChangeLT-0.5'
         else:
             filterName = 'PCTDayChangeLT0'
-    elif(regression_data['PCT_change'] > 0):
+    elif(regression_data['PCT_change'] > 0 and regression_data['PCT_day_change'] >= 0):
         if(regression_data['PCT_change'] > 16):
             filterName = 'PCTChangeGT16'
+        elif(regression_data['PCT_change'] > 12):
+            filterName = 'PCTChangeGT12'
         elif(regression_data['PCT_change'] > 8):
             filterName = 'PCTChangeGT8'
-        elif(regression_data['PCT_change'] > 4):
-            filterName = 'PCTChangeGT4'
+        elif(regression_data['PCT_change'] > 5):
+            filterName = 'PCTChangeGT5'
         elif(regression_data['PCT_change'] > 3):
             filterName = 'PCTChangeGT3'
         elif(regression_data['PCT_change'] > 2):
@@ -1565,6 +1569,32 @@ def pct_change_filter(regression_data, regressionResult, save=False):
             filterName = 'PCTChangeGT0'
     elif(regression_data['PCT_change'] == 0):
         filterName = 'PCTChangeEQ0'
+    elif(regression_data['PCT_change'] < 0 and regression_data['PCT_day_change'] > 0):
+        if(regression_data['PCT_change'] < -16):
+            filterName = 'PCDCGT0PCTChangeLT-16'
+        elif(regression_data['PCT_change'] < -8):
+            filterName = 'PCDCGT0PCTChangeLT-8'
+        elif(regression_data['PCT_change'] < -5):
+            filterName = 'PCDCGT0PCTChangeLT-5'
+        elif(regression_data['PCT_change'] < -3):
+            filterName = 'PCDCGT0PCTChangeLT-3'
+        elif(regression_data['PCT_change'] < -1):
+            filterName = 'PCDCGT0PCTChangeLT-1'
+        else:
+            filterName = 'PCDCGT0PCTDayChangeLT0'
+    elif(regression_data['PCT_change'] > 0 and regression_data['PCT_day_change'] < 0):
+        if(regression_data['PCT_change'] > 16):
+            filterName = 'PCDCLT0PCTChangeGT16'
+        elif(regression_data['PCT_change'] > 8):
+            filterName = 'PCDCLT0PCTChangeGT8'
+        elif(regression_data['PCT_change'] > 5):
+            filterName = 'PCDCLT0PCTChangeGT5'
+        elif(regression_data['PCT_change'] > 3):
+            filterName = 'PCDCLT0PCTChangeGT3'
+        elif(regression_data['PCT_change'] > 1):
+            filterName = 'PCDCLT0PCTChangeGT1'
+        else:
+            filterName = 'PCDCLT0PCTChangeGT0'
         
     return filterName
 
