@@ -1595,6 +1595,11 @@ def pct_change_filter(regression_data, regressionResult, save=False):
             filterName = 'PCDCLT0PCTChangeGT1'
         else:
             filterName = 'PCDCLT0PCTChangeGT0'
+            
+    if(-0.5 < regression_data['PCT_day_change'] < 0):
+        filterName = filterName + ',PCDayChange-0.5to0'
+    elif(0 < regression_data['PCT_day_change'] < 0.5):
+        filterName = filterName + ',PCDayChange0to0.5'
         
     return filterName
 

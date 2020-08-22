@@ -2275,7 +2275,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, 'STRONG-SUPER-Sell')
             flag = True
             
-        if(regression_data[filter_count] >= 1
+        if(regression_data[filter_count] >= 2
             and (abs(regression_data[filter_pct]) >= 70 or regression_data[filter_pct] == 0)
             ):
             if(regression_data[filter_avg] >= 0
