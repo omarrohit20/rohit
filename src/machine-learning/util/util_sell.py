@@ -1130,8 +1130,7 @@ def sell_af_others(regression_data, regressionResult, reg, ws):
     
     if( -7.5 < regression_data['PCT_day_change_pre1'] < -1.5 and -8 < regression_data['PCT_change_pre1'] < -0.75
         and regression_data['PCT_day_change_pre2'] < 0
-        and (regression_data['PCT_day_change_pre2'] < -2
-             or regression_data['PCT_day_change_pre2'] < -2
+        and ((regression_data['PCT_day_change_pre1'] < -2 or regression_data['PCT_day_change_pre2'] < -2)
              or (regression_data['PCT_day_change_pre2'] < -1 and regression_data['PCT_day_change_pre2'] < -1)
             )
         and (regression_data['PCT_day_change_pre3'] < 0 
@@ -3216,6 +3215,11 @@ def sell_market_downtrend(regression_data, regressionResult, reg, ws):
         and (regression_data['PCT_change'] < -3)
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, '##last2DayLow(LT-3)')
+        flag = True
+    elif(-10 < regression_data['PCT_day_change_pre1'] < -5 and -5 < regression_data['PCT_day_change'] < -1
+        and (3 < regression_data['PCT_change'])
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '##lastDayHigh(LT-5)Today(LT-1)')
         flag = True 
     
     if(('P@' not in regression_data['buyIndia'])

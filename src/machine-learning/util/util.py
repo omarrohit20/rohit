@@ -57,6 +57,12 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
         if('NearLow' in regression_data['filter3']
             and'GT0' in regression_data['filter3']
             and regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 1
+            and regression_data['forecast_day_PCT_change'] < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change']
+            and regression_data['forecast_day_PCT_change'] < 0
+            and regression_data['forecast_day_PCT2_change'] < 0
+            and regression_data['forecast_day_PCT3_change'] < 0
+            and regression_data['forecast_day_PCT4_change'] < 0
+            and regression_data['forecast_day_PCT5_change'] < 0
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'AFML:(UPTRENDMARKET)buyNearLowBaseReversal')
         if((regression_data['yearHighChange'] < -5) and ('BreakHighMonth6' in regression_data['filter3'])
@@ -763,6 +769,12 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
         if((regression_data['yearLowChange'] > 5) and ('BreakLowMonth6' in regression_data['filter3'])
             and'LT0' in regression_data['filter3']
             and regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 1
+            and regression_data['forecast_day_PCT_change'] > regression_data['forecast_day_PCT2_change'] > regression_data['forecast_day_PCT3_change']
+            and regression_data['forecast_day_PCT_change'] > 0
+            and regression_data['forecast_day_PCT2_change'] > 0
+            and regression_data['forecast_day_PCT3_change'] > 0
+            and regression_data['forecast_day_PCT4_change'] > 0
+            and regression_data['forecast_day_PCT5_change'] > 0
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'AFML:(DOWNTRENDMARKET)sellBreakLowBaseContinue')
         if(regression_data['monthLowChange'] > 0.5 
