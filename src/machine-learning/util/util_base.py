@@ -1979,10 +1979,14 @@ def base_line(regression_data, regressionResult, reg, ws):
     
     if((-10 < regression_data['year2HighChange'] < 0) 
         and (regression_data['year2LowChange'] > 40)
-        and regression_data['year2High'] == regression_data['month6High']
+        and (regression_data['year2High'] == regression_data['month6High']
+            or ((regression_data['month3HighChange'] == regression_data['monthHighChange']) and (regression_data['monthHighChange'] == regression_data['week2HighChange']) and regression_data['week2HighChange'] > 0)
+            )
         ):
         if(regression_data['year2High'] == regression_data['month6High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Recent)')
+        elif((regression_data['month3HighChange'] == regression_data['monthHighChange']) and (regression_data['monthHighChange'] == regression_data['week2HighChange']) and regression_data['week2HighChange'] > 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Oldest)')
         if(regression_data['weekHigh'] > regression_data['week2High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekHighGTweek2High)')
             
@@ -2001,10 +2005,14 @@ def base_line(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'NearHighYear2')   
     elif((-10 < regression_data['yearHighChange'] < 0) 
         and (regression_data['yearLowChange'] > 30)
-        and regression_data['yearHigh'] == regression_data['month3High']
+        and (regression_data['yearHigh'] == regression_data['month3High']
+             or ((regression_data['month3HighChange'] == regression_data['monthHighChange']) and (regression_data['monthHighChange'] == regression_data['week2HighChange']) and regression_data['week2HighChange'] > 0)
+            )
         ):
         if(regression_data['yearHigh'] == regression_data['month3High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Recent)')
+        elif((regression_data['month3HighChange'] == regression_data['monthHighChange']) and (regression_data['monthHighChange'] == regression_data['week2HighChange']) and regression_data['week2HighChange'] > 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Oldest)')
         if(regression_data['weekHigh'] > regression_data['week2High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekHighGTweek2High)')
         
@@ -2024,10 +2032,15 @@ def base_line(regression_data, regressionResult, reg, ws):
         
     elif((-10 < regression_data['month6HighChange'] < 0) 
         and (regression_data['month6LowChange'] > 20)
-        and regression_data['month6High'] == regression_data['month3High']
+        and (regression_data['month6High'] == regression_data['month3High']
+             or ((regression_data['month3HighChange'] == regression_data['monthHighChange']) and (regression_data['monthHighChange'] == regression_data['week2HighChange']) and regression_data['week2HighChange'] > 0)
+            )
+        
         ):
         if(regression_data['month6High'] == regression_data['month3High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Recent)')
+        elif((regression_data['month3HighChange'] == regression_data['monthHighChange']) and (regression_data['monthHighChange'] == regression_data['week2HighChange']) and regression_data['week2HighChange'] > 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Oldest)')
         if(regression_data['weekHigh'] > regression_data['week2High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekHighGTweek2High)')
         
@@ -2050,6 +2063,8 @@ def base_line(regression_data, regressionResult, reg, ws):
         ):
         if(regression_data['month3High'] == regression_data['monthHigh']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Recent)')
+        elif((regression_data['monthHighChange'] == regression_data['week2HighChange']) and regression_data['week2HighChange'] > 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Oldest)')
         if(regression_data['weekHigh'] > regression_data['week2High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekHighGTweek2High)')
         
@@ -2075,6 +2090,8 @@ def base_line(regression_data, regressionResult, reg, ws):
         ):
         if(regression_data['monthHigh'] == regression_data['week2High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Recent)')
+        elif(regression_data['week2HighChange'] > 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Oldest)')
         if(regression_data['weekHigh'] > regression_data['week2High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekHighGTweek2High)')
         
@@ -2199,10 +2216,14 @@ def base_line(regression_data, regressionResult, reg, ws):
     
     if((0 < regression_data['year2LowChange'] < 10) 
         and (regression_data['year2HighChange'] < -40)
-        and (regression_data['year2Low'] == regression_data['month6Low'])
+        and (regression_data['year2Low'] == regression_data['month6Low']
+            or ((regression_data['month3LowChange'] == regression_data['monthLowChange']) and (regression_data['monthLowChange'] == regression_data['week2LowChange']) and regression_data['week2LowChange'] < 0)
+            )
         ):
         if(regression_data['year2Low'] == regression_data['month6Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Recent)')
+        elif((regression_data['month3LowChange'] == regression_data['monthLowChange']) and (regression_data['monthLowChange'] == regression_data['week2LowChange']) and regression_data['week2LowChange'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Oldest)')
         if(regression_data['weekLow'] < regression_data['week2Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekLowLTweek2Low)')
         
@@ -2223,10 +2244,14 @@ def base_line(regression_data, regressionResult, reg, ws):
     elif((0 < regression_data['yearLowChange'] < 10)
         and (regression_data['year2LowChange'] > 7.5)
         and (regression_data['yearHighChange'] < -30)
-        and (regression_data['yearLow'] == regression_data['month3Low'])
+        and (regression_data['yearLow'] == regression_data['month3Low']
+            or ((regression_data['month3LowChange'] == regression_data['monthLowChange']) and (regression_data['monthLowChange'] == regression_data['week2LowChange']) and regression_data['week2LowChange'] < 0)
+            )
         ):
         if(regression_data['yearLow'] == regression_data['month3Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Recent)')
+        elif((regression_data['month3LowChange'] == regression_data['monthLowChange']) and (regression_data['monthLowChange'] == regression_data['week2LowChange']) and regression_data['week2LowChange'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Oldest)')
         if(regression_data['weekLow'] < regression_data['week2Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekLowLTweek2Low)')
         
@@ -2247,10 +2272,14 @@ def base_line(regression_data, regressionResult, reg, ws):
     elif((0 < regression_data['month6LowChange'] < 10)
         and (regression_data['yearLowChange'] > 7.5)
         and (regression_data['month6HighChange'] < -20)
-        and (regression_data['month6Low'] == regression_data['month3Low'])
+        and (regression_data['month6Low'] == regression_data['month3Low']
+             or ((regression_data['month3LowChange'] == regression_data['monthLowChange']) and (regression_data['monthLowChange'] == regression_data['week2LowChange']) and regression_data['week2LowChange'] < 0)
+            )
         ):
         if(regression_data['month6Low'] == regression_data['month3Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Recent)')
+        elif((regression_data['month3LowChange'] == regression_data['monthLowChange']) and (regression_data['monthLowChange'] == regression_data['week2LowChange']) and regression_data['week2LowChange'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Oldest)')
         if(regression_data['weekLow'] < regression_data['week2Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekLowLTweek2Low)')
             
@@ -2274,6 +2303,8 @@ def base_line(regression_data, regressionResult, reg, ws):
         ):
         if(regression_data['month3Low'] == regression_data['monthLow']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Recent)')
+        elif((regression_data['monthLowChange'] == regression_data['week2LowChange']) and regression_data['week2LowChange'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Oldest)')
         if(regression_data['weekLow'] < regression_data['week2Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekLowLTweek2Low)')
         
@@ -2300,6 +2331,8 @@ def base_line(regression_data, regressionResult, reg, ws):
         ):
         if(regression_data['monthLow'] == regression_data['week2Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Recent)')
+        elif(regression_data['week2LowChange'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(Oldest)')
         if(regression_data['weekLow'] < regression_data['week2Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekLowLTweek2Low)')
         
