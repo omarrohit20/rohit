@@ -1716,12 +1716,12 @@ def is_reg_buyorsell_defined_filter(regression_data, regressionResult, high_or_l
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None,'Filter-All-Buy')
             flag = True
-        elif(regression_data[filter_avg] > 1 and regression_data[filter_count] >= 2 and regression_data[filter_pct] > 70
+        elif(regression_data[filter_avg] > 1.5 and regression_data[filter_count] >= 3 and regression_data[filter_pct] > 70
             and "MLBuy" in regression_data['filter']
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None,'Filter-All-Buy')
             flag = True
-        elif(regression_data[filter_avg] > 1.5 and regression_data[filter_pct] > 70
+        elif(regression_data[filter_avg] > 1.5 and regression_data[filter_count] >= 2 and regression_data[filter_pct] > 70
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None,'Filter-All-Buy-risky')
             flag = True
@@ -1734,12 +1734,12 @@ def is_reg_buyorsell_defined_filter(regression_data, regressionResult, high_or_l
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None,'Filter-All-Sell')
             flag = True
-        elif(regression_data[filter_avg] < -1 and regression_data[filter_count] >= 2 and regression_data[filter_pct] < -70
+        elif(regression_data[filter_avg] < -1.5 and regression_data[filter_count] >= 3 and regression_data[filter_pct] < -70
             and "MLSell" in regression_data['filter']
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None,'Filter-All-Sell')
             flag = True
-        elif(regression_data[filter_avg] < -1.5 and regression_data[filter_pct] < -70
+        elif(regression_data[filter_avg] < -1.5 and regression_data[filter_count] >= 2 and regression_data[filter_pct] < -70
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None,'Filter-All-Sell-risky')
             flag = True
