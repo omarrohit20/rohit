@@ -20,7 +20,7 @@ SELL_VERY_LESS_DATA=True
 MARKET_IN_UPTREND=False
 MARKET_IN_DOWNTREND=False
 CLOSEPRICE = 40
-TEST = True
+TEST = False
 
 buyMLP = 0.1
 buyMLP_MIN = 0
@@ -1985,7 +1985,7 @@ def base_line(regression_data, regressionResult, reg, ws):
     
     
     
-    if((0 < regression_data['year2HighChange'] < 10) 
+    if((0 < regression_data['year2HighChange']) 
         and (regression_data['year2LowChange'] > 40)
         ):
         if(regression_data['year2High'] == regression_data['month6High']):
@@ -1993,7 +1993,9 @@ def base_line(regression_data, regressionResult, reg, ws):
         if(regression_data['weekHigh'] > regression_data['week2High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekHighGTweek2High)')
         
-        if(regression_data['year2HighChange'] > 7):
+        if(regression_data['year2HighChange'] > 10):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'HighYear2GT10')
+        elif(regression_data['year2HighChange'] > 7):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'HighYear2GT7')
         elif(regression_data['year2HighChange'] > 5):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'HighYear2GT5')
@@ -2004,7 +2006,7 @@ def base_line(regression_data, regressionResult, reg, ws):
             
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'BreakHighYear2')
         
-    elif((0 < regression_data['yearHighChange'] < 10) 
+    elif((0 < regression_data['yearHighChange']) 
         and (regression_data['yearLowChange'] > 30)
         ):
         if(regression_data['yearHigh'] == regression_data['month3High']):
@@ -2012,7 +2014,9 @@ def base_line(regression_data, regressionResult, reg, ws):
         if(regression_data['weekHigh'] > regression_data['week2High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekHighGTweek2High)')
         
-        if(regression_data['yearHighChange'] > 7):
+        if(regression_data['yearHighChange'] > 10):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'HighYearGT10')
+        elif(regression_data['yearHighChange'] > 7):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'HighYearGT7')
         elif(regression_data['yearHighChange'] > 5):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'HighYearGT5')
@@ -2023,7 +2027,7 @@ def base_line(regression_data, regressionResult, reg, ws):
             
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'BreakHighYear')
             
-    elif((0 < regression_data['month6HighChange'] < 10)
+    elif((0 < regression_data['month6HighChange'])
         and (regression_data['month6LowChange'] > 20)
         ):
         if(regression_data['month6High'] == regression_data['month3High']):
@@ -2031,7 +2035,9 @@ def base_line(regression_data, regressionResult, reg, ws):
         if(regression_data['weekHigh'] > regression_data['week2High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekHighGTweek2High)')
         
-        if(regression_data['month6HighChange'] > 7):
+        if(regression_data['month6HighChange'] > 10):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'HighMonth6GT10')
+        elif(regression_data['month6HighChange'] > 7):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'HighMonth6GT7')
         elif(regression_data['month6HighChange'] > 5):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'HighMonth6GT5')
@@ -2042,7 +2048,7 @@ def base_line(regression_data, regressionResult, reg, ws):
             
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'BreakHighMonth6')
                 
-    elif((0 < regression_data['month3HighChange'] < 10) 
+    elif((0 < regression_data['month3HighChange']) 
         and (regression_data['month3LowChange'] > 15)
         ):
         if(regression_data['month3High'] == regression_data['monthHigh']):
@@ -2050,7 +2056,9 @@ def base_line(regression_data, regressionResult, reg, ws):
         if(regression_data['weekHigh'] > regression_data['week2High']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekHighGTweek2High)')
         
-        if(regression_data['month3HighChange'] > 7):
+        if(regression_data['month3HighChange'] > 10):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'HighMonth3GT10')
+        elif(regression_data['month3HighChange'] > 7):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'HighMonth3GT7')
         elif(regression_data['month3HighChange'] > 5):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'HighMonth3GT5')
@@ -2084,7 +2092,7 @@ def base_line(regression_data, regressionResult, reg, ws):
     
     
     
-    if((-10 < regression_data['year2LowChange'] < 0 ) 
+    if((regression_data['year2LowChange'] < 0) 
         and (regression_data['year2HighChange'] < -40)
         ):
         if(regression_data['year2Low'] == regression_data['month6Low']):
@@ -2092,7 +2100,9 @@ def base_line(regression_data, regressionResult, reg, ws):
         if(regression_data['weekLow'] < regression_data['week2Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekLowLTweek2Low)')
             
-        if(regression_data['year2LowChange'] < -7):
+        if(regression_data['year2LowChange'] < -10):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'LowYear2LT-10')
+        elif(regression_data['year2LowChange'] < -7):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'LowYear2LT-7')
         elif(regression_data['year2LowChange'] < -5):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'LowYear2LT-5')
@@ -2103,7 +2113,7 @@ def base_line(regression_data, regressionResult, reg, ws):
             
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'BreakLowYear2')
         
-    elif((-10 < regression_data['yearLowChange'] < 0) 
+    elif((regression_data['yearLowChange'] < 0) 
         and (regression_data['year2LowChange'] > 20)
         and (regression_data['yearHighChange'] < -30)
         ):
@@ -2112,7 +2122,9 @@ def base_line(regression_data, regressionResult, reg, ws):
         if(regression_data['weekLow'] < regression_data['week2Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekLowLTweek2Low)')
             
-        if(regression_data['yearLowChange'] < -7):
+        if(regression_data['yearLowChange'] < -10):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'LowYearLT-10')
+        elif(regression_data['yearLowChange'] < -7):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'LowYearLT-7')
         elif(regression_data['yearLowChange'] < -5):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'LowYearLT-5')
@@ -2123,7 +2135,7 @@ def base_line(regression_data, regressionResult, reg, ws):
             
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'BreakLowYear')
         
-    elif((-10 < regression_data['month6LowChange'] < 0)
+    elif((regression_data['month6LowChange'] < 0)
         and (regression_data['yearLowChange'] > 20)
         and (regression_data['month6HighChange'] < -20)
         ):
@@ -2132,7 +2144,9 @@ def base_line(regression_data, regressionResult, reg, ws):
         if(regression_data['weekLow'] < regression_data['week2Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekLowLTweek2Low)')
             
-        if(regression_data['month6LowChange'] < -7):
+        if(regression_data['month6LowChange'] < -10):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'LowMonth6LT-10')
+        elif(regression_data['month6LowChange'] < -7):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'LowMonth6LT-7')
         elif(regression_data['month6LowChange'] < -5):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'LowMonth6LT-5')
@@ -2143,7 +2157,7 @@ def base_line(regression_data, regressionResult, reg, ws):
             
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'BreakLowMonth6')
         
-    elif((-10 < regression_data['month3LowChange'] < 0)
+    elif((regression_data['month3LowChange'] < 0)
         and (regression_data['month6LowChange'] > 10)
         and (regression_data['yearLowChange'] > 20)
         and (regression_data['month3HighChange'] < -15)
@@ -2153,7 +2167,9 @@ def base_line(regression_data, regressionResult, reg, ws):
         if(regression_data['weekLow'] < regression_data['week2Low']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, '(weekLowLTweek2Low)')
             
-        if(regression_data['month3LowChange'] < -7):
+        if(regression_data['month3LowChange'] < -10):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'LowMonth3LT-10')
+        elif(regression_data['month3LowChange'] < -7):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'LowMonth3LT-7')
         elif(regression_data['month3LowChange'] < -5):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, 'LowMonth3LT-5')

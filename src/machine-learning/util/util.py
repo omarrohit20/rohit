@@ -1928,12 +1928,14 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
         if(flag):
             superflag = True
     
-    flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
-    if(flag):
-        superflag = True   
-    flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_avg', 'filter_count', 'filter_pct')
-    if(flag):
-        superflag = True
+    if((abs(regression_data['filter_345_avg']) > 2 and regression_data['filter_345_count'] >= 3) or regression_data['filter_345_avg'] > 5):
+        flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
+        if(flag):
+            superflag = True   
+    if((abs(regression_data['filter_avg']) > 2 and regression_data['filter_count'] >= 3) or regression_data['filter_avg'] > 5):
+        flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_avg', 'filter_count', 'filter_pct')
+        if(flag):
+            superflag = True
     flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
     if(flag):
         superflag = True
@@ -1944,11 +1946,11 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
         flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
         if(flag):
             superflag = True
-    if((abs(regression_data['filter_tech_all_avg']) > 2 and regression_data['filter_tech_all_count'] >= 3) or regression_data['filter_tech_all_avg'] > 5):
+    if((abs(regression_data['filter_tech_all_avg']) > 2 and regression_data['filter_tech_all_count'] >= 4) or abs(regression_data['filter_tech_all_avg']) > 4 or regression_data['filter_tech_all_avg'] > 5):
         flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
         if(flag):
             superflag = True
-    if((abs(regression_data['filter_tech_all_pct_change_avg']) > 2 and regression_data['filter_tech_all_pct_change_count'] >= 3) or regression_data['filter_tech_all_avg'] > 5):
+    if((abs(regression_data['filter_tech_all_pct_change_avg']) > 2 and regression_data['filter_tech_all_pct_change_count'] >= 4) or abs(regression_data['filter_tech_all_pct_change_avg']) > 4 or regression_data['filter_tech_all_avg'] > 5):
         flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
         if(flag):
             superflag = True
