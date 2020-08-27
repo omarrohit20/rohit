@@ -551,7 +551,24 @@ def sell_high_volatility(regression_data, regressionResult):
 #             )
 #         ):
 #         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'maySellshortDownTrendContinue')
-#         flag = True
+#         flag = Tru
+    
+    if(-1.5 < regression_data['PCT_day_change'] < 1.5 and -1.5 < regression_data['PCT_change'] < 1.5
+        and -1.5 < regression_data['PCT_day_change_pre1'] < 1.5 and -1.5 < regression_data['PCT_change_pre1'] < 1.5
+        and -1.5 < regression_data['PCT_day_change_pre2'] < 1.5 and -1.5 < regression_data['PCT_change_pre2'] < 1.5
+        and -2.5 < regression_data['PCT_day_change_pre3'] < 2.5 and -2.5 < regression_data['PCT_change_pre3'] < 2.5
+        and -2.5 < regression_data['PCT_day_change_pre4'] < 2.5 and -2.5 < regression_data['PCT_change_pre4'] < 2.5
+        and -1.5 < regression_data['forecast_day_PCT_change'] < 1.5
+        and -1.5 < regression_data['forecast_day_PCT2_change'] < 1.5
+        and -1.5 < regression_data['forecast_day_PCT3_change'] < 1.5
+        and -1.5 < regression_data['forecast_day_PCT4_change'] < 1.5
+        and -1.5 < regression_data['forecast_day_PCT5_change'] < 1.5
+        and (regression_data['forecast_day_PCT7_change'] > 2 or regression_data['forecast_day_PCT10_change'] > 2)
+        and regression_data['monthHighChange'] < -4
+        and abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'TEST:consolidationSellCandidate')
+        flag = True
     
     if(high_volatility(regression_data, regressionResult, False)):
         flag = True
@@ -2995,6 +3012,8 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             or regression_data['forecast_day_PCT3_change'] > -0.5
             or regression_data['forecast_day_PCT4_change'] > -0.5
             )
+        and regression_data['low_pre1'] > regression_data['weekLow'] + 1
+        and regression_data['low_pre2'] > regression_data['weekLow']
         ):
         if (0 < regression_data['PCT_day_change'] < 0.75
             and(regression_data['PCT_day_change_pre1'] < -2
@@ -3020,6 +3039,8 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             or regression_data['forecast_day_PCT4_change'] > 0
             or regression_data['forecast_day_PCT5_change'] > 0
             )
+        and regression_data['low_pre1'] > regression_data['week2Low'] + 2
+        and regression_data['low_pre2'] > regression_data['week2Low']
         ):
         if (0 < regression_data['PCT_day_change'] < 0.75
             and regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']
@@ -3043,6 +3064,8 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             or regression_data['forecast_day_PCT3_change'] > -0.5
             or regression_data['forecast_day_PCT4_change'] > -0.5
             )
+        and regression_data['low_pre1'] > regression_data['weekLow'] + 1
+        and regression_data['low_pre2'] > regression_data['weekLow']
         ):
         if(0 < regression_data['PCT_day_change'] < 0.75
             and regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']
@@ -3073,6 +3096,8 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             or regression_data['forecast_day_PCT4_change'] > 0
             or regression_data['forecast_day_PCT5_change'] > 0
             )
+        and regression_data['low_pre1'] > regression_data['week2Low'] + 2
+        and regression_data['low_pre2'] > regression_data['week2Low']
         ):
         if(0 < regression_data['PCT_day_change'] < 0.75
             and regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']

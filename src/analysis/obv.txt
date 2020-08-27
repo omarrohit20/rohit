@@ -1,19 +1,10 @@
-To-Do - Sell 
-abs(day change) > 2
-Last 2 day up
-Last 2 day volume cross
-Last 3rd day up and volume cross
-at week2high sell 
-at week2low reversal buy
-
-4th day down and volume cross
-at week2high sell
+To-Do - 
 
 To-Do - Buy
-Last 2 day down
-Last 2 day volume cross
-Last 3rd day down and volume cross
-at week2low, at week2High reversal buy
+Last 5 day between -1.5 to 1.5 
+forecast_day 7 day or 10th day LT -2
+monthlowchange gt 4
+check morning trend at 9:30 last 4 day crossed
 
 
 More than 40 points up(down) on following day. Market will not go down, If day earlier down or downtrend couple of days
