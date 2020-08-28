@@ -1557,6 +1557,23 @@ def buy_year_low(regression_data, regressionResult, reg, ws, ws1):
 
 def buy_down_trend(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
+    
+    if(regression_data['month3LowChange'] < 0 
+        and regression_data['monthLowChange'] < 0
+        and regression_data['week2LowChange'] < 0
+        and regression_data['weekLowChange'] < 0
+        and regression_data['monthHighChange'] < -20
+        and regression_data['forecast_day_PCT_change'] < 0 and regression_data['forecast_day_PCT2_change'] < 0
+        and (regression_data['PCT_day_change_pre1'] > 0 
+             or regression_data['PCT_day_change_pre2'] > 0 
+             or regression_data['PCT_day_change_pre3'] > 0
+             or regression_data['PCT_day_change_pre4'] > 0
+            )
+        and -3 < regression_data['PCT_day_change'] < -1 and -4 < regression_data['PCT_change'] < -1
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%:buyDownTrend-month3Low')
+        return True
+    
     if((('NearLowYear2' in regression_data['filter3'])
         or ('BreakLowYear2' in regression_data['filter3'])
         or (regression_data['year2HighChange'] < -50 and regression_data['month3LowChange'] < 10)
@@ -3010,6 +3027,9 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
     
     flag = False
 
+    if(regression_data['year2HighChange'] > -3 or regression_data['year2LowChange'] < 3):
+        return False
+    
     if(-0.5 < regression_data['PCT_day_change'] < 0.5
         and (regression_data['PCT_day_change'] < 0 or regression_data['PCT_day_change_pre1'] < 0)
         and (regression_data['PCT_day_change'] > 0 or regression_data['PCT_day_change_pre1'] > 0)

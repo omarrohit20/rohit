@@ -1601,6 +1601,27 @@ def pct_change_filter(regression_data, regressionResult, save=False):
     elif(0 < regression_data['PCT_day_change'] < 0.5):
         filterName = filterName + ',PCDayChange-0.5to0.5'
         
+#     if(regression_data['SMA4'] > regression_data['SMA4_2daysBack']):
+#         filterName = filterName + ',SMA4GT2DaysBack'
+#     else:
+#         filterName = filterName + ',SMA4LT2DaysBack'
+#         
+#     if(regression_data['SMA9'] > regression_data['SMA9_2daysBack']):
+#         filterName = filterName + ',SMA9GT2DaysBack'
+#     else:
+#         filterName = filterName + ',SMA9LT2DaysBack'
+        
+#     if(regression_data['EMA14'] > regression_data['EMA14_2daysBack']):
+#         filterName = filterName + ',EMA14GT2DaysBack'
+#     else:
+#         filterName = filterName + ',EMA14LT2DaysBack'
+        
+    if(regression_data['year2HighChange'] > 0):
+        filterName = filterName + ',year2High'
+    elif(regression_data['year2LowChange'] < 0):
+        filterName = filterName + ',year2Low'
+        
+        
     return filterName
 
 def pct_change_filter_days(regression_data, regressionResult, save=False):

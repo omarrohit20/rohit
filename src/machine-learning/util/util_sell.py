@@ -1552,6 +1552,24 @@ def sell_year_low(regression_data, regressionResult, reg, ws):
 
 def sell_up_trend(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
+    
+    if(regression_data['month3HighChange'] > 0 
+        and regression_data['monthHighChange'] > 0
+        and regression_data['week2HighChange'] > 0
+        and regression_data['weekHighChange'] > 0
+        and regression_data['monthLowChange'] > 20
+        and regression_data['forecast_day_PCT_change'] > 0 and regression_data['forecast_day_PCT2_change'] > 0
+        and (regression_data['PCT_day_change_pre1'] < 0 
+             or regression_data['PCT_day_change_pre2'] < 0 
+             or regression_data['PCT_day_change_pre3'] < 0
+             or regression_data['PCT_day_change_pre4'] < 0
+            )
+        and 1 < regression_data['PCT_day_change'] < 3 and 1 < regression_data['PCT_change'] < 4
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%:sellUpTrend-month3High')
+        return True
+        
+    
     if(all_day_pct_change_positive_except_today(regression_data)
         and (regression_data['low'] < regression_data['low_pre1'])
         and -4.5 < regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0
@@ -2856,6 +2874,10 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
     
     flag = False
+    
+    if(regression_data['year2HighChange'] > -3 or regression_data['year2LowChange'] < 3):
+        return False
+    
     if(regression_data['close'] > 50
         and regression_data['forecast_day_PCT7_change'] < 0
         and regression_data['forecast_day_PCT10_change'] < 0
