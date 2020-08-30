@@ -3623,40 +3623,43 @@ def buy_risingMA(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, None, None, '##buyYear2LowMovingSMA')
         return True
     
-    if(is_algo_buy(regression_data)
+    if(regression_data['close'] > 50
         and regression_data['SMA4'] > 0
         and regression_data['SMA9'] > 0
         and regression_data['SMA25'] > 0
         and regression_data['SMA100'] > 10
         and regression_data['SMA200'] > 10
         and regression_data['year2HighChange'] < -5
-        and regression_data['yearHighChange'] < -5
-        and (regression_data['PCT_day_change_pre1'] < 0.5
-             or -0.5 < regression_data['PCT_day_change'] < 0.5)
+        and (abs(regression_data['PCT_day_change']) > 1.5  
+             or (-0.75 < regression_data['PCT_day_change'] < 0.75 and regression_data['PCT_day_change_pre1'] > 1.5
+                 and abs(regression_data['PCT_day_change_pre1']) > 2*abs(regression_data['PCT_day_change'])
+                )
+            )
         ):
-        if(regression_data['PCT_change'] < -4.5
+        if(regression_data['PCT_change'] < -3
             and regression_data['PCT_day_change'] < -4.5):
-            add_in_csv(regression_data, regressionResult, ws, None, None, '##(Test)ML:AllMAPositive_Uptrend_(LT-4.5)')
-        elif(-5 < regression_data['PCT_change'] < -2
-            and -5 < regression_data['PCT_day_change'] < -2):
-            add_in_csv(regression_data, regressionResult, ws, None, None, '##(Test)ML:AllMAPositive_Uptrend_(LT-2)')
-        elif(-5 < regression_data['PCT_change'] < 0
-            and -5 < regression_data['PCT_day_change'] < 0):
-            add_in_csv(regression_data, regressionResult, ws, None, None, '##(Test)ML:AllMAPositive_Uptrend_(LT0)')
-        elif(-1 < regression_data['PCT_change'] < 1
-            and -1 < regression_data['PCT_day_change'] < 1):
-            add_in_csv(regression_data, regressionResult, ws, None, None, '##(Test)ML:AllMAPositive_Uptrend_(BT+1-1)')
-        elif(0 < regression_data['PCT_change'] < 2
-            and 0 < regression_data['PCT_day_change'] < 2):
-            add_in_csv(regression_data, regressionResult, ws, None, None, '##(Test)ML:AllMAPositive_Uptrend_(GT0)')
-        elif(0 < regression_data['PCT_change'] < 5
-            and 0 < regression_data['PCT_day_change'] < 5):
-            add_in_csv(regression_data, regressionResult, ws, None, None, '##(Test)ML:AllMAPositive_Uptrend_(GT+2)')
-        elif(regression_data['PCT_change'] > 4.5
+            add_in_csv(regression_data, regressionResult, ws, None, None, '##AllMAPositive_Uptrend_(LT-4.5)')
+        elif(regression_data['PCT_change'] < -1
+            and -4.5 < regression_data['PCT_day_change'] < -2):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '##AllMAPositive_Uptrend_(LT-2)')
+        elif(regression_data['PCT_change'] < 0
+            and -2 < regression_data['PCT_day_change'] < -1):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '##AllMAPositive_Uptrend_(LT-1)')
+        elif(-1.5 < regression_data['PCT_change'] < 1.5
+            and -1 < regression_data['PCT_day_change'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '##AllMAPositive_Uptrend_(LT0)')
+        elif(regression_data['PCT_change'] >3
             and regression_data['PCT_day_change'] > 4.5):
-            add_in_csv(regression_data, regressionResult, ws, None, None, '##(Test)ML:AllMAPositive_Uptrend_(GT+4.5)')
-        else:
-            add_in_csv(regression_data, regressionResult, ws, None, None, '##(Test)ML:AllMAPositive_Uptrend')
+            add_in_csv(regression_data, regressionResult, ws, None, None, '##AllMAPositive_Uptrend_(GT4.5)')
+        elif(regression_data['PCT_change'] > 1
+            and 4.5 > regression_data['PCT_day_change'] > 2):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '##AllMAPositive_Uptrend_(GT2)')
+        elif(regression_data['PCT_change'] > 0
+            and 2 > regression_data['PCT_day_change'] > 1):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '##AllMAPositive_Uptrend_(GT1)')
+        elif(-1.5 < regression_data['PCT_change'] < 1.5
+            and 1 > regression_data['PCT_day_change'] > 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '##AllMAPositive_Uptrend_(GT0)')
     
     if(regression_data['close'] > 50
         ):        
