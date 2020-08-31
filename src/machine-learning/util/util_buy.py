@@ -3625,10 +3625,9 @@ def buy_risingMA(regression_data, regressionResult, reg, ws):
     
     if(regression_data['close'] > 50
         and regression_data['SMA4'] > 0
-        and regression_data['SMA9'] > 0
-        and regression_data['SMA25'] > 0
-        and regression_data['SMA100'] > 10
-        and regression_data['SMA200'] > 10
+        and regression_data['SMA9'] > 5
+        and regression_data['SMA25'] > 10
+        and regression_data['SMA100'] > 0
         and regression_data['year2HighChange'] < -5
         and (abs(regression_data['PCT_day_change']) > 1.5  
              or (-0.75 < regression_data['PCT_day_change'] < 0.75 and regression_data['PCT_day_change_pre1'] > 1.5
@@ -3636,6 +3635,11 @@ def buy_risingMA(regression_data, regressionResult, reg, ws):
                 )
             )
         ):
+        if(regression_data['SMA200'] > 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '##AllMAPositiveSMA200GT0')
+        else:
+            add_in_csv(regression_data, regressionResult, ws, None, None, '##AllMAPositiveSMA100GT0')
+        
         if(regression_data['PCT_change'] < -3
             and regression_data['PCT_day_change'] < -4.5):
             add_in_csv(regression_data, regressionResult, ws, None, None, '##AllMAPositive_Uptrend_(LT-4.5)')
