@@ -753,27 +753,6 @@ def buy_af_low_tail(regression_data, regressionResult, reg, ws):
             and (regression_data['forecast_day_PCT7_change'] < 5 or regression_data['forecast_day_PCT10_change'] < 5)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, '%%AF:(GLOBAL-SGX-UP)mayBuyTail-2,3,4thDayLT0')   
-#         elif(-3 < regression_data['PCT_day_change'] < 1 
-#            and -3 < regression_data['PCT_change'] < 1 
-#            and 1.4 <= low_tail_pct(regression_data)
-#            and is_algo_buy(regression_data)
-#            ):
-#            if(regression_data['high'] < regression_data['high_pre1']
-#                 and regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0
-#                 and regression_data['PCT_day_change_pre1'] > 0
-#                 and regression_data['PCT_day_change_pre2'] > 0
-#                 and abs(regression_data['PCT_day_change']) < abs(regression_data['PCT_day_change_pre1'])
-#                 and abs(regression_data['PCT_day_change']) < abs(regression_data['PCT_day_change_pre2'])
-#                 and (regression_data['weekHighChange'] < 0 or regression_data['week2HighChange'] or regression_data['week3HighChange'])
-#                 ):
-#                 add_in_csv(regression_data, regressionResult, ws, None, None, None)
-#            elif((regression_data['high'] > regression_data['high_pre1']
-#                 and regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0
-#                 )
-#                 or
-#                 (regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0)
-#                 ):
-#                 add_in_csv(regression_data, regressionResult, ws, None, None, '%%AF:mayBuyTail-Risky')
     
     
     
@@ -888,8 +867,7 @@ def buy_af_low_tail(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, None, None, '%%AF-Last2DayMarketUp:(GLOBAL-DOWN)sellHighLowerTailPre1-Reversal-LastDayMarketUp')
     
     
-    
-    
+        
     if((low_tail_pct(regression_data) > 1.5 and high_tail_pct(regression_data) < 1.5 and high_tail_pct(regression_data) < low_tail_pct(regression_data))
         and ((low_tail_pct_pre1(regression_data) > 1.5 and regression_data['low_pre1'] < regression_data['low'] and regression_data['high_pre1'] < regression_data['high'] and high_tail_pct_pre1(regression_data) < low_tail_pct_pre1(regression_data))
              or (low_tail_pct_pre2(regression_data) > 1.5 and regression_data['low_pre2'] < regression_data['low'] and regression_data['high_pre2'] < regression_data['high'] and high_tail_pct_pre2(regression_data) < low_tail_pct_pre2(regression_data))
