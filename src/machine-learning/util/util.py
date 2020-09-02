@@ -2376,7 +2376,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                 or (('buy' in reg_data_filter or 'Buy' in reg_data_filter) and (regression_data[filter_avg] < -1 and regression_data[filter_count] <= 3))
                 ):
                 return  flag
-            elif(regression_data[filter_count] >= 2
+            elif(regression_data[filter_count] >= 3
                 and abs(regression_data[filter_avg]) >= 2
                 and regression_data[filter_pct] >= 66 
                 and ('Buy-SUPER' in regression_data['filter2'] or regression_data[filter_count] >= 3 or regression_data[filter_pct] == 100)
@@ -2386,7 +2386,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, 'WEAK-Buy-GT2')
                 flag = True
-            elif(regression_data[filter_count] >= 2
+            elif(regression_data[filter_count] >= 3
                 and abs(regression_data[filter_avg]) >= 2  
                 and regression_data[filter_pct] <= -66
                 and ('Sell-SUPER' in regression_data['filter2'] or regression_data[filter_count] >= 3 or regression_data[filter_pct] == -100)
@@ -2434,7 +2434,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, 'WEAK-Sell')
                 flag = True
-            elif(regression_data[filter_count] >= 2
+            elif(regression_data[filter_count] >= 3
                 and abs(regression_data[filter_avg]) >= 2
                 and regression_data[filter_pct] >= 66 
                 and ('Buy-SUPER' in regression_data['filter2'] or regression_data[filter_count] >= 3)
@@ -2444,7 +2444,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, 'RISKY-WEAK-Buy-GT2')
                 flag = True
-            elif(regression_data[filter_count] >= 2
+            elif(regression_data[filter_count] >= 3
                 and abs(regression_data[filter_avg]) >= 2  
                 and regression_data[filter_pct] <= -66
                 and ('Sell-SUPER' in regression_data['filter2'] or regression_data[filter_count] >= 3)

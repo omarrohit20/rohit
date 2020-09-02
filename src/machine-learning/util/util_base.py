@@ -2913,21 +2913,28 @@ def high_volatility(regression_data, regressionResult, buy=True):
             flag = True
     
     if(buy == True
-        and regression_data['PCT_day_change'] < -8
-        and regression_data['PCT_day_change'] < -5
-        and regression_data['weekLowChange'] > 2
+        and regression_data['PCT_day_change'] < -7
+        and regression_data['PCT_change'] < -5
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'TEST:(UPTREND-LastDayMarketDown)%%mayBuyMorningHighVolatileLastDayDown-LT(-8)')
-        flag = True
+        if(regression_data['weekLowChange'] > 5):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'TEST:(UPTREND-LastDayMarketDown):%%mayBuyMorningHighVolatileLastDayDown-LT(-8)')
+            flag = True
+        elif(regression_data['month3LowChange'] > 10 and regression_data['monthLowChange'] < 0 and regression_data['week2LowChange'] < 0 and regression_data['weekLowChange'] < 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'TEST(9:30):(UPTREND-LastDayMarketDown):%%maySellContinueMorningHighVolatileLastDayDown-LT(-8)')
+            flag = True
     
         
     if(buy == False
-        and regression_data['PCT_day_change'] > 8
-        and regression_data['PCT_day_change'] > 5
-        and regression_data['weekHighChange'] < -2
+        and regression_data['PCT_day_change'] > 7
+        and regression_data['PCT_change'] > 5
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'TEST:(DOWNTREND-LastDayMarketUp)%%maySellMorningHighVolatileLastDayUp-GT8')
-        flag = True
+        if(regression_data['weekHighChange'] < -5):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'TEST:(DOWNTREND-LastDayMarketUp)%%maySellMorningHighVolatileLastDayUp-GT8')
+            flag = True
+        elif(regression_data['month3HighChange'] < -10 and regression_data['monthHighChange'] > 0 and regression_data['week2HighChange'] > 0 and regression_data['weekHighChange'] > 0):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'TEST:(DOWNTREND-LastDayMarketUp)%%mayBuyContinueMorningHighVolatileLastDayUp-GT8')
+            flag = True
+    
     
         
     if(buy == True
