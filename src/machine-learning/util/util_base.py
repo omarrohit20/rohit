@@ -674,6 +674,9 @@ def pct_change_negative_trend(regression_data):
                 return '(mediumDownTrend-monthLowGTmonthHigh)'  
             elif(regression_data['forecast_day_PCT10_change'] > 0):
                 return '(mediumDownTrend-monthLowGTmonthHigh-crossed10Days)' 
+    
+    if(regression_data['SMA9'] < -1.5):
+        return 'SMA9LT-1.5'
             
     return 'NA'           
     
@@ -773,6 +776,9 @@ def pct_change_positive_trend(regression_data):
                 return '(mediumUpTrend-monthHighGTmonthLow)'
             elif(regression_data['forecast_day_PCT10_change'] < 0):
                 return '(mediumUpTrend-monthHighGTmonthLow-crossed10Days)'
+    
+    if(regression_data['SMA9'] > 1.5):
+        return 'SMA9GT1.5'
      
     return 'NA' 
 
@@ -786,7 +792,11 @@ def pct_change_negative_trend_medium(regression_data):
              or (regression_data['forecast_day_PCT3_change'] > regression_data['forecast_day_PCT5_change'] > regression_data['forecast_day_PCT7_change'])
             )
         ):
-        return 'mediumDownTrend'           
+        return 'mediumDownTrend' 
+    
+    if(regression_data['SMA9'] < -1.5):
+        return 'SMA9LT-1.5'          
+    
     return 'NA'           
     
 def pct_change_positive_trend_medium(regression_data):
@@ -800,6 +810,11 @@ def pct_change_positive_trend_medium(regression_data):
             )
         ):
         return 'mediumUpTrend'
+    
+    
+    if(1.5 < regression_data['SMA9']):
+        return 'SMA9GT1.5'
+    
     return 'NA'          
 
 def pct_change_negative_trend_short(regression_data):
@@ -836,18 +851,10 @@ def pct_change_negative_trend_short(regression_data):
         and regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT2_change']
         ):
         return '(shortTrendDown)'
-#     elif(#regression_data['forecast_day_PCT_change'] < 0
-#         #and regression_data['forecast_day_PCT2_change'] < 0
-#         regression_data['forecast_day_PCT3_change'] < 0
-#         and low_counter(regression_data) >= 3
-#         ):
-#         if(regression_data['bar_low'] < regression_data['bar_low_pre1']
-#             #or regression_data['bar_low_pre1'] < regression_data['bar_low_pre2']
-#             ):
-#             return '(shortDownTrend-min3Day)' 
-#         else:
-#             return '(shortDownTrend-min3Day-Risky)' 
-                      
+
+    if(regression_data['SMA4'] < -1.5):
+        return 'SMA4LT-1.5'
+    
     return 'NA'           
     
 def pct_change_positive_trend_short(regression_data):
@@ -883,25 +890,48 @@ def pct_change_positive_trend_short(regression_data):
         and regression_data['forecast_day_PCT3_change'] > regression_data['forecast_day_PCT2_change']
         ):
         return '(shortTrendUp)' 
-#     elif(#regression_data['forecast_day_PCT_change'] > 0
-#         #and regression_data['forecast_day_PCT2_change'] > 0
-#         regression_data['forecast_day_PCT3_change'] > 0
-#         and high_counter(regression_data) >= 3
-#         ):
-#         if(regression_data['bar_high'] > regression_data['bar_high_pre1']
-#             #or regression_data['bar_high_pre1'] > regression_data['bar_high_pre2']
-#             ):
-#             return '(shortUpTrend-min3Day)'
-#         else:
-#             return '(shortUpTrend-min3Day-Risky)'
+    
+    if(regression_data['SMA4'] > 1.5):
+        return 'SMA4GT1.5'
     return 'NA'       
 
 def trend_calculator(regression_data):
     trend = pct_change_positive_trend(regression_data) + '$' + pct_change_negative_trend(regression_data)
     shortTrend = pct_change_positive_trend_short(regression_data) + '$' +  pct_change_negative_trend_short(regression_data)
     #mediumTrend = pct_change_positive_trend_medium(regression_data) + '$' +  pct_change_negative_trend_medium(regression_data)
-           
-    return trend + ':' + shortTrend 
+    
+    ser_trend = trend + ':' + shortTrend
+    if('(' not in ser_trend):
+        ser_trend = ''
+        if(regression_data['SMA9'] > 5):
+            ser_trend = 'SMA9GT5'
+        elif(regression_data['SMA9'] > 1):
+            ser_trend = 'SMA9GT1'
+        else:
+            ser_trend = 'NA'
+        
+        if(regression_data['SMA9'] < -5):
+            ser_trend = ser_trend + '$' + 'SMA9LT-5'
+        elif(regression_data['SMA9'] < -1):
+            ser_trend = ser_trend + '$' + 'SMA9LT-1'
+        else:
+            ser_trend = ser_trend + '$' + 'NA'
+        
+        if(regression_data['SMA4'] > 5):
+            ser_trend = ser_trend + ':' + 'SMA4GT5'
+        elif(regression_data['SMA4'] > 1):
+            ser_trend = ser_trend + ':' + 'SMA4GT1'
+        else:
+            ser_trend = ser_trend + ':' + 'NA'
+        
+        if(regression_data['SMA4'] < -5):
+            ser_trend = ser_trend + '$' + 'SMA4LT-5'
+        elif(regression_data['SMA4'] < -1):
+            ser_trend = ser_trend + '$' + 'SMA4LT-1'
+        else:
+            ser_trend = ser_trend + '$' + 'NA'
+        
+    return ser_trend 
 
 def preDayPctChangeUp_orVolHigh(regression_data):
     if(regression_data['PCT_day_change_pre1'] > 0 
