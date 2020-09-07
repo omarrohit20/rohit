@@ -126,6 +126,8 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
         #and regression_data['forecast_day_PCT10_change'] < 15
         and regression_data['month3HighChange'] < -10
         and regression_data['month3LowChange'] > 10
+        and 'sell' not in regression_data['filter']
+        and 'Sell' not in regression_data['filter']
         ):    
         if(regression_data['SMA9'] > 1):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Common:buyNotM3HighLow-0(SMA9GT1)')
@@ -163,6 +165,8 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
                     )
                 )
             )
+        and 'sell' not in regression_data['filter']
+        and 'Sell' not in regression_data['filter']
         ):
 #         if(2 < low_tail_pct_pre1(regression_data) < 6 and 2.9 < regression_data['PCT_day_change'] < 4.1
 #             and regression_data['PCT_day_change_pre1'] > -1.3 
@@ -315,6 +319,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         buy_up_trend(regression_data, regressionResult, reg, ws)
         buy_heavy_uptrend_reversal(regression_data, regressionResult, reg, ws)
         buy_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        buy_af_low_tail(regression_data, regressionResult, reg, ws)
         
         buy_random_filter(regression_data, regressionResult, reg, ws)
         buy_check_cup_filter(regression_data, regressionResult, reg, ws)
@@ -332,7 +337,7 @@ def buy_indicator_after_filter_accuracy(regression_data, regressionResult, reg, 
     buy_af_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
     buy_af_others(regression_data, regressionResult, reg, ws)
         #buy_af_high_volatility(regression_data, regressionResult, reg, ws)
-    buy_af_low_tail(regression_data, regressionResult, reg, ws)
+    #buy_af_low_tail(regression_data, regressionResult, reg, ws)
     buy_af_up_continued(regression_data, regressionResult, reg, ws)
     #sell_af_high_tail(regression_data, regressionResult, reg, ws)
             
@@ -853,6 +858,8 @@ def sell_all_common(regression_data, regressionResult, reg, ws):
         and regression_data['month3HighChange'] < -10
         and regression_data['month3LowChange'] > 10
         #and regression_data['trend'] != 'down'
+        and 'buy' not in regression_data['filter']
+        and 'Buy' not in regression_data['filter']
         ):    
         if(regression_data['SMA9'] < -1):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:sellNotM3HighLow-0(SMA9LT-1)') 
@@ -892,6 +899,8 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
                     )
                )
             )
+        and 'buy' not in regression_data['filter']
+        and 'Buy' not in regression_data['filter']
         ):
         if(-2.9 > regression_data['PCT_day_change'] > -4.1 and -3 > regression_data['PCT_change'] > -4.5
             and -4 < regression_data['PCT_day_change_pre1'] < 0.75
@@ -1016,6 +1025,7 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         sell_oi(regression_data, regressionResult, reg, ws)
         sell_heavy_downtrend(regression_data, regressionResult, reg, ws)
         sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
+        sell_af_high_tail(regression_data, regressionResult, reg, ws)
         
         sell_random_filter(regression_data, regressionResult, reg, ws)
         sell_check_cup_filter(regression_data, regressionResult, reg, ws)
@@ -1033,7 +1043,7 @@ def sell_indicator_after_filter_accuracy(regression_data, regressionResult, reg,
     sell_af_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
     sell_af_others(regression_data, regressionResult, reg, ws)
         #sell_af_high_volatility(regression_data, regressionResult, reg, ws)
-    sell_af_high_tail(regression_data, regressionResult, reg, ws)
+    #sell_af_high_tail(regression_data, regressionResult, reg, ws)
     sell_af_down_continued(regression_data, regressionResult, reg, ws)
             
 def sell_skip_close_lt_50(regression_data, regressionResult, reg, ws):
