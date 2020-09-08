@@ -2364,7 +2364,11 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
         if(regression_data[filter_count] >= 2
             and (abs(regression_data[filter_pct]) >= 70 or regression_data[filter_pct] == 0)
             ):
-            if(regression_data[filter_avg] >= 0
+            if((('sell' in reg_data_filter or 'Sell' in reg_data_filter) and (1 < regression_data[filter_avg] and  regression_data[filter_count] <= 3))
+                or (('buy' in reg_data_filter or 'Buy' in reg_data_filter) and (regression_data[filter_avg] < -1 and regression_data[filter_count] <= 3))
+                ):
+                return  flag
+            elif(regression_data[filter_avg] >= 0
                 and 'Buy-SUPER' in regression_data['filter2'] 
                 and 'Buy-AnyGT2' in regression_data['filter2'] 
                 and 'Sell-Any' not in regression_data['filter2']
@@ -2382,10 +2386,6 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, 'SUPER-Sell')
                 flag = True
-            elif((('sell' in reg_data_filter or 'Sell' in reg_data_filter) and (1 < regression_data[filter_avg] and  regression_data[filter_count] <= 3))
-                or (('buy' in reg_data_filter or 'Buy' in reg_data_filter) and (regression_data[filter_avg] < -1 and regression_data[filter_count] <= 3))
-                ):
-                return  flag
             elif(regression_data[filter_count] >= 3
                 and abs(regression_data[filter_avg]) >= 2
                 and regression_data[filter_pct] >= 66 
