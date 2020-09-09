@@ -130,9 +130,9 @@ def buy_all_common(regression_data, regressionResult, reg, ws):
         and 'Sell' not in regression_data['filter']
         ):    
         if(regression_data['SMA9'] > 1):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Common:buyNotM3HighLow-0(SMA9GT1)')
+            add_in_csv(regression_data, regressionResult, ws, 'Common:buyNotM3HighLow-0(SMA9GT1)')
         elif(regression_data['SMA25'] > 0):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, None)  
+            add_in_csv(regression_data, regressionResult, ws, None, None, None)  
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None)
              
@@ -194,7 +194,7 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
             and high_tail_pct(regression_data) < 1.29
             and low_tail_pct(regression_data) < 2.5
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:HighUptrend')
+            add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighUptrend')
         elif(2.7 < regression_data['PCT_day_change'] < 5.5
             and 3 < regression_data['PCT_change'] 
             and regression_data['PCT_day_change_pre1'] > -1.3
@@ -229,12 +229,12 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
                     or regression_data['PCT_day_change_pre3'] < 0
                     )
                 ):
-                add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:HEAVYUPTRENDMARKET:HighUptrend')
+                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HEAVYUPTRENDMARKET:HighUptrend')
             elif(regression_data['PCT_day_change_pre1'] > 0
                 or regression_data['PCT_day_change_pre2'] > 0
                 or regression_data['PCT_day_change_pre3'] > 0
                 ):
-                add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:HEAVYUPTRENDMARKET:HighUptrend-(UPTREND-GLOBALUP)')
+                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HEAVYUPTRENDMARKET:HighUptrend-(UPTREND-GLOBALUP)')
         if( 4 < regression_data['PCT_day_change'] < 8 and 3 < regression_data['PCT_change'] < 10
             and (5 < regression_data['PCT_day_change'] or 5 < regression_data['PCT_change'])  
             and -0.75 < regression_data['PCT_day_change_pre1'] < 4
@@ -246,9 +246,9 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
             and low_tail_pct(regression_data) < 2.5
             ):
             if(regression_data['PCT_day_change_pre1'] < 0): 
-                add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL(9:30):HighUptrend-2')
+                add_in_csv(regression_data, regressionResult, ws, 'CommonHL(9:30):HighUptrend-2')
             else:
-                add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:HighUptrend-2')
+                add_in_csv(regression_data, regressionResult, ws, 'CommonHL:HighUptrend-2')
         
     buy_common_up_continued(regression_data, regressionResult, reg, ws)
          
@@ -277,7 +277,13 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and low_tail_pct(regression_data) < 2.5
         and high_tail_pct(regression_data) < 2
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:UpTrendLast2Day-GlobalUp-GlobalFutureUp-NiftyUp')
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:UpTrendLast2Day-GlobalUp-GlobalFutureUp-NiftyUp')
+    elif(1.5 < regression_data['PCT_day_change'] < 2 and 3 < regression_data['PCT_change'] < 5
+        and low_tail_pct(regression_data) < 2.5
+        and high_tail_pct(regression_data) < 1.3
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDay-PCTDayChange-LT-PCTChange') 
+        
        
 def buy_other_indicator(regression_data, regressionResult, reg, ws):
     tail_pct_filter(regression_data, regressionResult)
@@ -871,7 +877,7 @@ def sell_all_common(regression_data, regressionResult, reg, ws):
         and 'Buy' not in regression_data['filter']
         ):    
         if(regression_data['SMA9'] < -1):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:sellNotM3HighLow-0(SMA9LT-1)') 
+            add_in_csv(regression_data, regressionResult, ws, None, 'CommonHL:sellNotM3HighLow-0(SMA9LT-1)') 
         elif(regression_data['SMA25'] < 0):
             add_in_csv(regression_data, regressionResult, ws, None, None, None) 
         else:
@@ -927,7 +933,7 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
             and low_tail_pct(regression_data) < 1.29
             and high_tail_pct(regression_data) < 2.5
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:HighDowntrend')
+            add_in_csv(regression_data, regressionResult, ws, None, 'CommonHL:HighDowntrend')
         elif(-2.7 > regression_data['PCT_day_change'] > -5.5
             and -3 > regression_data['PCT_change'] 
             and regression_data['PCT_day_change_pre1'] < 1.3
@@ -961,12 +967,12 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
                     or regression_data['PCT_day_change_pre3'] > 0
                     )
                 ):
-                add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:HEAVYDOWNTRENDMARKET:HighDowntrend')
+                add_in_csv(regression_data, regressionResult, ws, None, 'CommonHL:HEAVYDOWNTRENDMARKET:HighDowntrend')
             elif(regression_data['PCT_day_change_pre1'] < 0
                 or regression_data['PCT_day_change_pre2'] < 0
                 or regression_data['PCT_day_change_pre3'] < 0
                 ):
-                add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:HEAVYDOWNTRENDMARKET:HighDowntrend-(DOWNTREND-GLOBALDOWN)')
+                add_in_csv(regression_data, regressionResult, ws, None, 'CommonHL:HEAVYDOWNTRENDMARKET:HighDowntrend-(DOWNTREND-GLOBALDOWN)')
         
         if( -8 < regression_data['PCT_day_change'] < -4 and -10 < regression_data['PCT_change'] < -3
             and (regression_data['PCT_day_change'] < -5 or regression_data['PCT_change'] < -5)  
@@ -979,9 +985,9 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
             and low_tail_pct(regression_data) < abs(regression_data['PCT_day_change'])/3
             ):
             if(regression_data['PCT_day_change_pre1'] > 0):
-                add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL(9:30):HighDowntrend-2')
+                add_in_csv(regression_data, regressionResult, ws, None, 'CommonHL(9:30):HighDowntrend-2')
             else:
-                add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:HighDowntrend-2')
+                add_in_csv(regression_data, regressionResult, ws, None, 'CommonHL:HighDowntrend-2')
                 
     if(-2.5 > regression_data['PCT_day_change'] > -5 and -2.5 > regression_data['PCT_change'] > -5
         and -1 < regression_data['PCT_day_change_pre1'] 
@@ -990,7 +996,12 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and low_tail_pct(regression_data) < 2
         and high_tail_pct(regression_data) < 2.5
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, 'CommonHL:DownTrendLast2Day-GlobalDown-GlobalFutureDown-NiftyDown')
+        add_in_csv(regression_data, regressionResult, ws, None, 'CommonHL:DownTrendLast2Day-GlobalDown-GlobalFutureDown-NiftyDown')
+    elif(-2 < regression_data['PCT_day_change'] < -1.5 and -5 < regression_data['PCT_change'] < -3
+        and low_tail_pct(regression_data) < 1.3
+        and high_tail_pct(regression_data) < 2.5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDay-PCTDayChange-LT-PCTChange') 
     
     sell_common_down_continued(regression_data, regressionResult, reg, ws)
           

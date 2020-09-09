@@ -61,6 +61,8 @@ def all_withoutml(regression_data, regressionResult, ws):
     tempRegressionResult.append(regression_data['filter4'])
     tempRegressionResult.append(regression_data['filter5'])
     tempRegressionResult.append(regression_data['filter'])
+    tempRegressionResult.append(regression_data['filterbuy'])
+    tempRegressionResult.append(regression_data['filtersell'])
     tempRegressionResult.append(regression_data['filter_345_avg'])
     tempRegressionResult.append(regression_data['filter_345_count'])
     tempRegressionResult.append(regression_data['filter_345_pct'])
@@ -93,13 +95,13 @@ def add_in_csv(regression_data, regressionResult, ws=None, filterbuy=None, filte
     if(TEST != True):
         if(is_algo_buy(regression_data) and (filter is None)):
             if '[MLBuy]' not in regression_data['filter']:
-                regression_data['filterbuy'] ='[MLBuy]' + ':'
-                regression_data['filtersell'] ='[MLBuy]' + ':'
+                #regression_data['filterbuy'] ='[MLBuy]' + ':'
+                #regression_data['filtersell'] ='[MLBuy]' + ':'
                 regression_data['filter'] ='[MLBuy]' + ':'
         if(is_algo_sell(regression_data) and (filter is None)):
             if '[MLSell]' not in regression_data['filter']:
-                regression_data['filterbuy'] ='[MLSell]' + ':'
-                regression_data['filtersell'] ='[MLSell]' + ':'
+                #regression_data['filterbuy'] ='[MLSell]' + ':'
+                #regression_data['filtersell'] ='[MLSell]' + ':'
                 regression_data['filter'] ='[MLSell]' + ':'
         if ((filterbuy is not None) and (filterbuy not in regression_data['filterbuy'])):
             list = regression_data['filterbuy'].partition(']:')
