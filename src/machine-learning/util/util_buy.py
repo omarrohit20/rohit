@@ -3070,6 +3070,20 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, '%%(Test):checkBuy:Super03')
             return True
+        
+    if(regression_data['month3HighChange'] > 2
+            and regression_data['monthHighChange'] > 2
+            and regression_data['week2HighChange'] > 2
+            and -2 < regression_data['weekHighChange'] 
+            and (regression_data['month3HighChange'] == regression_data['monthHighChange'] 
+                 and regression_data['monthHighChange'] == regression_data['week2HighChange']
+                )
+            and regression_data['year2HighChange'] < 0
+            and regression_data['PCT_day_change'] < -2
+            and regression_data['PCT_change'] < -2
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '%%(Test):checkBuy:continueUptrend')
+            return True
     
     if(regression_data['close'] > 50
         and regression_data['forecast_day_PCT7_change'] > 0
