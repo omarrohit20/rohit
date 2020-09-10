@@ -1053,7 +1053,7 @@ def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
         ):
         if(high_tail_pct(regression_data) > 1.5):
             add_in_csv(regression_data, regressionResult, ws, None, None, '$$MaySellContinue-CheckChart(inuptrend-monthlow)')
-        else:    
+        elif(regression_data['monthHighChange'] < -10):    
             add_in_csv(regression_data, regressionResult, ws, None, None, '$$MayBuy-CheckChart-baseLine(inuptrend-monthlow)')
     elif(-1.3 < regression_data['monthLowChange'] < 3
         and regression_data['monthHighChange'] < -5
@@ -1067,7 +1067,7 @@ def buy_tail_reversal_filter(regression_data, regressionResult, reg, ws):
         ):
         if(high_tail_pct(regression_data) > 1.5):
             add_in_csv(regression_data, regressionResult, ws, None, None, '$$(UPTREND-OR-GLOBALUP)MaySellContinue-CheckChart(inuptrend-monthlow)')
-        else:
+        elif(regression_data['monthHighChange'] < -10):
             add_in_csv(regression_data, regressionResult, ws, None, None, '$$(UPTREND-OR-GLOBALUP)MayBuy-CheckChart-baseLine(inuptrend-monthlow)')
     elif(('MayBuy-CheckChart' in regression_data['filter1']) or ('MayBuyCheckChart' in regression_data['filter1'])):
         if(-3.5 < regression_data['PCT_day_change'] < -1
