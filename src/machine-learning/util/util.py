@@ -1523,24 +1523,24 @@ def filter_avg_gt_count(regression_data, val):
     count = 0
     cnt = 0
     if(regression_data['filter_345_avg'] > val
-        and (regression_data['filter_345_pct'] >= 60 or regression_data['filter_345_pct'] == 0)
+        and (regression_data['filter_345_pct'] >= 66 or regression_data['filter_345_pct'] == 0)
         and regression_data['filter_345_avg'] != regression_data['filter_all_avg']
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_345_count']
     if(regression_data['filter_avg'] > val
-        and (regression_data['filter_pct'] >= 60 or regression_data['filter_pct'] == 0)
+        and (regression_data['filter_pct'] >= 66 or regression_data['filter_pct'] == 0)
         and regression_data['filter_avg'] != regression_data['filter_all_avg']
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_count']
     if(regression_data['filter_pct_change_avg'] > val
-        and (regression_data['filter_pct_change_pct'] >= 60 or regression_data['filter_pct_change_pct'] == 0)
+        and (regression_data['filter_pct_change_pct'] >= 66 or regression_data['filter_pct_change_pct'] == 0)
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_pct_change_count']
     if(regression_data['filter_all_avg'] > val
-        and (regression_data['filter_all_pct'] >= 60 or regression_data['filter_all_pct'] == 0)
+        and (regression_data['filter_all_pct'] >= 66 or regression_data['filter_all_pct'] == 0)
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_all_count']
@@ -1565,24 +1565,24 @@ def filter_avg_lt_count(regression_data, val):
     count = 0
     cnt = 0
     if(regression_data['filter_345_avg'] < val
-        and (regression_data['filter_345_pct'] < -60 or regression_data['filter_345_pct'] == 0)
+        and (regression_data['filter_345_pct'] < -66 or regression_data['filter_345_pct'] == 0)
         and regression_data['filter_345_avg'] != regression_data['filter_all_avg']
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_345_count']
     if(regression_data['filter_avg'] < val
-        and (regression_data['filter_pct'] < -60 or regression_data['filter_pct'] == 0)
+        and (regression_data['filter_pct'] < -66 or regression_data['filter_pct'] == 0)
         and regression_data['filter_avg'] != regression_data['filter_all_avg']
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_count']
     if(regression_data['filter_pct_change_avg'] < val
-        and (regression_data['filter_pct_change_pct'] < -60 or regression_data['filter_pct_change_pct'] == 0)
+        and (regression_data['filter_pct_change_pct'] < -66 or regression_data['filter_pct_change_pct'] == 0)
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_pct_change_count']
     if(regression_data['filter_all_avg'] < val
-        and (regression_data['filter_all_pct'] < -60 or regression_data['filter_all_pct'] == 0)
+        and (regression_data['filter_all_pct'] < -66 or regression_data['filter_all_pct'] == 0)
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_all_count']
