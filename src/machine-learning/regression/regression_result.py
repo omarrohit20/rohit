@@ -448,13 +448,13 @@ def result_data_cla(scrip):
             sell_filter_all_accuracy(regression_data, regressionResult)
             sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws_lowSellStrongFilterAcc)                              
                                              
-def calculateParallel(threads=2, futures=None):
+def calculateParallel(threads=2, futures='Yes'):
     pool = ThreadPool(threads)
     scrips = []
     
     processing_date = (datetime.date.today() - datetime.timedelta(days=0)).strftime('%Y-%m-%d')
-    processing_date = '2020-09-10'
-    for data in db.scrip.find({'futures':'Yes'}):
+    #processing_date = '2020-09-10'
+    for data in db.scrip.find({'futures':futures}):
         #print('Scrip ', data)
         regdata = db.regressionlow.find_one({'scrip':data['scrip']})
         if(regdata is None):
@@ -481,6 +481,6 @@ def calculateParallel(threads=2, futures=None):
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(1)
+    calculateParallel(1, sys.argv[1])
     connection.close()
     saveReports()

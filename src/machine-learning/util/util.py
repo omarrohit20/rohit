@@ -2045,11 +2045,20 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     flag = filter_accuracy_finder_risky(regression_data, regressionResult, high_or_low, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
     if(flag):
         superflag = True
-      
-    flag = filter_accuracy_finder_stable(regression_data, regressionResult, high_or_low, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
-    if(flag):
-        superflag = True 
         
+    flag = filter_accuracy_finder_stable(regression_data, regressionResult, high_or_low, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
+    if(flag):
+        superflag = True
+    flag = filter_accuracy_finder_stable(regression_data, regressionResult, high_or_low, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
+    if(flag):
+        superflag = True
+    flag = filter_accuracy_finder_stable(regression_data, regressionResult, high_or_low, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
+    if(flag):
+        superflag = True
+    flag = filter_accuracy_finder_stable(regression_data, regressionResult, high_or_low, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
+    if(flag):
+        superflag = True
+                
        
     flag = is_reg_buyorsell_defined_filter(regression_data, regressionResult, high_or_low, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct', False)
     if(flag):
@@ -2336,6 +2345,35 @@ def filter_accuracy_finder_stable(regression_data, regressionResult, high_or_low
                 and ("MLBuy" not in regression_data['filter'])
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, 'STRONG-Sell-avg')
+            flag = True
+            
+        if(regression_data[filter_count] >= 2
+            and abs(regression_data[filter_pct]) > 90
+            and abs(regression_data[filter_avg]) >= 2
+            and ((abs(regression_data[filter_avg]) > 3 or regression_data[filter_count] > 3)
+                 )
+                 
+            ):
+            if(regression_data[filter_avg] >= 0
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, None, None, 'stable-filter-buy')
+            elif(regression_data[filter_avg] < 0
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, None, None, 'stable-filter-sell')
+            flag = True
+        elif(regression_data[filter_count] >= 2
+            and abs(regression_data[filter_pct]) > 90
+            and abs(regression_data[filter_avg]) >= 2.5
+            and ((abs(regression_data[filter_avg]) > 3 or regression_data[filter_count] >= 3)
+                 )
+                 
+            ):
+            if(regression_data[filter_avg] >= 0
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, None, None, 'stable-filter-risky-buy')
+            elif(regression_data[filter_avg] < 0
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, None, None, 'stable-filter-risky-sell')
             flag = True
         return flag
 
