@@ -2679,6 +2679,30 @@ def buy_check_cup_filter(regression_data, regressionResult, reg, ws):
         and regression_data['month3LowChange'] > 0
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, 'checkCupUp-start-lastDayDown-mayContinueBuy')
+    elif(-5.5 < regression_data['PCT_day_change'] < 0
+        and -5.5 < regression_data['PCT_change'] < 3
+        and regression_data['low'] > regression_data['low_pre1']
+        and regression_data['bar_low'] > (regression_data['bar_high_pre1'] - ((regression_data['bar_high_pre1'] - regression_data['bar_low_pre1'])/2))
+        and ((regression_data['PCT_day_change_pre1'] > 1.5)
+            or (regression_data['PCT_day_change_pre1'] > 1 and 0 > regression_data['PCT_day_change_pre2'] > -2)
+            or (regression_data['PCT_day_change_pre1'] > 0 and 0 > regression_data['PCT_day_change_pre2'] > -1)
+            )
+        and (regression_data['forecast_day_PCT4_change'] < 1
+            and regression_data['forecast_day_PCT5_change'] < 1
+            and regression_data['forecast_day_PCT7_change'] < 0
+            and regression_data['forecast_day_PCT10_change'] < 0
+            )
+        and (regression_data['forecast_day_PCT4_change'] < -1
+            or regression_data['forecast_day_PCT5_change'] < -1
+            )
+        and (regression_data['forecast_day_PCT7_change'] < -2
+            or regression_data['forecast_day_PCT10_change'] < -2
+            )
+        and regression_data['forecast_day_PCT_change'] > 0
+        and regression_data['weekLowChange'] > 0
+        and regression_data['month3LowChange'] > 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'RISKY:checkCupUp-start-lastDayDown-mayContinueBuy')
     elif(2 < regression_data['PCT_day_change'] < 5
         and 1.5 < regression_data['PCT_change'] < 5.5
         and (regression_data['forecast_day_PCT10_change'] < 1)

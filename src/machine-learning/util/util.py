@@ -1871,6 +1871,39 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
         pct_filter_pct_change_avg = ((regression_data['filter_pct_change_avg'] - regression_data['PCT_day_change'])*100)/abs(regression_data['PCT_day_change'])
         pct_filter_all_avg = ((regression_data['filter_all_avg'] - regression_data['PCT_day_change'])*100)/abs(regression_data['PCT_day_change'])
 
+    if(0 < regression_data['PCT_day_change'] < 5.5
+        and -3 < regression_data['PCT_change'] < 5.5
+        and regression_data['high'] < regression_data['high_pre1']
+        and regression_data['bar_high'] < (regression_data['bar_high_pre1'] - ((regression_data['bar_high_pre1'] - regression_data['bar_low_pre1'])/2))
+        and ((regression_data['PCT_day_change_pre1'] < -1.5)
+            or (regression_data['PCT_day_change_pre1'] < -1 and 0 < regression_data['PCT_day_change_pre2'] < 2)
+            or (regression_data['PCT_day_change_pre1'] < 0 and 0 < regression_data['PCT_day_change_pre2'] < 1)
+            )
+        and (regression_data['forecast_day_PCT7_change'] > 0
+            and regression_data['forecast_day_PCT10_change'] > 0
+            )
+        and regression_data['forecast_day_PCT_change'] < 0
+        and regression_data['weekHighChange'] < 0
+        and regression_data['month3HighChange'] < 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'RISKY-DOWNTREND-BUY') 
+    elif(-5.5 < regression_data['PCT_day_change'] < 0
+        and -5.5 < regression_data['PCT_change'] < 3
+        and regression_data['low'] > regression_data['low_pre1']
+        and regression_data['bar_low'] > (regression_data['bar_high_pre1'] - ((regression_data['bar_high_pre1'] - regression_data['bar_low_pre1'])/2))
+        and ((regression_data['PCT_day_change_pre1'] > 1.5)
+            or (regression_data['PCT_day_change_pre1'] > 1 and 0 > regression_data['PCT_day_change_pre2'] > -2)
+            or (regression_data['PCT_day_change_pre1'] > 0 and 0 > regression_data['PCT_day_change_pre2'] > -1)
+            )
+        and (regression_data['forecast_day_PCT7_change'] < 0
+            and regression_data['forecast_day_PCT10_change'] < 0
+            )
+        and regression_data['forecast_day_PCT_change'] > 0
+        and regression_data['weekLowChange'] > 0
+        and regression_data['month3LowChange'] > 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'RISKY-UPTREND-SELL')
+
     lt_minus_2_count_any, lt_minus_2_cnt = filter_avg_lt_minus_2_count_any(regression_data)
     lt_minus_1_count_any, lt_minus_1_cnt = filter_avg_lt_minus_1_count_any(regression_data)
     gt_2_count_any, gt_2_cnt = filter_avg_gt_2_count_any(regression_data)
@@ -1899,7 +1932,7 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
             if(regression_data['PCT_day_change'] > 2 or regression_data['PCT_change'] > 2):
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Buy-Risky')
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Buy-Any-' + str(gt_1_cnt))
-            
+    
     
     if(filter_avg_lt_minus_1_count(regression_data) >= 2
         and 'RISKYBASELINESELL' not in regression_data['filter5']
@@ -2398,6 +2431,10 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                 or (('buy' in reg_data_filter or 'Buy' in reg_data_filter) and (regression_data[filter_avg] < -1 and regression_data[filter_count] <= 3))
                 ):
                 return  flag
+            if((regression_data[filter_avg] > 1 and 'RISKY-DOWNTREND-BUY' in regression_data['filter2'])
+                or (regression_data[filter_avg] < -1 and 'RISKY-UPTREND-SELL' in regression_data['filter2'])
+                ):
+                return flag
             elif(regression_data[filter_avg] >= 0
                 and 'Buy-SUPER' in regression_data['filter2'] 
                 and 'Buy-AnyGT2' in regression_data['filter2'] 

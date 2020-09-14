@@ -1807,6 +1807,24 @@ def filterMA(regression_data, regressionResult):
     elif(is_ema14_sliding_down(regression_data)):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, '@s@EMA14Down@e@')
     
+    if(regression_data['SMA4_2daysBack']) < -5:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, '@s@SMA4BD2LT-5@e@')
+    elif(regression_data['SMA4_2daysBack']) < 0:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, '@s@SMA4BD2LT0@e@')
+    elif(regression_data['SMA4_2daysBack']) > 5:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, '@s@SMA4BD2GT5@e@')
+    elif(regression_data['SMA4_2daysBack']) > 0:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, '@s@SMA4BD2GT0@e@')
+    
+    if(regression_data['SMA9_2daysBack']) < -5:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, '@s@SMA9BD2LT-5@e@')
+    elif(regression_data['SMA9_2daysBack']) < 0:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, '@s@SMA9BD2LT0@e@')
+    elif(regression_data['SMA9_2daysBack']) > 5:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, '@s@SMA9BD2GT5@e@')
+    elif(regression_data['SMA9_2daysBack']) > 0:
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, '@s@SMA9BD2GT0@e@')
+    
     if(regression_data['SMA4']) < -5:
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, '@s@SMA4LT-5@e@')
     elif(regression_data['SMA4']) < 0:
