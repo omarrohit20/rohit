@@ -78,6 +78,9 @@ def buy_high_volatility(regression_data, regressionResult):
     flag = False
     ws = None
     
+    if(high_volatility(regression_data, regressionResult, True)):
+        flag = True    
+    
     if('checkBuyConsolidationBreakUp-2week' in regression_data['filter']
         and 1 < regression_data['PCT_day_change'] < 4
         and 1 < regression_data['PCT_change'] < 4
@@ -435,9 +438,30 @@ def buy_high_volatility(regression_data, regressionResult):
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'TEST:consolidationBuyCandidate')
         flag = True
+        
+    if(regression_data['monthHighChange'] > -4 and regression_data['week2HighChange'] > -4 and regression_data['weekHighChange'] > -4
+        and (regression_data['monthHighChange'] == regression_data['week2HighChange']
+             or regression_data['week2HighChange'] == regression_data['weekHighChange']
+             or regression_data['monthHighChange'] == regression_data['weekHighChange']
+            )
+        and abs(regression_data['monthLowChange']) > abs(regression_data['monthHighChange'])
+        and abs(regression_data['week2LowChange']) > abs(regression_data['week2HighChange'])
+        and -7 < regression_data['PCT_day_change'] < -2
+        and -7 < regression_data['PCT_change'] < -2
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'mayMorningBuy-LastDayDown-UpTrend')
+        flag = True
+    elif(regression_data['monthHighChange'] > -4 and regression_data['week2HighChange'] > -4 and regression_data['weekHighChange'] > -4
+        and abs(regression_data['monthLowChange']) > abs(regression_data['monthHighChange'])
+        and abs(regression_data['week2LowChange']) > abs(regression_data['week2HighChange'])
+        and -7 < regression_data['PCT_day_change'] < -2
+        and -7 < regression_data['PCT_change'] < -2
+        and regression_data['PCT_day_change_pre1'] > 0 
+        and regression_data['PCT_day_change_pre2'] > 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Risky:mayMorningBuy-LastDayDown-UpTrend')
+        flag = True
     
-    if(high_volatility(regression_data, regressionResult, True)):
-        flag = True    
     return flag
 
 def buy_common_up_continued(regression_data, regressionResult, reg, ws):
