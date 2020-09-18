@@ -392,7 +392,10 @@ def sell_high_volatility(regression_data, regressionResult):
         
         if(0.6 <= high_tail_pct(regression_data) <= 1.8
             and 0 < regression_data['PCT_day_change'] < 1.7
-            and regression_data['high'] < regression_data['high_pre1']
+            and (((regression_data['low'] < regression_data['low_pre1'] or regression_data['bar_low'] < regression_data['bar_low_pre1'])
+                   and abs(regression_data['PCT_day_change']) < abs(regression_data['PCT_day_change_pre1']))
+                or (regression_data['high'] < regression_data['high_pre1'] and regression_data['forecast_day_PCT_change'] < -0.5)
+                )
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'RISKY-DOWNTREND-BUY-0')
         
@@ -2780,7 +2783,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         and 0 < regression_data['week2LowChange'] < 7
         and 0 < regression_data['weekLowChange'] < 7
         and regression_data['month3LowChange'] == regression_data['monthLowChange'] 
-        and regression_data['week2LowChange'] == regression_data['weekLowChange']
+        and regression_data['week2LowChange'] > regression_data['weekLowChange']
         and regression_data['month3HighChange'] < -10
         and -3 < regression_data['PCT_day_change'] < 0
         and -5 < regression_data['PCT_change'] < 0
@@ -2795,6 +2798,18 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         and (regression_data['PCT_day_change'] < 0 and regression_data['PCT_day_change_pre1'] < 0)
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:Super00')
+        return True
+    elif(0 < regression_data['month3LowChange'] < 7
+        and 0 < regression_data['monthLowChange'] < 7
+        and 0 < regression_data['week2LowChange'] < 7
+        and 0 < regression_data['weekLowChange'] < 7
+        and regression_data['month3LowChange'] == regression_data['monthLowChange'] 
+        and regression_data['week2LowChange'] == regression_data['weekLowChange']
+        and regression_data['month3HighChange'] < -10
+        and -3 < regression_data['PCT_day_change'] < 0
+        and -5 < regression_data['PCT_change'] < 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%:check(UPTREND-UPMARKET)Buy(DOWNTRENDTREND-DOWNMARKET)Sell:Super01')
         return True
     elif(0 < regression_data['month3LowChange'] < 7
         and 0 < regression_data['monthLowChange'] < 7

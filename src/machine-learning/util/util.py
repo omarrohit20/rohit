@@ -278,11 +278,18 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and high_tail_pct(regression_data) < 2
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:UpTrendLast2Day-GlobalUp-GlobalFutureUp-NiftyUp')
-    elif(1.5 < regression_data['PCT_day_change'] < 2 and 3 < regression_data['PCT_change'] < 5
+    elif(1.5 < regression_data['PCT_day_change'] < 2 and 3 < regression_data['PCT_change'] < 4
+        and (regression_data['PCT_change'] - regression_data['PCT_day_change']) > 1.5
         and low_tail_pct(regression_data) < 2.5
         and high_tail_pct(regression_data) < 1.3
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDay-PCTDayChange-LT-PCTChange') 
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDay-PCTDayChange-LT-PCTChange')
+    elif(2 < regression_data['PCT_day_change'] < 3 and 4 < regression_data['PCT_change'] < 5
+        and (regression_data['PCT_change'] - regression_data['PCT_day_change']) > 1.5
+        and low_tail_pct(regression_data) < 2.5
+        and high_tail_pct(regression_data) < 1.3
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDay-PCTDayChange-LT-PCTChange')
         
        
 def buy_other_indicator(regression_data, regressionResult, reg, ws):
@@ -997,7 +1004,14 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and high_tail_pct(regression_data) < 2.5
         ):
         add_in_csv(regression_data, regressionResult, ws, None, 'CommonHL:DownTrendLast2Day-GlobalDown-GlobalFutureDown-NiftyDown')
-    elif(-2 < regression_data['PCT_day_change'] < -1.5 and -5 < regression_data['PCT_change'] < -3
+    elif(-2 < regression_data['PCT_day_change'] < -1.5 and -4 < regression_data['PCT_change'] < -3
+        and (regression_data['PCT_change'] - regression_data['PCT_day_change']) < -1.5
+        and low_tail_pct(regression_data) < 1.3
+        and high_tail_pct(regression_data) < 2.5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDay-PCTDayChange-LT-PCTChange') 
+    elif(-3 < regression_data['PCT_day_change'] < -2 and -5 < regression_data['PCT_change'] < -4
+        and (regression_data['PCT_change'] - regression_data['PCT_day_change']) < -1.5
         and low_tail_pct(regression_data) < 1.3
         and high_tail_pct(regression_data) < 2.5
         ):
