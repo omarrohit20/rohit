@@ -405,8 +405,8 @@ def process_regression_high(scrip, df, directory, run_ml_algo):
     month2Low = dftemp['low'].min()
     month2BarHigh = max(dftemp['open'].max(), dftemp['close'].max())
     month2BarLow = min(dftemp['open'].min(), dftemp['close'].min())
-    month2HighChange = (high - month2High)*100/month3High
-    month2LowChange = (low - month2Low)*100/month3Low
+    month2HighChange = (high - month2High)*100/month2High
+    month2LowChange = (low - month2Low)*100/month2Low
     high_month2 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_month2 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     

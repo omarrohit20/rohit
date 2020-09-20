@@ -271,8 +271,8 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'buyYear2LowLT-50(triggerAfter-9:15)')    
     
     if(2.5 < regression_data['PCT_day_change'] < 5 and 2.5 < regression_data['PCT_change'] < 5
-        and regression_data['PCT_day_change_pre1'] < 1
-        and regression_data['PCT_day_change_pre2'] < 1
+        and -2 < regression_data['PCT_day_change_pre1'] < 1
+        and -2 < regression_data['PCT_day_change_pre2'] < 1
         and (regression_data['week2LowChange'] > 2 or regression_data['weekLowChange'] > 2)
         and low_tail_pct(regression_data) < 2.5
         and high_tail_pct(regression_data) < 2
@@ -283,13 +283,13 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and low_tail_pct(regression_data) < 2.5
         and high_tail_pct(regression_data) < 1.3
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDay-PCTDayChange-LT-PCTChange')
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDay-PCTDayChange-GT2-PCTChange')
     elif(2 < regression_data['PCT_day_change'] < 3 and 4 < regression_data['PCT_change'] < 5
         and (regression_data['PCT_change'] - regression_data['PCT_day_change']) > 1.5
         and low_tail_pct(regression_data) < 2.5
         and high_tail_pct(regression_data) < 1.3
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDay-PCTDayChange-LT-PCTChange')
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDay-PCTDayChange-GT3-PCTChange')
         
        
 def buy_other_indicator(regression_data, regressionResult, reg, ws):
@@ -341,7 +341,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         buy_up_trend(regression_data, regressionResult, reg, ws)
         buy_heavy_uptrend_reversal(regression_data, regressionResult, reg, ws)
         buy_tail_reversal_filter(regression_data, regressionResult, reg, ws)
-        buy_af_low_tail(regression_data, regressionResult, reg, ws)
+        buy_hltf_low_tail(regression_data, regressionResult, reg, ws)
         
         buy_random_filter(regression_data, regressionResult, reg, ws)
         buy_check_cup_filter(regression_data, regressionResult, reg, ws)
@@ -359,9 +359,9 @@ def buy_indicator_after_filter_accuracy(regression_data, regressionResult, reg, 
     buy_af_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
     buy_af_others(regression_data, regressionResult, reg, ws)
         #buy_af_high_volatility(regression_data, regressionResult, reg, ws)
-    #buy_af_low_tail(regression_data, regressionResult, reg, ws)
+    #buy_hltf_low_tail(regression_data, regressionResult, reg, ws)
     buy_af_up_continued(regression_data, regressionResult, reg, ws)
-    #sell_af_high_tail(regression_data, regressionResult, reg, ws)
+    #sell_hltf_high_tail(regression_data, regressionResult, reg, ws)
             
 def buy_skip_close_lt_50(regression_data, regressionResult, reg, ws):
     return False
@@ -997,8 +997,8 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
                 add_in_csv(regression_data, regressionResult, ws, None, 'CommonHL:HighDowntrend-2')
                 
     if(-2.5 > regression_data['PCT_day_change'] > -5 and -2.5 > regression_data['PCT_change'] > -5
-        and -1 < regression_data['PCT_day_change_pre1'] 
-        and -1 < regression_data['PCT_day_change_pre2']
+        and -1 < regression_data['PCT_day_change_pre1'] < 2
+        and -1 < regression_data['PCT_day_change_pre2'] < 2
         and (regression_data['week2HighChange'] < -2 or regression_data['weekHighChange'] < -2)
         and low_tail_pct(regression_data) < 2
         and high_tail_pct(regression_data) < 2.5
@@ -1009,13 +1009,13 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and low_tail_pct(regression_data) < 1.3
         and high_tail_pct(regression_data) < 2.5
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDay-PCTDayChange-LT-PCTChange') 
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDay-PCTDayChange-LT(-2)-PCTChange') 
     elif(-3 < regression_data['PCT_day_change'] < -2 and -5 < regression_data['PCT_change'] < -4
         and (regression_data['PCT_change'] - regression_data['PCT_day_change']) < -1.5
         and low_tail_pct(regression_data) < 1.3
         and high_tail_pct(regression_data) < 2.5
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDay-PCTDayChange-LT-PCTChange') 
+        add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDay-PCTDayChange-LT(-3)-PCTChange') 
     
     sell_common_down_continued(regression_data, regressionResult, reg, ws)
           
@@ -1068,7 +1068,7 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         sell_oi(regression_data, regressionResult, reg, ws)
         sell_heavy_downtrend(regression_data, regressionResult, reg, ws)
         sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
-        sell_af_high_tail(regression_data, regressionResult, reg, ws)
+        sell_hltf_high_tail(regression_data, regressionResult, reg, ws)
         
         sell_random_filter(regression_data, regressionResult, reg, ws)
         sell_check_cup_filter(regression_data, regressionResult, reg, ws)
@@ -1086,7 +1086,7 @@ def sell_indicator_after_filter_accuracy(regression_data, regressionResult, reg,
     sell_af_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
     sell_af_others(regression_data, regressionResult, reg, ws)
         #sell_af_high_volatility(regression_data, regressionResult, reg, ws)
-    #sell_af_high_tail(regression_data, regressionResult, reg, ws)
+    #sell_hltf_high_tail(regression_data, regressionResult, reg, ws)
     sell_af_down_continued(regression_data, regressionResult, reg, ws)
             
 def sell_skip_close_lt_50(regression_data, regressionResult, reg, ws):
