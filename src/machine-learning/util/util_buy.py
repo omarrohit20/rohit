@@ -247,10 +247,14 @@ def buy_high_volatility(regression_data, regressionResult):
     
     if('shortUpTrend' in regression_data['series_trend']):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'shortUpTrend')
-        if(-2 < regression_data['PCT_day_change_pre2'] < 0
-            and 0 < regression_data['PCT_day_change_pre1'] < 2
+        if(-2 < regression_data['PCT_day_change_pre1'] < 0
+            and 0 < regression_data['PCT_day_change'] < 2
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTUP-GLOBALMARKETUP:mayContinueShortUpTrend')
+        elif(-2 < regression_data['PCT_day_change_pre2'] < 0
+            and 0 < regression_data['PCT_day_change_pre1'] < 2
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'HEAVY:GLOBALFUTUP-GLOBALMARKETUP:mayContinueShortUpTrend')
         flag = True   
             
     if(regression_data['PCT_day_change'] < 0
@@ -2833,7 +2837,8 @@ def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
         and 0 < regression_data['forecast_day_PCT2_change'] < 4
         and 0 < regression_data['forecast_day_PCT_change'] < 3
         and regression_data['bar_high'] > regression_data['week2BarHigh']
-        and (regression_data['bar_high_pre1'] < regression_data['week3BarHigh'] or regression_data['bar_high_pre1'] < regression_data['week3High'])
+        and (regression_data['bar_high'] < regression_data['week3BarHigh'] or regression_data['bar_high'] < regression_data['week3High'])
+        and (regression_data['bar_high_pre1'] < regression_data['week2BarHigh'] or regression_data['bar_high_pre1'] < regression_data['week2High'])
         ):
         if(regression_data['weekBarHigh'] > regression_data['bar_high_pre1'] 
             and regression_data['week2BarHigh'] > regression_data['bar_high_pre1']
@@ -2850,7 +2855,7 @@ def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
         if(regression_data['PCT_day_change'] > 2
             and regression_data['year2HighChange'] < -5
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, '(GLOBALFUTUP-UPTRENDMARKET)checkBuyConsolidationBreakUp-2week')
+            add_in_csv(regression_data, regressionResult, ws, None, None, '(GLOBALFUTUP-UPTRENDMARKET)checkBuyConsolidationBreakUp-week2-highNotReachedWeek3')
     elif(2 < regression_data['PCT_day_change'] < 6
         and regression_data['PCT_change'] < 6
         and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0)
@@ -2892,15 +2897,18 @@ def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
         and 0 < regression_data['forecast_day_PCT3_change'] < 10
         and 0 < regression_data['forecast_day_PCT2_change'] < 10
         and 0 < regression_data['forecast_day_PCT_change'] < 5
-        and regression_data['bar_high'] >= regression_data['week2BarHigh']
-        and regression_data['bar_high'] >= regression_data['week3BarHigh']
-        and regression_data['bar_high'] >= regression_data['monthBarHigh']
-        #and (regression_data['bar_high_pre1'] <= regression_data['weekBarHigh'])
-        and ((regression_data['bar_high_pre1'] <= regression_data['weekBarHigh'] and regression_data['bar_high_pre1'] < regression_data['weekHigh'])
-             or (regression_data['bar_high_pre1'] <= regression_data['week2BarHigh'] and regression_data['bar_high_pre1'] < regression_data['week2High'])
-             or (regression_data['bar_high_pre1'] <= regression_data['week3BarHigh'] and regression_data['bar_high_pre1'] < regression_data['week3High'])
-             or (regression_data['bar_high_pre1'] <= regression_data['monthBarHigh'] and regression_data['bar_high_pre1'] < regression_data['monthHigh'])
-             or (regression_data['bar_high_pre1'] <= regression_data['month3BarHigh'] and regression_data['bar_high_pre1'] < regression_data['month3High'])
+        and ((regression_data['bar_high_pre1'] <= regression_data['week2BarHigh'] and regression_data['bar_high_pre1'] < regression_data['week2High']
+                and regression_data['bar_high'] >= regression_data['week2BarHigh']
+                )
+             or (regression_data['bar_high_pre1'] <= regression_data['week3BarHigh'] and regression_data['bar_high_pre1'] < regression_data['week3High']
+                and regression_data['bar_high'] >= regression_data['week3BarHigh']
+                )
+             or (regression_data['bar_high_pre1'] <= regression_data['monthBarHigh'] and regression_data['bar_high_pre1'] < regression_data['monthHigh']
+                and regression_data['bar_high'] >= regression_data['monthBarHigh']
+                )
+             or (regression_data['bar_high_pre1'] <= regression_data['month3BarHigh'] and regression_data['bar_high_pre1'] < regression_data['month3High']
+                and regression_data['bar_high'] >= regression_data['month3BarHigh']
+                )
             )
         ):
         if(regression_data['weekBarHigh'] > regression_data['bar_high_pre1'] 
@@ -2914,18 +2922,22 @@ def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'weekBarHighChangeGT0')
         if((regression_data['bar_high_pre1'] < regression_data['month3BarHigh'] or regression_data['bar_high_pre1'] < regression_data['month3High'])
             and regression_data['bar_high_pre1'] > regression_data['month6BarHigh']
+            and regression_data['bar_low'] >= regression_data['month3BarHigh']
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, '(GLOBALFUTUP-UPTRENDMARKET)checkBuyConsolidationBreakUp-month3')
         elif((regression_data['bar_high_pre1'] < regression_data['month2BarHigh'] or regression_data['bar_high_pre1'] < regression_data['month2High'])
             and regression_data['bar_high_pre1'] > regression_data['month3BarHigh']
+            and regression_data['bar_low'] >= regression_data['month2BarHigh']
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, '(GLOBALFUTUP-UPTRENDMARKET)checkBuyConsolidationBreakUp-month2')
         elif((regression_data['bar_high_pre1'] < regression_data['monthBarHigh'] or regression_data['bar_high_pre1'] < regression_data['monthHigh'])
             and regression_data['bar_high_pre1'] > regression_data['month2BarHigh']
+            and regression_data['bar_low'] >= regression_data['monthBarHigh']
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, '(GLOBALFUTUP-UPTRENDMARKET)checkBuyConsolidationBreakUp-month')
         elif((regression_data['bar_high_pre1'] < regression_data['week2BarHigh'] or regression_data['bar_high_pre1'] < regression_data['week2High'])
             and regression_data['bar_high_pre1'] > regression_data['monthBarHigh']
+            and regression_data['bar_low'] >= regression_data['week2BarHigh']
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, '(GLOBALFUTUP-UPTRENDMARKET)checkBuyConsolidationBreakUp-week2')
         
