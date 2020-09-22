@@ -2615,12 +2615,8 @@ def sell_consolidation_breakdown(regression_data, regressionResult, reg, ws):
         and regression_data['PCT_day_change_pre1'] < 1
         and regression_data['low'] < regression_data['high_pre2']
         and regression_data['low'] < regression_data['high_pre1']
-        and -3 < regression_data['forecast_day_PCT4_change'] < -0.5
-        and -4 < regression_data['forecast_day_PCT3_change'] < 0
-        and -4 < regression_data['forecast_day_PCT2_change'] < 0
-        and -3 < regression_data['forecast_day_PCT_change'] < 0
         and regression_data['bar_low'] < regression_data['week2BarLow']
-        and (regression_data['bar_low'] > regression_data['week3BarLow'] or regression_data['bar_low'] > regression_data['week3Low'])
+        and (regression_data['bar_low'] > regression_data['week3BarLow'] or (regression_data['bar_low'] > regression_data['week3Low'] and regression_data['week3Low'] != regression_data['week2Low']))
         and (regression_data['bar_low_pre1'] > regression_data['week2BarLow'] or regression_data['bar_low_pre1'] > regression_data['week2Low'])
         ):
         if(regression_data['weekLow'] < regression_data['week2Low']):

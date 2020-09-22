@@ -2832,12 +2832,8 @@ def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
         and regression_data['PCT_change'] < 6
         and regression_data['high'] > regression_data['high_pre2']
         and regression_data['high'] > regression_data['high_pre1']
-        and 0.5 < regression_data['forecast_day_PCT4_change'] < 3
-        and 0 < regression_data['forecast_day_PCT3_change'] < 4
-        and 0 < regression_data['forecast_day_PCT2_change'] < 4
-        and 0 < regression_data['forecast_day_PCT_change'] < 3
         and regression_data['bar_high'] > regression_data['week2BarHigh']
-        and (regression_data['bar_high'] < regression_data['week3BarHigh'] or regression_data['bar_high'] < regression_data['week3High'])
+        and (regression_data['bar_high'] < regression_data['week3BarHigh'] or (regression_data['bar_high'] < regression_data['week3High'] and regression_data['week3high'] != regression_data['week2High']))
         and (regression_data['bar_high_pre1'] < regression_data['week2BarHigh'] or regression_data['bar_high_pre1'] < regression_data['week2High'])
         ):
         if(regression_data['weekBarHigh'] > regression_data['bar_high_pre1'] 
