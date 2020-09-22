@@ -2634,7 +2634,6 @@ def sell_consolidation_breakdown(regression_data, regressionResult, reg, ws):
         if(regression_data['PCT_day_change'] < -1.5
             and regression_data['year2LowChange'] > 5
             ):
-            print(regression_data['scrip'])
             add_in_csv(regression_data, regressionResult, ws, None, None, '(GLOBALFUTDOWN-DOWNTRENDMARKET)checkSellConsolidationBreakDown-week2-lowNotReachedWeek3')
     elif(-6 < regression_data['PCT_day_change'] < -2
         and -6 < regression_data['PCT_change']
