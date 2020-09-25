@@ -254,7 +254,19 @@ def sell_high_volatility(regression_data, regressionResult):
 #             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'TestmayBuyShortDownTrend') 
         flag = True
     
-    if('shortDownTrend' in regression_data['series_trend']):
+    if(('downTrend' in regression_data['series_trend'] or 'DownTrend' in regression_data['series_trend'])
+        and regression_data['monthLowChange'] > 0
+        and -6 < regression_data['PCT_day_change'] < -1
+        and -6 < regression_data['PCT_change'] < -1
+        and (regression_data['PCT_day_change'] < -1.5
+            or regression_data['PCT_change'] < -1.5)
+        and ('IT' not in regression_data['industry']
+             and 'PHARMA' not in regression_data['industry']
+             and 'HEALTH' not in regression_data['industry']
+             )
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTDOWN-GLOBALMARKETDOWN-LASTDAYDOWN:mayContinueShortDownTrend')
+    elif('shortDownTrend' in regression_data['series_trend']):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'shortDownTrend')
         if(0 < regression_data['PCT_day_change_pre1'] < 2
             and -2 < regression_data['PCT_day_change'] < 0
@@ -265,7 +277,8 @@ def sell_high_volatility(regression_data, regressionResult):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'HEAVY:GLOBALFUTDOWN-GLOBALMARKETDOWN:mayContinueShortDownTrend')
         flag = True
-    
+        
+            
     if(regression_data['PCT_day_change'] > 0
         and regression_data['PCT_day_change_pre1'] < 0
         and regression_data['PCT_day_change_pre2'] < 0

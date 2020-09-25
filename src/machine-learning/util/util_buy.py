@@ -245,7 +245,19 @@ def buy_high_volatility(regression_data, regressionResult):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'checkForUptrendReversalMonthHigh(5to10-minute-baseline-if-uptrend)')
         flag = True
     
-    if('shortUpTrend' in regression_data['series_trend']):
+    if(('upTrend' in regression_data['series_trend'] or 'UpTrend' in regression_data['series_trend'])
+        and regression_data['monthHighChange'] < 0
+        and 1 < regression_data['PCT_day_change'] < 6
+        and 1 < regression_data['PCT_change'] < 6
+        and (regression_data['PCT_day_change'] > 1.5
+            or regression_data['PCT_change'] > 1.5)
+        and ('IT' not in regression_data['industry']
+             and 'PHARMA' not in regression_data['industry']
+             and 'HEALTH' not in regression_data['industry']
+             )
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTUP-GLOBALMARKETUP-LASTDAYUP:mayContinueShortUpTrend') 
+    elif('shortUpTrend' in regression_data['series_trend']):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'shortUpTrend')
         if(-2 < regression_data['PCT_day_change_pre1'] < 0
             and 0 < regression_data['PCT_day_change'] < 2
@@ -255,8 +267,8 @@ def buy_high_volatility(regression_data, regressionResult):
             and 0 < regression_data['PCT_day_change_pre1'] < 2
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'HEAVY:GLOBALFUTUP-GLOBALMARKETUP:mayContinueShortUpTrend')
-        flag = True   
-            
+        flag = True  
+                    
     if(regression_data['PCT_day_change'] < 0
         and regression_data['PCT_day_change_pre1'] > 0
         and regression_data['PCT_day_change_pre2'] > 0
@@ -2833,7 +2845,7 @@ def buy_consolidation_breakout(regression_data, regressionResult, reg, ws):
         and regression_data['high'] > regression_data['high_pre2']
         and regression_data['high'] > regression_data['high_pre1']
         and regression_data['bar_high'] > regression_data['week2BarHigh']
-        and (regression_data['bar_high'] < regression_data['week3BarHigh'] or (regression_data['bar_high'] < regression_data['week3High'] and regression_data['week3high'] != regression_data['week2High']))
+        and (regression_data['bar_high'] < regression_data['week3BarHigh'] or (regression_data['bar_high'] < regression_data['week3High'] and regression_data['week3High'] != regression_data['week2High']))
         and (regression_data['bar_high_pre1'] < regression_data['week2BarHigh'] or regression_data['bar_high_pre1'] < regression_data['week2High'])
         ):
         if(regression_data['weekBarHigh'] > regression_data['bar_high_pre1'] 
