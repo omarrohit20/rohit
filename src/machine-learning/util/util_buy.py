@@ -251,6 +251,14 @@ def buy_high_volatility(regression_data, regressionResult):
         and 1 < regression_data['PCT_change'] < 6
         and (regression_data['PCT_day_change'] > 1.5
             or regression_data['PCT_change'] > 1.5)
+        and ((regression_data['bar_high'] > regression_data['weekBarHigh'])
+            or regression_data['weekHighChange'] > 0.5
+            )
+        and (regression_data['PCT_day_change_pre1'] < 0.5
+             or regression_data['PCT_day_change_pre2'] < 0.5
+             or regression_data['PCT_day_change_pre3'] < 0.5
+             or regression_data['PCT_day_change_pre4'] < 0.5
+            )
         and ('IT' not in regression_data['industry']
              and 'PHARMA' not in regression_data['industry']
              and 'HEALTH' not in regression_data['industry']
@@ -1541,7 +1549,7 @@ def buy_up_trend(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'chisBuyUpTrend-nearLow')
             return True
         else:
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'chisBuyUpTrend-Risky-nearLow')
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'chisUpTrend-Risky-nearLow')
             return True
     if((regression_data['yearLowChange'] > 20 and regression_data['month3LowChange'] > 15)
        and (regression_data['yearHighChange'] < -15 or regression_data['month3HighChange'] < -10)
@@ -3050,6 +3058,8 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
         and (regression_data['monthHighChange'] > 2 or regression_data['monthLowChange'] > 10 or regression_data['month3LowChange'] > 10)
         ):
         if(regression_data['PCT_day_change'] < 0
+            and (high_tail_pct(regression_data) <= low_tail_pct(regression_data) or (high_tail_pct(regression_data) < 1.5 and regression_data['low'] > regression_data['low_pre1'])
+            )
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, '%%:buyUptrend-lastDayDown-ReversalLowTail')
         elif(regression_data['PCT_day_change'] > 0

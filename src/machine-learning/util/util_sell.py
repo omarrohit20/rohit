@@ -260,6 +260,14 @@ def sell_high_volatility(regression_data, regressionResult):
         and -6 < regression_data['PCT_change'] < -1
         and (regression_data['PCT_day_change'] < -1.5
             or regression_data['PCT_change'] < -1.5)
+        and ((regression_data['bar_low'] < regression_data['weekBarLow'])
+            or regression_data['weekLowChange'] < -0.5
+            )
+        and (regression_data['PCT_day_change_pre1'] > -0.5
+             or regression_data['PCT_day_change_pre2'] > -0.5
+             or regression_data['PCT_day_change_pre3'] > -0.5
+             or regression_data['PCT_day_change_pre4'] > -0.5
+            )
         and ('IT' not in regression_data['industry']
              and 'PHARMA' not in regression_data['industry']
              and 'HEALTH' not in regression_data['industry']
@@ -1487,7 +1495,7 @@ def sell_down_trend(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'chisSellDownTrend-nearHigh')
             return True
         else:
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'chisSellDownTrend-Risky-nearHigh')
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'chisDownTrend-Risky-nearHigh')
             return True
     if(regression_data['forecast_day_PCT10_change'] < -10
         and regression_data['year2HighChange'] < -60
@@ -2828,6 +2836,8 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         and (regression_data['monthLowChange'] < -2 or regression_data['monthHighChange'] < -10 or regression_data['month3HighChange'] < -10)
         ):
         if(regression_data['PCT_day_change'] > 0
+            and (high_tail_pct(regression_data) >= low_tail_pct(regression_data) or (low_tail_pct(regression_data) < 1.5 and regression_data['high'] < regression_data['high_pre1'])
+            )
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, '%%:sellDowntrend-lastDayUp-ReversalHighTail')
         elif(regression_data['PCT_day_change'] < 0
