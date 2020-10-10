@@ -1976,16 +1976,16 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Buy-SUPER')
         else:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Buy-SUPER-risky')
-    elif(filter_avg_lt_minus_point9_count(regression_data) >= 2
-       and 'RISKYBASELINESELL' not in regression_data['filter5']
-       and "MLBuy" in regression_data['filter']
-      ):
-       add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'LT-0.9-Sell-SUPER-Risky')  
-    elif(filter_avg_gt_point9_count(regression_data) >= 2
-       and 'RISKYBASELINEBUY' not in regression_data['filter5']
-       and "MLSell" in regression_data['filter']
-       ):
-       add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GT0.9-Buy-SUPER-risky')
+#     elif(filter_avg_lt_minus_point9_count(regression_data) >= 2
+#        and 'RISKYBASELINESELL' not in regression_data['filter5']
+#        and "MLBuy" in regression_data['filter']
+#       ):
+#        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'LT-0.9-Sell-SUPER-Risky')  
+#     elif(filter_avg_gt_point9_count(regression_data) >= 2
+#        and 'RISKYBASELINEBUY' not in regression_data['filter5']
+#        and "MLSell" in regression_data['filter']
+#        ):
+#        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GT0.9-Buy-SUPER-risky')
     
     
     superflag = False
