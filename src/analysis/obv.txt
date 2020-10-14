@@ -1,10 +1,4 @@
-To-Do - 
 
-To-Do - Buy
-Last 5 day between -1.5 to 1.5 
-forecast_day 7 day or 10th day LT -2
-monthlowchange gt 4
-check morning trend at 9:30 last 4 day crossed
 
 
 More than 40 points up(down) on following day. Market will not go down, If day earlier down or downtrend couple of days
@@ -47,28 +41,7 @@ Sell Common
 
 
 
-
-##############################################################
-EMA6-LT-May-MT-EMA14 Buy
-	Check for 2.5 < PCT_Day_Change < 4 and 2 < PCT_Day_Change 
-	Last 3 days at-least 2 day up	
-
-EMA6-MT-May-LT-EMA14 Sell
-	Check for -4 < PCT_Day_Change < -2.5 and PCT_Day_Change < -2
-	Last 3 days at-least 2 day down
-##############################################################	
-
-##############################################################
-EMA6<EMA14 Buy
-	Check for -4 < PCT_Day_Change < -2.5 and PCT_Day_Change < -2
-	Last 3 days at-least 2 day down
-	Buy after 11, Buy in the morning If last 4 days down
-	
-EMA6>EMA14 Sell
-	Check for 2.5 < PCT_Day_Change < 4 and 2 < PCT_Day_Change 
-	Last 3 days at-least 2 day up
-	Sell after 11, Sell in the morning If last 4 days up
-##############################################################    	
+    	
 	
 ##############################################################	
 Rising MA
@@ -82,30 +55,7 @@ Downing MA
 	Give preferences for [MLSell]
 	If last-day down try after 9:30
 ##############################################################
-	
-##############################################################
-Common:(Test)HighIndicators	
-	* Buy last day midcap red, PCT_day_change greater than 2
-	* Sell last day midcap green, PCT_day_change less than -2
-##############################################################	
 
-##############################################################	
-HighTail > 1.5
-	1 - Sell => last day midcap green, 1.4 < PCT_DAY_Change < 5
-	2 - Sell => uptrend, PCT_day_change and PCT_change greater than -3 and less than 0, PCT_day_change_pre greater than 1
-	3 - Sell => PCT_DAY_Change and PCT_Change greater than 0, PCT_day_change_pre < 0, 'bar_high' < -1
-	4 - Buy => PCT_DAY_Change and PCT_Change greater than 0, PCT_day_change_pre < 0, 'bar_high' > 0
-	
-	
-LowTail > 1.5
-	1 - Buy => last day midcap red, -5 < PCT_DAY_Change < -1.4
-	2 - Buy => downtrend, PCT_day_change and PCT_change greater than 0 and less than 3, PCT_day_change_pre less than 1
-	3 - Buy => PCT_DAY_Change and PCT_Change less than 0, PCT_day_change_pre > 0, 'bar_low' > 1
-	4 - Sell => PCT_DAY_Change and PCT_Change less than 0, PCT_day_change_pre > 0, 'bar_low' < 0
-##############################################################	
-
-
-Check for Sell nearMonth6Hih nearMonth3High -3 to -9, last 2 day change lt -1.5 both, pre2 or pre3 gt 0, and mlsell 
 
 
 Good result and better than expected
