@@ -1269,6 +1269,20 @@ def low_tail_pct_pre2(regression_data):
     else:
         return (((regression_data['bar_low_pre2'] - regression_data['low_pre2'])/regression_data['bar_low_pre2'])*100)
 
+def bar_low_change_month(regression_data):
+    return (regression_data['monthLow'] - regression_data['bar_low'])*100/regression_data['monthLow']
+    
+def bar_low_change_month3(regression_data):
+    return (regression_data['month3Low'] - regression_data['bar_low'])*100/regression_data['month3Low']
+    
+def bar_high_change_month(regression_data):
+    return (regression_data['monthHigh'] - regression_data['bar_high'])*100/regression_data['monthHigh']
+    
+def bar_high_change_month3(regression_data):
+    return (regression_data['month3High'] - regression_data['bar_high'])*100/regression_data['month3High']
+    
+
+
 def is_recent_consolidation(regression_data):
 #     if(abs(regression_data['forecast_day_PCT_change']) < 1
 #         and abs(regression_data['forecast_day_PCT2_change']) < 1
