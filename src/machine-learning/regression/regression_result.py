@@ -357,8 +357,6 @@ def result_data_reg(scrip):
             all_withoutml(regression_data, regressionResult, ws_highBuyStrongBoth)
          
         all_withoutml(regression_data, regressionResult, ws_high)
-        if(buy_high_volatility(regression_data, regressionResult)):
-            all_withoutml(regression_data, regressionResult, ws_highAnalysis)
           
                 
     regression_data = regression_low
@@ -395,8 +393,6 @@ def result_data_reg(scrip):
             all_withoutml(regression_data, regressionResult, ws_lowSellStrongBoth)
         
         all_withoutml(regression_data, regressionResult, ws_low)
-        if(sell_high_volatility(regression_data, regressionResult)):
-            all_withoutml(regression_data, regressionResult, ws_lowAnalysis)
         
         regression_data = regression_high
         if (is_algo_sell(regression_high) != True and is_algo_sell(regression_low) != True):
@@ -412,6 +408,13 @@ def result_data_reg(scrip):
             ):
             all_withoutml(regression_high, regressionResult, ws_allFilterAcc) 
             all_withoutml(regression_low, regressionResult, ws_allFilterAcc)
+        
+        regression_data = regression_high    
+        if(buy_high_volatility(regression_data, regressionResult)):
+            all_withoutml(regression_data, regressionResult, ws_highAnalysis)
+        regression_data = regression_low
+        if(sell_high_volatility(regression_data, regressionResult)):
+            all_withoutml(regression_data, regressionResult, ws_lowAnalysis)
         
 def result_data_cla(scrip):
     regression_high = db.regressionhigh.find_one({'scrip':scrip})
@@ -455,7 +458,7 @@ def calculateParallel(threads=2, futures='Yes'):
     scrips = []
     
     processing_date = (datetime.date.today() - datetime.timedelta(days=0)).strftime('%Y-%m-%d')
-    #processing_date = '2020-10-16'
+    #processing_date = '2020-10-19'
     for data in db.scrip.find({'futures':futures}):
         #print('Scrip ', data)
         regdata = db.regressionlow.find_one({'scrip':data['scrip']})

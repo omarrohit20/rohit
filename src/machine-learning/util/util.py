@@ -2225,49 +2225,7 @@ def filter_accuracy_finder(regression_data, regression_high, regression_low, reg
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, 'STRONG-7-Buy')
             elif(regression_data[filter_avg] < 0 and is_algo_sell(regression_data)):
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, 'STRONG-7-Sell')
-            
-        if(abs(float(regression_data[filter_avg])) > 1
-            and abs(regression_data[filter_pct]) > 66
-            ):
-            flag = True
-            
-        if(("MLBuy" in regression_data['filter']) 
-            and regression_data[filter_avg] >= 1.5
-            and (regression_data[filter_pct] >= 80 or regression_data[filter_pct] == 0)
-            ):
-            flag = True
-            
-        if(("MLSell" in regression_data['filter']) 
-            and regression_data[filter_avg] <= -1.5
-            and (regression_data[filter_pct] <= -80 or regression_data[filter_pct] == 0)
-            ):
-            flag = True
-                    
-        return flag            
-
-def filter_accuracy_finder_all(regression_data, regression_high, regression_low, regressionResult, high_or_low, ws, filter_avg, filter_count, filter_pct):
-    flag = False  
-    if(abs(regression_data[filter_avg]) > 0.5
-        and ((regression_data[filter_avg] > 0 and (high_tail_pct(regression_data) < 1.3 or regression_data['PCT_day_change'] < 0 or regression_data['PCT_day_change'] > 3))
-             or (regression_data[filter_avg] < 0 and (low_tail_pct(regression_data) < 1.3 or regression_data['PCT_day_change'] > 0 or regression_data['PCT_day_change'] < -3))
-            )
-        and regression_data[filter_count] >= 1
-        and regression_data['close'] > 60
-        #and (regression_data[filter_count_oth] >= 2
-        #    or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2))
-        ):
-        if((("MLSell" in regression_data['filter']) and (float(regression_data[filter_avg]) > 1) and (abs(float(regression_data[filter_pct])) > 70))
-            or (("MLBuy" in regression_data['filter']) and (float(regression_data[filter_avg]) < -1) and (abs(float(regression_data[filter_pct])) > 70))
-            or (("MLSell" in regression_data['filter']) and ("Buy-SUPER" in regression_data['filter2']))
-            or (("MLBuy" in regression_data['filter']) and ("Sell-SUPER" in regression_data['filter2']))
-            ):
-            return False
-        
-        if((regression_data[filter_avg] > 1 and 'RISKY-DOWNTREND-BUY' in regression_data['filter2'])
-            or (regression_data[filter_avg] < -1 and 'RISKY-UPTREND-SELL' in regression_data['filter2'])
-            ):
-            return False
-            
+                
         if(regression_data[filter_count] >= 3
             and abs(regression_data[filter_pct]) > 80
             and abs(regression_data[filter_avg]) > 3
@@ -2335,7 +2293,7 @@ def filter_accuracy_finder_all(regression_data, regression_high, regression_low,
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, 'STRONG-0-Buy')
             elif(regression_data[filter_avg] < 0):
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, 'STRONG-0-Sell')
-        
+            
         if(abs(float(regression_data[filter_avg])) > 1
             and abs(regression_data[filter_pct]) > 66
             ):
@@ -2353,8 +2311,33 @@ def filter_accuracy_finder_all(regression_data, regression_high, regression_low,
             ):
             flag = True
                     
-        #is_filter_risky(regression_data, regressionResult, high_or_low, ws, filter_avg, filter_count, filter_pct)
-        return flag            
+    return flag            
+
+def filter_accuracy_finder_all(regression_data, regression_high, regression_low, regressionResult, high_or_low, ws, filter_avg, filter_count, filter_pct):
+    flag = False    
+    if(abs(float(regression_data[filter_avg])) > 1
+        and abs(regression_data[filter_pct]) > 66
+        ):
+        flag = True
+        
+    if(abs(float(regression_data[filter_avg])) > 2
+        and abs(regression_data[filter_pct]) == 0
+        ):
+        flag = True
+        
+    if(("MLBuy" in regression_data['filter']) 
+        and regression_data[filter_avg] >= 1.5
+        and (regression_data[filter_pct] >= 80 or regression_data[filter_pct] == 0)
+        ):
+        flag = True
+        
+    if(("MLSell" in regression_data['filter']) 
+        and regression_data[filter_avg] <= -1.5
+        and (regression_data[filter_pct] <= -80 or regression_data[filter_pct] == 0)
+        ):
+        flag = True
+                    
+    return flag            
 
 def filter_accuracy_finder_stable(regression_data, regressionResult, high_or_low, ws, filter_avg, filter_count, filter_pct):   
     flag = False
