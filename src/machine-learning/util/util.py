@@ -2462,6 +2462,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                 and 'Buy-AnyGT2' in regression_data['filter2'] 
                 and 'Sell-Any' not in regression_data['filter2']
                 and 'Buy-AnyGT2-1.0' not in regression_data['filter2']
+                and ('MLSell' not in regression_data['filter'] or regression_data['PCT_day_change'] < 0)
                 and (is_reg_buy_pct_filter(regression_data) == True)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, 'SUPER-Buy')
@@ -2471,6 +2472,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                 and 'Sell-AnyGT2' in regression_data['filter2'] 
                 and 'Buy-Any' not in regression_data['filter2']
                 and 'Sell-AnyGT2-1.0' not in regression_data['filter2']
+                and ('MLBuy' not in regression_data['filter'] or regression_data['PCT_day_change'] > 0)
                 and (is_reg_sell_pct_filter(regression_data) == True)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, 'SUPER-Sell')

@@ -337,6 +337,7 @@ def sell_high_volatility(regression_data, regressionResult):
             and regression_data['PCT_day_change_pre2'] < regression_data['PCT_day_change']
             and regression_data['forecast_day_PCT_change'] < 0
             and regression_data['month3LowChange'] > 5
+            and regression_data['monthHighChange'] < -5
             and abs(regression_data['monthLowChange']) > 1.5
             and abs(regression_data['monthLowChange']) < abs(regression_data['monthHighChange'])
             ):
