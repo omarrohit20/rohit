@@ -2001,7 +2001,7 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     flag = filter_accuracy_finder_all(regression_data, regression_high, regression_low, regressionResult, high_or_low, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
     if(flag):
         superflag = True
-    if((abs(regression_data['filter_tech_avg']) > 3 and regression_data['filter_tech_count'] >= 3) or regression_data['filter_tech_count'] > 5):
+    if(regression_data['filter_tech_count'] > 5):
         flag = filter_accuracy_finder_all(regression_data, regression_high, regression_low, regressionResult, high_or_low, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
         if(flag):
             superflag = True
@@ -2027,7 +2027,7 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, high_or_low, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
     if(flag):
         superflag = True
-    if((abs(regression_data['filter_tech_avg']) > 3 and regression_data['filter_tech_count'] >= 3) or regression_data['filter_tech_count'] > 5):
+    if(regression_data['filter_tech_count'] > 5):
         flag = filter_accuracy_finder(regression_data, regression_high, regression_low, regressionResult, high_or_low, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
         if(flag):
             superflag = True
@@ -2058,7 +2058,7 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
     if(flag):
         superflag = True 
-    if((abs(regression_data['filter_tech_avg']) > 2 and regression_data['filter_tech_count'] >= 3) or regression_data['filter_tech_avg'] > 5):
+    if(regression_data['filter_tech_avg'] > 5):
         flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
         if(flag):
             superflag = True
