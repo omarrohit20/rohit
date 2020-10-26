@@ -423,10 +423,34 @@ def sell_high_volatility(regression_data, regressionResult):
         ):   
         if('shortDownTrend' in regression_data['series_trend']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'shortDownTrend-1')
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'mayContinueSell-doji-shortDownTrend')
+            if(regression_data['PCT_day_change_pre1'] > 1
+                or regression_data['PCT_day_change_pre2'] > 1
+                or regression_data['PCT_day_change_pre3'] > 1
+                or regression_data['PCT_day_change_pre4'] > 1
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, None, 'mayContinueSell-doji-shortDownTrend')
+            elif(regression_data['PCT_day_change_pre1'] < 0
+                and regression_data['PCT_day_change_pre2'] < 0
+                and regression_data['PCT_day_change_pre3'] < 0
+                and regression_data['PCT_day_change_pre4'] < 0
+                and regression_data['PCT_day_change_pre5'] < 0
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, None, 'mayReversalBuy-doji-downTrend')
         if('RISKY-DOWNTREND-BUY' in regression_data['filter1']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'RISKY-DOWNTREND-BUY-1')
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'mayContinueSell-doji-RISKY-DOWNTREND-BUY')
+            if(regression_data['PCT_day_change_pre1'] > 1
+                or regression_data['PCT_day_change_pre2'] > 1
+                or regression_data['PCT_day_change_pre3'] > 1
+                or regression_data['PCT_day_change_pre4'] > 1
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, None, 'mayContinueSell-doji-RISKY-DOWNTREND-BUY')
+            elif(regression_data['PCT_day_change_pre1'] < 0
+                and regression_data['PCT_day_change_pre2'] < 0
+                and regression_data['PCT_day_change_pre3'] < 0
+                and regression_data['PCT_day_change_pre4'] < 0
+                and regression_data['PCT_day_change_pre5'] < 0
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, None, 'mayReversalBuy-doji-RISKY-DOWNTREND-BUY')
     
     if((regression_data['forecast_day_PCT5_change'] < -10 or regression_data['forecast_day_PCT4_change'] < -10 or regression_data['forecast_day_PCT3_change'] < -10)
         and regression_data['PCT_day_change'] < -15
@@ -2896,13 +2920,12 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
                 )
             )
         and high_tail_pct(regression_data) > 0.9
-        and (high_tail_pct(regression_data) >= low_tail_pct(regression_data) or regression_data['high'] < regression_data['high_pre1'])
+        and (high_tail_pct(regression_data) >= low_tail_pct(regression_data))
         and (regression_data['monthLowChange'] < -2 or regression_data['monthHighChange'] < -10 or regression_data['month3HighChange'] < -10)
         and regression_data['month6LowChange'] > 0
         ):
         if(regression_data['PCT_day_change'] > 0
-            and (high_tail_pct(regression_data) >= low_tail_pct(regression_data) or (low_tail_pct(regression_data) < 1.5 and regression_data['high'] < regression_data['high_pre1'])
-            )
+            and (high_tail_pct(regression_data) >= low_tail_pct(regression_data))
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, '%%:sellDowntrend-lastDayUp-ReversalHighTail')
         elif(regression_data['PCT_day_change'] < 0
