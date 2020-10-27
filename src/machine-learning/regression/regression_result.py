@@ -15,6 +15,7 @@ from talib.abstract import *
 import datetime
 import time
 import gc
+import copy
 
 from util.util import pct_change_filter, getScore, all_day_pct_change_negative, all_day_pct_change_positive, no_doji_or_spinning_buy_india, no_doji_or_spinning_sell_india, scrip_patterns_to_dict
 from util.util import is_algo_buy, is_algo_sell, is_filter_all_accuracy, is_any_reg_algo_gt1, is_any_reg_algo_lt_minus1, is_any_reg_algo_gt1_not_other, is_any_reg_algo_lt_minus1_not_other
@@ -339,7 +340,7 @@ def result_data_reg(scrip):
         buy_indicator_after_filter_accuracy(regression_data, regressionResult, True, None) 
         
         if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, 'High', None)):
-            all_withoutml(regression_data, regressionResult, ws_highBuyStrongFilterAcc)
+            all_withoutml(regression_data, regressionResult, None)
         if (is_algo_buy(regression_data)):
             buy_all_rule(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_highBuyReg)
@@ -375,7 +376,7 @@ def result_data_reg(scrip):
         sell_indicator_after_filter_accuracy(regression_data, regressionResult, True, None)
         
         if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, 'Low', None)):
-            all_withoutml(regression_data, regressionResult, ws_lowSellStrongFilterAcc)
+            all_withoutml(regression_data, regressionResult, None)
         if (is_algo_sell(regression_data)):
             sell_all_rule(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_lowSellReg)                               
@@ -403,18 +404,31 @@ def result_data_reg(scrip):
             sell_indicator_after_filter_accuracy(regression_data, regressionResult, True, None)
             all_withoutml(regression_data, regressionResult, ws_lowSell)
             
-        if(is_filter_all_accuracy(regression_high, regression_high, regression_low, regressionResult, "None", None)
-            and is_filter_all_accuracy(regression_low, regression_high, regression_low, regressionResult, "None", None)
-            ):
-            all_withoutml(regression_high, regressionResult, ws_allFilterAcc) 
-            all_withoutml(regression_low, regressionResult, ws_allFilterAcc)
         
-        regression_data = regression_high    
-        if(buy_high_volatility(regression_data, regressionResult)):
-            all_withoutml(regression_data, regressionResult, ws_highAnalysis)
-        regression_data = regression_low
-        if(sell_high_volatility(regression_data, regressionResult)):
-            all_withoutml(regression_data, regressionResult, ws_lowAnalysis)
+        regression_high_copy = copy.deepcopy(regression_high)
+        regression_high_copy['filter1']=""
+        if(is_filter_all_accuracy(regression_high_copy, regression_high, regression_low, regressionResult, 'High', None)):
+            all_withoutml(regression_high_copy, regressionResult, ws_highBuyStrongFilterAcc)
+        regression_low_copy = copy.deepcopy(regression_low)
+        regression_low_copy['filter1']=""
+        if(is_filter_all_accuracy(regression_low_copy, regression_high, regression_low, regressionResult, 'Low', None)):
+            all_withoutml(regression_low_copy, regressionResult, ws_lowSellStrongFilterAcc)
+        
+        if(is_filter_all_accuracy(regression_high_copy, regression_high, regression_low, regressionResult, "None", None)
+            and is_filter_all_accuracy(regression_low_copy, regression_high, regression_low, regressionResult, "None", None)
+            ):
+            all_withoutml(regression_high_copy, regressionResult, ws_allFilterAcc) 
+            all_withoutml(regression_low_copy, regressionResult, ws_allFilterAcc)
+        
+        regression_high_copy = copy.deepcopy(regression_high)   
+        if(buy_high_volatility(regression_high_copy, regressionResult)):
+            all_withoutml(regression_high_copy, regressionResult, ws_highAnalysis)
+        regression_low_copy = copy.deepcopy(regression_low)
+        if(sell_high_volatility(regression_low_copy, regressionResult)):
+            all_withoutml(regression_low_copy, regressionResult, ws_lowAnalysis)
+            
+        
+        
         
 def result_data_cla(scrip):
     regression_high = db.regressionhigh.find_one({'scrip':scrip})
