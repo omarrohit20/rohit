@@ -2582,7 +2582,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
     elif(regression_data[filter_avg] >= 1
         and (('Buy-SUPER' in regression_data['filter2']) 
              or ('Buy-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 2) 
-             or ('Buy-Any' in regression_data['filter2'] and regression_data[filter_count] >= 3 and 'Sell-Any' not in regression_data['filter2'])
+             or ('Buy-Any' in regression_data['filter2'] and regression_data[filter_count] >= 4 and 'Sell-Any' not in regression_data['filter2'])
             )
         and 'Sell-AnyGT2' not in regression_data['filter2']
         and regression_data['PCT_day_change'] < -1
@@ -2592,7 +2592,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
     elif(regression_data[filter_avg] <= -1
         and (('Sell-SUPER' in regression_data['filter2'])
              or ('Sell-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 2) 
-             or ('Sell-Any' in regression_data['filter2'] and regression_data[filter_count] >= 3 and 'Buy-Any' not in regression_data['filter2'])
+             or ('Sell-Any' in regression_data['filter2'] and regression_data[filter_count] >= 4 and 'Buy-Any' not in regression_data['filter2'])
             )
         and 'Buy-AnyGT2' not in regression_data['filter2']
         and regression_data['PCT_day_change'] > 1
