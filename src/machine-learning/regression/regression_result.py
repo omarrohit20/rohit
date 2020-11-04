@@ -420,12 +420,12 @@ def result_data_reg(scrip):
             all_withoutml(regression_high_copy, regressionResult, ws_allFilterAcc) 
             all_withoutml(regression_low_copy, regressionResult, ws_allFilterAcc)
         
-        regression_high_copy = copy.deepcopy(regression_high)   
-        if(buy_high_volatility(regression_high_copy, regressionResult)):
-            all_withoutml(regression_high_copy, regressionResult, ws_highAnalysis)
-        regression_low_copy = copy.deepcopy(regression_low)
-        if(sell_high_volatility(regression_low_copy, regressionResult)):
-            all_withoutml(regression_low_copy, regressionResult, ws_lowAnalysis)
+        regression_high_copy1 = copy.deepcopy(regression_high)   
+        if(buy_high_volatility(regression_high_copy1, regressionResult)):
+            all_withoutml(regression_high_copy1, regressionResult, ws_highAnalysis)
+        regression_low_copy1 = copy.deepcopy(regression_low)
+        if(sell_high_volatility(regression_low_copy1, regressionResult)):
+            all_withoutml(regression_low_copy1, regressionResult, ws_lowAnalysis)
             
         
         
