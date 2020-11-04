@@ -581,6 +581,19 @@ def sell_high_volatility(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'SMA9LT-1Sell')
         flag = True
         
+    if(-2.6 < regression_data['PCT_day_change'] < -1.9
+        and -4 < regression_data['PCT_change'] < -1.9
+        and regression_data['monthLowChange'] > 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'X_SGXNIFTYDOWNLT(-.5)PC-GLOBALFUTDOWN:PCTDayChangeBT-2.5and2.0')
+        flag = True
+    if(-4 < regression_data['PCT_day_change'] < -3
+        and -4.5 < regression_data['PCT_change'] < -2.5
+        and regression_data['monthLowChange'] > 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'X_LASTDAYNIFYUPGT2:PCTDayChangeBT-4and-3')
+        flag = True
+        
     return flag
 
 def sell_common_down_continued(regression_data, regressionResult, reg, ws):
