@@ -4,40 +4,28 @@
 More than 40 points up(down) on following day. Market will not go down, If day earlier down or downtrend couple of days
 	take opposite call if day earlier also up(down) or up-trend earlier
 
+
+GlobalUp-NiftyUp and midcap up more than .7%
+#########################################
+If last day up, 
+	Buy at 9:30 on consolidation bit down. 
+	Sell only if up GT 2% and last day up GT 3%
+
+
+GlobalUp-NiftyDown and midcap down more than .7%
+#########################################
+If last day down, 
+	Sell at 9:30 on consolidation bit up. 
+	Buy only if up LT -2% and last day up LT -3%
+
+
+
 In all OI calls check for last 2PM to 3PM trend for confirmation
 
-morning star(buyFinal) If market close less than 30 points( better in minus )
-evening star(sellFinal) If market close greater than -30 points( better in positive )
 
-dayLowVolLow
- 	* Not due to any negative news
- 
-dayHighVolLow
- 	* Not due to any positive news
-
-in uptrend - for sell
-	* check for downtrend avoid sectoral like oil, IT and banking
-	* check for uptrend, high sell indicators and ml sell indicators, day change and pct day change around -1
-
-in downtrend - for buy
-	* check for uptrend avoid sectoral like oil, IT and banking
-	* check for downtrend, high buy indicators and ml buy indicators, day change and pct day change around 1
 	
-In sideways or uptrend
-	* For year high check for high vol and news and for 1% move only	
 	
-
-BuyCommon
-	* PCT_Day_change 2 to 3
-	* series upTrend
-	* PCT_change should be less around PCT_Day_change
-	* PCT should be less or around PCT_Day_change
-
-Sell Common
-	* PCT_Day_change -2 to -3
-	* series downTrend
-	* PCT should be less or around PCT_Day_change
-
+	
 
 
 
@@ -80,6 +68,7 @@ SellFilters:RISKY-BUY-UPTREND-CONT:	Sell after 9:30 or 10 after some point up. I
 
 
 Sell => RISKY-UPTREND-SELL:			returns moderate If global down or market expected down. Fail If global up or market expected up
+
 
 DOWNTREND-MARKET
 ###############################################################

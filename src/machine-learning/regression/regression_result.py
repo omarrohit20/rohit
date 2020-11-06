@@ -406,26 +406,32 @@ def result_data_reg(scrip):
             
         
         regression_high_copy = copy.deepcopy(regression_high)
+        regression_high_copy1 = copy.deepcopy(regression_high)
+        regression_high_copy2 = copy.deepcopy(regression_high)
+        regression_low_copy = copy.deepcopy(regression_low)
+        regression_low_copy1 = copy.deepcopy(regression_low)
+        regression_low_copy2 = copy.deepcopy(regression_low)
+        
+        if(buy_high_volatility(regression_high_copy2, regressionResult)):
+            all_withoutml(regression_high_copy2, regressionResult, ws_highAnalysis)
+        if(sell_high_volatility(regression_low_copy2, regressionResult)):
+            all_withoutml(regression_low_copy2, regressionResult, ws_lowAnalysis)
+        
         regression_high_copy['filter1']=""
         if(is_filter_all_accuracy(regression_high_copy, regression_high, regression_low, regressionResult, 'High', None)):
             all_withoutml(regression_high_copy, regressionResult, ws_highBuyStrongFilterAcc)
-        regression_low_copy = copy.deepcopy(regression_low)
         regression_low_copy['filter1']=""
         if(is_filter_all_accuracy(regression_low_copy, regression_high, regression_low, regressionResult, 'Low', None)):
             all_withoutml(regression_low_copy, regressionResult, ws_lowSellStrongFilterAcc)
         
-        if(is_filter_all_accuracy(regression_high_copy, regression_high, regression_low, regressionResult, "None", None)
-            and is_filter_all_accuracy(regression_low_copy, regression_high, regression_low, regressionResult, "None", None)
-            ):
-            all_withoutml(regression_high_copy, regressionResult, ws_allFilterAcc) 
-            all_withoutml(regression_low_copy, regressionResult, ws_allFilterAcc)
         
-        regression_high_copy1 = copy.deepcopy(regression_high)   
-        if(buy_high_volatility(regression_high_copy1, regressionResult)):
-            all_withoutml(regression_high_copy1, regressionResult, ws_highAnalysis)
-        regression_low_copy1 = copy.deepcopy(regression_low)
-        if(sell_high_volatility(regression_low_copy1, regressionResult)):
-            all_withoutml(regression_low_copy1, regressionResult, ws_lowAnalysis)
+        if(is_filter_all_accuracy(regression_high_copy1, regression_high, regression_low, regressionResult, "None", None)
+            and is_filter_all_accuracy(regression_low_copy1, regression_high, regression_low, regressionResult, "None", None)
+            ):
+            all_withoutml(regression_high_copy1, regressionResult, ws_allFilterAcc) 
+            all_withoutml(regression_low_copy1, regressionResult, ws_allFilterAcc)
+        
+        
             
         
         
@@ -472,7 +478,7 @@ def calculateParallel(threads=2, futures='Yes'):
     scrips = []
     
     processing_date = (datetime.date.today() - datetime.timedelta(days=0)).strftime('%Y-%m-%d')
-    #processing_date = '2020-11-03'
+    #processing_date = '2020-11-05'
     for data in db.scrip.find({'futures':futures}):
         #print('Scrip ', data)
         regdata = db.regressionlow.find_one({'scrip':data['scrip']})
