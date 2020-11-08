@@ -5,18 +5,35 @@ More than 40 points up(down) on following day. Market will not go down, If day e
 	take opposite call if day earlier also up(down) or up-trend earlier
 
 
+Uptrend-MoreThanLast3DayUp
+#########################################
+Avoid doji and PCT_day_change less than 0 for buy - In uptrend no momentum
+Action will be for PCT_day_change more than 2%
+	At 9:30 buy If updirection for day
+	At 9:30 sell If downdirection for day
+	
+
 GlobalUp-NiftyUp and midcap up more than .7%
 #########################################
 If last day up, 
 	Buy at 9:30 on consolidation bit down. 
-	Sell only if up GT 2% and last day up GT 3%
+	Sell only if up GT 2% and last day stock up GT 3%
+	
+	
+
+Downtrend-MoreThanLast3DayDown
+#########################################
+Avoid doji and PCT_day_change more than 0 for sell - In downtrend no momentum
+Action will be for PCT_day_change less than -2%
+	At 9:30 buy If updirection for day
+	At 9:30 sell If downdirection for day
 
 
 GlobalUp-NiftyDown and midcap down more than .7%
 #########################################
 If last day down, 
 	Sell at 9:30 on consolidation bit up. 
-	Buy only if up LT -2% and last day up LT -3%
+	Buy only if up LT -2% and last day stock down LT -3%
 
 
 
