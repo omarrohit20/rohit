@@ -653,6 +653,22 @@ def pct_change_negative_trend(regression_data):
     if(regression_data['forecast_day_PCT10_change'] < regression_data['forecast_day_PCT7_change'] < regression_data['forecast_day_PCT3_change'] < 0
         ):
         return '(trendDown10<7<3)'
+    if(regression_data['forecast_day_PCT2_change'] < 0
+        and regression_data['forecast_day_PCT3_change'] < 0
+        and (regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT2_change']
+            or regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT3_change']
+            or regression_data['forecast_day_PCT5_change'] < regression_data['forecast_day_PCT4_change']
+            )
+        and low_counter(regression_data) >= 2
+        and (regression_data['high'] < regression_data['high_pre1']
+             or regression_data['high'] < regression_data['high_pre2']
+             or regression_data['high'] < regression_data['high_pre3']
+             or regression_data['high'] < regression_data['high_pre4']
+             )
+        and regression_data['month3LowChange'] < 0
+        and abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])
+        ):
+        return '(shortUpTrend-month3LowChangeLT0)' 
     if(pct_day_change_trend(regression_data) <= -3
         and abs_monthHigh_more_than_monthLow(regression_data)
         and regression_data['forecast_day_PCT5_change'] < 0
@@ -755,6 +771,22 @@ def pct_change_positive_trend(regression_data):
     if(regression_data['forecast_day_PCT10_change'] > regression_data['forecast_day_PCT7_change'] > regression_data['forecast_day_PCT3_change'] > 0
         ):
         return '(trendUp10>7>3)'
+    if(regression_data['forecast_day_PCT2_change'] > 0
+        and regression_data['forecast_day_PCT3_change'] > 0
+        and (regression_data['forecast_day_PCT3_change'] > regression_data['forecast_day_PCT2_change']
+             or regression_data['forecast_day_PCT4_change'] > regression_data['forecast_day_PCT3_change']
+             or regression_data['forecast_day_PCT5_change'] > regression_data['forecast_day_PCT4_change']
+            )
+        and high_counter(regression_data) >= 2
+        and (regression_data['low'] > regression_data['low_pre1']
+             or regression_data['low'] > regression_data['low_pre2']
+             or regression_data['low'] > regression_data['low_pre3']
+             or regression_data['low'] > regression_data['low_pre4']
+             )
+        and regression_data['month3HighChange'] > 0
+        and abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])
+        ):
+        return '(shortUpTrend-month3HighChangeGT0)'
     if(pct_day_change_trend(regression_data) >= 3
         and abs_monthHigh_less_than_monthLow(regression_data)
         and regression_data['forecast_day_PCT5_change'] > 0
@@ -842,7 +874,25 @@ def pct_change_negative_trend_short(regression_data):
                 return '(shortDownTrend-Risky)'
         if(regression_data['low'] > regression_data['low_pre2']):
             return '(shortDownTrend-MayReversal)'
-            
+    if(regression_data['forecast_day_PCT2_change'] < 0
+        and regression_data['forecast_day_PCT3_change'] < 0
+        and (regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT2_change']
+            or regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT3_change']
+            or regression_data['forecast_day_PCT5_change'] < regression_data['forecast_day_PCT4_change']
+            )
+        and low_counter(regression_data) >= 2
+        and (regression_data['high'] < regression_data['high_pre1']
+             or regression_data['high'] < regression_data['high_pre2']
+             or regression_data['high'] < regression_data['high_pre3']
+             or regression_data['high'] < regression_data['high_pre4']
+             )
+        and regression_data['month3LowChange'] > 0
+        and abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])
+        ):
+        if(regression_data['monthLowChange'] < 0):
+            return '(shortUpTrend-monthLowChangeLT0)' 
+        else:
+            return '(shortUpTrend-monthLowChangeGT0)'        
     if(pct_day_change_trend(regression_data) <= -3
         ):
         return '(shortDownTrend-Mini)'
@@ -882,7 +932,25 @@ def pct_change_positive_trend_short(regression_data):
                 return '(shortUpTrend-Risky)'
         if(regression_data['high'] < regression_data['high_pre2']):
             return '(shortUpTrend-MayReversal)'
-            
+    if(regression_data['forecast_day_PCT2_change'] > 0
+        and regression_data['forecast_day_PCT3_change'] > 0
+        and (regression_data['forecast_day_PCT3_change'] > regression_data['forecast_day_PCT2_change']
+             or regression_data['forecast_day_PCT4_change'] > regression_data['forecast_day_PCT3_change']
+             or regression_data['forecast_day_PCT5_change'] > regression_data['forecast_day_PCT4_change']
+            )
+        and high_counter(regression_data) >= 2
+        and (regression_data['low'] > regression_data['low_pre1']
+             or regression_data['low'] > regression_data['low_pre2']
+             or regression_data['low'] > regression_data['low_pre3']
+             or regression_data['low'] > regression_data['low_pre4']
+             )
+        and regression_data['month3HighChange'] < 0
+        and abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])
+        ):
+        if(regression_data['monthHighChange'] < 0):
+            return '(shortUpTrend-monthHighChangeLT0)' 
+        else:
+            return '(shortUpTrend-monthHighChangeGT0)'     
     if(pct_day_change_trend(regression_data) >= 3):
         return '(shortUpTrend-Mini)'
     if(regression_data['low'] > regression_data['bar_high_pre1']
