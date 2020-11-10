@@ -270,7 +270,7 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
             ):   
             add_in_csv(regression_data, regressionResult, ws, None, None, 'buyYear2LowLT-50(triggerAfter-9:15)')    
     
-    if(2.5 < regression_data['PCT_day_change'] < 5 and 2.5 < regression_data['PCT_change'] < 5
+    if(2.5 < regression_data['PCT_day_change'] < 3 and 2.5 < regression_data['PCT_change'] < 5
         and -2 < regression_data['PCT_day_change_pre1'] < 1
         and -2 < regression_data['PCT_day_change_pre2'] < 1
         and (regression_data['week2LowChange'] > 2 or regression_data['weekLowChange'] > 2)
@@ -996,7 +996,7 @@ def sell_all_common_High_Low(regression_data, regressionResult, reg, ws):
             else:
                 add_in_csv(regression_data, regressionResult, ws, None, 'CommonHL:HighDowntrend-2')
                 
-    if(-2.5 > regression_data['PCT_day_change'] > -5 and -2.5 > regression_data['PCT_change'] > -5
+    if(-2.5 > regression_data['PCT_day_change'] > -3 and -2.5 > regression_data['PCT_change'] > -5
         and -1 < regression_data['PCT_day_change_pre1'] < 2
         and -1 < regression_data['PCT_day_change_pre2'] < 2
         and (regression_data['week2HighChange'] < -2 or regression_data['weekHighChange'] < -2)
