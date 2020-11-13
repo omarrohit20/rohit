@@ -540,16 +540,20 @@ def buy_high_volatility(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'TEST:consolidationBuyCandidate')
         flag = True
     
-    if('SMA9GT1' in regression_data['series_trend']
-        and -1.3 < regression_data['PCT_day_change_pre1'] < 0
-        and 0 < regression_data['PCT_day_change'] < 1.3
-        and (regression_data['forecast_day_PCT4_change'] > 0 and regression_data['forecast_day_PCT5_change'] > 0)
-        and (regression_data['forecast_day_PCT4_change'] > 1 or regression_data['forecast_day_PCT5_change'] > 1)
-        and ((regression_data['low'] > regression_data['low_pre1'] and regression_data['bar_low'] > regression_data['bar_low_pre1'])
-             or (regression_data['low'] > regression_data['low_pre2'] and regression_data['bar_low'] > regression_data['bar_low_pre2'])
+    if(3.5 < regression_data['PCT_day_change_pre1'] < 7
+        and -2.5 < regression_data['PCT_day_change'] < 0.1
+        #and regression_data['bar_high'] < regression_data['bar_high_pre1']
+        and regression_data['bar_low'] > regression_data['bar_low_pre1']
+        and high_tail_pct_pre1(regression_data) < 1.5
+        and low_tail_pct_pre1(regression_data) < 1.5
+        and high_tail_pct(regression_data) > 2
+        and ('downTrend' not in regression_data['series_trend'] and 'DownTrend' not in regression_data['series_trend'])
+        and regression_data['month3HighChange'] < -1
+        and (abs(regression_data['month3HighChange']) < abs(regression_data['month3LowChange'])
+             or abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])
              )
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'SMA9GT1Buy')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'LastDayHighGT3.5')
         flag = True
         
     if(regression_data['monthHighChange'] > 2
@@ -628,6 +632,13 @@ def buy_high_volatility(regression_data, regressionResult):
         and regression_data['month3HighChange'] < -15
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Z_:NearOrBelowMonth3Low')
+        flag = True
+    if(regression_data['PCT_day_change'] < -2
+        and regression_data['PCT_change'] < 0
+        and regression_data['year2LowChange'] < 1
+        and regression_data['month3HighChange'] < -15
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Z_:NearOrBelowYear2Low')
         flag = True 
     if(-2 < regression_data['PCT_day_change'] < 4
         and -2 < regression_data['PCT_change'] < 6
@@ -666,14 +677,14 @@ def buy_high_volatility(regression_data, regressionResult):
                 or regression_data['PCT_day_change'] > 1
                 )
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'X_:MonthLowReversalContinue')
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Y_:MonthLowReversalContinue')
             flag = True
         elif(regression_data['PCT_day_change'] < 0
             and regression_data['PCT_day_change_pre1'] > 0 
             and regression_data['PCT_day_change_pre2'] < 0
             and regression_data['PCT_day_change_pre3'] > 0
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'X_:MonthLowReversalContinue-AlternateUpDown')
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Y_:MonthLowReversalContinue-AlternateUpDown')
             flag = True
     if(1.9 < regression_data['PCT_day_change'] < 4
         and 1.9 < regression_data['PCT_change'] < 6
@@ -682,8 +693,22 @@ def buy_high_volatility(regression_data, regressionResult):
         and (regression_data['monthLowChange'] < 0
             or abs(regression_data['monthHighChange']) > 3*abs(regression_data['monthLowChange'])
             )
+        and high_tail_pct(regression_data) < 1.5
+        and regression_data['PCT_day_change_pre1'] < 0
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'X_:MonthLowReversal-followNiftyDayTrend')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Y_:MonthLowReversal-followNiftyDayTrend')
+        flag = True
+    if(1.9 < regression_data['PCT_day_change'] < 6
+        and 1.9 < regression_data['PCT_change'] < 7
+        and regression_data['month3HighChange'] < -5
+        and regression_data['month3LowChange'] < 5
+        and (regression_data['month3LowChange'] < 0
+            or abs(regression_data['month3HighChange']) > 3*abs(regression_data['month3LowChange'])
+            )
+        and high_tail_pct(regression_data) < 1.5
+        and regression_data['PCT_day_change_pre1'] < 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Y_:Month3LowReversal-followNiftyDayTrend')
         flag = True
 
     return flag
