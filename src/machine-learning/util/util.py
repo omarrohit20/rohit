@@ -2132,7 +2132,6 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
             or regression_data['PCT_day_change_pre1'] > abs(regression_data['PCT_day_change'])
             )
         ):
-        print(regression_data['filter1'])
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'AvoidUptrend')
     if((regression_data['filter1'] != '')
         and regression_data['PCT_day_change'] > 0
