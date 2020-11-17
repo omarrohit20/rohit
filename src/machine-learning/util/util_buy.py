@@ -660,6 +660,27 @@ def buy_high_volatility(regression_data, regressionResult):
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Z_:NearOrBelowYear2Low')
         flag = True 
+    if(-1 < regression_data['PCT_day_change'] < 0
+        and regression_data['PCT_day_change_pre1'] > 1
+        and regression_data['PCT_day_change_pre2'] < 0
+        and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])
+        and abs(regression_data['PCT_day_change_pre1']) < abs(regression_data['PCT_day_change_pre2'])
+        and regression_data['bar_high'] > regression_data['bar_high_pre1']
+        and regression_data['bar_high_pre2'] > regression_data['bar_high_pre1']
+        and regression_data['weekHighChange'] < -1
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Y_:AlternateUpDownBuy-Risky')
+        flag = True
+    if(-1 < regression_data['PCT_day_change'] < 0
+        and regression_data['PCT_day_change_pre1'] > 1.5 
+        and regression_data['PCT_day_change_pre2'] < 0
+        and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])
+        and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change_pre2'])
+        and regression_data['bar_high'] > regression_data['bar_high_pre1'] > regression_data['bar_high_pre2']
+        and regression_data['weekHighChange'] < -1
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Y_:AlternateUpDownBuy')
+        flag = True
     if(-2 < regression_data['PCT_day_change'] < 4
         and -2 < regression_data['PCT_change'] < 6
         and regression_data['month3HighChange'] < -5
