@@ -2127,16 +2127,20 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     is_filter_risky(regression_data, regressionResult, high_or_low, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
 
     if((regression_data['filter1'] != '')
-        and regression_data['PCT_day_change'] < 0
         and (-1 < regression_data['PCT_day_change'] < 0
-            or regression_data['PCT_day_change_pre1'] > abs(regression_data['PCT_day_change'])
+            or (regression_data['PCT_day_change_pre1'] > abs(regression_data['PCT_day_change']) and regression_data['PCT_day_change'] < 0)
+            or (('upTrend' in regression_data['series_trend'] or 'UpTrend' in regression_data['series_trend'] or 'trendUp' in regression_data['series_trend'])
+                and regression_data['PCT_day_change'] < 2.5
+                )
             )
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'AvoidUptrendSell')
     if((regression_data['filter1'] != '')
-        and regression_data['PCT_day_change'] > 0
         and (0 < regression_data['PCT_day_change'] < 1
-            or (-regression_data['PCT_day_change_pre1']) < -(abs(regression_data['PCT_day_change']))
+            or ((-regression_data['PCT_day_change_pre1']) < -(abs(regression_data['PCT_day_change'])) and regression_data['PCT_day_change'] > 0)
+            or (('downTrend' in regression_data['series_trend'] or 'DownTrend' in regression_data['series_trend'] or 'trendDown' in regression_data['series_trend'])
+                and regression_data['PCT_day_change'] > -2.5
+                )
             )
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'AvoidDowntrendBuy')
