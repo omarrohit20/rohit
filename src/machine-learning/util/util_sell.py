@@ -294,6 +294,27 @@ def sell_high_volatility(regression_data, regressionResult):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None,'mayContinueDownTrend-monthLowNotReached')
         flag = True
+    elif(regression_data['week2LowChange'] < 0
+        and regression_data['PCT_day_change_pre1'] > 0
+        and -1 < regression_data['PCT_day_change'] < 0
+        ):
+        if(regression_data['year2LowChange'] < 0
+            and regression_data['weekLowChange'] < 2
+            and (regression_data['PCT_day_change_pre1'] > 1 or regression_data['bar_low'] < regression_data['bar_low_pre1'])
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTDOWN-GLOBALMARKETDOWN:mayContinueShortDownTrend-PCTDayChangePre1GT0-year2Low')
+            flag = True
+        elif(regression_data['month3LowChange'] < 0
+            and regression_data['weekLowChange'] < 2
+            and (regression_data['PCT_day_change_pre1'] > 1 or regression_data['bar_low'] < regression_data['bar_low_pre1'])
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTDOWN-GLOBALMARKETDOWN:mayContinueShortDownTrend-PCTDayChangePre1GT0-month3Low')
+            flag = True
+        elif(regression_data['month3LowChange'] < 0
+            and (regression_data['PCT_day_change_pre1'] < 1 and regression_data['bar_low'] > regression_data['bar_low_pre1'])
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTDOWN-GLOBALMARKETDOWN:mayReversalShortDownTrend-PCTDayChangePre1GT0-month3Low')
+            flag = True    
     elif('shortDownTrend' in regression_data['series_trend']):
         if(0 < regression_data['PCT_day_change_pre1'] < 2
             and -2 < regression_data['PCT_day_change'] < 0
@@ -3289,7 +3310,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         and -3 < regression_data['PCT_day_change'] < 0
         and -5 < regression_data['PCT_change'] < 0
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, '%%(Test):checkSell:Super03-monthLow')
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'chisSell:Super03-monthLow')
         return True
     
     if(regression_data['close'] > 50
