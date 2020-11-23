@@ -2738,7 +2738,7 @@ def is_filter_risky(regression_data, regressionResult, high_or_low, ws, filter_a
              or regression_data['PCT_day_change_pre2'] < -1
              or regression_data['PCT_day_change_pre3'] < -1
              )
-        and regression_data['close'] > regression_data['low_pre1']
+        #and regression_data['close'] > regression_data['low_pre1']
         and (regression_data['close'] < regression_data['low_pre2'] 
              or regression_data['close'] < regression_data['low_pre3']
              or (regression_data['close'] < regression_data['high_pre2'] and regression_data['close'] < regression_data['high_pre3'])
@@ -2752,7 +2752,7 @@ def is_filter_risky(regression_data, regressionResult, high_or_low, ws, filter_a
              or regression_data['PCT_day_change_pre2'] > 1 
              or regression_data['PCT_day_change_pre3'] > 1
              )
-        and regression_data['close'] < regression_data['high_pre1']
+        #and regression_data['close'] < regression_data['high_pre1']
         and (regression_data['close'] > regression_data['high_pre2'] 
              or regression_data['close'] > regression_data['high_pre3']
              or (regression_data['close'] > regression_data['low_pre2'] and regression_data['close'] > regression_data['low_pre3'])
