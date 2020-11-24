@@ -2617,7 +2617,45 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
         and regression_data['PCT_day_change'] > 1
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Candidate-Sell')
-        flag = True   
+        flag = True 
+        
+    
+    if(regression_data[filter_avg] >= 0
+        and 'Buy-SUPER' in regression_data['filter2'] 
+        and ('Buy-AnyGT2' in regression_data['filter2'] or ('Buy-Any' in regression_data['filter2'] and regression_data[filter_count] >= 2))
+        and 'Sell-AnyGT2' not in regression_data['filter2']
+        and 2 < regression_data['PCT_day_change'] < 4.5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'UptrendOnly:Filter-SUPER-Buy')
+        flag = True
+    elif(regression_data[filter_avg] <= 0
+        and 'Sell-SUPER' in regression_data['filter2'] 
+        and ('Sell-AnyGT2' in regression_data['filter2'] or ('Sell-Any' in regression_data['filter2'] and regression_data[filter_count] >= 2))
+        and 'Buy-AnyGT2' not in regression_data['filter2']
+        and -4.5 < regression_data['PCT_day_change'] < -2
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'DowntrendOnly:Filter-SUPER-Sell')
+        flag = True
+    elif(regression_data[filter_avg] >= 1 and (regression_data[filter_pct] == 0 or regression_data[filter_pct] > 50)
+        and (('Buy-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 3) or ('Buy-Any' in regression_data['filter2'] and regression_data[filter_count] >= 4 and 'Sell-Any' not in regression_data['filter2']))
+        and 'Sell-AnyGT2' not in regression_data['filter2']
+        and (('buy' in reg_data_filter or 'Buy' in reg_data_filter)
+             or ('sell' not in reg_data_filter and 'Sell' not in reg_data_filter and "MLBuy" in regression_data['filter'])
+            )
+        and 2 < regression_data['PCT_day_change'] < 4.5
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'UptrendOnly:Filter-Buy')
+        flag = True
+    elif(regression_data[filter_avg] <= -1 and (regression_data[filter_pct] == 0 or regression_data[filter_pct] < -50)
+        and (('Sell-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 3) or ('Sell-Any' in regression_data['filter2'] and regression_data[filter_count] >= 4 and 'Buy-Any' not in regression_data['filter2']))
+        and 'Buy-AnyGT2' not in regression_data['filter2']
+        and (('sell' in reg_data_filter or 'Sell' in reg_data_filter)
+             or ('buy' not in reg_data_filter and 'Buy' not in reg_data_filter and "MLSell" in regression_data['filter'])
+            )
+        and -4.5 < regression_data['PCT_day_change'] < -2
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'DowntrendOnly:Filter-Sell')
+        flag = True  
     
     
     if(abs(float(regression_data[filter_avg])) > 1

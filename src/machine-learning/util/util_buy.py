@@ -78,6 +78,11 @@ def buy_high_volatility(regression_data, regressionResult):
     flag = False
     ws = None
     
+    if(regression_data['year2HighChange'] > -5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'year2HighChangeGT-5')
+    elif(regression_data['year2LowChange'] < 5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'year2LowLT5')
+    
     if(high_volatility(regression_data, regressionResult, True)):
         flag = True    
     
