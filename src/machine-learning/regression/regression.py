@@ -122,5 +122,5 @@ def calculateParallel(threads=1, futures='Yes', ml_algo='Yes'):
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(3, sys.argv[1], sys.argv[2])
+    calculateParallel(1, sys.argv[1], sys.argv[2])
     connection.close()
