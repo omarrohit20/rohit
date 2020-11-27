@@ -42,20 +42,18 @@ def regression_ta_data(scrip):
         print('Missing or very less Data for ', scrip)
         return
         
-    hsdate, hsopen, hshigh, hslow, hslast, hsclose, hsquantity, hsturnover = historical_data(data)   
+    hsdate, hsopen, hshigh, hslow, hsclose, hsquantity = historical_data(data)   
     df = pd.DataFrame({
         'date': hsdate,
         'open': hsopen,
         'high': hshigh,
         'low': hslow,
         'close': hsclose,
-        'volume': hsquantity,
-        'turnover':hsturnover
+        'volume': hsquantity
     })
-    df = df[['date','open','high','low','close','volume','turnover']]
+    df = df[['date','open','high','low','close','volume']]
     print(scrip)
     df=df.rename(columns = {'total trade quantity':'volume'})
-    df=df.rename(columns = {'turnover (lacs)': 'turnover'})
     df['volume_pre'] = df['volume'].shift(+1)
     df['open_pre'] = df['open'].shift(+1)
     df['high_pre'] = df['high'].shift(+1)

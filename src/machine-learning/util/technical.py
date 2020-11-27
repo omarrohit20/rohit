@@ -50,32 +50,26 @@ def historical_data(data):
     aropen = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,1][::-1]).tolist()])
     arhigh = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,2][::-1]).tolist()])
     arlow  = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,3][::-1]).tolist()])
-    arlast = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,4][::-1]).tolist()])
     arclose= np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,5][::-1]).tolist()])
     arquantity = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,6][::-1]).tolist()])
-    arturnover = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,7][::-1]).tolist()])
-    return ardate, aropen, arhigh, arlow, arlast, arclose, arquantity, arturnover
+    return ardate, aropen, arhigh, arlow, arclose, arquantity
 
 def today_data(data):
     ardate = np.array([x.encode('UTF8') for x in (np.array(data['data'])[:,0]).tolist()])
     aropen = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,1]).tolist()])
     arhigh = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,2]).tolist()])
     arlow  = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,3]).tolist()])
-    arlast = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,4]).tolist()])
     arclose= np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,5]).tolist()])
     arquantity = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,6]).tolist()])
-    arturnover = np.array([float(x.encode('UTF8')) for x in (np.array(data['data'])[:,7]).tolist()])
     hs = 0
     date = ardate[hs]
     open = aropen[hs]
     high = arhigh[hs]
     low  = arlow[hs]
-    last = arlast[hs]
     close = arclose[hs]
     quantity = arquantity[hs]
-    turnover = arturnover[hs]
     change = (close - open)*100/open
-    return np.array([date]), np.array([open]), np.array([high]), np.array([low]), np.array([last]), np.array([close]), np.array([quantity]), np.array([turnover]), change
+    return np.array([date]), np.array([open]), np.array([high]), np.array([low]), np.array([close]), np.array([quantity]), change
 
 def today_data_df(df):
     ardate = df['date'].values
@@ -84,7 +78,6 @@ def today_data_df(df):
     arlow  = df['low'].values
     arclose= df['close'].values
     arquantity = df['volume'].values
-    arturnover = df['turnover'].values
     hs = -1
     date = ardate[hs]
     open = aropen[hs]
@@ -92,9 +85,8 @@ def today_data_df(df):
     low  = arlow[hs]
     close = arclose[hs]
     quantity = arquantity[hs]
-    turnover = arturnover[hs]
     change = (close - open)*100/open
-    return np.array([date]), np.array([open]), np.array([high]), np.array([low]), np.array([close]), np.array([quantity]), np.array([turnover]), change
+    return np.array([date]), np.array([open]), np.array([high]), np.array([low]), np.array([close]), np.array([quantity]), change
 
 def overlap_screener(data, todayInputs, tdchange, historicalInputs, hchange):
     technical_indicators = copy.deepcopy(data)
@@ -543,8 +535,8 @@ def ta_lib_data(scrip):
             print('Missing or very less Data for ', scrip) 
             return
             
-        hsdate, hsopen, hshigh, hslow, hslast, hsclose, hsquantity, hsturnover = historical_data(data)   
-        tddate, tdopen, tdhigh, tdlow, tdlast, tdclose, tdquantity, tdturnover, tdchange = today_data(data) 
+        hsdate, hsopen, hshigh, hslow, hsclose, hsquantity = historical_data(data)   
+        tddate, tdopen, tdhigh, tdlow, tdclose, tdquantity, tdchange = today_data(data) 
         
         todayInputs = {
             'open': tdopen,
@@ -568,8 +560,7 @@ def ta_lib_data(scrip):
             'high': hshigh,
             'low': hslow,
             'close': hsclose,
-            'volume': hsquantity,
-            'turnover':hsturnover
+            'volume': hsquantity
         })
         
         end_date = (datetime.date.today() - datetime.timedelta(days=0)).strftime('%Y-%m-%d')
@@ -839,7 +830,7 @@ def ta_lib_data_df(scrip, df, db_store=False):
         }
         
         hsclose = (df['close'].values)    
-        tddate, tdopen, tdhigh, tdlow, tdclose, tdquantity, tdturnover, tdchange = today_data_df(df) 
+        tddate, tdopen, tdhigh, tdlow, tdclose, tdquantity, tdchange = today_data_df(df) 
         todayInputs = {
             'open': tdopen,
             'high': tdhigh,

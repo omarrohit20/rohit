@@ -424,19 +424,19 @@ def benchmark_classifier(model, train, test, test_forecast, features, symbol, ou
 
     symbol, output_dir = output_params
 
-    model.fit(train[features].as_matrix(), train[output].astype(np.int32).as_matrix(), *args, **kwargs)
-    predicted_value = model.predict(test[features].as_matrix())
+    model.fit(train[features].values, train[output].astype(np.int32).values, *args, **kwargs)
+    predicted_value = model.predict(test[features].values)
     
     accuracy = 0
     try:
-        accuracy = model.score(test[features].as_matrix(), test[output].astype(int).as_matrix())
+        accuracy = model.score(test[features].values, test[output].astype(int).values)
     except AttributeError:
         accuracy = 0
     
-    forecast_set = model.predict(test_forecast[features].as_matrix())
+    forecast_set = model.predict(test_forecast[features].values)
     
     if plotgraph:
-        plt.plot(test[output].as_matrix(), color='g', ls='--', label='Actual Value')
+        plt.plot(test[output].values, color='g', ls='--', label='Actual Value')
         plt.plot(predicted_value, color='b', ls='--', label='predicted_value Value')
     
         plt.xlabel('Number of Set')
@@ -463,14 +463,14 @@ def benchmark_classifier_tf(model, train, test, test_forecast, features, symbol,
 
     symbol, output_dir = output_params
 
-    model.fit(train[features].as_matrix(), train[output].astype(np.int32).as_matrix(), *args, **kwargs)
-    predicted_value = model.predict(test[features].as_matrix())
+    model.fit(train[features].values, train[output].astype(np.int32).values, *args, **kwargs)
+    predicted_value = model.predict(test[features].values)
     
-    accuracy = model.score(test[features].as_matrix(), test[output].astype(int).as_matrix())
-    forecast_set = model.predict(test_forecast[features].as_matrix())
+    accuracy = model.score(test[features].values, test[output].astype(int).values)
+    forecast_set = model.predict(test_forecast[features].values)
     
     if plotgraph:
-        plt.plot(test[output].as_matrix(), color='g', ls='--', label='Actual Value')
+        plt.plot(test[output].values, color='g', ls='--', label='Actual Value')
         plt.plot(predicted_value, color='b', ls='--', label='predicted_value Value')
     
         plt.xlabel('Number of Set')
@@ -545,9 +545,9 @@ def performRegression(dataset, split, symbol, output_dir):
     r2_scores = []
 
     for pred in predicted_values:
-        mean_squared_errors.append(mean_squared_error(test[output].as_matrix(), \
-            pred.as_matrix()))
-        r2_scores.append(r2_score(test[output].as_matrix(), pred.as_matrix()))
+        mean_squared_errors.append(mean_squared_error(test[output].values, \
+            pred.values))
+        r2_scores.append(r2_score(test[output].values, pred.values))
 
     log.info('%s %s', mean_squared_errors, r2_scores)
 
@@ -702,11 +702,11 @@ def benchmark_model(model, train, test, features, output, \
 
     symbol, output_dir = output_params
 
-    model.fit(train[features].as_matrix(), train[output].as_matrix(), *args, **kwargs)
-    predicted_value = model.predict(test[features].as_matrix())
+    model.fit(train[features].values, train[output].values, *args, **kwargs)
+    predicted_value = model.predict(test[features].values)
 
     if plotgraph:
-        plt.plot(test[output].as_matrix(), color='g', ls='--', label='Actual Value')
+        plt.plot(test[output].values, color='g', ls='--', label='Actual Value')
         plt.plot(predicted_value, color='b', ls='--', label='predicted_value Value')
     
         plt.xlabel('Number of Set')
@@ -749,14 +749,14 @@ def benchmark_model(model, train, test, test_forecast, features, symbol, output,
 
     symbol, output_dir = output_params
 
-    model.fit(train[features].as_matrix(), train[output].as_matrix(), *args, **kwargs)
-    predicted_value = model.predict(test[features].as_matrix())
+    model.fit(train[features].values, train[output].values, *args, **kwargs)
+    predicted_value = model.predict(test[features].values)
     
-    accuracy = model.score(test[features].as_matrix(), test[output].as_matrix())
-    forecast_set = model.predict(test_forecast[features].as_matrix())
+    accuracy = model.score(test[features].values, test[output].values)
+    forecast_set = model.predict(test_forecast[features].values)
     
     if plotgraph:
-        plt.plot(test[output].as_matrix(), color='g', ls='--', label='Actual Value')
+        plt.plot(test[output].values, color='g', ls='--', label='Actual Value')
         plt.plot(predicted_value, color='b', ls='--', label='predicted_value Value')
     
         plt.xlabel('Number of Set')
