@@ -2508,6 +2508,26 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, '**DUPER-Sell')
                 flag = True
+                
+    if(regression_data[filter_avg] >= 0
+        and 'Buy-SUPER' in regression_data['filter2'] 
+        and (('Buy-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 2) or ('Buy-Any' in regression_data['filter2'] and regression_data[filter_count] >= 3))
+        and 'Sell-AnyGT2' not in regression_data['filter2']
+        and ('sell' not in reg_data_filter and 'Sell' not in reg_data_filter and "DOJI" in regression_data['filter5'])
+        and regression_data['PCT_day_change'] < 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'DOJI-SUPER-Buy')
+        flag = True
+    elif(regression_data[filter_avg] <= 0
+        and 'Sell-SUPER' in regression_data['filter2'] 
+        and (('Sell-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 2) or ('Sell-Any' in regression_data['filter2'] and regression_data[filter_count] >= 3))
+        and 'Buy-AnyGT2' not in regression_data['filter2']
+        and ('buy' not in reg_data_filter and 'Buy' not in reg_data_filter and "DOJI" in regression_data['filter5'])
+        and regression_data['PCT_day_change'] > 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'DOJI-SUPER-Sell')
+        flag = True
+    
     
     if(regression_data['filter'] == '' or regression_data['filter'] == ' ' or regression_data['filter'] == '[MLBuy]:' or regression_data['filter'] == '[MLSell]:'):
         return flag
@@ -2518,6 +2538,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
         and 'Sell-AnyGT2' not in regression_data['filter2']
         and (('buy' in reg_data_filter or 'Buy' in reg_data_filter)
              or ('sell' not in reg_data_filter and 'Sell' not in reg_data_filter and "MLBuy" in regression_data['filter'])
+             or ('sell' not in reg_data_filter and 'Sell' not in reg_data_filter and "DOJI" in regression_data['filter5'])
             )
         and is_reg_buy_pct_filter(regression_data)
         ):
@@ -2529,6 +2550,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
         and 'Buy-AnyGT2' not in regression_data['filter2']
         and (('sell' in reg_data_filter or 'Sell' in reg_data_filter)
              or ('buy' not in reg_data_filter and 'Buy' not in reg_data_filter and "MLSell" in regression_data['filter'])
+             or ('buy' not in reg_data_filter and 'Buy' not in reg_data_filter and "DOJI" in regression_data['filter5'])
             )
         and (is_reg_sell_pct_filter(regression_data) == True)
         ):
@@ -2562,6 +2584,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
         and 'Sell-AnyGT2' not in regression_data['filter2']
         and (('buy' in reg_data_filter or 'Buy' in reg_data_filter)
              or ('sell' not in reg_data_filter and 'Sell' not in reg_data_filter and "MLBuy" in regression_data['filter'])
+             or ('sell' not in reg_data_filter and 'Sell' not in reg_data_filter and "DOJI" in regression_data['filter5'])
             )
         and is_reg_buy_pct_filter(regression_data)
         ):
@@ -2572,6 +2595,7 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
         and 'Buy-AnyGT2' not in regression_data['filter2']
         and (('sell' in reg_data_filter or 'Sell' in reg_data_filter)
              or ('buy' not in reg_data_filter and 'Buy' not in reg_data_filter and "MLSell" in regression_data['filter'])
+             or ('buy' not in reg_data_filter and 'Buy' not in reg_data_filter and "DOJI" in regression_data['filter5'])
             )
         and (is_reg_sell_pct_filter(regression_data) == True)
         ):

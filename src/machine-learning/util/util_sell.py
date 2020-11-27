@@ -884,6 +884,9 @@ def sell_high_volatility(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Y_:Month3HighReversal-followNiftyDayTrend')
         flag = True
         
+    if('%%' in regression_data['filter'] or 'VOL:' in regression_data['filter']):
+        flag = True
+        
     return flag
 
 def sell_common_down_continued(regression_data, regressionResult, reg, ws):
@@ -3292,7 +3295,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
     if(0 < regression_data['month3LowChange'] < 7
         and 0 < regression_data['monthLowChange'] < 7
         and 0 < regression_data['week2LowChange'] < 7
-        and 0 < regression_data['weekLowChange'] < 7
+        and 0 < regression_data['weekLowChange'] < 2
         and regression_data['month3LowChange'] == regression_data['monthLowChange'] 
         and regression_data['week2LowChange'] == regression_data['weekLowChange']
         and regression_data['month3HighChange'] < -10
@@ -3319,6 +3322,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         and 0 < regression_data['week2LowChange'] < 7
         and 0 < regression_data['weekLowChange'] < 7
         and regression_data['month3LowChange'] == regression_data['monthLowChange'] 
+        and regression_data['monthLowChange'] == regression_data['week2LowChange']
         and regression_data['week2LowChange'] > regression_data['weekLowChange']
         and regression_data['month3HighChange'] < -10
         and -3 < regression_data['PCT_day_change'] < 0
