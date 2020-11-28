@@ -2174,31 +2174,7 @@ def filter_accuracy_finder(regression_data, regression_high, regression_low, reg
             return False
             
         buyRisky, sellRisky =  is_filter_risky(regression_data, regressionResult, high_or_low, ws, filter_avg, filter_count, filter_pct, False)   
-        if(len(regression_data['filter']) > 9 
-            and ((regression_data[filter_avg] >= 0.75 and regression_data[filter_count] >= 3 and regression_data[filter_pct] > 100 and regression_data['PCT_day_change'] < 2)
-                 or (regression_data[filter_avg] >= 1.5 and regression_data[filter_count] >= 5 and regression_data[filter_pct] > 80)
-                 or (regression_data[filter_avg] >= 2 and regression_data[filter_count] >= 4 and regression_data[filter_pct] > 80)
-                 #or (regression_data[filter_avg] >= 2.5 and regression_data[filter_count] >= 2 and regression_data[filter_pct] >= 80)
-                 )
-            and ("MLBuy" in regression_data['filter'])
-            and is_buy_filter_not_risky(regression_data)
-            #and high_tail_pct(regression_data) < 1.5 and low_tail_pct(regression_data) < 2.5
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Filter-Buy')
-            flag = True
-        
-        if(len(regression_data['filter']) > 9
-            and ((regression_data[filter_avg] <= -0.75 and regression_data[filter_count] >= 3 and regression_data[filter_pct] < -100 and regression_data['PCT_day_change'] > -2)
-                 or (regression_data[filter_avg] <= -1.5 and regression_data[filter_count] >= 5 and regression_data[filter_pct] < -80)
-                 or (regression_data[filter_avg] <= -2 and regression_data[filter_count] >= 4 and regression_data[filter_pct] < -80)
-                 #or (regression_data[filter_avg] <= -2.5 and regression_data[filter_count] >= 2 and regression_data[filter_pct] <= -80)
-                 )
-            and ("MLSell" in regression_data['filter'])
-            and is_sell_filter_not_risky(regression_data)
-            #and low_tail_pct(regression_data) < 1.5 and high_tail_pct(regression_data) < 2.5
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Filter-Sell')
-            flag = True      
+              
                 
         if(regression_data[filter_count] >= 3
             and abs(regression_data[filter_pct]) >= 90
