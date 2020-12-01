@@ -311,7 +311,7 @@ def sell_high_volatility(regression_data, regressionResult):
             flag = True
         elif(regression_data['month3LowChange'] < 0
             and regression_data['weekLowChange'] < 2
-            and (regression_data['PCT_day_change_pre1'] > 1 
+            and ((regression_data['PCT_day_change_pre1'] > 1 and regression_data['PCT_day_change_pre3'] < 0.75 )
                  or (regression_data['bar_low'] < regression_data['bar_low_pre1']
                      and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])
                     )
