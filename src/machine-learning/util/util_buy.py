@@ -273,17 +273,23 @@ def buy_high_volatility(regression_data, regressionResult):
             and regression_data['week2HighChange'] < 2
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None,'mayReversalShortUpTrend-monthHighNotReached')
-        elif(2 < regression_data['PCT_day_change'] < 3 
+        elif(1.5 < regression_data['PCT_day_change'] < 3 
             and (regression_data['PCT_day_change_pre1'] < 0 or regression_data['PCT_day_change_pre2'] < 0 or regression_data['PCT_day_change_pre3'] < 0)
             and (abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange']) or regression_data['week2HighChange'] > 3)
             and regression_data['monthLowChange'] > 5
+            and (regression_data['monthHighChange'] < -2 
+                 or regression_data['month3HighChange'] < -2
+                 or regression_data['week2HighChange'] < 0
+                 )
             and 'Sell-Any' not in regression_data['filter2']
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None,'mayContinueShortUpTrend-monthHighNotReached') 
         flag = True
     elif(regression_data['week2HighChange'] > 0
         and regression_data['PCT_day_change_pre1'] < 0
-        and 0 < regression_data['PCT_day_change'] < 1
+        and (0 < regression_data['PCT_day_change'] < 1
+            #or (0 < regression_data['PCT_day_change'] < 1.5 and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change']))
+            ) 
         ):
         if(regression_data['year2HighChange'] > 0
             and regression_data['weekHighChange'] > -2
@@ -296,6 +302,7 @@ def buy_high_volatility(regression_data, regressionResult):
             and ((regression_data['PCT_day_change_pre1'] < -1 and regression_data['PCT_day_change_pre3'] > -0.75)
                  or (regression_data['bar_high'] > regression_data['bar_high_pre1']
                      and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])
+                     and regression_data['PCT_day_change_pre2'] < -1
                     )
                 )
             ):
@@ -308,12 +315,14 @@ def buy_high_volatility(regression_data, regressionResult):
             flag = True
     elif(regression_data['month3HighChange'] > 0
         and regression_data['week2HighChange'] > -2
-        and 0 < regression_data['PCT_day_change_pre1'] < 1
-        and -1 < regression_data['PCT_day_change'] < 0
+        and 0 < regression_data['PCT_day_change_pre1'] < 0.5 and regression_data['bar_high'] < regression_data['bar_high_pre1']
+        and -0.5 < regression_data['PCT_day_change'] < 0
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTUP-GLOBALMARKETUP:mayReversalShortUpTrend-PCTDayChangePre1LT0-month3High')
         flag = True
-    elif('shortUpTrend' in regression_data['series_trend']):
+    elif('shortUpTrend' in regression_data['series_trend']
+        and (regression_data['forecast_day_PCT5_change'] > 2 or regression_data['forecast_day_PCT7_change'] > 2)
+        ):
         if(-2 < regression_data['PCT_day_change_pre1'] < 0
             and 0 < regression_data['PCT_day_change'] < 2
             ):
@@ -321,8 +330,19 @@ def buy_high_volatility(regression_data, regressionResult):
             flag = True
         elif(-2 < regression_data['PCT_day_change_pre2'] < 0
             and 0 < regression_data['PCT_day_change_pre1'] < 2
+            and -1 < regression_data['PCT_day_change'] < 2
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'HEAVY:GLOBALFUTUP-GLOBALMARKETUP:mayContinueShortUpTrend-PCTDayChangePre2LT0')
+            flag = True
+    elif('shortUpTrend' in regression_data['series_trend']
+        ):
+        if(-2 < regression_data['PCT_day_change_pre2'] < 0
+            and 0 < regression_data['PCT_day_change_pre1'] < 2
+            and (regression_data['PCT_day_change'] < -1.5
+                or (regression_data['forecast_day_PCT5_change'] < 1 and regression_data['forecast_day_PCT7_change'] < 1)
+                )
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'HEAVY:GLOBALFUTUP-GLOBALMARKETUP:mayReversalShortUpTrend-PCTDayChangePre2LT0')
             flag = True
     
     if('shortUpTrend' in regression_data['series_trend']):    
@@ -450,7 +470,7 @@ def buy_high_volatility(regression_data, regressionResult):
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'mayReversalSell-pre3LT(-2)-shortUpTrend')
                 flag = True
-        elif('RISKY-UPTREND-SELL' in regression_data['series_trend']):
+        elif('RISKY-UPTREND-SELL' in regression_data['filter1']):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'RISKY-UPTREND-SELL-1')
             if((high_tail_pct(regression_data) > 2 or high_tail_pct_pre1(regression_data) > 2)
                 and high_tail_pct_pre1(regression_data) > abs(regression_data['PCT_day_change'])
@@ -512,14 +532,14 @@ def buy_high_volatility(regression_data, regressionResult):
                 and regression_data['PCT_day_change_pre4'] > 0
                 and regression_data['PCT_day_change_pre5'] > 0
                 ):
-                add_in_csv(regression_data, regressionResult, ws, None, None, 'mayReversalSell-doji-RISKY-UPTREND-SELL')
-        
+                add_in_csv(regression_data, regressionResult, ws, None, None, 'mayReversalSell-doji-RISKY-UPTREND-SELL')    
     elif('RISKY-UPTREND-SELL' in regression_data['filter5']
         and 'DOJI' in regression_data['filter5']
         and regression_data['PCT_day_change'] < 0
-        and regression_data['PCT_day_change_pre1'] > 1
+        and regression_data['PCT_day_change_pre1'] > 0
         and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])
-        and regression_data['week2HighChange'] > 1
+        and (regression_data['PCT_day_change_pre1'] > 1 or abs(regression_data['PCT_day_change_pre1']) > 2*abs(regression_data['PCT_day_change']))
+        and regression_data['week2HighChange'] > 0
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'RISKY-UPTREND-SELL-3')
         flag = True
@@ -734,6 +754,35 @@ def buy_high_volatility(regression_data, regressionResult):
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'X_LASTDAYNIFYDOWNLT(-2):PCTDayChangeBT3and4')
         flag = True
+    if(regression_data['monthHighChange'] > 2
+        and regression_data['week2LowChange'] > 7
+        and regression_data['close'] < 70
+        ):
+        if (regression_data['PCT_day_change'] > 2
+            and regression_data['PCT_change'] > 2
+            and regression_data['PCT_day_change_pre1'] > 2
+            and regression_data['PCT_day_change_pre2'] > 2
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'X_:MonthHighUptrend3Days-risky-closelt70')
+            flag = True
+        elif (regression_data['PCT_day_change'] > 4
+            and regression_data['PCT_change'] > 4
+            and regression_data['PCT_day_change_pre1'] > 4
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'X_:MonthHighUptrend3Days-risky-closelt70')
+            flag = True
+    elif(regression_data['monthHighChange'] > 2
+        and regression_data['week2LowChange'] > 7
+        and regression_data['close'] < 150
+        ):
+        if (regression_data['PCT_day_change'] > 0
+            and regression_data['PCT_change'] > 0
+            and regression_data['PCT_day_change_pre1'] > 0
+            and regression_data['PCT_day_change_pre2'] > 0
+            and regression_data['PCT_day_change_pre3'] > 0
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'X_:MonthHighUptrend4Days-risky-closelt150')
+            flag = True
     if(regression_data['PCT_day_change'] < -2
         and regression_data['PCT_change'] < 0
         and regression_data['monthLowChange'] < 1
@@ -857,7 +906,9 @@ def buy_high_volatility(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Y_:Month3LowReversal-followNiftyDayTrend')
         flag = True
         
-    if('%%' in regression_data['filter'] or 'VOL:' in regression_data['filter']):
+    if('%%' in regression_data['filter'] 
+        or '$$' in regression_data['filter']
+        or 'VOL:' in regression_data['filter']):
         flag = True
         
     return flag
