@@ -102,9 +102,13 @@ def regression_ta_data(scrip):
     df['EMA100'] = EMA(df,100)
     df['EMA200'] = EMA(df,200)
     
-    ta_lib_data_df(scrip, df, True) 
-    process_regression_high(scrip, df, directory, run_ml_algo)
-    process_regression_low(scrip, df, directory, run_ml_algo)    
+    try:
+        ta_lib_data_df(scrip, df, True) 
+        process_regression_high(scrip, df, directory, run_ml_algo)
+        process_regression_low(scrip, df, directory, run_ml_algo)
+    except:
+        print('regression failed for', scrip) 
+        pass    
 
 def calculateParallel(threads=1, futures='Yes', ml_algo='Yes'):
     global run_ml_algo
