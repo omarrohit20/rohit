@@ -308,11 +308,11 @@ def buy_high_volatility(regression_data, regressionResult):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTUP-GLOBALMARKETUP:mayContinueShortUpTrend-PCTDayChangePre1LT0-month3High')
             flag = True
-        elif(regression_data['month3HighChange'] > 0
-            and (regression_data['PCT_day_change_pre1'] > -1 and regression_data['bar_high'] < regression_data['bar_high_pre1'])
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTUP-GLOBALMARKETUP:mayReversalShortUpTrend-PCTDayChangePre1LT0-month3High')
-            flag = True
+#         elif(regression_data['month3HighChange'] > 0
+#             and (regression_data['PCT_day_change_pre1'] > -1 and regression_data['bar_high'] < regression_data['bar_high_pre1'])
+#             ):
+#             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTUP-GLOBALMARKETUP:mayReversalShortUpTrend-PCTDayChangePre1LT0-month3High')
+#             flag = True
     elif(regression_data['month3HighChange'] > 0
         and regression_data['week2HighChange'] > -2
         and 0 < regression_data['PCT_day_change_pre1'] < 0.5 and regression_data['bar_high'] < regression_data['bar_high_pre1']
