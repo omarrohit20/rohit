@@ -935,6 +935,15 @@ def sell_high_volatility(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Y_:Month3HighReversal-followNiftyDayTrend')
         flag = True
         
+    if(regression_data['PCT_day_change_pre1'] < -7
+        and regression_data['PCT_day_change'] > 2
+        and regression_data['bar_low_pre1'] < regression_data['bar_high'] < regression_data['bar_high_pre1']
+        and high_tail_pct(regression_data) < 3
+        and (regression_data['industry'] != "" or regression_data['forecast_day_PCT5_change'] < -20)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'DowntrendMarketDownCircuitMayContinue')
+        flag = True
+        
     if('%%' in regression_data['filter'] 
         or '$$' in regression_data['filter']
         or 'VOL:' in regression_data['filter']):

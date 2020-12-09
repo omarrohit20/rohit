@@ -13,9 +13,20 @@ with open('nselist/ind_niftyfuturelist.csv') as csvfile:
         try:
             if (count != 0):
                 print(row[0])
+                futures = "Yes"
+                
                 db.scrip_futures.insert_one({
                     "company": row[0],
-                    "scrip": row[1]
+                    "industry": "",
+                    "scrip": row[1],
+                    "futures":futures
+                    })
+
+                db.scrip.insert_one({
+                    "company": row[0],
+                    "industry": "",
+                    "scrip": row[1],
+                    "futures":futures
                     })
             count = count + 1
         except:
@@ -30,17 +41,39 @@ with open('nselist/ind_nifty500list.csv') as csvfile:
             if (count != 0):
                 print(row[0])
                 
-                futures = "Yes"
-                data = db.scrip_futures.find_one({'scrip':row[2]})
+                data = db.scrip.find_one({'scrip':row[2]})
                 if(data is None):
                     futures = "No"
 
-                db.scrip.insert_one({
-                    "company": row[0],
-                    "industry": row[1],
-                    "scrip": row[2],
-                    "futures":futures
-                    })
+                    db.scrip.insert_one({
+                        "company": row[0],
+                        "industry": row[1],
+                        "scrip": row[2],
+                        "futures":futures
+                        })
+            count = count + 1
+        except:
+            pass    
+print(count)
+
+count = 0
+with open('nselist/ind_nifty1000list.csv') as csvfile:
+    readCSV = csv.reader(csvfile, delimiter=',')
+    for row in readCSV:
+        try:
+            if (count != 0):
+                print(row[0])
+                
+                data = db.scrip.find_one({'scrip':row[1]})
+                if(data is None):
+                    futures = "No"
+
+                    db.scrip.insert_one({
+                        "company": row[0],
+                        "industry": "",
+                        "scrip": row[1],
+                        "futures":futures
+                        })
             count = count + 1
         except:
             pass    
