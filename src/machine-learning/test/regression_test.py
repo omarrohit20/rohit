@@ -50,7 +50,7 @@ def regression_ta_data(scrip):
         'volume': hsquantity
     })
     df = df[['date','open','high','low','close','volume']]
-    print(scrip)
+    
     df=df.rename(columns = {'total trade quantity':'volume'})
     df['volume_pre'] = df['volume'].shift(+1)
     df['open_pre'] = df['open'].shift(+1)
@@ -102,13 +102,16 @@ def regression_ta_data(scrip):
     
     df.dropna(subset=['Act_PCT_change'], inplace = True)
     size = int((int(np.floor(df.shape[0]))/3)*2)
+    print(scrip + " " + str(size))
     for x in range(size):
         try:
-            db.technical.delete_many({'dataset_code':scrip})
-            ta_lib_data_df(scrip, df, True) 
-            regression_high = process_regression_high(scrip, df, directory, run_ml_algo, True)
-            regression_low = process_regression_low(scrip, df, directory, run_ml_algo, True)
-            result_data_reg(regression_high, regression_low, scrip)
+            close = df.tail(1).loc[-1:, 'close'].values[0]
+            if (50 < close < 10000):
+                db.technical.delete_many({'dataset_code':scrip})
+                ta_lib_data_df(scrip, df, True) 
+                regression_high = process_regression_high(scrip, df, directory, run_ml_algo, True)
+                regression_low = process_regression_low(scrip, df, directory, run_ml_algo, True)
+                result_data_reg(regression_high, regression_low, scrip)
             df = df[:-1]
         except IndexError as e:
             print(e)
