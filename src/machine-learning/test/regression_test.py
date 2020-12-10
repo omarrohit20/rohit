@@ -11,12 +11,12 @@ import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
 import numpy as np
 
-from regression_high import process_regression_high
-from regression_low import process_regression_low
+from regression.regression_high import process_regression_high
+from regression.regression_low import process_regression_low
 from technical import ta_lib_data_df
 from util.util import historical_data
 from talib.abstract import *
-from regression_result import result_data_reg, result_data_cla, result_data
+from regression_result import result_data_reg
 
 directory = '../../output' + '/regression/' + time.strftime("%d%m%y-%H%M%S")
 logname = '../../output' + '/regression/mllog' + time.strftime("%d%m%y-%H%M%S")
@@ -40,20 +40,18 @@ def regression_ta_data(scrip):
         print('Main Missing or very less Data for ', scrip)
         return
         
-    hsdate, hsopen, hshigh, hslow, hslast, hsclose, hsquantity, hsturnover = historical_data(data)   
+    hsdate, hsopen, hshigh, hslow, hsclose, hsquantity = historical_data(data)   
     df = pd.DataFrame({
         'date': hsdate,
         'open': hsopen,
         'high': hshigh,
         'low': hslow,
         'close': hsclose,
-        'volume': hsquantity,
-        'turnover':hsturnover
+        'volume': hsquantity
     })
-    df = df[['date','open','high','low','close','volume','turnover']]
+    df = df[['date','open','high','low','close','volume']]
     print(scrip)
     df=df.rename(columns = {'total trade quantity':'volume'})
-    df=df.rename(columns = {'turnover (lacs)': 'turnover'})
     df['volume_pre'] = df['volume'].shift(+1)
     df['open_pre'] = df['open'].shift(+1)
     df['high_pre'] = df['high'].shift(+1)
@@ -79,6 +77,10 @@ def regression_ta_data(scrip):
     
     df['bar_high'] = np.where(df['close'] > df['open'], df['close'], df['open'])
     df['bar_low'] = np.where(df['close'] > df['open'], df['open'], df['close'])
+    df['high_tail'] = (df['high'] - df['bar_high'])
+    df['low_tail'] = (df['low'] - df['bar_low'])
+    df['high_tail_pct'] = np.where((df['high'] - df['bar_high'] == 0), 0, (((df['high'] - df['bar_high'])/df['bar_high'])*100))
+    df['low_tail_pct'] = np.where((df['low'] - df['bar_low'] == 0), 0, (((df['low'] - df['bar_low'])/df['bar_low'])*100))
     df['bar_high_pre'] = np.where(df['close_pre'] > df['open_pre'], df['close_pre'], df['open_pre'])
     df['bar_low_pre'] = np.where(df['close_pre'] > df['open_pre'], df['open_pre'], df['close_pre'])
     df['uptrend'] = np.where((df['bar_high'] >  df['bar_high_pre']) & (df['high'] > df['high_pre']), 1, 0)
@@ -104,11 +106,9 @@ def regression_ta_data(scrip):
         try:
             db.technical.delete_many({'dataset_code':scrip})
             ta_lib_data_df(scrip, df, True) 
-            regression_high = process_regression_high(scrip, df, directory, run_ml_algo)
-            regression_low = process_regression_low(scrip, df, directory, run_ml_algo)
+            regression_high = process_regression_high(scrip, df, directory, run_ml_algo, True)
+            regression_low = process_regression_low(scrip, df, directory, run_ml_algo, True)
             result_data_reg(regression_high, regression_low, scrip)
-            result_data_cla(regression_high, regression_low, scrip)
-            result_data(regression_high, regression_low, scrip)
             df = df[:-1]
         except IndexError as e:
             print(e)

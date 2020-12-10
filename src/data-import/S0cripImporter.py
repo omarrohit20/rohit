@@ -21,13 +21,6 @@ with open('nselist/ind_niftyfuturelist.csv') as csvfile:
                     "scrip": row[1],
                     "futures":futures
                     })
-
-                db.scrip.insert_one({
-                    "company": row[0],
-                    "industry": "",
-                    "scrip": row[1],
-                    "futures":futures
-                    })
             count = count + 1
         except:
             pass    
@@ -41,16 +34,18 @@ with open('nselist/ind_nifty500list.csv') as csvfile:
             if (count != 0):
                 print(row[0])
                 
-                data = db.scrip.find_one({'scrip':row[2]})
+                data = db.scrip_futures.find_one({'scrip':row[2]})
                 if(data is None):
                     futures = "No"
+                else:
+                    futures = "Yes"
 
-                    db.scrip.insert_one({
-                        "company": row[0],
-                        "industry": row[1],
-                        "scrip": row[2],
-                        "futures":futures
-                        })
+                db.scrip.insert_one({
+                    "company": row[0],
+                    "industry": row[1],
+                    "scrip": row[2],
+                    "futures":futures
+                    })
             count = count + 1
         except:
             pass    

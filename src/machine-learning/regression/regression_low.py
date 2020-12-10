@@ -49,7 +49,7 @@ adaBoost = False
 kNeighbours = True
 gradientBoosting = False
 
-def get_data_frame(df, regressor='kn', type='reg'):
+def get_data_frame(df, regressor='None', type='reg'):
     if (df is not None):
         #dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
         dfp = df[['PCT_day_change']]
@@ -241,12 +241,15 @@ def create_csv(regression_data):
         json_data = json.loads(json.dumps(regression_data))
         db.regressionlow.insert_one(json_data)    
 
-def process_regression_low(scrip, df, directory, run_ml_algo):
-    regression_data_db = db.regressionlow.find_one({'scrip':scrip})
-    if(regression_data_db is not None):
-        return
-    
-    dfp = get_data_frame(df, 'kn', 'reg')
+def process_regression_low(scrip, df, directory, run_ml_algo, TEST=False):
+    dfp = None
+    if(TEST != False):
+        dfp = get_data_frame(df)
+    else:
+        regression_data_db = db.regressionlow.find_one({'scrip':scrip})
+        if(regression_data_db is not None):
+            return
+        dfp = get_data_frame(df, 'kn', 'reg')
     
     regression_data = {}
     if (kNeighbours and run_ml_algo):
@@ -327,28 +330,49 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     volume_pre3 = df.tail(4).loc[-forecast_out:, 'volume'].values[0]
     volume_pre4 = df.tail(5).loc[-forecast_out:, 'volume'].values[0]
     volume_pre5 = df.tail(6).loc[-forecast_out:, 'volume'].values[0]
+    volume_pre10 = df.tail(11).loc[-forecast_out:, 'volume'].values[0]
     open = df.tail(1).loc[-forecast_out:, 'open'].values[0]
     open_pre1 = df.tail(2).loc[-forecast_out:, 'open'].values[0]
     open_pre2 = df.tail(3).loc[-forecast_out:, 'open'].values[0]
+    open_pre3 = df.tail(4).loc[-forecast_out:, 'open'].values[0]
+    open_pre4 = df.tail(5).loc[-forecast_out:, 'open'].values[0]
+    open_pre5 = df.tail(6).loc[-forecast_out:, 'open'].values[0]
+    open_pre10 = df.tail(11).loc[-forecast_out:, 'open'].values[0]
     high = df.tail(1).loc[-forecast_out:, 'high'].values[0]
     high_pre1 = df.tail(2).loc[-forecast_out:, 'high'].values[0]
     high_pre2 = df.tail(3).loc[-forecast_out:, 'high'].values[0]
     high_pre3 = df.tail(4).loc[-forecast_out:, 'high'].values[0]
     high_pre4 = df.tail(5).loc[-forecast_out:, 'high'].values[0]
+    high_pre5 = df.tail(6).loc[-forecast_out:, 'high'].values[0]
+    high_pre10 = df.tail(11).loc[-forecast_out:, 'high'].values[0]
     low = df.tail(1).loc[-forecast_out:, 'low'].values[0]
     low_pre1 = df.tail(2).loc[-forecast_out:, 'low'].values[0]
     low_pre2 = df.tail(3).loc[-forecast_out:, 'low'].values[0]
     low_pre3 = df.tail(4).loc[-forecast_out:, 'low'].values[0]
     low_pre4 = df.tail(5).loc[-forecast_out:, 'low'].values[0]
+    low_pre5 = df.tail(6).loc[-forecast_out:, 'low'].values[0]
+    low_pre10 = df.tail(11).loc[-forecast_out:, 'low'].values[0]
     close = df.tail(1).loc[-forecast_out:, 'close'].values[0]
     close_pre1 = df.tail(2).loc[-forecast_out:, 'close'].values[0]
     close_pre2 = df.tail(3).loc[-forecast_out:, 'close'].values[0]
+    close_pre3 = df.tail(4).loc[-forecast_out:, 'close'].values[0]
+    close_pre4 = df.tail(5).loc[-forecast_out:, 'close'].values[0]
+    close_pre5 = df.tail(6).loc[-forecast_out:, 'close'].values[0]
+    close_pre10 = df.tail(11).loc[-forecast_out:, 'close'].values[0]
     bar_high = df.tail(1).loc[-forecast_out:, 'bar_high'].values[0]
     bar_high_pre1 = df.tail(2).loc[-forecast_out:, 'bar_high'].values[0]
     bar_high_pre2 = df.tail(3).loc[-forecast_out:, 'bar_high'].values[0]
+    bar_high_pre3 = df.tail(4).loc[-forecast_out:, 'bar_high'].values[0]
+    bar_high_pre4 = df.tail(5).loc[-forecast_out:, 'bar_high'].values[0]
+    bar_high_pre5 = df.tail(6).loc[-forecast_out:, 'bar_high'].values[0]
+    bar_high_pre10 = df.tail(11).loc[-forecast_out:, 'bar_high'].values[0]
     bar_low = df.tail(1).loc[-forecast_out:, 'bar_low'].values[0]
     bar_low_pre1 = df.tail(2).loc[-forecast_out:, 'bar_low'].values[0]
     bar_low_pre2 = df.tail(3).loc[-forecast_out:, 'bar_low'].values[0]
+    bar_low_pre3 = df.tail(4).loc[-forecast_out:, 'bar_low'].values[0]
+    bar_low_pre4 = df.tail(5).loc[-forecast_out:, 'bar_low'].values[0]
+    bar_low_pre5 = df.tail(6).loc[-forecast_out:, 'bar_low'].values[0]
+    bar_low_pre10 = df.tail(11).loc[-forecast_out:, 'bar_low'].values[0]
     greentrend = df.tail(1).loc[-forecast_out:, 'greentrend'].values[0]
     redtrend = df.tail(1).loc[-forecast_out:, 'redtrend'].values[0]
     
@@ -558,14 +582,21 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     regression_data['volume_pre3'] = float(volume_pre3)
     regression_data['volume_pre4'] = float(volume_pre4)
     regression_data['volume_pre5'] = float(volume_pre5)
+    regression_data['volume_pre10'] = float(volume_pre10)
     regression_data['open'] = float(open)
     regression_data['open_pre1'] = float(open_pre1)
     regression_data['open_pre2'] = float(open_pre2)
+    regression_data['open_pre3'] = float(open_pre3)
+    regression_data['open_pre4'] = float(open_pre4)
+    regression_data['open_pre5'] = float(open_pre5)
+    regression_data['open_pre10'] = float(open_pre10)
     regression_data['high'] = float(high)
     regression_data['high_pre1'] = float(high_pre1)
     regression_data['high_pre2'] = float(high_pre2)
     regression_data['high_pre3'] = float(high_pre3)
     regression_data['high_pre4'] = float(high_pre4)
+    regression_data['high_pre5'] = float(high_pre5)
+    regression_data['high_pre10'] = float(high_pre10)
     regression_data['high_year2'] = float(high_year2) 
     regression_data['high_year'] = float(high_year) 
     regression_data['high_month6'] = float(high_month6) 
@@ -580,6 +611,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     regression_data['low_pre2'] = float(low_pre2)
     regression_data['low_pre3'] = float(low_pre3)
     regression_data['low_pre4'] = float(low_pre4)
+    regression_data['low_pre5'] = float(low_pre5)
+    regression_data['low_pre10'] = float(low_pre10)
     regression_data['low_year2'] = float(low_year2)
     regression_data['low_year'] = float(low_year)
     regression_data['low_month6'] = float(low_month6)
@@ -592,12 +625,24 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
     regression_data['close'] = float(close)
     regression_data['close_pre1'] = float(close_pre1)
     regression_data['close_pre2'] = float(close_pre2)
+    regression_data['close_pre3'] = float(close_pre3)
+    regression_data['close_pre4'] = float(close_pre4)
+    regression_data['close_pre5'] = float(close_pre5)
+    regression_data['close_pre10'] = float(close_pre10)
     regression_data['bar_high'] = float(bar_high)
     regression_data['bar_high_pre1'] = float(bar_high_pre1)
     regression_data['bar_high_pre2'] = float(bar_high_pre2)
+    regression_data['bar_high_pre3'] = float(bar_high_pre3)
+    regression_data['bar_high_pre4'] = float(bar_high_pre4)
+    regression_data['bar_high_pre5'] = float(bar_high_pre5)
+    regression_data['bar_high_pre10'] = float(bar_high_pre10)
     regression_data['bar_low'] = float(bar_low)
     regression_data['bar_low_pre1'] = float(bar_low_pre1)
     regression_data['bar_low_pre2'] = float(bar_low_pre2)
+    regression_data['bar_low_pre3'] = float(bar_low_pre3)
+    regression_data['bar_low_pre4'] = float(bar_low_pre4)
+    regression_data['bar_low_pre5'] = float(bar_low_pre5)
+    regression_data['bar_low_pre10'] = float(bar_low_pre10)
     regression_data['greentrend'] = float(greentrend)
     regression_data['redtrend'] = float(redtrend)
     regression_data['EMA6'] = technical['overlap_studies']['EMA6'][0]
@@ -672,4 +717,7 @@ def process_regression_low(scrip, df, directory, run_ml_algo):
         regression_data['lowTail_pre2'] = (((regression_data['bar_low_pre2'] - regression_data['low_pre2'])/regression_data['bar_low_pre2'])*100)
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
-    create_csv(regression_data)
+    if(TEST != False):
+        return regression_data
+    else:
+        create_csv(regression_data)
