@@ -39,6 +39,7 @@ from sklearn.svm import SVC, SVR
 
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
+dbnsehistnew = connection.nsehistnew
 
 forecast_out = 1
 split = .98
@@ -493,7 +494,11 @@ def process_regression_high(scrip, df, directory, run_ml_algo, TEST=False):
     low_week = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
     scripinfo = db.scrip.find_one({'scrip':scrip})
-    technical = db.technical.find_one({'dataset_code':scrip})
+    technical = None
+    if TEST:
+        technical = dbnsehistnew.technical.find_one({'dataset_code':scrip})
+    else:
+        technical = db.technical.find_one({'dataset_code':scrip})
     regression_data['date'] = forecast_day_date
     regression_data['scrip'] = str(scrip)
     regression_data['industry'] = scripinfo['industry']
