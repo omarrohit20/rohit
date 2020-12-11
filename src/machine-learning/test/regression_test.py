@@ -101,14 +101,15 @@ def regression_ta_data(scrip):
     df['EMA200'] = EMA(df,200)
     
     df.dropna(subset=['Act_PCT_change'], inplace = True)
-    size = int((int(np.floor(df.shape[0]))/3)*2)
+    size = int((int(np.floor(df.shape[0]))/4)*3)
     print(scrip + " " + str(size))
     for x in range(size):
         try:
             close = df.tail(1).loc[-1:, 'close'].values[0]
             if (50 < close < 10000):
+                #print(scrip + " " + str(size) + " " + str(close))
                 db.technical.delete_many({'dataset_code':scrip})
-                ta_lib_data_df(scrip, df, True) 
+                ta_lib_data_df(scrip, df, False) 
                 regression_high = process_regression_high(scrip, df, directory, run_ml_algo, True)
                 regression_low = process_regression_low(scrip, df, directory, run_ml_algo, True)
                 result_data_reg(regression_high, regression_low, scrip)

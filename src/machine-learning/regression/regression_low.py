@@ -243,7 +243,8 @@ def create_csv(regression_data):
 
 def process_regression_low(scrip, df, directory, run_ml_algo, TEST=False):
     dfp = None
-    if(TEST != False):
+    if TEST:
+        df = df.tail(2000)
         dfp = get_data_frame(df)
     else:
         regression_data_db = db.regressionlow.find_one({'scrip':scrip})
@@ -379,6 +380,18 @@ def process_regression_low(scrip, df, directory, run_ml_algo, TEST=False):
     today_date = datetime.datetime.strptime(forecast_day_date, "%Y-%m-%d").date()
     
     end_date = (today_date - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
+    start_date = (today_date - datetime.timedelta(weeks=261)).strftime('%Y-%m-%d')
+    dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
+    year5High = dftemp['high'].max()
+    year5Low = dftemp['low'].min()
+    year5BarHigh = max(dftemp['open'].max(), dftemp['close'].max())
+    year5BarLow = min(dftemp['open'].min(), dftemp['close'].min())
+    year5HighChange = (high - year5High)*100/year5High
+    year5LowChange = (low - year5Low)*100/year5Low
+    high_year5 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
+    low_year5 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
+    
+    end_date = (today_date - datetime.timedelta(weeks=1)).strftime('%Y-%m-%d')
     start_date = (today_date - datetime.timedelta(weeks=104)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     year2High = dftemp['high'].max()
@@ -498,6 +511,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo, TEST=False):
     #regression_data['mlpValue'] = mlpValue
     #regression_data['kNeighboursValue'] = kNeighboursValue
     regression_data['trend'] = technical['trend']
+    regression_data['year5HighChange'] = float(year5HighChange) 
+    regression_data['year5LowChange'] = float(year5LowChange)
     regression_data['year2HighChange'] = float(year2HighChange) 
     regression_data['year2LowChange'] = float(year2LowChange)
     regression_data['yearHighChange'] = float(yearHighChange) 
@@ -514,6 +529,10 @@ def process_regression_low(scrip, df, directory, run_ml_algo, TEST=False):
     regression_data['week2LowChange'] = float(week2LowChange)
     regression_data['weekHighChange'] = float(weekHighChange) 
     regression_data['weekLowChange'] = float(weekLowChange)
+    regression_data['year5High'] = float(year5High) 
+    regression_data['year5Low'] = float(year5Low)
+    regression_data['year5BarHigh'] = float(year5BarHigh) 
+    regression_data['year5BarLow'] = float(year5BarLow)
     regression_data['year2High'] = float(year2High) 
     regression_data['year2Low'] = float(year2Low)
     regression_data['year2BarHigh'] = float(year2BarHigh) 
@@ -549,7 +568,7 @@ def process_regression_low(scrip, df, directory, run_ml_algo, TEST=False):
     regression_data['weekHigh'] = float(weekHigh) 
     regression_data['weekLow'] = float(weekLow)
     regression_data['weekBarHigh'] = float(weekBarHigh) 
-    regression_data['weekBarLow'] = float(weekBarLow)   
+    regression_data['weekBarLow'] = float(weekBarLow)    
     regression_data['patterns'] = ''
     regression_data['PCT_change_pre1'] = float(PCT_change_pre1)
     regression_data['PCT_change_pre2'] = float(PCT_change_pre2)
@@ -597,6 +616,7 @@ def process_regression_low(scrip, df, directory, run_ml_algo, TEST=False):
     regression_data['high_pre4'] = float(high_pre4)
     regression_data['high_pre5'] = float(high_pre5)
     regression_data['high_pre10'] = float(high_pre10)
+    regression_data['high_year5'] = float(high_year5)
     regression_data['high_year2'] = float(high_year2) 
     regression_data['high_year'] = float(high_year) 
     regression_data['high_month6'] = float(high_month6) 
@@ -613,6 +633,7 @@ def process_regression_low(scrip, df, directory, run_ml_algo, TEST=False):
     regression_data['low_pre4'] = float(low_pre4)
     regression_data['low_pre5'] = float(low_pre5)
     regression_data['low_pre10'] = float(low_pre10)
+    regression_data['low_year5'] = float(low_year5)
     regression_data['low_year2'] = float(low_year2)
     regression_data['low_year'] = float(low_year)
     regression_data['low_month6'] = float(low_month6)

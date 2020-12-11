@@ -809,7 +809,7 @@ def ta_lib_data(scrip):
         print(Exception)
         pass  
 
-def ta_lib_data_df(scrip, df, db_store=False):
+def ta_lib_data_df(scrip, dfp, db_store=False):
     try:
         if db_store:
             technical_indicators = db.technical.find_one({'dataset_code':scrip})
@@ -821,6 +821,8 @@ def ta_lib_data_df(scrip, df, db_store=False):
             print('Missing or very less Data for ', scrip) 
             return
         
+        df = dfp.tail(1000)
+            
         historicalInputs = {
             'open': df['open'].values,
             'high': df['high'].values,
