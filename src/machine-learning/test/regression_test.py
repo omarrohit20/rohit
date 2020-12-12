@@ -13,7 +13,7 @@ import numpy as np
 
 from regression.regression_high import process_regression_high
 from regression.regression_low import process_regression_low
-from technical import ta_lib_data_df
+from util.technical import ta_lib_data_df
 from util.util import historical_data
 from talib.abstract import *
 from regression_result import result_data_reg

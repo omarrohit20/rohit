@@ -18,6 +18,7 @@ log = logging.getLogger(__name__)
 
 connection = MongoClient('localhost',27017)
 db = connection.Nsedata
+dbnsehistnew = connection.nsehistnew
 # db.drop_collection('technical')
 # db.drop_collection('buy.overlap')
 # db.drop_collection('sell.overlap')
@@ -1105,7 +1106,10 @@ def ta_lib_data_df(scrip, dfp, db_store=False, TEST=False):
         ws.append([scrip, technical_indicators['BuyIndicators'], technical_indicators['SellIndicators']])    
         json_data = json.loads(json.dumps(technical_indicators))
         if db_store: 
-            db.technical.insert_one(json_data) 
+            if TEST:
+                dbnsehistnew.technical.insert_one(json_data)
+            else:
+                db.technical.insert_one(json_data) 
         return technical_indicators['BuyIndicators'], technical_indicators['SellIndicators'], technical_indicators['trend'], technical_indicators['changeSMA25'], technical_indicators['changeSMA50'], technical_indicators['changeSMA100'], technical_indicators['changeSMA200'] 
             
     except Exception:
