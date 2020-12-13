@@ -19,6 +19,7 @@ db = connection.Nsedata
 
 def buy_pattern_without_mlalgo(regression_data, regressionResult):
     ws=None
+    buy_pattern_from_history(regression_data, ws)
     if(regression_data['PCT_day_change'] < 3.5
         and regression_data['year2LowChange'] > 5):
         if(regression_data['buyIndia_avg'] > 0.9 and regression_data['buyIndia_count'] > 1
@@ -53,10 +54,6 @@ def buy_pattern_from_history(regression_data, ws):
     buyIndiaAvg = 0
     regression_data['buyIndia_avg'] = 0
     regression_data['buyIndia_count'] = 0
-    regression_data['sellIndia_avg'] = 0
-    regression_data['sellIndia_count'] = 0
-    regression_data['filter_avg'] = 0
-    regression_data['filter_count'] = 0
     flag = False
     if regression_data['buyIndia'] != '' and regression_data['buyIndia'] in buyPatternsDict:
         regression_data['buyIndia_avg'] = float(buyPatternsDict[regression_data['buyIndia']]['avg'])

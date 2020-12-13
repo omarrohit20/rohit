@@ -19,6 +19,7 @@ db = connection.Nsedata
 
 def sell_pattern_without_mlalgo(regression_data, regressionResult):
     ws=None
+    sell_pattern_from_history(regression_data, ws)
     if(regression_data['PCT_day_change'] > -3.5
         and regression_data['year2HighChange'] < -5):
         if(regression_data['sellIndia_avg'] < -0.9 and regression_data['sellIndia_count'] > 1
@@ -51,12 +52,8 @@ def sell_pattern_without_mlalgo(regression_data, regressionResult):
 def sell_pattern_from_history(regression_data, ws):
     sellPatternsDict=scrip_patterns_to_dict('../../data-import/nselist/patterns-sell.csv')
     sellIndiaAvg = 0
-    regression_data['buyIndia_avg'] = 0
-    regression_data['buyIndia_count'] = 0
     regression_data['sellIndia_avg'] = 0
     regression_data['sellIndia_count'] = 0
-    regression_data['filter_avg'] = 0
-    regression_data['filter_count'] = 0
     flag = False
     if regression_data['sellIndia'] != '' and regression_data['sellIndia'] in sellPatternsDict: 
         regression_data['sellIndia_avg'] = float(sellPatternsDict[regression_data['sellIndia']]['avg'])

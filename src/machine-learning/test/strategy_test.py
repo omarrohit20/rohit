@@ -95,6 +95,11 @@ def import_data_in_db_and_save():
     for data in curs:
         if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
             flag = buy_test_345(data, data, True, None)
             if(flag):
                 del data['_id']
@@ -111,6 +116,11 @@ def import_data_in_db_and_save():
     for data in curs:
         if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
             flag = buy_test(data, data, True, None)
             if(flag):
                 del data['_id']
@@ -127,6 +137,11 @@ def import_data_in_db_and_save():
     for data in curs:
         if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
             flag = buy_test_pct_change(data, data, True, None)
             if(flag):
                 del data['_id']
@@ -143,6 +158,11 @@ def import_data_in_db_and_save():
     for data in curs:
         if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
             flag = buy_test_all(data, data, True, None)
             if(flag):
                 del data['_id']
@@ -159,6 +179,11 @@ def import_data_in_db_and_save():
     for data in curs:
         if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
             flag = buy_test_tech(data, data, True, None)
             if(flag):
                 del data['_id']
@@ -175,6 +200,11 @@ def import_data_in_db_and_save():
     for data in curs:
         if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
             flag = buy_test_tech_all(data, data, True, None)
             if(flag):
                 del data['_id']
@@ -191,6 +221,11 @@ def import_data_in_db_and_save():
     for data in curs:
         if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
             flag = buy_test_tech_all_pct_change(data, data, True, None)
             if(flag):
                 del data['_id']
@@ -208,6 +243,11 @@ def import_data_in_db_and_save():
     for data in curs:
         if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
             flag = sell_test_345(data, data, True, None)
             if(flag):
                 del data['_id']
@@ -224,6 +264,11 @@ def import_data_in_db_and_save():
     for data in curs:
         if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
             flag = sell_test(data, data, True, None)
             if(flag):
                 del data['_id']
@@ -240,6 +285,11 @@ def import_data_in_db_and_save():
     for data in curs:
         if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
             flag = sell_test_pct_change(data, data, True, None)
             if(flag):
                 del data['_id']
@@ -255,6 +305,11 @@ def import_data_in_db_and_save():
     for data in curs:
         if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
             flag = sell_test_all(data, data, True, None)
             if(flag):
                 del data['_id']
@@ -270,6 +325,11 @@ def import_data_in_db_and_save():
     for data in curs:
         if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
             flag = sell_test_tech(data, data, True, None)
             if(flag):
                 del data['_id']
@@ -286,6 +346,11 @@ def import_data_in_db_and_save():
     for data in curs:
         if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
             flag = sell_test_tech_all(data, data, True, None)
             if(flag):
                 del data['_id']
@@ -301,6 +366,11 @@ def import_data_in_db_and_save():
     for data in curs:
         if(data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
             data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
             flag = sell_test_tech_all_pct_change(data, data, True, None)
             if(flag):
                 del data['_id']
