@@ -245,10 +245,10 @@ def create_csv(regression_data):
 def process_regression_low(scrip, df, directory, run_ml_algo, TEST=False):
     dfp = None
     if TEST:
-        df = df.tail(2000)
+        df = df.tail(1500)
         dfp = get_data_frame(df)
     else:
-        df = df.tail(4500)
+        df = df.tail(4000)
         regression_data_db = db.regressionlow.find_one({'scrip':scrip})
         if(regression_data_db is not None):
             return
