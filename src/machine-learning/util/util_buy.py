@@ -54,6 +54,8 @@ def buy_pattern_from_history(regression_data, ws):
     buyIndiaAvg = 0
     regression_data['buyIndia_avg'] = 0
     regression_data['buyIndia_count'] = 0
+    regression_data['sellIndia_avg'] = 0
+    regression_data['sellIndia_count'] = 0
     flag = False
     if regression_data['buyIndia'] != '' and regression_data['buyIndia'] in buyPatternsDict:
         regression_data['buyIndia_avg'] = float(buyPatternsDict[regression_data['buyIndia']]['avg'])

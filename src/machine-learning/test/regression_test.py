@@ -105,6 +105,8 @@ def regression_ta_data(scrip):
     size = int((int(np.floor(df.shape[0]))/4)*3)
     print(scrip + " " + str(size))
     for x in range(size):
+        if dfsize < 1300:
+            break
         try:
             close = df.tail(1).loc[-1:, 'close'].values[0]
             if (40 < close < 10000):
@@ -120,8 +122,6 @@ def regression_ta_data(scrip):
             print(e)
         df = df[:-1]
         dfsize = dfsize - 1
-        if dfsize < 1300:
-            break
         
     db.regressionHistoryScrip.insert_one({
         "dataset_code": scrip,

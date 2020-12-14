@@ -52,6 +52,8 @@ def sell_pattern_without_mlalgo(regression_data, regressionResult):
 def sell_pattern_from_history(regression_data, ws):
     sellPatternsDict=scrip_patterns_to_dict('../../data-import/nselist/patterns-sell.csv')
     sellIndiaAvg = 0
+    regression_data['buyIndia_avg'] = 0
+    regression_data['buyIndia_count'] = 0
     regression_data['sellIndia_avg'] = 0
     regression_data['sellIndia_count'] = 0
     flag = False
