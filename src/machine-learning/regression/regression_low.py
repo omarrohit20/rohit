@@ -230,9 +230,10 @@ def get_data_frame(df, regressor='None', type='reg'):
 #        dfp['AD'] = AD(df)
 #        dfp['ADOSC'] = ADOSC(df)
 #        dfp['OBV'] = OBV(df)
-        dfp = dfp.ix[50:]    
+        if (regressor == 'kn'):
+            dfp = dfp.ix[50:] 
+            dfp.dropna(inplace=True)  
         forecast_col = 'Low_change1'
-        dfp.dropna(inplace=True)
         dfp['label'] = dfp[forecast_col].shift(-forecast_out) 
         return dfp
 

@@ -320,25 +320,38 @@ def buy_high_volatility(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTUP-GLOBALMARKETUP:mayReversalShortUpTrend-PCTDayChangePre1LT0-month3High')
         flag = True
     elif('shortUpTrend' in regression_data['series_trend']
-        and (regression_data['forecast_day_PCT5_change'] > 2 or regression_data['forecast_day_PCT7_change'] > 2)
+        and (regression_data['forecast_day_PCT5_change'] > 2 or regression_data['forecast_day_PCT7_change'] > 2
+            or (regression_data['forecast_day_PCT5_change'] > -1 and regression_data['forecast_day_PCT7_change'] > -1
+               and regression_data['PCT_day_change'] > 0)
+            )
         ):
         if(-2 < regression_data['PCT_day_change_pre1'] < 0
             and 0 < regression_data['PCT_day_change'] < 2
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTUP-GLOBALMARKETUP:mayContinueShortUpTrend-PCTDayChangePre1LT0')
+            if(regression_data['forecast_day_PCT_change'] > 0):
+                add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTUP-GLOBALMARKETUP:mayContinueShortUpTrend-PCTDayChangePre1LT0')
+            else:
+                add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTUP-GLOBALMARKETUP:mayUPTREND(Buy)DOWNTREND(Sell)ShortUpTrend-PCTDayChangePre1LT0')
             flag = True
         elif(-2 < regression_data['PCT_day_change_pre2'] < 0
             and 0 < regression_data['PCT_day_change_pre1'] < 2
             and -1 < regression_data['PCT_day_change'] < 2
+            and (regression_data['PCT_day_change'] < 0 or regression_data['forecast_day_PCT5_change'] < 2 or regression_data['forecast_day_PCT5_change'] < 2)
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'HEAVY:GLOBALFUTUP-GLOBALMARKETUP:mayContinueShortUpTrend-PCTDayChangePre2LT0')
+            if(regression_data['PCT_day_change'] < 0
+                and regression_data['forecast_day_PCT_change'] > 0
+                ):
+                add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'HEAVY:GLOBALFUTUP-GLOBALMARKETUP:mayContinueShortUpTrend-PCTDayChangePre2LT0')
+            else:
+                add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'HEAVY:GLOBALFUTUP-GLOBALMARKETUP:mayUPTREND(Buy)DOWNTREND(Sell)ShortUpTrend-PCTDayChangePre2LT0')
+                
             flag = True
     elif('shortUpTrend' in regression_data['series_trend']
         ):
         if(-2 < regression_data['PCT_day_change_pre2'] < 0
             and 0 < regression_data['PCT_day_change_pre1'] < 2
             and (regression_data['PCT_day_change'] < -1.5
-                or (regression_data['forecast_day_PCT5_change'] < 1 and regression_data['forecast_day_PCT7_change'] < 1)
+                or (regression_data['forecast_day_PCT5_change'] < -1 and regression_data['forecast_day_PCT7_change'] < -1)
                 )
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'HEAVY:GLOBALFUTUP-GLOBALMARKETUP:mayReversalShortUpTrend-PCTDayChangePre2LT0')
