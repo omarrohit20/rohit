@@ -113,9 +113,11 @@ def regression_ta_data(scrip):
                 #print(scrip + " " + str(size) + " " + str(close))
                 db.technical.delete_many({'dataset_code':scrip})
                 ta_lib_data_df(scrip, df, True, True) 
-                regression_high = process_regression_high(scrip, df, directory, run_ml_algo, True)
-                regression_low = process_regression_low(scrip, df, directory, run_ml_algo, True)
-                result_data_reg(regression_high, regression_low, scrip)
+                size_high, regression_high = process_regression_high(scrip, df, directory, run_ml_algo, True)
+                size_low, regression_low = process_regression_low(scrip, df, directory, run_ml_algo, True)
+                if(size_high != 0 and size_low != 0):
+                    #print(".")
+                    result_data_reg(regression_high, regression_low, scrip)
         except IndexError as e:
             print(e)
         except Exception as e:

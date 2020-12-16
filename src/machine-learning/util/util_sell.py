@@ -354,7 +354,10 @@ def sell_high_volatility(regression_data, regressionResult):
         elif(0 < regression_data['PCT_day_change_pre2'] < 2
             and -2 < regression_data['PCT_day_change_pre1'] < 0
             and -2 < regression_data['PCT_day_change'] < 1
-            and (regression_data['PCT_day_change'] > 0 or regression_data['forecast_day_PCT5_change'] > -2 or regression_data['forecast_day_PCT5_change'] > -2)
+            and (regression_data['PCT_day_change'] > 0 or ((regression_data['forecast_day_PCT5_change'] > -2 or regression_data['forecast_day_PCT5_change'] > -2)
+                                                           and (regression_data['bar_low'] > regression_data['bar_low_pre4'] or regression_data['bar_low'] > regression_data['bar_low_pre5'])
+                                                        )
+                )
             ):
             if(regression_data['PCT_day_change'] > 0
                 and regression_data['forecast_day_PCT_change'] < 0

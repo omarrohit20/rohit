@@ -231,8 +231,8 @@ def get_data_frame(df, regressor='None', type='reg'):
 #        dfp['ADOSC'] = ADOSC(df)
 #        dfp['OBV'] = OBV(df)
         #if (regressor == 'kn' and (int(np.floor(dfp.shape[0])) > 1300)):
-        dfp = dfp.ix[50:] 
-        dfp.dropna(inplace=True)  
+        #dfp = dfp.ix[50:] 
+        #dfp.dropna(inplace=True)  
         forecast_col = 'Low_change1'
         dfp['label'] = dfp[forecast_col].shift(-forecast_out) 
         return dfp
@@ -248,6 +248,8 @@ def process_regression_low(scrip, df, directory, run_ml_algo, TEST=False):
     if TEST:
         df = df.tail(1500)
         dfp = get_data_frame(df)
+        if(int(np.floor(dfp.shape[0])) == 0):
+            return 0, None
     else:
         df = df.tail(3500)
         regression_data_db = db.regressionlow.find_one({'scrip':scrip})
@@ -746,6 +748,6 @@ def process_regression_low(scrip, df, directory, run_ml_algo, TEST=False):
     
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     if(TEST != False):
-        return regression_data
+        return 1, regression_data
     else:
         create_csv(regression_data)
