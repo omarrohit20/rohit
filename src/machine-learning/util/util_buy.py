@@ -811,6 +811,16 @@ def buy_high_volatility(regression_data, regressionResult):
             and (regression_data['PCT_day_change_pre2'] > 0 or regression_data['PCT_day_change_pre3'] > 0)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'PCTDayChangePre2GT(-0.7)')
+            
+        if(regression_data['PCT_day_change'] < -2 and regression_data['PCT_day_change_pre1'] < -2 and regression_data['PCT_day_change_pre2'] < -2
+            and regression_data['monthLowChange'] < 0
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'PCTDayChangeLast3DaysGT2')
+        elif(regression_data['PCT_day_change'] > 2 and regression_data['PCT_day_change_pre1'] > 2
+            and regression_data['monthLowChange'] < 0
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'PCTDayChangeLast2DaysGT2')
+            
         if(1.5 < low_tail_pct(regression_data)):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'AvoidSellingLowTail-mayBuy')
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Z_:NearOrBelowMonthLow')
