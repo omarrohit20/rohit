@@ -958,6 +958,16 @@ def sell_high_volatility(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, 'DowntrendMarketDownCircuitMayContinue')
         flag = True
         
+    if('RISKY-DOWNTREND-BUY' in regression_data['filter2']
+       and regression_data['PCT_day_change'] > 0
+       and regression_data['PCT_day_change_pre1'] < -1.3
+       and (regression_data['PCT_day_change_pre1'] < -1.5 or regression_data['PCT_day_change_pre3'] > 0)
+       and regression_data['PCT_day_change_pre2'] < 0
+       and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])
+       and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change_pre2'])
+       ):
+       add_in_csv(regression_data, regressionResult, ws, None, None,'mayContinueSell-(RISKY-DOWNTREND-BUY)') 
+       
     if('%%' in regression_data['filter'] 
         or '$$' in regression_data['filter']
         or 'VOL:' in regression_data['filter']):
