@@ -429,7 +429,7 @@ def export_tech_patterns_from_db():
     tech_sell_curs_to_csv(curser, '../../data-import/nselist/patterns-sell.csv')
     
 if __name__ == "__main__":  
-    db_cleanup()  
+    db_cleanup() 
+    export_tech_patterns_from_db() 
     import_data_in_db_and_save()
-    #export_tech_patterns_from_db()
     db_cleanup()
