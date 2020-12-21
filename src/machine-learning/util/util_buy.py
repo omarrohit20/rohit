@@ -440,6 +440,7 @@ def buy_high_volatility(regression_data, regressionResult):
                 and low_tail_pct(regression_data) > abs(regression_data['PCT_day_change'])  
                 and regression_data['bar_high'] < regression_data['bar_high_pre1']
                 and regression_data['bar_low'] > regression_data['bar_low_pre1']
+                and regression_data['forecast_day_PCT_change'] < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change']
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'mayContinueBuy-doji-RISKY-UPTREND-SELL')
         elif(0.6 <= low_tail_pct(regression_data) <= 1.8
@@ -948,8 +949,18 @@ def buy_high_volatility(regression_data, regressionResult):
        and regression_data['PCT_day_change_pre2'] > 0
        and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])
        and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change_pre2'])
+       and regression_data['forecast_day_PCT_change'] < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change']
        ):
        add_in_csv(regression_data, regressionResult, ws, None, None,'mayContinueBuy-(RISKY-UPTREND-SELL)') 
+    elif('RISKY-UPTREND-SELL' in regression_data['filter1']
+       and regression_data['forecast_day_PCT_change'] < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT4_change']
+       and regression_data['PCT_day_change_pre1'] > 0 
+       and regression_data['PCT_day_change_pre2'] > 0
+       and regression_data['PCT_day_change_pre3'] > 0
+       and regression_data['bar_low'] > regression_data['bar_low_pre2']
+       and regression_data['monthHighChange'] < -5
+       ):
+       add_in_csv(regression_data, regressionResult, ws, None, None,'mayContinueBuy-last3DayUp-(RISKY-UPTREND-SELL)') 
     
     if('%%' in regression_data['filter'] 
         or '$$' in regression_data['filter']

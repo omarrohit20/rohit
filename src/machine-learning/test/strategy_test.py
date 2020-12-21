@@ -430,6 +430,6 @@ def export_tech_patterns_from_db():
     
 if __name__ == "__main__":  
     db_cleanup() 
-    export_tech_patterns_from_db() 
+    #export_tech_patterns_from_db() 
     import_data_in_db_and_save()
     db_cleanup()
