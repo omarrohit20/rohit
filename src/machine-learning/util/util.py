@@ -2454,9 +2454,9 @@ def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or
             and abs(regression_data[filter_avg]) > 5
             ):
             if(regression_data[filter_avg] >= 0):
-                add_in_csv(regression_data, regressionResult, ws, None, None, None, 'STRONG-SUPER-Buy')
+                add_in_csv(regression_data, regressionResult, ws, None, None, None, 'STRONG-Buy')
             elif(regression_data[filter_avg] < 0):
-                add_in_csv(regression_data, regressionResult, ws, None, None, None, 'STRONG-SUPER-Sell')
+                add_in_csv(regression_data, regressionResult, ws, None, None, None, 'STRONG-Sell')
             flag = True
             
         if(regression_data[filter_count] >= 2
