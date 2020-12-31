@@ -328,81 +328,81 @@ def result_data_reg(scrip):
     regression_data = regression_high
     if(regression_data is not None):
         buyIndiaAvg, result = buy_pattern_from_history(regression_data, None)
-        regressionResult = get_regressionResult(regression_data, scrip, db, 
+        regressionResultHigh = get_regressionResult(regression_data, scrip, db, 
                                             regression_low['mlpValue_reg'], 
                                             regression_low['kNeighboursValue_reg'],
                                             regression_low['mlpValue_cla'], 
                                             regression_low['kNeighboursValue_cla'],
                                             )
-        buy_pattern_without_mlalgo(regression_data, regressionResult)
-        buy_other_indicator(regression_data, regressionResult, True, None)
-        buy_filter_all_accuracy(regression_data, regressionResult)
-        buy_indicator_after_filter_accuracy(regression_data, regressionResult, True, None) 
+        buy_pattern_without_mlalgo(regression_data, regressionResultHigh)
+        buy_other_indicator(regression_data, regressionResultHigh, True, None)
+        buy_filter_all_accuracy(regression_data, regressionResultHigh)
+        buy_indicator_after_filter_accuracy(regression_data, regressionResultHigh, True, None) 
         
-        if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, 'High', None)):
-            all_withoutml(regression_data, regressionResult, None)
+        if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResultHigh, 'High', None)):
+            all_withoutml(regression_data, regressionResultHigh, None)
         if (is_algo_buy(regression_data)):
-            buy_all_rule(regression_data, regressionResult, True, None)
-            all_withoutml(regression_data, regressionResult, ws_highBuyReg)
+            buy_all_rule(regression_data, regressionResultHigh, True, None)
+            all_withoutml(regression_data, regressionResultHigh, ws_highBuyReg)
         if (is_algo_buy(regression_high) and is_any_reg_algo_gt1_not_other(regression_data)):
-            buy_all_common_High_Low(regression_data, regressionResult, True, None)
-            all_withoutml(regression_data, regressionResult, ws_highBuyStrong) 
+            buy_all_common_High_Low(regression_data, regressionResultHigh, True, None)
+            all_withoutml(regression_data, regressionResultHigh, ws_highBuyStrong) 
         if (is_algo_buy(regression_high, True) and is_algo_buy(regression_low, True) and is_any_reg_algo_gt1(regression_data)):
-            buy_all_common_High_Low(regression_data, regressionResult, True, None)
-            all_withoutml(regression_data, regressionResult, ws_highBuyBothHL)
+            buy_all_common_High_Low(regression_data, regressionResultHigh, True, None)
+            all_withoutml(regression_data, regressionResultHigh, ws_highBuyBothHL)
         if (is_algo_buy(regression_high, True) and is_algo_buy(regression_low, True) 
             and is_any_reg_algo_gt1(regression_data)
             and is_any_reg_algo_gt1_not_other(regression_data)
             ):
-            buy_all_common_High_Low(regression_data, regressionResult, True, None)
-            all_withoutml(regression_data, regressionResult, ws_highBuyStrongBoth)
+            buy_all_common_High_Low(regression_data, regressionResultHigh, True, None)
+            all_withoutml(regression_data, regressionResultHigh, ws_highBuyStrongBoth)
          
-        all_withoutml(regression_data, regressionResult, ws_high)
+        all_withoutml(regression_data, regressionResultHigh, ws_high)
           
                 
     regression_data = regression_low
     if(regression_data is not None):
         sellIndiaAvg, result = sell_pattern_from_history(regression_data, None)
-        regressionResult = get_regressionResult(regression_data, scrip, db, 
+        regressionResultLow = get_regressionResult(regression_data, scrip, db, 
                                             regression_high['mlpValue_reg'], 
                                             regression_high['kNeighboursValue_reg'],
                                             regression_high['mlpValue_cla'], 
                                             regression_high['kNeighboursValue_cla'],
                                             False
                                             )
-        sell_pattern_without_mlalgo(regression_data, regressionResult)
-        sell_other_indicator(regression_data, regressionResult, True, None)
-        sell_filter_all_accuracy(regression_data, regressionResult)
-        sell_indicator_after_filter_accuracy(regression_data, regressionResult, True, None)
+        sell_pattern_without_mlalgo(regression_data, regressionResultLow)
+        sell_other_indicator(regression_data, regressionResultLow, True, None)
+        sell_filter_all_accuracy(regression_data, regressionResultLow)
+        sell_indicator_after_filter_accuracy(regression_data, regressionResultLow, True, None)
         
-        if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, 'Low', None)):
-            all_withoutml(regression_data, regressionResult, None)
+        if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResultLow, 'Low', None)):
+            all_withoutml(regression_data, regressionResultLow, None)
         if (is_algo_sell(regression_data)):
-            sell_all_rule(regression_data, regressionResult, True, None)
-            all_withoutml(regression_data, regressionResult, ws_lowSellReg)                               
+            sell_all_rule(regression_data, regressionResultLow, True, None)
+            all_withoutml(regression_data, regressionResultLow, ws_lowSellReg)                               
         if (is_algo_sell(regression_high) and is_any_reg_algo_lt_minus1_not_other(regression_data)):
-            sell_all_common_High_Low(regression_data, regressionResult, True, None)
-            all_withoutml(regression_data, regressionResult, ws_lowSellStrong)
+            sell_all_common_High_Low(regression_data, regressionResultLow, True, None)
+            all_withoutml(regression_data, regressionResultLow, ws_lowSellStrong)
         if (is_algo_sell(regression_high, True) and is_algo_sell(regression_low, True) and is_any_reg_algo_lt_minus1(regression_data)):
-            sell_all_common_High_Low(regression_data, regressionResult, True, None)
-            all_withoutml(regression_data, regressionResult, ws_lowSellBothHL)
+            sell_all_common_High_Low(regression_data, regressionResultLow, True, None)
+            all_withoutml(regression_data, regressionResultLow, ws_lowSellBothHL)
         if (is_algo_sell(regression_high, True) and is_algo_sell(regression_low, True) 
             and is_any_reg_algo_lt_minus1(regression_data)
             and is_any_reg_algo_lt_minus1_not_other(regression_data)
             ):
-            sell_all_common_High_Low(regression_data, regressionResult, True, None)
-            all_withoutml(regression_data, regressionResult, ws_lowSellStrongBoth)
+            sell_all_common_High_Low(regression_data, regressionResultLow, True, None)
+            all_withoutml(regression_data, regressionResultLow, ws_lowSellStrongBoth)
         
-        all_withoutml(regression_data, regressionResult, ws_low)
+        all_withoutml(regression_data, regressionResultLow, ws_low)
         
         regression_data = regression_high
         if (is_algo_sell(regression_high) != True and is_algo_sell(regression_low) != True):
-            buy_indicator_after_filter_accuracy(regression_data, regressionResult, True, None)
-            all_withoutml(regression_data, regressionResult, ws_highBuy)
+            buy_indicator_after_filter_accuracy(regression_data, regressionResultHigh, True, None)
+            all_withoutml(regression_data, regressionResultHigh, ws_highBuy)
         regression_data = regression_low
         if (is_algo_buy(regression_high) != True and is_algo_buy(regression_low) != True):
-            sell_indicator_after_filter_accuracy(regression_data, regressionResult, True, None)
-            all_withoutml(regression_data, regressionResult, ws_lowSell)
+            sell_indicator_after_filter_accuracy(regression_data, regressionResultLow, True, None)
+            all_withoutml(regression_data, regressionResultLow, ws_lowSell)
             
         
         regression_high_copy = copy.deepcopy(regression_high)
@@ -412,24 +412,24 @@ def result_data_reg(scrip):
         regression_low_copy1 = copy.deepcopy(regression_low)
         regression_low_copy2 = copy.deepcopy(regression_low)
         
-        if(buy_high_volatility(regression_high_copy2, regressionResult)):
-            all_withoutml(regression_high_copy2, regressionResult, ws_highAnalysis)
-        if(sell_high_volatility(regression_low_copy2, regressionResult)):
-            all_withoutml(regression_low_copy2, regressionResult, ws_lowAnalysis)
+        if(buy_high_volatility(regression_high_copy2, regressionResultHigh)):
+            all_withoutml(regression_high_copy2, regressionResultHigh, ws_highAnalysis)
+        if(sell_high_volatility(regression_low_copy2, regressionResultLow)):
+            all_withoutml(regression_low_copy2, regressionResultLow, ws_lowAnalysis)
         
         regression_high_copy['filter1']=""
-        if(is_filter_all_accuracy(regression_high_copy, regression_high, regression_low, regressionResult, 'High', None)):
-            all_withoutml(regression_high_copy, regressionResult, ws_highBuyStrongFilterAcc)
+        if(is_filter_all_accuracy(regression_high_copy, regression_high, regression_low, regressionResultHigh, 'High', None)):
+            all_withoutml(regression_high_copy, regressionResultHigh, ws_highBuyStrongFilterAcc)
         regression_low_copy['filter1']=""
-        if(is_filter_all_accuracy(regression_low_copy, regression_high, regression_low, regressionResult, 'Low', None)):
-            all_withoutml(regression_low_copy, regressionResult, ws_lowSellStrongFilterAcc)
+        if(is_filter_all_accuracy(regression_low_copy, regression_high, regression_low, regressionResultLow, 'Low', None)):
+            all_withoutml(regression_low_copy, regressionResultLow, ws_lowSellStrongFilterAcc)
         
         
-        if(is_filter_all_accuracy(regression_high_copy1, regression_high, regression_low, regressionResult, "None", None)
-            and is_filter_all_accuracy(regression_low_copy1, regression_high, regression_low, regressionResult, "None", None)
+        if(is_filter_all_accuracy(regression_high_copy1, regression_high, regression_low, regressionResultHigh, "None", None)
+            and is_filter_all_accuracy(regression_low_copy1, regression_high, regression_low, regressionResultLow, "None", None)
             ):
-            all_withoutml(regression_high_copy1, regressionResult, ws_allFilterAcc) 
-            all_withoutml(regression_low_copy1, regressionResult, ws_allFilterAcc)
+            all_withoutml(regression_high_copy1, regressionResultHigh, ws_allFilterAcc) 
+            all_withoutml(regression_low_copy1, regressionResultLow, ws_allFilterAcc)
         
         
             

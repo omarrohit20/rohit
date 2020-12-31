@@ -310,6 +310,7 @@ def sell_high_volatility(regression_data, regressionResult):
             and regression_data['PCT_day_change_pre1'] > 0.75 
             and regression_data['PCT_day_change'] > 0
             and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])
+            and regression_data['high'] < regression_data['high_pre1']
             and 'DOJI' in regression_data['filter5']
             and regression_data['forecast_day_PCT5_change'] < 0
             and regression_data['forecast_day_PCT7_change'] < 0
@@ -663,7 +664,7 @@ def sell_high_volatility(regression_data, regressionResult):
              and (regression_data['high'] > regression_data['high_pre3']
                   or regression_data['bar_high'] > regression_data['bar_high_pre2'])
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'mayMorningBuy')
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'mayMorning(UPTREND-UPMARKET)Buy(DOWNTRENDTREND-DOWNMARKET)Sell')
         flag = True
     elif(regression_data['monthLowChange'] < 4 and regression_data['week2LowChange'] < 4 and regression_data['weekLowChange'] < 4
         and abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])
@@ -699,7 +700,7 @@ def sell_high_volatility(regression_data, regressionResult):
              and (regression_data['high'] > regression_data['high_pre3']
                   or regression_data['bar_high'] > regression_data['bar_high_pre2'])
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'mayMorningBuy')
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'mayMorning(UPTREND-UPMARKET)Buy(DOWNTRENDTREND-DOWNMARKET)Sell')
         flag = True
     
     if(-7 < regression_data['PCT_day_change_pre1'] < -3.5
