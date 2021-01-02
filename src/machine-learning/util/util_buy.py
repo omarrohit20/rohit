@@ -304,6 +304,17 @@ def buy_high_volatility(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'UPTREND:mayContinueUpTrend-DOJI')
         flag = True
     elif(regression_data['week2HighChange'] > 0
+        and 4 < regression_data['PCT_day_change'] < 8
+        and -1 < regression_data['PCT_day_change_pre1'] < 0
+        and regression_data['PCT_day_change_pre2'] > 0 
+        and (regression_data['PCT_day_change_pre3'] > 0 or regression_data['PCT_day_change_pre4'] > 0)
+        and regression_data['forecast_day_PCT10_change'] > 10
+        ):
+        if(regression_data['bar_high'] > regression_data['bar_high_pre1']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTUP-GLOBALMARKETUP:mayContinueShortUpTrend-PCTDayChangePre1LT0-todayGT4')
+            flag = True
+    elif(regression_data['week2HighChange'] > 0
         and regression_data['PCT_day_change_pre1'] < 0
         and (0 < regression_data['PCT_day_change'] < 1
             #or (0 < regression_data['PCT_day_change'] < 1.5 and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change']))
