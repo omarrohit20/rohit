@@ -436,7 +436,22 @@ def buy_high_volatility(regression_data, regressionResult):
             and (low_tail_pct(regression_data) < 1 or (high_tail_pct(regression_data) - low_tail_pct(regression_data)) > 0.5)
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None,'shortUpTrendSellReversal-MonthHigh')
-        flag = True  
+        flag = True
+    elif(0 < regression_data['PCT_day_change'] < 1.3 and 0 < regression_data['PCT_change'] < 1.3
+        and regression_data['PCT_day_change_pre1'] < 0
+        and regression_data['PCT_day_change_pre2'] < 0
+        and (regression_data['PCT_day_change_pre3'] > 2 
+             or regression_data['PCT_day_change_pre4'] > 2
+             or regression_data['PCT_day_change_pre5'] > 2 
+             or regression_data['PCT_day_change_pre6'] > 2
+             )
+        and (regression_data['forecast_day_PCT3_change'] < 0 or regression_data['forecast_day_PCT4_change'] < 0)
+        and regression_data['forecast_day_PCT5_change'] > 0
+        and (regression_data['forecast_day_PCT7_change'] < 0 or regression_data['forecast_day_PCT10_change'] < 0)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'shortUpTrend')
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'shortUpTrendBuyContinue-Doji-Last2DayLT0') 
+        flag = True 
                     
     if(regression_data['PCT_day_change'] < 0
         and regression_data['PCT_day_change_pre1'] > 0
