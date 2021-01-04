@@ -435,8 +435,8 @@ def sell_high_volatility(regression_data, regressionResult):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None,'shortDownTrendBuyReversal-MonthLow-Doji-Last2DayLTToday')
         elif(-1.3 < regression_data['PCT_day_change'] < 0 and -2 < regression_data['PCT_change'] < 0
-            and -1.3 > regression_data['PCT_day_change_pre1'] < regression_data['PCT_day_change']
-            and -1.3 > regression_data['PCT_day_change_pre2'] < regression_data['PCT_day_change']
+            and -2 > regression_data['PCT_day_change_pre1'] < regression_data['PCT_day_change']
+            and -1.5 > regression_data['PCT_day_change_pre2'] < regression_data['PCT_day_change']
             and regression_data['forecast_day_PCT_change'] < 0
             and regression_data['month3LowChange'] > 5
             and regression_data['monthHighChange'] < -5
@@ -444,6 +444,17 @@ def sell_high_volatility(regression_data, regressionResult):
             and abs(regression_data['monthLowChange']) < abs(regression_data['monthHighChange'])
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None,'shortDownTrendSellContinue-Doji-Last2DayLTToday')
+        elif(-1.3 < regression_data['PCT_day_change'] < 0 and -2 < regression_data['PCT_change'] < 0
+            and -2 > regression_data['PCT_day_change_pre1'] < regression_data['PCT_day_change']
+            and -2 > regression_data['PCT_day_change_pre2'] < regression_data['PCT_day_change']
+            and regression_data['PCT_day_change_pre3'] > -1
+            and regression_data['forecast_day_PCT_change'] < 0
+            #and regression_data['month3LowChange'] > 5
+            and regression_data['monthHighChange'] < -5
+            and abs(regression_data['monthLowChange']) > 1.5
+            and abs(regression_data['monthLowChange']) < abs(regression_data['monthHighChange'])
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None,'HEAVY:GLOBALFUTDOWN-GLOBALMARKETDOWN:shortDownTrendSellContinue-Doji-Last2DayLTToday')
         
         if(regression_data['PCT_day_change'] < 0 and regression_data['PCT_change'] < 0
             and regression_data['forecast_day_PCT_change'] < 0
@@ -559,6 +570,7 @@ def sell_high_volatility(regression_data, regressionResult):
              or (regression_data['PCT_day_change_pre1'] < -3 and  -1.5 < regression_data['PCT_day_change'] < 0)
             )
         and regression_data['PCT_day_change_pre1'] < regression_data['PCT_day_change'] - 0.5
+        and regression_data['PCT_day_change_pre2'] < 0 
         and low_tail_pct(regression_data) > 0.9
         ):   
         if('shortDownTrend' in regression_data['series_trend']):

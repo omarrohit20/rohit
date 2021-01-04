@@ -417,7 +417,7 @@ def buy_high_volatility(regression_data, regressionResult):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'shortUpTrendSellReversal-MonthHigh-Doji-Last2DayGTToday')
         elif(0 < regression_data['PCT_day_change'] < 1.3 and 0 < regression_data['PCT_change'] < 2
-            and 1.5 < regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']
+            and 2 < regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']
             and 1.5 < regression_data['PCT_day_change_pre2'] > regression_data['PCT_day_change']
             and regression_data['forecast_day_PCT_change'] > 0
             and regression_data['month3HighChange'] < -5
@@ -426,6 +426,17 @@ def buy_high_volatility(regression_data, regressionResult):
             and abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'shortUpTrendBuyContinue-Doji-Last2DayGTToday')
+        elif(0 < regression_data['PCT_day_change'] < 1.3 and 0 < regression_data['PCT_change'] < 2
+            and 2 < regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']
+            and 2 < regression_data['PCT_day_change_pre2'] > regression_data['PCT_day_change']
+            and regression_data['PCT_day_change_pre3'] < 1
+            and regression_data['forecast_day_PCT_change'] > 0
+            #and regression_data['month3HighChange'] < -5
+            and regression_data['monthLowChange'] > 5
+            and abs(regression_data['monthHighChange']) > 1.5
+            and abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'HEAVY:GLOBALFUTUP-GLOBALMARKETUP:shortUpTrendBuyContinue-Doji-Last2DayGTToday')
             
         if(regression_data['PCT_day_change'] > 0 and regression_data['PCT_change'] > 0
             and regression_data['forecast_day_PCT_change'] > 0
@@ -543,6 +554,7 @@ def buy_high_volatility(regression_data, regressionResult):
              or (regression_data['PCT_day_change_pre1'] > 3 and 0 < regression_data['PCT_day_change'] < 1.5)
             )
         and regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change'] + 0.5
+        and regression_data['PCT_day_change_pre2'] > 0 
         and high_tail_pct(regression_data) > 0.9
         ):
         if('shortUpTrend' in regression_data['series_trend']):
