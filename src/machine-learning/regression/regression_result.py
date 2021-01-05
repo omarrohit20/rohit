@@ -396,11 +396,23 @@ def result_data_reg(scrip):
         all_withoutml(regression_data, regressionResultLow, ws_low)
         
         regression_data = regression_high
-        if (is_algo_sell(regression_high) != True and is_algo_sell(regression_low) != True):
+        reg_data_filter = regression_data['filter']
+        list = regression_data['filter'].partition(']:')
+        if(list[1] == ']:'):
+            reg_data_filter = list[2]
+        if ((is_algo_buy(regression_high) == True and 'Buy-Any' in regression_data['filter2'] and ('buy' in reg_data_filter or 'Buy' in reg_data_filter))
+            or (is_algo_sell(regression_high) == True and 'Sell-Any' in regression_data['filter2'] and ('sell' in reg_data_filter or 'Sell' in reg_data_filter))
+            ):
             buy_indicator_after_filter_accuracy(regression_data, regressionResultHigh, True, None)
             all_withoutml(regression_data, regressionResultHigh, ws_highBuy)
         regression_data = regression_low
-        if (is_algo_buy(regression_high) != True and is_algo_buy(regression_low) != True):
+        reg_data_filter = regression_data['filter']
+        list = regression_data['filter'].partition(']:')
+        if(list[1] == ']:'):
+            reg_data_filter = list[2]
+        if ((is_algo_buy(regression_low) == True and 'Buy-Any' in regression_data['filter2'] and  ('buy' in reg_data_filter or 'Buy' in reg_data_filter))
+            or (is_algo_sell(regression_low) == True and 'Sell-Any' in regression_data['filter2'] and  ('sell' in reg_data_filter or 'Sell' in reg_data_filter))
+            ):
             sell_indicator_after_filter_accuracy(regression_data, regressionResultLow, True, None)
             all_withoutml(regression_data, regressionResultLow, ws_lowSell)
             
