@@ -302,7 +302,8 @@ def sell_high_volatility(regression_data, regressionResult):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None,'mayContinueDownTrend-monthLowNotReached')
         flag = True
-    elif(('downTrend' in regression_data['series_trend'] 
+        
+    if(('downTrend' in regression_data['series_trend'] 
             or 'DownTrend' in regression_data['series_trend'] 
             or 'trendDown' in regression_data['series_trend']
             or 'SMA9LT' in regression_data['series_trend']
@@ -321,7 +322,8 @@ def sell_high_volatility(regression_data, regressionResult):
         #print(regression_data['scrip'])
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'DOWNTREND:mayContinueDownTrend-DOJI')
         flag = True
-    elif(regression_data['week2LowChange'] < 0
+        
+    if(regression_data['week2LowChange'] < 0
         and -8 < regression_data['PCT_day_change'] < -4
         and 0 < regression_data['PCT_day_change_pre1'] < 1
         and regression_data['PCT_day_change_pre2'] < 0 
