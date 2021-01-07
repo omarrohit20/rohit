@@ -303,25 +303,61 @@ def sell_high_volatility(regression_data, regressionResult):
             add_in_csv(regression_data, regressionResult, ws, None, None,'mayContinueDownTrend-monthLowNotReached')
         flag = True
         
-    if(('downTrend' in regression_data['series_trend'] 
-            or 'DownTrend' in regression_data['series_trend'] 
-            or 'trendDown' in regression_data['series_trend']
-            or 'SMA9LT' in regression_data['series_trend']
-            )
-            and regression_data['PCT_day_change_pre1'] > 0.75 
+    if('downTrend' in regression_data['series_trend'] 
+        or 'DownTrend' in regression_data['series_trend'] 
+        or 'trendDown' in regression_data['series_trend']
+        or 'SMA9LT' in regression_data['series_trend']
+        ):
+        if(regression_data['PCT_day_change_pre1'] > 0.75 
             and regression_data['PCT_day_change'] > 0
             and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])
             and regression_data['high'] < regression_data['high_pre1']
             and 'DOJI' in regression_data['filter5']
-            and regression_data['forecast_day_PCT5_change'] < 0
-            and regression_data['forecast_day_PCT7_change'] < 0
-            and regression_data['forecast_day_PCT10_change'] < 0
+            and regression_data['forecast_day_PCT5_change'] < -3
+            and regression_data['forecast_day_PCT7_change'] < -3
+            and regression_data['forecast_day_PCT10_change'] < -3
             and high_tail_pct(regression_data) < 1.5
             and low_tail_pct(regression_data) < 1.5
-        ):
-        #print(regression_data['scrip'])
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'DOWNTREND:mayContinueDownTrend-DOJI')
-        flag = True
+            ):
+            #print(regression_data['scrip'])
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'DOWNTREND:mayContinueDownTrend-DOJI')
+            flag = True
+        elif(regression_data['PCT_day_change_pre2'] < 0
+            and regression_data['PCT_day_change_pre1'] > 0 
+            and regression_data['PCT_day_change'] > 0
+            #and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])
+            and regression_data['bar_high_pre1'] < regression_data['bar_high']
+            and regression_data['bar_high_pre1'] < regression_data['bar_high_pre2']
+            and regression_data['high'] < regression_data['high_pre2']
+            and 'DOJI' in regression_data['filter5']
+            and regression_data['forecast_day_PCT5_change'] < -3
+            and regression_data['forecast_day_PCT7_change'] < -3
+            and regression_data['forecast_day_PCT10_change'] < -3
+            and high_tail_pct(regression_data) < 2.5
+            and low_tail_pct(regression_data) < 2.5
+            ):
+            #print(regression_data['scrip'])
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'DOWNTREND:mayContinueDownTrend-DOJI-Risky')
+            flag = True
+        elif(regression_data['PCT_day_change_pre1'] > 0.5 
+            and regression_data['PCT_day_change'] > 0.5
+            and abs(regression_data['PCT_day_change_pre1']) < abs(regression_data['PCT_day_change'])
+            and regression_data['bar_high_pre1'] < regression_data['bar_high']
+            and regression_data['high'] < regression_data['high_pre3']
+            and regression_data['forecast_day_PCT5_change'] < -3
+            and regression_data['forecast_day_PCT7_change'] < -3
+            and regression_data['forecast_day_PCT10_change'] < -5
+            and (regression_data['forecast_day_PCT10_change'] < regression_data['forecast_day_PCT7_change'] < regression_data['forecast_day_PCT5_change']
+                or (regression_data['forecast_day_PCT4_change'] < regression_data['forecast_day_PCT3_change'] - 2
+                    and regression_data['forecast_day_PCT3_change'] < regression_data['forecast_day_PCT2_change'] -2
+                    )
+                )
+            and high_tail_pct(regression_data) < 2.5
+            and low_tail_pct(regression_data) < 2.5
+            ):
+            #print(regression_data['scrip'])
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'UPTREND:mayContinueDownTrend-Last2DayUp')
+            flag = True
         
     if(regression_data['week2LowChange'] < 0
         and -8 < regression_data['PCT_day_change'] < -4
