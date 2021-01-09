@@ -27,6 +27,7 @@ class ExpiryDateError(Exception):
         
 def build_dt_dict():
     lines = urls.derivative_expiry_dates_url().text
+    lines = lines + 'indxExpryDt[] = "25-02-2021'
     
     for line in lines.split('\n'):
         s =  re_date.search(line)
