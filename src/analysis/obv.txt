@@ -3,13 +3,7 @@ More than 40 points up(down) on following day. Market will not go down, If day e
 	take opposite call if day earlier also up(down) or up-trend earlier
 
 
-PCT_Day_change More than 10% Up, 
-PCT_Day_change_pre1 < PCT_Day_change and high_tail < 1 Upper-circuit up or continue
-high_tail > 2 Upper-circuit break profit booking - Risky in uptrend
 
-PCT_Day_change less than -10% Down, PCT_Day_change_pre1 > PCT_Day_change and low_tail < 1
-Down-circuit down or continue
-low_tail > 2 Down-circuit break - Risky in downtrend
 
 
 Uptrend-Longterm
@@ -18,11 +12,15 @@ Buy
 ###
 1) X_:MonthHighUptrend2Days 0r 3Days not year2HighChangeGT-5
    2 < PCT_Day_change < 5
+2) midcap bar(LT < 0.7) avoid sell
+2) midcap bar(GT > 0.7) sell may work
    
 Sell
 ###
 1) X_:MonthHighUptrend2Days 0r 3Days or 4Days and year2HighChangeGT-5
    1.5 < PCT_Day_change < 5 and 1.5 < PCT_Day_change_pre1 < 5
+2) midcap bar(GT > -0.7) avoid buy
+2) midcap bar(LT < -0.7) buy may work
 
 
 Downtrend-Longterm
@@ -75,7 +73,7 @@ If last day down,
 
 
 
-In all OI calls check for last 2PM to 3PM trend for confirmation
+
 
 
 	

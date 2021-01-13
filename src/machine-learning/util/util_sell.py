@@ -905,6 +905,7 @@ def sell_high_volatility(regression_data, regressionResult):
         elif(('PCTDayChangeLast2DaysGT2' in regression_data['filter2']
                 or 'PCTDayChangeLast3DaysGT2' in regression_data['filter2']
                 )
+            and regression_data['PCT_day_change'] > 3 and regression_data['PCT_change'] > 3
             and ('Sell-Any' in regression_data['filter2']
                  or 'Buy-Any' not in regression_data['filter2']
                 )
@@ -938,6 +939,9 @@ def sell_high_volatility(regression_data, regressionResult):
                  or 'Buy-Any' in regression_data['filter2']
                 )
             and ((regression_data['forecast_day_VOL_change'] > 0 and regression_data['oi'] > 10 and regression_data['contract'] > 10) or regression_data['forecast_day_VOL_change'] > 150)    
+            and 'DownTrend' not in regression_data['series_trend']
+            and 'downTrend' not in regression_data['series_trend']
+            and 'trendDown' not in regression_data['series_trend']
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'mayBuyNearOrUpMonthHigh')
         elif('PCTDayChangeLast2DaysGT2' in regression_data['filter2']
@@ -946,6 +950,9 @@ def sell_high_volatility(regression_data, regressionResult):
                  or 'Buy-Any' in regression_data['filter2']
                 )
             and ((regression_data['forecast_day_VOL_change'] > 50 and regression_data['oi'] > 10 and regression_data['contract'] > 10) or regression_data['forecast_day_VOL_change'] > 150)    
+            and 'DownTrend' not in regression_data['series_trend']
+            and 'downTrend' not in regression_data['series_trend']
+            and 'trendDown' not in regression_data['series_trend']
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'mayBuyNearOrUpMonthHigh')
         elif(('PCTDayChangePre1LT0.7' in regression_data['filter2']
@@ -959,6 +966,9 @@ def sell_high_volatility(regression_data, regressionResult):
                  or (regression_data['forecast_day_VOL_change'] > 150 and regression_data['oi'] >= 0 and regression_data['contract'] >= 0)
                  or (regression_data['forecast_day_VOL_change'] > 20 and regression_data['oi_next'] > 0 and regression_data['contract_next'] >= 50)
                  )  
+            and 'DownTrend' not in regression_data['series_trend']
+            and 'downTrend' not in regression_data['series_trend']
+            and 'trendDown' not in regression_data['series_trend']
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'mayBuyNearOrUpMonthHigh')
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Z_:NearOrUpMonthHigh')
