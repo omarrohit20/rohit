@@ -197,13 +197,11 @@ def buy_high_volatility_boundary(regression_data, regressionResult):
         and regression_data['month3HighChange'] < -10
         ):
         if(regression_data['PCT_day_change_pre1'] > -0.7
-            and (regression_data['PCT_day_change_pre1'] > 0 or regression_data['PCT_day_change_pre2'] > 0)
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'PCTDayChangePre1GT(-0.7)')
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'PCTDayChangePre1GT0')
         elif(regression_data['PCT_day_change_pre2'] > -0.7
-            and (regression_data['PCT_day_change_pre2'] > 0 or regression_data['PCT_day_change_pre3'] > 0)
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'PCTDayChangePre2GT(-0.7)')
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'PCTDayChangePre2GT0')
             
         if(regression_data['PCT_day_change'] < -2 and regression_data['PCT_day_change_pre1'] < -2 and regression_data['PCT_day_change_pre2'] < -2
             and regression_data['monthLowChange'] < 0
