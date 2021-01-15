@@ -1096,8 +1096,22 @@ def sell_high_volatility(regression_data, regressionResult):
        and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])
        and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change_pre2'])
        and regression_data['forecast_day_PCT_change'] > regression_data['forecast_day_PCT2_change'] > regression_data['forecast_day_PCT3_change']
+       and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])*2
        ):
        add_in_csv(regression_data, regressionResult, ws, None, None,'mayContinueSell-(RISKY-DOWNTREND-BUY)') 
+    elif('RISKY-DOWNTREND-BUY' in regression_data['filter2']
+       and regression_data['PCT_day_change'] > 1
+       and -6 < regression_data['PCT_day_change_pre1'] < -1.3
+       and regression_data['PCT_day_change_pre1'] < -1.5
+       and regression_data['PCT_day_change_pre2'] < 0
+       and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])
+       and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change_pre2'])
+       and regression_data['forecast_day_PCT_change'] > regression_data['forecast_day_PCT2_change'] > regression_data['forecast_day_PCT3_change']
+       and regression_data['forecast_day_PCT5_change'] < 0
+       and abs(regression_data['PCT_day_change_pre1']) < abs(regression_data['PCT_day_change'])*2
+       ):
+       print(regression_data['scrip']) 
+       add_in_csv(regression_data, regressionResult, ws, None, None,'mayReversalBuy-(RISKY-DOWNTREND-BUY)') 
     elif('RISKY-DOWNTREND-BUY' in regression_data['filter1']
        and regression_data['forecast_day_PCT_change'] > regression_data['forecast_day_PCT2_change'] > regression_data['forecast_day_PCT3_change'] > regression_data['forecast_day_PCT4_change']
        and regression_data['PCT_day_change_pre1'] < 0 

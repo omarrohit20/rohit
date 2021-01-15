@@ -36,7 +36,7 @@ filtertechallpctchangebuy = patterns_to_dict('../../data-import/nselist/filter-t
 
 
 def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
-    if(high_tail_pct(regression_data) < 1):
+    if(high_tail_pct(regression_data) < 1.5):
         if(regression_data['PCT_day_change'] > 2 and regression_data['PCT_day_change_pre1'] > 2 and regression_data['PCT_day_change_pre2'] > 2):
             add_in_csv(regression_data, regressionResult, ws, 'Last3DayGT2')
         elif(regression_data['PCT_day_change'] > 2 and regression_data['PCT_day_change_pre1'] > 2 and regression_data['PCT_day_change_pre2'] > 0):
@@ -47,6 +47,18 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
             add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT2-2ndDayGT0')
         elif(regression_data['PCT_day_change'] > 2 and regression_data['PCT_day_change_pre1'] < 0):
             add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT2')
+        else:
+            if(high_tail_pct(regression_data) < regression_data['PCT_day_change'] or high_tail_pct(regression_data) < regression_data['PCT_change']):
+                if(regression_data['PCT_day_change'] >= 1 and regression_data['PCT_day_change_pre1'] >= 1 and regression_data['PCT_day_change_pre2'] >= 1):
+                    add_in_csv(regression_data, regressionResult, ws, 'Last3DayGT1')
+                elif(regression_data['PCT_day_change'] >= 1 and regression_data['PCT_day_change_pre1'] >= 1 and regression_data['PCT_day_change_pre2'] > 0):
+                    add_in_csv(regression_data, regressionResult, ws, 'Last2DayGT1-3rdDayGT0')
+                elif(regression_data['PCT_day_change'] >= 1 and regression_data['PCT_day_change_pre1'] >= 1 and regression_data['PCT_day_change_pre2'] < 0):
+                    add_in_csv(regression_data, regressionResult, ws, 'Last2DayGT1')
+                elif(regression_data['PCT_day_change'] >= 1 and regression_data['PCT_day_change_pre1'] > 0 and regression_data['PCT_day_change_pre2'] < 0):
+                    add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT1-2ndDayGT0')
+                elif(regression_data['PCT_day_change'] >= 1 and regression_data['PCT_day_change_pre1'] < 0):
+                    add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT1')
            
     if(is_algo_buy(regression_data)):    
         if(-15 < regression_data['PCT_day_change'] < -3.5 and -15 < regression_data['PCT_change'] < -3.5):
@@ -797,7 +809,7 @@ def buy_filter_all_accuracy(regression_data, regressionResult):
         buy_filter_tech_all_pct_change_accuracy(regression_data, regressionResult)
                            
 def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws): 
-    if(low_tail_pct(regression_data) < 1):          
+    if(low_tail_pct(regression_data) < 1.5):          
         if(regression_data['PCT_day_change'] < -2 and regression_data['PCT_day_change_pre1'] < -2 and regression_data['PCT_day_change_pre2'] < -2):
             add_in_csv(regression_data, regressionResult, ws, None, 'Last3Day(LT-2)')
         elif(regression_data['PCT_day_change'] < -2 and regression_data['PCT_day_change_pre1'] < -2 and regression_data['PCT_day_change_pre2'] < 0):
@@ -808,6 +820,19 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-2)-2ndDayLT0')
         elif(regression_data['PCT_day_change'] < -2 and regression_data['PCT_day_change_pre1'] > 0):
             add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-2)')
+        else:
+            if(low_tail_pct(regression_data) < abs(regression_data['PCT_day_change']) or low_tail_pct(regression_data) < abs(regression_data['PCT_change'])):
+                if(regression_data['PCT_day_change'] <= -1 and regression_data['PCT_day_change_pre1'] <= -1 and regression_data['PCT_day_change_pre2'] <= -1):
+                    add_in_csv(regression_data, regressionResult, ws, None, 'Last3Day(LT-1)')
+                elif(regression_data['PCT_day_change'] <= -1 and regression_data['PCT_day_change_pre1'] <= -1 and regression_data['PCT_day_change_pre2'] < 0):
+                    add_in_csv(regression_data, regressionResult, ws, None, 'Last2Day(LT-1)-3rdDayLT0')
+                elif(regression_data['PCT_day_change'] <= -1 and regression_data['PCT_day_change_pre1'] <= -1 and regression_data['PCT_day_change_pre2'] > 0):
+                    add_in_csv(regression_data, regressionResult, ws, None, 'Last2Day(LT-1)')
+                elif(regression_data['PCT_day_change'] <= -1 and regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre2'] > 0):
+                    add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-1)-2ndDayLT0')
+                elif(regression_data['PCT_day_change'] <= -1 and regression_data['PCT_day_change_pre1'] > 0):
+                    add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-1)')
+    
     if(is_algo_sell(regression_data)):
         if(3.5 < regression_data['PCT_day_change'] < 15 and 3.5 < regression_data['PCT_change'] < 15):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'AFML:mlSellPCTDayChangeGT3.5')

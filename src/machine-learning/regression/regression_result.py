@@ -341,8 +341,8 @@ def result_data_reg(scrip):
         
         if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResultHigh, 'High', None)):
             all_withoutml(regression_data, regressionResultHigh, None)
+        buy_all_rule(regression_data, regressionResultHigh, True, None)
         if (is_algo_buy(regression_data)):
-            buy_all_rule(regression_data, regressionResultHigh, True, None)
             all_withoutml(regression_data, regressionResultHigh, ws_highBuyReg)
         if (is_algo_buy(regression_high) and is_any_reg_algo_gt1_not_other(regression_data)):
             buy_all_common_High_Low(regression_data, regressionResultHigh, True, None)
@@ -377,8 +377,8 @@ def result_data_reg(scrip):
         
         if(is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResultLow, 'Low', None)):
             all_withoutml(regression_data, regressionResultLow, None)
+        sell_all_rule(regression_data, regressionResultLow, True, None)
         if (is_algo_sell(regression_data)):
-            sell_all_rule(regression_data, regressionResultLow, True, None)
             all_withoutml(regression_data, regressionResultLow, ws_lowSellReg)                               
         if (is_algo_sell(regression_high) and is_any_reg_algo_lt_minus1_not_other(regression_data)):
             sell_all_common_High_Low(regression_data, regressionResultLow, True, None)

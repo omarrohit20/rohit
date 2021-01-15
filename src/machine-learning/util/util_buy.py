@@ -886,6 +886,7 @@ def buy_high_volatility_riskyUptrendSell(regression_data, regressionResult):
        and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])
        and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change_pre2'])
        and regression_data['forecast_day_PCT_change'] < regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT3_change']
+       and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])*2
        ):
        add_in_csv(regression_data, regressionResult, ws, None, None,'mayContinueBuy-(RISKY-UPTREND-SELL)') 
     elif('RISKY-UPTREND-SELL' in regression_data['filter1']
