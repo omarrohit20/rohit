@@ -631,6 +631,18 @@ def sell_high_volatility_pre1pre2doji(regression_data, regressionResult):
     ws = None
     
     if(regression_data['week2LowChange'] < 0
+        and regression_data['monthLowChange'] < 0
+        #and regression_data['month3LowChange'] < 0
+        and -8 < regression_data['PCT_day_change'] < -3
+        and -8 < regression_data['PCT_change'] < -1
+        and -1 < regression_data['PCT_day_change_pre1'] < 0
+        and regression_data['forecast_day_PCT10_change'] < -10
+        ):
+        if(regression_data['bar_low'] < regression_data['bar_low_pre1']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTUP-GLOBALMARKETUP:mayContinueShortUpTrend-PCTDayChangePre1GT0-todayGT3')
+            flag = True
+    elif(regression_data['week2LowChange'] < 0
         and -8 < regression_data['PCT_day_change'] < -4
         and 0 < regression_data['PCT_day_change_pre1'] < 1
         and regression_data['PCT_day_change_pre2'] < 0 

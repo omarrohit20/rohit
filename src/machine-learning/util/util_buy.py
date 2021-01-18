@@ -568,7 +568,7 @@ def buy_high_volatility_pre1pre2doji(regression_data, regressionResult):
     
     if(regression_data['week2HighChange'] > 0
         and regression_data['monthHighChange'] > 0
-        and regression_data['month3HighChange'] > 0
+        #and regression_data['month3HighChange'] > 0
         and 3 < regression_data['PCT_day_change'] < 8
         and 1 < regression_data['PCT_change'] < 8
         and 0 < regression_data['PCT_day_change_pre1'] < 1
