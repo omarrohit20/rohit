@@ -1213,13 +1213,14 @@ def sell_high_volatility(regression_data, regressionResult):
             #print(regression_data['scrip'])
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'DOWNTREND:mayContinueDownTrend-DOJI')
             flag = True
-        elif(regression_data['PCT_day_change_pre2'] < 0
-            and regression_data['PCT_day_change_pre1'] > 0 
+        elif(regression_data['PCT_day_change_pre1'] > 0 
             and regression_data['PCT_day_change'] > 0
             #and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])
             and regression_data['bar_high_pre1'] < regression_data['bar_high']
-            and regression_data['bar_high_pre1'] < regression_data['bar_high_pre2']
-            and regression_data['high'] < regression_data['high_pre2']
+            #and regression_data['bar_high_pre1'] < regression_data['bar_high_pre2']
+            and (regression_data['high'] < regression_data['high_pre2']
+                 or regression_data['high'] < regression_data['high_pre3']
+                 )
             and 'DOJI' in regression_data['filter5']
             and regression_data['forecast_day_PCT5_change'] < -3
             and regression_data['forecast_day_PCT7_change'] < -3
@@ -1230,7 +1231,8 @@ def sell_high_volatility(regression_data, regressionResult):
             #print(regression_data['scrip'])
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'DOWNTREND:mayContinueDownTrend-DOJI-Risky')
             flag = True
-        elif(regression_data['PCT_day_change_pre1'] > 0.5 
+        elif(regression_data['PCT_day_change_pre2'] < -0.5
+            and regression_data['PCT_day_change_pre1'] > 0.5 
             and regression_data['PCT_day_change'] > 0.5
             and abs(regression_data['PCT_day_change_pre1']) < abs(regression_data['PCT_day_change'])
             and regression_data['bar_high_pre1'] < regression_data['bar_high']

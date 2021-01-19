@@ -71,6 +71,19 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
                     add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT1-2ndDayDojiLT0-3rdDayGT0')
                 elif(regression_data['PCT_day_change'] >= 1 and regression_data['PCT_day_change_pre1'] < 0):
                     add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT1')
+    
+    if('DOJI' in regression_data['filter5']
+        #and regression_data['forecast_day_PCT7_change'] > 0
+        and regression_data['forecast_day_PCT10_change'] >= 2
+        and (regression_data['PCT_day_change'] < 0
+            or (regression_data['forecast_day_PCT_change'] < 0
+                and regression_data['forecast_day_PCT2_change'] < 0
+                )
+            )
+        and (high_tail_pct(regression_data) < 4.0 and low_tail_pct(regression_data) < 4.0)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'Buy-LastDayNiftyMidCapDown(LT-1)-TodayUpMorningNiftyGT0.5')
+    
            
     if(is_algo_buy(regression_data)):    
         if(-15 < regression_data['PCT_day_change'] < -3.5 and -15 < regression_data['PCT_change'] < -3.5):
@@ -857,6 +870,17 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
                     add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-1)-2ndDayDojiGT0-3rdDayLT0')
                 elif(regression_data['PCT_day_change'] <= -1 and regression_data['PCT_day_change_pre1'] > 0):
                     add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-1)')
+    if('DOJI' in regression_data['filter5']
+        #and regression_data['forecast_day_PCT7_change'] > 0
+        and regression_data['forecast_day_PCT10_change'] <= -2
+        and (regression_data['PCT_day_change'] > 0
+            or (regression_data['forecast_day_PCT_change'] > 0
+                and regression_data['forecast_day_PCT2_change'] > 0
+                )
+            )
+        and (high_tail_pct(regression_data) < 4.0 and low_tail_pct(regression_data) < 4.0)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'Sell-LastDayNiftyMidCapDownGT1-TodayDownMorningNifty(LT-0.5)')
     
     if(is_algo_sell(regression_data)):
         if(3.5 < regression_data['PCT_day_change'] < 15 and 3.5 < regression_data['PCT_change'] < 15):

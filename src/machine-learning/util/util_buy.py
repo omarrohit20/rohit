@@ -1104,19 +1104,21 @@ def buy_high_volatility(regression_data, regressionResult):
             and regression_data['PCT_day_change'] < 0
             #and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])
             and regression_data['bar_low_pre1'] > regression_data['bar_low']
-            and regression_data['bar_low_pre1'] > regression_data['bar_low_pre2']
-            and regression_data['low'] > regression_data['low_pre2']
+            #and regression_data['bar_low_pre1'] > regression_data['bar_low_pre2']
+            and (regression_data['low'] > regression_data['low_pre2']
+                 or regression_data['low'] > regression_data['low_pre3']
+                )
             and 'DOJI' in regression_data['filter5']
             and regression_data['forecast_day_PCT5_change'] > 3
             and regression_data['forecast_day_PCT7_change'] > 3
             and regression_data['forecast_day_PCT10_change'] > 3
             and high_tail_pct(regression_data) < 2.5
-            and low_tail_pct(regression_data) < 2.5
+            and low_tail_pct(regression_data) < 3.5
             ):
             #print(regression_data['scrip'])
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'UPTREND:mayContinueUpTrend-DOJI-Risky')
             flag = True
-        elif(regression_data['PCT_day_change_pre2'] > 0
+        elif(regression_data['PCT_day_change_pre2'] > 0.5
             and regression_data['PCT_day_change_pre1'] < -0.5 
             and regression_data['PCT_day_change'] < -0.5
             and abs(regression_data['PCT_day_change_pre1']) < abs(regression_data['PCT_day_change'])
