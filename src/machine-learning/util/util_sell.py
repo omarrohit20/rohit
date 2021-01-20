@@ -268,10 +268,10 @@ def sell_high_volatility_boundary(regression_data, regressionResult):
 #                  or 'Buy-Any' in regression_data['filter2']
 #                 )
             and regression_data['forecast_day_VOL_change'] > 0
-            and ((regression_data['forecast_day_VOL_change'] > 0 and regression_data['oi'] > 10 and regression_data['contract'] > 10) or regression_data['forecast_day_VOL_change'] > 150)    
-            and 'DownTrend' not in regression_data['series_trend']
-            and 'downTrend' not in regression_data['series_trend']
-            and 'trendDown' not in regression_data['series_trend']
+            and ((regression_data['forecast_day_VOL_change'] > 0 and regression_data['oi'] > 10 and regression_data['contract'] > 10) 
+                 or (regression_data['forecast_day_VOL_change'] > 150 and regression_data['PCT_day_change_pre1'] < 0)
+                 or regression_data['forecast_day_VOL_change'] > 200
+                 )
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'mayBuyNearOrUpMonthHigh')
         elif('PCTDayChangeLast2DaysGT2' in regression_data['filter2']
@@ -300,6 +300,15 @@ def sell_high_volatility_boundary(regression_data, regressionResult):
             and 'DownTrend' not in regression_data['series_trend']
             and 'downTrend' not in regression_data['series_trend']
             and 'trendDown' not in regression_data['series_trend']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, 'mayBuyNearOrUpMonthHigh')
+        elif(('PCTDayChangePre1LT0' in regression_data['filter2']
+                )
+            and 2 < regression_data['PCT_day_change'] < 4 and regression_data['PCT_change'] < 8
+            and regression_data['PCT_day_change_pre1'] < -2
+            and (regression_data['bar_high'] < regression_data['bar_high_pre1']
+                 or regression_data['bar_high'] < regression_data['bar_high_pre2']
+                )
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'mayBuyNearOrUpMonthHigh')
         elif(('PCTDayChangePre2LT0' in regression_data['filter2']
