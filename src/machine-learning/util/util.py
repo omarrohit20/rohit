@@ -55,7 +55,7 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
                     add_in_csv(regression_data, regressionResult, ws, 'Last2DayGT1-3rdDayGT0')
                 elif(regression_data['PCT_day_change'] >= 1 and regression_data['PCT_day_change_pre1'] >= 1 and regression_data['PCT_day_change_pre2'] < 0):
                     add_in_csv(regression_data, regressionResult, ws, 'Last2DayGT1')
-                elif(regression_data['PCT_day_change'] >= 1 and 0 < regression_data['PCT_day_change_pre1'] < 1 and regression_data['PCT_day_change_pre2'] < 0 and regression_data['PCT_day_change_pre3'] < 0):
+                elif(regression_data['PCT_day_change'] >= 1 and 0 < regression_data['PCT_day_change_pre1'] < 1 and regression_data['PCT_day_change_pre2'] < 0 and regression_data['PCT_day_change_pre3'] > 0):
                     add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT1-2ndDayDojiGT0-3rdDayLT0')
                 elif(regression_data['PCT_day_change'] >= 1 
                     and (0 < regression_data['PCT_day_change_pre1'] < 1 or (0 < regression_data['PCT_day_change_pre1'] and 2*abs(regression_data['PCT_day_change_pre1']) < abs(regression_data['PCT_day_change_pre2'])))
@@ -71,6 +71,25 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
                     add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT1-2ndDayDojiLT0-3rdDayGT0')
                 elif(regression_data['PCT_day_change'] >= 1 and regression_data['PCT_day_change_pre1'] < 0):
                     add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT1')
+    
+        if(regression_data['PCT_day_change'] >= 1 
+            and -1 < regression_data['PCT_day_change_pre1'] < 0
+            and 0 < regression_data['PCT_day_change_pre2'] < 1
+            and regression_data['PCT_day_change_pre3'] > 1
+            and regression_data['bar_high'] > regression_data['bar_high_pre3'] > regression_data['bar_high_pre1'] 
+            and regression_data['bar_high'] > regression_data['bar_high_pre3'] > regression_data['bar_high_pre2']
+            and regression_data['month3HighChange'] < -1
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, 'DojiLastDayGT2Today')            
+    
+    if( 0 < regression_data['PCT_day_change'] < 0.5
+        and 0 < regression_data['PCT_change'] < 0.5
+        and 2 < regression_data['PCT_day_change_pre1'] < 7
+        and (regression_data['PCT_day_change_pre3'] < 0 or regression_data['PCT_day_change_pre4'] < 0)
+        and regression_data['bar_high'] > regression_data['bar_high_pre2']
+        and (high_tail_pct(regression_data) < 1.5 and low_tail_pct(regression_data) < 1.5)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, 'DojiTodayGT2LastDay')
     
     if('DOJI' in regression_data['filter5']
         #and regression_data['forecast_day_PCT7_change'] > 0
@@ -853,7 +872,7 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
                     add_in_csv(regression_data, regressionResult, ws, None, 'Last2Day(LT-1)-3rdDayLT0')
                 elif(regression_data['PCT_day_change'] <= -1 and regression_data['PCT_day_change_pre1'] <= -1 and regression_data['PCT_day_change_pre2'] > 0):
                     add_in_csv(regression_data, regressionResult, ws, None, 'Last2Day(LT-1)')
-                elif(regression_data['PCT_day_change'] <= -1 and -1 < regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre2'] > 0 and regression_data['PCT_day_change_pre3'] > 0):
+                elif(regression_data['PCT_day_change'] <= -1 and -1 < regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre2'] > 0 and regression_data['PCT_day_change_pre3'] < 0):
                     add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-1)-2ndDayDojiLT0-3rdDayGT0')
                 elif(regression_data['PCT_day_change'] <= -1 
                     and (-1 < regression_data['PCT_day_change_pre1'] < 0 or (regression_data['PCT_day_change_pre1'] < 0 and 2*abs(regression_data['PCT_day_change_pre1']) < abs(regression_data['PCT_day_change_pre2'])))
@@ -869,6 +888,26 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
                     add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-1)-2ndDayDojiGT0-3rdDayLT0')
                 elif(regression_data['PCT_day_change'] <= -1 and regression_data['PCT_day_change_pre1'] > 0):
                     add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-1)')
+                    
+        if(regression_data['PCT_day_change'] <= -1 
+            and 0 < regression_data['PCT_day_change_pre1'] < 1 
+            and -1 < regression_data['PCT_day_change_pre2'] < 0 
+            and regression_data['PCT_day_change_pre3'] <= -1
+            and regression_data['bar_low'] < regression_data['bar_low_pre3'] < regression_data['bar_low_pre1'] 
+            and regression_data['bar_low'] < regression_data['bar_low_pre3'] < regression_data['bar_low_pre2']
+            and regression_data['month3LowChange'] > 0
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, 'DojiLastDay(LT-1)Today')
+        
+    if( -0.5 < regression_data['PCT_day_change'] < 0
+        and -0.5 < regression_data['PCT_change'] < 0
+        and -7 < regression_data['PCT_day_change_pre1'] < -2
+        and (regression_data['PCT_day_change_pre3'] > 0 or regression_data['PCT_day_change_pre4'] > 0)
+        and regression_data['bar_low'] < regression_data['bar_low_pre2']
+        and (high_tail_pct(regression_data) < 1.5 and low_tail_pct(regression_data) < 1.5)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, 'DojiToday(LT-2)LastDay')
+        
     if('DOJI' in regression_data['filter5']
         #and regression_data['forecast_day_PCT7_change'] > 0
         and regression_data['forecast_day_PCT10_change'] <= -2
@@ -879,7 +918,7 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
             )
         and (high_tail_pct(regression_data) < 4.0 and low_tail_pct(regression_data) < 4.0)
         ):
-        add_in_csv(regression_data, regressionResult, ws, 'Sell-LastDayNiftyMidCapUpGT1-TodayDownMorningNifty(LT-0.5)')
+        add_in_csv(regression_data, regressionResult, ws, None, 'Sell-LastDayNiftyMidCapUpGT1-TodayDownMorningNifty(LT-0.5)')
     
     if(is_algo_sell(regression_data)):
         if(3.5 < regression_data['PCT_day_change'] < 15 and 3.5 < regression_data['PCT_change'] < 15):

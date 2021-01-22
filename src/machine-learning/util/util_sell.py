@@ -649,7 +649,7 @@ def sell_high_volatility_pre1pre2doji(regression_data, regressionResult):
         ):
         if(regression_data['bar_low'] < regression_data['bar_low_pre1']
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTUP-GLOBALMARKETUP:mayContinueShortUpTrend-PCTDayChangePre1GT0-todayGT3')
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTDOWN-GLOBALMARKETDOWN:mayContinueShortDownTrend-PCTDayChangePre1LT0-todayLT(-3)')
             flag = True
     elif(regression_data['week2LowChange'] < 0
         and -8 < regression_data['PCT_day_change'] < -4
@@ -946,7 +946,7 @@ def sell_high_volatility_riskyDowntrendBuy(regression_data, regressionResult):
        and abs(regression_data['PCT_day_change_pre1']) > abs(regression_data['PCT_day_change'])*2
        ):
         if(regression_data['PCT_day_change_pre3'] > 1 or regression_data['PCT_day_change_pre4'] > 1):
-            add_in_csv(regression_data, regressionResult, ws, None, None,'mayReversalBuyInUptrendOrNiftyUp-ContinueSellInDownTrendOrNiftyDown-(RISKY-DOWNTREND-BUY)')
+            add_in_csv(regression_data, regressionResult, ws, None, None,'mayReversalBuyInUptrend-ContinueSellInDownTrend-(RISKY-DOWNTREND-BUY)')
         elif(regression_data['PCT_day_change_pre3'] < -1 or regression_data['PCT_day_change_pre4'] < -1):
             add_in_csv(regression_data, regressionResult, ws, None, None,'mayContinueSell-(RISKY-DOWNTREND-BUY)') 
     
@@ -1154,11 +1154,6 @@ def sell_high_volatility(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'LastDayNiftyUPGT(1)NotUpToday(9:30-Sell):LowTailPct-PCTDayChangeGT4')
         flag = True
         
-    
-        
-    
-    
-        
     if(regression_data['PCT_day_change_pre1'] < -7
         and regression_data['PCT_day_change'] > 2
         and regression_data['bar_low_pre1'] < regression_data['bar_high'] < regression_data['bar_high_pre1']
@@ -1168,8 +1163,6 @@ def sell_high_volatility(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, 'DowntrendMarketDownCircuitMayContinue')
         flag = True
         
-    
-       
     if('downTrend' in regression_data['series_trend'] 
         or 'DownTrend' in regression_data['series_trend'] 
         or 'trendDown' in regression_data['series_trend']
@@ -3699,7 +3692,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
                 and (regression_data['PCT_day_change_pre3'] > 0 or regression_data['PCT_day_change_pre4'] > 0)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkBuy:Super01-monthLow-alternateDayUp')
-            else:
+            elif(regression_data['bar_low'] < regression_data['bar_low_pre2']):
                 add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:Super01-monthLow')
             return True
         elif(-2 < regression_data['forecast_day_PCT5_change'] < 2
@@ -3708,6 +3701,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             and (regression_data['PCT_day_change_pre3'] < -4 or regression_data['PCT_day_change_pre4'] < -4)
             and (regression_data['PCT_day_change_pre2'] > 0 and regression_data['PCT_day_change_pre3'] > 0)
             and (regression_data['PCT_day_change'] < 0 and regression_data['PCT_day_change_pre1'] < 0)
+            and regression_data['bar_low'] < regression_data['bar_low_pre2']
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:Super00-monthLow')
             return True
@@ -3727,7 +3721,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
                 and (regression_data['PCT_day_change_pre3'] > 0 or regression_data['PCT_day_change_pre4'] > 0)
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'chisBuy:Super03-monthLow-alternateDayUp')
-            else:
+            elif(regression_data['bar_low'] < regression_data['bar_low_pre2']):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'chisSell:Super03-monthLow')
             return True
     
