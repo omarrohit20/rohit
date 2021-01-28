@@ -624,23 +624,25 @@ def buy_high_volatility_pre1pre2doji(regression_data, regressionResult):
     ws = None
     
     if(regression_data['week2HighChange'] > 0
+        and regression_data['week2LowChange'] > 5
         and regression_data['monthHighChange'] > 0
         #and regression_data['month3HighChange'] > 0
         and 3 < regression_data['PCT_day_change'] < 8
         and 1 < regression_data['PCT_change'] < 8
         and 0 < regression_data['PCT_day_change_pre1'] < 1
-        and regression_data['forecast_day_PCT10_change'] > 10
+        and (regression_data['forecast_day_PCT5_change'] > 5 or  regression_data['forecast_day_PCT10_change'] > 5)
         ):
         if(regression_data['bar_high'] > regression_data['bar_high_pre1']
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'GLOBALFUTUP-GLOBALMARKETUP:mayContinueShortUpTrend-PCTDayChangePre1GT0-todayGT3')
             flag = True
     elif(regression_data['week2HighChange'] > 0
-        and 4 < regression_data['PCT_day_change'] < 8
+        and regression_data['week2LowChange'] > 5
+        and 3 < regression_data['PCT_day_change'] < 8
         and -1 < regression_data['PCT_day_change_pre1'] < 0
         and regression_data['PCT_day_change_pre2'] > 0 
         and (regression_data['PCT_day_change_pre3'] > 0 or regression_data['PCT_day_change_pre4'] > 0)
-        and regression_data['forecast_day_PCT10_change'] > 10
+        and (regression_data['forecast_day_PCT5_change'] > 5 or  regression_data['forecast_day_PCT10_change'] > 5)
         ):
         if(regression_data['bar_high'] > regression_data['bar_high_pre1']
             ):
