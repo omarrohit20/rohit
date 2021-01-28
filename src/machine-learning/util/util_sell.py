@@ -252,8 +252,8 @@ def sell_high_volatility_boundary(regression_data, regressionResult):
             and (regression_data['oi'] < 0 or regression_data['contract'] < 0 or regression_data['forecast_day_VOL_change'] < -50)    
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'maySellNearOrUpMonthHigh')
-        elif(('PCTDayChangePre1LT0.7' in regression_data['filter2']
-                or 'PCTDayChangePre2LT0.7' in regression_data['filter2']
+        elif(('PCTDayChangePre1LT0' in regression_data['filter2']
+                or 'PCTDayChangePre2LT0' in regression_data['filter2']
                 )
             and regression_data['PCT_day_change'] > 3 and regression_data['PCT_change'] > 3
             and ('Sell-Any' in regression_data['filter2'])

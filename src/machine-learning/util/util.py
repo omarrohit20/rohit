@@ -56,19 +56,22 @@ def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
                 elif(regression_data['PCT_day_change'] >= 1 and regression_data['PCT_day_change_pre1'] >= 1 and regression_data['PCT_day_change_pre2'] < 0):
                     add_in_csv(regression_data, regressionResult, ws, 'Last2DayGT1')
                 elif(regression_data['PCT_day_change'] >= 1 and 0 < regression_data['PCT_day_change_pre1'] < 1 and regression_data['PCT_day_change_pre2'] < 0 and regression_data['PCT_day_change_pre3'] > 0):
-                    add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT1-2ndDayDojiGT0-3rdDayLT0')
+                    add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT1-2ndDayDojiGT0-3rdDayLT0:MayBuyUptrend-SellDownTrend')
                 elif(regression_data['PCT_day_change'] >= 1 
                     and (0 < regression_data['PCT_day_change_pre1'] < 1 or (0 < regression_data['PCT_day_change_pre1'] and 2*abs(regression_data['PCT_day_change_pre1']) < abs(regression_data['PCT_day_change_pre2'])))
                     and regression_data['PCT_day_change_pre2'] > 0
                     and regression_data['PCT_day_change_pre3'] < 0.5
                     ):
-                    add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT1-2ndDayDojiGT0-3rdDayGT0')
+                    if(abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])):
+                        add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT1-2ndDayDojiGT0-3rdDayGT0:MayBuy')
+                    elif(abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])):
+                        add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT1-2ndDayDojiGT0-3rdDayGT0:MaySell')
                 elif(regression_data['PCT_day_change'] >= 1 
                     and (regression_data['PCT_day_change_pre1'] < 0 and 2*abs(regression_data['PCT_day_change_pre1']) < abs(regression_data['PCT_day_change_pre2']))
                     and regression_data['PCT_day_change_pre2'] > 0
                     and regression_data['PCT_day_change_pre3'] < 0.5
                     ):
-                    add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT1-2ndDayDojiLT0-3rdDayGT0')
+                    add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT1-2ndDayDojiLT0-3rdDayGT0:MayBuyUptrend-SellDownTrend')
                 elif(regression_data['PCT_day_change'] >= 1 and regression_data['PCT_day_change_pre1'] < 0):
                     add_in_csv(regression_data, regressionResult, ws, 'Last1DayGT1')
     
@@ -873,19 +876,22 @@ def sell_all_rule(regression_data, regressionResult, sellIndiaAvg, ws):
                 elif(regression_data['PCT_day_change'] <= -1 and regression_data['PCT_day_change_pre1'] <= -1 and regression_data['PCT_day_change_pre2'] > 0):
                     add_in_csv(regression_data, regressionResult, ws, None, 'Last2Day(LT-1)')
                 elif(regression_data['PCT_day_change'] <= -1 and -1 < regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre2'] > 0 and regression_data['PCT_day_change_pre3'] < 0):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-1)-2ndDayDojiLT0-3rdDayGT0')
+                    add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-1)-2ndDayDojiLT0-3rdDayGT0:MaySellDowntrend-BuyUptrend')
                 elif(regression_data['PCT_day_change'] <= -1 
                     and (-1 < regression_data['PCT_day_change_pre1'] < 0 or (regression_data['PCT_day_change_pre1'] < 0 and 2*abs(regression_data['PCT_day_change_pre1']) < abs(regression_data['PCT_day_change_pre2'])))
                     and regression_data['PCT_day_change_pre2'] < 0
                     and regression_data['PCT_day_change_pre3'] > -0.5
                     ):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-1)-2ndDayDojiLT0-3rdDayLT0')
+                    if(abs(regression_data['monthHighChange']) < abs(regression_data['monthLowChange'])):
+                        add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-1)-2ndDayDojiLT0-3rdDayLT0:MayBuy')
+                    elif(abs(regression_data['monthHighChange']) > abs(regression_data['monthLowChange'])):
+                        add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-1)-2ndDayDojiLT0-3rdDayLT0:MaySell')
                 elif(regression_data['PCT_day_change'] <= -1 
                     and (0 < regression_data['PCT_day_change_pre1'] < 1 and 2*abs(regression_data['PCT_day_change_pre1']) < abs(regression_data['PCT_day_change_pre2']))
                     and regression_data['PCT_day_change_pre2'] < 0
                     and regression_data['PCT_day_change_pre3'] > -0.5
                     ):
-                    add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-1)-2ndDayDojiGT0-3rdDayLT0')
+                    add_in_csv(regression_data, regressionResult, ws, None, 'MaySell:Last1Day(LT-1)-2ndDayDojiGT0-3rdDayLT0:MaySellDownTrend-BuyUptrend')
                 elif(regression_data['PCT_day_change'] <= -1 and regression_data['PCT_day_change_pre1'] > 0):
                     add_in_csv(regression_data, regressionResult, ws, None, 'Last1Day(LT-1)')
                     
