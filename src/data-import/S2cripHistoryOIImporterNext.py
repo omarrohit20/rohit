@@ -14,7 +14,7 @@ connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
 def futures_data(scrip):
-    expirydate=get_expiry_date(datetime.date.today().year, datetime.date.today().month + 1)
+    expirydate=get_expiry_date(datetime.date.today().year, datetime.date.today().month + 2)
     #expirydate=date(2021,2,25)
     print(expirydate)
     stock_fut = get_history(symbol=scrip,
