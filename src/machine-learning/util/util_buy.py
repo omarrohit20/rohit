@@ -1019,14 +1019,14 @@ def buy_high_volatility_lastDayDown(regression_data, regressionResult):
                 and regression_data['PCT_day_change_pre2'] > 1 and regression_data['PCT_day_change_pre3'] > 1
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'mayMorning-BuyOrSell-5minutesMidcapTrend-lastDayDown')
-        elif((regression_data['PCT_day_change'] < -1.5
-                and regression_data['PCT_day_change_pre1'] < 0
-                and regression_data['PCT_day_change_pre2'] < 0
+        elif((regression_data['PCT_day_change'] > 1.5
+                and regression_data['PCT_day_change_pre1'] > 0
+                and regression_data['PCT_day_change_pre2'] > 0
                 )
             ):
-            if(regression_data['PCT_day_change_pre1'] < -1.5):
-                add_in_csv(regression_data, regressionResult, ws, None, None, 'mayBuy-Last3DayDown')
-            elif(regression_data['PCT_day_change_pre1'] > -1):
+            if(regression_data['PCT_day_change_pre1'] > 1.5):
+                add_in_csv(regression_data, regressionResult, ws, None, None, 'mayBuy-Last3DayUp')
+            elif(regression_data['PCT_day_change_pre1'] < 1):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'mayFollowMarketTrend')        
         elif(regression_data['PCT_day_change_pre2'] > 0
             and (regression_data['low'] < regression_data['low_pre3']
@@ -1067,15 +1067,15 @@ def buy_high_volatility_lastDayDown(regression_data, regressionResult):
                 and regression_data['PCT_day_change_pre2'] > 1 and regression_data['PCT_day_change_pre3'] > 1
                 ):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'mayMorning-BuyOrSell-5minutesMidcapTrend-lastDayDown')
-        elif((regression_data['PCT_day_change'] < -1.5
-                and regression_data['PCT_day_change_pre1'] < 0
-                and regression_data['PCT_day_change_pre2'] < 0
+        elif((regression_data['PCT_day_change'] > 1.5
+                and regression_data['PCT_day_change_pre1'] > 0
+                and regression_data['PCT_day_change_pre2'] > 0
                 )
             ):
-            if(regression_data['PCT_day_change_pre1'] < -1.5):
-                add_in_csv(regression_data, regressionResult, ws, None, None, 'mayBuy-Last3DayDown')
-            elif(regression_data['PCT_day_change_pre1'] > -1):
-                add_in_csv(regression_data, regressionResult, ws, None, None, 'mayFollowMarketTrend')        
+            if(regression_data['PCT_day_change_pre1'] > 1.5):
+                add_in_csv(regression_data, regressionResult, ws, None, None, 'mayBuy-Last3DayUp')
+            elif(regression_data['PCT_day_change_pre1'] < 1):
+                add_in_csv(regression_data, regressionResult, ws, None, None, 'mayFollowMarketTrend')         
         elif(regression_data['PCT_day_change_pre2'] > 0
             and (regression_data['low'] < regression_data['low_pre3']
                 or regression_data['bar_low'] < regression_data['bar_low_pre2']
