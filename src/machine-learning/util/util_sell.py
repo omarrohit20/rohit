@@ -1029,7 +1029,7 @@ def sell_high_volatility_lastDayUp(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'morningSell-LastDayUp-DownTrend')
         if(abs(regression_data['month3LowChange']) > -1):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'UptrendMonth3LowReversalBuy')
-        elif((regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre2'] < 0)
+        if((regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre2'] < 0)
             ):
             if(regression_data['bar_high'] > regression_data['bar_high_pre2']):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'mayFollowLast3DayTrendSellOrBuy-BrokenLast2DaySupport')
@@ -1076,7 +1076,7 @@ def sell_high_volatility_lastDayUp(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'Risky:morningSell-LastDayUp-DownTrend')
         if(abs(regression_data['month3LowChange']) > -1):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'UptrendMonth3LowReversalBuy')
-        elif((regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre2'] < 0)
+        if((regression_data['PCT_day_change_pre1'] < 0 and regression_data['PCT_day_change_pre2'] < 0)
             ):
             if(regression_data['bar_high'] > regression_data['bar_high_pre2']):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'mayFollowLast3DayTrendSellOrBuy-BrokenLast2DaySupport')
