@@ -346,16 +346,16 @@ def result_data_reg(scrip):
             all_withoutml(regression_data, regressionResultHigh, ws_highBuyReg)
         if (is_algo_buy(regression_high) and is_any_reg_algo_gt1_not_other(regression_data)):
             buy_all_common_High_Low(regression_data, regressionResultHigh, True, None)
-            all_withoutml(regression_data, regressionResultHigh, ws_highBuyStrong) 
+            #all_withoutml(regression_data, regressionResultHigh, ws_highBuyStrong) 
         if (is_algo_buy(regression_high, True) and is_algo_buy(regression_low, True) and is_any_reg_algo_gt1(regression_data)):
             buy_all_common_High_Low(regression_data, regressionResultHigh, True, None)
-            all_withoutml(regression_data, regressionResultHigh, ws_highBuyBothHL)
+            #all_withoutml(regression_data, regressionResultHigh, ws_highBuyBothHL)
         if (is_algo_buy(regression_high, True) and is_algo_buy(regression_low, True) 
             and is_any_reg_algo_gt1(regression_data)
             and is_any_reg_algo_gt1_not_other(regression_data)
             ):
             buy_all_common_High_Low(regression_data, regressionResultHigh, True, None)
-            all_withoutml(regression_data, regressionResultHigh, ws_highBuyStrongBoth)
+            #all_withoutml(regression_data, regressionResultHigh, ws_highBuyStrongBoth)
          
         all_withoutml(regression_data, regressionResultHigh, ws_high)
           
@@ -382,16 +382,16 @@ def result_data_reg(scrip):
             all_withoutml(regression_data, regressionResultLow, ws_lowSellReg)                               
         if (is_algo_sell(regression_high) and is_any_reg_algo_lt_minus1_not_other(regression_data)):
             sell_all_common_High_Low(regression_data, regressionResultLow, True, None)
-            all_withoutml(regression_data, regressionResultLow, ws_lowSellStrong)
+            #all_withoutml(regression_data, regressionResultLow, ws_lowSellStrong)
         if (is_algo_sell(regression_high, True) and is_algo_sell(regression_low, True) and is_any_reg_algo_lt_minus1(regression_data)):
             sell_all_common_High_Low(regression_data, regressionResultLow, True, None)
-            all_withoutml(regression_data, regressionResultLow, ws_lowSellBothHL)
+            #all_withoutml(regression_data, regressionResultLow, ws_lowSellBothHL)
         if (is_algo_sell(regression_high, True) and is_algo_sell(regression_low, True) 
             and is_any_reg_algo_lt_minus1(regression_data)
             and is_any_reg_algo_lt_minus1_not_other(regression_data)
             ):
             sell_all_common_High_Low(regression_data, regressionResultLow, True, None)
-            all_withoutml(regression_data, regressionResultLow, ws_lowSellStrongBoth)
+            #all_withoutml(regression_data, regressionResultLow, ws_lowSellStrongBoth)
         
         all_withoutml(regression_data, regressionResultLow, ws_low)
         
@@ -424,10 +424,37 @@ def result_data_reg(scrip):
         regression_low_copy1 = copy.deepcopy(regression_low)
         regression_low_copy2 = copy.deepcopy(regression_low)
         
+        regression_data = regression_high_copy2
         if(buy_high_volatility(regression_high_copy2, regressionResultHigh)):
             all_withoutml(regression_high_copy2, regressionResultHigh, ws_highAnalysis)
+        if (is_algo_buy(regression_high_copy2) and is_any_reg_algo_gt1_not_other(regression_data)):
+            buy_all_common_High_Low(regression_data, regressionResultHigh, True, None)
+            all_withoutml(regression_data, regressionResultHigh, ws_highBuyStrong) 
+        if (is_algo_buy(regression_high_copy2, True) and is_algo_buy(regression_low_copy2, True) and is_any_reg_algo_gt1(regression_data)):
+            buy_all_common_High_Low(regression_data, regressionResultHigh, True, None)
+            all_withoutml(regression_data, regressionResultHigh, ws_highBuyBothHL)
+        if (is_algo_buy(regression_high_copy2, True) and is_algo_buy(regression_low_copy2, True) 
+            and is_any_reg_algo_gt1(regression_data)
+            and is_any_reg_algo_gt1_not_other(regression_data)
+            ):
+            buy_all_common_High_Low(regression_data, regressionResultHigh, True, None)
+            all_withoutml(regression_data, regressionResultHigh, ws_highBuyStrongBoth)
+                
+        regression_data = regression_low_copy2
         if(sell_high_volatility(regression_low_copy2, regressionResultLow)):
             all_withoutml(regression_low_copy2, regressionResultLow, ws_lowAnalysis)
+        if (is_algo_sell(regression_low_copy2) and is_any_reg_algo_lt_minus1_not_other(regression_data)):
+            sell_all_common_High_Low(regression_data, regressionResultLow, True, None)
+            all_withoutml(regression_data, regressionResultLow, ws_lowSellStrong)
+        if (is_algo_sell(regression_high_copy2, True) and is_algo_sell(regression_low_copy2, True) and is_any_reg_algo_lt_minus1(regression_data)):
+            sell_all_common_High_Low(regression_data, regressionResultLow, True, None)
+            all_withoutml(regression_data, regressionResultLow, ws_lowSellBothHL)
+        if (is_algo_sell(regression_high_copy2, True) and is_algo_sell(regression_low_copy2, True) 
+            and is_any_reg_algo_lt_minus1(regression_data)
+            and is_any_reg_algo_lt_minus1_not_other(regression_data)
+            ):
+            sell_all_common_High_Low(regression_data, regressionResultLow, True, None)
+            all_withoutml(regression_data, regressionResultLow, ws_lowSellStrongBoth)
         
         regression_high_copy['filter1']=""
         if(is_filter_all_accuracy(regression_high_copy, regression_high, regression_low, regressionResultHigh, 'High', None)):
