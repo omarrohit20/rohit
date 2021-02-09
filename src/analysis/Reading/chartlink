@@ -1,0 +1,6 @@
+Final-check-Breakup
+( {46553} ( [0] 10 minute close > [-1] 10 minute max ( 20 , [0] 10 minute close ) and [0] 5 minute close > [=1] 5 minute open and [-1] 5 minute high < [=1] 5 minute open and [=1] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" < 0 and [0] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" > 0 and [-1] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" > -0.3 and [-2] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" > -0.3 and [-1] 10 minute "close - 1 candle ago close / 1 candle ago close * 100" > -0.3 and [0] 1 hour "close - 1 candle ago close / 1 candle ago close * 100" < 3.0 ) )
+
+
+final-check-breakup-to-start
+( {46553} ( [=1] 10 minute "close - 1 candle ago close / 1 candle ago close * 100" < -1 and [=1] 15 minute "close - 1 candle ago close / 1 candle ago close * 100" < -1 and [0] 15 minute "close - 1 candle ago close / 1 candle ago close * 100" > -1 and [0] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" > 0 and [0] 5 minute close < latest open and [0] 5 minute close > [0] 5 minute sma ( [0] 5 minute close , 10 ) ) )  
