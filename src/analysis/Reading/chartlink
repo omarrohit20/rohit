@@ -24,12 +24,17 @@ Sell-final-check-breakdown-to-start
 
 
 
-Buy-DayConsolidation-Breakout
+Buy-DayConsolidation-Breakout-01
 ( {57960} ( latest "close - 1 candle ago close / 1 candle ago close * 100" > 1 and [0] 1 hour high > [=1] 2 hour high and [=1] 5 minute close > [=1] 5 minute open and ( ( [0] 15 minute vwap - [-6] 15 minute vwap ) * 100 ) / [-6] 15 minute vwap < 0.05 and ( ( [-4] 15 minute vwap - [-8] 15 minute vwap ) * 100 ) / [-8] 15 minute vwap < 0.05 and ( ( [0] 15 minute vwap - [-6] 15 minute vwap ) * 100 ) / [-6] 15 minute vwap > -0.05 and ( ( [-4] 15 minute vwap - [-8] 15 minute vwap ) * 100 ) / [-8] 15 minute vwap > -0.05 and ( ( [0] 15 minute high - [-4] 15 minute high ) * 100 ) / [-4] 15 minute high < 1 and ( ( [-4] 15 minute high - [-8] 15 minute high ) * 100 ) / [-8] 15 minute high < 1 and ( ( [0] 15 minute high - [-4] 15 minute high ) * 100 ) / [-4] 15 minute high > -1 and ( ( [-4] 15 minute high - [-8] 15 minute high ) * 100 ) / [-8] 15 minute high > -1 ) ) 
 
-Sell-DayConsolidation-Breakout
+Sell-DayConsolidation-Breakout-01
 ( {46553} ( latest "close - 1 candle ago close / 1 candle ago close * 100" < -1 and [0] 1 hour low < [=1] 2 hour low and [=1] 5 minute close < [=1] 5 minute open and ( ( [0] 15 minute vwap - [-6] 15 minute vwap ) * 100 ) / [-6] 15 minute vwap < 0.05 and ( ( [-4] 15 minute vwap - [-8] 15 minute vwap ) * 100 ) / [-8] 15 minute vwap < 0.05 and ( ( [0] 15 minute vwap - [-6] 15 minute vwap ) * 100 ) / [-6] 15 minute vwap > -0.05 and ( ( [-4] 15 minute vwap - [-8] 15 minute vwap ) * 100 ) / [-8] 15 minute vwap > -0.05 and ( ( [0] 15 minute high - [-4] 15 minute high ) * 100 ) / [-4] 15 minute high < 1 and ( ( [-4] 15 minute high - [-8] 15 minute high ) * 100 ) / [-8] 15 minute high < 1 and ( ( [0] 15 minute high - [-4] 15 minute high ) * 100 ) / [-4] 15 minute high > -1 ) ) 
 
+
+temp
+( {57960} ( ( {33489} ( [0] 10 minute close > [-1] 10 minute max ( 20 , [0] 10 minute close ) and [=1] 5 minute close > [=1] 5 minute open and [=2] 5 minute close < [=2] 5 minute open and [=3] 5 minute close < [=3] 5 minute open and [=5] 5 minute close > [=5] 5 minute open and [0] 5 minute close > [=1] 5 minute close and [-1] 5 minute close < [=1] 5 minute close and [0] 5 minute close > [0] 5 minute open and [-1] 5 minute close > [-1] 5 minute open and [0] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" > 0 and [-1] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" > -0.3 and [-2] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" > -0.3 and [-1] 10 minute "close - 1 candle ago close / 1 candle ago close * 100" > -0.3 and [0] 1 hour "close - 1 candle ago close / 1 candle ago close * 100" < 3.0 ) ) ) ) 
+
+( {57960} ( latest "close - 1 candle ago close / 1 candle ago close * 100" > 1 and [0] 1 hour high > [=1] 2 hour high and [=1] 5 minute close > [=1] 5 minute open and ( ( [0] 15 minute vwap - [-6] 15 minute vwap ) * 100 ) / [-6] 15 minute vwap < 0.05 and ( ( [-4] 15 minute vwap - [-8] 15 minute vwap ) * 100 ) / [-8] 15 minute vwap < 0.05 and ( ( [0] 15 minute vwap - [-6] 15 minute vwap ) * 100 ) / [-6] 15 minute vwap > -0.05 and ( ( [-4] 15 minute vwap - [-8] 15 minute vwap ) * 100 ) / [-8] 15 minute vwap > -0.05 and ( ( [0] 15 minute high - [-4] 15 minute high ) * 100 ) / [-4] 15 minute high < 1 and ( ( [-4] 15 minute high - [-8] 15 minute high ) * 100 ) / [-8] 15 minute high < 1 and ( ( [0] 15 minute high - [-4] 15 minute high ) * 100 ) / [-4] 15 minute high > -1 and ( ( [-4] 15 minute high - [-8] 15 minute high ) * 100 ) / [-8] 15 minute high > -1 ) ) 
 
 
 
