@@ -66,9 +66,11 @@ if __name__ == "__main__":
     server = Server(path)
     server.start()
     proxy = server.create_proxy()
-    profile  = webdriver.FirefoxProfile('/Users/rohit/Library/Application Support/Firefox/Profiles/p2dahe48.default')
-    profile.set_proxy(proxy.selenium_proxy())
-    driver = webdriver.Firefox(firefox_profile=profile)
+    fireFoxOptions = webdriver.FirefoxOptions()
+    fireFoxOptions.set_headless()
+    fireFoxProfile  = webdriver.FirefoxProfile('/Users/rohit/Library/Application Support/Firefox/Profiles/p2dahe48.default')
+    fireFoxProfile.set_proxy(proxy.selenium_proxy())
+    driver = webdriver.Firefox(firefox_profile=fireFoxProfile, firefox_options=fireFoxOptions)
     
     nw = datetime.now()
     hrs = nw.hour;mins = nw.minute;secs = nw.second;
@@ -79,7 +81,9 @@ if __name__ == "__main__":
     time_10_00 = st + timedelta(seconds=10*3600) # this gives 10:00 AM
     time_10_15 = st + timedelta(seconds=10*3600+15*60) # this gives 10:15 AM
     time_10_30 = st + timedelta(seconds=10*3600+30*60) # this gives 10:30 AM
+    time_12_00 = st + timedelta(seconds=12*3600) # this gives 12:00 PM
     time_13_30 = st + timedelta(seconds=13*3600+30*60) # this gives 1:30 PM
+    time_14_30 = st + timedelta(seconds=14*3600+30*60) # this gives 2:30 PM
     time_15_30 = st + timedelta(seconds=22*3600+30*60)  # this gives 2:30 PM
     while (nw <= time_15_30): 
         

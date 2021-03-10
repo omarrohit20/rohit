@@ -85,26 +85,14 @@ if __name__ == "__main__":
     time_13_30 = st + timedelta(seconds=13*3600+30*60) # this gives 1:30 PM
     time_14_30 = st + timedelta(seconds=14*3600+30*60) # this gives 2:30 PM
     time_15_30 = st + timedelta(seconds=22*3600+30*60)  # this gives 2:30 PM
-    while (nw <= time_15_30): 
+    while (nw <= time_14_30): 
         
-        if(nw>= time_09_30 and nw <= time_10_30):
-            process_url('https://chartink.com/screener/buy-check-breaup-first5minutegreen-01', 'buy-check-breaup-first5minutegreen-01', time_09_30, time_10_30)
-            process_url('https://chartink.com/screener/buy-check-breaup-first5minutegreen-02', 'buy-check-breaup-first5minutegreen-02', time_09_30, time_10_30)
-            
-            process_url('https://chartink.com/screener/buy-check-morning-down-breakup-01', 'buy-check-morning-down-breakup-01', time_09_30, time_10_30)
-            
-            process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02', 'buy-check-morning-down-breakup-02', time_09_30, time_10_00)
-            process_url('https://chartink.com/screener/copy-final-check-morning-down-breakup', 'buy-check-morning-down-breakup-03', time_09_30, time_10_00)
-            
-            
-        if(nw>= time_10_30 and nw <= time_13_30):
-            process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-01', 'buy-dayconsolidation-breakout-01', time_10_30, time_13_30)
-            process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-02', 'buy-dayconsolidation-breakout-02', time_10_30, time_13_30)
-            
-                  
-        #process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02', 'buy-check-morning-down-breakup-02')
+        if(nw>= time_09_40 and nw <= time_12_00): 
+            process_url('https://chartink.com/screener/indices-downtrend-2', 'indices-downtrend', time_09_40, time_12_00)
+        if(nw>= time_12_00 and nw <= time_14_30): 
+            process_url('https://chartink.com/screener/indices-downtrend-2', 'indices-downtrend', time_12_00, time_14_30)    
         
-        time.sleep(200)
+        time.sleep(800)
         nw = datetime.now()
         
     server.stop()
