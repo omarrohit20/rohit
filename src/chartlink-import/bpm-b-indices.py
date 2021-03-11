@@ -87,14 +87,13 @@ if __name__ == "__main__":
     time_15_30 = st + timedelta(seconds=22*3600+30*60)  # this gives 2:30 PM
     while (nw <= time_14_30): 
         
-        if(nw>= time_09_40 and nw <= time_12_00): 
-            process_url('https://chartink.com/screener/indices-uptrend-3', 'indices-uptrend', time_09_40, time_12_00)
-        if(nw>= time_12_00 and nw <= time_14_30): 
-            process_url('https://chartink.com/screener/indices-uptrend-3', 'indices-uptrend', time_12_00, time_14_30)
+        if(nw>= time_09_40 and nw <= time_14_30): 
+            process_url('https://chartink.com/screener/indices-uptrend-3', 'indices-uptrend', time_09_40, time_14_30)
+            process_url('https://chartink.com/screener/stocks-uptrend-3', 'stocks-uptrend', time_09_40, time_14_30)
               
         #process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02', 'buy-check-morning-down-breakup-02')
         
-        time.sleep(800)
+        time.sleep(200)
         nw = datetime.now()
         
     server.stop()
