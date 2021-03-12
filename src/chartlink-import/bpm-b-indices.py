@@ -20,7 +20,7 @@ def process_backtest(rawdata, processor, starttime, endtime):
     aggregatedStockList = response_json["aggregatedStockList"]
     tradeTimes = response_json["metaData"][0]["tradeTimes"]
     df = pd.DataFrame({'aggregatedStockList': aggregatedStockList, 'tradeTimes': tradeTimes})
-    df = df[-60:] 
+    df = df[-80:] 
     df.drop(df[df['aggregatedStockList'].str.len().lt(1)].index, inplace=True)
     df.iloc[::-1]
     for ind in df.index: 
@@ -84,8 +84,8 @@ if __name__ == "__main__":
     time_12_00 = st + timedelta(seconds=12*3600) # this gives 12:00 PM
     time_13_30 = st + timedelta(seconds=13*3600+30*60) # this gives 1:30 PM
     time_14_30 = st + timedelta(seconds=14*3600+30*60) # this gives 2:30 PM
-    time_15_30 = st + timedelta(seconds=22*3600+30*60)  # this gives 2:30 PM
-    while (nw <= time_14_30): 
+    time_15_30 = st + timedelta(seconds=15*3600+30*60)  # this gives 2:30 PM
+    while (nw <= time_15_30): 
         
         if(nw>= time_09_40 and nw <= time_14_30): 
             process_url('https://chartink.com/screener/indices-uptrend-3', 'indices-uptrend', time_09_40, time_14_30)
