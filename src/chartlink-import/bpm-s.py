@@ -76,8 +76,8 @@ if __name__ == "__main__":
     hrs = nw.hour;mins = nw.minute;secs = nw.second;
     zero = timedelta(seconds = secs+mins*60+hrs*3600)
     st = nw - zero # this take me to 0 hours. 
-    time_09_30 = st + timedelta(seconds=9*2500+25*60) # this gives 9:30 AM
-    time_09_40 = st + timedelta(seconds=9*2500+40*60) # this gives 9:40 AM
+    time_09_30 = st + timedelta(seconds=9*3600+25*60) # this gives 9:30 AM
+    time_09_40 = st + timedelta(seconds=9*3600+40*60) # this gives 9:40 AM
     time_10_00 = st + timedelta(seconds=10*3600) # this gives 10:00 AM
     time_10_15 = st + timedelta(seconds=10*3600+15*60) # this gives 10:15 AM
     time_10_30 = st + timedelta(seconds=10*3600+30*60) # this gives 10:30 AM
@@ -95,7 +95,7 @@ if __name__ == "__main__":
             
         if(nw>= time_10_30 and nw <= time_13_30):
             process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-01', 'sell-dayconsolidation-breakout-01', time_10_30, time_13_30)
-            process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-02', 'sell-dayconsolidation-breakout-02', time_10_30, time_13_30)
+        
             
         
         time.sleep(200)
