@@ -420,6 +420,7 @@ def buy_high_volatility_boundary(regression_data, regressionResult):
     if(1.9 < regression_data['PCT_day_change'] < 6
         and 1.9 < regression_data['PCT_change'] < 7
         and regression_data['month3HighChange'] < -5
+        and regression_data['monthHighChange'] < -5
         and regression_data['month3LowChange'] < 5
         and (regression_data['month3LowChange'] < 0
             or abs(regression_data['month3HighChange']) > 3*abs(regression_data['month3LowChange'])

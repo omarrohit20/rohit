@@ -426,6 +426,7 @@ def sell_high_volatility_boundary(regression_data, regressionResult):
         and -7 < regression_data['PCT_change'] < -1.9
         and regression_data['month3HighChange'] > -5
         and regression_data['month3LowChange'] > 5
+        and regression_data['monthLowChange'] > 5
         and (regression_data['month3HighChange'] > 0
             or abs(regression_data['month3LowChange']) > 3*abs(regression_data['month3HighChange'])
             )
