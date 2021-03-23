@@ -260,6 +260,12 @@ def is_algo_buy(regression_data, resticted=False):
                 #and regression_data['PCT_change'] > 0
                 ):
                 return False
+            if((regression_data['mlpValue_cla'] <= 0) and (regression_data['kNeighboursValue_cla'] <= 0)
+                and (regression_data['mlpValue_cla_other'] <= 0) and (regression_data['kNeighboursValue_cla_other'] <= 0)
+                and (regression_data['mlpValue_reg'] <= 2.5) and (regression_data['kNeighboursValue_reg'] <= 2.5)
+                and (regression_data['mlpValue_reg_other'] <= 2.5) and (regression_data['kNeighboursValue_reg_other'] <= 2.5)
+                ):
+                return False
             if resticted:
                 if((regression_data['mlpValue_reg_other'] >= 0 or regression_data['kNeighboursValue_reg_other'] >= 0)):
                     return True
@@ -315,6 +321,12 @@ def is_algo_sell(regression_data, resticted=False):
                 and (regression_data['mlpValue_reg_other'] + regression_data['kNeighboursValue_reg_other']) > -1.5
                 and regression_data['PCT_day_change'] < 0
                 #and regression_data['PCT_change'] < 0
+                ):
+                return False
+            if((regression_data['mlpValue_cla'] >= 0) and (regression_data['kNeighboursValue_cla'] >= 0)
+                and (regression_data['mlpValue_cla_other'] >= 0) and (regression_data['kNeighboursValue_cla_other'] >= 0)
+                and (regression_data['mlpValue_reg'] >= -2.5) and (regression_data['kNeighboursValue_reg'] >= -2.5)
+                and (regression_data['mlpValue_reg_other'] >= -2.5) and (regression_data['kNeighboursValue_reg_other'] >= -2.5)
                 ):
                 return False
             if resticted:
