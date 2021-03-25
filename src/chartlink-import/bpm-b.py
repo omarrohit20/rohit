@@ -78,7 +78,9 @@ if __name__ == "__main__":
     st = nw - zero # this take me to 0 hours. 
     time_09_30 = st + timedelta(seconds=9*3600+25*60) # this gives 9:30 AM
     time_09_40 = st + timedelta(seconds=9*3600+40*60) # this gives 9:40 AM
+    time_09_50 = st + timedelta(seconds=9*3600+50*60) # this gives 9:50 AM
     time_10_00 = st + timedelta(seconds=10*3600) # this gives 10:00 AM
+    time_10_10 = st + timedelta(seconds=10*3600+10*60) # this gives 10:10 AM
     time_10_15 = st + timedelta(seconds=10*3600+15*60) # this gives 10:15 AM
     time_10_30 = st + timedelta(seconds=10*3600+30*60) # this gives 10:30 AM
     time_12_00 = st + timedelta(seconds=12*3600) # this gives 12:00 PM
@@ -92,9 +94,10 @@ if __name__ == "__main__":
             process_url('https://chartink.com/screener/buy-check-breaup-first5minutegreen-02', 'buy-check-breaup-first5minutegreen-02', time_09_30, time_10_30)
             
             process_url('https://chartink.com/screener/buy-check-morning-down-breakup-01', 'buy-check-morning-down-breakup-01', time_09_30, time_10_30)
-            
             process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02', 'buy-check-morning-down-breakup-02', time_09_30, time_10_00)
-            
+         
+        if(nw>= time_09_40 and nw <= time_10_15):   
+            process_url('https://chartink.com/screener/buy-breakup-intraday-9-30-to-10', 'buy-breakup-intraday-9:50-to-10:10', time_09_50, time_10_10)
             
         if(nw>= time_10_30 and nw <= time_13_30):
             process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-01', 'buy-dayconsolidation-breakout-01', time_10_30, time_13_30)
