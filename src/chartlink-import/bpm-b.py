@@ -96,9 +96,7 @@ if __name__ == "__main__":
             process_url('https://chartink.com/screener/buy-check-morning-down-breakup-01', 'buy-check-morning-down-breakup-01', time_09_30, time_10_30)
             process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02', 'buy-check-morning-down-breakup-02', time_09_30, time_10_00)
          
-        if(nw>= time_09_40 and nw <= time_10_15):   
-            process_url('https://chartink.com/screener/buy-breakup-intraday-9-30-to-10', 'buy-breakup-intraday-9:50-to-10:10', time_09_50, time_10_10)
-            
+                
         if(nw>= time_10_30 and nw <= time_13_30):
             process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-01', 'buy-dayconsolidation-breakout-01', time_10_30, time_13_30)
             
