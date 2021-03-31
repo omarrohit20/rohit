@@ -89,9 +89,12 @@ if __name__ == "__main__":
     time_15_30 = st + timedelta(seconds=15*3600+30*60)  # this gives 2:30 PM
     while (nw <= time_15_30): 
         
-        if(nw>= time_09_40 and nw <= time_10_15):   
-            process_url('https://chartink.com/screener/copy-sell-breakdown-intraday-9-30-to-10', 'sell-breakdown-intraday-9:50-to-10:10', time_09_50, time_10_10)
+        if(nw>= time_09_40 and nw <= time_10_30):   
+            process_url('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-03', 'sell-breakdown-intraday-9:50-to-10:10-3', time_09_40, time_10_30)
         
+        if(nw>= time_09_40 and nw <= time_12_00):   
+            process_url('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-04', 'sell-breakdown-intraday-9:50-to-10:10-3', time_09_40, time_12_00)
+            
         if(nw>= time_10_30 and nw <= time_14_30): 
             process_url('https://chartink.com/screener/indices-downtrend-2', 'indices-downtrend', time_10_30, time_14_30) 
             process_url('https://chartink.com/screener/stocks-downtrend', 'stocks-downtrend', time_10_30, time_14_30)   

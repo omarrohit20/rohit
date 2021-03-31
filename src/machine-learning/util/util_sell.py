@@ -686,7 +686,7 @@ def sell_high_volatility_monthLowNotReached(regression_data, regressionResult):
             and regression_data['monthHighChange'] < -5
             and (regression_data['monthLowChange'] > 2 
                  or regression_data['month3LowChange'] > 2
-                 or regression_data['week23LowChange'] > 0
+                 or regression_data['week2LowChange'] > 0
                  )
             and 'Buy-Any' not in regression_data['filter2']
             ):
