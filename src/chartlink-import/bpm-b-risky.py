@@ -83,19 +83,20 @@ if __name__ == "__main__":
     time_10_10 = st + timedelta(seconds=10*3600+10*60) # this gives 10:10 AM
     time_10_15 = st + timedelta(seconds=10*3600+15*60) # this gives 10:15 AM
     time_10_30 = st + timedelta(seconds=10*3600+30*60) # this gives 10:30 AM
+    time_11_30 = st + timedelta(seconds=11*3600+30*60) # this gives 11:30 AM
     time_12_00 = st + timedelta(seconds=12*3600) # this gives 12:00 PM
     time_13_30 = st + timedelta(seconds=13*3600+30*60) # this gives 1:30 PM
     time_14_30 = st + timedelta(seconds=14*3600+30*60) # this gives 2:30 PM
     time_15_30 = st + timedelta(seconds=15*3600+30*60)  # this gives 2:30 PM
     while (nw <= time_15_30): 
+        if(nw>= time_09_40 and nw <= time_10_30):   
+            process_url('https://chartink.com/screener/buy-breakup-intraday-9-30-to-10', 'buy-breakup-intraday-9:50-to-10:10-01', time_09_40, time_10_30)
+            process_url('https://chartink.com/screener/buy-breakup-intraday-9-50-to-10-10-02', 'buy-breakup-intraday-9:50-to-10:10-02', time_09_40, time_10_30)
         
-        if(nw>= time_09_30 and nw <= time_10_30):
-            process_url('https://chartink.com/screener/copy-final-check-morning-down-breakup', 'buy-check-morning-down-breakup-03', time_09_30, time_10_00)            
-            
-        if(nw>= time_10_30 and nw <= time_13_30):
-            process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-02', 'buy-dayconsolidation-breakout-02', time_10_30, time_13_30)
-            
-                  
+        if(nw>= time_10_30 and nw <= time_14_30): 
+            process_url('https://chartink.com/screener/indices-uptrend-3', 'indices-uptrend', time_10_30, time_14_30)
+            process_url('https://chartink.com/screener/stocks-uptrend-3', 'stocks-uptrend', time_10_30, time_14_30)
+              
         #process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02', 'buy-check-morning-down-breakup-02')
         
         time.sleep(200)
