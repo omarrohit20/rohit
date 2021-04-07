@@ -88,12 +88,12 @@ if __name__ == "__main__":
     time_13_30 = st + timedelta(seconds=13*3600+30*60) # this gives 1:30 PM
     time_14_30 = st + timedelta(seconds=14*3600+30*60) # this gives 2:30 PM
     time_15_30 = st + timedelta(seconds=15*3600+30*60)  # this gives 2:30 PM
-    while (nw <= time_15_30): 
+    while (nw <= time_11_30): 
         if(nw>= time_09_40 and nw <= time_10_30):   
             process_url('https://chartink.com/screener/buy-breakup-intraday-9-50-to-10-10-03', '03-buyBreakupIntraday-MidcapLastDayUp-9:40-to-9:50', time_09_40, time_10_00)
             process_url('https://chartink.com/screener/buy-breakup-intraday-9-50-to-10-10-05', '05-buyBreakupIntraday-MidcapLastDayUp-9:45', time_09_40, time_10_00)
         
-        if(nw>= time_09_40 and nw <= time_12_00):   
+        if(nw>= time_09_40 and nw <= time_11_30):   
             process_url('https://chartink.com/screener/buy-breakup-intraday-9-50-to-10-10-04', '04-buyBreakupIntraday-MidcapLastDayUp-10:15-to-11:15', time_09_40, time_11_30)
         
 #         if(nw>= time_09_30 and nw <= time_10_30):
