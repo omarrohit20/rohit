@@ -88,6 +88,7 @@ if __name__ == "__main__":
     time_13_30 = st + timedelta(seconds=13*3600+30*60) # this gives 1:30 PM
     time_14_30 = st + timedelta(seconds=14*3600+30*60) # this gives 2:30 PM
     time_15_30 = st + timedelta(seconds=15*3600+30*60)  # this gives 2:30 PM
+    time_23_00 = st + timedelta(seconds=23*3600)
     while (nw <= time_13_30): 
         
         if(nw>= time_09_30 and nw <= time_10_30):
