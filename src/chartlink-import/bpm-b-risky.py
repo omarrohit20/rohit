@@ -76,6 +76,7 @@ if __name__ == "__main__":
     hrs = nw.hour;mins = nw.minute;secs = nw.second;
     zero = timedelta(seconds = secs+mins*60+hrs*3600)
     st = nw - zero # this take me to 0 hours. 
+    time_09_20 = st + timedelta(seconds=9*3600+20*60) # this gives 9:30 AM
     time_09_30 = st + timedelta(seconds=9*3600+25*60) # this gives 9:30 AM
     time_09_40 = st + timedelta(seconds=9*3600+40*60) # this gives 9:40 AM
     time_09_50 = st + timedelta(seconds=9*3600+50*60) # this gives 9:50 AM
@@ -90,7 +91,10 @@ if __name__ == "__main__":
     time_15_30 = st + timedelta(seconds=15*3600+30*60)  # this gives 2:30 PM
     time_23_00 = st + timedelta(seconds=23*3600)
     while (nw <= time_14_30): 
-        if(nw>= time_09_40 and nw <= time_10_30):   
+        if(nw>= time_09_20 and nw <= time_10_30):
+            process_url('https://chartink.com/screener/buy-breakup-intraday-9-25-to-10-30-06', 'buy-breakupGT2-intraday-9:25-to-10:30', time_09_20, time_10_30)
+            
+        if(nw>= time_09_40 and nw <= time_10_30):  
             process_url('https://chartink.com/screener/buy-breakup-intraday-9-30-to-10', 'buy-breakup-intraday-9:50-to-10:10-01', time_09_40, time_10_30)
             process_url('https://chartink.com/screener/buy-breakup-intraday-9-50-to-10-10-02', 'buy-breakup-intraday-9:50-to-10:10-02', time_09_40, time_10_30)
         

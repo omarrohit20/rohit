@@ -96,7 +96,7 @@ if __name__ == "__main__":
             process_url('https://chartink.com/screener/buy-check-breaup-first5minutegreen-02', 'buy-check-breaup-first5minutegreen-02', time_09_30, time_10_30)
             
             process_url('https://chartink.com/screener/buy-check-morning-down-breakup-01', 'buy-check-morning-down-breakup-01', time_09_30, time_10_30)
-            process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02', 'buy-check-morning-down-breakup-02', time_09_30, time_10_00)
+            process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02-1', 'buy-check-morning-down-breakup-02', time_09_30, time_10_00)
          
                 
         if(nw>= time_10_30 and nw <= time_13_30):
