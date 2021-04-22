@@ -94,7 +94,9 @@ if __name__ == "__main__":
         
         if(nw>= time_09_30 and nw <= time_10_30):
             process_url('https://chartink.com/screener/copy-sell-final-check-breakdown-first5minutered', 'sell-final-check-breakdown-first5minutered', time_09_30, time_10_30)
-            process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-01', 'sell-check-morning-up-breakdown-01', time_09_30, time_10_30)
+            
+        if(nw>= time_09_20 and nw <= time_11_30):    
+            process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-02', 'sell-check-morning-up-breakdown-02', time_09_20, time_11_30)
             
                 
         if(nw>= time_10_30 and nw <= time_13_30):
