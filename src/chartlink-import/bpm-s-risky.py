@@ -84,6 +84,8 @@ if __name__ == "__main__":
     time_10_10 = st + timedelta(seconds=10*3600+10*60) # this gives 10:10 AM
     time_10_15 = st + timedelta(seconds=10*3600+15*60) # this gives 10:15 AM
     time_10_30 = st + timedelta(seconds=10*3600+30*60) # this gives 10:30 AM
+    time_11_00 = st + timedelta(seconds=11*3600) # this gives 11:15 AM
+    time_11_15 = st + timedelta(seconds=11*3600+15*60) # this gives 11:15 AM
     time_11_30 = st + timedelta(seconds=11*3600+30*60) # this gives 11:30 AM
     time_12_00 = st + timedelta(seconds=12*3600) # this gives 12:00 PM
     time_13_30 = st + timedelta(seconds=13*3600+30*60) # this gives 1:30 PM
@@ -92,7 +94,7 @@ if __name__ == "__main__":
     time_23_00 = st + timedelta(seconds=23*3600)
     while (nw <= time_14_30): 
         if(nw>= time_09_20 and nw <= time_10_30):
-            process_url('https://chartink.com/screener/sell-breakdown-intraday-9-25-to-10-30-06', 'sell-breakdownGT2-intraday-9:25-to-10:30', time_09_20, time_10_30)
+            process_url('https://chartink.com/screener/sell-breakdown-intraday-9-25-to-10-30-06', 'sell-breakdownGT2-intraday-9:25-to-10:30', time_09_25, time_10_30)
         
 #         if(nw>= time_09_40 and nw <= time_10_30):   
 #             process_url('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-01', 'sell-breakdown-intraday-9:50-to-10:10-1', time_09_40, time_10_30)
