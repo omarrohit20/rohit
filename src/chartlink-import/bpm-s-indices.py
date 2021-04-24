@@ -93,12 +93,12 @@ if __name__ == "__main__":
     time_15_30 = st + timedelta(seconds=15*3600+30*60)  # this gives 2:30 PM
     time_23_00 = st + timedelta(seconds=23*3600)
     while (nw <= time_11_30): 
-        if(nw>= time_09_40 and nw <= time_10_30):   
-            process_url('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-03', '03-sellBreakdownIntraday-MidcapLastDayDown-9:40-to-9:50', time_09_40, time_09_50)
-            process_url('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-05', '05-sellBreakdownIntraday-MidcapLastDayDown-9:45', time_09_40, time_09_50)
-        
+        if(nw>= time_09_40 and nw <= time_10_30): 
+            process_url('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-05', '05-sellBreakdownIntraday-9:45', time_09_40, time_09_50)  
+            process_url('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-03', '(==MidcapLastDayDown==)03-sellBreakdownIntraday-9:40-to-9:50', time_09_40, time_09_50)
+            
         if(nw>= time_09_40 and nw <= time_11_30):   
-            process_url('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-04', '04-sellBreakdownIntraday-10:15-to-11:15', time_10_15, time_11_15)
+            process_url('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-04', '(==AvoidSpikeMA50==)04-sellBreakdownIntraday-10:15-to-11:15', time_10_15, time_11_15)
                         
 #         if(nw>= time_10_30 and nw <= time_13_30):
 #             process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-02', 'sell-dayconsolidation-breakout-02', time_10_30, time_13_30)
