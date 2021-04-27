@@ -77,8 +77,10 @@ if __name__ == "__main__":
     zero = timedelta(seconds = secs+mins*60+hrs*3600)
     st = nw - zero # this take me to 0 hours. 
     time_09_20 = st + timedelta(seconds=9*3600+20*60) # this gives 9:20 AM
-    time_09_30 = st + timedelta(seconds=9*3600+25*60) # this gives 9:30 AM
+    time_09_25 = st + timedelta(seconds=9*3600+25*60) # this gives 9:25 AM
+    time_09_30 = st + timedelta(seconds=9*3600+30*60) # this gives 9:30 AM
     time_09_40 = st + timedelta(seconds=9*3600+40*60) # this gives 9:40 AM
+    time_09_45 = st + timedelta(seconds=9*3600+45*60) # this gives 9:45 AM
     time_09_50 = st + timedelta(seconds=9*3600+50*60) # this gives 9:50 AM
     time_10_00 = st + timedelta(seconds=10*3600) # this gives 10:00 AM
     time_10_10 = st + timedelta(seconds=10*3600+10*60) # this gives 10:10 AM
