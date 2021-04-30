@@ -90,12 +90,13 @@ if __name__ == "__main__":
     time_11_15 = st + timedelta(seconds=11*3600+15*60) # this gives 11:15 AM
     time_11_30 = st + timedelta(seconds=11*3600+30*60) # this gives 11:30 AM
     time_12_00 = st + timedelta(seconds=12*3600) # this gives 12:00 PM
+    time_13_00 = st + timedelta(seconds=13*3600) # this gives 1:00 PM
     time_13_30 = st + timedelta(seconds=13*3600+30*60) # this gives 1:30 PM
     time_14_30 = st + timedelta(seconds=14*3600+30*60) # this gives 2:30 PM
     time_15_30 = st + timedelta(seconds=15*3600+30*60)  # this gives 2:30 PM
     time_23_00 = st + timedelta(seconds=23*3600)
     while (nw <= time_13_30):
-        if(nw>=time_09_25 and nw<=time_10_00):
+        if(nw>=time_09_25 and nw<=time_10_15):
             process_url('https://chartink.com/screener/sell-uptrend-01', 'sell-uptrendlast2day', time_09_25, time_10_00) 
             process_url('https://chartink.com/screener/sell-downtrend-01', 'sell-downtrendlast2day', time_09_25, time_10_00) 
         
@@ -106,8 +107,8 @@ if __name__ == "__main__":
             process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-02', 'sell-check-morning-up-breakdown-02', time_09_20, time_11_30)
             
                 
-        if(nw>= time_10_30 and nw <= time_13_30):
-            process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-01', 'sell-dayconsolidation-breakout-01', time_10_30, time_13_30)
+        if(nw>= time_10_00 and nw <= time_13_00):
+            process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-01', 'sell-dayconsolidation-breakout-01', time_10_00, time_12_30)
         
             
         
