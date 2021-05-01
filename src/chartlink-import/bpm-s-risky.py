@@ -103,9 +103,9 @@ if __name__ == "__main__":
 #             process_url('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-01', 'sell-breakdown-intraday-9:50-to-10:10-1', time_09_40, time_10_30)
 #             process_url('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-02', 'sell-breakdown-intraday-9:50-to-10:10-2', time_09_40, time_10_30)
             
-        if(nw>= time_10_30 and nw <= time_14_30): 
-            process_url('https://chartink.com/screener/indices-downtrend-2', 'indices-downtrend', time_10_30, time_14_30) 
-            process_url('https://chartink.com/screener/stocks-downtrend', 'stocks-downtrend', time_10_30, time_14_30)   
+        if(nw>= time_11_30 and nw <= time_14_30): 
+            process_url('https://chartink.com/screener/indices-downtrend-2', 'indices-downtrend', time_11_30, time_14_30) 
+            process_url('https://chartink.com/screener/stocks-downtrend', 'stocks-downtrend', time_11_30, time_14_30)   
         
         time.sleep(200)
         nw = datetime.now()

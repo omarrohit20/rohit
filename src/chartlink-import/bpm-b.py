@@ -99,11 +99,8 @@ if __name__ == "__main__":
         if(nw>=time_09_25 and nw<=time_10_15):
             process_url('https://chartink.com/screener/buy-downtrend-01', 'buy-downtrendlast2day', time_09_25, time_10_00) 
             process_url('https://chartink.com/screener/buy-uptrend-01', 'buy-uptrendlast2day', time_09_25, time_10_00)
-        
-        if(nw>= time_09_30 and nw <= time_10_30):
-            process_url('https://chartink.com/screener/buy-check-breaup-first5minutegreen-01', 'buy-check-breaup-first5minutegreen-01', time_09_30, time_10_30)
-            process_url('https://chartink.com/screener/buy-check-breaup-first5minutegreen-02', 'buy-check-breaup-first5minutegreen-02', time_09_30, time_10_30)
-        
+                
+                    
         if(nw>= time_09_20 and nw <= time_11_30):    
             process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02-1', 'buy-check-morning-down-breakup-02', time_09_20, time_11_30)
          

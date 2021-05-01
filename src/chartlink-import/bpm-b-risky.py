@@ -103,9 +103,9 @@ if __name__ == "__main__":
             process_url('https://chartink.com/screener/buy-breakup-intraday-9-30-to-10', '(=========UPTREND=======)buy-breakup-intraday-9:50-to-10:10-01', time_09_50, time_10_15)
             process_url('https://chartink.com/screener/buy-breakup-intraday-9-50-to-10-10-02', 'buy-breakup-intraday-9:50-to-10:10-02', time_09_45, time_10_15)
         
-        if(nw>= time_10_30 and nw <= time_14_30): 
-            process_url('https://chartink.com/screener/indices-uptrend-3', 'indices-uptrend', time_10_30, time_14_30)
-            process_url('https://chartink.com/screener/stocks-uptrend-3', 'stocks-uptrend', time_10_30, time_14_30)
+        if(nw>= time_11_30 and nw <= time_14_30): 
+            process_url('https://chartink.com/screener/indices-uptrend-3', 'indices-uptrend', time_11_30, time_14_30)
+            process_url('https://chartink.com/screener/stocks-uptrend-3', 'stocks-uptrend', time_11_30, time_14_30)
               
         #process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02', 'buy-check-morning-down-breakup-02')
         
