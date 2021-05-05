@@ -90,6 +90,7 @@ if __name__ == "__main__":
     time_11_15 = st + timedelta(seconds=11*3600+15*60) # this gives 11:15 AM
     time_11_30 = st + timedelta(seconds=11*3600+30*60) # this gives 11:30 AM
     time_12_00 = st + timedelta(seconds=12*3600) # this gives 12:00 PM
+    time_12_30 = st + timedelta(seconds=12*3600+30*60) # this gives 12:30 PM
     time_13_00 = st + timedelta(seconds=13*3600) # this gives 1:00 PM
     time_13_30 = st + timedelta(seconds=13*3600+30*60) # this gives 1:30 PM
     time_14_30 = st + timedelta(seconds=14*3600+30*60) # this gives 2:30 PM
@@ -103,9 +104,9 @@ if __name__ == "__main__":
 #             process_url('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-01', 'sell-breakdown-intraday-9:50-to-10:10-1', time_09_40, time_10_30)
 #             process_url('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-02', 'sell-breakdown-intraday-9:50-to-10:10-2', time_09_40, time_10_30)
             
-        if(nw>= time_11_30 and nw <= time_14_30): 
-            process_url('https://chartink.com/screener/indices-downtrend-2', 'indices-downtrend', time_11_30, time_14_30) 
-            process_url('https://chartink.com/screener/stocks-downtrend', 'stocks-downtrend', time_11_30, time_14_30)   
+        if(nw>= time_12_00 and nw <= time_14_30): 
+            process_url('https://chartink.com/screener/indices-downtrend-2', 'indices-downtrend', time_12_00, time_14_30) 
+            process_url('https://chartink.com/screener/stocks-downtrend', 'stocks-downtrend', time_12_00, time_14_30)   
         
         time.sleep(200)
         nw = datetime.now()
