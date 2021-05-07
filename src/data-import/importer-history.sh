@@ -1,6 +1,3 @@
-#!/bin/bash 
-. ~/.bash_profile
-pyenv local 3.5.0
-python ./cleaner.py
-python ./S2cripHistoryImporterYahoo.py all Yes
-python ./S2cripHistoryImporterYahoo.py update No
+python3 ./cleaner.py
+python3 ./S2cripHistoryImporterYahoo.py all Yes
+python3 ./S2cripHistoryImporterYahoo.py update No

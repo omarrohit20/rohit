@@ -1,6 +1,2 @@
-#!/bin/bash 
-. ~/.bash_profile
-pyenv local 3.5.0
-python ./regression.py No No
-pyenv local 3.5.0
-python ./regression_result.py No ""
+python3 ./regression.py No No
+python3 ./regression_result.py No ""

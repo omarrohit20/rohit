@@ -1,6 +1,3 @@
-#!/bin/bash 
-. ~/.bash_profile
-pyenv local 3.5.0
-python ./S2cripHistoryOIImporter.py update
-python ./S2cripHistoryOIImporterNext.py update
+python3 ./S2cripHistoryOIImporter.py update
+python3 ./S2cripHistoryOIImporterNext.py update
 

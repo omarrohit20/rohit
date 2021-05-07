@@ -26,7 +26,7 @@ connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
 forecast_out = 1
-run_ml_algo = False
+run_ml_algo = True
 
 def regression_ta_data(scrip):
     data = db.history.find_one({'dataset_code':scrip})
