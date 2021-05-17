@@ -37,7 +37,7 @@ proxy = None
 option = webdriver.ChromeOptions()
 prefs = {"profile.password_manager_enabled": True}
 option.add_experimental_option("prefs", prefs)
-#option.add_argument('--headless')
+option.add_argument('--headless')
 option.add_argument('--no-sandbox')
 option.add_argument('--disable-gpu')
 
@@ -93,10 +93,10 @@ def process_url(url, processor, starttime, endtime):
     for ent in proxy.har['log']['entries']:
         _url = ent['request']['url']
         _response = ent['response']
-        print(_response)
+        #print(_response)
         if (_url == 'https://chartink.com/backtest/process') and ('text' in ent['response']['content']):
             data = _response['content']['text']
-            print(data)
+            #print(data)
             process_backtest(data, processor, starttime, endtime)
             
             
