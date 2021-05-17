@@ -27,8 +27,10 @@ if __name__ == "__main__":
                 
         if(sb.nw>= time_10_00 and sb.nw <= time_12_30):
             process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-01', 'sell-dayconsolidation-breakout-01', time_10_00, time_12_00)
+            process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-02', 'sell-dayconsolidation-breakout-02', time_10_00, time_12_00)
         
-            
+        if(sb.nw>= time_11_15 and sb.nw <= time_14_00):
+            process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-03-1', 'sell-dayconsolidation-breakout-03', time_11_15, time_14_00)    
         
         time.sleep(200)
         sb.nw = datetime.now()
