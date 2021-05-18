@@ -18,7 +18,6 @@ if __name__ == "__main__":
     while (sb.nw <= time_13_30): 
         if(sb.nw>=time_09_25 and sb.nw<=time_10_15):
             process_url('https://chartink.com/screener/buy-downtrend-01', 'buy-downtrendlast2day', time_09_25, time_10_15) 
-            process_url('https://chartink.com/screener/buy-uptrend-01', 'buy-uptrendlast2day', time_09_25, time_10_15)
                 
                     
         if(sb.nw>= time_09_45 and sb.nw <= time_11_30):    

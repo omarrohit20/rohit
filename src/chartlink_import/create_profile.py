@@ -6,14 +6,14 @@ if __name__ == "__main__":
     
     #shutil.rmtree("/Users/profilechrome/profiles")
     
-    sb.server = Server(sb.path, options={'port': 16090})
-    time.sleep(1)
-    sb.server.start()
-    time.sleep(1)
-    sb.proxy = sb.server.create_proxy()
-    print("Server started")
-    
-    sb.option.add_argument('--proxy-server=%s' % sb.proxy.proxy)
+    # sb.server = Server(sb.path, options={'existing_proxy_port_to_use': 16010})
+    # time.sleep(1)
+    # sb.server.start()
+    # time.sleep(1)
+    # sb.proxy = sb.server.create_proxy()
+    # print("Server started")
+    #
+    # sb.option.add_argument('--proxy-server=%s' % sb.proxy.proxy)
     sb.option.add_argument("user-data-dir=/Users/profilechrome/profiles/p")
     sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities)
     sb.driver.get("https://chartink.com/login")

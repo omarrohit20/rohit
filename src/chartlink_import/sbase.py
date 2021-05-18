@@ -52,38 +52,41 @@ driver = None
 
 def process_backtest(rawdata, processor, starttime, endtime):
     response_json = json.loads(rawdata)
-    aggregatedStockList = response_json["aggregatedStockList"]
-    tradeTimes = response_json["metaData"][0]["tradeTimes"]
-    df = pd.DataFrame({'aggregatedStockList': aggregatedStockList, 'tradeTimes': tradeTimes})
-    df = df[-80:] 
-    df.drop(df[df['aggregatedStockList'].str.len().lt(1)].index, inplace=True)
-    df.iloc[::-1]
-    for ind in df.index: 
-        i = 0
-        while i < len(df['aggregatedStockList'][ind]):
-            epochtime = str(df['tradeTimes'][ind])[0:-3]
-            eventtime = time.localtime(int(epochtime))
-            systemtime = time.strftime('%Y-%m-%d %H:%M:%S', eventtime)
-            eventdateonly = time.strftime('%Y-%m-%d', eventtime)
-            #eventtimeonly = time.strftime('%H:%M:%S', eventtime)
-            currenttime = datetime.strptime(systemtime, '%Y-%m-%d %H:%M:%S')
-            reportedtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            scrip = df['aggregatedStockList'][ind][i]
-            #print(scrip, systemtime)
-            if(i%3 == 0 and eventdateonly == (date.today()).strftime('%Y-%m-%d')
-                and currenttime >= starttime and currenttime <= endtime
-                ):
-                if((db[processor].find_one({'scrip':scrip}) is None)):
-                    print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime)
-                    record = {}
-                    record['dataset_code'] = scrip
-                    record['scrip'] = scrip
-                    record['epochtime'] = epochtime
-                    record['eventtime'] = eventtime
-                    record['systemtime'] = systemtime
-                    json_data = json.loads(json.dumps(record, default=json_util.default))
-                    db[processor].insert_one(json_data)
-            i += 1
+    try:
+        aggregatedStockList = response_json["aggregatedStockList"]
+        tradeTimes = response_json["metaData"][0]["tradeTimes"]
+        df = pd.DataFrame({'aggregatedStockList': aggregatedStockList, 'tradeTimes': tradeTimes})
+        df = df[-80:] 
+        df.drop(df[df['aggregatedStockList'].str.len().lt(1)].index, inplace=True)
+        df.iloc[::-1]
+        for ind in df.index: 
+            i = 0
+            while i < len(df['aggregatedStockList'][ind]):
+                epochtime = str(df['tradeTimes'][ind])[0:-3]
+                eventtime = time.localtime(int(epochtime))
+                systemtime = time.strftime('%Y-%m-%d %H:%M:%S', eventtime)
+                eventdateonly = time.strftime('%Y-%m-%d', eventtime)
+                #eventtimeonly = time.strftime('%H:%M:%S', eventtime)
+                currenttime = datetime.strptime(systemtime, '%Y-%m-%d %H:%M:%S')
+                reportedtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                scrip = df['aggregatedStockList'][ind][i]
+                #print(scrip, systemtime)
+                if(i%3 == 0 and eventdateonly == (date.today()).strftime('%Y-%m-%d')
+                    and currenttime >= starttime and currenttime <= endtime
+                    ):
+                    if((db[processor].find_one({'scrip':scrip}) is None)):
+                        print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime)
+                        record = {}
+                        record['dataset_code'] = scrip
+                        record['scrip'] = scrip
+                        record['epochtime'] = epochtime
+                        record['eventtime'] = eventtime
+                        record['systemtime'] = systemtime
+                        json_data = json.loads(json.dumps(record, default=json_util.default))
+                        db[processor].insert_one(json_data)
+                i += 1
+    except KeyError:
+        print("")
             
 def process_url(url, processor, starttime, endtime):
     proxy.new_har("file_name", options={'captureHeaders': False, 'captureContent': True, 'captureBinaryContent': True})
