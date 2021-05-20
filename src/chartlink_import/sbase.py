@@ -86,7 +86,7 @@ def process_backtest(rawdata, processor, starttime, endtime):
                         db[processor].insert_one(json_data)
                 i += 1
     except KeyError:
-        print("")
+        None
             
 def process_url(url, processor, starttime, endtime):
     proxy.new_har("file_name", options={'captureHeaders': False, 'captureContent': True, 'captureBinaryContent': True})
