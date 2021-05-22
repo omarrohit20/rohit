@@ -16,11 +16,13 @@ if __name__ == "__main__":
     sb.nw = datetime.now()
     
     while (sb.nw <= time_11_30): 
+        if(sb.nw>=time_09_25 and sb.nw<=time_10_15):
+            process_url('https://chartink.com/screener/sell-uptrend-01', 'sell-uptrendlast2day', time_09_25, time_10_00) 
+        
         if(sb.nw>= time_09_30 and sb.nw <= time_10_30):
             process_url('https://chartink.com/screener/copy-sell-final-check-breakdown-first5minutered', 'sell-final-check-breakdown-first5minutered', time_09_30, time_10_30)
         
         if(sb.nw>= time_09_40 and sb.nw <= time_10_30): 
-            process_url('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-05', '05-sellBreakdownIntraday-9:45', time_09_40, time_09_50)  
             process_url('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-03', '(==MidcapLastDayDown==)03-sellBreakdownIntraday-9:40-to-9:50', time_09_40, time_09_50)
             
         if(sb.nw>= time_10_15 and sb.nw <= time_11_30):   
@@ -29,7 +31,7 @@ if __name__ == "__main__":
 #         if(sb.nw>= time_10_30 and sb.nw <= time_13_30):
 #             process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-02', 'sell-dayconsolidation-breakout-02', time_10_30, time_13_30)
             
-        time.sleep(200)
+        time.sleep(100)
         sb.nw = datetime.now()
         
     sb.server.stop()

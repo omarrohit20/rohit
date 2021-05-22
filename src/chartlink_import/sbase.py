@@ -1,5 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium import *
 from browsermobproxy import Server
 from datetime import datetime
 from datetime import timedelta
@@ -87,11 +89,15 @@ def process_backtest(rawdata, processor, starttime, endtime):
                 i += 1
     except KeyError:
         None
+    except TypeError:
+        None
             
 def process_url(url, processor, starttime, endtime):
     proxy.new_har("file_name", options={'captureHeaders': False, 'captureContent': True, 'captureBinaryContent': True})
     driver.get(url)
-    #proxy.wait_for_traffic_to_stop(1, 10)
+    time.sleep(60)
+    #WebDriverWait(driver, 30).until(lambda x: x.find_element_by_id("backtest-chart"))
+    proxy.wait_for_traffic_to_stop(1, 30)
     #print(proxy.har)
     for ent in proxy.har['log']['entries']:
         _url = ent['request']['url']

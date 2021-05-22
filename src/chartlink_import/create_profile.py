@@ -19,9 +19,12 @@ if __name__ == "__main__":
     sb.driver.get("https://chartink.com/login")
     sb.driver.find_element_by_id("email").send_keys("")
     sb.driver.find_element_by_id("password").send_keys("")
+    
     sb.driver.find_element_by_css_selector("button.g-recaptcha").click()
     
     time.sleep(5)
+    
+    
     
     sb.driver.quit()
     

@@ -29,7 +29,7 @@ if __name__ == "__main__":
               
         #process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02', 'buy-check-morning-down-breakup-02')
         
-        time.sleep(200)
+        time.sleep(100)
         sb.nw = datetime.now()
         
     sb.server.stop()

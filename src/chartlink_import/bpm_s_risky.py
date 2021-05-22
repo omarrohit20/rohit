@@ -27,7 +27,7 @@ if __name__ == "__main__":
             process_url('https://chartink.com/screener/indices-downtrend-2', 'indices-downtrend', time_12_00, time_14_30) 
             process_url('https://chartink.com/screener/stocks-downtrend', 'stocks-downtrend', time_12_00, time_14_30)   
         
-        time.sleep(200)
+        time.sleep(100)
         sb.nw = datetime.now()
         
     sb.server.stop()
