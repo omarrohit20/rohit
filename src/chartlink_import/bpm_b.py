@@ -2,7 +2,7 @@ import sbase as sb
 from config import *
      
 if __name__ == "__main__":
-    sb.server = Server(sb.path, options={'existing_proxy_port_to_use': 16090})
+    sb.server = Server(sb.path, options={'existing_proxy_port_to_use': 18090})
     time.sleep(1)
     sb.server.start()
     time.sleep(1)
@@ -11,6 +11,7 @@ if __name__ == "__main__":
     
     sb.option.add_argument('--proxy-server=%s' % sb.proxy.proxy)
     sb.option.add_argument("user-data-dir=/Users/profilechrome/profiles/p3")
+    #sb.option.add_argument('--headless')
     sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities)
     
     sb.nw = datetime.now()
@@ -28,9 +29,8 @@ if __name__ == "__main__":
         if(sb.nw>= time_11_15 and sb.nw <= time_14_00):
             process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-03-1', 'buy-dayconsolidation-breakout-03', time_11_15, time_14_00)
             
-        
-    time.sleep(100)
-    sb.nw = datetime.now()
+        time.sleep(100)
+        sb.nw = datetime.now()
         
     sb.server.stop()
     sb.driver.quit()
