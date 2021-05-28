@@ -20,8 +20,8 @@ if __name__ == "__main__":
         if(sb.nw>=time_09_25 and sb.nw<=time_10_15):
             process_url('https://chartink.com/screener/buy-downtrend-01', 'buy-downtrendlast2day', time_09_25, time_10_15) 
                 
-        if(sb.nw>= time_09_30 and sb.nw <= time_10_30):
-            process_url('https://chartink.com/screener/buy-check-breaup-first5minutegreen-01', 'buy-check-breaup-first5minutegreen-01', time_09_30, time_10_30)
+        if(sb.nw>= time_11_30 and sb.nw <= time_13_30):
+            process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-04', 'buy-dayconsolidation-breakout-04(11:45-to-1:00)', time_11_30, time_13_00)
          
         if(sb.nw>= time_09_40 and sb.nw <= time_10_30): 
             process_url('https://chartink.com/screener/buy-breakup-intraday-9-50-to-10-10-03', '(==MidcapLastDayUp==)03-buyBreakupIntraday-9:40-to-9:50', time_09_40, time_09_50)
