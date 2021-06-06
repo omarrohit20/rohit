@@ -52,7 +52,7 @@ with open('nselist/ind_nifty500list.csv') as csvfile:
 print(count)
 
 count = 0
-with open('nselist/ind_nifty500list.csv') as csvfile:
+with open('nselist/ind_nifty1000list.csv') as csvfile:
     readCSV = csv.reader(csvfile, delimiter=',')
     for row in readCSV:
         try:

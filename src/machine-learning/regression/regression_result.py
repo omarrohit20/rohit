@@ -542,15 +542,16 @@ def calculateParallel(threads=2, futures='Yes', processing_date=""):
             print('End Date ', regdata['date'], 'not recent for', data['scrip'])
         else: 
             scrips.append(data['scrip'])
-#     for data in db.scrip.find({'futures':'No'}):
-#         #print('Scrip ', data)
-#         regdata = db.regressionlow.find_one({'scrip':data['scrip']})
-#         if(regdata is None):
-#             print('Missing or very less Data for ', data['scrip'])
-#         if(regdata is not None and regdata['date'] != processing_date):
-#             print('End Date ', regdata['date'], 'not recent for', data['scrip'])
-#         else: 
-#             scrips.append(data['scrip'])
+    if (futures =='No' or futures =='NO' or futures =='no'):
+        for data in db.scrip.find({'futures':'Yes'}):
+            #print('Scrip ', data)
+            regdata = db.regressionlow.find_one({'scrip':data['scrip']})
+            if(regdata is None):
+                print('Missing or very less Data for ', data['scrip'])
+            if(regdata is not None and regdata['date'] != processing_date):
+                print('End Date ', regdata['date'], 'not recent for', data['scrip'])
+            else: 
+                scrips.append(data['scrip'])
     scrips.sort()
     #pool.map(result_data, scrips)
     #pool.map(result_data_cla, scrips)

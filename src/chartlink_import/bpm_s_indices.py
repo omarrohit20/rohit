@@ -16,7 +16,7 @@ if __name__ == "__main__":
     
     sb.nw = datetime.now()
     
-    while (sb.nw <= time_11_30): 
+    while (sb.nw <= time_12_00): 
         if(sb.nw>=time_09_25 and sb.nw<=time_10_15):
             process_url('https://chartink.com/screener/sell-uptrend-01', 'sell-uptrendlast2day', time_09_25, time_10_00) 
         

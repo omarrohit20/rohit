@@ -26,8 +26,8 @@ if __name__ == "__main__":
             process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-01', 'buy-dayconsolidation-breakout-01', time_10_00, time_12_00)
             process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-02', 'buy-dayconsolidation-breakout-02', time_10_00, time_12_00)
             
-        if(sb.nw>= time_11_15 and sb.nw <= time_14_00):
-            process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-03-1', 'buy-dayconsolidation-breakout-03', time_11_15, time_14_00)
+        if(sb.nw>= time_12_15 and sb.nw <= time_14_00):
+            process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-03-1', 'buy-dayconsolidation-breakout-03', time_12_15, time_14_00)
             
         time.sleep(100)
         sb.nw = datetime.now()
