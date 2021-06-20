@@ -117,137 +117,122 @@ def saveReports():
                showLastColumn=False, showRowStripes=True, showColumnStripes=True)
     
     count = 0
-    for row in ws_allFilterAcc.iter_rows(row_offset=1):
+    for row in ws_allFilterAcc.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="allFilterAcc", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_allFilterAcc.add_table(tab)
     
     count = 0
-    for row in ws_highBuyStrongBoth.iter_rows(row_offset=1):
+    for row in ws_highBuyReg.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
-    tab.tableStyleInfo = style
-    ws_highBuyStrongBoth.add_table(tab)
-    
-    
-    count = 0
-    for row in ws_highBuyReg.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="highBuyReg", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_highBuyReg.add_table(tab)
     
     count = 0
-    for row in ws_highBuyStrong.iter_rows(row_offset=1):
+    for row in ws_highBuyStrong.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="highBuyStrong", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_highBuyStrong.add_table(tab)
     
     count = 0
-    for row in ws_highBuyStrongFilterAcc.iter_rows(row_offset=1):
+    for row in ws_highBuyStrongFilterAcc.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="highBuyStrongFilterAcc", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_highBuyStrongFilterAcc.add_table(tab)
     
     count = 0
-    for row in ws_highAnalysis.iter_rows(row_offset=1):
+    for row in ws_highAnalysis.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="highAnalysis", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_highAnalysis.add_table(tab)
     
     count = 0
-    for row in ws_high.iter_rows(row_offset=1):
+    for row in ws_high.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="high", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_high.add_table(tab)
     
     
     count = 0
-    for row in ws_lowSellStrongBoth.iter_rows(row_offset=1):
+    for row in ws_lowSellReg.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
-    tab.tableStyleInfo = style
-    ws_lowSellStrongBoth.add_table(tab)
-    
-    count = 0
-    for row in ws_lowSellReg.iter_rows(row_offset=1):
-        count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="lowSellReg", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_lowSellReg.add_table(tab)
     
     count = 0
-    for row in ws_lowSellStrong.iter_rows(row_offset=1):
+    for row in ws_lowSellStrong.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="lowSellStrong", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_lowSellStrong.add_table(tab)
       
     count = 0
-    for row in ws_lowSellStrongFilterAcc.iter_rows(row_offset=1):
+    for row in ws_lowSellStrongFilterAcc.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="lowSellStrongFilterAcc", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_lowSellStrongFilterAcc.add_table(tab)
     
     count = 0
-    for row in ws_lowAnalysis.iter_rows(row_offset=1):
+    for row in ws_lowAnalysis.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="lowAnalysis", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_lowAnalysis.add_table(tab)
         
     count = 0
-    for row in ws_low.iter_rows(row_offset=1):
+    for row in ws_low.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="low", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_low.add_table(tab)
     
     count = 0
-    for row in ws_highBuyStrongBoth.iter_rows(row_offset=1):
+    for row in ws_highBuyStrongBoth.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="highBuyStrongBoth", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_highBuyStrongBoth.add_table(tab)
     
     count = 0
-    for row in ws_lowSellStrongBoth.iter_rows(row_offset=1):
+    for row in ws_lowSellStrongBoth.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="lowSellStrongBoth", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_lowSellStrongBoth.add_table(tab)
     
     count = 0
-    for row in ws_lowBuyStrong.iter_rows(row_offset=1):
+    for row in ws_lowBuyStrong.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="lowBuyStrong", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_lowBuyStrong.add_table(tab)
     
     count = 0
-    for row in ws_highSellStrong.iter_rows(row_offset=1):
+    for row in ws_highSellStrong.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="highSellStrong", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_highSellStrong.add_table(tab)
     
     count = 0
-    for row in ws_highBuy.iter_rows(row_offset=1):
+    for row in ws_highBuy.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="highBuy", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_highBuy.add_table(tab)
     
     count = 0
-    for row in ws_lowSell.iter_rows(row_offset=1):
+    for row in ws_lowSell.iter_rows(min_row=2):
         count += 1
-    tab = Table(displayName="Table1", ref="A1:CR" + str(count))
+    tab = Table(displayName="lowSell", ref="A1:CR" + str(count))
     tab.tableStyleInfo = style
     ws_lowSell.add_table(tab)
     

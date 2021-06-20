@@ -231,7 +231,7 @@ def get_data_frame(df, regressor='None', type='reg'):
 #        dfp['ADOSC'] = ADOSC(df)
 #        dfp['OBV'] = OBV(df)
         #if (regressor == 'kn' and (int(np.floor(dfp.shape[0])) > 1300)):
-        dfp = dfp.ix[50:] 
+        dfp = dfp.loc[50:] 
         dfp.dropna(inplace=True)   
         forecast_col = 'High_change1'
         dfp['label'] = dfp[forecast_col].shift(-forecast_out) 

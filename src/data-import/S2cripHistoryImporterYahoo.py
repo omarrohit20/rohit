@@ -9,6 +9,7 @@ import time
 import sys
 import csv
 from pymongo import MongoClient
+pd.options.mode.chained_assignment = None  # default='warn'
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 

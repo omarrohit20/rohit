@@ -39,7 +39,7 @@ from lasagne.updates import nesterov_momentum
 #import tflearn
 
 import logging
-from sklearn.ensemble.bagging import BaggingClassifier
+from sklearn.ensemble import BaggingClassifier
 log = logging.getLogger(__name__)
 import gc
 import time
