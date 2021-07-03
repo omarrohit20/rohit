@@ -19,7 +19,7 @@ if __name__ == "__main__":
     while (sb.nw <= time_13_30):
         if(sb.nw>=time_09_25 and sb.nw<=time_10_15):
             process_url('https://chartink.com/screener/buy-uptrend-01', 'buy-uptrend-01', time_09_25, time_10_15)
-            process_url('https://chartink.com/screener/buy-downtrend-01', 'buy-downtrendlast2day', time_09_25, time_10_15) 
+            process_url('https://chartink.com/screener/buy-downtrend-01', 'downlast2day(last3rdDownGT(-0.5)-Sell)(last3rdDownLt(-0.5)-Buy)', time_09_25, time_10_15) 
             
         if(sb.nw>= time_09_20 and sb.nw <= time_10_30):    
             process_url('https://chartink.com/screener/buy-check-morning-down-breakup-03', 'buy-check-morning-down-breakup-03', time_09_20, time_10_30)

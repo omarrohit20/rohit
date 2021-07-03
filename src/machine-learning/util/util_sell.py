@@ -1026,6 +1026,35 @@ def sell_high_volatility_riskyDowntrendBuy(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'RISKY-DOWNTREND-BUY-3')
         flag = True
         
+    if('DOJI' in regression_data['filter5']
+        and regression_data['PCT_day_change'] < 0
+        and regression_data['PCT_day_change_pre1'] < -0.5
+        and regression_data['PCT_day_change_pre2'] < -0.5
+        and abs(regression_data['PCT_day_change']) < abs(regression_data['PCT_day_change_pre1'])
+        and abs(regression_data['PCT_day_change']) < abs(regression_data['PCT_day_change_pre2'])
+        and (abs(regression_data['PCT_day_change_pre1'])-abs(regression_data['PCT_day_change']))*100/abs(regression_data['PCT_day_change']) > 30
+        ):
+        if(regression_data['PCT_day_change_pre3'] > 0
+            and (regression_data['week2LowChange'] > 3
+                 or regression_data['weekLowChange'] > 3
+                )
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'RISKY-DOWNTREND-BUY-4-Sell')
+        elif(regression_data['PCT_day_change_pre3'] < 0
+            and regression_data['month3LowChange'] > 5
+            and regression_data['low'] < regression_data['low_pre1']
+            and regression_data['close'] < regression_data['close_pre1']
+            and (regression_data['week2LowChange'] < 0.5)
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'RISKY-DOWNTREND-BUY-4-Buy')
+        elif(regression_data['PCT_day_change_pre3'] > -0.5
+            and regression_data['month3LowChange'] < 0
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'RISKY-DOWNTREND-BUY-4-month3LowSell')
+        
+        flag = True
+        
+        
     if('RISKY-DOWNTREND-BUY' in regression_data['filter2']
        and 1.3 > regression_data['PCT_day_change'] > 0
        and -6 < regression_data['PCT_day_change_pre1'] < -1.3
