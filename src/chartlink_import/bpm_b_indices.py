@@ -16,25 +16,26 @@ if __name__ == "__main__":
     
     sb.nw = datetime.now()
     
-    while (sb.nw <= time_13_30):
-        if(sb.nw>=time_09_25 and sb.nw<=time_10_15):
-            process_url('https://chartink.com/screener/buy-uptrend-01', 'buy-uptrend-01', time_09_25, time_10_15)
-            process_url('https://chartink.com/screener/buy-downtrend-01', 'downlast2day(last3rdDownGT(-0.5)-Sell)(last3rdDownLt(-0.5)-Buy)', time_09_25, time_10_15) 
-            
-        if(sb.nw>= time_09_20 and sb.nw <= time_10_30):    
-            process_url('https://chartink.com/screener/buy-check-morning-down-breakup-03', 'buy-check-morning-down-breakup-03', time_09_20, time_10_30)
-                
-        if(sb.nw>= time_11_30 and sb.nw <= time_13_30):
-            process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-04', 'buy-dayconsolidation-breakout-04(11:45-to-1:00)', time_11_30, time_13_00)
-         
+    while (sb.nw <= time_13_30):        
         if(sb.nw>= time_09_40 and sb.nw <= time_10_30): 
             process_url('https://chartink.com/screener/03-buybreakupintraday-01', '(==Reversal==)03-buyBreakupIntraday', time_09_40, time_09_50)
         
         if(sb.nw>= time_09_40 and sb.nw <= time_11_00): 
             process_url('https://chartink.com/screener/03-buybreakupintraday-02', '(==Continue==)03-buyBreakupIntraday', time_09_40, time_10_30)
-                    
-        if(sb.nw>= time_10_15 and sb.nw <= time_11_30):   
-            process_url('https://chartink.com/screener/buy-breakup-intraday-9-50-to-10-10-04', '(==AvoidSpikeMA50==)04-buyBreakupIntraday-10:15-to-11:15', time_10_15, time_11_15)
+            
+        if(sb.nw>= time_09_40 and sb.nw <= time_10_30):  
+            process_url('https://chartink.com/screener/buy-breakup-intraday-9-30-to-10', '(=========UPTREND=======)buy-breakup-intraday-9:40-to-10:10-01', time_09_40, time_10_15)
+        
+        if(sb.nw>= time_09_20 and sb.nw <= time_10_30):
+            process_url('https://chartink.com/screener/buy-breakup-intraday-9-25-to-10-30-06', 'buy-breakupGT2-intraday-9:25-to-10:30', time_09_25, time_10_30)
+            
+        if(sb.nw>= time_11_30 and sb.nw <= time_13_30):
+            process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-04', 'buy-dayconsolidation-breakout-04(11:45-to-1:00)', time_11_30, time_13_00)
+        
+        
+                        
+        # if(sb.nw>= time_10_15 and sb.nw <= time_11_30):   
+        #     process_url('https://chartink.com/screener/buy-breakup-intraday-9-50-to-10-10-04', '(==AvoidSpikeMA50==)04-buyBreakupIntraday-10:15-to-11:15', time_10_15, time_11_15)
         
         
         time.sleep(100)

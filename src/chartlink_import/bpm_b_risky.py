@@ -17,13 +17,15 @@ if __name__ == "__main__":
     sb.nw = datetime.now()
     
     while (sb.nw <= time_14_30):
-        if(sb.nw>= time_09_20 and sb.nw <= time_10_30):
-            process_url('https://chartink.com/screener/buy-breakup-intraday-9-25-to-10-30-06', 'buy-breakupGT2-intraday-9:25-to-10:30', time_09_25, time_10_30)
+        if(sb.nw>=time_09_25 and sb.nw<=time_10_15):
+            process_url('https://chartink.com/screener/buy-downtrend-01', 'downlast2day(last3rdDownGT(-0.5)-Sell)(last3rdDownLt(-0.5)-Buy)', time_09_25, time_10_15) 
             
-        if(sb.nw>= time_09_40 and sb.nw <= time_10_30):  
-            process_url('https://chartink.com/screener/buy-breakup-intraday-9-30-to-10', '(=========UPTREND=======)buy-breakup-intraday-9:50-to-10:10-01', time_09_50, time_10_15)
-            process_url('https://chartink.com/screener/buy-breakup-intraday-9-50-to-10-10-02', 'buy-breakup-intraday-9:50-to-10:10-02', time_09_45, time_10_15)
-        
+        if(sb.nw>= time_09_20 and sb.nw <= time_10_30):    
+            process_url('https://chartink.com/screener/buy-check-morning-down-breakup-03', 'buy-check-morning-down-breakup-03', time_09_20, time_10_30)
+            
+        if(sb.nw>= time_11_15 and sb.nw <= time_12_30):
+            process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-03', 'buy-dayconsolidation-breakout-03-checkChart', time_11_15, time_12_30)
+                 
         if(sb.nw>= time_12_00 and sb.nw <= time_14_30): 
             process_url('https://chartink.com/screener/indices-uptrend-3', 'indices-uptrend', time_12_00, time_14_30)
             process_url('https://chartink.com/screener/stocks-uptrend-3', 'stocks-uptrend', time_12_00, time_14_30)
