@@ -17,8 +17,8 @@ if __name__ == "__main__":
     sb.nw = datetime.now()
     
     while (sb.nw <= time_12_00): 
-        if(sb.nw>= time_09_40 and sb.nw <= time_10_30): 
-            process_url('https://chartink.com/screener/03-sellbreakdownintraday-01', '(==Reversal==)03-sellBreakdownIntraday', time_09_40, time_09_50)
+        #if(sb.nw>= time_09_40 and sb.nw <= time_10_30): 
+            #process_url('https://chartink.com/screener/03-sellbreakdownintraday-01', '(==Reversal==)03-sellBreakdownIntraday', time_09_40, time_09_50)
             
         if(sb.nw>= time_09_40 and sb.nw <= time_11_00): 
             process_url('https://chartink.com/screener/03-sellbreakdownintraday-02', '(==Continue==)03-sellBreakdownIntraday', time_09_40, time_10_30)
