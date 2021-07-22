@@ -30,7 +30,7 @@ if __name__ == "__main__":
         if(sb.nw>= time_10_15 and sb.nw <= time_14_00):
             process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-03', 'sell-dayconsolidation-breakout-03', time_10_15, time_14_00)
                 
-        time.sleep(10)
+        time.sleep(30)
         sb.nw = datetime.now()
         
     sb.server.stop()

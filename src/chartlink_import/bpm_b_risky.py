@@ -19,6 +19,9 @@ if __name__ == "__main__":
     while (sb.nw <= time_14_30):
         if(sb.nw>= time_09_15 and sb.nw <= time_10_00): 
             process_url('https://chartink.com/screener/supertrend-morning-buy', 'buy-supertrend-morning', time_09_15, time_10_00)
+            
+        if(sb.nw>= time_09_20 and sb.nw <= time_10_30):
+            process_url('https://chartink.com/screener/buy-breakup-intraday-9-25-to-10-30-06', 'buy-breakupGT2-intraday-9:25-to-10:30', time_09_25, time_10_30)
         
         if(sb.nw>=time_09_25 and sb.nw<=time_10_15):
             process_url('https://chartink.com/screener/buy-downtrend-01', 'downlast2day(last3rdDownGT(-0.5)-Sell)(last3rdDownLt(-0.5)-Buy)', time_09_25, time_10_15) 
@@ -34,7 +37,7 @@ if __name__ == "__main__":
               
         #process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02', 'buy-check-morning-down-breakup-02')
         
-        time.sleep(100)
+        time.sleep(30)
         sb.nw = datetime.now()
         
     sb.server.stop()

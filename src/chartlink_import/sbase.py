@@ -57,12 +57,12 @@ def process_backtest(rawdata, processor, starttime, endtime):
         aggregatedStockList = response_json["aggregatedStockList"]
         tradeTimes = response_json["metaData"][0]["tradeTimes"]
         df = pd.DataFrame({'aggregatedStockList': aggregatedStockList, 'tradeTimes': tradeTimes})
-        df = df[-80:] 
+        #df = df[-80:] 
         df.drop(df[df['aggregatedStockList'].str.len().lt(1)].index, inplace=True)
         df.iloc[::-1]
         for ind in df.index: 
             i = 0
-            while i < len(df['aggregatedStockList'][ind]):
+            while (i%3 == 0 and i < len(df['aggregatedStockList'][ind])):
                 epochtime = str(df['tradeTimes'][ind])[0:-3]
                 eventtime = time.localtime(int(epochtime))
                 systemtime = time.strftime('%Y-%m-%d %H:%M:%S', eventtime)
