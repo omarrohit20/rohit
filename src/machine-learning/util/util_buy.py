@@ -1042,6 +1042,18 @@ def buy_high_volatility_riskyUptrendSell(regression_data, regressionResult):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'RISKY-UPTREND-SELL-4-month3HighBuy')
         
         flag = True
+        
+    if((((regression_data['close_pre1'] - regression_data['open_pre1'])/regression_data['close_pre1'])*100) > 2
+        and (((regression_data['close_pre1'] - regression_data['open_pre1'])/regression_data['close_pre1'])*100) < 4
+        and (((regression_data['close_pre1'] - regression_data['low_pre1'])/regression_data['close_pre1'])*100) > 3
+        and (((regression_data['close_pre1'] - regression_data['low_pre1'])/regression_data['close_pre1'])*100) < 6
+        and (((regression_data['close'] - regression_data['low'])/regression_data['close'])*100) < 1
+        and (((regression_data['close'] - regression_data['low'])/regression_data['close'])*100) > -1
+        and (((regression_data['close'] - regression_data['open'])/regression_data['close'])*100) < 1
+        and (((regression_data['close'] - regression_data['open'])/regression_data['close'])*100) > -1
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'RISKY-UPTREND-SELL-5-Buy')
+        flag = True
     
     if('RISKY-UPTREND-SELL' in regression_data['filter2']
        and -1.3 < regression_data['PCT_day_change'] < 0
