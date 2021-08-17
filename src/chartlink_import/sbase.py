@@ -22,7 +22,7 @@ global path, proxy, option, capabilities, driver
 
 connection = MongoClient('localhost', 27017)
 db = connection.chartlink
-
+dbnse = connection.Nsedata
 
 nw = datetime.now()
 hrs = nw.hour;mins = nw.minute;secs = nw.second;
@@ -76,7 +76,12 @@ def process_backtest(rawdata, processor, starttime, endtime):
                     and currenttime >= starttime and currenttime <= endtime
                     ):
                     if((db[processor].find_one({'scrip':scrip}) is None)):
-                        print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime)
+                        if((dbnse['highBuyStrong'].find_one({'scrip':scrip}) is not None)):
+                            print(reportedtime, ':', processor, ' : ', 'highBuyStrong', scrip, ' : ', systemtime)
+                        elif((dbnse['lowSellStrong'].find_one({'scrip':scrip}) is not None)):
+                            print(reportedtime, ':', processor, ' : ', 'lowSellStrong', scrip, ' : ', systemtime)
+                        else:
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime)
                         record = {}
                         record['dataset_code'] = scrip
                         record['scrip'] = scrip

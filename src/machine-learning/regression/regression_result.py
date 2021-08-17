@@ -6,6 +6,7 @@ from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.styles import Color, PatternFill, Font, Border
 from pymongo import MongoClient
 from multiprocessing.dummy import Pool as ThreadPool
+from bson import json_util
 
 import quandl, math, time
 import pandas as pd
@@ -16,6 +17,7 @@ import datetime
 import time
 import gc
 import copy
+import json
 
 from util.util import pct_change_filter, getScore, all_day_pct_change_negative, all_day_pct_change_positive, no_doji_or_spinning_buy_india, no_doji_or_spinning_sell_india, scrip_patterns_to_dict
 from util.util import is_algo_buy, is_algo_sell, is_filter_all_accuracy, is_any_reg_algo_gt1, is_any_reg_algo_lt_minus1, is_any_reg_algo_gt1_not_other, is_any_reg_algo_lt_minus1_not_other
@@ -425,6 +427,11 @@ def result_data_reg(scrip):
             ):
             buy_all_common_High_Low(regression_data, regressionResultHigh, True, None)
             all_withoutml(regression_data, regressionResultHigh, ws_highBuyStrong) 
+            if((db['highBuyStrong'].find_one({'scrip':scrip}) is None)):
+                record = {}
+                record['scrip'] = scrip
+                json_data = json.loads(json.dumps(record, default=json_util.default))
+                db['highBuyStrong'].insert_one(json_data)
         if ((is_algo_sell(regression_high_copy2) and is_any_reg_algo_lt_minus1_not_other(regression_data))
             or (is_algo_sell(regression_high_copy2, True) and is_algo_sell(regression_low_copy2, True) and is_any_reg_algo_lt_minus1(regression_data))
             ):
@@ -448,6 +455,11 @@ def result_data_reg(scrip):
             ):
             sell_all_common_High_Low(regression_data, regressionResultLow, True, None)
             all_withoutml(regression_data, regressionResultLow, ws_lowSellStrong)
+            if((db['lowSellStrong'].find_one({'scrip':scrip}) is None)):
+                record = {}
+                record['scrip'] = scrip
+                json_data = json.loads(json.dumps(record, default=json_util.default))
+                db['lowSellStrong'].insert_one(json_data)
         if ((is_algo_buy(regression_low_copy2) and is_any_reg_algo_gt1_not_other(regression_data))
             or (is_algo_buy(regression_high_copy2, True) and is_algo_buy(regression_low_copy2, True) and is_any_reg_algo_gt1(regression_data))
             ):
