@@ -29,8 +29,8 @@ db.drop_collection('classificationhigh')
 db.drop_collection('classificationlow')
 db.drop_collection('scrip_result')
 db.drop_collection('resultScripFutures')
-db.drop_collection('highBuyStrong')
-db.drop_collection('lowSellStrong')
+db.drop_collection('highBuy')
+db.drop_collection('lowSell')
 db = connection.chartlink
 collection = db.list_collection_names(include_system_collections=False)
 for collect in collection:

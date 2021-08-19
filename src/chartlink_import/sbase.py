@@ -76,12 +76,16 @@ def process_backtest(rawdata, processor, starttime, endtime):
                     and currenttime >= starttime and currenttime <= endtime
                     ):
                     if((db[processor].find_one({'scrip':scrip}) is None)):
-                        if((dbnse['highBuyStrong'].find_one({'scrip':scrip}) is not None)):
-                            print(reportedtime, ':', processor, ' : ', 'highBuyStrong', scrip, ' : ', systemtime)
-                        elif((dbnse['lowSellStrong'].find_one({'scrip':scrip}) is not None)):
-                            print(reportedtime, ':', processor, ' : ', 'lowSellStrong', scrip, ' : ', systemtime)
-                        else:
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime)
+                        mldatahigh = ''
+                        mldatalow = ''
+                        if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
+                            data = dbnse.highBuy.find_one({'scrip':scrip})
+                            mldatahigh = data['ml'] + '-' + data['filter2']
+                        if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
+                            data = dbnse.highBuy.find_one({'scrip':scrip})
+                            mldatalow = data['ml'] + '-' + data['filter2']
+                        
+                        print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
                         record = {}
                         record['dataset_code'] = scrip
                         record['scrip'] = scrip

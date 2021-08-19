@@ -20,7 +20,7 @@ import copy
 import json
 
 from util.util import pct_change_filter, getScore, all_day_pct_change_negative, all_day_pct_change_positive, no_doji_or_spinning_buy_india, no_doji_or_spinning_sell_india, scrip_patterns_to_dict
-from util.util import is_algo_buy, is_algo_sell, is_filter_all_accuracy, is_any_reg_algo_gt1, is_any_reg_algo_lt_minus1, is_any_reg_algo_gt1_not_other, is_any_reg_algo_lt_minus1_not_other
+from util.util import is_algo_buy, is_algo_sell, is_filter_all_accuracy, is_filter_hist_accuracy, is_any_reg_algo_gt1, is_any_reg_algo_lt_minus1, is_any_reg_algo_gt1_not_other, is_any_reg_algo_lt_minus1_not_other
 from util.util import get_regressionResult
 from util.util import buy_pattern_from_history, buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final, buy_pattern
 from util.util import sell_pattern_from_history, sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final, sell_pattern
@@ -427,11 +427,13 @@ def result_data_reg(scrip):
             ):
             buy_all_common_High_Low(regression_data, regressionResultHigh, True, None)
             all_withoutml(regression_data, regressionResultHigh, ws_highBuyStrong) 
-            if((db['highBuyStrong'].find_one({'scrip':scrip}) is None)):
+            if((db['highBuy'].find_one({'scrip':scrip}) is None)):
                 record = {}
                 record['scrip'] = scrip
+                record['ml'] = 'highBuyStrong'
+                record['filter2'] = regression_high_copy['filter2']
                 json_data = json.loads(json.dumps(record, default=json_util.default))
-                db['highBuyStrong'].insert_one(json_data)
+                db['highBuy'].insert_one(json_data)
         if ((is_algo_sell(regression_high_copy2) and is_any_reg_algo_lt_minus1_not_other(regression_data))
             or (is_algo_sell(regression_high_copy2, True) and is_algo_sell(regression_low_copy2, True) and is_any_reg_algo_lt_minus1(regression_data))
             ):
@@ -455,11 +457,13 @@ def result_data_reg(scrip):
             ):
             sell_all_common_High_Low(regression_data, regressionResultLow, True, None)
             all_withoutml(regression_data, regressionResultLow, ws_lowSellStrong)
-            if((db['lowSellStrong'].find_one({'scrip':scrip}) is None)):
+            if((db['lowSell'].find_one({'scrip':scrip}) is None)):
                 record = {}
                 record['scrip'] = scrip
+                record['ml'] = 'lowSellStrong'
+                record['filter2'] = regression_low_copy['filter2']
                 json_data = json.loads(json.dumps(record, default=json_util.default))
-                db['lowSellStrong'].insert_one(json_data)
+                db['lowSell'].insert_one(json_data)
         if ((is_algo_buy(regression_low_copy2) and is_any_reg_algo_gt1_not_other(regression_data))
             or (is_algo_buy(regression_high_copy2, True) and is_algo_buy(regression_low_copy2, True) and is_any_reg_algo_gt1(regression_data))
             ):
@@ -476,9 +480,25 @@ def result_data_reg(scrip):
         regression_high_copy['filter1']=""
         if(is_filter_all_accuracy(regression_high_copy, regression_high, regression_low, regressionResultHigh, 'High', None)):
             all_withoutml(regression_high_copy, regressionResultHigh, ws_highBuyStrongFilterAcc)
+            if(is_filter_hist_accuracy(regression_high_copy, regression_high, regression_low, regressionResultHigh, 'High', None)
+                and (db['highBuy'].find_one({'scrip':scrip}) is None)):
+                record = {}
+                record['scrip'] = scrip
+                record['ml'] = ''
+                record['filter2'] = regression_high_copy['filter2']
+                json_data = json.loads(json.dumps(record, default=json_util.default))
+                db['highBuy'].insert_one(json_data)
         regression_low_copy['filter1']=""
         if(is_filter_all_accuracy(regression_low_copy, regression_high, regression_low, regressionResultLow, 'Low', None)):
             all_withoutml(regression_low_copy, regressionResultLow, ws_lowSellStrongFilterAcc)
+            if(is_filter_hist_accuracy(regression_low_copy, regression_high, regression_low, regressionResultLow, 'Low', None)
+                and (db['lowSell'].find_one({'scrip':scrip}) is None)):
+                record = {}
+                record['scrip'] = scrip
+                record['ml'] = ''
+                record['filter2'] = regression_low_copy['filter2']
+                json_data = json.loads(json.dumps(record, default=json_util.default))
+                db['lowSell'].insert_one(json_data)
         
         
         if(is_filter_all_accuracy(regression_high_copy1, regression_high, regression_low, regressionResultHigh, "None", None)

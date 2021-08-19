@@ -2059,6 +2059,26 @@ def is_reg_sell_pct_filter(regression_data):
         return True
     else:
         return False
+    
+def is_filter_hist_accuracy(regression_data, regression_high, regression_low, regressionResult, high_or_low, ws):
+    pct_filter_345_avg = 0
+    pct_filter_avg = 0
+    pct_filter_pct_change_avg = 0
+    pct_filter_all_avg = 0
+
+    lt_minus_2_count_any, lt_minus_2_cnt = filter_avg_lt_minus_2_count_any(regression_data)
+    lt_minus_1_count_any, lt_minus_1_cnt = filter_avg_lt_minus_1_count_any(regression_data)
+    gt_2_count_any, gt_2_cnt = filter_avg_gt_2_count_any(regression_data)
+    gt_1_count_any, gt_1_cnt = filter_avg_gt_1_count_any(regression_data)
+    if(lt_minus_2_count_any >= 1 and lt_minus_2_cnt > 2
+        ):
+        return True
+    elif(gt_2_count_any >= 1 and gt_2_cnt > 2
+        ):
+        return True
+    else:
+        return False
+         
 
 def is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, high_or_low, ws):
     pct_filter_345_avg = 0
