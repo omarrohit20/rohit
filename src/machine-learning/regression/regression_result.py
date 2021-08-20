@@ -431,7 +431,8 @@ def result_data_reg(scrip):
                 record = {}
                 record['scrip'] = scrip
                 record['ml'] = 'highBuyStrong'
-                record['filter2'] = regression_high_copy['filter2']
+                record['filter'] = ''
+                record['filter2'] = ''
                 json_data = json.loads(json.dumps(record, default=json_util.default))
                 db['highBuy'].insert_one(json_data)
         if ((is_algo_sell(regression_high_copy2) and is_any_reg_algo_lt_minus1_not_other(regression_data))
@@ -461,7 +462,8 @@ def result_data_reg(scrip):
                 record = {}
                 record['scrip'] = scrip
                 record['ml'] = 'lowSellStrong'
-                record['filter2'] = regression_low_copy['filter2']
+                record['filter'] = ''
+                record['filter2'] = ''
                 json_data = json.loads(json.dumps(record, default=json_util.default))
                 db['lowSell'].insert_one(json_data)
         if ((is_algo_buy(regression_low_copy2) and is_any_reg_algo_gt1_not_other(regression_data))
@@ -480,25 +482,33 @@ def result_data_reg(scrip):
         regression_high_copy['filter1']=""
         if(is_filter_all_accuracy(regression_high_copy, regression_high, regression_low, regressionResultHigh, 'High', None)):
             all_withoutml(regression_high_copy, regressionResultHigh, ws_highBuyStrongFilterAcc)
-            if(is_filter_hist_accuracy(regression_high_copy, regression_high, regression_low, regressionResultHigh, 'High', None)
-                and (db['highBuy'].find_one({'scrip':scrip}) is None)):
-                record = {}
-                record['scrip'] = scrip
-                record['ml'] = ''
-                record['filter2'] = regression_high_copy['filter2']
-                json_data = json.loads(json.dumps(record, default=json_util.default))
-                db['highBuy'].insert_one(json_data)
+            if(is_filter_hist_accuracy(regression_high_copy, regression_high, regression_low, regressionResultHigh, 'High', None)):
+                if((db['highBuy'].find_one({'scrip':scrip}) is None)):
+                    record = {}
+                    record['scrip'] = scrip
+                    record['ml'] = ''
+                    record['filter'] = ''
+                    record['filter2'] = regression_high_copy['filter2']
+                    json_data = json.loads(json.dumps(record, default=json_util.default))
+                    db['highBuy'].insert_one(json_data)
+                else:
+                    db['highBuy'].update_one({'scrip':scrip}, { "$set": {'filter2':regression_high_copy['filter2']}})
+                    
+            
         regression_low_copy['filter1']=""
         if(is_filter_all_accuracy(regression_low_copy, regression_high, regression_low, regressionResultLow, 'Low', None)):
             all_withoutml(regression_low_copy, regressionResultLow, ws_lowSellStrongFilterAcc)
-            if(is_filter_hist_accuracy(regression_low_copy, regression_high, regression_low, regressionResultLow, 'Low', None)
-                and (db['lowSell'].find_one({'scrip':scrip}) is None)):
-                record = {}
-                record['scrip'] = scrip
-                record['ml'] = ''
-                record['filter2'] = regression_low_copy['filter2']
-                json_data = json.loads(json.dumps(record, default=json_util.default))
-                db['lowSell'].insert_one(json_data)
+            if(is_filter_hist_accuracy(regression_low_copy, regression_high, regression_low, regressionResultLow, 'Low', None)):
+                if((db['lowSell'].find_one({'scrip':scrip}) is None)):
+                    record = {}
+                    record['scrip'] = scrip
+                    record['ml'] = ''
+                    record['filter'] = ''
+                    record['filter2'] = regression_low_copy['filter2']
+                    json_data = json.loads(json.dumps(record, default=json_util.default))
+                    db['lowSell'].insert_one(json_data)
+                else:
+                    db['lowSell'].update_one({'scrip':scrip}, { "$set": {'filter2':regression_low_copy['filter2']}})
         
         
         if(is_filter_all_accuracy(regression_high_copy1, regression_high, regression_low, regressionResultHigh, "None", None)
