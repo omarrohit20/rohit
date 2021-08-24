@@ -80,11 +80,11 @@ def process_backtest(rawdata, processor, starttime, endtime):
                         mldatalow = ''
                         if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
                             data = dbnse.highBuy.find_one({'scrip':scrip})
-                            mldatahigh = data['ml'] + '-' + data['filter2']
+                            mldatahigh = data['ml'] + '|' + data['filter2'] + '|' + data['filter']
                         if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
-                            data = dbnse.highBuy.find_one({'scrip':scrip})
-                            mldatalow = data['ml'] + '-' + data['filter2']
-                        
+                            data = dbnse.lowSell.find_one({'scrip':scrip})
+                            mldatalow = data['ml'] + '|' + data['filter2'] + '|' + data['filter']
+                            
                         print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
                         record = {}
                         record['dataset_code'] = scrip
@@ -171,7 +171,6 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
         None
             
 def process_url_volBreakout(url, processor, starttime, endtime):
-    print('rohit')
     proxy.new_har("file_name", options={'captureHeaders': False, 'captureContent': True, 'captureBinaryContent': True})
     driver.get(url)
     time.sleep(10)

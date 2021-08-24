@@ -2,7 +2,7 @@ import sbase as sb
 from config import *
      
 if __name__ == "__main__":
-    sb.server = Server(sb.path, options={'existing_proxy_port_to_use': 17060})
+    sb.server = Server(sb.path, options={'existing_proxy_port_to_use': 17070})
     time.sleep(1)
     sb.server.start()
     time.sleep(1)
