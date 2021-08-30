@@ -84,8 +84,12 @@ def process_backtest(rawdata, processor, starttime, endtime):
                         if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
                             data = dbnse.lowSell.find_one({'scrip':scrip})
                             mldatalow = data['ml'] + '|' + data['filter2'] + '|' + data['filter']
-                            
-                        print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
+                        
+                        if(processor == 'buy-dayconsolidation-breakout-04(11:45-to-1:00)' or processor == 'sell-dayconsolidation-breakout-04(10:00-to-12:00)'):
+                            if((db['morning-volume-breakout'].find_one({'scrip':scrip}) is None)): 
+                                print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
+                        else:
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
                         record = {}
                         record['dataset_code'] = scrip
                         record['scrip'] = scrip
