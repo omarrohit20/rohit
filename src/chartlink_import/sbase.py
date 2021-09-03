@@ -78,18 +78,25 @@ def process_backtest(rawdata, processor, starttime, endtime):
                     if((db[processor].find_one({'scrip':scrip}) is None)):
                         mldatahigh = ''
                         mldatalow = ''
+                        highVol = ''
                         if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
                             data = dbnse.highBuy.find_one({'scrip':scrip})
                             mldatahigh = data['ml'] + '|' + data['filter2'] + '|' + data['filter']
                         if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
                             data = dbnse.lowSell.find_one({'scrip':scrip})
                             mldatalow = data['ml'] + '|' + data['filter2'] + '|' + data['filter']
+                        if((db['morning-volume-breakout-buy'].find_one({'scrip':scrip}) is not None)): 
+                            highVol = 'morning-volume-breakout-buy'
+                        if((db['morning-volume-breakout-sell'].find_one({'scrip':scrip}) is not None)): 
+                            highVol = 'morning-volume-breakout-sell'
                         
-                        if(processor == 'buy-dayconsolidation-breakout-04(11:45-to-1:00)' or processor == 'sell-dayconsolidation-breakout-04(10:00-to-12:00)'):
-                            if((db['morning-volume-breakout'].find_one({'scrip':scrip}) is None)): 
-                                print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
-                        else:
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
+                        # if(processor == 'buy-dayconsolidation-breakout-04(11:45-to-1:00)' or processor == 'sell-dayconsolidation-breakout-04(10:00-to-12:00)'):
+                        #     if((db['morning-volume-breakout'].find_one({'scrip':scrip}) is None)): 
+                        #         print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
+                        # else:
+                        #     print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
+                        
+                        print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol)
                         record = {}
                         record['dataset_code'] = scrip
                         record['scrip'] = scrip

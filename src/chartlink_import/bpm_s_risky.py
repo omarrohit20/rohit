@@ -26,8 +26,8 @@ if __name__ == "__main__":
         if(sb.nw>=time_09_25 and sb.nw<=time_10_15):
             process_url('https://chartink.com/screener/sell-uptrend-01', 'uplast2day(last3rdUpLT(0.5)-Buy)(last3rdUpGT(0.5)-Sell)', time_09_25, time_10_00) 
             
-        if(sb.nw>= time_09_20 and sb.nw <= time_10_30):    
-            process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-03', 'sell-check-morning-up-breakdown-03', time_09_20, time_10_30)   
+        if(sb.nw>= time_09_25 and sb.nw <= time_10_30):    
+            process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-03', 'sell-check-morning-up-breakdown-03', time_09_25, time_10_30)   
         
         if(sb.nw>= time_11_00 and sb.nw <= time_12_30):
             process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-03-1', 'sell-dayconsolidation-breakout-03-checkChart', time_11_00, time_12_30)
