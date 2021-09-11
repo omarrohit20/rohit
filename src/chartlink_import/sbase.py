@@ -158,10 +158,10 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
                     mldatalow = ''
                     if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
                         data = dbnse.highBuy.find_one({'scrip':scrip})
-                        mldatahigh = data['ml'] + '|' + data['filter2'] + '|' + data['filter']
+                        mldatahigh = data['ml'] + '|' + data['filter2'] + '|' + data['filter'] + '|' + data['filter3']
                     if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
                         data = dbnse.lowSell.find_one({'scrip':scrip})
-                        mldatalow = data['ml'] + '|' + data['filter2'] + '|' + data['filter']
+                        mldatalow = data['ml'] + '|' + data['filter2'] + '|' + data['filter'] + '|' + data['filter3']
                         
                     if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None) or (dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
                         print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)

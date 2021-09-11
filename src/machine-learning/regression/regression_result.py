@@ -348,13 +348,16 @@ def result_data_reg(scrip):
             #all_withoutml(regression_data, regressionResultHigh, ws_highBuyStrongBoth)
          
         all_withoutml(regression_data, regressionResultHigh, ws_high)
-        if("%%:" in regression_data['filter']):
+        if("%%:" in regression_data['filter']
+            or 'ConsolidationBreakout' in regression_data['filter']
+            ):
             if((db['highBuy'].find_one({'scrip':scrip}) is None)):
                 record = {}
                 record['scrip'] = scrip
                 record['ml'] = ''
                 record['filter'] = regression_data['filter']
                 record['filter2'] = ''
+                record['filter3'] = ''
                 json_data = json.loads(json.dumps(record, default=json_util.default))
                 db['highBuy'].insert_one(json_data)
             else:
@@ -395,13 +398,16 @@ def result_data_reg(scrip):
             #all_withoutml(regression_data, regressionResultLow, ws_lowSellStrongBoth)
         
         all_withoutml(regression_data, regressionResultLow, ws_low)
-        if("%%:" in regression_data['filter']):
+        if("%%:" in regression_data['filter']
+            or 'ConsolidationBreakout' in regression_data['filter']
+            ):
             if((db['lowSell'].find_one({'scrip':scrip}) is None)):
                 record = {}
                 record['scrip'] = scrip
                 record['ml'] = ''
                 record['filter'] = regression_data['filter']
                 record['filter2'] = ''
+                record['filter3'] = ''
                 json_data = json.loads(json.dumps(record, default=json_util.default))
                 db['lowSell'].insert_one(json_data)
             else:
@@ -456,6 +462,7 @@ def result_data_reg(scrip):
                 record['ml'] = 'MLhighBuy'
                 record['filter'] = ''
                 record['filter2'] = ''
+                record['filter3'] = ''
                 json_data = json.loads(json.dumps(record, default=json_util.default))
                 db['highBuy'].insert_one(json_data)
             else:
@@ -480,6 +487,7 @@ def result_data_reg(scrip):
                 record['ml'] = 'MLhighBuyStrongBoth'
                 record['filter'] = ''
                 record['filter2'] = ''
+                record['filter3'] = ''
                 json_data = json.loads(json.dumps(record, default=json_util.default))
                 db['highBuy'].insert_one(json_data)
             else:
@@ -501,6 +509,7 @@ def result_data_reg(scrip):
                 record['ml'] = 'MLlowSell'
                 record['filter'] = ''
                 record['filter2'] = ''
+                record['filter3'] = ''
                 json_data = json.loads(json.dumps(record, default=json_util.default))
                 db['lowSell'].insert_one(json_data)
             else:
@@ -525,6 +534,7 @@ def result_data_reg(scrip):
                 record['ml'] = 'MLlowSellStrongBoth'
                 record['filter'] = ''
                 record['filter2'] = ''
+                record['filter3'] = ''
                 json_data = json.loads(json.dumps(record, default=json_util.default))
                 db['lowSell'].insert_one(json_data)
             else:
@@ -540,10 +550,24 @@ def result_data_reg(scrip):
                     record['ml'] = ''
                     record['filter'] = ''
                     record['filter2'] = regression_high_copy['filter2']
+                    record['filter3'] = ''
                     json_data = json.loads(json.dumps(record, default=json_util.default))
                     db['highBuy'].insert_one(json_data)
                 else:
                     db['highBuy'].update_one({'scrip':scrip}, { "$set": {'filter2':regression_high_copy['filter2']}})
+                    
+            if("ReversalLow" in regression_data['filter3']):     
+                if((db['highBuy'].find_one({'scrip':scrip}) is None)):
+                    record = {}
+                    record['scrip'] = scrip
+                    record['ml'] = ''
+                    record['filter'] = ''
+                    record['filter2'] = ''
+                    record['filter3'] = regression_high_copy['filter3']
+                    json_data = json.loads(json.dumps(record, default=json_util.default))
+                    db['highBuy'].insert_one(json_data)
+                else:
+                    db['highBuy'].update_one({'scrip':scrip}, { "$set": {'filter3':regression_high_copy['filter3']}})
                     
             
         regression_low_copy['filter1']=""
@@ -556,10 +580,24 @@ def result_data_reg(scrip):
                     record['ml'] = ''
                     record['filter'] = ''
                     record['filter2'] = regression_low_copy['filter2']
+                    record['filter3'] = ''
                     json_data = json.loads(json.dumps(record, default=json_util.default))
                     db['lowSell'].insert_one(json_data)
                 else:
                     db['lowSell'].update_one({'scrip':scrip}, { "$set": {'filter2':regression_low_copy['filter2']}})
+                    
+            if("ReversalHigh" in regression_data['filter3']):     
+                if((db['lowSell'].find_one({'scrip':scrip}) is None)):
+                    record = {}
+                    record['scrip'] = scrip
+                    record['ml'] = ''
+                    record['filter'] = ''
+                    record['filter2'] = ''
+                    record['filter3'] = regression_low_copy['filter3']
+                    json_data = json.loads(json.dumps(record, default=json_util.default))
+                    db['lowSell'].insert_one(json_data)
+                else:
+                    db['lowSell'].update_one({'scrip':scrip}, { "$set": {'filter3':regression_low_copy['filter3']}})
         
         
         if(is_filter_all_accuracy(regression_high_copy1, regression_high, regression_low, regressionResultHigh, "None", None)
