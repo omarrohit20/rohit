@@ -112,6 +112,17 @@ def is_buy_filter(regression_data):
     else:
         return False
     
+def is_buy_filter2(regression_data):
+    if("RISKY-UPTREND-SELL-0" in regression_data['filter2']
+        or 'RISKY-UPTREND-SELL-1' in regression_data['filter2']
+        or 'RISKY-UPTREND-SELL-2' in regression_data['filter2']
+        or 'RISKY-UPTREND-SELL-3' in regression_data['filter2']
+        or 'RISKY-UPTREND-SELL-4' in regression_data['filter2']
+        ):
+        return True
+    else:
+        return False
+    
 def is_sell_filter(regression_data):
     if("%%:" in regression_data['filter']
         or 'ConsolidationBreakout' in regression_data['filter']
@@ -125,6 +136,17 @@ def is_sell_filter(regression_data):
         or 'sellEveningStar-0' in regression_data['filter']
         or 'checkCupDown' in regression_data['filter']
         or 'checkSellConsolidationBreakDown' in regression_data['filter']
+        ):
+        return True
+    else:
+        return False
+    
+def is_sell_filter2(regression_data):
+    if("RISKY-DOWNTREND-BUY-0" in regression_data['filter2']
+        or "RISKY-DOWNTREND-BUY-1" in regression_data['filter2']
+        or "RISKY-DOWNTREND-BUY-2" in regression_data['filter2']
+        or "RISKY-DOWNTREND-BUY-3" in regression_data['filter2']
+        or "RISKY-DOWNTREND-BUY-4" in regression_data['filter2']
         ):
         return True
     else:
@@ -510,6 +532,18 @@ def result_data_reg(scrip):
         regression_data = regression_high_copy2
         if(buy_high_volatility(regression_high_copy2, regressionResultHigh)):
             all_withoutml(regression_high_copy2, regressionResultHigh, ws_highAnalysis)
+            if(is_buy_filter2(regression_data)):
+                if((db['highBuy'].find_one({'scrip':scrip}) is None)):
+                    record = {}
+                    record['scrip'] = scrip
+                    record['ml'] = ''
+                    record['filter'] = ''
+                    record['filter2'] = regression_data['filter2']
+                    record['filter3'] = ''
+                    json_data = json.loads(json.dumps(record, default=json_util.default))
+                    db['highBuy'].insert_one(json_data)
+                else:
+                    db['highBuy'].update_one({'scrip':scrip}, { "$set": {'filter2':regression_data['filter2']}})
         if (is_algo_buy(regression_high_copy2)):
             all_withoutml(regression_data, regressionResultHigh, ws_highBuyReg)
         if ((is_algo_buy(regression_high_copy2) and is_any_reg_algo_gt1_not_other(regression_data))
@@ -557,6 +591,18 @@ def result_data_reg(scrip):
         regression_data = regression_low_copy2
         if(sell_high_volatility(regression_low_copy2, regressionResultLow)):
             all_withoutml(regression_low_copy2, regressionResultLow, ws_lowAnalysis)
+            if(is_sell_filter2(regression_data)):
+                if((db['lowSell'].find_one({'scrip':scrip}) is None)):
+                    record = {}
+                    record['scrip'] = scrip
+                    record['ml'] = ''
+                    record['filter'] = ''
+                    record['filter2'] = regression_data['filter2']
+                    record['filter3'] = ''
+                    json_data = json.loads(json.dumps(record, default=json_util.default))
+                    db['lowSell'].insert_one(json_data)
+                else:
+                    db['lowSell'].update_one({'scrip':scrip}, { "$set": {'filter2':regression_data['filter2']}})
         if (is_algo_sell(regression_low_copy2)):
             all_withoutml(regression_data, regressionResultHigh, ws_lowSellReg)
         if ((is_algo_sell(regression_low_copy2) and is_any_reg_algo_lt_minus1_not_other(regression_data))

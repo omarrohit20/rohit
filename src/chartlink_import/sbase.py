@@ -51,7 +51,7 @@ capabilities['acceptInsecureCerts'] = True
 driver = None
 
 
-def process_backtest(rawdata, processor, starttime, endtime):
+def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
     response_json = json.loads(rawdata)
     try:
         aggregatedStockList = response_json["aggregatedStockList"]
@@ -72,22 +72,38 @@ def process_backtest(rawdata, processor, starttime, endtime):
                 reportedtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 scrip = df['aggregatedStockList'][ind][i]
                 #print(scrip, systemtime)
-                if(i%3 == 0 and eventdateonly == (date.today()).strftime('%Y-%m-%d')
+                if(dbnse['scrip'].find_one({'scrip':scrip}) is not None
+                    and eventdateonly == (date.today()).strftime('%Y-%m-%d')
                     and currenttime >= starttime and currenttime <= endtime
                     ):
                     if((db[processor].find_one({'scrip':scrip}) is None)):
                         mldatahigh = ''
                         mldatalow = ''
                         highVol = ''
+                        filtersFlag = False
                         if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
                             data = dbnse.highBuy.find_one({'scrip':scrip})
-                            mldatahigh = data['ml'] + '|' + data['filter2'] + '|' + data['filter']
+                            mldatahigh =  data['filter2'] + '|' + data['filter']
+                            if (data['filter2']!='' or data['filter']!= ''):
+                                    filtersFlag = True
+                            if ('buy' in processor):
+                                mldatahigh = data['ml'] + '|' + mldatahigh + '|' + data['filter3']
+                                if (data['ml']!='' or data['filter3']!= ''):
+                                    filtersFlag = True
                         if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
                             data = dbnse.lowSell.find_one({'scrip':scrip})
-                            mldatalow = data['ml'] + '|' + data['filter2'] + '|' + data['filter']
+                            if (data['filter2']!='' or data['filter']!= ''):
+                                    filtersFlag = True
+                            mldatalow = data['filter2'] + '|' + data['filter'] 
+                            if ('sell' in processor):
+                                mldatalow = data['ml'] + '|' +  mldatalow + '|' + data['filter3']
+                                if (data['ml']!='' or data['filter3']!= ''):
+                                    filtersFlag = True
                         if((db['morning-volume-breakout-buy'].find_one({'scrip':scrip}) is not None)): 
+                            filtersFlag = True
                             highVol = 'morning-volume-breakout-buy'
-                        if((db['morning-volume-breakout-sell'].find_one({'scrip':scrip}) is not None)): 
+                        if((db['morning-volume-breakout-sell'].find_one({'scrip':scrip}) is not None)):
+                            filtersFlag = True 
                             highVol = 'morning-volume-breakout-sell'
                         
                         # if(processor == 'buy-dayconsolidation-breakout-04(11:45-to-1:00)' or processor == 'sell-dayconsolidation-breakout-04(10:00-to-12:00)'):
@@ -95,8 +111,11 @@ def process_backtest(rawdata, processor, starttime, endtime):
                         #         print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
                         # else:
                         #     print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
-                        
-                        print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol)
+                        if(filtered == False):
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol)
+                        elif(filtered == True and filtersFlag == True):
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol)
+                            
                         record = {}
                         record['dataset_code'] = scrip
                         record['scrip'] = scrip
@@ -111,7 +130,7 @@ def process_backtest(rawdata, processor, starttime, endtime):
     except TypeError:
         None
             
-def process_url(url, processor, starttime, endtime):
+def process_url(url, processor, starttime, endtime, filtered=False):
     proxy.new_har("file_name", options={'captureHeaders': False, 'captureContent': True, 'captureBinaryContent': True})
     driver.get(url)
     time.sleep(60)
@@ -125,7 +144,7 @@ def process_url(url, processor, starttime, endtime):
         if (_url == 'https://chartink.com/backtest/process') and ('text' in ent['response']['content']):
             data = _response['content']['text']
             #print(data)
-            process_backtest(data, processor, starttime, endtime)
+            process_backtest(data, processor, starttime, endtime, filtered)
 
 def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
     response_json = json.loads(rawdata)
@@ -148,7 +167,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
             reportedtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             while (i < len(df['aggregatedStockList'][ind])):
                 scrip = df['aggregatedStockList'][ind][i]
-                if(i%3 == 0 
+                if(dbnse['scrip'].find_one({'scrip':scrip}) is not None
                     and db[processor].find_one({'scrip':scrip}) is None
                     and eventdateonly == (date.today()).strftime('%Y-%m-%d')
                     and currenttime >= starttime and currenttime <= endtime
@@ -158,13 +177,38 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
                     mldatalow = ''
                     if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
                         data = dbnse.highBuy.find_one({'scrip':scrip})
-                        mldatahigh = data['ml'] + '|' + data['filter2'] + '|' + data['filter'] + '|' + data['filter3']
+                        regressionhigh = dbnse.regressionhigh.find_one({'scrip':scrip})
+                        if ('buy' in processor):
+                            mldatahigh = data['ml']
+                        mldatahigh = mldatahigh + '|' + data['filter2'] + '|' + data['filter']
+                        if ('buy' in processor
+                            and (regressionhigh['PCT_day_change'] > 1 
+                                 or (regressionhigh['PCT_day_change_pre1'] > 1 and abs(regressionhigh['PCT_day_change']) < abs(regressionhigh['PCT_day_change_pre1']))
+                                 )
+                            ):
+                            mldatahigh = mldatahigh + '|' + data['filter3']
+                            if(regressionhigh['month3HighChange'] < -5):
+                                mldatahigh = mldatahigh + '|' + 'lastDayUp'
                     if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
                         data = dbnse.lowSell.find_one({'scrip':scrip})
-                        mldatalow = data['ml'] + '|' + data['filter2'] + '|' + data['filter'] + '|' + data['filter3']
-                        
+                        regressionlow = dbnse.regressionlow.find_one({'scrip':scrip})
+                        if ('sell' in processor):
+                            mldatalow = data['ml']
+                        mldatalow = mldatalow + '|' + data['filter2'] + '|' + data['filter']
+                        if ('sell' in processor
+                            and (regressionlow['PCT_day_change'] < -1 
+                                 or (regressionlow['PCT_day_change_pre1'] < -1 and abs(regressionlow['PCT_day_change']) < abs(regressionlow['PCT_day_change_pre1']))
+                                 )
+                            ):
+                            mldatalow = mldatalow + '|' + data['filter3']
+                            if(regressionlow['month3LowChange'] > 5):
+                                mldatalow = mldatalow + '|' + 'lastDayDown'
+                    
                     if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None) or (dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
                         print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
+                    else:
+                        print(reportedtime, ':', processor, ' : ', scrip)
+                        
                         
                     record = {}
                     record['dataset_code'] = scrip
@@ -197,4 +241,21 @@ def process_url_volBreakout(url, processor, starttime, endtime):
             #print(data)
             process_backtest_volBreakout(data, processor, starttime, endtime)
             
-            
+
+def regression_ta_data_buy():
+    for data in dbnse.scrip.find({'futures':'Yes'}):
+        scrip = data['scrip']
+        if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
+            data = dbnse.highBuy.find_one({'scrip':scrip})
+            histData = ' :::: ' + scrip + ' : ' + data['ml'] + '|' + data['filter2'] + '|' + data['filter'] + '|' + data['filter3']
+            if(data['ml'] != '' or data['filter'] != '' or data['filter2'] != ''):
+                print(histData)
+    
+def regression_ta_data_sell():
+    for data in dbnse.scrip.find({'futures':'Yes'}):
+        scrip = data['scrip']
+        if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
+            data = dbnse.lowSell.find_one({'scrip':scrip})
+            histData = ' :::: ' + scrip + ' : ' + data['ml'] + '|' + data['filter2'] + '|' + data['filter'] + '|' + data['filter3']
+            if(data['ml'] != '' or data['filter'] != '' or data['filter2'] != ''):
+                print(histData)            

@@ -18,12 +18,12 @@ if __name__ == "__main__":
     
     while (sb.nw <= time_14_00):    
         if(sb.nw>= time_09_20 and sb.nw <= time_10_30):    
-            process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-01', 'sell-check-morning-up-breakdown-01', time_09_20, time_10_30)
+            process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-01', 'sell-check-morning-up-breakdown-01', time_09_20, time_10_30, True)
         if(sb.nw>= time_09_20 and sb.nw <= time_10_30):    
-            process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-02', 'sell-check-morning-up-breakdown-02', time_09_20, time_10_30)
+            process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-02', 'sell-check-morning-up-breakdown-02', time_09_20, time_10_30, True)
             
                 
-        if(sb.nw>= time_09_45 and sb.nw <= time_12_30):
+        if(sb.nw>= time_09_45 and sb.nw <= time_11_15):
             process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-01', 'sell-dayconsolidation-breakout-01', time_09_45, time_12_00)
             process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-02', 'sell-dayconsolidation-breakout-02', time_09_45, time_12_00)
         

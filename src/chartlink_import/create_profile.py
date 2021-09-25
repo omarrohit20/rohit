@@ -34,5 +34,6 @@ if __name__ == "__main__":
     shutil.copytree("/Users/profilechrome/profiles/p", "/Users/profilechrome/profiles/p4")
     shutil.copytree("/Users/profilechrome/profiles/p", "/Users/profilechrome/profiles/p5")
     shutil.copytree("/Users/profilechrome/profiles/p", "/Users/profilechrome/profiles/p6")
+    shutil.copytree("/Users/profilechrome/profiles/p", "/Users/profilechrome/profiles/p7")
     
     
