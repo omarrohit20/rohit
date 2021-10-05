@@ -92,7 +92,13 @@ def all_withoutml(regression_data, regressionResult, ws):
             })
 
 def withoutml(regression_data, ws):
-    ws.append(regression_data) if (ws is not None) else False
+    tempRegressionResult = []
+    tempRegressionResult.append(regression_data['scrip'])
+    tempRegressionResult.append(regression_data['ml'])
+    tempRegressionResult.append(regression_data['filter'])
+    tempRegressionResult.append(regression_data['filter2'])
+    tempRegressionResult.append(regression_data['filter3'])
+    ws.append(tempRegressionResult) if (ws is not None) else False
 
 
 def add_in_csv(regression_data, regressionResult, ws=None, filterbuy=None, filtersell=None, filter=None, filter1=None, filter2=None, filter3=None, filter4=None, filter5=None, filter6=None):
