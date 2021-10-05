@@ -24,7 +24,7 @@ from util.util import is_algo_buy, is_algo_sell, is_filter_all_accuracy, is_filt
 from util.util import get_regressionResult
 from util.util import buy_pattern_from_history, buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final, buy_pattern
 from util.util import sell_pattern_from_history, sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final, sell_pattern
-from util.util import buy_pattern_without_mlalgo, sell_pattern_without_mlalgo, buy_oi, sell_oi, all_withoutml
+from util.util import buy_pattern_without_mlalgo, sell_pattern_without_mlalgo, buy_oi, sell_oi, all_withoutml, withoutml
 from util.util import buy_oi_candidate, sell_oi_candidate
 from util.util import buy_other_indicator, buy_indicator_after_filter_accuracy, buy_all_common, buy_all_common_High_Low, sell_other_indicator, sell_indicator_after_filter_accuracy, sell_all_common, sell_all_common_High_Low
 from util.util import buy_all_rule_classifier, sell_all_rule_classifier
@@ -367,6 +367,15 @@ def result_data(scrip):
         and sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvgReg, None)
         ):
         all_withoutml(regression_data, regressionResult, ws_lowSellStrongBoth)
+
+def result_data_summary(scrip):
+    regression_high = db.highBuy.find_one({'scrip':scrip})
+    regression_low = db.lowSell.find_one({'scrip':scrip})
+    if(regression_high is None or regression_low is None):
+        return
+    
+    withoutml(regression_high, ws_highBuy)
+    withoutml(regression_low, ws_lowSell)
                                                         
 def result_data_reg(scrip):
     regression_high = db.regressionhigh.find_one({'scrip':scrip})
@@ -503,23 +512,23 @@ def result_data_reg(scrip):
         gt_2_count_any, gt_2_cnt = filter_avg_gt_2_count_any(regression_data)
         if(list[1] == ']:'):
             reg_data_filter = list[2]
-        if ((is_algo_buy(regression_high) == True and 'Buy-AnyGT2' in regression_data['filter2'] and ('buy' in reg_data_filter or 'Buy' in reg_data_filter))
-            or (is_algo_sell(regression_high) == True and 'Sell-AnyGT2' in regression_data['filter2'] and ('sell' in reg_data_filter or 'Sell' in reg_data_filter))
-            or ((gt_2_count_any > 1 or ('Buy-SUPER' in regression_data['filter2'])) and gt_2_cnt > 1)
-            or ((lt_minus_2_count_any > 1 or ('Sell-SUPER' in regression_data['filter2'])) and lt_minus_2_cnt > 1)
-            ):
-            all_withoutml(regression_data, regressionResultHigh, ws_highBuy)
+        # if ((is_algo_buy(regression_high) == True and 'Buy-AnyGT2' in regression_data['filter2'] and ('buy' in reg_data_filter or 'Buy' in reg_data_filter))
+        #     or (is_algo_sell(regression_high) == True and 'Sell-AnyGT2' in regression_data['filter2'] and ('sell' in reg_data_filter or 'Sell' in reg_data_filter))
+        #     or ((gt_2_count_any > 1 or ('Buy-SUPER' in regression_data['filter2'])) and gt_2_cnt > 1)
+        #     or ((lt_minus_2_count_any > 1 or ('Sell-SUPER' in regression_data['filter2'])) and lt_minus_2_cnt > 1)
+        #     ):
+        #     all_withoutml(regression_data, regressionResultHigh, ws_highBuy)
         regression_data = regression_low
         reg_data_filter = regression_data['filter']
         list = regression_data['filter'].partition(']:')
         if(list[1] == ']:'):
             reg_data_filter = list[2]
-        if ((is_algo_buy(regression_low) == True and 'Buy-AnyGT2' in regression_data['filter2'] and  ('buy' in reg_data_filter or 'Buy' in reg_data_filter))
-            or (is_algo_sell(regression_low) == True and 'Sell-AnyGT2' in regression_data['filter2'] and  ('sell' in reg_data_filter or 'Sell' in reg_data_filter))
-            or ((gt_2_count_any > 1 or ('Buy-SUPER' in regression_data['filter2'])) and gt_2_cnt > 1)
-            or ((lt_minus_2_count_any > 1 or ('Sell-SUPER' in regression_data['filter2'])) and lt_minus_2_cnt > 1)
-            ):
-            all_withoutml(regression_data, regressionResultLow, ws_lowSell)
+        # if ((is_algo_buy(regression_low) == True and 'Buy-AnyGT2' in regression_data['filter2'] and  ('buy' in reg_data_filter or 'Buy' in reg_data_filter))
+        #     or (is_algo_sell(regression_low) == True and 'Sell-AnyGT2' in regression_data['filter2'] and  ('sell' in reg_data_filter or 'Sell' in reg_data_filter))
+        #     or ((gt_2_count_any > 1 or ('Buy-SUPER' in regression_data['filter2'])) and gt_2_cnt > 1)
+        #     or ((lt_minus_2_count_any > 1 or ('Sell-SUPER' in regression_data['filter2'])) and lt_minus_2_cnt > 1)
+        #     ):
+        #     all_withoutml(regression_data, regressionResultLow, ws_lowSell)
             
         
         regression_high_copy = copy.deepcopy(regression_high)
@@ -753,6 +762,7 @@ def calculateParallel(threads=2, futures='Yes', processing_date=""):
     #pool.map(result_data, scrips)
     #pool.map(result_data_cla, scrips)
     pool.map(result_data_reg, scrips)
+    pool.map(result_data_summary, scrips)
 
                       
 if __name__ == "__main__":

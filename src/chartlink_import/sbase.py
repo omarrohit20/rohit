@@ -100,10 +100,10 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 if (data['ml']!='' or data['filter3']!= ''):
                                     filtersFlag = True
                         if((db['morning-volume-breakout-buy'].find_one({'scrip':scrip}) is not None)): 
-                            filtersFlag = True
+                            #filtersFlag = True
                             highVol = 'morning-volume-breakout-buy'
                         if((db['morning-volume-breakout-sell'].find_one({'scrip':scrip}) is not None)):
-                            filtersFlag = True 
+                            #filtersFlag = True 
                             highVol = 'morning-volume-breakout-sell'
                         
                         # if(processor == 'buy-dayconsolidation-breakout-04(11:45-to-1:00)' or processor == 'sell-dayconsolidation-breakout-04(10:00-to-12:00)'):

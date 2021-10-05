@@ -91,6 +91,10 @@ def all_withoutml(regression_data, regressionResult, ws):
             "date": regression_data['date']
             })
 
+def withoutml(regression_data, ws):
+    ws.append(regression_data) if (ws is not None) else False
+
+
 def add_in_csv(regression_data, regressionResult, ws=None, filterbuy=None, filtersell=None, filter=None, filter1=None, filter2=None, filter3=None, filter4=None, filter5=None, filter6=None):
     if(TEST != True):
         if(is_algo_buy(regression_data) and (filter is None)):

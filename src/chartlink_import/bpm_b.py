@@ -18,13 +18,13 @@ if __name__ == "__main__":
     
     while (sb.nw <= time_14_00):             
         if(sb.nw>= time_09_20 and sb.nw <= time_10_30):    
-            process_url('https://chartink.com/screener/buy-check-morning-down-breakup-01', 'buy-check-morning-down-breakup-01', time_09_20, time_10_30, True)
+            process_url('https://chartink.com/screener/buy-check-morning-down-breakup-01', 'buy-check-morning-down-breakup-01', time_09_40, time_10_30, True)
         if(sb.nw>= time_09_20 and sb.nw <= time_10_30):    
             process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02', 'buy-check-morning-down-breakup-02', time_09_20, time_10_30, True) 
                 
         if(sb.nw>= time_09_45 and sb.nw <= time_11_15):
-            process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-01', 'buy-dayconsolidation-breakout-01', time_09_45, time_12_00)
-            process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-02', 'buy-dayconsolidation-breakout-02', time_09_45, time_12_00)
+            process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-01', 'buy-dayconsolidation-breakout-01', time_09_45, time_11_30)
+            process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-02', 'buy-dayconsolidation-breakout-02', time_09_45, time_11_30)
         
         if(sb.nw>= time_10_15 and sb.nw <= time_14_00):
             process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-03', 'buy-dayconsolidation-breakout-03', time_10_15, time_14_00)

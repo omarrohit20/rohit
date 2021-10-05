@@ -12,7 +12,7 @@ if __name__ == "__main__":
     print("Server started")
     
     sb.option.add_argument('--proxy-server=%s' % sb.proxy.proxy)
-    sb.option.add_argument("user-data-dir=/Users/profilechrome/profiles/p7")
+    sb.option.add_argument("user-data-dir=/Users/profilechrome/profiles/p8")
     #sb.option.add_argument('--headless')
     sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities)
     
