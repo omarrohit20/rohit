@@ -93,6 +93,7 @@ ws_low.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_A
 
 def is_buy_filter(regression_data):
     if("%%:" in regression_data['filter']
+        or "$$" in regression_data['filter']
         or 'ConsolidationBreakout' in regression_data['filter']
         or '%%HLTF:mayBuyTail-tailGT2-allDayLT0' in regression_data['filter']
         or '%%HLTF:mayBuyTail-tailGT2-7,10thDayLT0' in regression_data['filter']
@@ -124,6 +125,7 @@ def is_buy_filter2(regression_data):
     
 def is_sell_filter(regression_data):
     if("%%:" in regression_data['filter']
+        or "$$" in regression_data['filter']
         or 'ConsolidationBreakout' in regression_data['filter']
         or '%%HLTF:maySellTail-tailGT2-allDayGT0' in regression_data['filter']
         or '%%HLTF:maySellTail-tailGT2-7,10thDayGT0' in regression_data['filter']

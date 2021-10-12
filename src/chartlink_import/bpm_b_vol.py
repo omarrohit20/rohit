@@ -15,16 +15,22 @@ if __name__ == "__main__":
     
     sb.option.add_argument('--proxy-server=%s' % sb.proxy.proxy)
     sb.option.add_argument("user-data-dir=/Users/profilechrome/profiles/p7")
-    #sb.option.add_argument('--headless')
+    sb.option.add_argument('--headless')
     sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities)
     
     sb.nw = datetime.now()
     
-    while (sb.nw <= time_23_00):             
-        if(sb.nw>= time_09_15 and sb.nw <= time_23_00):
-            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-1', 'morning-volume-breakout-buy', time_09_00, time_23_00)
-            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-2', 'morning-volume-breakout-buy', time_09_00, time_23_00)
+    while (sb.nw <= time_13_30):             
+        if(sb.nw>= time_09_15 and sb.nw <= time_09_30):
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-1', 'morning-volume-breakout-buy', time_09_00, time_09_30)
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-2', 'morning-volume-breakout-buy', time_09_00, time_09_30)
    
+        if(sb.nw>= time_10_00 and sb.nw <= time_13_30):
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-1-2', 'morning-volume-breakout-after10', time_10_00, time_13_30)
+            
+        if(sb.nw>= time_11_45 and sb.nw <= time_13_30):
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-2-1', 'morning-volume-breakout-after11:45', time_11_45, time_13_30)
+        
         time.sleep(60)
         sb.nw = datetime.now()
         

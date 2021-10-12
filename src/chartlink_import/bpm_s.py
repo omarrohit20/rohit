@@ -20,7 +20,7 @@ if __name__ == "__main__":
         if(sb.nw>= time_09_20 and sb.nw <= time_10_30):    
             process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-01', 'sell-check-morning-up-breakdown-01', time_09_40, time_10_30, True)
         if(sb.nw>= time_09_20 and sb.nw <= time_10_30):    
-            process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-02', 'sell-check-morning-up-breakdown-02', time_09_20, time_10_30, True)
+            process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-02', 'sell-check-morning-up-breakdown-02(Midcap-change-less-than-(-0.5%))', time_09_20, time_10_30, True)
             
                 
         if(sb.nw>= time_09_45 and sb.nw <= time_11_15):
