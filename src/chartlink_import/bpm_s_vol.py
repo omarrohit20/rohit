@@ -18,11 +18,18 @@ if __name__ == "__main__":
     
     sb.nw = datetime.now()
     
-    while (sb.nw <= time_09_30):             
+    while (sb.nw <= time_13_30):             
         if(sb.nw>= time_09_15 and sb.nw <= time_09_30):    
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-1', 'morning-volume-breakout-sell', time_09_00, time_09_30)
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-2', 'morning-volume-breakout-sell-2(lastDayMid-or-2daylow)', time_09_00, time_09_30)
-   
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-3', 'morning-volume-breakout-sell-3(lastDayGT8)', time_09_00, time_09_30)
+        
+        if(sb.nw>= time_10_00 and sb.nw <= time_13_30):
+            process_url_volBreakout('https://chartink.com/screener/sell-morning-volume-breakout-after10', 'sell-morning-volume-breakout-after10', time_10_00, time_13_30)
+            
+        if(sb.nw>= time_10_00 and sb.nw <= time_13_30):
+            process_url_volBreakout('https://chartink.com/screener/sell-morning-volume-breakout-after11-45', 'sell-morning-volume-breakout-after11:45', time_10_00, time_13_30)
+        
         time.sleep(60)
         sb.nw = datetime.now()
         

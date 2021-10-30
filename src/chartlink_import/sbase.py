@@ -62,6 +62,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
         df.iloc[::-1]
         for ind in df.index: 
             i = 0
+            needToPrint = False
             while (i < len(df['aggregatedStockList'][ind])):
                 epochtime = str(df['tradeTimes'][ind])[0:-3]
                 eventtime = time.localtime(int(epochtime))
@@ -72,6 +73,14 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                 reportedtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 scrip = df['aggregatedStockList'][ind][i]
                 #print(scrip, systemtime)
+                # industry = ""
+                # if(dbnse['scrip'].find_one({'scrip':scrip}) is None):
+                #     industry = scrip
+                if(dbnse['scrip'].find_one({'scrip':scrip}) is None and scrip != 'Largecap' and scrip != 'Midcap' and scrip != 'Smallcap'):
+                    if(needToPrint == True):
+                        print(scrip)
+                        industry = scrip
+                        needToPrint = False
                 if(dbnse['scrip'].find_one({'scrip':scrip}) is not None
                     and eventdateonly == (date.today()).strftime('%Y-%m-%d')
                     and currenttime >= starttime and currenttime <= endtime
@@ -99,12 +108,9 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 mldatalow = data['ml'] + '|' +  mldatalow + '|' + data['filter3']
                                 if (data['ml']!='' or data['filter3']!= ''):
                                     filtersFlag = True
-                        if((db['morning-volume-breakout-buy'].find_one({'scrip':scrip}) is not None)): 
+                        if((db['morning-volume-bs'].find_one({'scrip':scrip}) is not None)): 
                             #filtersFlag = True
-                            highVol = 'morning-volume-breakout-buy'
-                        if((db['morning-volume-breakout-sell'].find_one({'scrip':scrip}) is not None)):
-                            #filtersFlag = True 
-                            highVol = 'morning-volume-breakout-sell'
+                            highVol = 'morning-volume-breakout'
                         
                         # if(processor == 'buy-dayconsolidation-breakout-04(11:45-to-1:00)' or processor == 'sell-dayconsolidation-breakout-04(10:00-to-12:00)'):
                         #     if((db['morning-volume-breakout'].find_one({'scrip':scrip}) is None)): 
@@ -113,8 +119,10 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         #     print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
                         if(filtered == False):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol)
+                            needToPrint = True
                         elif(filtered == True and filtersFlag == True):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol)
+                            needToPrint = True
                             
                         record = {}
                         record['dataset_code'] = scrip
@@ -165,8 +173,15 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
             #eventtimeonly = time.strftime('%H:%M:%S', eventtime)
             currenttime = datetime.strptime(systemtime, '%Y-%m-%d %H:%M:%S')
             reportedtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            needToPrint = False
             while (i < len(df['aggregatedStockList'][ind])):
                 scrip = df['aggregatedStockList'][ind][i]
+                industry = ""
+                if(dbnse['scrip'].find_one({'scrip':scrip}) is None and scrip != 'Largecap' and scrip != 'Midcap' and scrip != 'Smallcap'):
+                    if(needToPrint == True):
+                        print(scrip)
+                        industry = scrip
+                        needToPrint = False
                 if(dbnse['scrip'].find_one({'scrip':scrip}) is not None
                     and db[processor].find_one({'scrip':scrip}) is None
                     and eventdateonly == (date.today()).strftime('%Y-%m-%d')
@@ -175,9 +190,10 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
                     #print(scrip)
                     mldatahigh = ''
                     mldatalow = ''
+                    regressionhigh = dbnse.regressionhigh.find_one({'scrip':scrip})
+                    regressionlow = dbnse.regressionlow.find_one({'scrip':scrip})
                     if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
                         data = dbnse.highBuy.find_one({'scrip':scrip})
-                        regressionhigh = dbnse.regressionhigh.find_one({'scrip':scrip})
                         if ('buy' in processor):
                             mldatahigh = data['ml']
                         mldatahigh = mldatahigh + '|' + data['filter2'] + '|' + data['filter']
@@ -189,9 +205,10 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
                             mldatahigh = mldatahigh + '|' + data['filter3']
                             if(regressionhigh['month3HighChange'] < -5):
                                 mldatahigh = mldatahigh + '|' + 'lastDayUp'
+                    if('buy' in processor and regressionhigh['month3LowChange'] < 5):
+                        mldatahigh = mldatahigh + '|' + 'month3LowChangeLT5'
                     if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
                         data = dbnse.lowSell.find_one({'scrip':scrip})
-                        regressionlow = dbnse.regressionlow.find_one({'scrip':scrip})
                         if ('sell' in processor):
                             mldatalow = data['ml']
                         mldatalow = mldatalow + '|' + data['filter2'] + '|' + data['filter']
@@ -203,11 +220,16 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
                             mldatalow = mldatalow + '|' + data['filter3']
                             if(regressionlow['month3LowChange'] > 5):
                                 mldatalow = mldatalow + '|' + 'lastDayDown'
+                    if('sell' in processor and regressionlow['month3HighChange'] > -5):
+                        mldatalow = mldatalow + '|' + 'month3HighChangeGT-5'
                     
-                    if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None) or (dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
-                        print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
-                    else:
-                        print(reportedtime, ':', processor, ' : ', scrip)
+                    if( processor != 'morning-volume-bs')
+                        if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None) or (dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
+                            needToPrint = True
+                        else:
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
+                            needToPrint = True
                         
                         
                     record = {}

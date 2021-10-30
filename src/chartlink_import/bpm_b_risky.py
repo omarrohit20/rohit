@@ -20,22 +20,11 @@ if __name__ == "__main__":
         if(sb.nw>= time_09_15 and sb.nw <= time_10_00): 
             process_url('https://chartink.com/screener/supertrend-morning-buy', 'buy-supertrend-morning', time_09_15, time_10_00, True)
             
-        if(sb.nw>= time_09_20 and sb.nw <= time_10_30):
-            process_url('https://chartink.com/screener/buy-breakup-intraday-9-25-to-10-30-06', 'buy-breakupGT2-intraday-9:25-to-10:30', time_09_25, time_10_30, True)
-        
         if(sb.nw>=time_09_25 and sb.nw<=time_10_15):
-            process_url('https://chartink.com/screener/buy-downtrend-01', 'buy-downlast2day)', time_09_25, time_10_15) 
+            process_url('https://chartink.com/screener/buy-downtrend-01', 'buy-downlast2day)', time_09_25, time_10_15, True) 
             
-        if(sb.nw>= time_09_25 and sb.nw <= time_10_30):    
-            process_url('https://chartink.com/screener/buy-check-morning-down-breakup-03', 'buy-check-morning-down-breakup-03', time_09_25, time_10_30)
-            
-        if(sb.nw>= time_11_00 and sb.nw <= time_12_30):
-            process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-03-1', 'buy-dayconsolidation-breakout-03-checkChart', time_10_30, time_12_30)
-                 
+       
         
-            
-              
-        #process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02', 'buy-check-morning-down-breakup-02')
         
         time.sleep(30)
         sb.nw = datetime.now()
