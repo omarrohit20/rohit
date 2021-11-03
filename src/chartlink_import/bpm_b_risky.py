@@ -23,8 +23,9 @@ if __name__ == "__main__":
         if(sb.nw>=time_09_25 and sb.nw<=time_10_15):
             process_url('https://chartink.com/screener/buy-downtrend-01', 'buy-downlast2day)', time_09_25, time_10_15, True) 
             
-       
-        
+        if(sb.nw>=time_09_45 and sb.nw<=time_11_00):
+            process_url('https://chartink.com/screener/buy-ema-up0', 'buy-ema-up0', time_09_45, time_11_00)
+            process_url('https://chartink.com/screener/buy-ema-up1', 'buy-ema-up1', time_09_45, time_11_00)
         
         time.sleep(30)
         sb.nw = datetime.now()
