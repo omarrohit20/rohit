@@ -2880,6 +2880,8 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regressionResult.append(regression_data['forecast_kNeighboursValue_reg'])
     regressionResult.append(regression_data['forecast_mlpValue_reg'])
     regressionResult.append(regression_data['forecast_kNeighboursValue_cla'])
+    regressionResult.append(regression_data['year5HighChange'])
+    regressionResult.append(regression_data['year5LowChange'])
     regressionResult.append(regression_data['year2HighChange'])
     regressionResult.append(regression_data['year2LowChange'])
     regressionResult.append(regression_data['yearHighChange'])
