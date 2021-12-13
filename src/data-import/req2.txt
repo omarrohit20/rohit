@@ -50,7 +50,7 @@ Keras-Applications==1.0.8
 Keras-Preprocessing==1.1.2
 kiwisolver==1.1.0
 Lasagne==0.2.dev1
-lxml==4.5.1
+lxml==4.6.5
 macholib==1.5.1
 Markdown==3.1.1
 MarkupSafe==1.1.1
