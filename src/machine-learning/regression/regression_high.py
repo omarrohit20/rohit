@@ -37,6 +37,10 @@ from sklearn.svm import SVC, SVR
 #from sklearn.qda import QDA
 #from sklearn.grid_search import GridSearchCV
 
+# from keras.models import Sequential
+# from keras.layers import Dense, Activation
+# from keras.layers import LSTM
+
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 dbnsehistnew = connection.nsehistnew
@@ -293,6 +297,24 @@ def process_regression_high(scrip, df, directory, run_ml_algo, TEST=False):
         regression_data['mlpValue_cla'] = float(result[0])
     else:
         regression_data['mlpValue_cla'] = float(0)
+        
+    # if (mlp and run_ml_algo):
+    #     dfp = get_data_frame(df, 'mlp', 'cla')
+    #     step_size = 1
+    #     # LSTM MODEL
+    #     model = Sequential()
+    #     model.add(LSTM(32, input_shape=(1, step_size), return_sequences = True))
+    #     model.add(LSTM(16))
+    #     model.add(Dense(1))
+    #     model.add(Activation('linear'))
+    #
+    #     # MODEL COMPILING AND TRAINING
+    #     model.compile(loss='mean_squared_error', optimizer='adagrad') # Try SGD, adam, adagrad and compare!!!
+    #     model.fit(epochs=5, batch_size=1, verbose=2)
+    #     result = performClassification(dfp, split, scrip, directory, forecast_out, model)
+    #     regression_data['mlpValue_cla'] = float(result[0])
+    # else:
+    #     regression_data['mlpValue_cla'] = float(0)
     
     forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'High_change1'].values[0]
     forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'High_change2'].values[0]

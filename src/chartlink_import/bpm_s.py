@@ -25,8 +25,11 @@ if __name__ == "__main__":
                 
         if(sb.nw>= time_09_45 and sb.nw <= time_11_15):
             process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-01', 'sell-dayconsolidation-breakout-01', time_09_45, time_11_30)
-            process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-02', 'sell-dayconsolidation-breakout-02', time_09_45, time_11_30)
-        
+        #if(sb.nw>= time_09_45 and sb.nw <= time_10_00):    
+            #process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-02', 'sell-vol-dayconsol-wait-or-\(if-market-down-or-downtrend)', time_09_45, time_10_00)
+        if(sb.nw>= time_10_00 and sb.nw <= time_11_00):    
+            process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-02', 'sell-vol-dayconsol-wait', time_10_00, time_11_00)
+            
         if(sb.nw>= time_10_15 and sb.nw <= time_14_00):
             process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-03', 'sell-dayconsolidation-breakout-03', time_10_15, time_14_00, True)
                 

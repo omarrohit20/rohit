@@ -18,7 +18,7 @@ if __name__ == "__main__":
     
     while (sb.nw <= time_14_30): 
         if(sb.nw>= time_09_15 and sb.nw <= time_10_00): 
-            process_url('https://chartink.com/screener/supertrend-morning-sell', 'sell-supertrend-morning', time_09_15, time_10_00, True)
+            process_url('https://chartink.com/screener/supertrend-morning-sell', 'sell-3-day-ago-downtrend-last2dayconsol', time_09_15, time_10_00, True)
             
         if(sb.nw>=time_09_25 and sb.nw<=time_10_15):
             process_url('https://chartink.com/screener/sell-uptrend-01', 'sell-uplast2day)', time_09_25, time_10_00, True) 
@@ -26,11 +26,11 @@ if __name__ == "__main__":
         if(sb.nw>= time_09_20 and sb.nw <= time_10_30):
             process_url('https://chartink.com/screener/sell-breakdown-intraday-9-25-to-10-30-06', 'sell-breakdownGT2-intraday-9:25-to-10:30', time_09_25, time_10_30, True)
             
-        if(sb.nw>=time_09_40 and sb.nw<=time_11_00):
-            process_url('https://chartink.com/screener/sell-ema-down0', 'sell-ema-down0', time_09_40, time_11_00)
-            process_url('https://chartink.com/screener/sell-ema-down1', 'sell-ema-down1', time_09_40, time_11_00)
+        if(sb.nw>=time_09_40 and sb.nw<=time_10_30):
+            process_url('https://chartink.com/screener/sell-ema-down0', 'sell-ema-down0', time_09_40, time_10_30)
+            process_url('https://chartink.com/screener/sell-ema-down1', 'sell-ema-down1-lastDayMarketUp-check\\', time_09_40, time_10_30)
             
-        time.sleep(30)
+        time.sleep(10)
         sb.nw = datetime.now()
         
     sb.server.stop()

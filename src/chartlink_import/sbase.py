@@ -153,7 +153,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
 def process_url(url, processor, starttime, endtime, filtered=False):
     proxy.new_har("file_name", options={'captureHeaders': False, 'captureContent': True, 'captureBinaryContent': True})
     driver.get(url)
-    time.sleep(60)
+    time.sleep(20)
     #WebDriverWait(driver, 30).until(lambda x: x.find_element_by_id("backtest-chart"))
     proxy.wait_for_traffic_to_stop(1, 30)
     #print(proxy.har)
@@ -186,6 +186,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
             currenttime = datetime.strptime(systemtime, '%Y-%m-%d %H:%M:%S')
             reportedtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             needToPrint = False
+            tempScrip = ''
             while (i < len(df['aggregatedStockList'][ind])):
                 scrip = df['aggregatedStockList'][ind][i]
                 industry = ""
@@ -194,6 +195,17 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
                         print(scrip)
                         industry = scrip
                         needToPrint = False
+                        if((db[processor].find_one({'scrip':tempScrip}) is None) and tempScrip != ''):
+                            record = {}
+                            record['scrip'] = tempScrip
+                            record['processor'] = processor
+                            record['epochtime'] = epochtime
+                            record['eventtime'] = eventtime
+                            record['systemtime'] = systemtime
+                            record['industry'] = industry
+                            json_data = json.loads(json.dumps(record, default=json_util.default))
+                            db[processor].insert_one(json_data)
+                            tempScrip = ''
                 if(dbnse['scrip'].find_one({'scrip':scrip}) is not None
                     and db[processor].find_one({'scrip':scrip}) is None
                     and eventdateonly == (date.today()).strftime('%Y-%m-%d')
@@ -243,15 +255,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
                             needToPrint = True
                         
-                        
-                    record = {}
-                    record['dataset_code'] = scrip
-                    record['scrip'] = scrip
-                    record['epochtime'] = epochtime
-                    record['eventtime'] = eventtime
-                    record['systemtime'] = systemtime
-                    json_data = json.loads(json.dumps(record, default=json_util.default))
-                    db[processor].insert_one(json_data)
+                    tempScrip = scrip
                 i = i + 1
                 
     except KeyError:

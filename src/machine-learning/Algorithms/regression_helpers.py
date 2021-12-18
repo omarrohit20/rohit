@@ -46,6 +46,7 @@ import time
 
 plotgraph = False
 memoize_data = {}
+plt.switch_backend('Agg')
 
 def load_dataset(path_directory, symbol): 
     """

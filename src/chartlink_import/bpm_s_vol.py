@@ -24,13 +24,16 @@ if __name__ == "__main__":
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-2', 'morning-volume-breakout-sell-2(lastDayMid-or-2daylow)', time_09_00, time_09_30)
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-3', 'morning-volume-breakout-sell-3(lastDayGT8)', time_09_00, time_09_30)
         
-        if(sb.nw>= time_10_00 and sb.nw <= time_13_30):
-            process_url_volBreakout('https://chartink.com/screener/sell-morning-volume-breakout-after10', 'sell-morning-volume-breakout-after10', time_10_00, time_13_30)
+        if(sb.nw>= time_09_50 and sb.nw <= time_10_30):
+            process_url_volBreakout('https://chartink.com/screener/sell-morning-volume-breakout-after10', 'sell-morning-volume-breakout-after10', time_10_00, time_10_30)
             
-        if(sb.nw>= time_10_00 and sb.nw <= time_13_30):
-            process_url_volBreakout('https://chartink.com/screener/sell-morning-volume-breakout-after11-45', 'sell-morning-volume-breakout-after11:45', time_10_00, time_13_30)
+        if(sb.nw>= time_09_50 and sb.nw <= time_10_30):
+            process_url_volBreakout('https://chartink.com/screener/sell-morning-volume-breakout-after11-45', 'sell-morning-volume-breakout-after10-consol-or-\-PCTLT1.5', time_10_00, time_10_30)
         
-        time.sleep(60)
+        if(sb.nw>= time_11_15 and sb.nw <= time_12_15):
+            process_url_volBreakout('https://chartink.com/screener/sell-morning-volume-breakout-after11-45', 'sell-morning-volume-breakout-after(First15minuteLowestInFirstHour)11-|_|-|or\\', time_11_15, time_12_15)
+
+        time.sleep(30)
         sb.nw = datetime.now()
         
     sb.server.stop()

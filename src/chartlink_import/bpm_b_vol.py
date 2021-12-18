@@ -29,13 +29,16 @@ if __name__ == "__main__":
             process_url_volBreakout('https://chartink.com/screener/morning-volume-bs-2', 'morning-volume-bs', time_09_30, time_09_45)
             process_url_volBreakout('https://chartink.com/screener/morning-volume-bs-2', 'morning-volume-bs', time_09_30, time_09_45)
             
-        if(sb.nw>= time_10_00 and sb.nw <= time_13_30):
-            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-1-2', 'morning-volume-breakout-after10', time_10_00, time_13_30)
+        if(sb.nw>= time_09_50 and sb.nw <= time_10_30):
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-1-2', 'morning-volume-breakout-after10', time_10_00, time_10_30)
             
-        if(sb.nw>= time_11_45 and sb.nw <= time_13_30):
-            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-2-1', 'morning-volume-breakout-after11:45', time_11_45, time_13_30)
+        if(sb.nw>= time_09_50 and sb.nw <= time_10_30):
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-2-1', 'morning-volume-breakout-after10-consol-or-/-PCTLT1.5', time_10_00, time_10_30)
+            
+        if(sb.nw>= time_11_15 and sb.nw <= time_12_15):
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-2-1', 'morning-volume-breakout-after(First15minuteHighestInFirstHour)11-|-|_|or/', time_11_15, time_12_15)
         
-        time.sleep(60)
+        time.sleep(30)
         sb.nw = datetime.now()
         
     sb.server.stop()
