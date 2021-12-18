@@ -187,6 +187,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
             reportedtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             needToPrint = False
             tempScrip = ''
+            mlData = ''
             while (i < len(df['aggregatedStockList'][ind])):
                 scrip = df['aggregatedStockList'][ind][i]
                 industry = ""
@@ -198,14 +199,17 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
                         if((db[processor].find_one({'scrip':tempScrip}) is None) and tempScrip != ''):
                             record = {}
                             record['scrip'] = tempScrip
-                            record['processor'] = processor
+                            record['industry'] = industry
+                            record['mlData'] = mlData
                             record['epochtime'] = epochtime
                             record['eventtime'] = eventtime
                             record['systemtime'] = systemtime
-                            record['industry'] = industry
+                            record['processor'] = processor
+                            
                             json_data = json.loads(json.dumps(record, default=json_util.default))
                             db[processor].insert_one(json_data)
                             tempScrip = ''
+                            mlData = ''
                 if(dbnse['scrip'].find_one({'scrip':scrip}) is not None
                     and db[processor].find_one({'scrip':scrip}) is None
                     and eventdateonly == (date.today()).strftime('%Y-%m-%d')
@@ -256,6 +260,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
                             needToPrint = True
                         
                     tempScrip = scrip
+                    mlData = mldatahigh + ' : ' + mldatalow
                 i = i + 1
                 
     except KeyError:
