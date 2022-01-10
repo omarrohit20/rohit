@@ -9,7 +9,7 @@ if __name__ == "__main__":
     sb.server.start()
     time.sleep(1)
     sb.proxy = sb.server.create_proxy()
-    regression_ta_data_buy()
+    #regression_ta_data_buy()
     
     print("Server started")
     
@@ -21,14 +21,18 @@ if __name__ == "__main__":
     sb.nw = datetime.now()
     
     while (sb.nw <= time_13_30):             
-        if(sb.nw>= time_09_15 and sb.nw <= time_09_30):
+        if(sb.nw>= time_09_15 and sb.nw <= time_09_25):
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-1', 'morning-volume-breakout-buy', time_09_00, time_09_30)
-            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-2', 'morning-volume-breakout-buy', time_09_00, time_09_30)
-   
-        if(sb.nw>= time_09_30 and sb.nw <= time_09_45):
-            process_url_volBreakout('https://chartink.com/screener/morning-volume-bs-2', 'morning-volume-bs', time_09_30, time_09_45)
-            process_url_volBreakout('https://chartink.com/screener/morning-volume-bs-2', 'morning-volume-bs', time_09_30, time_09_45)
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-bs', 'morning-volume-bs', time_09_00, time_09_30)
             
+        if(sb.nw>= time_09_20 and sb.nw <= time_09_45):
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-2', 'morning-volume-breakout-buy', time_09_00, time_09_30)
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-bs-2', 'morning-volume-bs', time_09_00, time_09_30)
+            
+        if(sb.nw>= time_09_15 and sb.nw <= time_09_45):
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-3', 'morning-volume-breakout-buy-lastDayDown', time_09_00, time_09_30)
+            
+   
         if(sb.nw>= time_09_50 and sb.nw <= time_10_30):
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-1-2', 'morning-volume-breakout-after10', time_10_00, time_10_30)
             

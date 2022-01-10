@@ -134,6 +134,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         elif(filtered == True and filtersFlag == True):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol)
                             needToPrint = True
+                        
                         tempScrip = scrip
                             
                         record = {}
@@ -251,14 +252,16 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
                     if('sell' in processor and regressionlow['month3HighChange'] > -5):
                         mldatalow = mldatalow + '|' + 'month3HighChangeGT-5'
                     
-                    if( processor != 'morning-volume-bs'):
-                        if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None) or (dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
+                    
+                    if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None) or (dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
+                        if( processor != 'morning-volume-bs'):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
-                            needToPrint = True
-                        else:
+                        needToPrint = True
+                    else:
+                        if( processor != 'morning-volume-bs'):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
-                            needToPrint = True
-                        
+                        needToPrint = True
+                                
                     tempScrip = scrip
                     mlData = mldatahigh + ' : ' + mldatalow
                 i = i + 1

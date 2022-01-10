@@ -94,6 +94,8 @@ def all_withoutml(regression_data, regressionResult, ws):
 def withoutml(regression_data, ws):
     tempRegressionResult = []
     tempRegressionResult.append(regression_data['scrip'])
+    tempRegressionResult.append(regression_data['PCT_change'])
+    tempRegressionResult.append(regression_data['PCT_day_change'])
     tempRegressionResult.append(regression_data['ml'])
     tempRegressionResult.append(regression_data['filter'])
     tempRegressionResult.append(regression_data['filter2'])

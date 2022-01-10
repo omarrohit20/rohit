@@ -7,7 +7,7 @@ if __name__ == "__main__":
     sb.server.start()
     time.sleep(1)
     sb.proxy = sb.server.create_proxy()
-    regression_ta_data_sell()
+    #regression_ta_data_sell()
     
     print("Server started")
     
@@ -19,7 +19,7 @@ if __name__ == "__main__":
     sb.nw = datetime.now()
     
     while (sb.nw <= time_13_30):             
-        if(sb.nw>= time_09_15 and sb.nw <= time_09_30):    
+        if(sb.nw>= time_09_15 and sb.nw <= time_09_45):    
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-1', 'morning-volume-breakout-sell', time_09_00, time_09_30)
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-2', 'morning-volume-breakout-sell-2(lastDayMid-or-2daylow)', time_09_00, time_09_30)
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-3', 'morning-volume-breakout-sell-3(lastDayGT8)', time_09_00, time_09_30)
