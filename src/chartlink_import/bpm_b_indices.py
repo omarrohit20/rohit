@@ -27,8 +27,8 @@ if __name__ == "__main__":
             process_url('https://chartink.com/screener/buy-breakup-intraday-9-30-to-10', 'buy-(=========UPTREND=======)breakup-intraday-9:40-to-10:10', time_09_30, time_10_15, True)
             process_url('https://chartink.com/screener/buy-breakup-intraday-9-50-to-10-10-01', 'buy-(=========UPTREND=======)breakup-intraday-9:40-to-10:10', time_09_30, time_10_30, True)
             
-        if(sb.nw >= time_10_00 and sb.nw <= time_13_30):
-            process_url('https://chartink.com/screener/morning-volume-breakout-buy-consolidation-01', 'buy-morning-volume-breakout-consolidation-01', time_10_00, time_13_30)
+        if(sb.nw >= time_12_00 and sb.nw <= time_12_30):
+            process_url('https://chartink.com/screener/morning-volume-breakout-buy-consolidation-01', 'buy-morning-volume-breakout-consolidation-01', time_12_00, time_12_30)
          
         if(sb.nw >= time_10_00 and sb.nw <= time_13_30):
             process_url('https://chartink.com/screener/morning-volume-breakout-buy-consolidation-02', 'buy-morning-volume-breakout-consolidation-02', time_10_00, time_13_30)

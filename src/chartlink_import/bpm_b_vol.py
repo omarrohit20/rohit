@@ -36,12 +36,17 @@ if __name__ == "__main__":
         if(sb.nw>= time_09_50 and sb.nw <= time_10_30):
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-1-2', 'morning-volume-breakout-after10', time_10_00, time_10_30)
             
-        if(sb.nw>= time_09_50 and sb.nw <= time_10_30):
-            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-2-1', 'morning-volume-breakout-after10-consol-or-/-PCTLT1.5', time_10_00, time_10_30)
-            
-        if(sb.nw>= time_11_15 and sb.nw <= time_12_15):
-            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-2-1', 'morning-volume-breakout-after(First15minuteHighestInFirstHour)11-|-|_|or/', time_11_15, time_12_15)
+        if(sb.nw>= time_11_30 and sb.nw <= time_12_15):
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-1-2', 'morning-volume-breakout-after11:30(SellInDowntrend)11-|-|_|or/', time_11_30, time_12_15)
         
+        if(sb.nw>= time_10_00 and sb.nw <= time_11_30):
+            process_url_volBreakout('https://chartink.com/screener/buy-morning-down-1', 'buy-morning-down-breakout-VWAP', time_10_00, time_11_30)
+            
+        if(sb.nw>= time_11_30 and sb.nw <= time_13_00):
+            process_url_volBreakout('https://chartink.com/screener/buy-morning-down-0', 'buy-morning-down-breakout-VWAP', time_11_30, time_13_00)
+        
+        
+            
         time.sleep(30)
         sb.nw = datetime.now()
         

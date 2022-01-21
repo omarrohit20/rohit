@@ -18,9 +18,7 @@ if __name__ == "__main__":
     
     while (sb.nw <= time_14_00):             
         if(sb.nw>= time_09_20 and sb.nw <= time_10_30):    
-            process_url('https://chartink.com/screener/buy-check-morning-down-breakup-01', 'buy-check-morning-down-breakup-01', time_09_35, time_10_30)
-        if(sb.nw>= time_09_20 and sb.nw <= time_10_30):    
-            process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02', 'buy-check-morning-down-breakup-02(Midcap-change-more-than-0.5%)', time_09_35, time_10_30) 
+            process_url('https://chartink.com/screener/buy-check-morning-down-breakup-02', 'buy-check-morning-down-breakup-02(|`|_| or / Buy)(ReversalMABuy-ReversalVWAPSell)', time_09_35, time_10_30) 
                 
         if(sb.nw>= time_09_45 and sb.nw <= time_11_15):
             process_url('https://chartink.com/screener/buy-dayconsolidation-breakout-01', 'buy-dayconsolidation-breakout-01(|`|_|follow-midcap-pattern)', time_09_45, time_11_30)

@@ -101,27 +101,32 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         mldatalow = ''
                         highVol = ''
                         filtersFlag = False
-                        if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
-                            data = dbnse.highBuy.find_one({'scrip':scrip})
-                            mldatahigh =  data['filter2'] + '|' + data['filter']
-                            if (data['filter2']!='' or data['filter']!= ''):
-                                    filtersFlag = True
-                            if ('buy' in processor and ''):
-                                mldatahigh = data['ml'] + '|' + mldatahigh + '|' + data['filter3']
-                                if (data['ml']!='' or data['filter3']!= ''):
-                                    filtersFlag = True
-                        if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
-                            data = dbnse.lowSell.find_one({'scrip':scrip})
-                            if (data['filter2']!='' or data['filter']!= ''):
-                                    filtersFlag = True
-                            mldatalow = data['filter2'] + '|' + data['filter'] 
-                            if ('sell' in processor and 'MLhighBuy' not in data['ml'] and 'MLhighBuyStrong' not in data['ml'] and '[MLSell]' not in data['filter']):
-                                mldatalow = data['ml'] + '|' +  mldatalow + '|' + data['filter3']
-                                if (data['ml']!='' or data['filter3']!= ''):
-                                    filtersFlag = True
-                        if((db['morning-volume-bs'].find_one({'scrip':scrip}) is not None)): 
-                            #filtersFlag = True
-                            highVol = 'morning-volume-breakout'
+                        
+                        try: 
+                            if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
+                                data = dbnse.highBuy.find_one({'scrip':scrip})
+                                mldatahigh =  data['filter2'] + '|' + data['filter']
+                                if (data['filter2']!='' or data['filter']!= ''):
+                                        filtersFlag = True
+                                if ('buy' in processor and ''):
+                                    mldatahigh = data['ml'] + '|' + mldatahigh + '|' + data['filter3']
+                                    if (data['ml']!='' or data['filter3']!= ''):
+                                        filtersFlag = True
+                            if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
+                                data = dbnse.lowSell.find_one({'scrip':scrip})
+                                if (data['filter2']!='' or data['filter']!= ''):
+                                        filtersFlag = True
+                                mldatalow = data['filter2'] + '|' + data['filter'] 
+                                if ('sell' in processor and 'MLhighBuy' not in data['ml'] and 'MLhighBuyStrong' not in data['ml'] and '[MLSell]' not in data['filter']):
+                                    mldatalow = data['ml'] + '|' +  mldatalow + '|' + data['filter3']
+                                    if (data['ml']!='' or data['filter3']!= ''):
+                                        filtersFlag = True
+                            if((db['morning-volume-bs'].find_one({'scrip':scrip}) is not None)): 
+                                #filtersFlag = True
+                                highVol = 'morning-volume-breakout'
+                        except: 
+                            print('')
+                        
                         
                         # if(processor == 'buy-dayconsolidation-breakout-04(11:45-to-1:00)' or processor == 'sell-dayconsolidation-breakout-04(10:00-to-12:00)'):
                         #     if((db['morning-volume-breakout'].find_one({'scrip':scrip}) is None)): 
@@ -194,7 +199,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
                 industry = ""
                 if(dbnse['scrip'].find_one({'scrip':scrip}) is None and scrip != 'Largecap' and scrip != 'Midcap' and scrip != 'Smallcap'):
                     if(needToPrint == True):
-                        print(scrip)
+                        #print(scrip)
                         industry = scrip
                         needToPrint = False
                         if((db[processor].find_one({'scrip':tempScrip}) is None) and tempScrip != ''):
@@ -219,39 +224,41 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
                     #print(scrip)
                     mldatahigh = ''
                     mldatalow = ''
-                    regressionhigh = dbnse.regressionhigh.find_one({'scrip':scrip})
-                    regressionlow = dbnse.regressionlow.find_one({'scrip':scrip})
-                    if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
-                        data = dbnse.highBuy.find_one({'scrip':scrip})
-                        if ('buy' in processor):
-                            mldatahigh = data['ml']
-                        mldatahigh = mldatahigh + '|' + data['filter2'] + '|' + data['filter']
-                        if ('buy' in processor
-                            and (regressionhigh['PCT_day_change'] > 1 
-                                 or (regressionhigh['PCT_day_change_pre1'] > 1 and abs(regressionhigh['PCT_day_change']) < abs(regressionhigh['PCT_day_change_pre1']))
-                                 )
-                            ):
-                            mldatahigh = mldatahigh + '|' + data['filter3']
-                            if(regressionhigh['month3HighChange'] < -5):
-                                mldatahigh = mldatahigh + '|' + 'lastDayUp'
-                    if('buy' in processor and regressionhigh['month3LowChange'] < 5):
-                        mldatahigh = mldatahigh + '|' + 'month3LowChangeLT5'
-                    if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
-                        data = dbnse.lowSell.find_one({'scrip':scrip})
-                        if ('sell' in processor):
-                            mldatalow = data['ml']
-                        mldatalow = mldatalow + '|' + data['filter2'] + '|' + data['filter']
-                        if ('sell' in processor
-                            and (regressionlow['PCT_day_change'] < -1 
-                                 or (regressionlow['PCT_day_change_pre1'] < -1 and abs(regressionlow['PCT_day_change']) < abs(regressionlow['PCT_day_change_pre1']))
-                                 )
-                            ):
-                            mldatalow = mldatalow + '|' + data['filter3']
-                            if(regressionlow['month3LowChange'] > 5):
-                                mldatalow = mldatalow + '|' + 'lastDayDown'
-                    if('sell' in processor and regressionlow['month3HighChange'] > -5):
-                        mldatalow = mldatalow + '|' + 'month3HighChangeGT-5'
-                    
+                    try: 
+                        regressionhigh = dbnse.regressionhigh.find_one({'scrip':scrip})
+                        regressionlow = dbnse.regressionlow.find_one({'scrip':scrip})
+                        if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
+                            data = dbnse.highBuy.find_one({'scrip':scrip})
+                            if ('buy' in processor):
+                                mldatahigh = data['ml']
+                            mldatahigh = mldatahigh + '|' + data['filter2'] + '|' + data['filter']
+                            if ('buy' in processor
+                                and (regressionhigh['PCT_day_change'] > 1 
+                                     or (regressionhigh['PCT_day_change_pre1'] > 1 and abs(regressionhigh['PCT_day_change']) < abs(regressionhigh['PCT_day_change_pre1']))
+                                     )
+                                ):
+                                mldatahigh = mldatahigh + '|' + data['filter3']
+                                if(regressionhigh['month3HighChange'] < -5):
+                                    mldatahigh = mldatahigh + '|' + 'lastDayUp'
+                        if('buy' in processor and regressionhigh['month3LowChange'] < 5):
+                            mldatahigh = mldatahigh + '|' + 'month3LowChangeLT5'
+                        if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
+                            data = dbnse.lowSell.find_one({'scrip':scrip})
+                            if ('sell' in processor):
+                                mldatalow = data['ml']
+                            mldatalow = mldatalow + '|' + data['filter2'] + '|' + data['filter']
+                            if ('sell' in processor
+                                and (regressionlow['PCT_day_change'] < -1 
+                                     or (regressionlow['PCT_day_change_pre1'] < -1 and abs(regressionlow['PCT_day_change']) < abs(regressionlow['PCT_day_change_pre1']))
+                                     )
+                                ):
+                                mldatalow = mldatalow + '|' + data['filter3']
+                                if(regressionlow['month3LowChange'] > 5):
+                                    mldatalow = mldatalow + '|' + 'lastDayDown'
+                        if('sell' in processor and regressionlow['month3HighChange'] > -5):
+                            mldatalow = mldatalow + '|' + 'month3HighChangeGT-5'
+                    except: 
+                        print('')
                     
                     if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None) or (dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
                         if( processor != 'morning-volume-bs'):
