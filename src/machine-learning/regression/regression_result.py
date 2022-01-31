@@ -92,7 +92,7 @@ ws_low = wb.create_sheet("LowAll")
 ws_low.append(["BuyIndicators", "Buy_Avg","Buy_Count", "SellIndicators", "Sell_Avg", "Sell_Count", "Symbol", "seriesTrend", "SMA4_2daysBack", "SMA9_2daysBack", "SMA4", "SMA9", "SMA25", "SMA50", "SMA100", "SMA200", "ResultDate", "ResultDeclared", "ResultSentiment", "ResultComment", "VOL_change", "OI_change", "Contract_change", "OI_change_next", "Contract_change_next", "PCT", "PCT2", "PCT3", "PCT4", "PCT5", "PCT7", "PCT10", "MLP_reg", "KNeighbors_reg", "MLP_cla", "KNeighbors_cla","MLP_reg_Other", "KNeighbors_reg_Other", "MLP_cla_Other", "KNeighbors_cla_Other", "forecast_mlpValue_reg", "forecast_kNeighboursValue_reg", "forecast_mlpValue_cla", "forecast_kNeighboursValue_cla", "yHigh5Change", "yLow5Change", "yHigh2Change", "yLow2Change", "yHighChange", "yLowChange", "m6HighChange", "m6LowChange", "m3HighChange", "m3LowChange", "mHighChange", "mLowChange", "w2HighChange", "w2LowChange", "wHighChange", "wLowChange", "trend", "Score", "HighTail", "LowTail", "Close", "PCT_Day_Change", "PCT_Change", "Symbol", "Industry", "Filter1", "Filter2", "Filter3", "Filter4", "Filter5", "Filter", "FilterBuy", "FilterSell", "Filter345Acc", "Filter345Count", "Filter345Pct", "Filter1Acc", "Filter1Count", "Filter1Pct", "FilterPctDayChangeAcc", "FilterPctDayChangeCount", "FilterPctDayChangePct", "FilterAllAcc", "FilterAllCount", "FilterAllPct", "FilterTechAcc", "FilterTechCount", "FilterTechPct", "FilterTechAllAcc", "FilterTechAllCount", "FilterTechAllPct", "FilterTechAllPctChangeAcc", "FilterTechAllPctChangeCount", "FilterTechAllPctChangePct"])
 
 def is_buy_filter(regression_data):
-    if("%%:" in regression_data['filter']
+    if('%%:' in regression_data['filter']
         or "$$" in regression_data['filter']
         or 'ConsolidationBreakout' in regression_data['filter']
         or '%%HLTF:mayBuyTail-tailGT2-allDayLT0' in regression_data['filter']
@@ -113,7 +113,7 @@ def is_buy_filter(regression_data):
         return False
     
 def is_buy_filter2(regression_data):
-    if("RISKY-UPTREND-SELL-0" in regression_data['filter2']
+    if('RISKY-UPTREND-SELL-0' in regression_data['filter2']
         or 'RISKY-UPTREND-SELL-1' in regression_data['filter2']
         or 'RISKY-UPTREND-SELL-2' in regression_data['filter2']
         or 'RISKY-UPTREND-SELL-3' in regression_data['filter2']
@@ -123,8 +123,30 @@ def is_buy_filter2(regression_data):
     else:
         return False
     
+def is_buy_filter5(regression_data):
+    if(regression_data['PCT_day_change'] > 1):
+        if('RISKY-UPTREND-SELL' in regression_data['filter5']):
+            return 'RISKY-UPTREND-SELL'
+        elif('RISKY-BUY-UPTREND-CONT' in regression_data['filter5']):
+            return 'RISKY-BUY-UPTREND-CONT'
+        else:
+            return ""
+    else:
+        return ""
+    
+def is_buy_filterBuy(regression_data):
+    if('Last3Day(GT1)' in regression_data['filterbuy']):
+        return "Last3Day(GT1)"
+    elif('Last2Day(GT1)' in regression_data['filterbuy']):
+        return "Last2Day(GT1)"
+    elif('Last3Day(GT2)' in regression_data['filterbuy']):
+        return "Last3Day(GT2)"
+    else:
+        return ""
+    
+    
 def is_sell_filter(regression_data):
-    if("%%:" in regression_data['filter']
+    if('%%:' in regression_data['filter']
         or "$$" in regression_data['filter']
         or 'ConsolidationBreakout' in regression_data['filter']
         or '%%HLTF:maySellTail-tailGT2-allDayGT0' in regression_data['filter']
@@ -143,15 +165,38 @@ def is_sell_filter(regression_data):
         return False
     
 def is_sell_filter2(regression_data):
-    if("RISKY-DOWNTREND-BUY-0" in regression_data['filter2']
-        or "RISKY-DOWNTREND-BUY-1" in regression_data['filter2']
-        or "RISKY-DOWNTREND-BUY-2" in regression_data['filter2']
-        or "RISKY-DOWNTREND-BUY-3" in regression_data['filter2']
-        or "RISKY-DOWNTREND-BUY-4" in regression_data['filter2']
+    if('RISKY-DOWNTREND-BUY-0' in regression_data['filter2']
+        or 'RISKY-DOWNTREND-BUY-1' in regression_data['filter2']
+        or 'RISKY-DOWNTREND-BUY-2' in regression_data['filter2']
+        or 'RISKY-DOWNTREND-BUY-3' in regression_data['filter2']
+        or 'RISKY-DOWNTREND-BUY-4' in regression_data['filter2']
         ):
         return True
     else:
         return False
+    
+def is_sell_filter5(regression_data):
+    if(regression_data['PCT_day_change'] < -1):
+        if('RISKY-DOWNTREND-BUY' in regression_data['filter5']):
+            return 'RISKY-DOWNTREND-BUY'
+        elif('RISKY-SELL-DOWNTREND-CONT' in regression_data['filter5']):
+            return 'RISKY-SELL-DOWNTREND-CONT'
+        else:
+            return ""
+    else:
+        return ""
+    
+
+def is_sell_filterSell(regression_data):
+    if('Last3Day(LT-1)' in regression_data['filtersell']):
+        return 'Last3Day(LT-1)'
+    elif('Last2Day(LT-1)' in regression_data['filtersell']):
+        return 'Last2Day(LT-1)'
+    elif('Last3Day(LT-2)' in regression_data['filtersell']):
+        return 'Last3Day(LT-2)'
+    else:
+        return ""
+    
 
 def saveReports():
     ws_allFilterAcc.append([""])
@@ -550,6 +595,8 @@ def result_data_reg(scrip):
         regression_data = regression_high_copy2
         if(buy_high_volatility(regression_high_copy2, regressionResultHigh)):
             all_withoutml(regression_high_copy2, regressionResultHigh, ws_highAnalysis)
+            filterbuy = is_buy_filterBuy(regression_data)
+            filter5 = is_buy_filter5(regression_data)
             if(is_buy_filter2(regression_data)):
                 if((db['highBuy'].find_one({'scrip':scrip}) is None)):
                     record = {}
@@ -564,6 +611,37 @@ def result_data_reg(scrip):
                     db['highBuy'].insert_one(json_data)
                 else:
                     db['highBuy'].update_one({'scrip':scrip}, { "$set": {'filter2':regression_data['filter2']}})
+            if(filterbuy != ""):
+                if((db['highBuy'].find_one({'scrip':scrip}) is None)):
+                    record = {}
+                    record['scrip'] = scrip
+                    record['PCT_change'] =regression_data['PCT_change']
+                    record['PCT_day_change'] =regression_data['PCT_day_change']
+                    record['ml'] = ''
+                    record['filter'] = ''
+                    record['filter2'] = filterbuy
+                    record['filter3'] = ''
+                    json_data = json.loads(json.dumps(record, default=json_util.default))
+                    db['highBuy'].insert_one(json_data)
+                else:
+                    temp = db['highBuy'].find_one({'scrip':scrip})
+                    db['highBuy'].update_one({'scrip':scrip}, { "$set": {'filter2':filterbuy + ',' + temp['filter2']}})
+            if(filter5 != ""):
+                if((db['highBuy'].find_one({'scrip':scrip}) is None)):
+                    record = {}
+                    record['scrip'] = scrip
+                    record['PCT_change'] =regression_data['PCT_change']
+                    record['PCT_day_change'] =regression_data['PCT_day_change']
+                    record['ml'] = ''
+                    record['filter'] = ''
+                    record['filter2'] = filter5
+                    record['filter3'] = ''
+                    json_data = json.loads(json.dumps(record, default=json_util.default))
+                    db['highBuy'].insert_one(json_data)
+                else:
+                    temp = db['highBuy'].find_one({'scrip':scrip})
+                    db['highBuy'].update_one({'scrip':scrip}, { "$set": {'filter2':filter5 + ',' + temp['filter2']}})
+            
         if (is_algo_buy(regression_high_copy2)):
             all_withoutml(regression_data, regressionResultHigh, ws_highBuyReg)
         if ((is_algo_buy(regression_high_copy2) and is_any_reg_algo_gt1_not_other(regression_data))
@@ -615,6 +693,8 @@ def result_data_reg(scrip):
         regression_data = regression_low_copy2
         if(sell_high_volatility(regression_low_copy2, regressionResultLow)):
             all_withoutml(regression_low_copy2, regressionResultLow, ws_lowAnalysis)
+            filtersell = is_sell_filterSell(regression_data)
+            filter5 = is_sell_filter5(regression_data)
             if(is_sell_filter2(regression_data)):
                 if((db['lowSell'].find_one({'scrip':scrip}) is None)):
                     record = {}
@@ -629,6 +709,37 @@ def result_data_reg(scrip):
                     db['lowSell'].insert_one(json_data)
                 else:
                     db['lowSell'].update_one({'scrip':scrip}, { "$set": {'filter2':regression_data['filter2']}})
+            if(filtersell != ""):
+                if((db['lowSell'].find_one({'scrip':scrip}) is None)):
+                    record = {}
+                    record['scrip'] = scrip
+                    record['PCT_change'] =regression_data['PCT_change']
+                    record['PCT_day_change'] =regression_data['PCT_day_change']
+                    record['ml'] = ''
+                    record['filter'] = ''
+                    record['filter2'] = filtersell
+                    record['filter3'] = ''
+                    json_data = json.loads(json.dumps(record, default=json_util.default))
+                    db['lowSell'].insert_one(json_data)
+                else:
+                    temp = db['lowSell'].find_one({'scrip':scrip})
+                    db['lowSell'].update_one({'scrip':scrip}, { "$set": {'filter2':(filtersell + ',' + temp['filter2'])}})
+            if(filter5 != ""):
+                if((db['lowSell'].find_one({'scrip':scrip}) is None)):
+                    record = {}
+                    record['scrip'] = scrip
+                    record['PCT_change'] =regression_data['PCT_change']
+                    record['PCT_day_change'] =regression_data['PCT_day_change']
+                    record['ml'] = ''
+                    record['filter'] = ''
+                    record['filter2'] = filter5
+                    record['filter3'] = ''
+                    json_data = json.loads(json.dumps(record, default=json_util.default))
+                    db['lowSell'].insert_one(json_data)
+                else:
+                    temp = db['lowSell'].find_one({'scrip':scrip})
+                    db['lowSell'].update_one({'scrip':scrip}, { "$set": {'filter2':(filter5 + ',' + temp['filter2'])}})
+            
         if (is_algo_sell(regression_low_copy2)):
             all_withoutml(regression_data, regressionResultHigh, ws_lowSellReg)
         if ((is_algo_sell(regression_low_copy2) and is_any_reg_algo_lt_minus1_not_other(regression_data))
