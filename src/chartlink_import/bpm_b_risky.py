@@ -21,6 +21,7 @@ if __name__ == "__main__":
             process_url('https://chartink.com/screener/supertrend-morning-buy', 'buy-3-day-ago-uptrend-last2dayconsol', time_09_45, time_11_00)
             
         if(sb.nw>=time_09_25 and sb.nw<=time_10_15):
+            #( {cash} ( 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" < 0 and 2 days ago "close - 1 candle ago close / 1 candle ago close * 100" < 0.5 and ( ( 1 day ago close - 1 day ago open ) * 100 ) / 1 day ago open < -2 and ( ( 2 days ago close - 2 days ago open ) * 100 ) / 2 days ago open < 0.5 and ( ( 1 day ago close - 3 days ago close ) * 100 ) / 3 days ago close < -5 and [=3] 5 minute close > [=1] 5 minute close and ( ( [=1] 5 minute close - [=1] 5 minute open ) * 100 ) / [=1] 5 minute open > -0.5 and ( ( [=1] 10 minute close - [=1] 10 minute open ) * 100 ) / [=1] 10 minute open > 0.7 and ( ( [0] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close < 1 and [=1] 5 minute vwap < [=3] 5 minute vwap and [=2] 5 minute vwap < [=3] 5 minute vwap and [-1] 5 minute close > [-1] 5 minute vwap ) ) 
             process_url('https://chartink.com/screener/buy-downtrend-01', 'buy-downlast2day)', time_09_25, time_10_15) 
             
         if(sb.nw>= time_09_20 and sb.nw <= time_10_30):
