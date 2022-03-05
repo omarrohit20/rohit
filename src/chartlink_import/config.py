@@ -13,6 +13,7 @@ time_09_50 = st + timedelta(seconds=9*3600+50*60) # this gives 9:50 AM
 time_10_00 = st + timedelta(seconds=10*3600) # this gives 10:00 AM
 time_10_10 = st + timedelta(seconds=10*3600+10*60) # this gives 10:10 AM
 time_10_15 = st + timedelta(seconds=10*3600+15*60) # this gives 10:15 AM
+time_10_25 = st + timedelta(seconds=10*3600+25*60) # this gives 10:25 AM
 time_10_30 = st + timedelta(seconds=10*3600+30*60) # this gives 10:30 AM
 time_10_45 = st + timedelta(seconds=10*3600+45*60)
 time_11_00 = st + timedelta(seconds=11*3600) # this gives 11:15 AM

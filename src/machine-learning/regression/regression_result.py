@@ -124,7 +124,7 @@ def is_buy_filter2(regression_data):
         return False
     
 def is_buy_filter5(regression_data):
-    if(regression_data['PCT_day_change'] > 1):
+    if(regression_data['PCT_day_change'] > 2.5 or regression_data['PCT_change'] > 3 or ('DOJI' in regression_data['filter5'])):
         if('RISKY-UPTREND-SELL' in regression_data['filter5']):
             return 'RISKY-UPTREND-SELL'
         elif('RISKY-BUY-UPTREND-CONT' in regression_data['filter5']):
@@ -176,7 +176,7 @@ def is_sell_filter2(regression_data):
         return False
     
 def is_sell_filter5(regression_data):
-    if(regression_data['PCT_day_change'] < -1):
+    if(regression_data['PCT_day_change'] < -2.5 or regression_data['PCT_change'] < -3 or ('DOJI' in regression_data['filter5'])):
         if('RISKY-DOWNTREND-BUY' in regression_data['filter5']):
             return 'RISKY-DOWNTREND-BUY'
         elif('RISKY-SELL-DOWNTREND-CONT' in regression_data['filter5']):

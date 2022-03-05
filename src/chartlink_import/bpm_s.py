@@ -22,7 +22,7 @@ if __name__ == "__main__":
             process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-02', 'check-morning-up-breakdown-02', time_09_35, time_10_30)
         
         if(sb.nw>= time_11_30 and sb.nw <= time_13_30):    
-            process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-01', 'check-morning-up-breakdown-01', time_09_35, time_10_30)    
+            process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-01', 'check-morning-up-breakdown-01', time_09_35, time_10_30, True)    
                 
         if(sb.nw>= time_09_45 and sb.nw <= time_11_15):
             process_url('https://chartink.com/screener/sell-dayconsolidation-breakout-01', 'sell-dayconsolidation-breakout-01(|_|`|follow-midcap-pattern)', time_09_45, time_11_30, True)

@@ -106,16 +106,20 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
                                 data = dbnse.highBuy.find_one({'scrip':scrip})
                                 mldatahigh =  data['filter2'] + '|' + data['filter']
-                                if (data['filter2'] !='' or data['filter']!= ''):
-                                        filtersFlag = True
+                                if ('-UPTREND-' in data['filter2'] or '-DOWNTREND-' in data['filter2']):
+                                    filtersFlag = True
+                                if (data['filter']!= ''):
+                                    filtersFlag = True
                                 if ('buy' in processor and ''):
                                     mldatahigh = data['ml'] + '|' + mldatahigh + '|' + data['filter3']
                                     if (data['ml']!='' or data['filter3']!= ''):
                                         filtersFlag = True
                             if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
                                 data = dbnse.lowSell.find_one({'scrip':scrip})
-                                if (data['filter2'] !='' or data['filter']!= ''):
-                                        filtersFlag = True
+                                if ('-UPTREND-' in data['filter2'] or '-DOWNTREND-' in data['filter2']):
+                                    filtersFlag = True
+                                if (data['filter']!= ''):
+                                    filtersFlag = True
                                 mldatalow = data['filter2'] + '|' + data['filter'] 
                                 if ('sell' in processor and 'MLhighBuy' not in data['ml'] and 'MLhighBuyStrong' not in data['ml'] and '[MLSell]' not in data['filter']):
                                     mldatalow = data['ml'] + '|' +  mldatalow + '|' + data['filter3']
