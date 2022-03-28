@@ -125,9 +125,15 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                     mldatalow = data['ml'] + '|' +  mldatalow + '|' + data['filter3']
                                     if (data['ml']!='' or data['filter3']!= ''):
                                         filtersFlag = True
-                            if((db['morning-volume-bs'].find_one({'scrip':scrip}) is not None)): 
+                            data = db['morning-volume-bs'].find_one({'scrip':scrip})
+                            if(data is not None): 
                                 #filtersFlag = True
-                                highVol = 'morning-volume-breakout'
+                                highVol = data['keyIndicator']
+                            data = db['breakout-morning-volume'].find_one({'scrip':scrip})
+                            if(data is not None): 
+                                #filtersFlag = True
+                                highVol = highVol + ':' + data['keyIndicator']    
+                               
                         except: 
                             print('')
                         
@@ -176,7 +182,7 @@ def process_url(url, processor, starttime, endtime, filtered=False):
             #print(data)
             process_backtest(data, processor, starttime, endtime, filtered)
 
-def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
+def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndicator=None):
     response_json = json.loads(rawdata)
     try:
         aggregatedStockList = response_json["aggregatedStockList"]
@@ -215,6 +221,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
                             record['eventtime'] = eventtime
                             record['systemtime'] = systemtime
                             record['processor'] = processor
+                            record['keyIndicator'] = keyIndicator
                             
                             json_data = json.loads(json.dumps(record, default=json_util.default))
                             db[processor].insert_one(json_data)
@@ -265,11 +272,19 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
                         print('')
                     
                     if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None) or (dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
-                        if( processor != 'morning-volume-bs'):
+                        if(processor == 'morning-volume-bs'):
+                            needToPrint = True #do-nothing
+                        elif(processor == 'breakout-morning-volume'):
+                            needToPrint = True #do-nothing
+                        else:
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
                         needToPrint = True
                     else:
-                        if( processor != 'morning-volume-bs'):
+                        if(processor == 'morning-volume-bs'):
+                            needToPrint = True #do-nothing
+                        elif(processor == 'breakout-morning-volume'):
+                            needToPrint = True #do-nothing
+                        else:
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
                         needToPrint = True
                                 
@@ -282,7 +297,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime):
     except TypeError:
         None
             
-def process_url_volBreakout(url, processor, starttime, endtime):
+def process_url_volBreakout(url, processor, starttime, endtime, keyIndicator=None):
     proxy.new_har("file_name", options={'captureHeaders': False, 'captureContent': True, 'captureBinaryContent': True})
     driver.get(url)
     time.sleep(10)
@@ -296,7 +311,7 @@ def process_url_volBreakout(url, processor, starttime, endtime):
         if (_url == 'https://chartink.com/backtest/process') and ('text' in ent['response']['content']):
             data = _response['content']['text']
             #print(data)
-            process_backtest_volBreakout(data, processor, starttime, endtime)
+            process_backtest_volBreakout(data, processor, starttime, endtime, keyIndicator)
             
 
 def regression_ta_data_buy():
