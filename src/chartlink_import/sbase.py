@@ -127,11 +127,11 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                         filtersFlag = True
                             data = db['morning-volume-bs'].find_one({'scrip':scrip})
                             if(data is not None): 
-                                #filtersFlag = True
+                                filtersFlag = True
                                 highVol = data['keyIndicator']
                             data = db['breakout-morning-volume'].find_one({'scrip':scrip})
                             if(data is not None): 
-                                #filtersFlag = True
+                                filtersFlag = True
                                 highVol = highVol + ':' + data['keyIndicator']    
                                
                         except: 
@@ -235,6 +235,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     #print(scrip)
                     mldatahigh = ''
                     mldatalow = ''
+                    highVol = ''
                     try: 
                         regressionhigh = dbnse.regressionhigh.find_one({'scrip':scrip})
                         regressionlow = dbnse.regressionlow.find_one({'scrip':scrip})
@@ -270,6 +271,15 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             mldatalow = mldatalow + '|' + 'month3HighChangeGT-5'
                     except: 
                         print('')
+                        
+                    data = db['morning-volume-bs'].find_one({'scrip':scrip})
+                    if(data is not None): 
+                        #filtersFlag = True
+                        highVol = data['keyIndicator']
+                    data = db['breakout-morning-volume'].find_one({'scrip':scrip})
+                    if(data is not None): 
+                        #filtersFlag = True
+                        highVol = highVol + ':' + data['keyIndicator']
                     
                     if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None) or (dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
                         if(processor == 'morning-volume-bs'):
@@ -277,7 +287,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                         elif(processor == 'breakout-morning-volume'):
                             needToPrint = True #do-nothing
                         else:
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol)
                         needToPrint = True
                     else:
                         if(processor == 'morning-volume-bs'):
@@ -285,7 +295,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                         elif(processor == 'breakout-morning-volume'):
                             needToPrint = True #do-nothing
                         else:
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol)
                         needToPrint = True
                                 
                     tempScrip = scrip

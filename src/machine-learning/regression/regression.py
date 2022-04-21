@@ -39,6 +39,7 @@ def regression_ta_data(scrip):
             return
     
     if(data is None or (np.array(data['data'])).size < 1000):
+        print(data)
         print('Missing or very less Data for ', scrip)
         return
         
