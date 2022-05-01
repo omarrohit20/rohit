@@ -100,6 +100,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         mldatahigh = ''
                         mldatalow = ''
                         highVol = ''
+                        resultDeclared = ''
                         filtersFlag = False
                         
                         try: 
@@ -125,6 +126,11 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                     mldatalow = data['ml'] + '|' +  mldatalow + '|' + data['filter3']
                                     if (data['ml']!='' or data['filter3']!= ''):
                                         filtersFlag = True
+                            
+                            if((dbnse['scrip_result'].find_one({'scrip':scrip}) is not None)):
+                                data = dbnse.scrip_result.find_one({'scrip':scrip})
+                                resultDeclared = data['resultDeclared']
+                            
                             data = db['morning-volume-bs'].find_one({'scrip':scrip})
                             if(data is not None): 
                                 filtersFlag = True
@@ -144,10 +150,10 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         # else:
                         #     print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
                         if(filtered == False):
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol)
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
                             needToPrint = True
                         elif(filtered == True and filtersFlag == True):
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol)
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
                             needToPrint = True
                         
                         tempScrip = scrip
@@ -158,6 +164,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         record['epochtime'] = epochtime
                         record['eventtime'] = eventtime
                         record['systemtime'] = systemtime
+                        record['resultDeclared'] = resultDeclared
                         json_data = json.loads(json.dumps(record, default=json_util.default))
                         db[processor].insert_one(json_data)
                 i += 1
@@ -204,6 +211,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
             needToPrint = False
             tempScrip = ''
             mlData = ''
+            resultDeclared = ''
             while (i < len(df['aggregatedStockList'][ind])):
                 scrip = df['aggregatedStockList'][ind][i]
                 industry = ""
@@ -222,11 +230,13 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             record['systemtime'] = systemtime
                             record['processor'] = processor
                             record['keyIndicator'] = keyIndicator
+                            record['resultDeclared'] = resultDeclared
                             
                             json_data = json.loads(json.dumps(record, default=json_util.default))
                             db[processor].insert_one(json_data)
                             tempScrip = ''
                             mlData = ''
+                            resultDeclared = ''
                 if(dbnse['scrip'].find_one({'scrip':scrip}) is not None
                     and db[processor].find_one({'scrip':scrip}) is None
                     and eventdateonly == (date.today()).strftime('%Y-%m-%d')
@@ -269,6 +279,10 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                     mldatalow = mldatalow + '|' + 'lastDayDown'
                         if('sell' in processor and regressionlow['month3HighChange'] > -5):
                             mldatalow = mldatalow + '|' + 'month3HighChangeGT-5'
+                            
+                        if((dbnse['scrip_result'].find_one({'scrip':scrip}) is not None)):
+                            data = dbnse.scrip_result.find_one({'scrip':scrip})
+                            resultDeclared = data['resultDeclared']
                     except: 
                         print('')
                         
@@ -287,7 +301,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                         elif(processor == 'breakout-morning-volume'):
                             needToPrint = True #do-nothing
                         else:
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol)
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
                         needToPrint = True
                     else:
                         if(processor == 'morning-volume-bs'):
@@ -295,7 +309,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                         elif(processor == 'breakout-morning-volume'):
                             needToPrint = True #do-nothing
                         else:
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol)
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
                         needToPrint = True
                                 
                     tempScrip = scrip
