@@ -129,8 +129,10 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             
                             if((dbnse['scrip_result'].find_one({'scrip':scrip}) is not None)):
                                 data = dbnse.scrip_result.find_one({'scrip':scrip})
-                                resultDeclared = data['resultDeclared']
-                            
+                                resultDeclared = data['resultDeclared'] + ',' + data['result_sentiment']
+                                if(resultDeclared != ''):
+                                    filtersFlag = True
+                                    
                             data = db['morning-volume-bs'].find_one({'scrip':scrip})
                             if(data is not None): 
                                 filtersFlag = True
@@ -282,7 +284,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             
                         if((dbnse['scrip_result'].find_one({'scrip':scrip}) is not None)):
                             data = dbnse.scrip_result.find_one({'scrip':scrip})
-                            resultDeclared = data['resultDeclared']
+                            resultDeclared = data['resultDeclared'] + ',' + data['result_sentiment']
                     except: 
                         print('')
                         

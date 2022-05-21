@@ -54,8 +54,8 @@ with open('nselist/ind_result.csv') as csvfile:
                     resultDeclared = 'Tomorrow'
                 elif today_next2 <= result_time < today_next3:
                     resultDeclared = 'DayAfterTomorrow'
-                elif today_next3 <= result_time < today_next4:
-                    resultDeclared = 'DayAfterTomorrow + 1'
+                #elif today_next3 <= result_time < today_next4:
+                    #resultDeclared = 'DayAfterTomorrow + 1'
                 
                 if(resultDeclared != ''):   
                     db.scrip_result.insert_one({

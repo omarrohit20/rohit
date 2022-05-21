@@ -1,4 +1,4 @@
-python3 ./regression.py Yes Yes
+python3 ./regression.py Yes No
 python3 ./regression_result.py Yes ""
 python3 ./regression.py No No
 python3 ./regression_result.py No ""
