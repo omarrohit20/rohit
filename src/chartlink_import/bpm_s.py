@@ -16,8 +16,14 @@ if __name__ == "__main__":
     
     sb.nw = datetime.now()
     
-    while (sb.nw <= time_14_00):    
-        if(sb.nw>= time_09_20 and sb.nw <= time_10_30): 
+    while (sb.nw <= time_14_00):
+        if(sb.nw>= time_09_25 and sb.nw <= time_09_45):
+            #( {33489} ( ( {cash} ( [=1] 3 minute volume > greatest(  1 day ago volume / 24  ) and [=5] 1 minute low < [=5] 1 minute vwap and [=6] 1 minute low < [=6] 1 minute vwap and [=7] 1 minute low < [=7] 1 minute vwap and [=8] 1 minute open < [=8] 1 minute vwap and [=8] 1 minute close < [=8] 1 minute vwap and [=8] 1 minute low < [=5] 1 minute low and [=1] 5 minute high < [=-2] 15 minute high ) ) ) ) 
+            process_url('https://chartink.com/screener/sell-morning-volume-breakout-after10', 'sell-morning-volume-breakout(CheckNews)', time_09_25, time_09_45, True)
+            #( {57960} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and [=1] 5 minute volume > greatest(  2 days ago volume / 24  ) and [=1] 5 minute low < [=1] 5 minute sma ( [=1] 5 minute close , 200 ) and [=1] 5 minute close < [=1] 5 minute open and [=1] 5 minute close < 1 day ago close and ( ( ( [=2] 5 minute high - 1 day ago close ) * 100 ) / 1 day ago close ) < -0.5 ) ) ) ) 
+            process_url('https://chartink.com/screener/sell-morning-volume-breakout-checknews-01', 'sell-morning-volume-breakout(CheckNews)-01', time_09_25, time_09_45, True)
+    
+        if(sb.nw>= time_09_35 and sb.nw <= time_10_30): 
             #( {cash} ( [-1] 5 minute low > [=1] 5 minute low and [-1] 5 minute low > [=1] 15 minute low and [-1] 30 minute "close - 1 candle ago close / 1 candle ago close * 100" < 0 and [-1] 15 minute "close - 1 candle ago close / 1 candle ago close * 100" < 0 and [0] 15 minute "close - 1 candle ago close / 1 candle ago close * 100" < -0.3 and [=1] 1 hour high > [=-1] 5 minute low and [=1] 30 minute high = [=1] 1 hour high and [-1] 10 minute high < [=1] 15 minute high and ( ( [-1] 5 minute close - [=1] 5 minute open ) * 100 ) / [=1] 5 minute open > -2 and ( ( [-1] 5 minute close - [=1] 5 minute open ) * 100 ) / [=1] 5 minute open < 2 and ( ( [-1] 5 minute close - [=1] 5 minute high ) * 100 ) / [=1] 5 minute high > -2 and [0] 5 minute low < [0] 5 minute ema ( [0] 5 minute close , 50 ) and [-1] 5 minute high < [-1] 5 minute vwap and [-2] 5 minute high < [-2] 5 minute vwap and [-1] 5 minute low < [-1] 5 minute vwap and [-2] 5 minute low < [-2] 5 minute vwap and [-3] 5 minute low < [-3] 5 minute vwap and [-4] 5 minute low < [-4] 5 minute vwap ) ) 
             process_url('https://chartink.com/screener/sell-check-morning-up-breakdown-02', 'check-morning-up-breakdown-02', time_09_35, time_10_30, True)
         
