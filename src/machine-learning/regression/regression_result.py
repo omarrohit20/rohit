@@ -25,7 +25,6 @@ from util.util import get_regressionResult
 from util.util import buy_pattern_from_history, buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final, buy_pattern
 from util.util import sell_pattern_from_history, sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final, sell_pattern
 from util.util import buy_pattern_without_mlalgo, sell_pattern_without_mlalgo, buy_oi, sell_oi, all_withoutml, withoutml
-from util.util import buy_oi_candidate, sell_oi_candidate
 from util.util import buy_other_indicator, buy_indicator_after_filter_accuracy, buy_all_common, buy_all_common_High_Low, sell_other_indicator, sell_indicator_after_filter_accuracy, sell_all_common, sell_all_common_High_Low
 from util.util import buy_all_rule_classifier, sell_all_rule_classifier
 from util.util import is_algo_buy_classifier, is_algo_sell_classifier
@@ -829,8 +828,18 @@ def result_data_reg(scrip):
         if(is_filter_all_accuracy(regression_high_copy1, regression_high, regression_low, regressionResultHigh, "None", None)
             and is_filter_all_accuracy(regression_low_copy1, regression_high, regression_low, regressionResultLow, "None", None)
             ):
-            all_withoutml(regression_high_copy1, regressionResultHigh, ws_allFilterAcc) 
-            all_withoutml(regression_low_copy1, regressionResultLow, ws_allFilterAcc)       
+            if(('Buy-AnyGT2'in regression_high_copy1['filter2'] or 'Buy-AnyGT2' in regression_low_copy1['filter2'])
+                and 'Buy-Any' in regression_high_copy1['filter2'] and 'Buy-Any' in regression_low_copy1['filter2']
+                and 'Sell-Any' not in regression_high_copy1['filter2'] and 'Sell-Any' not in regression_low_copy1['filter2']
+                ):
+                all_withoutml(regression_high_copy1, regressionResultHigh, ws_allFilterAcc)
+                all_withoutml(regression_low_copy1, regressionResultLow, ws_allFilterAcc)  
+            if(('Sell-AnyGT2'in regression_high_copy1['filter2'] or 'Sell-AnyGT2' in regression_low_copy1['filter2'])
+                and 'Sell-Any' in regression_high_copy1['filter2'] and 'Sell-Any' in regression_low_copy1['filter2']
+                and 'Buy-Any' not in regression_high_copy1['filter2'] and 'Buy-Any' not in regression_low_copy1['filter2']
+                ):
+                all_withoutml(regression_high_copy1, regressionResultHigh, ws_allFilterAcc)
+                all_withoutml(regression_low_copy1, regressionResultLow, ws_allFilterAcc)     
         
 def result_data_cla(scrip):
     regression_high = db.regressionhigh.find_one({'scrip':scrip})

@@ -109,49 +109,49 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             
                             data = db['morning-volume-bs'].find_one({'scrip':scrip})
                             if(data is not None): 
-                                filtersFlag = True
                                 highVol = data['keyIndicator']
+                                if ('CheckNews' not in processor):
+                                    filtersFlag = True
                             data = db['breakout-morning-volume'].find_one({'scrip':scrip})
                             if(data is not None): 
-                                filtersFlag = True
                                 highVol = highVol + ':' + data['keyIndicator']
-                             
-                            if 'CheckNews' in processor:
-                                filtersFlag = False  
+                                if ('CheckNews' not in processor):
+                                    filtersFlag = True 
+                              
                                 
                             if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
                                 data = dbnse.highBuy.find_one({'scrip':scrip})
                                 mldatahigh =  data['filter2'] + '|' + data['filter']
-                                if ('-UPTREND-' in data['filter2'] or '-DOWNTREND-' in data['filter2']):
-                                    filtersFlag = True
+                                #if (('-UPTREND-' in data['filter2'] or '-DOWNTREND-' in data['filter2'])
+                                #    and 'CheckNews' not in processor):
+                                #    filtersFlag = True
                                 if (data['filter']!= ''):
                                     filtersFlag = True
-                                if 'CheckNews' in processor:
-                                    filtersFlag = False 
-                                if ('buy' in processor and ''):
+                                if ('buy' in processor
+                                    and ('MLlowSell' not in data['ml'])
+                                    and ('MLlowSellStrong' not in data['ml'])
+                                    ):
                                     mldatahigh = data['ml'] + '|' + mldatahigh + '|' + data['filter3']
-                                    if (data['filter3']!= ''):
+                                    if (data['filter3']!= '' and 'CheckNews' not in processor):
                                         filtersFlag = True
-                                    if 'CheckNews' in processor:
-                                        filtersFlag = False 
                                     if (data['ml']!=''):
                                         filtersFlag = True
                                     
                             if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
                                 data = dbnse.lowSell.find_one({'scrip':scrip})
                                 mldatalow = data['filter2'] + '|' + data['filter'] 
-                                if ('-UPTREND-' in data['filter2'] or '-DOWNTREND-' in data['filter2']):
-                                    filtersFlag = True
+                                #if (('-UPTREND-' in data['filter2'] or '-DOWNTREND-' in data['filter2'])
+                                #    and 'CheckNews' not in processor):
+                                #    filtersFlag = True
                                 if (data['filter']!= ''):
                                     filtersFlag = True
-                                if 'CheckNews' in processor:
-                                    filtersFlag = False 
-                                if ('sell' in processor and 'MLhighBuy' not in data['ml'] and 'MLhighBuyStrong' not in data['ml'] and '[MLSell]' not in data['filter']):
+                                if ('sell' in processor 
+                                    and ('MLhighBuy' not in data['ml'])
+                                    and ('MLhighBuyStrong' not in data['ml'])
+                                    ):
                                     mldatalow = data['ml'] + '|' +  mldatalow + '|' + data['filter3']
-                                    if (data['filter3']!= ''):
+                                    if (data['filter3']!= '' and ('CheckNews' not in processor)):
                                         filtersFlag = True
-                                    if 'CheckNews' in processor:
-                                        filtersFlag = False 
                                     if (data['ml']!=''):
                                         filtersFlag = True
                             

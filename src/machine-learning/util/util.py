@@ -428,7 +428,6 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         buy_day_low(regression_data, regressionResult, reg, ws)
         buy_trend_reversal(regression_data, regressionResult, reg, ws)
         buy_trend_break(regression_data, regressionResult, reg, ws)
-        buy_consolidation_breakout(regression_data, regressionResult, reg, ws)
         buy_final_candidate(regression_data, regressionResult, reg, ws)
         buy_oi(regression_data, regressionResult, reg, ws)
         buy_up_trend(regression_data, regressionResult, reg, ws)
@@ -436,8 +435,9 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         buy_tail_reversal_filter(regression_data, regressionResult, reg, ws)
         buy_hltf_low_tail(regression_data, regressionResult, reg, ws)
         
-        buy_random_filter(regression_data, regressionResult, reg, ws)
+        #buy_random_filter(regression_data, regressionResult, reg, ws)
         buy_check_cup_filter(regression_data, regressionResult, reg, ws)
+        buy_consolidation_breakout(regression_data, regressionResult, reg, ws)
         buy_supertrend(regression_data, regressionResult, reg, ws)
         return True
     if(buy_skip_close_lt_50(regression_data, regressionResult, reg, ws)):
@@ -657,29 +657,6 @@ def buy_test_tech_all_pct_change(regression_data, regressionResult, reg, ws):
         return True
     
     return False
-
-def buy_oi_candidate(regression_data, regressionResult, reg, ws):
-    mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
-    tail_pct_filter(regression_data, regressionResult)
-    tail_reversal_filter(regression_data, regressionResult)
-    flag = False
-    
-    if(buy_trend_reversal(regression_data, regressionResult, reg, ws)
-        and regression_data['close'] > 50
-        ):
-        flag = True
-    if(breakout_or_no_consolidation(regression_data) == True):
-        if buy_evening_star_sell(regression_data, regressionResult, reg, ws):
-            flag = True
-        if buy_morning_star_buy(regression_data, regressionResult, reg, ws):
-            flag = True
-        if buy_day_low(regression_data, regressionResult, reg, ws):
-            flag = True
-        if buy_trend_break(regression_data, regressionResult, reg, ws):
-            flag = True
-        if buy_final_candidate(regression_data, regressionResult, reg, ws):
-            flag = True
-    return flag
 
 def buy_all_filter(regression_data, regressionResult, reg, ws):
     flag = False
@@ -1249,15 +1226,15 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         sell_day_high(regression_data, regressionResult, reg, ws)
         sell_trend_reversal(regression_data, regressionResult, reg, ws)
         sell_trend_break(regression_data, regressionResult, reg, ws)
-        sell_consolidation_breakdown(regression_data, regressionResult, reg, ws)
         sell_final_candidate(regression_data, regressionResult, reg, ws)
         sell_oi(regression_data, regressionResult, reg, ws)
         sell_heavy_downtrend(regression_data, regressionResult, reg, ws)
         sell_tail_reversal_filter(regression_data, regressionResult, reg, ws)
         sell_hltf_high_tail(regression_data, regressionResult, reg, ws)
         
-        sell_random_filter(regression_data, regressionResult, reg, ws)
+        #sell_random_filter(regression_data, regressionResult, reg, ws)
         sell_check_cup_filter(regression_data, regressionResult, reg, ws)
+        sell_consolidation_breakdown(regression_data, regressionResult, reg, ws)
         sell_supertrend(regression_data, regressionResult, reg, ws)
         return True
     if(sell_skip_close_lt_50(regression_data, regressionResult, reg, ws)):
@@ -1479,31 +1456,6 @@ def sell_test_tech_all_pct_change(regression_data, regressionResult, reg, ws):
     
     return False
       
-def sell_oi_candidate(regression_data, regressionResult, reg, ws):
-    mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
-    tail_pct_filter(regression_data, regressionResult)
-    tail_reversal_filter(regression_data, regressionResult)
-    flag = False
-    if(regression_data['close'] > 50):
-        if sell_base_line_buy(regression_data, regressionResult, reg, ws):
-            flag = True
-    if(sell_trend_reversal(regression_data, regressionResult, reg, ws)
-        and regression_data['close'] > 50
-        ):
-        flag = True
-    if(breakout_or_no_consolidation(regression_data) == True):
-        if sell_morning_star_buy(regression_data, regressionResult, reg, ws): 
-            flag = True
-        if sell_evening_star_sell(regression_data, regressionResult, reg, ws): 
-            flag = True
-        if sell_day_high(regression_data, regressionResult, reg, ws):
-            flag = True
-        if sell_trend_break(regression_data, regressionResult, reg, ws):
-            flag = True
-        if sell_final_candidate(regression_data, regressionResult, reg, ws):
-            flag = True
-    return flag
-
 def sell_all_filter(regression_data, regressionResult, reg, ws):
     flag = False
     if sell_year_high(regression_data, regressionResult, reg, None, None):
