@@ -2839,11 +2839,6 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regressionResult = [ ]
     regressionResult.append(regression_data['buyIndia'])
     regressionResult.append(regression_data['sellIndia'])
-    if(TEST != True):
-        regressionResult.append(regression_data['buyIndia_avg'])
-        regressionResult.append(regression_data['buyIndia_count'])
-        regressionResult.append(regression_data['sellIndia_avg'])
-        regressionResult.append(regression_data['sellIndia_count'])
     regressionResult.append(regression_data['scrip'])
     regressionResult.append(regression_data['series_trend'])
     regressionResult.append(regression_data['SMA4_2daysBack'])

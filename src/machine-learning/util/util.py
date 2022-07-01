@@ -192,7 +192,6 @@ def buy_all_rule_classifier(regression_data, regressionResult, buyIndiaAvg, ws):
         and (BUY_VERY_LESS_DATA or regression_data['PCT_change'] > -1)
         and (BUY_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] < 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
         and (BUY_VERY_LESS_DATA or (regression_data['high']-regression_data['bar_high']) < (regression_data['bar_high']-regression_data['bar_low']))
-        and buyIndiaAvg >= -.70
         and ((last_7_day_all_up(regression_data) == False) or (regression_data['forecast_day_PCT10_change'] < 10))
         and (MARKET_IN_UPTREND or (last_4_day_all_up(regression_data) == False)) #Uncomment0 If very less data
         and breakout_or_no_consolidation(regression_data) == True
@@ -399,7 +398,6 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         sell_up_trend(regression_data, regressionResult, reg, ws)
         sell_down_trend(regression_data, regressionResult, reg, ws)
         sell_final(regression_data, regressionResult, reg, ws, ws)
-        sell_pattern(regression_data, regressionResult, reg, ws, ws)
         sell_morning_star_buy(regression_data, regressionResult, reg, ws)
         sell_evening_star_sell(regression_data, regressionResult, reg, ws)
         sell_day_high(regression_data, regressionResult, reg, ws)
@@ -422,7 +420,6 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
         buy_year_low(regression_data, regressionResult, reg, ws, ws)
         buy_down_trend(regression_data, regressionResult, reg, ws)
         buy_final(regression_data, regressionResult, reg, ws, ws)
-        buy_pattern(regression_data, regressionResult, reg, ws, ws)
         buy_morning_star_buy(regression_data, regressionResult, reg, ws)
         buy_evening_star_sell(regression_data, regressionResult, reg, ws)
         buy_day_low(regression_data, regressionResult, reg, ws)
@@ -445,16 +442,7 @@ def buy_other_indicator(regression_data, regressionResult, reg, ws):
     return False
 
 def buy_indicator_after_filter_accuracy(regression_data, regressionResult, reg, ws):
-    if(is_any_sell_from_all_filter(regression_data) != True):
-        buy_af_high_indicators(regression_data, regressionResult, reg, ws)
-    buy_af_oi_negative(regression_data, regressionResult, reg, ws)
-    buy_af_vol_contract(regression_data, regressionResult, reg, ws)
-    buy_af_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
-    buy_af_others(regression_data, regressionResult, reg, ws)
-        #buy_af_high_volatility(regression_data, regressionResult, reg, ws)
-    #buy_hltf_low_tail(regression_data, regressionResult, reg, ws)
-    buy_af_up_continued(regression_data, regressionResult, reg, ws)
-    #sell_hltf_high_tail(regression_data, regressionResult, reg, ws)
+    return False
             
 def buy_skip_close_lt_50(regression_data, regressionResult, reg, ws):
     return False
@@ -673,12 +661,6 @@ def buy_all_filter(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, None, None, None)
         flag = True
     if buy_final(regression_data, regressionResult, reg, None, None):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None)
-        flag = True
-    if buy_af_high_indicators(regression_data, regressionResult, reg, None):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None)
-        flag = True
-    if buy_pattern(regression_data, regressionResult, reg, None, None):
         add_in_csv(regression_data, regressionResult, ws, None, None, None)
         flag = True
     if buy_oi(regression_data, regressionResult, reg, None):
@@ -1016,7 +998,6 @@ def sell_all_rule_classifier(regression_data, regressionResult, sellIndiaAvg, ws
         and (SELL_VERY_LESS_DATA or regression_data['PCT_change'] < 1)
         and (SELL_VERY_LESS_DATA or ((regression_data['PCT_day_change_pre1'] > 0) or (regression_data['forecast_day_VOL_change'] > 0))) #Uncomment1 If very less data
         and (SELL_VERY_LESS_DATA or (regression_data['bar_low']-regression_data['low']) < (regression_data['bar_high']-regression_data['bar_low']))
-        and sellIndiaAvg <= 0.70
         and ((last_7_day_all_down(regression_data) == False) or (regression_data['forecast_day_PCT10_change'] > -10))
         and (MARKET_IN_DOWNTREND or (last_4_day_all_down(regression_data) == False)) #Uncomment0 If very less data
         and breakout_or_no_consolidation(regression_data) == True
@@ -1199,7 +1180,6 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         buy_year_low(regression_data, regressionResult, reg, ws, ws)
         buy_down_trend(regression_data, regressionResult, reg, ws)
         buy_final(regression_data, regressionResult, reg, ws, ws)
-        buy_pattern(regression_data, regressionResult, reg, ws, ws)
         buy_morning_star_buy(regression_data, regressionResult, reg, ws)
         buy_evening_star_sell(regression_data, regressionResult, reg, ws)
         buy_day_low(regression_data, regressionResult, reg, ws)
@@ -1220,7 +1200,6 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
         sell_up_trend(regression_data, regressionResult, reg, ws)
         sell_down_trend(regression_data, regressionResult, reg, ws)
         sell_final(regression_data, regressionResult, reg, ws, ws)
-        sell_pattern(regression_data, regressionResult, reg, ws, ws)
         sell_morning_star_buy(regression_data, regressionResult, reg, ws)
         sell_evening_star_sell(regression_data, regressionResult, reg, ws)
         sell_day_high(regression_data, regressionResult, reg, ws)
@@ -1242,15 +1221,7 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
     return False
 
 def sell_indicator_after_filter_accuracy(regression_data, regressionResult, reg, ws):
-    if(is_any_buy_from_all_filter(regression_data) != True):
-        sell_af_high_indicators(regression_data, regressionResult, reg, ws)
-    sell_af_oi_negative(regression_data, regressionResult, reg, ws)
-    sell_af_vol_contract(regression_data, regressionResult, reg, ws)
-    sell_af_vol_contract_contrarian(regression_data, regressionResult, reg, ws)
-    sell_af_others(regression_data, regressionResult, reg, ws)
-        #sell_af_high_volatility(regression_data, regressionResult, reg, ws)
-    #sell_hltf_high_tail(regression_data, regressionResult, reg, ws)
-    sell_af_down_continued(regression_data, regressionResult, reg, ws)
+    r
             
 def sell_skip_close_lt_50(regression_data, regressionResult, reg, ws):
     if((regression_data['weekLowChange'] > 15) 
@@ -1471,12 +1442,6 @@ def sell_all_filter(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, None, None, None)
         flag = True
     if sell_final(regression_data, regressionResult, reg, None, None):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None)
-        flag = True
-    if sell_af_high_indicators(regression_data, regressionResult, reg, None):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None)
-        flag = True
-    if sell_pattern(regression_data, regressionResult, reg, None, None):
         add_in_csv(regression_data, regressionResult, ws, None, None, None)
         flag = True
     if sell_oi(regression_data, regressionResult, reg, None):
