@@ -382,13 +382,13 @@ def buy_all_common_High_Low(regression_data, regressionResult, reg, ws):
         and high_tail_pct(regression_data) < 1.3
         ):
         add_in_csv(regression_data, regressionResult, ws, 'CommonHL:LastDay-PCTDayChange-GT3-PCTChange')
-        
-       
+              
 def buy_other_indicator(regression_data, regressionResult, reg, ws):
     tail_pct_filter(regression_data, regressionResult)
     base_line(regression_data, regressionResult, reg, ws)
     filterMA(regression_data, regressionResult)
     tail_reversal_filter(regression_data, regressionResult)
+    buy_high_volatility(regression_data, regressionResult)
     if(regression_data['close'] > 50):
         sell_market_downtrend(regression_data, regressionResult, reg, ws)
         sell_check_chart(regression_data, regressionResult, reg, ws)
@@ -1168,6 +1168,7 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
     base_line(regression_data, regressionResult, reg, ws)
     filterMA(regression_data, regressionResult)
     tail_reversal_filter(regression_data, regressionResult)
+    sell_high_volatility(regression_data, regressionResult)
     if(regression_data['close'] > 50):
         buy_market_uptrend(regression_data, regressionResult, reg, ws)
         buy_month3_high_continue(regression_data, regressionResult, reg, ws)
@@ -1900,59 +1901,6 @@ def is_sell_filter_not_risky(regression_data):
        ):
         return True
 
-def is_reg_buyorsell_defined_filter(regression_data, regressionResult, high_or_low, ws, filter_avg, filter_count, filter_pct, risky):
-    flag = False
-    if(regression_data['filter'] == '' or regression_data['filter'] == ' ' or regression_data['filter'] == '[MLBuy]:' or regression_data['filter'] == '[MLSell]:'):
-        return flag
-    
-    reg_data_filter = regression_data['filter']
-    list = regression_data['filter'].partition(']:')
-    if(list[1] == ']:'):
-        reg_data_filter = list[2]
-    
-    if(is_reg_buy_pct_filter(regression_data)
-        and ('Buy-AnyGT2' in regression_data['filter2'] or ('buy' in regression_data['filter']) or ('Buy' in regression_data['filter']))
-        and (('sell' not in reg_data_filter and 'Sell' not in reg_data_filter) 
-             or (regression_data[filter_avg] > 2 and regression_data[filter_count] > 3 and regression_data[filter_pct] == 100)
-             )
-        ):
-        if(regression_data[filter_avg] > 2 and regression_data[filter_count] >= 2 and regression_data[filter_pct] > 70
-            and "MLSell" not in regression_data['filter']
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None,'Filter-All-Buy')
-            flag = True
-        elif(regression_data[filter_avg] > 1.5 and regression_data[filter_count] >= 3 and regression_data[filter_pct] > 70
-            and "MLBuy" in regression_data['filter']
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None,'Filter-All-Buy')
-            flag = True
-        elif(regression_data[filter_avg] > 1.5 and regression_data[filter_count] >= 2 and regression_data[filter_pct] > 70
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None,'Filter-All-Buy-risky')
-            flag = True
-    
-    if(is_reg_sell_pct_filter(regression_data)
-        and ('Sell-AnyGT2' in regression_data['filter2'] or ('sell' in regression_data['filter']) or ('Sell' in regression_data['filter']))
-        and (('buy' not in reg_data_filter and 'Buy' not in reg_data_filter) 
-             or (regression_data[filter_avg] < -2 and regression_data[filter_count] > 3 and regression_data[filter_pct] == -100)
-            )
-        ):
-        if(regression_data[filter_avg] < -2 and regression_data[filter_count] >= 2 and regression_data[filter_pct] < -70
-            and "MLBuy" not in regression_data['filter']
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None,'Filter-All-Sell')
-            flag = True
-        elif(regression_data[filter_avg] < -1.5 and regression_data[filter_count] >= 3 and regression_data[filter_pct] < -70
-            and "MLSell" in regression_data['filter']
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None,'Filter-All-Sell')
-            flag = True
-        elif(regression_data[filter_avg] < -1.5 and regression_data[filter_count] >= 2 and regression_data[filter_pct] < -70
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, None,'Filter-All-Sell-risky')
-            flag = True
-    return flag
-
 def is_reg_buy_pct_filter(regression_data):
     if(2< regression_data['PCT_day_change']):
         return False
@@ -2163,33 +2111,6 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
         if(flag):
             superflag = True
     
-    
-    flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
-    if(flag):
-        superflag = True   
-    flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_avg', 'filter_count', 'filter_pct')
-    if(flag):
-        superflag = True
-    flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct')
-    if(flag):
-        superflag = True
-    flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct')
-    if(flag):
-        superflag = True 
-    if(regression_data['filter_tech_avg'] > 5):
-        flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
-        if(flag):
-            superflag = True
-    if((abs(regression_data['filter_tech_all_avg']) > 2 and regression_data['filter_tech_all_count'] >= 4) or abs(regression_data['filter_tech_all_avg']) > 4 or regression_data['filter_tech_all_avg'] > 5):
-        flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
-        if(flag):
-            superflag = True
-    if((abs(regression_data['filter_tech_all_pct_change_avg']) > 2 and regression_data['filter_tech_all_pct_change_count'] >= 4) or abs(regression_data['filter_tech_all_pct_change_avg']) > 4 or regression_data['filter_tech_all_avg'] > 5):
-        flag = filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
-        if(flag):
-            superflag = True
-            
-      
      
     flag = filter_accuracy_finder_risky(regression_data, regressionResult, high_or_low, ws, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
     if(flag):
@@ -2225,13 +2146,6 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
 #         superflag = True
     
       
-    flag = is_reg_buyorsell_defined_filter(regression_data, regressionResult, high_or_low, ws, 'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct', False)
-    if(flag):
-        superflag = True 
-    flag = is_reg_buyorsell_defined_filter(regression_data, regressionResult, high_or_low, ws, 'filter_all_avg', 'filter_all_count', 'filter_all_pct', True)    
-    if(flag):
-        superflag = True 
-       
     if(regression_data['filter_pct_change_avg'] > 1 and regression_data['filter_pct_change_count'] >= 1 and regression_data['filter_pct_change_pct'] > 66
         and "MLSell" not in regression_data['filter']
         ):
@@ -2248,27 +2162,7 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
     is_filter_risky(regression_data, regressionResult, high_or_low, ws, 'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct')
     is_filter_risky(regression_data, regressionResult, high_or_low, ws, 'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct')
     is_filter_risky(regression_data, regressionResult, high_or_low, ws, 'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count', 'filter_tech_all_pct_change_pct')
-
-    if((regression_data['filter1'] != '')
-        and (-1 < regression_data['PCT_day_change'] < 0
-            or (regression_data['PCT_day_change_pre1'] > abs(regression_data['PCT_day_change']) and regression_data['PCT_day_change'] < 0)
-            or (('upTrend' in regression_data['series_trend'] or 'UpTrend' in regression_data['series_trend'] or 'trendUp' in regression_data['series_trend'])
-                and regression_data['PCT_day_change'] < 2.5
-                )
-            )
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'AvoidUptrendSell')
-    if((regression_data['filter1'] != '')
-        and (0 < regression_data['PCT_day_change'] < 1
-            or ((-regression_data['PCT_day_change_pre1']) < -(abs(regression_data['PCT_day_change'])) and regression_data['PCT_day_change'] > 0)
-            or (('downTrend' in regression_data['series_trend'] or 'DownTrend' in regression_data['series_trend'] or 'trendDown' in regression_data['series_trend'])
-                and regression_data['PCT_day_change'] > -2.5
-                )
-            )
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'AvoidDowntrendBuy')
-        
-        
+    
     if(superflag):
         return superflag       
 
@@ -2291,8 +2185,8 @@ def filter_accuracy_finder(regression_data, regression_high, regression_low, reg
                 ):
                 return False
             
-        if((regression_data[filter_avg] > 1 and 'RISKY-DOWNTREND-BUY' in regression_data['filter2'])
-            or (regression_data[filter_avg] < -1 and 'RISKY-UPTREND-SELL' in regression_data['filter2'])
+        if((regression_data[filter_avg] > 1 and 'RISKY-DOWNTREND-BUY' in regression_data['filter1'])
+            or (regression_data[filter_avg] < -1 and 'RISKY-UPTREND-SELL' in regression_data['filter1'])
             ):
             return False
             
@@ -2477,8 +2371,8 @@ def filter_accuracy_finder_stable(regression_data, regressionResult, high_or_low
                 ):
                 return  flag
             
-            if((regression_data[filter_avg] > 1 and 'RISKY-DOWNTREND-BUY' in regression_data['filter2'])
-                or (regression_data[filter_avg] < -1 and 'RISKY-UPTREND-SELL' in regression_data['filter2'])
+            if((regression_data[filter_avg] > 1 and 'RISKY-DOWNTREND-BUY' in regression_data['filter1'])
+                or (regression_data[filter_avg] < -1 and 'RISKY-UPTREND-SELL' in regression_data['filter1'])
                 ):
                 return flag
             
@@ -2532,275 +2426,6 @@ def filter_accuracy_finder_stable(regression_data, regressionResult, high_or_low
                     add_in_csv(regression_data, regressionResult, ws, None, None, None, 'stable-filter-risky-sell')
                 flag = True
         return flag
-
-def filter_accuracy_finder_stable_all(regression_data, regressionResult, high_or_low, ws, filter_avg, filter_count, filter_pct):
-    flag = False
-    
-    reg_data_filter = regression_data['filter']
-    list = regression_data['filter'].partition(']:')
-    if(list[1] == ']:'):
-        reg_data_filter = list[2]
-    
-    if(abs(regression_data[filter_avg]) >= 0.5
-        #and ((regression_data[filter_avg] > 0 and (high_tail_pct(regression_data) < 1.3 or regression_data['PCT_day_change'] < 0 or regression_data['PCT_day_change'] > 3))
-        #     or (regression_data[filter_avg] < 0 and (low_tail_pct(regression_data) < 1.3 or regression_data['PCT_day_change'] > 0 or regression_data['PCT_day_change'] < -3))
-        #    )
-        and regression_data[filter_count] >= 1
-        #and (regression_data[filter_count_oth] >= 2
-        #    or (regression_data[filter_count_oth] >= 1 and abs(regression_data[filter_avg_oth]) > 2))
-        ):
-        if(regression_data[filter_count] >= 3
-            and abs(regression_data[filter_pct]) >= 85
-            and abs(regression_data[filter_avg]) > 5
-            ):
-            if(regression_data[filter_avg] >= 0):
-                add_in_csv(regression_data, regressionResult, ws, None, None, None, 'STRONG-Buy')
-            elif(regression_data[filter_avg] < 0):
-                add_in_csv(regression_data, regressionResult, ws, None, None, None, 'STRONG-Sell')
-            flag = True
-            
-        if(regression_data[filter_count] >= 2
-            and (abs(regression_data[filter_pct]) >= 70 or regression_data[filter_pct] == 0)
-            ):
-            if((('sell' in reg_data_filter or 'Sell' in reg_data_filter) and (1 < regression_data[filter_avg] and  regression_data[filter_count] <= 3))
-                or (('buy' in reg_data_filter or 'Buy' in reg_data_filter) and (regression_data[filter_avg] < -1 and regression_data[filter_count] <= 3))
-                ):
-                flag = False
-            elif((regression_data[filter_avg] > 1 and 'RISKY-DOWNTREND-BUY' in regression_data['filter2'])
-                or (regression_data[filter_avg] < -1 and 'RISKY-UPTREND-SELL' in regression_data['filter2'])
-                ):
-                flag = False
-            elif(regression_data[filter_avg] >= 0
-                and 'Buy-SUPER' in regression_data['filter2'] 
-                and 'Buy-AnyGT2' in regression_data['filter2'] 
-                and 'Sell-Any' not in regression_data['filter2']
-                and 'Buy-AnyGT2-1.0' not in regression_data['filter2']
-                and ('MLSell' not in regression_data['filter'] or regression_data['PCT_day_change'] < 0)
-                and (is_reg_buy_pct_filter(regression_data) == True)
-                ):
-                add_in_csv(regression_data, regressionResult, ws, None, None, None, 'SUPER-Buy')
-                flag = True
-            elif(regression_data[filter_avg] <= 0
-                and 'Sell-SUPER' in regression_data['filter2'] 
-                and 'Sell-AnyGT2' in regression_data['filter2'] 
-                and 'Buy-Any' not in regression_data['filter2']
-                and 'Sell-AnyGT2-1.0' not in regression_data['filter2']
-                and ('MLBuy' not in regression_data['filter'] or regression_data['PCT_day_change'] > 0)
-                and (is_reg_sell_pct_filter(regression_data) == True)
-                ):
-                add_in_csv(regression_data, regressionResult, ws, None, None, None, 'SUPER-Sell')
-                flag = True
-                
-        if('STRONG' not in regression_data['filter1']
-            ):
-            if(regression_data[filter_avg] >= 5
-                and is_any_sell_from_all_filter(regression_data) == False
-                and 'MLSell' not in regression_data['filter']
-                and (regression_data[filter_pct] >= 80 or regression_data[filter_pct] == 0)
-                ):
-                add_in_csv(regression_data, regressionResult, ws, None, None, None, '**DUPER-Buy')
-                flag = True
-            elif(regression_data[filter_avg] < -5
-                and is_any_buy_from_all_filter(regression_data) == False
-                and 'MLBuy' not in regression_data['filter']
-                and (regression_data[filter_pct] <= -80 or regression_data[filter_pct] == 0)
-                ):
-                add_in_csv(regression_data, regressionResult, ws, None, None, None, '**DUPER-Sell')
-                flag = True
-                
-    if(regression_data[filter_avg] >= 0
-        and 'Buy-SUPER' in regression_data['filter2'] 
-        and (('Buy-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 2) or ('Buy-Any' in regression_data['filter2'] and regression_data[filter_count] >= 3))
-        and 'Sell-AnyGT2' not in regression_data['filter2']
-        and ('sell' not in reg_data_filter and 'Sell' not in reg_data_filter and "DOJI" in regression_data['filter5'])
-        and regression_data['PCT_day_change'] < 0
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'DOJI-SUPER-Buy')
-        flag = True
-    elif(regression_data[filter_avg] <= 0
-        and 'Sell-SUPER' in regression_data['filter2'] 
-        and (('Sell-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 2) or ('Sell-Any' in regression_data['filter2'] and regression_data[filter_count] >= 3))
-        and 'Buy-AnyGT2' not in regression_data['filter2']
-        and ('buy' not in reg_data_filter and 'Buy' not in reg_data_filter and "DOJI" in regression_data['filter5'])
-        and regression_data['PCT_day_change'] > 0
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'DOJI-SUPER-Sell')
-        flag = True
-    
-    
-    if(regression_data['filter'] == '' or regression_data['filter'] == ' ' or regression_data['filter'] == '[MLBuy]:' or regression_data['filter'] == '[MLSell]:'):
-        return flag
-    
-    if(regression_data[filter_avg] >= 0
-        and 'Buy-SUPER' in regression_data['filter2'] 
-        and ('Buy-AnyGT2' in regression_data['filter2'] or ('Buy-Any' in regression_data['filter2'] and regression_data[filter_count] >= 2))
-        and 'Sell-AnyGT2' not in regression_data['filter2']
-        and (('buy' in reg_data_filter or 'Buy' in reg_data_filter)
-             or ('sell' not in reg_data_filter and 'Sell' not in reg_data_filter and "MLBuy" in regression_data['filter'])
-             or ('sell' not in reg_data_filter and 'Sell' not in reg_data_filter and "DOJI" in regression_data['filter5'])
-            )
-        and is_reg_buy_pct_filter(regression_data)
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Filter-SUPER-Buy')
-        flag = True
-    elif(regression_data[filter_avg] <= 0
-        and 'Sell-SUPER' in regression_data['filter2'] 
-        and ('Sell-AnyGT2' in regression_data['filter2'] or ('Sell-Any' in regression_data['filter2'] and regression_data[filter_count] >= 2))
-        and 'Buy-AnyGT2' not in regression_data['filter2']
-        and (('sell' in reg_data_filter or 'Sell' in reg_data_filter)
-             or ('buy' not in reg_data_filter and 'Buy' not in reg_data_filter and "MLSell" in regression_data['filter'])
-             or ('buy' not in reg_data_filter and 'Buy' not in reg_data_filter and "DOJI" in regression_data['filter5'])
-            )
-        and (is_reg_sell_pct_filter(regression_data) == True)
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Filter-SUPER-Sell')
-        flag = True
-    elif(regression_data[filter_avg] >= 0
-        and 'Buy-SUPER' in regression_data['filter2'] 
-        and ('Buy-AnyGT2' in regression_data['filter2'] or ('Buy-Any' in regression_data['filter2'] and regression_data[filter_count] >= 2))
-        and 'Sell-AnyGT2' not in regression_data['filter2']
-        and (('buy' in reg_data_filter or 'Buy' in reg_data_filter)
-             or ('sell' not in reg_data_filter and 'Sell' not in reg_data_filter and "MLBuy" in regression_data['filter'])
-            )
-        and regression_data['PCT_day_change'] < 3
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'RISKY:Filter-SUPER-Buy')
-        flag = True
-    elif(regression_data[filter_avg] <= 0
-        and 'Sell-SUPER' in regression_data['filter2'] 
-        and ('Sell-AnyGT2' in regression_data['filter2'] or ('Sell-Any' in regression_data['filter2'] and regression_data[filter_count] >= 2))
-        and 'Buy-AnyGT2' not in regression_data['filter2']
-        and (('sell' in reg_data_filter or 'Sell' in reg_data_filter)
-             or ('buy' not in reg_data_filter and 'Buy' not in reg_data_filter and "MLSell" in regression_data['filter'])
-            )
-        and regression_data['PCT_day_change'] > -3
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'RISKY:Filter-SUPER-Sell')
-        flag = True
-        
-    elif(regression_data[filter_avg] >= 1 and (regression_data[filter_pct] == 0 or regression_data[filter_pct] > 50)
-        and (('Buy-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 3) or ('Buy-Any' in regression_data['filter2'] and regression_data[filter_count] >= 4 and 'Sell-Any' not in regression_data['filter2']))
-        and 'Sell-AnyGT2' not in regression_data['filter2']
-        and (('buy' in reg_data_filter or 'Buy' in reg_data_filter)
-             or ('sell' not in reg_data_filter and 'Sell' not in reg_data_filter and "MLBuy" in regression_data['filter'])
-             or ('sell' not in reg_data_filter and 'Sell' not in reg_data_filter and "DOJI" in regression_data['filter5'])
-            )
-        and is_reg_buy_pct_filter(regression_data)
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Filter-Buy')
-        flag = True
-    elif(regression_data[filter_avg] <= -1 and (regression_data[filter_pct] == 0 or regression_data[filter_pct] < -50)
-        and (('Sell-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 3) or ('Sell-Any' in regression_data['filter2'] and regression_data[filter_count] >= 4 and 'Buy-Any' not in regression_data['filter2']))
-        and 'Buy-AnyGT2' not in regression_data['filter2']
-        and (('sell' in reg_data_filter or 'Sell' in reg_data_filter)
-             or ('buy' not in reg_data_filter and 'Buy' not in reg_data_filter and "MLSell" in regression_data['filter'])
-             or ('buy' not in reg_data_filter and 'Buy' not in reg_data_filter and "DOJI" in regression_data['filter5'])
-            )
-        and (is_reg_sell_pct_filter(regression_data) == True)
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Filter-Sell')
-        flag = True
-    elif(regression_data[filter_avg] >= 1 and (regression_data[filter_pct] == 0 or regression_data[filter_pct] > 50)
-        and (('Buy-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 3) or ('Buy-Any' in regression_data['filter2'] and regression_data[filter_count] >= 4 and 'Sell-Any' not in regression_data['filter2']))
-        and 'Sell-AnyGT2' not in regression_data['filter2']
-        and (('buy' in reg_data_filter or 'Buy' in reg_data_filter)
-             or ('sell' not in reg_data_filter and 'Sell' not in reg_data_filter and "MLBuy" in regression_data['filter'])
-            )
-        and regression_data['PCT_day_change'] < 3
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'RISKY:Filter-Buy')
-        flag = True
-    elif(regression_data[filter_avg] <= -1 and (regression_data[filter_pct] == 0 or regression_data[filter_pct] < -50)
-        and (('Sell-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 3) or ('Sell-Any' in regression_data['filter2'] and regression_data[filter_count] >= 4 and 'Buy-Any' not in regression_data['filter2']))
-        and 'Buy-AnyGT2' not in regression_data['filter2']
-        and (('sell' in reg_data_filter or 'Sell' in reg_data_filter)
-             or ('buy' not in reg_data_filter and 'Buy' not in reg_data_filter and "MLSell" in regression_data['filter'])
-            )
-        and regression_data['PCT_day_change'] > -3
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'RISKY:Filter-Sell')
-        flag = True 
-    
-    elif(regression_data[filter_avg] >= 1 and (regression_data[filter_pct] == 0 or regression_data[filter_pct] > 50)
-        and (('Buy-SUPER' in regression_data['filter2']) 
-             or ('Buy-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 2) 
-             or ('Buy-Any' in regression_data['filter2'] and regression_data[filter_count] >= 4 and 'Sell-Any' not in regression_data['filter2'])
-            )
-        and 'Sell-AnyGT2' not in regression_data['filter2']
-        and regression_data['PCT_day_change'] < -1
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Candidate-Buy')
-        flag = True
-    elif(regression_data[filter_avg] <= -1 and (regression_data[filter_pct] == 0 or regression_data[filter_pct] < -50)
-        and (('Sell-SUPER' in regression_data['filter2'])
-             or ('Sell-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 2) 
-             or ('Sell-Any' in regression_data['filter2'] and regression_data[filter_count] >= 4 and 'Buy-Any' not in regression_data['filter2'])
-            )
-        and 'Buy-AnyGT2' not in regression_data['filter2']
-        and regression_data['PCT_day_change'] > 1
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Candidate-Sell')
-        flag = True 
-        
-    
-    if(regression_data[filter_avg] >= 0
-        and 'Buy-SUPER' in regression_data['filter2'] 
-        and ('Buy-AnyGT2' in regression_data['filter2'] or ('Buy-Any' in regression_data['filter2'] and regression_data[filter_count] >= 2))
-        and 'Sell-AnyGT2' not in regression_data['filter2']
-        and 2 < regression_data['PCT_day_change'] < 4.5
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'UptrendOnly:Filter-SUPER-Buy')
-        flag = True
-    elif(regression_data[filter_avg] <= 0
-        and 'Sell-SUPER' in regression_data['filter2'] 
-        and ('Sell-AnyGT2' in regression_data['filter2'] or ('Sell-Any' in regression_data['filter2'] and regression_data[filter_count] >= 2))
-        and 'Buy-AnyGT2' not in regression_data['filter2']
-        and -4.5 < regression_data['PCT_day_change'] < -2
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'DowntrendOnly:Filter-SUPER-Sell')
-        flag = True
-    elif(regression_data[filter_avg] >= 1 and (regression_data[filter_pct] == 0 or regression_data[filter_pct] > 50)
-        and (('Buy-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 3) or ('Buy-Any' in regression_data['filter2'] and regression_data[filter_count] >= 4 and 'Sell-Any' not in regression_data['filter2']))
-        and 'Sell-AnyGT2' not in regression_data['filter2']
-        and (('buy' in reg_data_filter or 'Buy' in reg_data_filter)
-             or ('sell' not in reg_data_filter and 'Sell' not in reg_data_filter and "MLBuy" in regression_data['filter'])
-            )
-        and 2 < regression_data['PCT_day_change'] < 4.5
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'UptrendOnly:Filter-Buy')
-        flag = True
-    elif(regression_data[filter_avg] <= -1 and (regression_data[filter_pct] == 0 or regression_data[filter_pct] < -50)
-        and (('Sell-AnyGT2' in regression_data['filter2'] and regression_data[filter_count] >= 3) or ('Sell-Any' in regression_data['filter2'] and regression_data[filter_count] >= 4 and 'Buy-Any' not in regression_data['filter2']))
-        and 'Buy-AnyGT2' not in regression_data['filter2']
-        and (('sell' in reg_data_filter or 'Sell' in reg_data_filter)
-             or ('buy' not in reg_data_filter and 'Buy' not in reg_data_filter and "MLSell" in regression_data['filter'])
-            )
-        and -4.5 < regression_data['PCT_day_change'] < -2
-        ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'DowntrendOnly:Filter-Sell')
-        flag = True  
-    
-    
-    if(abs(float(regression_data[filter_avg])) > 1
-        and abs(regression_data[filter_pct]) > 66
-        ):
-        flag = True
-        
-    if(("MLSell" not in regression_data['filter']) 
-        and ((regression_data[filter_avg] >= 1.5 and (regression_data[filter_pct] >= 80 or regression_data[filter_pct] == 0))
-            or (regression_data[filter_avg] >= 2 and regression_data[filter_pct] >= 70)
-            )
-        ):
-        flag = True
-        
-    if(("MLBuy" not in regression_data['filter']) 
-        and ((regression_data[filter_avg] <= -1.5 and (regression_data[filter_pct] <= -80 or regression_data[filter_pct] == 0))
-            or (regression_data[filter_avg] <= -2 and regression_data[filter_pct] <= -70)
-            )
-        ):
-        flag = True
-        
-    return flag    
     
 def filter_accuracy_finder_risky(regression_data, regressionResult, high_or_low, ws, filter_avg, filter_count, filter_pct):   
     flag = False
@@ -2819,8 +2444,8 @@ def filter_accuracy_finder_risky(regression_data, regressionResult, high_or_low,
             ):
             return False
         
-        if((regression_data[filter_avg] > 1 and 'RISKY-DOWNTREND-BUY' in regression_data['filter2'])
-            or (regression_data[filter_avg] < -1 and 'RISKY-UPTREND-SELL' in regression_data['filter2'])
+        if((regression_data[filter_avg] > 1 and 'RISKY-DOWNTREND-BUY' in regression_data['filter1'])
+            or (regression_data[filter_avg] < -1 and 'RISKY-UPTREND-SELL' in regression_data['filter1'])
             ):
             return False
         
