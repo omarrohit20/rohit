@@ -1943,7 +1943,6 @@ def is_filter_hist_accuracy(regression_data, regression_high, regression_low, re
     else:
         return False
          
-
 def is_filter_all_accuracy(regression_data, regression_high, regression_low, regressionResult, high_or_low, ws):
     pct_filter_345_avg = 0
     pct_filter_avg = 0
