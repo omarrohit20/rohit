@@ -122,38 +122,43 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
                                 data = dbnse.highBuy.find_one({'scrip':scrip})
                                 mldatahigh =  data['filter2'] + '|' + data['filter']
-                                #if (('-UPTREND-' in data['filter2'] or '-DOWNTREND-' in data['filter2'])
-                                #    and 'CheckNews' not in processor):
-                                #    filtersFlag = True
-                                if (data['filter']!= ''):
-                                    filtersFlag = True
                                 if ('buy' in processor
                                     and ('MLlowSell' not in data['ml'])
                                     and ('MLlowSellStrong' not in data['ml'])
+                                    and (('MLhighBuy' in data['ml'])
+                                         or ('MLhighBuyStrong' in data['ml'])
+                                         or ('buy' in mldatahigh)
+                                         or ('Buy' in mldatahigh)
+                                         )
                                     ):
-                                    mldatahigh = data['ml'] + '|' + mldatahigh + '|' + data['filter3']
+                                    mldatahigh = data['ml'] + '|' + mldatahigh  + '|' + data['filter3']
                                     if (data['filter3']!= '' and 'CheckNews' not in processor):
+                                        filtersFlag = True
+                                    if (data['filter']!= ''):
                                         filtersFlag = True
                                     if (data['ml']!=''):
                                         filtersFlag = True
-                                    
+                                    filtersFlag = True
                             if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
                                 data = dbnse.lowSell.find_one({'scrip':scrip})
-                                mldatalow = data['filter2'] + '|' + data['filter'] 
-                                #if (('-UPTREND-' in data['filter2'] or '-DOWNTREND-' in data['filter2'])
-                                #    and 'CheckNews' not in processor):
-                                #    filtersFlag = True
-                                if (data['filter']!= ''):
-                                    filtersFlag = True
+                                mldatalow =  data['filter2'] + '|' + data['filter']
                                 if ('sell' in processor 
                                     and ('MLhighBuy' not in data['ml'])
                                     and ('MLhighBuyStrong' not in data['ml'])
+                                    and (('MLlowSell' in data['ml'])
+                                         or ('MLlowSellStrong' in data['ml'])
+                                         or ('sell' in mldatalow)
+                                         or ('Sell' in mldatalow)
+                                         )
                                     ):
-                                    mldatalow = data['ml'] + '|' +  mldatalow + '|' + data['filter3']
+                                    mldatalow = data['ml'] + '|' + mldatalow  + '|' + data['filter3']
                                     if (data['filter3']!= '' and ('CheckNews' not in processor)):
+                                        filtersFlag = True
+                                    if (data['filter']!= ''):
                                         filtersFlag = True
                                     if (data['ml']!=''):
                                         filtersFlag = True
+                                    filtersFlag = True
                             
                             if((dbnse['scrip_result'].find_one({'scrip':scrip}) is not None)):
                                 data = dbnse.scrip_result.find_one({'scrip':scrip})
