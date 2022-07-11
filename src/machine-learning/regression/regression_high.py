@@ -54,6 +54,8 @@ adaBoost = False
 kNeighbours = True
 gradientBoosting = False
 
+dR = 1
+
 def get_data_frame(df, regressor='None', type='reg'):
     if (df is not None):
         #dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
@@ -261,6 +263,7 @@ def process_regression_high(scrip, df, directory, run_ml_algo, TEST=False):
             return
         dfp = get_data_frame(df, 'kn', 'reg')
     
+    dfp = dfp.round(2)
     regression_data = {}
     if (kNeighbours and run_ml_algo):
         #result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1, weights='distance'))
@@ -315,7 +318,7 @@ def process_regression_high(scrip, df, directory, run_ml_algo, TEST=False):
     #     regression_data['mlpValue_cla'] = float(result[0])
     # else:
     #     regression_data['mlpValue_cla'] = float(0)
-    
+    dfp = dfp.round(2)
     forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'High_change1'].values[0]
     forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'High_change2'].values[0]
     forecast_day_PCT3_change = dfp.tail(1).loc[-forecast_out:, 'High_change3'].values[0]
@@ -525,6 +528,7 @@ def process_regression_high(scrip, df, directory, run_ml_algo, TEST=False):
         technical = dbnsehistnew.technical.find_one({'dataset_code':scrip})
     else:
         technical = db.technical.find_one({'dataset_code':scrip})
+    
     regression_data['date'] = forecast_day_date
     regression_data['scrip'] = str(scrip)
     regression_data['industry'] = scripinfo['industry']
@@ -542,24 +546,24 @@ def process_regression_high(scrip, df, directory, run_ml_algo, TEST=False):
     #regression_data['mlpValue'] = mlpValue
     #regression_data['kNeighboursValue'] = kNeighboursValue
     regression_data['trend'] = technical['trend']
-    regression_data['year5HighChange'] = float(year5HighChange) 
-    regression_data['year5LowChange'] = float(year5LowChange)
-    regression_data['year2HighChange'] = float(year2HighChange) 
-    regression_data['year2LowChange'] = float(year2LowChange)
-    regression_data['yearHighChange'] = float(yearHighChange) 
-    regression_data['yearLowChange'] = float(yearLowChange)
-    regression_data['month6HighChange'] = float(month6HighChange) 
-    regression_data['month6LowChange'] = float(month6LowChange)
-    regression_data['month3HighChange'] = float(month3HighChange) 
-    regression_data['month3LowChange'] = float(month3LowChange)
-    regression_data['month2HighChange'] = float(month2HighChange) 
-    regression_data['month2LowChange'] = float(month2LowChange)
-    regression_data['monthHighChange'] = float(monthHighChange) 
-    regression_data['monthLowChange'] = float(monthLowChange)
-    regression_data['week2HighChange'] = float(week2HighChange) 
-    regression_data['week2LowChange'] = float(week2LowChange)
-    regression_data['weekHighChange'] = float(weekHighChange) 
-    regression_data['weekLowChange'] = float(weekLowChange)
+    regression_data['year5HighChange'] = round(float(year5HighChange), dR) 
+    regression_data['year5LowChange'] = round(float(year5LowChange), dR) 
+    regression_data['year2HighChange'] = round(float(year2HighChange), dR) 
+    regression_data['year2LowChange'] = round(float(year2LowChange), dR) 
+    regression_data['yearHighChange'] = round(float(yearHighChange), dR)  
+    regression_data['yearLowChange'] = round(float(yearLowChange), dR) 
+    regression_data['month6HighChange'] = round(float(month6HighChange), dR)  
+    regression_data['month6LowChange'] = round(float(month6LowChange), dR) 
+    regression_data['month3HighChange'] = round(float(month3HighChange), dR)  
+    regression_data['month3LowChange'] = round(float(month3LowChange), dR) 
+    regression_data['month2HighChange'] = round(float(month2HighChange), dR)  
+    regression_data['month2LowChange'] = round(float(month2LowChange), dR) 
+    regression_data['monthHighChange'] = round(float(monthHighChange), dR)  
+    regression_data['monthLowChange'] = round(float(monthLowChange), dR) 
+    regression_data['week2HighChange'] = round(float(week2HighChange), dR)  
+    regression_data['week2LowChange'] = round(float(week2LowChange), dR) 
+    regression_data['weekHighChange'] = round(float(weekHighChange), dR)  
+    regression_data['weekLowChange'] = round(float(weekLowChange), dR) 
     regression_data['year5High'] = float(year5High) 
     regression_data['year5Low'] = float(year5Low)
     regression_data['year5BarHigh'] = float(year5BarHigh) 
@@ -697,32 +701,32 @@ def process_regression_high(scrip, df, directory, run_ml_algo, TEST=False):
     #regression_data['bar_low_pre10'] = float(bar_low_pre10)
     regression_data['greentrend'] = float(greentrend)
     regression_data['redtrend'] = float(redtrend)
-    regression_data['EMA6'] = technical['overlap_studies']['EMA6'][0]
-    regression_data['EMA14'] = technical['overlap_studies']['EMA14'][0]
-    regression_data['EMA6_1daysBack'] = technical['overlap_studies']['EMA6'][1]
-    regression_data['EMA14_1daysBack'] = technical['overlap_studies']['EMA14'][1]
-    regression_data['EMA6_2daysBack'] = technical['overlap_studies']['EMA6'][2]
-    regression_data['EMA14_2daysBack'] = technical['overlap_studies']['EMA14'][2]
-    regression_data['SMA4_2daysBack'] = (float(close)-technical['overlap_studies']['SMA4'][2])*100/technical['overlap_studies']['SMA4'][2]
-    regression_data['SMA9_2daysBack'] = (float(close)-technical['overlap_studies']['SMA9'][2])*100/technical['overlap_studies']['SMA9'][2]
-    regression_data['ema6-14'] = (((technical['overlap_studies']['EMA6'][0] - technical['overlap_studies']['EMA14'][0])/technical['overlap_studies']['EMA14'][0])*100)
-    regression_data['ema6-14_pre1'] = (((technical['overlap_studies']['EMA6'][1] - technical['overlap_studies']['EMA14'][1])/technical['overlap_studies']['EMA14'][1])*100)
-    regression_data['ema6-14_pre2'] = (((technical['overlap_studies']['EMA6'][2] - technical['overlap_studies']['EMA14'][2])/technical['overlap_studies']['EMA14'][2])*100)
-    regression_data['ema6-14_pre3'] = (((technical['overlap_studies']['EMA6'][3] - technical['overlap_studies']['EMA14'][3])/technical['overlap_studies']['EMA14'][3])*100)
-    regression_data['ema6-14_pre4'] = (((technical['overlap_studies']['EMA6'][4] - technical['overlap_studies']['EMA14'][4])/technical['overlap_studies']['EMA14'][4])*100)
-    regression_data['ema6-14_pre4'] = (((technical['overlap_studies']['EMA6'][5] - technical['overlap_studies']['EMA14'][5])/technical['overlap_studies']['EMA14'][5])*100)
-    regression_data['ema6-14_pre5'] = (((technical['overlap_studies']['EMA6'][6] - technical['overlap_studies']['EMA14'][6])/technical['overlap_studies']['EMA14'][6])*100)
-    regression_data['ema6-14_pre6'] = (((technical['overlap_studies']['EMA6'][7] - technical['overlap_studies']['EMA14'][7])/technical['overlap_studies']['EMA14'][7])*100)
-    regression_data['ema6-14_pre7'] = (((technical['overlap_studies']['EMA6'][8] - technical['overlap_studies']['EMA14'][8])/technical['overlap_studies']['EMA14'][8])*100)
-    regression_data['ema6-14_pre8'] = (((technical['overlap_studies']['EMA6'][9] - technical['overlap_studies']['EMA14'][9])/technical['overlap_studies']['EMA14'][9])*100)
-    regression_data['SMA4_2daysBack'] = (float(close)-technical['overlap_studies']['SMA4'][2])*100/technical['overlap_studies']['SMA4'][2]
-    regression_data['SMA9_2daysBack'] = (float(close)-technical['overlap_studies']['SMA9'][2])*100/technical['overlap_studies']['SMA9'][2]
-    regression_data['SMA4'] = (float(close)-technical['overlap_studies']['SMA4'][0])*100/technical['overlap_studies']['SMA4'][0]
-    regression_data['SMA9'] = (float(close)-technical['overlap_studies']['SMA9'][0])*100/technical['overlap_studies']['SMA9'][0]
-    regression_data['SMA25'] = (float(close)-technical['overlap_studies']['SMA25'][0])*100/technical['overlap_studies']['SMA25'][0]
-    regression_data['SMA50'] = (float(close)-technical['overlap_studies']['SMA50'][0])*100/technical['overlap_studies']['SMA50'][0]
-    regression_data['SMA100'] = (float(close)-technical['overlap_studies']['SMA100'][0])*100/technical['overlap_studies']['SMA100'][0]
-    regression_data['SMA200'] = (float(close)-technical['overlap_studies']['SMA200'][0])*100/technical['overlap_studies']['SMA200'][0]
+    regression_data['EMA6'] = round(technical['overlap_studies']['EMA6'][0], dR) 
+    regression_data['EMA14'] = round(technical['overlap_studies']['EMA14'][0], dR) 
+    regression_data['EMA6_1daysBack'] = round(technical['overlap_studies']['EMA6'][1], dR) 
+    regression_data['EMA14_1daysBack'] = round(technical['overlap_studies']['EMA14'][1], dR) 
+    regression_data['EMA6_2daysBack'] = round(technical['overlap_studies']['EMA6'][2], dR) 
+    regression_data['EMA14_2daysBack'] = round(technical['overlap_studies']['EMA14'][2], dR) 
+    regression_data['SMA4_2daysBack'] = round((float(close)-technical['overlap_studies']['SMA4'][2])*100/technical['overlap_studies']['SMA4'][2], dR) 
+    regression_data['SMA9_2daysBack'] = round((float(close)-technical['overlap_studies']['SMA9'][2])*100/technical['overlap_studies']['SMA9'][2], dR) 
+    regression_data['ema6-14'] = round((((technical['overlap_studies']['EMA6'][0] - technical['overlap_studies']['EMA14'][0])/technical['overlap_studies']['EMA14'][0])*100), dR) 
+    regression_data['ema6-14_pre1'] = round((((technical['overlap_studies']['EMA6'][1] - technical['overlap_studies']['EMA14'][1])/technical['overlap_studies']['EMA14'][1])*100), dR) 
+    regression_data['ema6-14_pre2'] = round((((technical['overlap_studies']['EMA6'][2] - technical['overlap_studies']['EMA14'][2])/technical['overlap_studies']['EMA14'][2])*100), dR) 
+    regression_data['ema6-14_pre3'] = round((((technical['overlap_studies']['EMA6'][3] - technical['overlap_studies']['EMA14'][3])/technical['overlap_studies']['EMA14'][3])*100), dR) 
+    regression_data['ema6-14_pre4'] = round((((technical['overlap_studies']['EMA6'][4] - technical['overlap_studies']['EMA14'][4])/technical['overlap_studies']['EMA14'][4])*100), dR) 
+    regression_data['ema6-14_pre4'] = round((((technical['overlap_studies']['EMA6'][5] - technical['overlap_studies']['EMA14'][5])/technical['overlap_studies']['EMA14'][5])*100), dR) 
+    regression_data['ema6-14_pre5'] = round((((technical['overlap_studies']['EMA6'][6] - technical['overlap_studies']['EMA14'][6])/technical['overlap_studies']['EMA14'][6])*100), dR) 
+    regression_data['ema6-14_pre6'] = round((((technical['overlap_studies']['EMA6'][7] - technical['overlap_studies']['EMA14'][7])/technical['overlap_studies']['EMA14'][7])*100), dR) 
+    regression_data['ema6-14_pre7'] = round((((technical['overlap_studies']['EMA6'][8] - technical['overlap_studies']['EMA14'][8])/technical['overlap_studies']['EMA14'][8])*100), dR) 
+    regression_data['ema6-14_pre8'] = round((((technical['overlap_studies']['EMA6'][9] - technical['overlap_studies']['EMA14'][9])/technical['overlap_studies']['EMA14'][9])*100), dR) 
+    regression_data['SMA4_2daysBack'] = round((float(close)-technical['overlap_studies']['SMA4'][2])*100/technical['overlap_studies']['SMA4'][2], dR) 
+    regression_data['SMA9_2daysBack'] = round((float(close)-technical['overlap_studies']['SMA9'][2])*100/technical['overlap_studies']['SMA9'][2], dR) 
+    regression_data['SMA4'] = round((float(close)-technical['overlap_studies']['SMA4'][0])*100/technical['overlap_studies']['SMA4'][0], dR) 
+    regression_data['SMA9'] = round((float(close)-technical['overlap_studies']['SMA9'][0])*100/technical['overlap_studies']['SMA9'][0], dR) 
+    regression_data['SMA25'] = round((float(close)-technical['overlap_studies']['SMA25'][0])*100/technical['overlap_studies']['SMA25'][0], dR) 
+    regression_data['SMA50'] = round((float(close)-technical['overlap_studies']['SMA50'][0])*100/technical['overlap_studies']['SMA50'][0], dR) 
+    regression_data['SMA100'] = round((float(close)-technical['overlap_studies']['SMA100'][0])*100/technical['overlap_studies']['SMA100'][0], dR) 
+    regression_data['SMA200'] = round((float(close)-technical['overlap_studies']['SMA200'][0])*100/technical['overlap_studies']['SMA200'][0], dR) 
     regression_data['mlpValue_reg_other'] = 0
     regression_data['kNeighboursValue_reg_other'] = 0
     regression_data['mlpValue_cla_other'] = 0
@@ -737,36 +741,36 @@ def process_regression_high(scrip, df, directory, run_ml_algo, TEST=False):
     if(regression_data['high'] - regression_data['bar_high'] == 0):
         regression_data['highTail'] = 0
     else:
-        regression_data['highTail'] = (((regression_data['high'] - regression_data['bar_high'])/regression_data['bar_high'])*100)
+        regression_data['highTail'] = round((((regression_data['high'] - regression_data['bar_high'])/regression_data['bar_high'])*100), dR) 
     
     if((regression_data['bar_low'] - regression_data['low']) == 0):
         regression_data['lowTail'] = 0
     else:
-        regression_data['lowTail'] = (((regression_data['bar_low'] - regression_data['low'])/regression_data['bar_low'])*100)
+        regression_data['lowTail'] = round((((regression_data['bar_low'] - regression_data['low'])/regression_data['bar_low'])*100), dR) 
         
     regression_data['highTail_pre1'] = 0
     regression_data['lowTail_pre1'] = 0
     if(regression_data['high_pre1'] - regression_data['bar_high_pre1'] == 0):
         regression_data['highTail_pre1'] = 0
     else:
-        regression_data['highTail_pre1'] = (((regression_data['high_pre1'] - regression_data['bar_high_pre1'])/regression_data['bar_high_pre1'])*100)
+        regression_data['highTail_pre1'] = round((((regression_data['high_pre1'] - regression_data['bar_high_pre1'])/regression_data['bar_high_pre1'])*100), dR) 
     
     if((regression_data['bar_low_pre1'] - regression_data['low_pre1']) == 0):
         regression_data['lowTail_pre1'] = 0
     else:
-        regression_data['lowTail_pre1'] = (((regression_data['bar_low_pre1'] - regression_data['low_pre1'])/regression_data['bar_low_pre1'])*100)
+        regression_data['lowTail_pre1'] = round((((regression_data['bar_low_pre1'] - regression_data['low_pre1'])/regression_data['bar_low_pre1'])*100), dR) 
     
     regression_data['highTail_pre2'] = 0
     regression_data['lowTail_pre2'] = 0
     if(regression_data['high_pre2'] - regression_data['bar_high_pre2'] == 0):
         regression_data['highTail_pre2'] = 0
     else:
-        regression_data['highTail_pre2'] = (((regression_data['high_pre2'] - regression_data['bar_high_pre2'])/regression_data['bar_high_pre2'])*100)
+        regression_data['highTail_pre2'] = round((((regression_data['high_pre2'] - regression_data['bar_high_pre2'])/regression_data['bar_high_pre2'])*100), dR) 
     
     if((regression_data['bar_low_pre2'] - regression_data['low_pre2']) == 0):
         regression_data['lowTail_pre2'] = 0
     else:
-        regression_data['lowTail_pre2'] = (((regression_data['bar_low_pre2'] - regression_data['low_pre2'])/regression_data['bar_low_pre2'])*100)
+        regression_data['lowTail_pre2'] = round((((regression_data['bar_low_pre2'] - regression_data['low_pre2'])/regression_data['bar_low_pre2'])*100), dR) 
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     if(TEST != False):
         return 1, regression_data

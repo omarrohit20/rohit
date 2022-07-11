@@ -51,84 +51,89 @@ def regression_ta_data(scrip):
     })
     df = df[['date','open','high','low','close','volume']]
     
-    df=df.rename(columns = {'total trade quantity':'volume'})
-    df['volume_pre'] = df['volume'].shift(+1)
-    df['open_pre'] = df['open'].shift(+1)
-    df['high_pre'] = df['high'].shift(+1)
-    df['low_pre'] = df['low'].shift(+1)
-    df['close_pre'] = df['close'].shift(+1)
-    df['VOL_change'] = (((df['volume'] - df['volume_pre'])/df['volume_pre'])*100)
-    df['PCT_change'] = (((df['close'] - df['close_pre'])/df['close_pre'])*100)
-    df['Act_PCT_change'] = df['PCT_change'].shift(-forecast_out)
-    df['PCT_day_change'] = (((df['close'] - df['open'])/df['open'])*100)
-    df['PCT_day_change_pre'] = (((df['close_pre'] - df['open_pre'])/df['open_pre'])*100)
-    df['Act_PCT_day_change'] = df['PCT_day_change'].shift(-forecast_out)
-    df['PCT_day_LH'] = (((df['high'] - df['low'])/df['low'])*100).astype(float)
-    df['PCT_day_LC'] = (((df['close'] - df['low'])/df['low'])*100).astype(float)
-    df['PCT_day_CH'] = (((df['close'] - df['high'])/df['close'])*100).astype(float)
-    df['PCT_day_OL'] = (((df['low'] - df['open'])/df['open'])*100).astype(float)
-    df['Act_PCT_day_OL'] = df['PCT_day_OL'].shift(-forecast_out)
-    df['PCT_day_HO'] = (((df['high'] - df['open'])/df['open'])*100).astype(float)
-    df['Act_PCT_day_HO'] = df['PCT_day_HO'].shift(-forecast_out)
-    df['High_change'] = (((df['high'] - df['high_pre'])/df['high_pre'])*100)
-    df['Act_High_change'] = df['High_change'].shift(-forecast_out)
-    df['Low_change'] = (((df['low'] - df['low_pre'])/df['low_pre'])*100)
-    df['Act_Low_change'] = df['Low_change'].shift(-forecast_out)
-    
-    df['bar_high'] = np.where(df['close'] > df['open'], df['close'], df['open'])
-    df['bar_low'] = np.where(df['close'] > df['open'], df['open'], df['close'])
-    df['high_tail'] = (df['high'] - df['bar_high'])
-    df['low_tail'] = (df['low'] - df['bar_low'])
-    df['high_tail_pct'] = np.where((df['high'] - df['bar_high'] == 0), 0, (((df['high'] - df['bar_high'])/df['bar_high'])*100))
-    df['low_tail_pct'] = np.where((df['low'] - df['bar_low'] == 0), 0, (((df['low'] - df['bar_low'])/df['bar_low'])*100))
-    df['bar_high_pre'] = np.where(df['close_pre'] > df['open_pre'], df['close_pre'], df['open_pre'])
-    df['bar_low_pre'] = np.where(df['close_pre'] > df['open_pre'], df['open_pre'], df['close_pre'])
-    df['uptrend'] = np.where((df['bar_high'] >  df['bar_high_pre']) & (df['high'] > df['high_pre']), 1, 0)
-    df['downtrend'] = np.where((df['bar_low'] <  df['bar_low_pre']) & (df['low'] < df['low_pre']), -1, 0)
-    df['greentrend'] = np.where((df['PCT_day_change'] > 0) & (df['PCT_day_change_pre'] > 0), 1, 0)
-    df['redtrend'] = np.where((df['PCT_day_change'] < 0) & (df['PCT_day_change_pre'] < 0), -1, 0)
-    df['bar'] = df['bar_high'] - df['bar_low']
-    df['HH'] = np.where((df['high']-df['bar_high']) > (df['bar_high']-df['bar_low']), 1, 0)
-    df['LL'] = np.where((df['bar_low']-df['low']) > (df['bar_high']-df['bar_low']), 1, 0)
-    df['HHPc'] = ((((df['high']-df['bar_high']) - df['bar'])/df['bar'])*100).astype(float).round(1)
-    df['LLPc'] = ((((df['bar_low']-df['low']) - df['bar'])/df['bar'])*100).astype(float).round(1)
-
-    df['MACD'], df['MACDSIGNAL'], df['MACDHIST'] = MACD(df)
-    df['EMA9'] = EMA(df,9)
-    df['EMA21'] = EMA(df,21)
-    df['EMA50'] = EMA(df,50)
-    df['EMA100'] = EMA(df,100)
-    df['EMA200'] = EMA(df,200)
-    
-    df.dropna(subset=['Act_PCT_change'], inplace = True)
-    dfsize = int(np.floor(df.shape[0]))
-    size = int((int(np.floor(df.shape[0]))/4)*3)
-    print(scrip + " " + str(size))
-    for x in range(size):
-        if dfsize < 1300:
-            break
-        try:
-            close = df.tail(1).loc[-1:, 'close'].values[0]
-            if (40 < close < 10000):
-                #print(scrip + " " + str(size) + " " + str(close))
-                db.technical.delete_many({'dataset_code':scrip})
-                ta_lib_data_df(scrip, df, True, True) 
-                size_high, regression_high = process_regression_high(scrip, df, directory, run_ml_algo, True)
-                size_low, regression_low = process_regression_low(scrip, df, directory, run_ml_algo, True)
-                if(size_high != 0 and size_low != 0):
-                    #print(".")
-                    result_data_reg(regression_high, regression_low, scrip)
-        except IndexError as e:
-            print(e)
-        except Exception as e:
-            print(e)
-        df = df[:-1]
-        dfsize = dfsize - 1
+    try:
+        df=df.rename(columns = {'total trade quantity':'volume'})
+        df['volume_pre'] = df['volume'].shift(+1)
+        df['open_pre'] = df['open'].shift(+1)
+        df['high_pre'] = df['high'].shift(+1)
+        df['low_pre'] = df['low'].shift(+1)
+        df['close_pre'] = df['close'].shift(+1)
+        df['VOL_change'] = (((df['volume'] - df['volume_pre'])/df['volume_pre'])*100)
+        df['PCT_change'] = (((df['close'] - df['close_pre'])/df['close_pre'])*100)
+        df['Act_PCT_change'] = df['PCT_change'].shift(-forecast_out)
+        df['PCT_day_change'] = (((df['close'] - df['open'])/df['open'])*100)
+        df['PCT_day_change_pre'] = (((df['close_pre'] - df['open_pre'])/df['open_pre'])*100)
+        df['Act_PCT_day_change'] = df['PCT_day_change'].shift(-forecast_out)
+        df['PCT_day_LH'] = (((df['high'] - df['low'])/df['low'])*100).astype(float)
+        df['PCT_day_LC'] = (((df['close'] - df['low'])/df['low'])*100).astype(float)
+        df['PCT_day_CH'] = (((df['close'] - df['high'])/df['close'])*100).astype(float)
+        df['PCT_day_OL'] = (((df['low'] - df['open'])/df['open'])*100).astype(float)
+        df['Act_PCT_day_OL'] = df['PCT_day_OL'].shift(-forecast_out)
+        df['PCT_day_HO'] = (((df['high'] - df['open'])/df['open'])*100).astype(float)
+        df['Act_PCT_day_HO'] = df['PCT_day_HO'].shift(-forecast_out)
+        df['High_change'] = (((df['high'] - df['high_pre'])/df['high_pre'])*100)
+        df['Act_High_change'] = df['High_change'].shift(-forecast_out)
+        df['Low_change'] = (((df['low'] - df['low_pre'])/df['low_pre'])*100)
+        df['Act_Low_change'] = df['Low_change'].shift(-forecast_out)
         
-    db.regressionHistoryScrip.insert_one({
-        "dataset_code": scrip,
-        "date":(df['date'].values)[-1]
-        })    
+        df['bar_high'] = np.where(df['close'] > df['open'], df['close'], df['open'])
+        df['bar_low'] = np.where(df['close'] > df['open'], df['open'], df['close'])
+        df['high_tail'] = (df['high'] - df['bar_high'])
+        df['low_tail'] = (df['low'] - df['bar_low'])
+        df['high_tail_pct'] = np.where((df['high'] - df['bar_high'] == 0), 0, (((df['high'] - df['bar_high'])/df['bar_high'])*100))
+        df['low_tail_pct'] = np.where((df['low'] - df['bar_low'] == 0), 0, (((df['low'] - df['bar_low'])/df['bar_low'])*100))
+        df['bar_high_pre'] = np.where(df['close_pre'] > df['open_pre'], df['close_pre'], df['open_pre'])
+        df['bar_low_pre'] = np.where(df['close_pre'] > df['open_pre'], df['open_pre'], df['close_pre'])
+        df['uptrend'] = np.where((df['bar_high'] >  df['bar_high_pre']) & (df['high'] > df['high_pre']), 1, 0)
+        df['downtrend'] = np.where((df['bar_low'] <  df['bar_low_pre']) & (df['low'] < df['low_pre']), -1, 0)
+        df['greentrend'] = np.where((df['PCT_day_change'] > 0) & (df['PCT_day_change_pre'] > 0), 1, 0)
+        df['redtrend'] = np.where((df['PCT_day_change'] < 0) & (df['PCT_day_change_pre'] < 0), -1, 0)
+        df['bar'] = df['bar_high'] - df['bar_low']
+        df['HH'] = np.where((df['high']-df['bar_high']) > (df['bar_high']-df['bar_low']), 1, 0)
+        df['LL'] = np.where((df['bar_low']-df['low']) > (df['bar_high']-df['bar_low']), 1, 0)
+        df['HHPc'] = ((((df['high']-df['bar_high']) - df['bar'])/df['bar'])*100).astype(float).round(1)
+        df['LLPc'] = ((((df['bar_low']-df['low']) - df['bar'])/df['bar'])*100).astype(float).round(1)
+    
+        df['MACD'], df['MACDSIGNAL'], df['MACDHIST'] = MACD(df)
+        df['EMA9'] = EMA(df,9)
+        df['EMA21'] = EMA(df,21)
+        df['EMA50'] = EMA(df,50)
+        df['EMA100'] = EMA(df,100)
+        df['EMA200'] = EMA(df,200)
+        df = df.round(2)
+        
+        df.dropna(subset=['Act_PCT_change'], inplace = True)
+        dfsize = int(np.floor(df.shape[0]))
+        size = int((int(np.floor(df.shape[0]))/4)*3)
+        print(scrip + " " + str(size))
+        for x in range(size):
+            if dfsize < 1300:
+                break
+            try:
+                close = df.tail(1).loc[-1:, 'close'].values[0]
+                if (40 < close < 10000):
+                    #print(scrip + " " + str(size) + " " + str(close))
+                    db.technical.delete_many({'dataset_code':scrip})
+                    ta_lib_data_df(scrip, df, True, True) 
+                    size_high, regression_high = process_regression_high(scrip, df, directory, run_ml_algo, True)
+                    size_low, regression_low = process_regression_low(scrip, df, directory, run_ml_algo, True)
+                    if(size_high != 0 and size_low != 0):
+                        #print(".")
+                        result_data_reg(regression_high, regression_low, scrip)
+            except IndexError as e:
+                print(e)
+            except Exception as e:
+                print(e)
+            df = df[:-1]
+            dfsize = dfsize - 1
+            
+        db.regressionHistoryScrip.insert_one({
+            "dataset_code": scrip,
+            "date":(df['date'].values)[-1]
+            })  
+    except Exception as e:
+        print(e)
+      
 
 def calculateParallel(threads=1):
     pool = ThreadPool(threads)

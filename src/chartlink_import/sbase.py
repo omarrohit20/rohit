@@ -107,16 +107,18 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             
                                     
                             
-                            data = db['morning-volume-bs'].find_one({'scrip':scrip})
-                            if(data is not None): 
-                                highVol = data['keyIndicator']
-                                if ('CheckNews' not in processor):
-                                    filtersFlag = True
-                            data = db['breakout-morning-volume'].find_one({'scrip':scrip})
-                            if(data is not None): 
-                                highVol = highVol + ':' + data['keyIndicator']
-                                if ('CheckNews' not in processor):
-                                    filtersFlag = True 
+                            data1 = db['morning-volume-bs'].find_one({'scrip':scrip})
+                            if(data1 is not None): 
+                                highVol = data1['keyIndicator']
+                            data2 = db['breakout-morning-volume'].find_one({'scrip':scrip})
+                            if(data2 is not None): 
+                                highVol = highVol + ':' + data2['keyIndicator']
+                            if ('CheckNews' not in processor
+                                and data2 is not None
+                                and (('buy' in processor and 'buy' in highVol) 
+                                     or ('sell' in processor and 'sell' in highVol))
+                                ):
+                                filtersFlag = True 
                               
                                 
                             if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):

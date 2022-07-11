@@ -1583,20 +1583,6 @@ def sell_tail_reversal_filter(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, '$$MaySell-CheckChart-baseLine(inDownTrend-monthHigh)-PCTDayChangeGT0')
         elif(regression_data['PCT_day_change'] < -2 and regression_data['monthLowChange'] < 10):
             add_in_csv(regression_data, regressionResult, ws, None, None, '$$(UPTREND-OR-GLOBALUP)$$MayBuyContinue-CheckChart-baseLine(inDownTrend-monthHigh)-PCTDayChangeLT(-2)')
-    elif(('MaySell-CheckChart' in regression_data['filter1']) or ('MaySellCheckChart' in regression_data['filter1'])):
-        if(1 < regression_data['PCT_day_change'] < 3.5
-            and 1 < regression_data['PCT_change'] < 3.5
-            and 0 < regression_data['PCT_day_change_pre1']
-            and 0 < regression_data['PCT_day_change_pre2']
-            and 0 < regression_data['PCT_day_change_pre3'] 
-            and regression_data['monthHighChange'] > -1
-            and regression_data['month3HighChange'] < -1
-            and regression_data['yearHighChange'] < -10
-            and high_tail_pct(regression_data) < 2.5
-            and low_tail_pct(regression_data) < 1
-            #and regression_data['PCT_day_change_pre3'] < regression_data['PCT_day_change']
-            ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, '$$MaySell-CheckChart(monthHigh-minimumLast4DayUp)')
     
     if((-0.5 < regression_data['PCT_change'] < 0.5)
         and (0 < regression_data['PCT_day_change'] < 1)

@@ -28,6 +28,7 @@ def insert_scripdata(scrip, data, futures):
         temp = data[['Open', 'High', 'Low', 'Close', 'Volume']]
         temp['Date'] = data.index.astype(str)
         df = temp[['Date','Open', 'High', 'Low', 'Close', 'Volume']]
+        df = df.round(1)
         record['end_date'] = data.index.astype(str)[0]
         record['data'] = df.values.tolist()
         record['column_names'] = df.columns.tolist()
@@ -51,6 +52,7 @@ if __name__ == "__main__":
             if(data is None):
                 ticker = yf.Ticker(scrip + '.NS')
                 data = ticker.history(start=start_date, end=end_date)
+                #print(data)
                 insert_scripdata(scrip, data, futures)
             print(scrip)      
         except:
