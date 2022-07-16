@@ -263,7 +263,7 @@ def process_regression_high(scrip, df, directory, run_ml_algo, TEST=False):
             return
         dfp = get_data_frame(df, 'kn', 'reg')
     
-    dfp = dfp.round(2)
+    dfp = dfp.round(1)
     regression_data = {}
     if (kNeighbours and run_ml_algo):
         #result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1, weights='distance'))
@@ -318,7 +318,7 @@ def process_regression_high(scrip, df, directory, run_ml_algo, TEST=False):
     #     regression_data['mlpValue_cla'] = float(result[0])
     # else:
     #     regression_data['mlpValue_cla'] = float(0)
-    dfp = dfp.round(2)
+    dfp = dfp.round(1)
     forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'High_change1'].values[0]
     forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'High_change2'].values[0]
     forecast_day_PCT3_change = dfp.tail(1).loc[-forecast_out:, 'High_change3'].values[0]
