@@ -1,7 +1,5 @@
-from selenium import webdriver
-from selenium.webdriver import DesiredCapabilities
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium import *
+from seleniumwire import webdriver
+from seleniumwire.webdriver import DesiredCapabilities
 from browsermobproxy import Server
 from datetime import datetime
 from datetime import timedelta
@@ -11,6 +9,7 @@ from bson import json_util
 import json
 import time
 import pandas as pd
+import base64
 
 pd.options.mode.chained_assignment = None  # default='warn'
 
@@ -42,14 +41,21 @@ option.add_experimental_option("prefs", prefs)
 option.add_argument('--no-sandbox')
 option.add_argument('--disable-gpu')
 
-
-
 capabilities = DesiredCapabilities.CHROME.copy()
+capabilities["goog:loggingPrefs"] = {"performance": "ALL"}
 capabilities['acceptSslCerts'] = True
 capabilities['acceptInsecureCerts'] = True
 
+
 driver = None
 
+def log_filter(log_):
+    return (
+        # is an actual response
+        log_["method"] == "Network.responseReceived"
+        # and json
+        and "json" in log_["params"]["response"]["mimeType"]
+    )
 
 def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
     response_json = json.loads(rawdata)
@@ -204,23 +210,26 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
         None
             
 def process_url(url, processor, starttime, endtime, filtered=False):
-    proxy.new_har("file_name", options={'captureHeaders': False, 'captureContent': True, 'captureBinaryContent': True})
+    time.sleep(5)
     driver.get(url)
-    time.sleep(20)
-    #WebDriverWait(driver, 30).until(lambda x: x.find_element_by_id("backtest-chart"))
-    proxy.wait_for_traffic_to_stop(1, 30)
-    #print(proxy.har)
-    for ent in proxy.har['log']['entries']:
-        _url = ent['request']['url']
-        _response = ent['response']
-        #print(_response)
-        if (_url == 'https://chartink.com/backtest/process') and ('text' in ent['response']['content']):
-            data = _response['content']['text']
+    time.sleep(5)
+
+    logs_raw = driver.get_log("performance")
+    logs = [json.loads(lr["message"])["message"] for lr in logs_raw]
+
+    for log in filter(log_filter, logs):
+        request_id = log["params"]["requestId"]
+        resp_url = log["params"]["response"]["url"]
+        if (resp_url == 'https://chartink.com/backtest/process'):
+            data = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": request_id})['body']
+            #print(f"Caught {resp_url}")
             #print(data)
             process_backtest(data, processor, starttime, endtime, filtered)
+    print()
 
 def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndicator=None):
     response_json = json.loads(rawdata)
+    print()
     try:
         aggregatedStockList = response_json["aggregatedStockList"]
         tradeTimes = response_json["metaData"][0]["tradeTimes"]
@@ -352,21 +361,22 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
         None
             
 def process_url_volBreakout(url, processor, starttime, endtime, keyIndicator=None):
-    proxy.new_har("file_name", options={'captureHeaders': False, 'captureContent': True, 'captureBinaryContent': True})
+    time.sleep(5)
     driver.get(url)
-    time.sleep(10)
-    #WebDriverWait(driver, 30).until(lambda x: x.find_element_by_id("backtest-chart"))
-    proxy.wait_for_traffic_to_stop(1, 30)
-    #print(proxy.har)
-    for ent in proxy.har['log']['entries']:
-        _url = ent['request']['url']
-        _response = ent['response']
-        #print(_response)
-        if (_url == 'https://chartink.com/backtest/process') and ('text' in ent['response']['content']):
-            data = _response['content']['text']
-            #print(data)
+    time.sleep(5)
+
+    logs_raw = driver.get_log("performance")
+    logs = [json.loads(lr["message"])["message"] for lr in logs_raw]
+
+    for log in filter(log_filter, logs):
+        request_id = log["params"]["requestId"]
+        resp_url = log["params"]["response"]["url"]
+        if (resp_url == 'https://chartink.com/backtest/process'):
+            data = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": request_id})['body']
+            # print(f"Caught {resp_url}")
+            # print(data)
             process_backtest_volBreakout(data, processor, starttime, endtime, keyIndicator)
-            
+    print()
 
 def regression_ta_data_buy():
     for data in dbnse.scrip.find({'futures':'Yes'}):

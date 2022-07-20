@@ -31,3 +31,4 @@ time_14_00 = st + timedelta(seconds=14*3600) # this gives 2:00 PM
 time_14_30 = st + timedelta(seconds=14*3600+30*60) # this gives 2:30 PM
 time_15_30 = st + timedelta(seconds=15*3600+30*60)  # this gives 2:30 PM
 time_23_00 = st + timedelta(seconds=23*3600)
+time_24_00 = st + timedelta(seconds=24*3600)

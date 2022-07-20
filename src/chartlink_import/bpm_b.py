@@ -2,14 +2,6 @@ import sbase as sb
 from config import *
      
 if __name__ == "__main__":
-    sb.server = Server(sb.path, options={'existing_proxy_port_to_use': 18090})
-    time.sleep(1)
-    sb.server.start()
-    time.sleep(1)
-    sb.proxy = sb.server.create_proxy()
-    print("Server started")
-    
-    sb.option.add_argument('--proxy-server=%s' % sb.proxy.proxy)
     sb.option.add_argument("user-data-dir=/Users/profilechrome/profiles/p3")
     sb.option.add_argument('--headless')
     sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities)
