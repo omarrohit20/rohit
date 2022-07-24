@@ -252,7 +252,7 @@ def create_csv(regression_data):
 def process_regression_high(scrip, df, directory, run_ml_algo, TEST=False):
     dfp = None
     if TEST:
-        df = df.tail(1500)
+        df = df.tail(2000)
         dfp = get_data_frame(df)
         if(int(np.floor(dfp.shape[0])) == 0):
             return 0, None
@@ -771,6 +771,14 @@ def process_regression_high(scrip, df, directory, run_ml_algo, TEST=False):
         regression_data['lowTail_pre2'] = 0
     else:
         regression_data['lowTail_pre2'] = round((((regression_data['bar_low_pre2'] - regression_data['low_pre2'])/regression_data['bar_low_pre2'])*100), dR) 
+
+    if TEST:
+        regression_data['close_post5_change'] = df.tail(1).loc[-forecast_out:,'close_post5_change'].values[0]
+        regression_data['close_post10_change'] = df.tail(1).loc[-forecast_out:, 'close_post10_change'].values[0]
+        regression_data['close_post20_change'] = df.tail(1).loc[-forecast_out:, 'close_post20_change'].values[0]
+        regression_data['close_post40_change'] = df.tail(1).loc[-forecast_out:, 'close_post40_change'].values[0]
+        regression_data['close_post60_change'] = df.tail(1).loc[-forecast_out:, 'close_post60_change'].values[0]
+
     #dfp.to_csv(directory + '/' + scrip + '_dfp.csv', encoding='utf-8')
     if(TEST != False):
         return 1, regression_data

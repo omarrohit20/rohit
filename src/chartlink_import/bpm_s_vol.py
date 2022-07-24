@@ -5,7 +5,7 @@ if __name__ == "__main__":
     sb.option.add_argument("user-data-dir=/Users/profilechrome/profiles/p8")
     sb.option.add_argument('--headless')
     sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities)
-
+    print('Started')
     sb.nw = datetime.now()
     
     while (sb.nw <= time_13_30):             

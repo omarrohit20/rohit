@@ -14,7 +14,6 @@ import base64
 pd.options.mode.chained_assignment = None  # default='warn'
 
 
-
 global connection, db;
 global nw, hrs, zero
 global path, proxy, option, capabilities, driver
@@ -27,9 +26,6 @@ nw = datetime.now()
 hrs = nw.hour;mins = nw.minute;secs = nw.second;
 zero = timedelta(seconds = secs+mins*60+hrs*3600)
 
-
-
-    
 
 path = './browsermob/bin/browsermob-proxy' #your path to browsermob-proxy
 
@@ -225,11 +221,10 @@ def process_url(url, processor, starttime, endtime, filtered=False):
             #print(f"Caught {resp_url}")
             #print(data)
             process_backtest(data, processor, starttime, endtime, filtered)
-    print()
+    #print()
 
 def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndicator=None):
     response_json = json.loads(rawdata)
-    print()
     try:
         aggregatedStockList = response_json["aggregatedStockList"]
         tradeTimes = response_json["metaData"][0]["tradeTimes"]
@@ -376,7 +371,7 @@ def process_url_volBreakout(url, processor, starttime, endtime, keyIndicator=Non
             # print(f"Caught {resp_url}")
             # print(data)
             process_backtest_volBreakout(data, processor, starttime, endtime, keyIndicator)
-    print()
+    #print()
 
 def regression_ta_data_buy():
     for data in dbnse.scrip.find({'futures':'Yes'}):
