@@ -105,10 +105,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         resultDeclared = ''
                         filtersFlag = False
                         
-                        try: 
-                            
-                                    
-                            
+                        try:
                             data1 = db['morning-volume-bs'].find_one({'scrip':scrip})
                             if(data1 is not None): 
                                 highVol = data1['keyIndicator']
@@ -181,7 +178,26 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         #         print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
                         # else:
                         #     print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
-                        if(filtered == False):
+
+                        if ('buy' in processor
+                            and 'Sell-AnyGT2' in mldatahigh
+                            and 'Sell-AnyGT2-1.0' not in mldatahigh
+                            and 'Sell-AnyGT2-2.0' not in mldatahigh
+                            and ('Sell-SUPER-Risky' in mldatahigh
+                                or 'Sell-Risky' in mldatahigh
+                                or 'Sell-AnyGT2-3.0' not in mldatahigh)
+                            ):
+                            needToPrint = True
+                        elif ('sell' in processor
+                            and 'Buy-AnyGT2' in mldatalow
+                            and 'Buy-AnyGT2-1.0' not in mldatalow
+                            and 'Buy-AnyGT2-2.0' not in mldatalow
+                            and ('Buy-SUPER-Risky' in mldatalow
+                                 or 'Buy-Risky' in mldatalow
+                                 or 'Buy-AnyGT2-3.0' not in mldatalow)
+                            ):
+                            needToPrint = True
+                        elif(filtered == False):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
                             needToPrint = True
                         elif(filtered == True and filtersFlag == True):
@@ -206,22 +222,25 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
         None
             
 def process_url(url, processor, starttime, endtime, filtered=False):
-    time.sleep(5)
-    driver.get(url)
-    time.sleep(5)
+    try:
+        time.sleep(5)
+        driver.get(url)
+        time.sleep(10)
 
-    logs_raw = driver.get_log("performance")
-    logs = [json.loads(lr["message"])["message"] for lr in logs_raw]
+        logs_raw = driver.get_log("performance")
+        logs = [json.loads(lr["message"])["message"] for lr in logs_raw]
 
-    for log in filter(log_filter, logs):
-        request_id = log["params"]["requestId"]
-        resp_url = log["params"]["response"]["url"]
-        if (resp_url == 'https://chartink.com/backtest/process'):
-            data = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": request_id})['body']
-            #print(f"Caught {resp_url}")
-            #print(data)
-            process_backtest(data, processor, starttime, endtime, filtered)
-    #print()
+        for log in filter(log_filter, logs):
+            request_id = log["params"]["requestId"]
+            resp_url = log["params"]["response"]["url"]
+            if (resp_url == 'https://chartink.com/backtest/process'):
+                data = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": request_id})['body']
+                # print(f"Caught {resp_url}")
+                # print(data)
+                process_backtest(data, processor, starttime, endtime, filtered)
+        # print()
+    except Exception as e:
+        print('driver failed')
 
 def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndicator=None):
     response_json = json.loads(rawdata)
@@ -356,22 +375,25 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
         None
             
 def process_url_volBreakout(url, processor, starttime, endtime, keyIndicator=None):
-    time.sleep(5)
-    driver.get(url)
-    time.sleep(5)
+    try:
+        time.sleep(5)
+        driver.get(url)
+        time.sleep(10)
 
-    logs_raw = driver.get_log("performance")
-    logs = [json.loads(lr["message"])["message"] for lr in logs_raw]
+        logs_raw = driver.get_log("performance")
+        logs = [json.loads(lr["message"])["message"] for lr in logs_raw]
 
-    for log in filter(log_filter, logs):
-        request_id = log["params"]["requestId"]
-        resp_url = log["params"]["response"]["url"]
-        if (resp_url == 'https://chartink.com/backtest/process'):
-            data = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": request_id})['body']
-            # print(f"Caught {resp_url}")
-            # print(data)
-            process_backtest_volBreakout(data, processor, starttime, endtime, keyIndicator)
-    #print()
+        for log in filter(log_filter, logs):
+            request_id = log["params"]["requestId"]
+            resp_url = log["params"]["response"]["url"]
+            if (resp_url == 'https://chartink.com/backtest/process'):
+                data = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": request_id})['body']
+                # print(f"Caught {resp_url}")
+                # print(data)
+                process_backtest_volBreakout(data, processor, starttime, endtime, keyIndicator)
+        # print()
+    except Exception as e:
+        print('driver failed')
 
 def regression_ta_data_buy():
     for data in dbnse.scrip.find({'futures':'Yes'}):

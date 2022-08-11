@@ -252,7 +252,7 @@ def create_csv(regression_data):
 def process_regression_high(scrip, df, directory, run_ml_algo, TEST=False):
     dfp = None
     if TEST:
-        df = df.tail(2000)
+        df = df.tail(1500)
         dfp = get_data_frame(df)
         if(int(np.floor(dfp.shape[0])) == 0):
             return 0, None

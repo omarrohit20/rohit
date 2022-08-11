@@ -17,12 +17,12 @@ if __name__ == "__main__":
     sb.option.add_argument("user-data-dir=/Users/profilechrome/profiles/p")
     sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities)
     sb.driver.get("https://chartink.com/login")
-    sb.driver.find_element_by_id("email").send_keys("rohit_51981@yahoo.co.in")
-    sb.driver.find_element_by_id("password").send_keys("qwER12#$")
-    
-    sb.driver.find_element_by_css_selector("button.g-recaptcha").click()
-    
     time.sleep(10)
+    sb.driver.find_element("id", "email").send_keys("rohit_51981@yahoo.co.in")
+    sb.driver.find_element("id", "password").send_keys("qwER12#$")
+    #sb.driver.find_element("css", "button.g-recaptcha").click()
+    
+    time.sleep(5)
     
     
     
