@@ -465,7 +465,7 @@ def buy_test_345(regression_data, regressionResult, reg, ws):
                                     + filterNameTail + ',' \
                                     + pctChange5Day + ',' \
                                     + regression_data['series_trend'] + ',' \
-                                    + regression_data['filter2'] + ',' \
+                                    + regression_data['filter1'] + ',' \
                                     + regression_data['filter3'] + ',' \
                                     + regression_data['filter5']
     
@@ -638,7 +638,7 @@ def buy_test_tech_all_pct_change(regression_data, regressionResult, reg, ws):
                                         + pctChange5Day + ','\
                                         + 'B@{' + regression_data['buyIndia'] + '}' \
                                         + 'S@{' + regression_data['sellIndia'] + '}' \
-                                        + regression_data['filter2'] + ',' \
+                                        + regression_data['filter1'] + ',' \
                                         + regression_data['filter4'] + ',' \
                                         + regression_data['filter5']
         return True
@@ -676,7 +676,7 @@ def buy_filter_345_accuracy(regression_data, regressionResult):
             + filterNameTail + ',' \
             + pctChange5Day + ','\
             + regression_data['series_trend'] + ',' \
-            + regression_data['filter2'] + ',' \
+            + regression_data['filter1'] + ',' \
             + regression_data['filter3'] + ',' \
             + regression_data['filter5']
     if (filter != '') and (filter in filtersDict):
@@ -812,7 +812,7 @@ def buy_filter_tech_all_pct_change_accuracy(regression_data, regressionResult):
             + pctChange5Day + ','\
             + 'B@{' + regression_data['buyIndia'] + '}' \
             + 'S@{' + regression_data['sellIndia'] + '}' \
-            + regression_data['filter2'] + ',' \
+            + regression_data['filter1'] + ',' \
             + regression_data['filter4'] + ',' \
             + regression_data['filter5']
             
@@ -1221,8 +1221,8 @@ def sell_other_indicator(regression_data, regressionResult, reg, ws):
     return False
 
 def sell_indicator_after_filter_accuracy(regression_data, regressionResult, reg, ws):
-    r
-            
+    return False
+
 def sell_skip_close_lt_50(regression_data, regressionResult, reg, ws):
     if((regression_data['weekLowChange'] > 15) 
         and (-10 < regression_data['PCT_change'] < -4)
@@ -1251,7 +1251,7 @@ def sell_test_345(regression_data, regressionResult, reg, ws):
                                     + filterNameTail + ',' \
                                     + pctChange5Day + ',' \
                                     + regression_data['series_trend'] + ',' \
-                                    + regression_data['filter2'] + ',' \
+                                    + regression_data['filter1'] + ',' \
                                     + regression_data['filter3'] + ',' \
                                     + regression_data['filter5']
     if regression_data['filterTest'] != '':
@@ -1420,7 +1420,7 @@ def sell_test_tech_all_pct_change(regression_data, regressionResult, reg, ws):
                                         + pctChange5Day + ',' \
                                         + 'B@{' + regression_data['buyIndia'] + '}' \
                                         + 'S@{' + regression_data['sellIndia'] + '}' \
-                                        + regression_data['filter2'] + ',' \
+                                        + regression_data['filter1'] + ',' \
                                         + regression_data['filter4'] + ',' \
                                         + regression_data['filter5']
         return True
@@ -1458,7 +1458,7 @@ def sell_filter_345_accuracy(regression_data, regressionResult):
             + filterNameTail + ',' \
             + pctChange5Day + ',' \
             + regression_data['series_trend'] + ',' \
-            + regression_data['filter2'] + ',' \
+            + regression_data['filter1'] + ',' \
             + regression_data['filter3'] + ',' \
             + regression_data['filter5']
                 
@@ -1595,7 +1595,7 @@ def sell_filter_tech_all_pct_change_accuracy(regression_data, regressionResult):
             + pctChange5Day + ',' \
             + 'B@{' + regression_data['buyIndia'] + '}' \
             + 'S@{' + regression_data['sellIndia'] + '}' \
-            + regression_data['filter2'] + ',' \
+            + regression_data['filter1'] + ',' \
             + regression_data['filter4'] + ',' \
             + regression_data['filter5']
             
