@@ -32,9 +32,9 @@ if __name__ == "__main__":
             #( {33489} ( ( {cash} ( ( ( ( [=1] 15 minute low - 1 day ago close ) * 100 ) / 1 day ago close ) < -2 and latest low < 1 day ago close and [-1] 5 minute close < 1 day ago close and [-1] 5 minute close > [=1] 5 minute close and [0] 5 minute vwap > [-2] 5 minute vwap and ( ( [0] 5 minute vwap - [=1] 5 minute vwap ) * 100 ) / [=1] 5 minute vwap > 0.5 ) ) ) )
             process_url_volBreakout('https://chartink.com/screener/buy-morning-down-1', 'marketUpBuy-(marketDown,lastDayDown-sellCheckBase,lastDayUp-buy)', time_09_15, time_10_15)
 
-        if(sb.nw>= time_09_45 and sb.nw <= time_11_30):
+        if(sb.nw>= time_09_30 and sb.nw <= time_11_30):
             #( {33489} ( ( {cash} ( ( ( ( [=1] 15 minute low - 1 day ago close ) * 100 ) / 1 day ago close ) < -0.75 and ( ( ( [=1] 15 minute low - 1 day ago close ) * 100 ) / 1 day ago close ) > -2.5 and latest low < 1 day ago close and [-1] 5 minute close > 1 day ago close and [-1] 5 minute close > [=1] 5 minute close and [0] 5 minute vwap > [-2] 5 minute vwap and ( ( [-1] 1 minute vwap - [=1] 1 minute vwap ) * 100 ) / [=1] 1 minute vwap > 0.5 and ( ( [-1] 5 minute vwap - [=1] 5 minute vwap ) * 100 ) / [=1] 5 minute vwap > 0 and ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and [=1] 5 minute volume > greatest(  2 days ago volume / 24  ) ) ) and abs ( 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" ) > 1 ) ) ) )
-            process_url_volBreakout('https://chartink.com/screener/buy-morning-down-2', 'checkChartBuy-morningDown', time_09_45, time_11_30)
+            process_url_volBreakout('https://chartink.com/screener/buy-morning-down-2', 'checkChartBuy-morningDown', time_09_15, time_11_30)
 
         #if(sb.nw>= time_11_30 and sb.nw <= time_13_30):
             #process_url_volBreakout('https://chartink.com/screener/buy-morning-down-3', 'buy-morning-down-breakout-VWAP-3-11:30', time_11_30, time_13_30)

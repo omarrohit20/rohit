@@ -466,8 +466,7 @@ def buy_test_345(regression_data, regressionResult, reg, ws):
                                     + pctChange5Day + ',' \
                                     + regression_data['series_trend'] + ',' \
                                     + regression_data['filter1'] + ',' \
-                                    + regression_data['filter3'] + ',' \
-                                    + regression_data['filter5']
+                                    + regression_data['filter3']
     
     if regression_data['filterTest'] != '':
         return True  
@@ -638,7 +637,6 @@ def buy_test_tech_all_pct_change(regression_data, regressionResult, reg, ws):
                                         + pctChange5Day + ','\
                                         + 'B@{' + regression_data['buyIndia'] + '}' \
                                         + 'S@{' + regression_data['sellIndia'] + '}' \
-                                        + regression_data['filter1'] + ',' \
                                         + regression_data['filter4'] + ',' \
                                         + regression_data['filter5']
         return True
@@ -677,8 +675,7 @@ def buy_filter_345_accuracy(regression_data, regressionResult):
             + pctChange5Day + ','\
             + regression_data['series_trend'] + ',' \
             + regression_data['filter1'] + ',' \
-            + regression_data['filter3'] + ',' \
-            + regression_data['filter5']
+            + regression_data['filter3']
     if (filter != '') and (filter in filtersDict):
         regression_data['filter_345_avg'] = float(filtersDict[filter]['avg'])
         regression_data['filter_345_count'] = float(filtersDict[filter]['count'])
@@ -812,7 +809,6 @@ def buy_filter_tech_all_pct_change_accuracy(regression_data, regressionResult):
             + pctChange5Day + ','\
             + 'B@{' + regression_data['buyIndia'] + '}' \
             + 'S@{' + regression_data['sellIndia'] + '}' \
-            + regression_data['filter1'] + ',' \
             + regression_data['filter4'] + ',' \
             + regression_data['filter5']
             
@@ -1252,8 +1248,7 @@ def sell_test_345(regression_data, regressionResult, reg, ws):
                                     + pctChange5Day + ',' \
                                     + regression_data['series_trend'] + ',' \
                                     + regression_data['filter1'] + ',' \
-                                    + regression_data['filter3'] + ',' \
-                                    + regression_data['filter5']
+                                    + regression_data['filter3']
     if regression_data['filterTest'] != '':
         return True  
     return False
@@ -1420,7 +1415,6 @@ def sell_test_tech_all_pct_change(regression_data, regressionResult, reg, ws):
                                         + pctChange5Day + ',' \
                                         + 'B@{' + regression_data['buyIndia'] + '}' \
                                         + 'S@{' + regression_data['sellIndia'] + '}' \
-                                        + regression_data['filter1'] + ',' \
                                         + regression_data['filter4'] + ',' \
                                         + regression_data['filter5']
         return True
@@ -1459,8 +1453,7 @@ def sell_filter_345_accuracy(regression_data, regressionResult):
             + pctChange5Day + ',' \
             + regression_data['series_trend'] + ',' \
             + regression_data['filter1'] + ',' \
-            + regression_data['filter3'] + ',' \
-            + regression_data['filter5']
+            + regression_data['filter3']
                 
     if (filter != '') and (filter in filtersDict):
         regression_data['filter_345_avg'] = float(filtersDict[filter]['avg'])
@@ -1595,7 +1588,6 @@ def sell_filter_tech_all_pct_change_accuracy(regression_data, regressionResult):
             + pctChange5Day + ',' \
             + 'B@{' + regression_data['buyIndia'] + '}' \
             + 'S@{' + regression_data['sellIndia'] + '}' \
-            + regression_data['filter1'] + ',' \
             + regression_data['filter4'] + ',' \
             + regression_data['filter5']
             
