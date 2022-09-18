@@ -814,15 +814,28 @@ def result_data_reg(scrip):
             if(('Buy-AnyGT2'in regression_high_copy1['filter2'] or 'Buy-AnyGT2' in regression_low_copy1['filter2'])
                 and 'Buy-Any' in regression_high_copy1['filter2'] and 'Buy-Any' in regression_low_copy1['filter2']
                 and 'Sell-Any' not in regression_high_copy1['filter2'] and 'Sell-Any' not in regression_low_copy1['filter2']
+                and (abs(regression_high_copy1['PCT_change']) > 1.5 or abs(regression_high_copy1['PCT_change_pre1']) > 1.5)
                 ):
                 all_withoutml(regression_high_copy1, regressionResultHigh, ws_allFilterAcc)
                 all_withoutml(regression_low_copy1, regressionResultLow, ws_allFilterAcc)  
             if(('Sell-AnyGT2'in regression_high_copy1['filter2'] or 'Sell-AnyGT2' in regression_low_copy1['filter2'])
                 and 'Sell-Any' in regression_high_copy1['filter2'] and 'Sell-Any' in regression_low_copy1['filter2']
                 and 'Buy-Any' not in regression_high_copy1['filter2'] and 'Buy-Any' not in regression_low_copy1['filter2']
+                and (abs(regression_high_copy1['PCT_change']) > 1.5 or abs(regression_high_copy1['PCT_change_pre1']) > 1.5)
                 ):
                 all_withoutml(regression_high_copy1, regressionResultHigh, ws_allFilterAcc)
-                all_withoutml(regression_low_copy1, regressionResultLow, ws_allFilterAcc)     
+                all_withoutml(regression_low_copy1, regressionResultLow, ws_allFilterAcc)
+
+            if (('Buy-SUPER' in regression_high_copy1['filter2'] or 'Buy-SUPER' in regression_low_copy1['filter2'])
+                and (abs(regression_high_copy1['PCT_change']) > 2 or abs(regression_high_copy1['PCT_change_pre1']) > 2)
+                ):
+                all_withoutml(regression_high_copy1, regressionResultHigh, ws_allFilterAcc)
+                all_withoutml(regression_low_copy1, regressionResultLow, ws_allFilterAcc)
+            if (('Sell-SUPER' in regression_high_copy1['filter2'] or 'Sell-SUPER' in regression_low_copy1['filter2'])
+                and (abs(regression_high_copy1['PCT_change']) > 2 or abs(regression_high_copy1['PCT_change_pre1']) > 2)
+                ):
+                all_withoutml(regression_high_copy1, regressionResultHigh, ws_allFilterAcc)
+                all_withoutml(regression_low_copy1, regressionResultLow, ws_allFilterAcc)
         
 def result_data_cla(scrip):
     regression_high = db.regressionhigh.find_one({'scrip':scrip})
