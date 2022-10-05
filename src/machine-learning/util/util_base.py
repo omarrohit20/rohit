@@ -34,6 +34,29 @@ sellKN_MIN = 0
 connection = MongoClient('localhost',27017)
 db = connection.Nsedata
 
+def patterns_to_dict_st(filename):
+    tempDict = {}
+    count = 0
+    with open(filename) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        for row in readCSV:
+            try:
+                if (count != 0):
+                    dictValue = {}
+                    dictValue['avg5'] = row[1]
+                    dictValue['countgt5'] = row[2]
+                    dictValue['countlt5'] = row[3]
+                    dictValue['avg10'] = row[4]
+                    dictValue['countgt10'] = row[5]
+                    dictValue['countlt10'] = row[6]
+                    dictValue['count'] = row[7]
+                    tempDict[row[0]] = dictValue
+                count = count + 1
+            except:
+                pass
+    'avg5', 'countgt5', 'countlt5', 'avg10', 'countgt10', 'countlt10', 'count'
+    return tempDict
+
 def patterns_to_dict(filename):  
     tempDict = {}
     count = 0
@@ -84,6 +107,21 @@ def all_withoutml(regression_data, regressionResult, ws):
     tempRegressionResult.append(regression_data['filter_tech_all_pct_change_avg'])
     tempRegressionResult.append(regression_data['filter_tech_all_pct_change_count'])
     tempRegressionResult.append(regression_data['filter_tech_all_pct_change_pct'])
+    tempRegressionResult.append(regression_data['filterst_avg5'])
+    tempRegressionResult.append(regression_data['filterst_pct5'])
+    tempRegressionResult.append(regression_data['filterst_avg10'])
+    tempRegressionResult.append(regression_data['filterst_pct10'])
+    tempRegressionResult.append(regression_data['filterst_count'])
+    tempRegressionResult.append(regression_data['filter3st_avg5'])
+    tempRegressionResult.append(regression_data['filter3st_pct5'])
+    tempRegressionResult.append(regression_data['filter3st_avg10'])
+    tempRegressionResult.append(regression_data['filter3st_pct10'])
+    tempRegressionResult.append(regression_data['filter3st_count'])
+    tempRegressionResult.append(regression_data['filter4st_avg5'])
+    tempRegressionResult.append(regression_data['filter4st_pct5'])
+    tempRegressionResult.append(regression_data['filter4st_avg10'])
+    tempRegressionResult.append(regression_data['filter4st_pct10'])
+    tempRegressionResult.append(regression_data['filter4st_count'])
     ws.append(tempRegressionResult) if (ws is not None) else False
     if(db.resultScripFutures.find_one({'scrip':regression_data['scrip']}) is None):
         db.resultScripFutures.insert_one({
@@ -2764,6 +2802,21 @@ def get_regressionResult(regression_data, scrip, db, mlp_r_o, kneighbours_r_o, m
     regression_data['filter_tech_all_pct_change_avg'] = 0
     regression_data['filter_tech_all_pct_change_count'] = 0
     regression_data['filter_tech_all_pct_change_pct'] = 0
+    regression_data['filterst_avg5'] = 0
+    regression_data['filterst_pct5'] = 0
+    regression_data['filterst_avg10'] = 0
+    regression_data['filterst_pct10'] = 0
+    regression_data['filterst_count'] = 0
+    regression_data['filter3st_avg5'] = 0
+    regression_data['filter3st_pct5'] = 0
+    regression_data['filter3st_avg10'] = 0
+    regression_data['filter3st_pct10'] = 0
+    regression_data['filter3st_count'] = 0
+    regression_data['filter4st_avg5'] = 0
+    regression_data['filter4st_pct5'] = 0
+    regression_data['filter4st_avg10'] = 0
+    regression_data['filter4st_pct10'] = 0
+    regression_data['filter4st_count'] = 0
     regression_data['series_trend'] = trend_calculator(regression_data)
     regression_data['oi'] = float(-10000)
     regression_data['contract'] = float(-10000)

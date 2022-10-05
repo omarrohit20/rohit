@@ -6,7 +6,7 @@ import pprint
 from util.util import pct_change_filter, getScore, all_day_pct_change_negative, all_day_pct_change_positive, no_doji_or_spinning_buy_india, no_doji_or_spinning_sell_india, scrip_patterns_to_dict
 from util.util import is_algo_buy, is_algo_sell
 from util.util import get_regressionResult
-from util.util import buy_test_345, buy_test, buy_test_pct_change, buy_test_all, buy_test_tech, buy_test_tech_all, buy_test_tech_all_pct_change, buy_other_indicator, buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final
+from util.util import test_short_term_filter, buy_test_345, buy_test, buy_test_pct_change, buy_test_all, buy_test_tech, buy_test_tech_all, buy_test_tech_all_pct_change, buy_other_indicator, buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final
 from util.util import sell_test_345, sell_test, sell_test_pct_change, sell_test_all, sell_test_tech, sell_test_tech_all, sell_test_tech_all_pct_change, sell_other_indicator, sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final
 from util.util import buy_oi, sell_oi, all_withoutml
 from util.util import buy_all_filter, buy_all_common, sell_all_filter, sell_all_common
@@ -26,6 +26,14 @@ def curs_to_csv(curser, filename):
     with open(filename, 'w') as outfile:   
         write = csv.DictWriter(outfile, fieldnames=fields)
         for record in data: 
+            write.writerow(record)
+
+def curs_to_csv_short_term(curser, filename):
+    data = list(curser)
+    fields = ['filterTest', 'avg5', 'countgt5', 'countlt5', 'avg10', 'countgt10', 'countlt10', 'count']
+    with open(filename, 'w') as outfile:
+        write = csv.DictWriter(outfile, fieldnames=fields)
+        for record in data:
             write.writerow(record)
 
 def tech_buy_curs_to_csv(curser, filename):
@@ -61,6 +69,139 @@ def db_cleanup():
     dbresult.drop_collection('sell_test_tech_all')
     dbresult.drop_collection('sell_test_tech_all_pct_change')
 
+
+def import_short_term_data_in_db_and_save():
+    print('\n\n\n\n############################################')
+    print('export_data_patterns_from_db')
+    print('############################################')
+    pipelinefiltertest = [{"$project": {"close_post5_change": "$close_post5_change",
+                              "close_post10_change": "$close_post10_change",
+                              "close_post20_change": "$close_post20_change",
+                              "filterTest": "$filterTest",
+                              }},
+                {"$project": {"_id": "$_id",
+                              "___group": {"filterTest": "$filterTest"},
+                              "close_post5_change": "$close_post5_change",
+                              "close_post10_change": "$close_post10_change",
+                              "close_post20_change": "$close_post20_change",
+                              }},
+                {"$group": {"_id": "$___group",
+                            "avg5": {"$avg": "$close_post5_change"},
+                            "countgt5": {"$sum": {"$cond": [{"$gt": ['$close_post5_change', 0]}, 1, 0]}},
+                            "countlt5": {"$sum": {"$cond": [{"$lt": ['$close_post5_change', 0]}, 1, 0]}},
+                            "avg10": {"$avg": "$close_post10_change"},
+                            "countgt10": {"$sum": {"$cond": [{"$gt": ['$close_post10_change', 0]}, 1, 0]}},
+                            "countlt10": {"$sum": {"$cond": [{"$lt": ['$close_post10_change', 0]}, 1, 0]}},
+                            "count": {"$sum": 1},
+                            }},
+                {"$project": {"_id": False, "filterTest": "$_id.filterTest", "avg5": True, "countgt5":True, "countlt5": True, "avg10": True,
+                              "countgt10": True, "countlt10": True, "count": True}}
+                ]
+
+    pipelinefilter3 = [{"$project": {"close_post5_change": "$close_post5_change",
+                              "close_post10_change": "$close_post10_change",
+                              "close_post20_change": "$close_post20_change",
+                              "filter3": "$filter3",
+                              }},
+                {"$project": {"_id": "$_id",
+                              "___group": {"filter3": "$filter3"},
+                              "close_post5_change": "$close_post5_change",
+                              "close_post10_change": "$close_post10_change",
+                              "close_post20_change": "$close_post20_change",
+                              }},
+                {"$group": {"_id": "$___group",
+                            "avg5": {"$avg": "$close_post5_change"},
+                            "countgt5": {"$sum": {"$cond": [{"$gt": ['$close_post5_change', 0]}, 1, 0]}},
+                            "countlt5": {"$sum": {"$cond": [{"$lt": ['$close_post5_change', 0]}, 1, 0]}},
+                            "avg10": {"$avg": "$close_post10_change"},
+                            "countgt10": {"$sum": {"$cond": [{"$gt": ['$close_post10_change', 0]}, 1, 0]}},
+                            "countlt10": {"$sum": {"$cond": [{"$lt": ['$close_post10_change', 0]}, 1, 0]}},
+                            "count": {"$sum": 1},
+                            }},
+                {"$project": {"_id": False, "filterTest": "$_id.filter3", "avg5": True, "countgt5":True, "countlt5": True, "avg10": True,
+                              "countgt10": True, "countlt10": True, "count": True}}
+                ]
+
+    pipelinefilter4 = [{"$project": {"close_post5_change": "$close_post5_change",
+                              "close_post10_change": "$close_post10_change",
+                              "close_post20_change": "$close_post20_change",
+                              "filter4": "$filter4",
+                              }},
+                {"$project": {"_id": "$_id",
+                              "___group": {"filter4": "$filter4"},
+                              "close_post5_change": "$close_post5_change",
+                              "close_post10_change": "$close_post10_change",
+                              "close_post20_change": "$close_post20_change",
+                              }},
+                {"$group": {"_id": "$___group",
+                            "avg5": {"$avg": "$close_post5_change"},
+                            "countgt5": {"$sum": {"$cond": [{"$gt": ['$close_post5_change', 0]}, 1, 0]}},
+                            "countlt5": {"$sum": {"$cond": [{"$lt": ['$close_post5_change', 0]}, 1, 0]}},
+                            "avg10": {"$avg": "$close_post10_change"},
+                            "countgt10": {"$sum": {"$cond": [{"$gt": ['$close_post10_change', 0]}, 1, 0]}},
+                            "countlt10": {"$sum": {"$cond": [{"$lt": ['$close_post10_change', 0]}, 1, 0]}},
+                            "count": {"$sum": 1},
+                            }},
+                {"$project": {"_id": False, "filterTest": "$_id.filter4", "avg5": True, "countgt5":True, "countlt5": True, "avg10": True,
+                              "countgt10": True, "countlt10": True, "count": True}}
+                ]
+
+    print('############################################')
+    print('import_data_in_db')
+    print('############################################')
+
+    """
+    print('buy_test_short_term_filter')
+    dbresult.drop_collection('buy_test_short_term_filter')
+    curs = db.ws_high.find({})
+    for data in curs:
+        if (data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
+            data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
+            flag = test_short_term_filter(data, data, True, None)
+            if (flag):
+                del data['_id']
+                dbresult.buy_test_short_term_filter.insert_one(json.loads(json.dumps(data)))
+
+    print('buy_test_short_term')
+    curser = dbresult.buy_test_short_term_filter.aggregate(pipelinefiltertest, allowDiskUse=True)
+    curs_to_csv_short_term(curser, '../../data-import/nselist/buy_test_short_term_filter.csv')
+    curser = dbresult.buy_test_short_term_filter.aggregate(pipelinefilter3, allowDiskUse=True)
+    curs_to_csv_short_term(curser, '../../data-import/nselist/buy_test_short_term_filter3.csv')
+    curser = dbresult.buy_test_short_term_filter.aggregate(pipelinefilter4, allowDiskUse=True)
+    curs_to_csv_short_term(curser, '../../data-import/nselist/buy_test_short_term_filter4.csv')
+    dbresult.drop_collection('buy_test_short_term_filter')
+    """
+    
+    print('sell_test_short_term')
+    dbresult.drop_collection('sell_test_short_term_filter')
+    curs = db.ws_low.find({})
+    for data in curs:
+        if (data['close'] > CLOSEPRICE and data['PCT_day_change'] != 0):
+            data['filterTest'] = ''
+            data['buyIndia_avg'] = 0
+            data['buyIndia_count'] = 0
+            data['sellIndia_avg'] = 0
+            data['sellIndia_count'] = 0
+            data['contract'] = 0
+            flag = test_short_term_filter(data, data, True, None)
+            if (flag):
+                del data['_id']
+                dbresult.sell_test_short_term_filter.insert_one(json.loads(json.dumps(data)))
+    print('sell_test_short_term')
+    curser = dbresult.sell_test_short_term_filter.aggregate(pipelinefiltertest, allowDiskUse=True)
+    curs_to_csv_short_term(curser, '../../data-import/nselist/sell_test_short_term_filter.csv')
+    curser = dbresult.sell_test_short_term_filter.aggregate(pipelinefilter3, allowDiskUse=True)
+    curs_to_csv_short_term(curser, '../../data-import/nselist/sell_test_short_term_filter3.csv')
+    curser = dbresult.sell_test_short_term_filter.aggregate(pipelinefilter4, allowDiskUse=True)
+    curs_to_csv_short_term(curser, '../../data-import/nselist/sell_test_short_term_filter4.csv')
+    dbresult.drop_collection('sell_test_short_term_filter')
+
+
 def import_data_in_db_and_save():
     print('\n\n\n\n############################################')
     print('export_data_patterns_from_db')
@@ -87,7 +228,7 @@ def import_data_in_db_and_save():
     print('############################################')
     print('import_data_in_db')
     print('############################################')
-    
+
     print('buy_test_345')
     dbresult.drop_collection('buy_test_345')       
     curs = db.ws_high.find({})
@@ -378,7 +519,7 @@ def import_data_in_db_and_save():
     curser = dbresult.sell_test_tech_all_pct_change.aggregate(pipeline, allowDiskUse=True)
     curs_to_csv(curser, '../../data-import/nselist/filter-tech-all-pct-change-sell.csv') 
     dbresult.drop_collection('sell_test_tech_all_pct_change')
- 
+
 def import_filter_data_in_db():
     print('############################################')
     print('import_filter_data_in_db')
@@ -430,5 +571,6 @@ def export_tech_patterns_from_db():
 if __name__ == "__main__":  
     db_cleanup() 
     #export_tech_patterns_from_db() 
-    import_data_in_db_and_save()
+    #import_data_in_db_and_save()
+    import_short_term_data_in_db_and_save()
     db_cleanup()

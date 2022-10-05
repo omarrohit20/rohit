@@ -2,6 +2,7 @@ import csv
 from openpyxl import Workbook
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.styles import Color, PatternFill, Font, Border
+import json
 from pymongo import MongoClient
 from multiprocessing.dummy import Pool as ThreadPool
 
@@ -18,7 +19,9 @@ from util.util_base import *
 
 connection = MongoClient('localhost',27017)
 db = connection.Nsedata
-
+filterstsell = patterns_to_dict_st('../../data-import/nselist/sell_test_short_term_filter.csv')
+filter3stsell = patterns_to_dict_st('../../data-import/nselist/sell_test_short_term_filter3.csv')
+filter4stsell = patterns_to_dict_st('../../data-import/nselist/sell_test_short_term_filter4.csv')
 filter345sell = patterns_to_dict('../../data-import/nselist/filter-345-sell.csv')
 filtersell = patterns_to_dict('../../data-import/nselist/filter-sell.csv')
 filterpctchangesell = patterns_to_dict('../../data-import/nselist/filter-pct-change-sell.csv')
@@ -26,6 +29,9 @@ filterallsell = patterns_to_dict('../../data-import/nselist/filter-all-sell.csv'
 filtertechsell = patterns_to_dict('../../data-import/nselist/filter-tech-buy.csv')
 filtertechallsell = patterns_to_dict('../../data-import/nselist/filter-tech-all-buy.csv')
 filtertechallpctchangesell = patterns_to_dict('../../data-import/nselist/filter-tech-all-pct-change-buy.csv')
+filterstbuy = patterns_to_dict_st('../../data-import/nselist/buy_test_short_term_filter.csv')
+filter3stbuy = patterns_to_dict_st('../../data-import/nselist/buy_test_short_term_filter3.csv')
+filter4stbuy = patterns_to_dict_st('../../data-import/nselist/buy_test_short_term_filter4.csv')
 filter345buy = patterns_to_dict('../../data-import/nselist/filter-345-buy.csv')
 filterbuy = patterns_to_dict('../../data-import/nselist/filter-buy.csv')
 filterpctchangebuy = patterns_to_dict('../../data-import/nselist/filter-pct-change-buy.csv')
@@ -33,6 +39,22 @@ filterallbuy = patterns_to_dict('../../data-import/nselist/filter-all-buy.csv')
 filtertechbuy = patterns_to_dict('../../data-import/nselist/filter-tech-buy.csv')
 filtertechallbuy = patterns_to_dict('../../data-import/nselist/filter-tech-all-buy.csv')
 filtertechallpctchangebuy = patterns_to_dict('../../data-import/nselist/filter-tech-all-pct-change-buy.csv')
+
+def insert_scripdata_st(scrip, date, filter, avg5, pct5, avg10, pct10, count):
+    data = {}
+    data['scrip'] = scrip
+    data['date'] = date
+    data['filter'] = filter
+    data['avg5'] = avg5
+    data['pct5'] = pct5
+    data['avg10'] = avg10
+    data['pct10'] = pct10
+    data['count'] = count
+    json_data = json.loads(json.dumps(data))
+    if (db.sttips.find(json_data).count()) < 1:
+        if abs(pct5) > 80:
+            print(json_data)
+            db.sttips.insert_one(json_data)
 
 
 def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
@@ -445,7 +467,25 @@ def buy_indicator_after_filter_accuracy(regression_data, regressionResult, reg, 
             
 def buy_skip_close_lt_50(regression_data, regressionResult, reg, ws):
     return False
-        
+
+def test_short_term_filter(regression_data, regressionResult, reg, ws):
+    regression_data['filterbuy'] = " "
+    regression_data['filtersell'] = " "
+    regression_data['filter'] = " "
+    regression_data['filter1'] = " "
+    regression_data['filter2'] = " "
+    regression_data['filter3'] = " "
+    regression_data['filter4'] = " "
+    regression_data['filter5'] = " "
+    regression_data['filter6'] = " "
+    regression_data['series_trend'] = trend_calculator(regression_data)
+    flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
+    filterName = pct_change_filter(regression_data, regressionResult, False)
+    filterNameTail = tail_change_filter(regression_data, regressionResult, False)
+    pctChange5Day = pct_change_filter_days(regression_data, regressionResult, False)
+    regression_data['filterTest'] = regression_data['filter'] + ',' + regression_data['filter1']
+    return True
+
 def buy_test_345(regression_data, regressionResult, reg, ws):
     regression_data['filterbuy'] = " "
     regression_data['filtersell'] = " "
@@ -665,6 +705,89 @@ def buy_all_filter(regression_data, regressionResult, reg, ws):
         flag = True
     return flag
 
+def buy_filter_st_accuracy(regression_data, regressionResult):
+    filtersDict = filterstbuy
+    filter = regression_data['filter'] + ',' + regression_data['filter1']
+    if (filter != '') and (filter in filtersDict):
+        if float(filtersDict[filter]['count']) >= 2:
+            if abs(float(filtersDict[filter]['avg5'])) >= 5 and abs(float(filtersDict[filter]['avg10'])) > abs(
+                    float(filtersDict[filter]['avg5'])):
+                regression_data['filterst_avg5'] = float(filtersDict[filter]['avg5'])
+                regression_data['filterst_avg10'] = float(filtersDict[filter]['avg10'])
+                regression_data['filterst_count'] = float(filtersDict[filter]['count'])
+                if float(filtersDict[filter]['avg5']) >= 0:
+                    regression_data['filterst_pct5'] = (float(filtersDict[filter]['countgt5']) * 100) / float(
+                        filtersDict[filter]['count'])
+                    regression_data['filterst_pct10'] = (float(filtersDict[filter]['countgt10']) * 100) / float(
+                        filtersDict[filter]['count'])
+                else:
+                    regression_data['filterst_pct5'] = -(float(filtersDict[filter]['countlt5']) * 100) / float(
+                        filtersDict[filter]['count'])
+                    regression_data['filterst_pct10'] = -(float(filtersDict[filter]['countlt10']) * 100) / float(
+                        filtersDict[filter]['count'])
+                insert_scripdata_st(regression_data['scrip'],
+                                    regression_data['date'],
+                                    filter,
+                                    regression_data['filterst_avg5'],
+                                    regression_data['filterst_pct5'],
+                                    regression_data['filterst_avg10'],
+                                    regression_data['filterst_pct10'],
+                                    regression_data['filterst_count'])
+    filtersDict = filter3stbuy
+    filter = regression_data['filter3']
+    if (filter != '') and (filter in filtersDict):
+        if float(filtersDict[filter]['count']) >= 2:
+            if abs(float(filtersDict[filter]['avg5'])) >= 5 and abs(float(filtersDict[filter]['avg10'])) > abs(
+                    float(filtersDict[filter]['avg5'])):
+                regression_data['filter3st_avg5'] = float(filtersDict[filter]['avg5'])
+                regression_data['filter3st_avg10'] = float(filtersDict[filter]['avg10'])
+                regression_data['filter3st_count'] = float(filtersDict[filter]['count'])
+                if float(filtersDict[filter]['avg5']) >= 0:
+                    regression_data['filter3st_pct5'] = (float(filtersDict[filter]['countgt5']) * 100) / float(
+                        filtersDict[filter]['count'])
+                    regression_data['filter3st_pct10'] = (float(filtersDict[filter]['countgt10']) * 100) / float(
+                        filtersDict[filter]['count'])
+                else:
+                    regression_data['filter3st_pct5'] = -(float(filtersDict[filter]['countlt5']) * 100) / float(
+                        filtersDict[filter]['count'])
+                    regression_data['filter3st_pct10'] = -(float(filtersDict[filter]['countlt10']) * 100) / float(
+                        filtersDict[filter]['count'])
+                insert_scripdata_st(regression_data['scrip'],
+                                    regression_data['date'],
+                                    filter,
+                                    regression_data['filter3st_avg5'],
+                                    regression_data['filter3st_pct5'],
+                                    regression_data['filter3st_avg10'],
+                                    regression_data['filter3st_pct10'],
+                                    regression_data['filter3st_count'])
+    filtersDict = filter4stbuy
+    filter = regression_data['filter4']
+    if (filter != '') and (filter in filtersDict):
+        if float(filtersDict[filter]['count']) >= 2:
+            if abs(float(filtersDict[filter]['avg5'])) >= 5 and abs(float(filtersDict[filter]['avg10'])) > abs(
+                    float(filtersDict[filter]['avg5'])):
+                regression_data['filter4st_avg5'] = float(filtersDict[filter]['avg5'])
+                regression_data['filter4st_avg10'] = float(filtersDict[filter]['avg10'])
+                regression_data['filter4st_count'] = float(filtersDict[filter]['count'])
+                if float(filtersDict[filter]['avg5']) >= 0:
+                    regression_data['filter4st_pct5'] = (float(filtersDict[filter]['countgt5']) * 100) / float(
+                        filtersDict[filter]['count'])
+                    regression_data['filter4st_pct10'] = (float(filtersDict[filter]['countgt10']) * 100) / float(
+                        filtersDict[filter]['count'])
+                else:
+                    regression_data['filter4st_pct5'] = -(float(filtersDict[filter]['countlt5']) * 100) / float(
+                        filtersDict[filter]['count'])
+                    regression_data['filter4st_pct10'] = -(float(filtersDict[filter]['countlt10']) * 100) / float(
+                        filtersDict[filter]['count'])
+                insert_scripdata_st(regression_data['scrip'],
+                                    regression_data['date'],
+                                    filter,
+                                    regression_data['filter4st_avg5'],
+                                    regression_data['filter4st_pct5'],
+                                    regression_data['filter4st_avg10'],
+                                    regression_data['filter4st_pct10'],
+                                    regression_data['filter4st_count'])
+
 def buy_filter_345_accuracy(regression_data, regressionResult):
     filtersDict=filter345buy
     filterName = pct_change_filter(regression_data, regressionResult, False)
@@ -823,6 +946,7 @@ def buy_filter_tech_all_pct_change_accuracy(regression_data, regressionResult):
 
 def buy_filter_all_accuracy(regression_data, regressionResult):
     if(regression_data['close'] > CLOSEPRICE):
+        buy_filter_st_accuracy(regression_data, regressionResult)
         buy_filter_345_accuracy(regression_data, regressionResult)
         buy_filter_accuracy(regression_data, regressionResult)
         buy_filter_pct_change_accuracy(regression_data, regressionResult) 
@@ -1443,6 +1567,90 @@ def sell_all_filter(regression_data, regressionResult, reg, ws):
         flag = True
     return flag
 
+def sell_filter_st_accuracy(regression_data, regressionResult):
+    filtersDict = filterstsell
+    filter = regression_data['filter'] + ',' + regression_data['filter1']
+    if (filter != '') and (filter in filtersDict):
+        if float(filtersDict[filter]['count']) >= 2:
+            if abs(float(filtersDict[filter]['avg5'])) >= 5 and abs(float(filtersDict[filter]['avg10'])) > abs(
+                    float(filtersDict[filter]['avg5'])):
+                regression_data['filterst_avg5'] = float(filtersDict[filter]['avg5'])
+                regression_data['filterst_avg10'] = float(filtersDict[filter]['avg10'])
+                regression_data['filterst_count'] = float(filtersDict[filter]['count'])
+                if float(filtersDict[filter]['avg5']) >= 0:
+                    regression_data['filterst_pct5'] = (float(filtersDict[filter]['countgt5']) * 100) / float(
+                        filtersDict[filter]['count'])
+                    regression_data['filterst_pct10'] = (float(filtersDict[filter]['countgt10']) * 100) / float(
+                        filtersDict[filter]['count'])
+                else:
+                    regression_data['filterst_pct5'] = -(float(filtersDict[filter]['countlt5']) * 100) / float(
+                        filtersDict[filter]['count'])
+                    regression_data['filterst_pct10'] = -(float(filtersDict[filter]['countlt10']) * 100) / float(
+                        filtersDict[filter]['count'])
+                insert_scripdata_st(regression_data['scrip'],
+                                    regression_data['date'],
+                                    filter,
+                                    regression_data['filterst_avg5'],
+                                    regression_data['filterst_pct5'],
+                                    regression_data['filterst_avg10'],
+                                    regression_data['filterst_pct10'],
+                                    regression_data['filterst_count'])
+    filtersDict = filter3stsell
+    filter = regression_data['filter3']
+    if (filter != '') and (filter in filtersDict):
+        if float(filtersDict[filter]['count']) >= 2:
+            if abs(float(filtersDict[filter]['avg5'])) >= 5 and abs(float(filtersDict[filter]['avg10'])) > abs(
+                    float(filtersDict[filter]['avg5'])):
+                regression_data['filter3st_avg5'] = float(filtersDict[filter]['avg5'])
+                regression_data['filter3st_avg10'] = float(filtersDict[filter]['avg10'])
+                regression_data['filter3st_count'] = float(filtersDict[filter]['count'])
+                if float(filtersDict[filter]['avg5']) >= 0:
+                    regression_data['filter3st_pct5'] = (float(filtersDict[filter]['countgt5']) * 100) / float(
+                        filtersDict[filter]['count'])
+                    regression_data['filter3st_pct10'] = (float(filtersDict[filter]['countgt10']) * 100) / float(
+                        filtersDict[filter]['count'])
+                else:
+                    regression_data['filter3st_pct5'] = -(float(filtersDict[filter]['countlt5']) * 100) / float(
+                        filtersDict[filter]['count'])
+                    regression_data['filter3st_pct10'] = -(float(filtersDict[filter]['countlt10']) * 100) / float(
+                        filtersDict[filter]['count'])
+                insert_scripdata_st(regression_data['scrip'],
+                                    regression_data['date'],
+                                    filter,
+                                    regression_data['filter3st_avg5'],
+                                    regression_data['filter3st_pct5'],
+                                    regression_data['filter3st_avg10'],
+                                    regression_data['filter3st_pct10'],
+                                    regression_data['filter3st_count'])
+    filtersDict = filter4stsell
+    filter = regression_data['filter4']
+    if (filter != '') and (filter in filtersDict):
+        if float(filtersDict[filter]['count']) >= 2:
+            if abs(float(filtersDict[filter]['avg5'])) >= 5 and abs(float(filtersDict[filter]['avg10'])) > abs(
+                    float(filtersDict[filter]['avg5'])):
+                regression_data['filter4st_avg5'] = float(filtersDict[filter]['avg5'])
+                regression_data['filter4st_avg10'] = float(filtersDict[filter]['avg10'])
+                regression_data['filter4st_count'] = float(filtersDict[filter]['count'])
+                if float(filtersDict[filter]['avg5']) >= 0:
+                    regression_data['filter4st_pct5'] = (float(filtersDict[filter]['countgt5']) * 100) / float(
+                        filtersDict[filter]['count'])
+                    regression_data['filter4st_pct10'] = (float(filtersDict[filter]['countgt10']) * 100) / float(
+                        filtersDict[filter]['count'])
+                else:
+                    regression_data['filter4st_pct5'] = -(float(filtersDict[filter]['countlt5']) * 100) / float(
+                        filtersDict[filter]['count'])
+                    regression_data['filter4st_pct10'] = -(float(filtersDict[filter]['countlt10']) * 100) / float(
+                        filtersDict[filter]['count'])
+                insert_scripdata_st(regression_data['scrip'],
+                                    regression_data['date'],
+                                    filter,
+                                    regression_data['filter4st_avg5'],
+                                    regression_data['filter4st_pct5'],
+                                    regression_data['filter4st_avg10'],
+                                    regression_data['filter4st_pct10'],
+                                    regression_data['filter4st_count'])
+
+
 def sell_filter_345_accuracy(regression_data, regressionResult):
     filtersDict = filter345sell
     filterName = pct_change_filter(regression_data, regressionResult, False)
@@ -1506,7 +1714,7 @@ def sell_filter_pct_change_accuracy(regression_data, regressionResult):
                     regression_data['filter_pct_change_pct'] = (float(filtersDict[filter]['countgt'])*100)/float(filtersDict[filter]['count'])
                 else:
                     regression_data['filter_pct_change_pct'] = -(float(filtersDict[filter]['countlt'])*100)/float(filtersDict[filter]['count'])
-                        
+
 def sell_filter_345_all_accuracy(regression_data, regressionResult):
     filtersDict=filterallsell
     filterName = pct_change_filter(regression_data, regressionResult, False)
@@ -1602,6 +1810,7 @@ def sell_filter_tech_all_pct_change_accuracy(regression_data, regressionResult):
 
 def sell_filter_all_accuracy(regression_data, regressionResult):
     if(regression_data['close'] > CLOSEPRICE):
+        sell_filter_st_accuracy(regression_data, regressionResult)
         sell_filter_345_accuracy(regression_data, regressionResult)
         sell_filter_accuracy(regression_data, regressionResult)
         sell_filter_pct_change_accuracy(regression_data, regressionResult) 
