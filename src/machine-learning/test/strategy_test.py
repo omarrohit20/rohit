@@ -87,11 +87,11 @@ def import_short_term_data_in_db_and_save():
                               }},
                 {"$group": {"_id": "$___group",
                             "avg5": {"$avg": "$close_post5_change"},
-                            "countgt5": {"$sum": {"$cond": [{"$gt": ['$close_post5_change', 0]}, 1, 0]}},
-                            "countlt5": {"$sum": {"$cond": [{"$lt": ['$close_post5_change', 0]}, 1, 0]}},
+                            "countgt5": {"$sum": {"$cond": [{"$gt": ['$close_post5_change', 5]}, 1, 0]}},
+                            "countlt5": {"$sum": {"$cond": [{"$lt": ['$close_post5_change', -5]}, 1, 0]}},
                             "avg10": {"$avg": "$close_post10_change"},
-                            "countgt10": {"$sum": {"$cond": [{"$gt": ['$close_post10_change', 0]}, 1, 0]}},
-                            "countlt10": {"$sum": {"$cond": [{"$lt": ['$close_post10_change', 0]}, 1, 0]}},
+                            "countgt10": {"$sum": {"$cond": [{"$gt": ['$close_post10_change', 10]}, 1, 0]}},
+                            "countlt10": {"$sum": {"$cond": [{"$lt": ['$close_post10_change', -10]}, 1, 0]}},
                             "count": {"$sum": 1},
                             }},
                 {"$project": {"_id": False, "filterTest": "$_id.filterTest", "avg5": True, "countgt5":True, "countlt5": True, "avg10": True,
@@ -111,11 +111,11 @@ def import_short_term_data_in_db_and_save():
                               }},
                 {"$group": {"_id": "$___group",
                             "avg5": {"$avg": "$close_post5_change"},
-                            "countgt5": {"$sum": {"$cond": [{"$gt": ['$close_post5_change', 0]}, 1, 0]}},
-                            "countlt5": {"$sum": {"$cond": [{"$lt": ['$close_post5_change', 0]}, 1, 0]}},
+                            "countgt5": {"$sum": {"$cond": [{"$gt": ['$close_post5_change', 5]}, 1, 0]}},
+                            "countlt5": {"$sum": {"$cond": [{"$lt": ['$close_post5_change', -5]}, 1, 0]}},
                             "avg10": {"$avg": "$close_post10_change"},
-                            "countgt10": {"$sum": {"$cond": [{"$gt": ['$close_post10_change', 0]}, 1, 0]}},
-                            "countlt10": {"$sum": {"$cond": [{"$lt": ['$close_post10_change', 0]}, 1, 0]}},
+                            "countgt10": {"$sum": {"$cond": [{"$gt": ['$close_post10_change', 10]}, 1, 0]}},
+                            "countlt10": {"$sum": {"$cond": [{"$lt": ['$close_post10_change', -10]}, 1, 0]}},
                             "count": {"$sum": 1},
                             }},
                 {"$project": {"_id": False, "filterTest": "$_id.filterTest", "avg5": True, "countgt5":True, "countlt5": True, "avg10": True,
@@ -135,11 +135,11 @@ def import_short_term_data_in_db_and_save():
                               }},
                 {"$group": {"_id": "$___group",
                             "avg5": {"$avg": "$close_post5_change"},
-                            "countgt5": {"$sum": {"$cond": [{"$gt": ['$close_post5_change', 0]}, 1, 0]}},
-                            "countlt5": {"$sum": {"$cond": [{"$lt": ['$close_post5_change', 0]}, 1, 0]}},
+                            "countgt5": {"$sum": {"$cond": [{"$gt": ['$close_post5_change', 5]}, 1, 0]}},
+                            "countlt5": {"$sum": {"$cond": [{"$lt": ['$close_post5_change', -5]}, 1, 0]}},
                             "avg10": {"$avg": "$close_post10_change"},
-                            "countgt10": {"$sum": {"$cond": [{"$gt": ['$close_post10_change', 0]}, 1, 0]}},
-                            "countlt10": {"$sum": {"$cond": [{"$lt": ['$close_post10_change', 0]}, 1, 0]}},
+                            "countgt10": {"$sum": {"$cond": [{"$gt": ['$close_post10_change', 10]}, 1, 0]}},
+                            "countlt10": {"$sum": {"$cond": [{"$lt": ['$close_post10_change', -10]}, 1, 0]}},
                             "count": {"$sum": 1},
                             }},
                 {"$project": {"_id": False, "filterTest": "$_id.filter4", "avg5": True, "countgt5":True, "countlt5": True, "avg10": True,
@@ -578,8 +578,8 @@ def export_tech_patterns_from_db():
     tech_sell_curs_to_csv(curser, '../../data-import/nselist/patterns-sell.csv')
     
 if __name__ == "__main__":  
-    db_cleanup() 
-    #export_tech_patterns_from_db() 
-    #import_data_in_db_and_save()
+    db_cleanup()
     import_short_term_data_in_db_and_save()
+    #export_tech_patterns_from_db() 
+    import_data_in_db_and_save()
     db_cleanup()
