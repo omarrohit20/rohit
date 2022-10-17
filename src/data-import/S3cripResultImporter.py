@@ -20,10 +20,10 @@ with open('nselist/ind_result.csv') as csvfile:
                 start_date = (datetime.datetime.now())
                 today = datetime.datetime(start_date.year, start_date.month, start_date.day)
                 
-                start_date = (datetime.datetime.now() - datetime.timedelta(days=4))
+                start_date = (datetime.datetime.now() - datetime.timedelta(days=2))
                 today_pre2 = datetime.datetime(start_date.year, start_date.month, start_date.day)
                 
-                start_date = (datetime.datetime.now() - datetime.timedelta(days=3))
+                start_date = (datetime.datetime.now() - datetime.timedelta(days=1))
                 today_pre1 = datetime.datetime(start_date.year, start_date.month, start_date.day)
                 
                 start_date = (datetime.datetime.now() + datetime.timedelta(days=1))
