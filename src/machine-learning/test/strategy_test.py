@@ -6,7 +6,7 @@ import pprint
 from util.util import pct_change_filter, getScore, all_day_pct_change_negative, all_day_pct_change_positive, no_doji_or_spinning_buy_india, no_doji_or_spinning_sell_india, scrip_patterns_to_dict
 from util.util import is_algo_buy, is_algo_sell
 from util.util import get_regressionResult
-from util.util import test_short_term_filter, buy_test_345, buy_test, buy_test_pct_change, buy_test_all, buy_test_tech, buy_test_tech_all, buy_test_tech_all_pct_change, buy_other_indicator, buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final
+from util.util import test_short_term_filter3, test_short_term_filter, buy_test_345, buy_test, buy_test_pct_change, buy_test_all, buy_test_tech, buy_test_tech_all, buy_test_tech_all_pct_change, buy_other_indicator, buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final
 from util.util import sell_test_345, sell_test, sell_test_pct_change, sell_test_all, sell_test_tech, sell_test_tech_all, sell_test_tech_all_pct_change, sell_other_indicator, sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final
 from util.util import buy_oi, sell_oi, all_withoutml
 from util.util import buy_all_filter, buy_all_common, sell_all_filter, sell_all_common
@@ -101,10 +101,10 @@ def import_short_term_data_in_db_and_save():
     pipelinefilter3 = [{"$project": {"close_post5_change": "$close_post5_change",
                               "close_post10_change": "$close_post10_change",
                               "close_post20_change": "$close_post20_change",
-                              "filter3": "$filter3",
+                              "filterTest": "$filterTest",
                               }},
                 {"$project": {"_id": "$_id",
-                              "___group": {"filter3": "$filter3"},
+                              "___group": {"filterTest": "$filterTest"},
                               "close_post5_change": "$close_post5_change",
                               "close_post10_change": "$close_post10_change",
                               "close_post20_change": "$close_post20_change",
@@ -118,7 +118,7 @@ def import_short_term_data_in_db_and_save():
                             "countlt10": {"$sum": {"$cond": [{"$lt": ['$close_post10_change', 0]}, 1, 0]}},
                             "count": {"$sum": 1},
                             }},
-                {"$project": {"_id": False, "filterTest": "$_id.filter3", "avg5": True, "countgt5":True, "countlt5": True, "avg10": True,
+                {"$project": {"_id": False, "filterTest": "$_id.filterTest", "avg5": True, "countgt5":True, "countlt5": True, "avg10": True,
                               "countgt10": True, "countlt10": True, "count": True}}
                 ]
 
@@ -150,7 +150,7 @@ def import_short_term_data_in_db_and_save():
     print('import_data_in_db')
     print('############################################')
 
-    """
+
     print('buy_test_short_term_filter')
     dbresult.drop_collection('buy_test_short_term_filter')
     curs = db.ws_high.find({})
@@ -162,20 +162,24 @@ def import_short_term_data_in_db_and_save():
             data['sellIndia_avg'] = 0
             data['sellIndia_count'] = 0
             data['contract'] = 0
+            del data['_id']
             flag = test_short_term_filter(data, data, True, None)
             if (flag):
-                del data['_id']
                 dbresult.buy_test_short_term_filter.insert_one(json.loads(json.dumps(data)))
+            flag = test_short_term_filter3(data, data, True, None)
+            if (flag):
+                dbresult.buy_test_short_term_filter3.insert_one(json.loads(json.dumps(data)))
 
     print('buy_test_short_term')
     curser = dbresult.buy_test_short_term_filter.aggregate(pipelinefiltertest, allowDiskUse=True)
     curs_to_csv_short_term(curser, '../../data-import/nselist/buy_test_short_term_filter.csv')
-    curser = dbresult.buy_test_short_term_filter.aggregate(pipelinefilter3, allowDiskUse=True)
-    curs_to_csv_short_term(curser, '../../data-import/nselist/buy_test_short_term_filter3.csv')
     curser = dbresult.buy_test_short_term_filter.aggregate(pipelinefilter4, allowDiskUse=True)
     curs_to_csv_short_term(curser, '../../data-import/nselist/buy_test_short_term_filter4.csv')
+
+    curser = dbresult.buy_test_short_term_filter3.aggregate(pipelinefilter3, allowDiskUse=True)
+    curs_to_csv_short_term(curser, '../../data-import/nselist/buy_test_short_term_filter3.csv')
     dbresult.drop_collection('buy_test_short_term_filter')
-    """
+    dbresult.drop_collection('buy_test_short_term_filter3')
     
     print('sell_test_short_term')
     dbresult.drop_collection('sell_test_short_term_filter')
@@ -188,18 +192,23 @@ def import_short_term_data_in_db_and_save():
             data['sellIndia_avg'] = 0
             data['sellIndia_count'] = 0
             data['contract'] = 0
+            del data['_id']
             flag = test_short_term_filter(data, data, True, None)
             if (flag):
-                del data['_id']
                 dbresult.sell_test_short_term_filter.insert_one(json.loads(json.dumps(data)))
+            flag = test_short_term_filter3(data, data, True, None)
+            if (flag):
+                dbresult.sell_test_short_term_filter3.insert_one(json.loads(json.dumps(data)))
     print('sell_test_short_term')
     curser = dbresult.sell_test_short_term_filter.aggregate(pipelinefiltertest, allowDiskUse=True)
     curs_to_csv_short_term(curser, '../../data-import/nselist/sell_test_short_term_filter.csv')
-    curser = dbresult.sell_test_short_term_filter.aggregate(pipelinefilter3, allowDiskUse=True)
-    curs_to_csv_short_term(curser, '../../data-import/nselist/sell_test_short_term_filter3.csv')
     curser = dbresult.sell_test_short_term_filter.aggregate(pipelinefilter4, allowDiskUse=True)
     curs_to_csv_short_term(curser, '../../data-import/nselist/sell_test_short_term_filter4.csv')
+
+    curser = dbresult.sell_test_short_term_filter3.aggregate(pipelinefilter3, allowDiskUse=True)
+    curs_to_csv_short_term(curser, '../../data-import/nselist/sell_test_short_term_filter3.csv')
     dbresult.drop_collection('sell_test_short_term_filter')
+    dbresult.drop_collection('sell_test_short_term_filter3')
 
 
 def import_data_in_db_and_save():

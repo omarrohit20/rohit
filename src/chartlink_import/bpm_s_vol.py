@@ -18,7 +18,7 @@ if __name__ == "__main__":
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-2', 'morning-volume-breakout-sell-2(lastDayMid-or-2daylow)', time_09_00, time_09_30)
 
         if(sb.nw>= time_09_25 and sb.nw <= time_09_45):
-            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-3', 'breakout-morning-volume', time_09_00, time_09_30, 'brakout-morning-volume-sell')
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-3', 'breakout-morning-volume', time_09_00, time_09_30, 'breakout-morning-volume-sell')
         if(sb.nw>= time_09_25 and sb.nw <= time_09_45):
             process_url_volBreakout('https://chartink.com/screener/morning-volume-bs-2', 'morning-volume-bs', time_09_00, time_09_30, 'morning-volume-sell*2')
         

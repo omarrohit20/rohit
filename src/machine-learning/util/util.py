@@ -484,6 +484,28 @@ def test_short_term_filter(regression_data, regressionResult, reg, ws):
     filterNameTail = tail_change_filter(regression_data, regressionResult, False)
     pctChange5Day = pct_change_filter_days(regression_data, regressionResult, False)
     regression_data['filterTest'] = regression_data['filter'] + ',' + regression_data['filter1']
+    if (regression_data['filterTest'] == ',' or regression_data['filterTest'] == ' , '):
+        return False
+    return True
+
+def test_short_term_filter3(regression_data, regressionResult, reg, ws):
+    regression_data['filterbuy'] = " "
+    regression_data['filtersell'] = " "
+    regression_data['filter'] = " "
+    regression_data['filter1'] = " "
+    regression_data['filter2'] = " "
+    regression_data['filter3'] = " "
+    regression_data['filter4'] = " "
+    regression_data['filter5'] = " "
+    regression_data['filter6'] = " "
+    regression_data['series_trend'] = trend_calculator(regression_data)
+    flag = buy_other_indicator(regression_data, regressionResult, reg, ws)
+    filterName = pct_change_filter(regression_data, regressionResult, False)
+    filterNameTail = tail_change_filter(regression_data, regressionResult, False)
+    pctChange5Day = pct_change_filter_days(regression_data, regressionResult, False)
+    regression_data['filterTest'] = regression_data['filter'] + ',' + regression_data['filter3']
+    if(regression_data['filterTest'] == ',' or regression_data['filterTest'] == ' , '):
+        return False
     return True
 
 def buy_test_345(regression_data, regressionResult, reg, ws):
@@ -709,7 +731,7 @@ def buy_filter_st_accuracy(regression_data, regressionResult):
     filtersDict = filterstbuy
     filter = regression_data['filter'] + ',' + regression_data['filter1']
     if (filter != '') and (filter in filtersDict):
-        if float(filtersDict[filter]['count']) >= 2:
+        if float(filtersDict[filter]['count']) >= 3:
             if abs(float(filtersDict[filter]['avg5'])) >= 5 and abs(float(filtersDict[filter]['avg10'])) > abs(
                     float(filtersDict[filter]['avg5'])):
                 regression_data['filterst_avg5'] = float(filtersDict[filter]['avg5'])
@@ -734,9 +756,9 @@ def buy_filter_st_accuracy(regression_data, regressionResult):
                                     regression_data['filterst_pct10'],
                                     regression_data['filterst_count'])
     filtersDict = filter3stbuy
-    filter = regression_data['filter3']
+    filter = regression_data['filter'] + ',' + regression_data['filter3']
     if (filter != '') and (filter in filtersDict):
-        if float(filtersDict[filter]['count']) >= 2:
+        if float(filtersDict[filter]['count']) >= 3:
             if abs(float(filtersDict[filter]['avg5'])) >= 5 and abs(float(filtersDict[filter]['avg10'])) > abs(
                     float(filtersDict[filter]['avg5'])):
                 regression_data['filter3st_avg5'] = float(filtersDict[filter]['avg5'])
@@ -763,7 +785,7 @@ def buy_filter_st_accuracy(regression_data, regressionResult):
     filtersDict = filter4stbuy
     filter = regression_data['filter4']
     if (filter != '') and (filter in filtersDict):
-        if float(filtersDict[filter]['count']) >= 2:
+        if float(filtersDict[filter]['count']) >= 3:
             if abs(float(filtersDict[filter]['avg5'])) >= 5 and abs(float(filtersDict[filter]['avg10'])) > abs(
                     float(filtersDict[filter]['avg5'])):
                 regression_data['filter4st_avg5'] = float(filtersDict[filter]['avg5'])
@@ -1571,7 +1593,7 @@ def sell_filter_st_accuracy(regression_data, regressionResult):
     filtersDict = filterstsell
     filter = regression_data['filter'] + ',' + regression_data['filter1']
     if (filter != '') and (filter in filtersDict):
-        if float(filtersDict[filter]['count']) >= 2:
+        if float(filtersDict[filter]['count']) >= 3:
             if abs(float(filtersDict[filter]['avg5'])) >= 5 and abs(float(filtersDict[filter]['avg10'])) > abs(
                     float(filtersDict[filter]['avg5'])):
                 regression_data['filterst_avg5'] = float(filtersDict[filter]['avg5'])
@@ -1596,9 +1618,9 @@ def sell_filter_st_accuracy(regression_data, regressionResult):
                                     regression_data['filterst_pct10'],
                                     regression_data['filterst_count'])
     filtersDict = filter3stsell
-    filter = regression_data['filter3']
+    filter = regression_data['filter'] + ',' + regression_data['filter3']
     if (filter != '') and (filter in filtersDict):
-        if float(filtersDict[filter]['count']) >= 2:
+        if float(filtersDict[filter]['count']) >= 3:
             if abs(float(filtersDict[filter]['avg5'])) >= 5 and abs(float(filtersDict[filter]['avg10'])) > abs(
                     float(filtersDict[filter]['avg5'])):
                 regression_data['filter3st_avg5'] = float(filtersDict[filter]['avg5'])
@@ -1625,7 +1647,7 @@ def sell_filter_st_accuracy(regression_data, regressionResult):
     filtersDict = filter4stsell
     filter = regression_data['filter4']
     if (filter != '') and (filter in filtersDict):
-        if float(filtersDict[filter]['count']) >= 2:
+        if float(filtersDict[filter]['count']) >= 3:
             if abs(float(filtersDict[filter]['avg5'])) >= 5 and abs(float(filtersDict[filter]['avg10'])) > abs(
                     float(filtersDict[filter]['avg5'])):
                 regression_data['filter4st_avg5'] = float(filtersDict[filter]['avg5'])
