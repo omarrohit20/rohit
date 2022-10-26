@@ -113,6 +113,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             if(data2 is not None): 
                                 highVol = highVol + ':' + data2['keyIndicator']
                             if ('CheckNews' not in processor
+                                and data1 is not None
                                 and data2 is not None
                                 and (('buy' in processor and 'buy' in highVol) 
                                      or ('sell' in processor and 'sell' in highVol))
@@ -164,11 +165,10 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             if((dbnse['scrip_result'].find_one({'scrip':scrip}) is not None)):
                                 data = dbnse.scrip_result.find_one({'scrip':scrip})
                                 resultDeclared = data['resultDeclared'] + ',' + data['result_sentiment']
-                                if(resultDeclared != ''):
+                                if('Today' not in resultDeclared
+                                    ):
                                     filtersFlag = True
-                                    
-                                
-                               
+
                         except: 
                             print('')
                         
@@ -180,21 +180,17 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         #     print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
 
                         if ('buy' in processor
-                            and 'Sell-AnyGT2' in mldatahigh
-                            and 'Sell-AnyGT2-1.0' not in mldatahigh
+                            and 'Buy-AnyGT2' in mldatahigh
+                            #and 'Sell-AnyGT2-1.0' not in mldatahigh
                             and 'Sell-AnyGT2-2.0' not in mldatahigh
-                            and ('Sell-SUPER-Risky' in mldatahigh
-                                or 'Sell-Risky' in mldatahigh
-                                or 'Sell-AnyGT2-3.0' not in mldatahigh)
+                            and 'Sell-AnyGT2-3.0' not in mldatahigh
                             ):
                             needToPrint = True
                         elif ('sell' in processor
-                            and 'Buy-AnyGT2' in mldatalow
-                            and 'Buy-AnyGT2-1.0' not in mldatalow
+                            and 'Sell-AnyGT2' in mldatalow
+                            #and 'Buy-AnyGT2-1.0' not in mldatalow
                             and 'Buy-AnyGT2-2.0' not in mldatalow
-                            and ('Buy-SUPER-Risky' in mldatalow
-                                 or 'Buy-Risky' in mldatalow
-                                 or 'Buy-AnyGT2-3.0' not in mldatalow)
+                            and 'Buy-AnyGT2-3.0' not in mldatalow
                             ):
                             needToPrint = True
                         elif(filtered == False):
@@ -347,23 +343,20 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     if(data is not None): 
                         #filtersFlag = True
                         highVol = highVol + ':' + data['keyIndicator']
-                    
-                    if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None) or (dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
-                        if(processor == 'morning-volume-bs'):
-                            needToPrint = True #do-nothing
-                        elif(processor == 'breakout-morning-volume'):
-                            needToPrint = True #do-nothing
-                        else:
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
-                        needToPrint = True
+
+                    if (processor == 'morning-volume-bs'):
+                        needToPrint = True  # do-nothing
+                    elif (processor == 'breakout-morning-volume'):
+                        needToPrint = True  # do-nothing
                     else:
-                        if(processor == 'morning-volume-bs'):
-                            needToPrint = True #do-nothing
-                        elif(processor == 'breakout-morning-volume'):
-                            needToPrint = True #do-nothing
+                        if(any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
+                        or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
+                        ):
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  #################################')
                         else:
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
-                        needToPrint = True
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
+
+                    needToPrint = True
                                 
                     tempScrip = scrip
                     mlData = mldatahigh + ' : ' + mldatalow
