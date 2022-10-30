@@ -347,7 +347,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     if (processor == 'morning-volume-bs'):
                         needToPrint = True  # do-nothing
                     elif (processor == 'breakout-morning-volume'):
-                        needToPrint = True  # do-nothing
+                        if('%%' in mldatahigh or '%%' in mldatalow):
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  #################################')
                     else:
                         if(any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
                         or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))

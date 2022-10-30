@@ -3460,8 +3460,27 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             elif(regression_data['bar_low'] < regression_data['bar_low_pre2']):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'chisSell:Super03-monthLow')
             return True
-    
-    if(regression_data['close'] > 50
+    if (regression_data['close'] > 50
+        and regression_data['forecast_day_PCT5_change'] < -2
+        and regression_data['forecast_day_PCT7_change'] < -2
+        and regression_data['forecast_day_PCT10_change'] < -2
+        and regression_data['forecast_day_PCT10_change'] < regression_data['forecast_day_PCT7_change'] < regression_data['forecast_day_PCT5_change']
+        and regression_data['year2LowChange'] > 5
+        and regression_data['year2HighChange'] < -15
+        and regression_data['month3HighChange'] < -10
+        ):
+        if(-0.75 < regression_data['PCT_day_change'] < 0.75
+            and -0.75 < regression_data['PCT_day_change_pre1'] < 0.75
+            and -0.75 < regression_data['PCT_change'] < 0.75
+            and -0.75 < regression_data['PCT_change_pre1'] < 0.75
+            and 0.5 > regression_data['forecast_day_PCT_change']
+            and 0.5 > regression_data['forecast_day_PCT2_change']
+            and 0.5 > regression_data['forecast_day_PCT3_change']
+            and 0.5 > regression_data['forecast_day_PCT4_change']
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:Super000000000')
+            flag = True
+    elif(regression_data['close'] > 50
         and regression_data['forecast_day_PCT7_change'] < 0
         and regression_data['forecast_day_PCT10_change'] < 0
         and high_tail_pct(regression_data) > regression_data['PCT_day_change']
