@@ -3681,13 +3681,18 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
         and regression_data['month3LowChange'] > 10
         ):
         if(-0.75 < regression_data['PCT_day_change'] < 0.75
-            and -0.75 < regression_data['PCT_day_change_pre1'] < 0.75
             and -0.75 < regression_data['PCT_change'] < 0.75
-            and -0.75 < regression_data['PCT_change_pre1'] < 0.75
+            and -1 < regression_data['PCT_day_change_pre1'] < 1
+            and -1 < regression_data['PCT_change_pre1'] < 1
             and -0.5 < regression_data['forecast_day_PCT_change']
             and -0.5 < regression_data['forecast_day_PCT2_change']
             and -0.5 < regression_data['forecast_day_PCT3_change']
             and -0.5 < regression_data['forecast_day_PCT4_change']
+            and (regression_data['forecast_day_PCT_change'] < 0.5
+                or regression_data['forecast_day_PCT2_change'] < 0.5
+                or regression_data['forecast_day_PCT3_change'] < 0.5
+                or regression_data['forecast_day_PCT3_change'] < 0.5
+                )
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkBuy:Super000000000')
             flag = True

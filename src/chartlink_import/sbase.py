@@ -112,23 +112,14 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             data2 = db['breakout-morning-volume'].find_one({'scrip':scrip})
                             if(data2 is not None): 
                                 highVol = highVol + ':' + data2['keyIndicator']
-                            if ('CheckNews' not in processor
-                                and data1 is not None
-                                and data2 is not None
-                                and (('buy' in processor and 'buy' in highVol) 
-                                     or ('sell' in processor and 'sell' in highVol))
-                                ):
-                                filtersFlag = True 
-                              
-                                
+
                             if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
                                 data = dbnse.highBuy.find_one({'scrip':scrip})
                                 mldatahigh =  data['filter2'] + '|' + data['filter']
                                 if ('buy' in processor
                                     and ('MLlowSell' not in data['ml'])
                                     and ('MLlowSellStrong' not in data['ml'])
-                                    and (('MLhighBuy' in data['ml'])
-                                         or ('MLhighBuyStrong' in data['ml'])
+                                    and (('MLhighBuyStrong' in data['ml'])
                                          or ('buy' in mldatahigh)
                                          or ('Buy' in mldatahigh)
                                          )
@@ -147,8 +138,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 if ('sell' in processor 
                                     and ('MLhighBuy' not in data['ml'])
                                     and ('MLhighBuyStrong' not in data['ml'])
-                                    and (('MLlowSell' in data['ml'])
-                                         or ('MLlowSellStrong' in data['ml'])
+                                    and (('MLlowSellStrong' in data['ml'])
                                          or ('sell' in mldatalow)
                                          or ('Sell' in mldatalow)
                                          )
@@ -192,6 +182,9 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             and 'Buy-AnyGT2-2.0' not in mldatalow
                             and 'Buy-AnyGT2-3.0' not in mldatalow
                             ):
+                            needToPrint = True
+                        elif (('%%' in mldatahigh and 'buy' in processor) or ('%%' in mldatalow and 'sell' in processor)):
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
                             needToPrint = True
                         elif(filtered == False):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
@@ -347,13 +340,15 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     if (processor == 'morning-volume-bs'):
                         needToPrint = True  # do-nothing
                     elif (processor == 'breakout-morning-volume'):
-                        if('%%' in mldatahigh or '%%' in mldatalow):
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  #################################')
+                        if(('%%' in mldatahigh and 'buy' in keyIndicator) or ('%%' in mldatalow and 'sell' in keyIndicator)):
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
                     else:
                         if(any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
                         or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
                         ):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  #################################')
+                        elif (('%%' in mldatahigh and 'buy' in processor) or ('%%' in mldatalow and 'sell' in processor)):
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
                         else:
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
 

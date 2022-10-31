@@ -18,6 +18,7 @@ if __name__ == "__main__":
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-2', 'morning-volume-breakout-sell-2(lastDayMid-or-2daylow)', time_09_00, time_09_30)
 
         if(sb.nw>= time_09_25 and sb.nw <= time_09_45):
+            # ( {33489} ( ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and [=1] 5 minute volume > greatest(  2 days ago volume / 24  ) and ( ( [=1] 5 minute close - [=1] 5 minute open ) * 100 ) / [=1] 5 minute open < 0.1 and ( ( [=1] 5 minute close - [=1] 5 minute low ) * 100 ) / [=1] 5 minute close < 1 and [=1] 10 minute close < [=1] 5 minute open ) ) ) ) ) )
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-3', 'breakout-morning-volume', time_09_00, time_09_30, 'breakout-morning-volume-sell')
         if(sb.nw>= time_09_25 and sb.nw <= time_09_45):
             process_url_volBreakout('https://chartink.com/screener/morning-volume-bs-2', 'morning-volume-bs', time_09_00, time_09_30, 'morning-volume-sell*2')
