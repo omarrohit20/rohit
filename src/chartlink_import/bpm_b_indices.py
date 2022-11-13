@@ -8,10 +8,10 @@ if __name__ == "__main__":
     print('Started')
     sb.nw = datetime.now()
     
-    while (sb.nw <= time_13_30):
+    while (sb.nw <= time_10_30):
         if (sb.nw >= time_09_25 and sb.nw <= time_09_45):
-            # ( {57960} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 12  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and [=1] 5 minute volume > greatest(  2 days ago volume / 24  ) and [=1] 5 minute high > [=1] 5 minute sma ( [=1] 5 minute close , 200 ) and [=1] 5 minute close > [=1] 5 minute open and [=1] 5 minute close > 1 day ago close and ( ( ( [=2] 5 minute low - 1 day ago close ) * 100 ) / 1 day ago close ) > 0.5 and [0] 5 minute high > [=3] 5 minute close and [0] 5 minute high > [=3] 5 minute open ) ) ) )
-            process_url('https://chartink.com/screener/buy-morning-volume-breakout-checknews-01', 'buy-morning-volume-breakout(CheckNews)-01', time_09_25, time_09_45, True)
+            # ( {46553} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 12  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and [=1] 5 minute volume > greatest(  2 days ago volume / 24  ) and [=1] 5 minute high > [=1] 5 minute sma ( [=1] 5 minute close , 200 ) and [=1] 5 minute close > [=1] 5 minute open and [=1] 5 minute close > 1 day ago close and ( ( ( [=2] 5 minute low - 1 day ago close ) * 100 ) / 1 day ago close ) > 0.5 and [0] 5 minute high > [=3] 5 minute close and [0] 5 minute high > [=3] 5 minute open ) ) ) )
+            process_url('https://chartink.com/screener/buy-morning-volume-breakout-checknews-01', 'buy-morning-volume-breakout(Check-News)-01', time_09_25, time_09_45, True)
 
         #if(sb.nw >= time_09_40 and sb.nw <= time_10_30):
             #( {33489} ( ( {cash} ( [=1] 5 minute open > 1 day ago low and [=1] 5 minute close > 1 day ago low and [-1] 5 minute high >= [-2] 15 minute high and [-1] 5 minute high >= [-3] 15 minute high and [-1] 5 minute high > [=1] 15 minute high and [-1] 5 minute high > [=2] 15 minute high and ( ( [-1] 5 minute high - [=1] 5 minute high ) * 100 ) / [=1] 5 minute high > 0.5 and ( ( [-1] 5 minute close - [=-1] 5 minute close ) * 100 ) / [=-1] 5 minute close < 2.5 and ( ( [-1] 5 minute high - [=1] 5 minute high ) * 100 ) / [=1] 5 minute high < 1.5 and ( ( 1 day ago close - 1 day ago open ) * 100 ) / 1 day ago open < 4 and ( ( 1 day ago high - 1 day ago open ) * 100 ) / 1 day ago high < 4 and ( ( 1 day ago high - 1 day ago low ) * 100 ) / 1 day ago low < 5 and [-1] 5 minute high < 1 day ago high and [-1] 5 minute high < 2 days ago high and ( ( 3 days ago high - [-1] 5 minute high ) * 100 ) / [-1] 5 minute high > 1 and ( ( 4 days ago high - [-1] 5 minute high ) * 100 ) / [-1] 5 minute high > 2.5 ) ) ) ) 

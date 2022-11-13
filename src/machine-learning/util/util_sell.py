@@ -1064,7 +1064,10 @@ def sell_high_volatility(regression_data, regressionResult):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'year2HighChangeGT-5')
     elif(regression_data['year2LowChange'] < 5):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, 'year2LowLT5')
-    
+
+    if (sell_high_volatility_shortDownTrend(regression_data, regressionResult)):
+        flag = True
+
     if(sell_high_volatility_boundary(regression_data, regressionResult)):
         flag = True 
         
@@ -1072,9 +1075,6 @@ def sell_high_volatility(regression_data, regressionResult):
         flag = True
         
     if(sell_high_volatility_pre1pre2doji(regression_data, regressionResult)):
-        flag = True  
-        
-    if(sell_high_volatility_shortDownTrend(regression_data, regressionResult)):
         flag = True
         
     if(sell_high_volatility_riskyDowntrendBuy(regression_data, regressionResult)):
@@ -1082,7 +1082,7 @@ def sell_high_volatility(regression_data, regressionResult):
         
     if(sell_high_volatility_lastDayUp(regression_data, regressionResult)):
         flag = True
-    
+
     if('checkSellConsolidationBreakDown-2week' in regression_data['filter']
         and -4 < regression_data['PCT_day_change'] < -1
         and -4 < regression_data['PCT_change'] < -1
@@ -1187,6 +1187,14 @@ def sell_high_volatility(regression_data, regressionResult):
             #print(regression_data['scrip'])
             add_in_csv(regression_data, regressionResult, ws, None, None, None, 'DOWNTREND:mayContinueDownTrend-Last2DayUp')
             flag = True
+
+    if (regression_data['forecast_day_PCT5_change'] < regression_data['forecast_day_PCT4_change'] < regression_data[
+        'forecast_day_PCT3_change'] < regression_data['forecast_day_PCT2_change'] < regression_data[
+        'forecast_day_PCT_change'] < 1
+        and regression_data['year2LowChange'] > 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'CheckChartUp-DowntrendLast5Day')
+        flag = True
        
     if('%%' in regression_data['filter'] 
         or '$$' in regression_data['filter']
@@ -3391,9 +3399,9 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             if(regression_data['PCT_day_change_pre1'] > 0 
                 and (regression_data['PCT_day_change_pre3'] > 0 or regression_data['PCT_day_change_pre4'] > 0)
                 ):
-                add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkBuy:Super01-monthLow-alternateDayUp')
+                add_in_csv(regression_data, regressionResult, ws, None, None, 'chisBuy:monthLow-alternateDayUp')
             else:
-                add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:Super01-monthLow')
+                add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:monthLow')
             return True
         elif(0 < regression_data['month3LowChange'] < 2
             and 0 < regression_data['monthLowChange'] < 2
@@ -3409,9 +3417,9 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             if(regression_data['PCT_day_change_pre1'] > 0 
                 and (regression_data['PCT_day_change_pre3'] > 0 or regression_data['PCT_day_change_pre4'] > 0)
                 ):
-                add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkBuy:Super01-monthLow-alternateDayUp')
+                add_in_csv(regression_data, regressionResult, ws, None, None, 'chisBuy:01-monthLow-alternateDayUp')
             else:
-                add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:Super01-monthLow')
+                add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:01-monthLow')
             return True
         elif(0 < regression_data['month3LowChange'] < 7
             and 0 < regression_data['monthLowChange'] < 7
@@ -3427,9 +3435,9 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             if(regression_data['PCT_day_change_pre1'] > 0 
                 and (regression_data['PCT_day_change_pre3'] > 0 or regression_data['PCT_day_change_pre4'] > 0)
                 ):
-                add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkBuy:Super01-monthLow-alternateDayUp')
+                add_in_csv(regression_data, regressionResult, ws, None, None, 'chisBuy:02-monthLow-alternateDayUp')
             elif(regression_data['bar_low'] < regression_data['bar_low_pre2']):
-                add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:Super01-monthLow')
+                add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:02-monthLow')
             return True
         elif(-2 < regression_data['forecast_day_PCT5_change'] < 2
             and regression_data['forecast_day_PCT2_change'] < regression_data['forecast_day_PCT_change'] < 0
@@ -3439,7 +3447,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             and (regression_data['PCT_day_change'] < 0 and regression_data['PCT_day_change_pre1'] < 0)
             and regression_data['bar_low'] < regression_data['bar_low_pre2']
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:Super00-monthLow')
+            add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:03-monthLow')
             return True
         elif(0 < regression_data['month3LowChange'] < 7
             and 0 < regression_data['monthLowChange'] < 7
@@ -3460,7 +3468,8 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             elif(regression_data['bar_low'] < regression_data['bar_low_pre2']):
                 add_in_csv(regression_data, regressionResult, ws, None, None, 'chisSell:Super03-monthLow')
             return True
-    if (regression_data['close'] > 50
+
+    if (regression_data['close'] > 150
         and regression_data['forecast_day_PCT5_change'] < -2
         and regression_data['forecast_day_PCT7_change'] < -2
         and regression_data['forecast_day_PCT10_change'] < -2
@@ -3469,10 +3478,10 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         and regression_data['year2HighChange'] < -15
         and regression_data['month3HighChange'] < -10
         ):
-        if(-0.75 < regression_data['PCT_day_change'] < 0.75
-            and -0.75 < regression_data['PCT_change'] < 0.75
-            and -1 < regression_data['PCT_day_change_pre1'] < 1
-            and -1 < regression_data['PCT_change_pre1'] < 1
+        if(-1.5 < regression_data['PCT_day_change'] < 0.75
+            and -1.5 < regression_data['PCT_change'] < 0.75
+            and -1.5 < regression_data['PCT_day_change_pre1'] < 1
+            and -1.5 < regression_data['PCT_change_pre1'] < 1
             and 0.5 > regression_data['forecast_day_PCT_change']
             and 0.5 > regression_data['forecast_day_PCT2_change']
             and 0.5 > regression_data['forecast_day_PCT3_change']
@@ -3480,10 +3489,32 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             and (regression_data['forecast_day_PCT_change'] > -0.5
                  or regression_data['forecast_day_PCT2_change'] > -0.5
                  or regression_data['forecast_day_PCT3_change'] > -0.5
-                 or regression_data['forecast_day_PCT4_change'] > -0.5
                 )
+            and (abs(regression_data['PCT_day_change_pre2']) > 2 * abs(regression_data['PCT_day_change'])
+                 or abs(regression_data['PCT_day_change_pre3']) > 3 * abs(regression_data['PCT_day_change'])
+            )
+            and regression_data['monthLowChange'] < 1
+            #and abs(regression_data['yearHighChange']) > abs(regression_data['yearLowChange'])
             ):
-            add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:Super000000000')
+            add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSellAtR1:Super000000000')
+            flag = True
+    elif (regression_data['close'] > 150
+        and regression_data['year2LowChange'] > 5
+        and regression_data['year2HighChange'] < -15
+        and regression_data['month3HighChange'] < -10
+        ):
+        if(-1.5 < regression_data['PCT_day_change'] < 0.75
+            and -1.5 < regression_data['PCT_change'] < 0.75
+            and (-7 < regression_data['PCT_day_change_pre1'] < -2.5 or -7 < regression_data['PCT_day_change_pre2'] < -2.5)
+            and (-7 < regression_data['PCT_change_pre1'] < -2.5 or -8 < regression_data['PCT_change_pre2'] < -2.5)
+            and (abs(regression_data['PCT_day_change_pre2']) > 3*abs(regression_data['PCT_day_change'])
+                or abs(regression_data['PCT_day_change_pre3']) > 3*abs(regression_data['PCT_day_change'])
+                )
+            and regression_data['low'] < regression_data['low_pre1']
+            and regression_data['low'] < regression_data['low_pre2']
+            and regression_data['week2LowChange'] < 1
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSell:SuperDoji')
             flag = True
     elif(regression_data['close'] > 50
         and regression_data['forecast_day_PCT7_change'] < 0

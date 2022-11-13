@@ -112,8 +112,17 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             data2 = db['breakout-morning-volume'].find_one({'scrip':scrip})
                             if(data2 is not None): 
                                 highVol = highVol + ':' + data2['keyIndicator']
+                            if('CheckNews' not in processor
+                                and data1 is not None
+                                and data2 is not None
+                                and (('buy' in processor and 'buy' in highVol) 
+                                    or ('sell' in processor and 'sell' in highVol))
+                                ):
+                                filtersFlag = True 
 
-                            if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
+                            if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)
+                                and 'CheckNews' not in processor
+                                ):
                                 data = dbnse.highBuy.find_one({'scrip':scrip})
                                 mldatahigh =  data['filter2'] + '|' + data['filter']
                                 if ('buy' in processor
@@ -132,7 +141,9 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                     if (data['ml']!=''):
                                         filtersFlag = True
                                     filtersFlag = True
-                            if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
+                            if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)
+                                and 'CheckNews' not in processor
+                                ):
                                 data = dbnse.lowSell.find_one({'scrip':scrip})
                                 mldatalow =  data['filter2'] + '|' + data['filter']
                                 if ('sell' in processor 
@@ -156,6 +167,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 data = dbnse.scrip_result.find_one({'scrip':scrip})
                                 resultDeclared = data['resultDeclared'] + ',' + data['result_sentiment']
                                 if('Today' not in resultDeclared
+                                    and 'Yesterday' not in resultDeclared
                                     ):
                                     filtersFlag = True
 
@@ -183,13 +195,23 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             and 'Buy-AnyGT2-3.0' not in mldatalow
                             ):
                             needToPrint = True
+                        elif ('buy-ema-up0' in processor or 'sell-ema-down0' in processor):
+                            if('NearHighYear2' in mldatahigh or 'NearHighYear2' in mldatalow):
+                                print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+                                needToPrint = True
                         elif (('%%' in mldatahigh and 'buy' in processor) or ('%%' in mldatalow and 'sell' in processor)):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
                             needToPrint = True
-                        elif(filtered == False):
+                        elif(filtered == False
+                            and 'Today' not in resultDeclared
+                            and 'Yesterday' not in resultDeclared
+                            ):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
                             needToPrint = True
-                        elif(filtered == True and filtersFlag == True):
+                        elif(filtered == True and filtersFlag == True
+                            and 'Today' not in resultDeclared
+                            and 'Yesterday' not in resultDeclared
+                            ):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
                             needToPrint = True
                         
