@@ -144,7 +144,7 @@ def is_buy_filterBuy(regression_data):
 def is_sell_filter(regression_data):
     if('%%:' in regression_data['filter']
         or "$$" in regression_data['filter']
-        or 'ConsolidationBreakout' in regression_data['filter']
+        or 'ConsolidationBreakdown' in regression_data['filter']
         or '%%HLTF:maySellTail-tailGT2-allDayGT0' in regression_data['filter']
         or '%%HLTF:maySellTail-tailGT2-7,10thDayGT0' in regression_data['filter']
         or '$$MaySell-CheckChart(downTrend-mayReverseLast4DaysUp)' in regression_data['filter']

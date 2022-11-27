@@ -5,6 +5,7 @@ if __name__ == "__main__":
     sb.option.add_argument("user-data-dir=/Users/profilechrome/profiles/p7")
     sb.option.add_argument('--headless')
     sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities)
+    regression_ta_data_buy()
     print('Started')
     sb.nw = datetime.now()
 
