@@ -3713,7 +3713,7 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkBuyAtS1:Super000000000')
             flag = True
     elif (regression_data['close'] > 150
-        and regression_data['year2HighChange'] < -5
+        #and regression_data['year2HighChange'] < -5
         and regression_data['yearLowChange'] > 10
         and regression_data['month3LowChange'] > 10
         ):

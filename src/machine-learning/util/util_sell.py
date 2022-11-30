@@ -3503,7 +3503,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, '%%:checkSellAtR1:Super000000000')
             flag = True
     elif (regression_data['close'] > 150
-        and regression_data['year2LowChange'] > 5
+        #and regression_data['year2LowChange'] > 5
         and regression_data['year2HighChange'] < -10
         and regression_data['month3HighChange'] < -10
         ):
