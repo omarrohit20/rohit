@@ -95,7 +95,7 @@ opt-einsum==3.3.0
 outcome==1.2.0
 packaging==20.9
 pandas==1.2.4
-Pillow==8.2.0
+Pillow==9.3.0
 pkgconfig==1.5.4
 pluggy==1.0.0
 polling==0.3.2
