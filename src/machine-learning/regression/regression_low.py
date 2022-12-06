@@ -43,8 +43,8 @@ dbnsehistnew = connection.nsehistnew
 
 forecast_out = 1
 split = .98
-randomForest = False
-mlp = True
+randomForest = True
+mlp = False
 bagging = False
 adaBoost = False
 kNeighbours = True

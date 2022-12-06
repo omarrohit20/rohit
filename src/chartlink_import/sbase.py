@@ -112,6 +112,10 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             data2 = db['breakout-morning-volume'].find_one({'scrip':scrip})
                             if(data2 is not None): 
                                 highVol = highVol + ':' + data2['keyIndicator']
+                            data2 = db['breakout2-morning-volume'].find_one({'scrip': scrip})
+                            if (data2 is not None):
+                                highVol = '****' + highVol
+
                             if('CheckNews' not in processor
                                 and data1 is not None
                                 and data2 is not None
@@ -358,8 +362,12 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     if(data is not None): 
                         #filtersFlag = True
                         highVol = highVol + ':' + data['keyIndicator']
+                    data = db['breakout2-morning-volume'].find_one({'scrip': scrip})
+                    if (data is not None):
+                        # filtersFlag = True
+                        highVol = '****' + highVol
 
-                    if (processor == 'morning-volume-bs'):
+                    if (processor == 'morning-volume-bs' or processor == 'breakout2-morning-volume'):
                         needToPrint = True  # do-nothing
                     elif (processor == 'breakout-morning-volume'):
                         if(('%%' in mldatahigh and 'buy' in keyIndicator) or ('%%' in mldatalow and 'sell' in keyIndicator)):
