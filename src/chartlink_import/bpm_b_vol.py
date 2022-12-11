@@ -35,7 +35,7 @@ if __name__ == "__main__":
             process_url_volBreakout('https://chartink.com/screener/buy-morning-down-0', 'checkChartBuy-morningDown(marketDown,lastDayUp-buy)', time_09_15, time_11_30)
 
         if(sb.nw>= time_09_30 and sb.nw <= time_10_15):
-            # ( {33489} ( ( {cash} ( ( ( ( [=1] 15 minute low - 1 day ago close ) * 100 ) / 1 day ago close ) < -2 and [=1] 30 minute low < 1 day ago close and [-1] 5 minute close < 1 day ago close and [-1] 5 minute close > [=1] 5 minute close and [0] 5 minute vwap > [-2] 5 minute vwap and ( ( [0] 5 minute vwap - [=1] 5 minute vwap ) * 100 ) / [=1] 5 minute vwap > 0.5 ) ) ) )
+            # ( {33489} ( ( {cash} ( ( ( ( [=1] 15 minute low - 1 day ago close ) * 100 ) / 1 day ago close ) < -2 and [=1] 30 minute low < 1 day ago close and [-1] 5 minute close < 1 day ago close and [-1] 5 minute close > [=1] 5 minute close and [-1] 5 minute vwap > [-3] 5 minute vwap and ( ( [-1] 5 minute vwap - [=1] 5 minute vwap ) * 100 ) / [=1] 5 minute vwap > 0.5 ) ) ) )
             process_url_volBreakout('https://chartink.com/screener/buy-morning-down-1', 'marketUpBuy-(marketDown,lastDayDown-sellCheckBase,lastDayUp-buy)', time_09_15, time_10_15)
 
         if(sb.nw>= time_09_30 and sb.nw <= time_11_30):

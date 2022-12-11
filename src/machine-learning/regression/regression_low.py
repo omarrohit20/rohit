@@ -43,8 +43,8 @@ dbnsehistnew = connection.nsehistnew
 
 forecast_out = 1
 split = .98
-randomForest = True
-mlp = False
+randomForest = False
+mlp = True
 bagging = False
 adaBoost = False
 kNeighbours = True
@@ -262,37 +262,38 @@ def process_regression_low(scrip, df, directory, run_ml_algo, TEST=False):
     dfp = dfp.round(1)
     regression_data = {}
     if (kNeighbours and run_ml_algo):
-        #result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1, weights='distance'))
-        result = performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor(max_depth=5, n_estimators=100, min_samples_leaf=5, n_jobs=1, random_state= 0))
-#         result = performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=2,
-#            max_features='auto', max_leaf_nodes=None,
-#            min_impurity_decrease=0.0, min_impurity_split=None,
-#            min_samples_leaf=1, min_samples_split=2,
-#            min_weight_fraction_leaf=0.0, n_estimators=100, n_jobs=None,
-#            oob_score=False, random_state=0, verbose=0, warm_start=False))
+        result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1, weights='distance'))
+        #         result = performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=2,
+        #            max_features='auto', max_leaf_nodes=None,
+        #            min_impurity_decrease=0.0, min_impurity_split=None,
+        #            min_samples_leaf=1, min_samples_split=2,
+        #            min_weight_fraction_leaf=0.0, n_estimators=100, n_jobs=None,
+        #            oob_score=False, random_state=0, verbose=0, warm_start=False))
         regression_data['kNeighboursValue_reg'] = float(result[0])
     else:
         regression_data['kNeighboursValue_reg'] = float(0)
-        
+
     if (mlp and run_ml_algo):
         dfp = get_data_frame(df, 'mlp', 'reg')
-        result = performRegression(dfp, split, scrip, directory, forecast_out, MLPRegressor(random_state=0, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
+        # result = performRegression(dfp, split, scrip, directory, forecast_out, MLPRegressor(random_state=0, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
+        result = performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor(max_depth=5, n_estimators=100, min_samples_leaf=5, n_jobs=1, random_state= 0))
         regression_data['mlpValue_reg'] = float(result[0])
     else:
         regression_data['mlpValue_reg'] = float(0)
-        
+
     if (kNeighbours and run_ml_algo):
         dfp = get_data_frame(df, 'kn', 'cla')
         result = performClassification(dfp, split, scrip, directory, forecast_out, neighbors.KNeighborsClassifier(n_jobs=1, n_neighbors=3, weights='distance'))
-        #result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(n_estimators=10, n_jobs=1))
-        #result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(random_state=1, n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1))
+        # result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(n_estimators=10, n_jobs=1))
+        # result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(random_state=1, n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1))
         regression_data['kNeighboursValue_cla'] = float(result[0])
     else:
         regression_data['kNeighboursValue_cla'] = float(0)
-            
+
     if (mlp and run_ml_algo):
         dfp = get_data_frame(df, 'mlp', 'cla')
-        result = performClassification(dfp, split, scrip, directory, forecast_out, MLPClassifier(random_state=0, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25)))
+        # result = performClassification(dfp, split, scrip, directory, forecast_out, MLPClassifier(random_state=0, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(51, 35, 25)))
+        result = performClassification(dfp, split, scrip, directory, forecast_out, RandomForestClassifier(random_state=1, n_estimators=10, max_depth=None, min_samples_split=2, n_jobs=1))
         regression_data['mlpValue_cla'] = float(result[0])
     else:
         regression_data['mlpValue_cla'] = float(0)

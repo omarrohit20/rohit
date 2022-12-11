@@ -127,45 +127,39 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)
                                 and 'CheckNews' not in processor
                                 ):
-                                data = dbnse.highBuy.find_one({'scrip':scrip})
-                                mldatahigh =  data['filter2'] + '|' + data['filter']
-                                if ('buy' in processor
-                                    and ('MLlowSell' not in data['ml'])
-                                    and ('MLlowSellStrong' not in data['ml'])
-                                    and (('MLhighBuyStrong' in data['ml'])
-                                         or ('buy' in mldatahigh)
-                                         or ('Buy' in mldatahigh)
-                                         )
-                                    ):
-                                    mldatahigh = data['ml'] + '|' + mldatahigh  + '|' + data['filter3']
-                                    if (data['filter3']!= '' and 'CheckNews' not in processor):
-                                        filtersFlag = True
-                                    if (data['filter']!= ''):
-                                        filtersFlag = True
-                                    if (data['ml']!=''):
-                                        filtersFlag = True
-                                    filtersFlag = True
-                            if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)
+                                datahigh = dbnse.highBuy.find_one({'scrip':scrip})
+                                mldatahigh =  datahigh['filter2'] + '|' + datahigh['filter']
+                                mldatahigh = datahigh['ml'] + '|' + mldatahigh + '|' + datahigh['filter3']
+                            if ((dbnse['lowSell'].find_one({'scrip': scrip}) is not None)
                                 and 'CheckNews' not in processor
                                 ):
-                                data = dbnse.lowSell.find_one({'scrip':scrip})
-                                mldatalow =  data['filter2'] + '|' + data['filter']
-                                if ('sell' in processor 
-                                    and ('MLhighBuy' not in data['ml'])
-                                    and ('MLhighBuyStrong' not in data['ml'])
-                                    and (('MLlowSellStrong' in data['ml'])
-                                         or ('sell' in mldatalow)
-                                         or ('Sell' in mldatalow)
-                                         )
-                                    ):
-                                    mldatalow = data['ml'] + '|' + mldatalow  + '|' + data['filter3']
-                                    if (data['filter3']!= '' and ('CheckNews' not in processor)):
-                                        filtersFlag = True
-                                    if (data['filter']!= ''):
-                                        filtersFlag = True
-                                    if (data['ml']!=''):
-                                        filtersFlag = True
-                                    filtersFlag = True
+                                datalow = dbnse.lowSell.find_one({'scrip': scrip})
+                                mldatalow = datalow['filter2'] + '|' + datalow['filter']
+                                mldatalow = datalow['ml'] + '|' + mldatalow + '|' + datalow['filter3']
+
+                            if ('buy' in processor
+                                #and ('MLlowSell' not in data['ml'])
+                                #and ('MLlowSellStrong' not in data['ml'])
+                                and (('MLhighBuyStrong' in data['ml'])
+                                     or ('buy' in mldatahigh)
+                                     or ('Buy' in mldatahigh)
+                                     or ('buy' in mldatalow)
+                                     or ('Buy' in mldatalow)
+                                     )
+                                ):
+                                filtersFlag = True
+
+                            if ('sell' in processor
+                                #and ('MLhighBuy' not in data['ml'])
+                                #and ('MLhighBuyStrong' not in data['ml'])
+                                and (('MLlowSellStrong' in data['ml'])
+                                     or ('sell' in mldatahigh)
+                                     or ('Sell' in mldatahigh)
+                                     or ('sell' in mldatalow)
+                                     or ('Sell' in mldatalow)
+                                     )
+                                ):
+                                filtersFlag = True
                             
                             if((dbnse['scrip_result'].find_one({'scrip':scrip}) is not None)):
                                 data = dbnse.scrip_result.find_one({'scrip':scrip})

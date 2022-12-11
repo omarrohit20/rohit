@@ -103,6 +103,17 @@ def is_buy_filter(regression_data):
         or 'checkCupUp' in regression_data['filter']
         or 'checkBuyConsolidationBreakUp' in regression_data['filter']
         or 'buyYear2LowBreakingUp' in regression_data['filter']
+        or 'VOL:buy' in regression_data['filter']
+        or 'VOL:Buy' in regression_data['filter']
+        or regression_data['filter'].startswith('check')
+        or regression_data['filter'].startswith('[MLBuy]:check')
+        or regression_data['filter'].startswith('[MLSell]:check')
+        or regression_data['filter'].startswith('buy')
+        or regression_data['filter'].startswith('[MLBuy]:buy')
+        or regression_data['filter'].startswith('[MLSell]:buy')
+        or regression_data['filter'].startswith('Buy')
+        or regression_data['filter'].startswith('[MLBuy]:Buy')
+        or regression_data['filter'].startswith('[MLSell]:Buy')
         ):
         return True
     else:
@@ -155,6 +166,17 @@ def is_sell_filter(regression_data):
         or 'sellEveningStar-0' in regression_data['filter']
         or 'checkCupDown' in regression_data['filter']
         or 'checkSellConsolidationBreakDown' in regression_data['filter']
+        or 'VOL:sell' in regression_data['filter']
+        or 'VOL:Sell' in regression_data['filter']
+        or regression_data['filter'].startswith('check')
+        or regression_data['filter'].startswith('[MLBuy]:check')
+        or regression_data['filter'].startswith('[MLSell]:check')
+        or regression_data['filter'].startswith('sell')
+        or regression_data['filter'].startswith('[MLBuy]:sell')
+        or regression_data['filter'].startswith('[MLSell]:sell')
+        or regression_data['filter'].startswith('Sell')
+        or regression_data['filter'].startswith('[MLBuy]:Sell')
+        or regression_data['filter'].startswith('[MLSell]:Sell')
         ):
         return True
     else:
