@@ -140,7 +140,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             if ('buy' in processor
                                 #and ('MLlowSell' not in data['ml'])
                                 #and ('MLlowSellStrong' not in data['ml'])
-                                and (('MLhighBuyStrong' in data['ml'])
+                                and (('MLhighBuyStrong' in mldatahigh)
                                      or ('buy' in mldatahigh)
                                      or ('Buy' in mldatahigh)
                                      or ('buy' in mldatalow)
@@ -152,7 +152,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             if ('sell' in processor
                                 #and ('MLhighBuy' not in data['ml'])
                                 #and ('MLhighBuyStrong' not in data['ml'])
-                                and (('MLlowSellStrong' in data['ml'])
+                                and (('MLlowSellStrong' in mldatalow)
                                      or ('sell' in mldatahigh)
                                      or ('Sell' in mldatahigh)
                                      or ('sell' in mldatalow)
