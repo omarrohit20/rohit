@@ -112,52 +112,59 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             data2 = db['breakout-morning-volume'].find_one({'scrip':scrip})
                             if(data2 is not None): 
                                 highVol = highVol + ':' + data2['keyIndicator']
-                            data2 = db['breakout2-morning-volume'].find_one({'scrip': scrip})
-                            if (data2 is not None):
+                            data3 = db['breakout2-morning-volume'].find_one({'scrip': scrip})
+                            if (data3 is not None):
                                 highVol = '****' + highVol
-
-                            if('CheckNews' not in processor
-                                and data1 is not None
-                                and data2 is not None
-                                and (('buy' in processor and 'buy' in highVol) 
-                                    or ('sell' in processor and 'sell' in highVol))
-                                ):
-                                filtersFlag = True 
 
                             if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)
                                 and 'CheckNews' not in processor
                                 ):
                                 datahigh = dbnse.highBuy.find_one({'scrip':scrip})
                                 mldatahigh =  datahigh['filter2'] + '|' + datahigh['filter']
-                                mldatahigh = datahigh['ml'] + '|' + mldatahigh + '|' + datahigh['filter3']
+                                mldatahigh = datahigh['ml'] + '|' + mldatahigh
+                                if('ReversalYear' in datahigh['filter3'] or 'BreakYear' in datahigh['filter3'] or 'NearYear' in datahigh['filter3']):
+                                    mldatahigh = mldatahigh + '|' + datahigh['filter3']
+                                if('buy' in processor
+                                    and '%%' in datahigh['filter']
+                                    ):
+                                    filtersFlag = True
+
                             if ((dbnse['lowSell'].find_one({'scrip': scrip}) is not None)
                                 and 'CheckNews' not in processor
                                 ):
                                 datalow = dbnse.lowSell.find_one({'scrip': scrip})
                                 mldatalow = datalow['filter2'] + '|' + datalow['filter']
-                                mldatalow = datalow['ml'] + '|' + mldatalow + '|' + datalow['filter3']
+                                mldatalow = datalow['ml'] + '|' + mldatalow
+                                if ('ReversalYear' in datalow['filter3'] or 'BreakYear' in datalow['filter3'] or 'NearYear' in datalow['filter3']):
+                                    mldatalow = mldatalow + '|' + datalow['filter3']
+                                if ('sell' in processor
+                                    and '%%' in datalow['filter']
+                                    ):
+                                    filtersFlag = True
 
-                            if ('buy' in processor
-                                #and ('MLlowSell' not in data['ml'])
-                                #and ('MLlowSellStrong' not in data['ml'])
-                                and (('MLhighBuyStrong' in mldatahigh)
-                                     or ('buy' in mldatahigh)
-                                     or ('Buy' in mldatahigh)
-                                     or ('buy' in mldatalow)
-                                     or ('Buy' in mldatalow)
-                                     )
+                            if (data1 is not None
+                                and data2 is not None
+                                and data3 is not None
+                                and ('MLhighBuyStrong' in mldatahigh or 'MLlowSellStrong' in mldatalow)
+                                and (('buy' in processor and ('buy' in highVol or 'Buy' in highVol))
+                                     or ('sell' in processor and ('sell' in highVol or 'Sell' in highVol))
+                                    )
                                 ):
                                 filtersFlag = True
 
-                            if ('sell' in processor
-                                #and ('MLhighBuy' not in data['ml'])
-                                #and ('MLhighBuyStrong' not in data['ml'])
-                                and (('MLlowSellStrong' in mldatalow)
-                                     or ('sell' in mldatahigh)
-                                     or ('Sell' in mldatahigh)
-                                     or ('sell' in mldatalow)
-                                     or ('Sell' in mldatalow)
-                                     )
+                            if ('CheckNews' not in processor
+                                and 'buy' in processor and ('buy' in highVol or 'Buy' in highVol)
+                                and data2 is not None
+                                and data3 is not None
+                                and ('MLhighBuyStrong' in mldatahigh or data1 is not None)
+                                ):
+                                filtersFlag = True
+
+                            if ('CheckNews' not in processor
+                                and 'sell' in processor and ('sell' in highVol or 'Sell' in highVol)
+                                and data2 is not None
+                                and data3 is not None
+                                and ('MLlowSellStrong' in mldatalow or data1 is not None)
                                 ):
                                 filtersFlag = True
                             
@@ -316,14 +323,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             if ('buy' in processor):
                                 mldatahigh = data['ml']
                             mldatahigh = mldatahigh + '|' + data['filter2'] + '|' + data['filter']
-                            if ('buy' in processor
-                                and (regressionhigh['PCT_day_change'] > 1 
-                                     or (regressionhigh['PCT_day_change_pre1'] > 1 and abs(regressionhigh['PCT_day_change']) < abs(regressionhigh['PCT_day_change_pre1']))
-                                     )
-                                ):
-                                mldatahigh = mldatahigh + '|' + data['filter3']
-                                if(regressionhigh['month3HighChange'] < -5):
-                                    mldatahigh = mldatahigh + '|' + 'lastDayUp'
+
                         if('buy' in processor and regressionhigh['month3LowChange'] < 5):
                             mldatahigh = mldatahigh + '|' + 'month3LowChangeLT5'
                         if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
@@ -331,14 +331,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             if ('sell' in processor):
                                 mldatalow = data['ml']
                             mldatalow = mldatalow + '|' + data['filter2'] + '|' + data['filter']
-                            if ('sell' in processor
-                                and (regressionlow['PCT_day_change'] < -1 
-                                     or (regressionlow['PCT_day_change_pre1'] < -1 and abs(regressionlow['PCT_day_change']) < abs(regressionlow['PCT_day_change_pre1']))
-                                     )
-                                ):
-                                mldatalow = mldatalow + '|' + data['filter3']
-                                if(regressionlow['month3LowChange'] > 5):
-                                    mldatalow = mldatalow + '|' + 'lastDayDown'
+
                         if('sell' in processor and regressionlow['month3HighChange'] > -5):
                             mldatalow = mldatalow + '|' + 'month3HighChangeGT-5'
                             
@@ -364,15 +357,24 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     if (processor == 'morning-volume-bs' or processor == 'breakout2-morning-volume'):
                         needToPrint = True  # do-nothing
                     elif (processor == 'breakout-morning-volume'):
-                        if(('%%' in mldatahigh and 'buy' in keyIndicator) or ('%%' in mldatalow and 'sell' in keyIndicator)):
+                        if(('%%' in mldatahigh and 'buy' in keyIndicator) or ('%%' in mldatalow and 'sell' in keyIndicator)
+                            or ('Buy-AnyGT2' in mldatahigh and 'buy' in keyIndicator) or ('Sell-AnyGT2' in mldatahigh and 'sell' in keyIndicator)
+                            or ('Yesterday' in resultDeclared or 'Today' in resultDeclared)
+                            ):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
                     else:
-                        if(any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
-                        or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
-                        ):
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  #################################')
-                        elif (('%%' in mldatahigh and 'buy' in processor) or ('%%' in mldatalow and 'sell' in processor)):
+                        if (('%%' in mldatahigh and 'buy' in processor) or ('%%' in mldatalow and 'sell' in processor)
+                            or ('Buy-AnyGT2' in mldatahigh and 'buy' in processor) or ('Sell-AnyGT2' in mldatahigh and 'sell' in processor)
+                            or ('(LT2)' in processor and ('Yesterday' in resultDeclared or 'Today' in resultDeclared))
+                            or ('(GT-2)' in processor and ('Yesterday' in resultDeclared or 'Today' in resultDeclared))
+                            or (processor == 'morning-volume-breakout-buy' and resultDeclared != '')
+                            or (processor == 'morning-volume-breakout-sell' and resultDeclared != '')
+                            ):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+                        elif(any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
+                            or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
+                            ):
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  #################################')
                         else:
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
 

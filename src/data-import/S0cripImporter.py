@@ -19,7 +19,8 @@ with open('nselist/ind_niftyfuturelist.csv') as csvfile:
                     "company": row[0],
                     "industry": "",
                     "scrip": row[1],
-                    "futures":futures
+                    "futures":futures,
+                    "index":"futures"
                     })
             count = count + 1
         except:
@@ -44,7 +45,8 @@ with open('nselist/ind_nifty500list.csv') as csvfile:
                     "company": row[0],
                     "industry": row[1],
                     "scrip": row[2],
-                    "futures":futures
+                    "futures":futures,
+                    "index": "nifty500"
                     })
             count = count + 1
         except:
@@ -67,7 +69,8 @@ with open('nselist/ind_niftycash.csv') as csvfile:
                         "company": row[0],
                         "industry": "",
                         "scrip": row[1],
-                        "futures":futures
+                        "futures":futures,
+                        "index": "cash"
                         })
             count = count + 1
         except:

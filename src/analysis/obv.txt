@@ -158,6 +158,10 @@ TEST:%%mayBuyContinueHighVolatileLastDayUp-GT8 : global should up direction from
 HighBuyAllFilter : check for PCT_Day_change > 8 and filter2 buy indicators, but not MLSell
 LowSellAllFilter : check for PCT_Day_change > 8 and filter2 buy indicators, but not MLSell
 
+
+
+/Applications/mongodb/bin/mongod --dbpath /Users/RO001OM/data/db --logpath /var/log/mongodb.log
+
 	
 	    
 		

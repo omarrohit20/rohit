@@ -40,21 +40,45 @@ filtertechbuy = patterns_to_dict('../../data-import/nselist/filter-tech-buy.csv'
 filtertechallbuy = patterns_to_dict('../../data-import/nselist/filter-tech-all-buy.csv')
 filtertechallpctchangebuy = patterns_to_dict('../../data-import/nselist/filter-tech-all-pct-change-buy.csv')
 
-def insert_scripdata_st(scrip, date, filter, avg5, pct5, avg10, pct10, count):
-    data = {}
-    data['scrip'] = scrip
-    data['date'] = date
-    data['filter'] = filter
-    data['avg5'] = avg5
-    data['pct5'] = pct5
-    data['avg10'] = avg10
-    data['pct10'] = pct10
-    data['count'] = count
-    json_data = json.loads(json.dumps(data))
-    if (db.sttips.find(json_data).count()) < 1:
-        if abs(pct5) > 80:
+def insert_scripdata_st(scrip, date, filter, avg5, pct5, avg10, pct10, count, regression_data):
+    if (abs(pct5) > 70 and regression_data['industry'] != ''):
+        data = {}
+        data['scrip'] = scrip
+        data['date'] = date
+        data['filter'] = filter
+        data['avg5'] = avg5
+        data['pct5'] = pct5
+        data['avg10'] = avg10
+        data['pct10'] = pct10
+        data['count'] = count
+        json_data = json.loads(json.dumps(data))
+        if (db.sttips.find(json_data).count()) < 1:
             print(json_data)
             db.sttips.insert_one(json_data)
+
+
+def insert_year2LowReversal(regression_data):
+    if (regression_data['year2HighChange'] < -50 and 'ReversalLowYear2' in regression_data['filter3'] and regression_data['industry'] != ''):
+        data = {}
+        data['scrip'] = regression_data['scrip']
+        data['industry'] = regression_data['industry']
+        data['date'] = regression_data['date']
+        data['close'] = regression_data['close']
+        json_data = json.loads(json.dumps(data))
+        if (db.reversalY2L.find({'scrip':data['scrip']}).count()) < 1:
+            db.reversalY2L.insert_one(json_data)
+
+    
+def insert_year5LowBreakout(regression_data):
+    if (regression_data['year2HighChange'] > -5 and regression_data['year2LowChange'] > 30 and regression_data['year5HighChange'] < -50):
+        data = {}
+        data['scrip'] = regression_data['scrip']
+        data['industry'] = regression_data['industry']
+        data['date'] = regression_data['date']
+        data['close'] = regression_data['close']
+        json_data = json.loads(json.dumps(data))
+        if (db.breakoutY2H.find({'scrip': data['scrip']}).count()) < 1:
+            db.breakoutY2H.insert_one(json_data)
 
 
 def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
@@ -754,7 +778,9 @@ def buy_filter_st_accuracy(regression_data, regressionResult):
                                     regression_data['filterst_pct5'],
                                     regression_data['filterst_avg10'],
                                     regression_data['filterst_pct10'],
-                                    regression_data['filterst_count'])
+                                    regression_data['filterst_count'],
+                                    regression_data
+                                    )
     filtersDict = filter3stbuy
     filter = regression_data['filter'] + ',' + regression_data['filter3']
     if (filter != '') and (filter in filtersDict):
@@ -781,7 +807,9 @@ def buy_filter_st_accuracy(regression_data, regressionResult):
                                     regression_data['filter3st_pct5'],
                                     regression_data['filter3st_avg10'],
                                     regression_data['filter3st_pct10'],
-                                    regression_data['filter3st_count'])
+                                    regression_data['filter3st_count'],
+                                    regression_data
+                                    )
     filtersDict = filter4stbuy
     filter = regression_data['filter4']
     if (filter != '') and (filter in filtersDict):
@@ -808,7 +836,9 @@ def buy_filter_st_accuracy(regression_data, regressionResult):
                                     regression_data['filter4st_pct5'],
                                     regression_data['filter4st_avg10'],
                                     regression_data['filter4st_pct10'],
-                                    regression_data['filter4st_count'])
+                                    regression_data['filter4st_count'],
+                                    regression_data
+                                    )
 
 def buy_filter_345_accuracy(regression_data, regressionResult):
     filtersDict=filter345buy
@@ -1616,7 +1646,9 @@ def sell_filter_st_accuracy(regression_data, regressionResult):
                                     regression_data['filterst_pct5'],
                                     regression_data['filterst_avg10'],
                                     regression_data['filterst_pct10'],
-                                    regression_data['filterst_count'])
+                                    regression_data['filterst_count'],
+                                    regression_data
+                                    )
     filtersDict = filter3stsell
     filter = regression_data['filter'] + ',' + regression_data['filter3']
     if (filter != '') and (filter in filtersDict):
@@ -1643,7 +1675,9 @@ def sell_filter_st_accuracy(regression_data, regressionResult):
                                     regression_data['filter3st_pct5'],
                                     regression_data['filter3st_avg10'],
                                     regression_data['filter3st_pct10'],
-                                    regression_data['filter3st_count'])
+                                    regression_data['filter3st_count'],
+                                    regression_data
+                                    )
     filtersDict = filter4stsell
     filter = regression_data['filter4']
     if (filter != '') and (filter in filtersDict):
@@ -1670,7 +1704,9 @@ def sell_filter_st_accuracy(regression_data, regressionResult):
                                     regression_data['filter4st_pct5'],
                                     regression_data['filter4st_avg10'],
                                     regression_data['filter4st_pct10'],
-                                    regression_data['filter4st_count'])
+                                    regression_data['filter4st_count'],
+                                    regression_data
+                                    )
 
 
 def sell_filter_345_accuracy(regression_data, regressionResult):
@@ -1862,91 +1898,122 @@ def is_reg_sell_from_filter(regression_data, filter_avg, filter_count, filter_pc
 def filter_avg_gt_count(regression_data, val):
     count = 0
     cnt = 0
+    max = 0
     if(regression_data['filter_345_avg'] > val
         and (regression_data['filter_345_pct'] >= 66 or regression_data['filter_345_pct'] == 0)
         and regression_data['filter_345_avg'] != regression_data['filter_all_avg']
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_345_count']
+        if max < regression_data['filter_345_count']:
+            max = regression_data['filter_345_count']
     if(regression_data['filter_avg'] > val
         and (regression_data['filter_pct'] >= 66 or regression_data['filter_pct'] == 0)
         and regression_data['filter_avg'] != regression_data['filter_all_avg']
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_count']
+        if max < regression_data['filter_count']:
+            max = regression_data['filter_count']
     if(regression_data['filter_pct_change_avg'] > val
         and (regression_data['filter_pct_change_pct'] >= 66 or regression_data['filter_pct_change_pct'] == 0)
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_pct_change_count']
+        if max < regression_data['filter_pct_change_count']:
+            max = regression_data['filter_pct_change_count']
     if(regression_data['filter_all_avg'] > val
         and (regression_data['filter_all_pct'] >= 66 or regression_data['filter_all_pct'] == 0)
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_all_count']
+        if max < regression_data['filter_all_count']:
+            max = regression_data['filter_all_count']
     if(regression_data['filter_tech_avg'] > val
         and (regression_data['filter_tech_pct'] >= 70 or regression_data['filter_tech_pct'] == 0)
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_tech_count']
+        if max < regression_data['filter_tech_count']:
+            max = regression_data['filter_tech_count']
     if(regression_data['filter_tech_all_avg'] > 3
         and (regression_data['filter_tech_all_pct'] >= 70 or regression_data['filter_tech_all_pct'] == 0)
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_tech_all_count']
+        if max < regression_data['filter_tech_all_count']:
+            max = regression_data['filter_tech_all_count']
     if(regression_data['filter_tech_all_pct_change_avg'] > 3
         and (regression_data['filter_tech_all_pct_change_pct'] >= 70 or regression_data['filter_tech_all_pct_change_pct'] == 0)
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_tech_all_pct_change_count']
-    return count, cnt
+        if max < regression_data['filter_tech_all_pct_change_count']:
+            max = regression_data['filter_tech_all_pct_change_count']
+    return count, cnt, max
     
 def filter_avg_lt_count(regression_data, val):
     count = 0
     cnt = 0
+    max = 0
     if(regression_data['filter_345_avg'] < val
         and (regression_data['filter_345_pct'] < -66 or regression_data['filter_345_pct'] == 0)
         and regression_data['filter_345_avg'] != regression_data['filter_all_avg']
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_345_count']
+        if max < regression_data['filter_345_count']:
+            max = regression_data['filter_345_count']
     if(regression_data['filter_avg'] < val
         and (regression_data['filter_pct'] < -66 or regression_data['filter_pct'] == 0)
         and regression_data['filter_avg'] != regression_data['filter_all_avg']
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_count']
+        if max < regression_data['filter_count']:
+            max = regression_data['filter_count']
     if(regression_data['filter_pct_change_avg'] < val
         and (regression_data['filter_pct_change_pct'] < -66 or regression_data['filter_pct_change_pct'] == 0)
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_pct_change_count']
+        if max < regression_data['filter_pct_change_count']:
+            max = regression_data['filter_pct_change_count']
     if(regression_data['filter_all_avg'] < val
         and (regression_data['filter_all_pct'] < -66 or regression_data['filter_all_pct'] == 0)
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_all_count']
+        if max < regression_data['filter_all_count']:
+            max = regression_data['filter_all_count']
     if(regression_data['filter_tech_avg'] < val
         and (regression_data['filter_tech_pct'] < -70 or regression_data['filter_tech_pct'] == 0)
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_tech_count']
+        if max < regression_data['filter_tech_count']:
+            max = regression_data['filter_tech_count']
     if(regression_data['filter_tech_all_avg'] < -3
         and (regression_data['filter_tech_all_pct'] < -70 or regression_data['filter_tech_all_pct'] == 0)
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_tech_all_count']
+        if max < regression_data['filter_tech_all_count']:
+            max = regression_data['filter_tech_all_count']
     if(regression_data['filter_tech_all_pct_change_avg'] < -3
         and (regression_data['filter_tech_all_pct_change_pct'] < -70 or regression_data['filter_tech_all_pct_change_pct'] == 0)
         ):
         count = count + 1
         cnt = cnt + regression_data['filter_tech_all_pct_change_count']
-    return count, cnt
+        if max < regression_data['filter_tech_all_pct_change_count']:
+            max = regression_data['filter_tech_all_pct_change_count']
+    return count, cnt, max
 
 def filter_avg_gt_point9_count(regression_data):
     count = 0
     cnt = 0
-    count, cnt = filter_avg_gt_count(regression_data, 0.9)
+    max = 0
+    count, cnt, max = filter_avg_gt_count(regression_data, 0.9)
     if(cnt > 1):
         return count
     else:
@@ -1955,7 +2022,8 @@ def filter_avg_gt_point9_count(regression_data):
 def filter_avg_lt_minus_point9_count(regression_data):
     count = 0
     cnt = 0
-    count, cnt = filter_avg_lt_count(regression_data, -0.9)
+    max = 0
+    count, cnt, max = filter_avg_lt_count(regression_data, -0.9)
     if(cnt > 1):
         return count
     else:
@@ -1964,7 +2032,8 @@ def filter_avg_lt_minus_point9_count(regression_data):
 def filter_avg_gt_1_count(regression_data):
     count = 0
     cnt = 0
-    count, cnt = filter_avg_gt_count(regression_data, 1)
+    max = 0
+    count, cnt, max = filter_avg_gt_count(regression_data, 1)
     if(cnt > 1):
         return count
     else:
@@ -1973,7 +2042,8 @@ def filter_avg_gt_1_count(regression_data):
 def filter_avg_lt_minus_1_count(regression_data):
     count = 0
     cnt = 0
-    count, cnt = filter_avg_lt_count(regression_data, -1)
+    max = 0
+    count, cnt, max = filter_avg_lt_count(regression_data, -1)
     if(cnt > 1):
         return count
     else:
@@ -1982,7 +2052,8 @@ def filter_avg_lt_minus_1_count(regression_data):
 def filter_avg_gt_2_count(regression_data):
     count = 0
     cnt = 0
-    count, cnt = filter_avg_gt_count(regression_data, 2)
+    max = 0
+    count, cnt, max = filter_avg_gt_count(regression_data, 2)
     if(cnt > 1):
         return count
     else:
@@ -1991,7 +2062,8 @@ def filter_avg_gt_2_count(regression_data):
 def filter_avg_lt_minus_2_count(regression_data):
     count = 0
     cnt = 0
-    count, cnt = filter_avg_lt_count(regression_data, -2)
+    max = 0
+    count, cnt, max = filter_avg_lt_count(regression_data, -2)
     if(cnt > 1):
         return count
     else:
@@ -2000,26 +2072,30 @@ def filter_avg_lt_minus_2_count(regression_data):
 def filter_avg_gt_1_count_any(regression_data):
     count = 0
     cnt = 0
-    count, cnt = filter_avg_gt_count(regression_data, 1)
-    return count, cnt
+    max = 0
+    count, cnt, max = filter_avg_gt_count(regression_data, 1)
+    return count, cnt, max
     
 def filter_avg_lt_minus_1_count_any(regression_data):
     count = 0
     cnt = 0
-    count, cnt = filter_avg_lt_count(regression_data, -1)
-    return count, cnt
+    max = 0
+    count, cnt, max = filter_avg_lt_count(regression_data, -1)
+    return count, cnt, max
 
 def filter_avg_gt_2_count_any(regression_data):
     count = 0
     cnt = 0
-    count, cnt = filter_avg_gt_count(regression_data, 2)
-    return count, cnt
+    max = 0
+    count, cnt, max = filter_avg_gt_count(regression_data, 2)
+    return count, cnt, max
     
 def filter_avg_lt_minus_2_count_any(regression_data):
     count = 0
     cnt = 0
-    count, cnt = filter_avg_lt_count(regression_data, -2)
-    return count, cnt
+    max = 0
+    count, cnt, max = filter_avg_lt_count(regression_data, -2)
+    return count, cnt, max
  
 def is_any_buy_GT2_from_all_filter(regression_data):
     if(is_buy_GT2_from_filter(regression_data, 'filter_345_avg', 'filter_345_count', 'filter_345_pct')
@@ -2153,14 +2229,19 @@ def is_filter_hist_accuracy(regression_data, regression_high, regression_low, re
     pct_filter_pct_change_avg = 0
     pct_filter_all_avg = 0
 
-    lt_minus_2_count_any, lt_minus_2_cnt = filter_avg_lt_minus_2_count_any(regression_data)
-    lt_minus_1_count_any, lt_minus_1_cnt = filter_avg_lt_minus_1_count_any(regression_data)
-    gt_2_count_any, gt_2_cnt = filter_avg_gt_2_count_any(regression_data)
-    gt_1_count_any, gt_1_cnt = filter_avg_gt_1_count_any(regression_data)
-    if(lt_minus_2_count_any >= 1 and lt_minus_2_cnt > 2
+    lt_minus_2_count_any, lt_minus_2_cnt, lt_minus_2_max = filter_avg_lt_minus_2_count_any(regression_data)
+    lt_minus_1_count_any, lt_minus_1_cnt, lt_minus_1_max = filter_avg_lt_minus_1_count_any(regression_data)
+    gt_2_count_any, gt_2_cnt, gt_2_max = filter_avg_gt_2_count_any(regression_data)
+    gt_1_count_any, gt_1_cnt, gt_2_max = filter_avg_gt_1_count_any(regression_data)
+    if(((lt_minus_2_count_any == 1 and lt_minus_2_cnt > 5 and gt_2_cnt < 2 and gt_1_cnt < 3)
+        or (lt_minus_2_count_any > 1 and lt_minus_2_max > 5 and gt_2_cnt < 2 and gt_1_cnt < 3)
+        or (lt_minus_2_count_any > 1 and lt_minus_2_cnt > 9 and gt_2_cnt < 2 and gt_1_cnt < 3))
         ):
         return True
-    elif(gt_2_count_any >= 1 and gt_2_cnt > 2
+    elif(
+        ((gt_2_count_any == 1 and gt_2_cnt > 5 and lt_minus_2_cnt < 2 and lt_minus_1_cnt < 3)
+        or (gt_2_count_any > 1 and gt_2_max > 5 and lt_minus_2_cnt < 2 and lt_minus_1_cnt < 3)
+        or (gt_2_count_any > 1 and gt_2_cnt > 9 and lt_minus_2_cnt < 2 and lt_minus_1_cnt < 3))
         ):
         return True
     else:
@@ -2210,10 +2291,10 @@ def is_filter_all_accuracy(regression_data, regression_high, regression_low, reg
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, None, None, 'RISKY-UPTREND-SELL')
 
-    lt_minus_2_count_any, lt_minus_2_cnt = filter_avg_lt_minus_2_count_any(regression_data)
-    lt_minus_1_count_any, lt_minus_1_cnt = filter_avg_lt_minus_1_count_any(regression_data)
-    gt_2_count_any, gt_2_cnt = filter_avg_gt_2_count_any(regression_data)
-    gt_1_count_any, gt_1_cnt = filter_avg_gt_1_count_any(regression_data)
+    lt_minus_2_count_any, lt_minus_2_cnt, lt_minus_2_max = filter_avg_lt_minus_2_count_any(regression_data)
+    lt_minus_1_count_any, lt_minus_1_cnt, lt_minus_1_max = filter_avg_lt_minus_1_count_any(regression_data)
+    gt_2_count_any, gt_2_cnt, gt_2_max = filter_avg_gt_2_count_any(regression_data)
+    gt_1_count_any, gt_1_cnt, gt_1_max = filter_avg_gt_1_count_any(regression_data)
     if(lt_minus_2_count_any >= 1
         ):
         if(regression_data['PCT_day_change'] < -2 or regression_data['PCT_change'] < -2):

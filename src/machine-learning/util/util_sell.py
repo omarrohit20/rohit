@@ -3331,6 +3331,11 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
     mlpValue_other, kNeighboursValue_other = get_reg_or_cla_other(regression_data, reg)
     
     flag = False
+
+    if ((regression_data['PCT_day_change'] > 6 or regression_data['PCT_change'] > 6)
+        and (regression_data['forecast_day_PCT5_change'] > 10 or regression_data['forecast_day_PCT7_change'] > 10 or regression_data['forecast_day_PCT10_change'] > 15)
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None,'%%:MaySell-High-UpTrend')
     
     if(regression_data['year2HighChange'] > -3 or regression_data['year2LowChange'] < 3):
         return False
