@@ -22,7 +22,7 @@ if __name__ == "__main__":
     sb.driver.find_element("id", "password").send_keys("qwER12#$")
     #sb.driver.find_element("css", "button.g-recaptcha").click()
     
-    time.sleep(5)
+    time.sleep(10)
     
     
     
