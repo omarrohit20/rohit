@@ -1,8 +1,5 @@
 from seleniumwire import webdriver
 from seleniumwire.webdriver import DesiredCapabilities
-import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.LogEntry;
-import org.openqa.selenium.logging.LogType;
 from browsermobproxy import Server
 from datetime import datetime
 from datetime import timedelta
@@ -400,14 +397,6 @@ def process_url_volBreakout(url, processor, starttime, endtime, keyIndicator=Non
 
         logs_raw = driver.get_log("performance")
         logs = [json.loads(lr["message"])["message"] for lr in logs_raw]
-
-        browser_log = driver.get_log("browser")
-
-        // Mentioning
-        entry = driver.manage().logs().get(LogType.BROWSER);
-        // Retrieving
-
-        List < LogEntry > logs_list = entry.getAll();
 
         for log in filter(log_filter, logs):
             request_id = log["params"]["requestId"]
