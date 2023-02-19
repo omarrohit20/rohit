@@ -1,1 +1,1 @@
-python3 ./S3cripResultImporter.py all Yes
+python3.9 ./S3cripResultImporter.py all Yes

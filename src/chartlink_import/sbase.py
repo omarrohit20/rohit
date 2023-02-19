@@ -50,7 +50,7 @@ def log_filter(log_):
         # is an actual response
         log_["method"] == "Network.responseReceived"
         # and json
-        and "json" in log_["params"]["response"]["mimeType"]
+        and "XHR" in log_["params"]["type"]
     )
 
 def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
