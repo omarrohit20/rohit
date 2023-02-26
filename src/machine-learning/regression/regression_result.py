@@ -36,7 +36,7 @@ from util.util import buy_filter_pct_change_accuracy, sell_filter_pct_change_acc
 from util.util import buy_filter_all_accuracy, sell_filter_all_accuracy
 from util.util_buy import buy_high_volatility     
 from util.util_sell import sell_high_volatility
-from util.util import insert_year2LowReversal, insert_year5LowBreakout
+from util.util import insert_year2LowReversal, insert_year5LowBreakoutY2H, insert_year5LowBreakoutYH, insert_year2HighNearBreakout
 
 
 
@@ -874,8 +874,10 @@ def result_data_reg(scrip):
                 all_withoutml(regression_high_copy1, regressionResultHigh, ws_allFilterAcc)
                 all_withoutml(regression_low_copy1, regressionResultLow, ws_allFilterAcc)
             '''
-        insert_year5LowBreakout(regression_data)
+        insert_year5LowBreakoutY2H(regression_data)
+        insert_year5LowBreakoutYH(regression_data)
         insert_year2LowReversal(regression_data)
+        #insert_year2HighNearBreakout(regression_data)
         
 def result_data_cla(scrip):
     regression_high = db.regressionhigh.find_one({'scrip':scrip})

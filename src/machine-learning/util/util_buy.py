@@ -4127,6 +4127,24 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, 'chisBuyReversalLast2DayLow(LT-4)')
         flag = True
+
+    if (regression_data['year2HighChange'] > -3
+        and regression_data['month3LowChange'] > 15
+        ):
+        if(regression_data['PCT_day_change'] > 2
+            and regression_data['PCT_change'] > 0
+            and regression_data['PCT_day_change_pre1'] < 0
+            and regression_data['PCT_change_pre1'] < 1
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, '%%:Z_:NearOrUpYear2High, PCTdaychangepre1LT0')
+            flag = True
+        if (regression_data['PCT_day_change'] < 0.5
+            and regression_data['PCT_change'] < 1
+            and regression_data['PCT_day_change_pre1'] > 1.5
+            and regression_data['PCT_change_pre1'] > 0
+            ):
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, '%%:Z_:NearOrUpYear2High, PCTdaychangeDoji')
+            flag = True
     
     return flag
 
