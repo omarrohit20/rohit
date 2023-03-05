@@ -125,21 +125,21 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 if('ReversalYear' in datahigh['filter3'] or 'BreakYear' in datahigh['filter3'] or 'NearYear' in datahigh['filter3']):
                                     mldatahigh = mldatahigh + '|' + datahigh['filter3']
                                 if('buy' in processor
-                                    and ('buy' in datahigh['filter'] or 'Buy' in datahigh['filter'])
                                     and ('%%' in datahigh['filter']
-                                        or "$$" in datahigh['filter']
-                                        or 'ConsolidationBreakout' in datahigh['filter']
-                                        or '%%HLTF:mayBuyTail-tailGT2-allDayLT0' in datahigh['filter']
-                                        or '%%HLTF:mayBuyTail-tailGT2-7,10thDayLT0' in datahigh['filter']
-                                        or '$$MayBuy-CheckChart(downTrend-mayReverseLast4DaysDown)' in datahigh['filter']
-                                        or 'buyYearHigh-0' in datahigh['filter']
-                                        or 'BuyYearLow' in datahigh['filter']
-                                        or '%%:buyDownTrend-month3Low' in datahigh['filter']
-                                        or 'buyFinal' in datahigh['filter']
-                                        or 'buyMorningStar-HighLowerTail' in datahigh['filter']
-                                        or 'checkCupUp' in datahigh['filter']
-                                        or 'checkBuyConsolidationBreakUp' in datahigh['filter']
-                                        or 'buyYear2LowBreakingUp' in datahigh['filter']
+                                         or "$$" in datahigh['filter']
+                                         #or 'ConsolidationBreakout' in datahigh['filter']
+                                         or '%%HLTF:mayBuyTail-tailGT2-allDayLT0' in datahigh['filter']
+                                         or '%%HLTF:mayBuyTail-tailGT2-7,10thDayLT0' in datahigh['filter']
+                                         or '$$MayBuy-CheckChart(downTrend-mayReverseLast4DaysDown)' in datahigh[
+                                             'filter']
+                                         or 'buyYearHigh-0' in datahigh['filter']
+                                         #or 'BuyYearLow' in datahigh['filter']
+                                         or '%%:buyDownTrend-month3Low' in datahigh['filter']
+                                         or 'buyFinal' in datahigh['filter']
+                                         or 'buyMorningStar-HighLowerTail' in datahigh['filter']
+                                         or 'checkCupUp' in datahigh['filter']
+                                         or 'checkBuyConsolidationBreakUp' in datahigh['filter']
+                                         or 'buyYear2LowBreakingUp' in datahigh['filter']
                                         )
                                     ):
                                     filtersFlag = True
@@ -153,19 +153,19 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 if ('ReversalYear' in datalow['filter3'] or 'BreakYear' in datalow['filter3'] or 'NearYear' in datalow['filter3']):
                                     mldatalow = mldatalow + '|' + datalow['filter3']
                                 if ('sell' in processor
-                                    and ('sell' in datahigh['filter'] or 'Sell' in datahigh['filter'])
                                     and ('%%' in datahigh['filter']
-                                        or "$$" in datahigh['filter']
-                                        or 'ConsolidationBreakdown' in datahigh['filter']
-                                        or '%%HLTF:maySellTail-tailGT2-allDayGT0' in datahigh['filter']
-                                        or '%%HLTF:maySellTail-tailGT2-7,10thDayGT0' in datahigh['filter']
-                                        or '$$MaySell-CheckChart(downTrend-mayReverseLast4DaysUp)' in datahigh['filter']
-                                        or 'sellYearLow' in datahigh['filter']
-                                        or 'sellYearHigh' in datahigh['filter']
-                                        or 'sellFinal' in datahigh['filter']
-                                        or 'sellEveningStar-0' in datahigh['filter']
-                                        or 'checkCupDown' in datahigh['filter']
-                                        or 'checkSellConsolidationBreakDown' in datahigh['filter']
+                                         or "$$" in datahigh['filter']
+                                         #or 'ConsolidationBreakdown' in datahigh['filter']
+                                         or '%%HLTF:maySellTail-tailGT2-allDayGT0' in datahigh['filter']
+                                         or '%%HLTF:maySellTail-tailGT2-7,10thDayGT0' in datahigh['filter']
+                                         or '$$MaySell-CheckChart(downTrend-mayReverseLast4DaysUp)' in datahigh[
+                                             'filter']
+                                         or 'sellYearLow' in datahigh['filter']
+                                         #or 'sellYearHigh' in datahigh['filter']
+                                         or 'sellFinal' in datahigh['filter']
+                                         or 'sellEveningStar-0' in datahigh['filter']
+                                         or 'checkCupDown' in datahigh['filter']
+                                         or 'checkSellConsolidationBreakDown' in datahigh['filter']
                                         )
                                     ):
                                     filtersFlag = True
@@ -207,39 +207,55 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             if ('buy' in processor
                                 and 'Buy-AnyGT2' in mldatahigh
                                 and 'Buy-AnyGT2-1.0' not in mldatahigh
-                                and 'Buy-AnyGT2-2.0' not in mldatahigh
                                 and 'Sell-AnyGT2-2.0' not in mldatahigh
                                 and 'Sell-AnyGT2-3.0' not in mldatahigh
                                 ):
                                 filtersFlag = True
                             elif ('sell' in processor
                                 and 'Sell-AnyGT2' in mldatalow
-                                and 'Sell-AnyGT2-1.0' not in mldatahigh
-                                and 'Sell-AnyGT2-2.0' not in mldatahigh
+                                and 'Sell-AnyGT2-1.0' not in mldatalow
                                 and 'Buy-AnyGT2-2.0' not in mldatalow
                                 and 'Buy-AnyGT2-3.0' not in mldatalow
                                 ):
                                 filtersFlag = True
+
                         except: 
                             print('')
+                        
+                        
+                        # if(processor == 'buy-dayconsolidation-breakout-04(11:45-to-1:00)' or processor == 'sell-dayconsolidation-breakout-04(10:00-to-12:00)'):
+                        #     if((db['morning-volume-breakout'].find_one({'scrip':scrip}) is None)): 
+                        #         print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
+                        # else:
+                        #     print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
 
-                        if (('%%' in mldatahigh and 'buy' in processor) or ('%%' in mldatalow and 'sell' in processor)):
+
+                        if ('buy-ema-up0' in processor or 'sell-ema-down0' in processor):
+                            if('NearHighYear2' in mldatahigh or 'NearHighYear2' in mldatalow):
+                                print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+                                needToPrint = True
+                        elif (('%%' in mldatahigh and 'buy' in processor) or ('%%' in mldatalow and 'sell' in processor)):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
                             needToPrint = True
-                        elif (filtersFlag == True
-                              and 'Today' not in resultDeclared
-                              and 'Yesterday' not in resultDeclared
-                            ):
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh,' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
-                            needToPrint = True
-                        elif(filtered == False
-                            and (data1 is not None or data2 is not None or data3 is not None)
+                        elif(filtered == True and filtersFlag == True
                             and 'Today' not in resultDeclared
                             and 'Yesterday' not in resultDeclared
                             ):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
                             needToPrint = True
-
+                        elif (filtersFlag == True
+                            and 'Today' not in resultDeclared
+                            and 'Yesterday' not in resultDeclared
+                            ):
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
+                            needToPrint = True
+                        elif (filtered == False
+                            and (data2 is not None or data3 is not None)
+                            and 'Today' not in resultDeclared
+                            and 'Yesterday' not in resultDeclared
+                            ):
+                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
+                            needToPrint = True
                         
                         tempScrip = scrip
                             
