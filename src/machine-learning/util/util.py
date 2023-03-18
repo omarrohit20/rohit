@@ -58,7 +58,10 @@ def insert_scripdata_st(scrip, date, filter, avg5, pct5, avg10, pct10, count, re
 
 
 def insert_year2LowReversal(regression_data):
-    if (regression_data['year2HighChange'] < -50 and 'ReversalLowYear2' in regression_data['filter3'] and regression_data['industry'] != ''):
+    if ((regression_data['year2HighChange'] < -50 and 'ReversalLowYear2' in regression_data['filter3']
+            and regression_data['industry'] != '')
+        or (regression_data['year2HighChange'] < -60
+            and regression_data['industry'] != '' and regression_data['month3HighChange'] > -10 and regression_data['month3LowChange'] < 10)):
         data = {}
         data['scrip'] = regression_data['scrip']
         data['industry'] = regression_data['industry']
@@ -67,9 +70,12 @@ def insert_year2LowReversal(regression_data):
         data['year5HighChange'] = regression_data['year5HighChange']
         data['year2HighChange'] = regression_data['year2HighChange']
         data['year5LowChange'] = regression_data['year5LowChange']
+        data['month3HighChange'] = regression_data['month3HighChange']
+        data['month3LowChange'] = regression_data['month3LowChange']
         json_data = json.loads(json.dumps(data))
         if (db.reversalY2L.find({'scrip':data['scrip']}).count()) < 1:
             db.reversalY2L.insert_one(json_data)
+
 
     
 def insert_year5LowBreakoutY2H(regression_data):

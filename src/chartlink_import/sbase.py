@@ -125,21 +125,22 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 if('ReversalYear' in datahigh['filter3'] or 'BreakYear' in datahigh['filter3'] or 'NearYear' in datahigh['filter3']):
                                     mldatahigh = mldatahigh + '|' + datahigh['filter3']
                                 if('buy' in processor
+                                    and ('buy' in datahigh['filter'] or 'Buy' in datahigh['filter'])
                                     and ('%%' in datahigh['filter']
-                                         or "$$" in datahigh['filter']
-                                         #or 'ConsolidationBreakout' in datahigh['filter']
-                                         or '%%HLTF:mayBuyTail-tailGT2-allDayLT0' in datahigh['filter']
-                                         or '%%HLTF:mayBuyTail-tailGT2-7,10thDayLT0' in datahigh['filter']
-                                         or '$$MayBuy-CheckChart(downTrend-mayReverseLast4DaysDown)' in datahigh[
-                                             'filter']
-                                         or 'buyYearHigh-0' in datahigh['filter']
-                                         #or 'BuyYearLow' in datahigh['filter']
-                                         or '%%:buyDownTrend-month3Low' in datahigh['filter']
-                                         or 'buyFinal' in datahigh['filter']
-                                         or 'buyMorningStar-HighLowerTail' in datahigh['filter']
-                                         or 'checkCupUp' in datahigh['filter']
-                                         or 'checkBuyConsolidationBreakUp' in datahigh['filter']
-                                         or 'buyYear2LowBreakingUp' in datahigh['filter']
+                                        or "$$" in datahigh['filter']
+                                        #or 'ConsolidationBreakout' in datahigh['filter']
+                                        or '%%HLTF:mayBuyTail-tailGT2-allDayLT0' in datahigh['filter']
+                                        or '%%HLTF:mayBuyTail-tailGT2-7,10thDayLT0' in datahigh['filter']
+                                        or '$$MayBuy-CheckChart(downTrend-mayReverseLast4DaysDown)' in datahigh[
+                                         'filter']
+                                        or 'buyYearHigh-0' in datahigh['filter']
+                                        #or 'BuyYearLow' in datahigh['filter']
+                                        or '%%:buyDownTrend-month3Low' in datahigh['filter']
+                                        or 'buyFinal' in datahigh['filter']
+                                        or 'buyMorningStar-HighLowerTail' in datahigh['filter']
+                                        or 'checkCupUp' in datahigh['filter']
+                                        or 'checkBuyConsolidationBreakUp' in datahigh['filter']
+                                        or 'buyYear2LowBreakingUp' in datahigh['filter']
                                         )
                                     ):
                                     filtersFlag = True
@@ -153,19 +154,20 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 if ('ReversalYear' in datalow['filter3'] or 'BreakYear' in datalow['filter3'] or 'NearYear' in datalow['filter3']):
                                     mldatalow = mldatalow + '|' + datalow['filter3']
                                 if ('sell' in processor
-                                    and ('%%' in datahigh['filter']
-                                         or "$$" in datahigh['filter']
+                                    and ('sell' in datalow['filter'] or 'Sell' in datalow['filter'])
+                                    and ('%%' in datalow['filter']
+                                         or "$$" in datalow['filter']
                                          #or 'ConsolidationBreakdown' in datahigh['filter']
-                                         or '%%HLTF:maySellTail-tailGT2-allDayGT0' in datahigh['filter']
-                                         or '%%HLTF:maySellTail-tailGT2-7,10thDayGT0' in datahigh['filter']
-                                         or '$$MaySell-CheckChart(downTrend-mayReverseLast4DaysUp)' in datahigh[
+                                         or '%%HLTF:maySellTail-tailGT2-allDayGT0' in datalow['filter']
+                                         or '%%HLTF:maySellTail-tailGT2-7,10thDayGT0' in datalow['filter']
+                                         or '$$MaySell-CheckChart(downTrend-mayReverseLast4DaysUp)' in datalow[
                                              'filter']
-                                         or 'sellYearLow' in datahigh['filter']
+                                         or 'sellYearLow' in datalow['filter']
                                          #or 'sellYearHigh' in datahigh['filter']
-                                         or 'sellFinal' in datahigh['filter']
-                                         or 'sellEveningStar-0' in datahigh['filter']
-                                         or 'checkCupDown' in datahigh['filter']
-                                         or 'checkSellConsolidationBreakDown' in datahigh['filter']
+                                         or 'sellFinal' in datalow['filter']
+                                         or 'sellEveningStar-0' in datalow['filter']
+                                         or 'checkCupDown' in datalow['filter']
+                                         or 'checkSellConsolidationBreakDown' in datalow['filter']
                                         )
                                     ):
                                     filtersFlag = True
