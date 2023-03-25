@@ -139,7 +139,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                         or 'buyFinal' in datahigh['filter']
                                         or 'buyMorningStar-HighLowerTail' in datahigh['filter']
                                         or 'checkCupUp' in datahigh['filter']
-                                        or 'checkBuyConsolidationBreakUp' in datahigh['filter']
+                                        #or 'checkBuyConsolidationBreakUp' in datahigh['filter']
                                         or 'buyYear2LowBreakingUp' in datahigh['filter']
                                         )
                                     ):
@@ -167,7 +167,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                          or 'sellFinal' in datalow['filter']
                                          or 'sellEveningStar-0' in datalow['filter']
                                          or 'checkCupDown' in datalow['filter']
-                                         or 'checkSellConsolidationBreakDown' in datalow['filter']
+                                         #or 'checkSellConsolidationBreakDown' in datalow['filter']
                                         )
                                     ):
                                     filtersFlag = True
