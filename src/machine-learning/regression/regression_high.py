@@ -7,7 +7,7 @@ from openpyxl.styles import Color, PatternFill, Font, Border
 from pymongo import MongoClient
 from multiprocessing.dummy import Pool as ThreadPool
 
-import quandl, math, time
+import math, time
 import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
 import numpy as np
