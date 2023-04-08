@@ -37,7 +37,7 @@ googleapis-common-protos==1.5.0
 googledatastore==7.1.0
 grpcio==1.29.0
 h5py==2.10.0
-html5lib==0.9999999
+html5lib==0.999999999
 httplib2==0.18.1
 idna==2.5
 inflection==0.3.1
