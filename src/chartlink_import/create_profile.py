@@ -1,10 +1,12 @@
+import pathlib
+
 import sbase as sb
 from config import *
 import shutil
      
 if __name__ == "__main__":
     
-    #shutil.rmtree("/Users/profilechrome/profiles")
+    #shutil.rmtree("profiles")
     
     # sb.server = Server(sb.path, options={'existing_proxy_port_to_use': 16010})
     # time.sleep(1)
@@ -14,7 +16,8 @@ if __name__ == "__main__":
     # print("Server started")
     #
     # sb.option.add_argument('--proxy-server=%s' % sb.proxy.proxy)
-    sb.option.add_argument("user-data-dir=/Users/profilechrome/profiles/p")
+    script_directory = pathlib.Path().absolute()
+    sb.option.add_argument(f"user-data-dir={script_directory}/profiles/p")
     sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities)
     sb.driver.get("https://chartink.com/login")
     time.sleep(10)
@@ -28,13 +31,13 @@ if __name__ == "__main__":
     
     sb.driver.quit()
     
-    shutil.copytree("/Users/profilechrome/profiles/p", "/Users/profilechrome/profiles/p1")
-    shutil.copytree("/Users/profilechrome/profiles/p", "/Users/profilechrome/profiles/p2")
-    shutil.copytree("/Users/profilechrome/profiles/p", "/Users/profilechrome/profiles/p3")
-    shutil.copytree("/Users/profilechrome/profiles/p", "/Users/profilechrome/profiles/p4")
-    shutil.copytree("/Users/profilechrome/profiles/p", "/Users/profilechrome/profiles/p5")
-    shutil.copytree("/Users/profilechrome/profiles/p", "/Users/profilechrome/profiles/p6")
-    shutil.copytree("/Users/profilechrome/profiles/p", "/Users/profilechrome/profiles/p7")
-    shutil.copytree("/Users/profilechrome/profiles/p", "/Users/profilechrome/profiles/p8")
+    shutil.copytree("profiles/p", "profiles/p1")
+    shutil.copytree("profiles/p", "profiles/p2")
+    shutil.copytree("profiles/p", "profiles/p3")
+    shutil.copytree("profiles/p", "profiles/p4")
+    shutil.copytree("profiles/p", "profiles/p5")
+    shutil.copytree("profiles/p", "profiles/p6")
+    shutil.copytree("profiles/p", "profiles/p7")
+    shutil.copytree("profiles/p", "profiles/p8")
     
     

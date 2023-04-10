@@ -8,7 +8,7 @@ from pymongo import MongoClient
 from multiprocessing.dummy import Pool as ThreadPool
 from bson import json_util
 
-import quandl, math, time
+import math, time
 import pandas as pd
 import numpy as np
 from talib.abstract import *
@@ -912,11 +912,11 @@ def result_data_cla(scrip):
             sell_filter_all_accuracy(regression_data, regressionResult)
             sell_all_rule_classifier(regression_data, regressionResult, None, ws_lowSellStrongFilterAcc)                              
                                              
-def calculateParallel(threads=2, futures='Yes', processing_date=""):
+def calculateParallel(threads=2, futures='Yes', processing_date=" "):
     pool = ThreadPool(threads)
     scrips = []
     
-    if(processing_date == ""):
+    if(processing_date == " "):
         processing_date = (datetime.date.today() - datetime.timedelta(days=0)).strftime('%Y-%m-%d')
     for data in db.scrip.find({'futures':futures}):
         #print('Scrip ', data)

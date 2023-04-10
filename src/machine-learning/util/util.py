@@ -6,7 +6,7 @@ import json
 from pymongo import MongoClient
 from multiprocessing.dummy import Pool as ThreadPool
 
-import quandl, math, time
+import math, time
 from datetime import date
 import datetime   
 import pandas as pd
@@ -52,7 +52,7 @@ def insert_scripdata_st(scrip, date, filter, avg5, pct5, avg10, pct10, count, re
         data['pct10'] = pct10
         data['count'] = count
         json_data = json.loads(json.dumps(data))
-        if (db.sttips.find(json_data).count()) < 1:
+        if (db.sttips.count_documents(json_data)) < 1:
             print(json_data)
             db.sttips.insert_one(json_data)
 
@@ -73,7 +73,7 @@ def insert_year2LowReversal(regression_data):
         data['month3HighChange'] = regression_data['month3HighChange']
         data['month3LowChange'] = regression_data['month3LowChange']
         json_data = json.loads(json.dumps(data))
-        if (db.reversalY2L.find({'scrip':data['scrip']}).count()) < 1:
+        if (db.reversalY2L.count_documents({'scrip':data['scrip']})) < 1:
             db.reversalY2L.insert_one(json_data)
 
 
@@ -89,7 +89,7 @@ def insert_year5LowBreakoutY2H(regression_data):
         data['year2HighChange'] = regression_data['year2HighChange']
         data['year5LowChange'] = regression_data['year5LowChange']
         json_data = json.loads(json.dumps(data))
-        if ((db.breakoutY2H.find({'scrip': data['scrip']}).count()) < 1 and (db.breakoutYH.find({'scrip': data['scrip']}).count()) < 1):
+        if ((db.breakoutY2H.count_documents({'scrip': data['scrip']})) < 1 and (db.breakoutYH.count_documents({'scrip': data['scrip']})) < 1):
             db.breakoutY2H.insert_one(json_data)
         return True
 
@@ -104,7 +104,7 @@ def insert_year5LowBreakoutYH(regression_data):
         data['year2HighChange'] = regression_data['year2HighChange']
         data['year5LowChange'] = regression_data['year5LowChange']
         json_data = json.loads(json.dumps(data))
-        if ((db.breakoutY2H.find({'scrip': data['scrip']}).count()) < 1 and (db.breakoutYH.find({'scrip': data['scrip']}).count()) < 1):
+        if ((db.breakoutY2H.count_documents({'scrip': data['scrip']})) < 1 and (db.breakoutYH.count_documents({'scrip': data['scrip']})) < 1):
             db.breakoutYH.insert_one(json_data)
         return True
 
@@ -119,7 +119,7 @@ def insert_year2HighNearBreakout(regression_data):
         data['year2HighChange'] = regression_data['year2HighChange']
         data['year5LowChange'] = regression_data['year5LowChange']
         json_data = json.loads(json.dumps(data))
-        if (db.nearY2H.find({'scrip': data['scrip']}).count()) < 1:
+        if (db.nearY2H.count_documents({'scrip': data['scrip']})) < 1:
             db.nearY2H.insert_one(json_data)
 
 

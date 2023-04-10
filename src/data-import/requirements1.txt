@@ -117,15 +117,10 @@ scipy
 selenium
 selenium-wire
 six
-TA-Lib
 tabulate
-tensorboard
-tensorflow
-tensorflow-tensorboard
 termcolor
 texttable
 tflearn
-Theano
 threadpoolctl
 toml
 trio

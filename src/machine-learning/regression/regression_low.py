@@ -7,7 +7,7 @@ from openpyxl.styles import Color, PatternFill, Font, Border
 from pymongo import MongoClient
 from multiprocessing.dummy import Pool as ThreadPool
 
-import quandl, math, time
+import math, time
 import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
 import numpy as np
@@ -158,12 +158,12 @@ def get_data_frame(df, regressor='None', type='reg'):
 #         dfp['WMA'] = WMA(df)
 
 
-        dfp['CDL2CROWS'] = CDL2CROWS(df)
-        dfp['CDL3BLACKCROWS'] = CDL3BLACKCROWS(df)
-        dfp['CDL3INSIDE'] = CDL3INSIDE(df)
-        dfp['CDL3LINESTRIKE'] = CDL3LINESTRIKE(df)
-        dfp['CDL3OUTSIDE'] = CDL3OUTSIDE(df)
-        dfp['CDL3STARSINSOUTH'] = CDL3STARSINSOUTH(df)
+#        dfp['CDL2CROWS'] = CDL2CROWS(df)
+#        dfp['CDL3BLACKCROWS'] = CDL3BLACKCROWS(df)
+#        dfp['CDL3INSIDE'] = CDL3INSIDE(df)
+#        dfp['CDL3LINESTRIKE'] = CDL3LINESTRIKE(df)
+#        dfp['CDL3OUTSIDE'] = CDL3OUTSIDE(df)
+#        dfp['CDL3STARSINSOUTH'] = CDL3STARSINSOUTH(df)
         dfp['CDL3WHITESOLDIERS'] = CDL3WHITESOLDIERS(df)
         dfp['CDLABANDONEDBABY'] = CDLABANDONEDBABY(df)
         dfp['CDLADVANCEBLOCK'] = CDLADVANCEBLOCK(df) #Bearish reversal. prior trend Upward. Look for three white candles in an upward price trend. On each candle, price opens within the body of the previous candle. The height of the shadows grow taller on the last two candles.

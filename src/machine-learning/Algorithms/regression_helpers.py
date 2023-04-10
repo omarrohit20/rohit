@@ -31,9 +31,9 @@ import os
 #from sklearn.grid_search import GridSearchCV
 #from Neural_Network import NeuralNet
 
-import lasagne
-from lasagne import layers
-from lasagne.updates import nesterov_momentum
+#import lasagne
+#from lasagne import layers
+#from lasagne.updates import nesterov_momentum
 #from nolearn.lasagne import NeuralNet as nlNeuralNet
 
 #import tflearn

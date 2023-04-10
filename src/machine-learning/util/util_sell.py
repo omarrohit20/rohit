@@ -5,7 +5,7 @@ from openpyxl.styles import Color, PatternFill, Font, Border
 from pymongo import MongoClient
 from multiprocessing.dummy import Pool as ThreadPool
 
-import quandl, math, time
+import math, time
 from datetime import date
 import datetime   
 import pandas as pd

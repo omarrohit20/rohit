@@ -1,8 +1,11 @@
+import pathlib
 import sbase as sb
 from config import *
      
 if __name__ == "__main__":
-    sb.option.add_argument("user-data-dir=/Users/profilechrome/profiles/p1")
+    script_directory = pathlib.Path().absolute()
+    sb.option.add_experimental_option('excludeSwitches', ['enable-logging'])
+    sb.option.add_argument(f"user-data-dir={script_directory}/profiles/p1")
     sb.option.add_argument('--headless=new')
     sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities)
     print('Started')
