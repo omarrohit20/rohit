@@ -232,11 +232,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         #     print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime , ' : ', mldatahigh, ' : ', mldatalow)
 
 
-                        if ('buy-ema-up0' in processor or 'sell-ema-down0' in processor):
-                            if('NearHighYear2' in mldatahigh or 'NearHighYear2' in mldatalow):
-                                print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-                                needToPrint = True
-                        elif (('%%' in mldatahigh and 'buy' in processor) or ('%%' in mldatalow and 'sell' in processor)):
+                        if (('%%' in mldatahigh and 'buy' in processor) or ('%%' in mldatalow and 'sell' in processor)):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
                             needToPrint = True
                         elif(filtered == True and filtersFlag == True
@@ -252,7 +248,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
                             needToPrint = True
                         elif (filtered == False
-                            and (data2 is not None or data3 is not None)
+                            and (data3 is not None)
                             and (('buy' in processor and ('buy' in highVol or 'Buy' in highVol))
                                 or ('sell' in processor and ('sell' in highVol or 'Sell' in highVol))
                                 )
@@ -366,30 +362,52 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 mldatahigh = data['ml']
                             mldatahigh = mldatahigh + '|' + data['filter2'] + '|' + data['filter']
 
-                        if('buy' in processor and regressionhigh['month3LowChange'] < 5
-                            and((regressionhigh['monthLowChange'] + regressionhigh['weekHighChange'] + regressionhigh['weekLowChange']) < 4.5 or regressionhigh['month3LowChange'] == regressionhigh['weekLowChange'])
-                            ):
-                            mldatahigh = mldatahigh + '|' + 'month3LowChangeLT5'
+                        if('buy' in processor and regressionhigh['month3LowChange'] < 5):
+                            if (regressionhigh['month3LowChange'] == regressionhigh['weekLowChange']):
+                                mldatahigh = mldatahigh + '|' + '0-month3LowChangeLT5-shortuptrend'
+                            elif ((regressionhigh['monthLowChange'] + regressionhigh['weekHighChange'] + regressionhigh['weekLowChange']) < 4.5):
+                                mldatahigh = mldatahigh + '|' + '1-month3LowChangeLT5-shortdowntrend'
+                            else:
+                                mldatahigh = mldatahigh + '|' + 'month3LowChangeLT5-indexhigh'
+                        elif ('buy' in processor and regressionlow['month3HighChange'] > -5):
+                            if (regressionlow['monthHighChange'] == regressionhigh['weekHighChange']):
+                                mldatalow = mldatalow + '|' + 'm3HGT-5-shortdowntrend'
+                            elif ((regressionlow['monthHighChange'] + regressionhigh['weekHighChange'] + regressionhigh['weekLowChange']) > -4.5):
+                                mldatalow = mldatalow + '|' + 'm3HGT-5-shortuptrend'
+                            else:
+                                mldatalow = mldatalow + '|' + 'm3HGT-5-indexhigh'
                         if ('buy' in processor
                             and 'shortUpTrend' in regressionhigh['filter1'] and '(upTrend)' in regressionhigh['seriesTrend']
                             and abs(regressionhigh['month3LowChange']) < abs(regressionhigh['month3HighChange'])
                             ):
                             mldatahigh = mldatahigh + '|' + 'shortUpTrend'
+
                         if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
                             data = dbnse.lowSell.find_one({'scrip':scrip})
                             if ('sell' in processor):
                                 mldatalow = data['ml']
                             mldatalow = mldatalow + '|' + data['filter2'] + '|' + data['filter']
 
-                        if('sell' in processor and regressionlow['month3HighChange'] > -5
-                            and ((regressionlow['monthHighChange'] + regressionhigh['weekHighChange'] + regressionhigh['weekLowChange']) > -4.5 or regressionlow['monthHighChange'] == regressionhigh['weekHighChange'])
-                            ):
-                            mldatalow = mldatalow + '|' + 'month3HighChangeGT-5'
+                        if  ('sell' in processor and regressionlow['month3HighChange'] > -5):
+                            if(regressionlow['monthHighChange'] == regressionhigh['weekHighChange']):
+                                mldatalow = mldatalow + '|' + '0-month3HighChangeGT-5-shortdowntrend'
+                            elif((regressionlow['monthHighChange'] + regressionhigh['weekHighChange'] + regressionhigh['weekLowChange']) > -4.5):
+                                mldatalow = mldatalow + '|' + '1-month3HighChangeGT-5-shortuptrend'
+                            else:
+                                mldatalow = mldatalow + '|' + 'month3HighChangeGT-5-indexhigh'
+                        elif ('sell' in processor and regressionhigh['month3LowChange'] < 5):
+                            if (regressionhigh['month3LowChange'] == regressionhigh['weekLowChange']):
+                                mldatahigh = mldatahigh + '|' + 'm3LowLT5-shortuptrend'
+                            elif ((regressionhigh['monthLowChange'] + regressionhigh['weekHighChange'] + regressionhigh['weekLowChange']) < 4.5):
+                                mldatahigh = mldatahigh + '|' + 'm3LowLT5-shortdowntrend'
+                            else:
+                                mldatahigh = mldatahigh + '|' + 'm3LowLT5-indexhigh'
                         if ('sell' in processor
                             and 'shorDownTrend' in regressionhigh['filter1'] and '(downTrend)' in regressionhigh['seriesTrend']
                             and abs(regressionhigh['month3LowChange']) > abs(regressionhigh['month3HighChange'])
                             ):
                             mldatahigh = mldatahigh + '|' + 'shortDownTrend'
+
                         if((dbnse['scrip_result'].find_one({'scrip':scrip}) is not None)):
                             data = dbnse.scrip_result.find_one({'scrip':scrip})
                             resultDeclared = data['resultDeclared'] + ',' + data['result_sentiment']

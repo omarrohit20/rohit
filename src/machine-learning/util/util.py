@@ -73,8 +73,10 @@ def insert_year2LowReversal(regression_data):
         data['month3HighChange'] = regression_data['month3HighChange']
         data['month3LowChange'] = regression_data['month3LowChange']
         json_data = json.loads(json.dumps(data))
-        if (db.reversalY2L.count_documents({'scrip':data['scrip']})) < 1:
-            db.reversalY2L.insert_one(json_data)
+        if (db.reversalY2LLT60.count_documents({'scrip':data['scrip']})) < 1 and regression_data['year2HighChange'] < -60:
+            db.reversalY2LLT60.insert_one(json_data)
+        elif (db.reversalY2LLT50.count_documents({'scrip':data['scrip']})) < 1 and regression_data['year2HighChange'] < -50:
+            db.reversalY2LLT50.insert_one(json_data)
 
 
     
