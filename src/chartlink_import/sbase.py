@@ -66,6 +66,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
             i = 0
             needToPrint = False
             tempScrip = ''
+            tobuy = ''
+            tosell = ''
             while (i < len(df['aggregatedStockList'][ind])):
                 epochtime = str(df['tradeTimes'][ind])[0:-3]
                 eventtime = time.localtime(int(epochtime))
@@ -91,9 +93,13 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         record['epochtime'] = epochtime
                         record['eventtime'] = eventtime
                         record['systemtime'] = systemtime
+                        record['tobuy'] = tobuy
+                        record['tosell'] = tosell
                         json_data = json.loads(json.dumps(record, default=json_util.default))
                         db[industry].insert_one(json_data)
                         tempScrip = ''
+                        tobuy = ''
+                        tosell = ''
                 if(dbnse['scrip'].find_one({'scrip':scrip}) is not None
                     and eventdateonly == (date.today()).strftime('%Y-%m-%d')
                     and currenttime >= starttime and currenttime <= endtime
@@ -241,10 +247,12 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                         and (regressionhigh['PCT_day_change_pre1'] > 0 or regressionhigh['PCT_day_change_pre2'] > 0)
                                         ):
                                         mldatahigh = mldatahigh + '|' + 'buy-m3HGT-5-shortuptrend'
+                                        filtersFlag = True
                                 if ('shortUpTrend' in regressionhigh['filter1'] and '(upTrend)' in regressionhigh['seriesTrend']
                                     and abs(regressionhigh['month3LowChange']) < abs(regressionhigh['month3HighChange'])
                                     ):
                                     mldatahigh = mldatahigh + '|' + 'shortUpTrend'
+                                    filtersFlag = True
 
                             if ('sell' in processor or 'Sell' in processor or 'breakout2-morning-volume' in processor or 'morning-volume-bs' in processor):
                                 if (regressionlow['month3HighChange'] > -5):
@@ -263,13 +271,19 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                         and (regressionlow['PCT_day_change_pre1'] < 0 or regressionlow['PCT_day_change_pre2'] < 0)
                                         ):
                                         mldatalow = mldatalow + '|' + 'sell-m3LowLT5-shortdowntrend'
+                                        filtersFlag = True
                                 if ('shorDownTrend' in regressionhigh['filter1'] and '(downTrend)' in regressionhigh['seriesTrend']
                                     and abs(regressionhigh['month3LowChange']) > abs(regressionhigh['month3HighChange'])
                                     ):
                                     mldatalow = mldatalow + '|' + 'shortDownTrend'
+                                    filtersFlag = True
 
+                            if (regressionhigh['PCT_day_change'] < 1 or regressionhigh['PCT_day_change_pre2'] < 1):
+                                tobuy = 'buyrecommended'
+                            if (regressionhigh['PCT_day_change'] > -1 or regressionhigh['PCT_day_change_pre2'] > -1):
+                                tosell = 'sellrecommended'
                         except: 
-                            print('')
+                            needToPrint = True
                         
                         
                         # if(processor == 'buy-dayconsolidation-breakout-04(11:45-to-1:00)' or processor == 'sell-dayconsolidation-breakout-04(10:00-to-12:00)'):
@@ -366,6 +380,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
             tempScrip = ''
             mlData = ''
             resultDeclared = ''
+            tobuy = ''
+            tosell = ''
             while (i < len(df['aggregatedStockList'][ind])):
                 scrip = df['aggregatedStockList'][ind][i]
                 industry = ""
@@ -385,12 +401,16 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             record['processor'] = processor
                             record['keyIndicator'] = keyIndicator
                             record['resultDeclared'] = resultDeclared
+                            record['tobuy'] = tobuy
+                            record['tosell'] = tosell
 
                             json_data = json.loads(json.dumps(record, default=json_util.default))
                             db[processor].insert_one(json_data)
                             tempScrip = ''
                             mlData = ''
                             resultDeclared = ''
+                            tobuy = ''
+                            tosell = ''
 
                 if(dbnse['scrip'].find_one({'scrip':scrip}) is not None
                     and db[processor].find_one({'scrip':scrip}) is None
@@ -402,6 +422,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     mldatalow = ''
                     highVol = ''
                     resultDeclared = ''
+                    filtersFlag = False
 
                     try:
                         if ((dbnse['scrip_result'].find_one({'scrip': scrip}) is not None)):
@@ -419,7 +440,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 mldatalow = data['ml']
                             mldatalow = mldatalow + '|' + data['filter2'] + '|' + data['filter']
                     except:
-                        print('')
+                        needToPrint = True  # do-nothing
 
                     try:
                         regressionhigh = dbnse.regressionhigh.find_one({'scrip':scrip})
@@ -469,8 +490,17 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 ):
                                 mldatalow = mldatalow + '|' + 'shortDownTrend'
 
+                        if ('buy-breakup-intraday-9:40-to-10:10' in processor and regressionhigh['forecast_day_PCT3_change'] < 5 and regressionhigh['forecast_day_PCT4_change'] < 5):
+                            filtersFlag = True
+                        if ('sell-breakdown-intraday-9:40-to-10:10' in processor and regressionhigh['forecast_day_PCT3_change'] > -5 and regressionhigh['forecast_day_PCT4_change'] > -5):
+                            filtersFlag = True
+
+                        if(regressionhigh['PCT_day_change'] < 1 or regressionhigh['PCT_day_change_pre1'] < 1):
+                            tobuy = 'buyrecommended'
+                        if (regressionhigh['PCT_day_change'] > -1 or regressionhigh['PCT_day_change_pre1'] > -1):
+                            tosell = 'sellrecommended'
                     except: 
-                        print('')
+                        needToPrint = True  # do-nothing
                         
                     data = db['morning-volume-bs'].find_one({'scrip':scrip})
                     if(data is not None): 
@@ -485,7 +515,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                         # filtersFlag = True
                         highVol = '****' + highVol
 
-                    if (processor == 'morning-volume-bs' or processor == 'breakout2-morning-volume' or processor == 'breakout-morning-volume'):
+                    if filtersFlag:
+                        print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
+                    elif(processor == 'morning-volume-bs' or processor == 'breakout2-morning-volume' or processor == 'breakout-morning-volume'):
                         needToPrint = True  # do-nothing
                     else:
                         if (('%%' in mldatahigh and 'buy' in processor) or ('%%' in mldatalow and 'sell' in processor)
