@@ -1,0 +1,31 @@
+morning-volume-breakout
+#######################
+( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and [=1] 5 minute volume > greatest(  2 days ago volume / 24  ) and latest "close - 1 candle ago close / 1 candle ago close * 100" > 1 ) ) ) )
+
+"morning-volume-breakout-1"
+#######################
+( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and [=1] 5 minute volume > greatest(  2 days ago volume / 24  ) and latest "close - 1 candle ago close / 1 candle ago close * 100" < -1 ) ) ) )
+
+ "BUY/SELL-UP-last-day-stairs"
+ ######################
+ ( {57960} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and [=1] 5 minute volume > greatest(  2 days ago volume / 24  ) ) ) and ( {33489} ( 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" > 0.75 and 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" < 3 and ( ( [=-1] 15 minute high - [=-12] 15 minute high ) * 100 ) / [=-12] 15 minute high > 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" / 2 ) ) ) )
+
+ "Buy-UP-last-day-consolidate-post-lunch"
+ ######################
+ ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and [=1] 5 minute volume > greatest(  2 days ago volume / 24  ) ) ) and ( {cash} ( 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" > 1.5 and ( ( [=-1] 15 minute high - [=-12] 15 minute high ) * 100 ) / [=-12] 15 minute high < 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" / 4 and [=1] 5 minute close > [=1] 5 minute open ) ) ) )
+
+ "Sell-UP-last-day-consolidate-post-lunch"
+ ######################
+ ( {33489} ( ( {cash} ( [=1] 5 minute volume < greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume < greatest(  1 day ago volume / 18  ) and [=1] 5 minute volume < greatest(  2 days ago volume / 24  ) ) ) and ( {33489} ( 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" > 1.5 and ( ( [=-1] 15 minute high - [=-12] 15 minute high ) * 100 ) / [=-12] 15 minute high < 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" / 4 and [=1] 5 minute close < [=1] 5 minute open ) ) ) )
+
+ "BUY/SELL-DOWN-last-day-stairs"
+ ######################
+ ( {57960} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and [=1] 5 minute volume > greatest(  2 days ago volume / 24  ) and ( {33489} ( 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" < -0.75 and 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" > -3 and ( ( [=-1] 15 minute low - [=-12] 15 minute low ) * 100 ) / [=-12] 15 minute low < 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" / 2 ) ) ) ) ) )
+
+ "Sell-DOWN-last-day-consolidate-post-lunch"
+ ######################
+ ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and [=1] 5 minute volume > greatest(  2 days ago volume / 24  ) ) ) and ( {cash} ( 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" < -1.5 and ( ( [=-1] 15 minute low - [=-12] 15 minute low ) * 100 ) / [=-12] 15 minute low > 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" / 4 and [=1] 5 minute close < [=1] 5 minute open ) ) ) )
+
+ "Buy-DOWN-last-day-consolidate-post-lunch"
+ ######################
+ ( {33489} ( ( {cash} ( [=1] 5 minute volume < greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume < greatest(  1 day ago volume / 18  ) and [=1] 5 minute volume < greatest(  2 days ago volume / 24  ) ) ) and ( {33489} ( 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" < -1.5 and ( ( [=-1] 15 minute low - [=-12] 15 minute low ) * 100 ) / [=-12] 15 minute low > 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" / 4 and [=1] 5 minute close > [=1] 5 minute open ) ) ) )

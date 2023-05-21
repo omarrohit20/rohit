@@ -247,7 +247,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                         and (regressionhigh['PCT_day_change_pre1'] > 0 or regressionhigh['PCT_day_change_pre2'] > 0)
                                         ):
                                         mldatahigh = mldatahigh + '|' + 'buy-m3HGT-5-shortuptrend'
-                                        filtersFlag = True
+                                        if ('MLhighBuyStrong' in mldatahigh or data1 is not None):
+                                            filtersFlag = True
                                 #if ('shortUpTrend' in regressionhigh['filter1'] and '(upTrend)' in regressionhigh['series_trend']
                                     #and abs(regressionhigh['month3LowChange']) < abs(regressionhigh['month3HighChange'])
                                     #):
@@ -276,7 +277,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                         and (regressionlow['PCT_day_change_pre1'] < 0 or regressionlow['PCT_day_change_pre2'] < 0)
                                         ):
                                         mldatalow = mldatalow + '|' + 'sell-m3LowLT5-shortdowntrend'
-                                        filtersFlag = True
+                                        if ('MLlowSellStrong' in mldatalow or data1 is not None):
+                                            filtersFlag = True
                                 #if ('shorDownTrend' in regressionhigh['filter1'] and '(downTrend)' in regressionhigh['series_trend']
                                     #and abs(regressionhigh['month3LowChange']) > abs(regressionhigh['month3HighChange'])
                                     #):
