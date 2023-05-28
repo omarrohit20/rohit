@@ -37,6 +37,7 @@ from util.util import buy_filter_all_accuracy, sell_filter_all_accuracy
 from util.util_buy import buy_high_volatility     
 from util.util_sell import sell_high_volatility
 from util.util import insert_year2LowReversal, insert_year5LowBreakoutY2H, insert_year5LowBreakoutYH, insert_year2HighNearBreakout
+from util.util import historical_data
 
 
 
@@ -425,6 +426,60 @@ def result_data(scrip):
         ):
         all_withoutml(regression_data, regressionResult, ws_lowSellStrongBoth)
 
+
+def intraday_tech_data(scrip):
+    data = db.history15m.find_one({'dataset_code': scrip})
+    if (data is None or (np.array(data['data'])).size < 25):
+        return ""
+
+    hsdate, hsopen, hshigh, hslow, hsclose, hsquantity = historical_data(data)
+    df = pd.DataFrame({
+        'date': hsdate,
+        'open': hsopen,
+        'high': hshigh,
+        'low': hslow,
+        'close': hsclose,
+        'volume': hsquantity
+    })
+    df = df[['date', 'open', 'high', 'low', 'close', 'volume']]
+    df = df.rename(columns={'total trade quantity': 'volume'})
+    forecast_out = 0
+    open = df.tail(1).loc[-forecast_out:, 'open'].values[0]
+    open_pre1 = df.tail(2).loc[-forecast_out:, 'open'].values[0]
+    open_pre12 = df.tail(12).loc[-forecast_out:, 'open'].values[0]
+    open_pre24 = df.tail(24).loc[-forecast_out:, 'open'].values[0]
+    open_pre25 = df.tail(25).loc[-forecast_out:, 'open'].values[0]
+    high = df.tail(1).loc[-forecast_out:, 'high'].values[0]
+    high_pre1 = df.tail(2).loc[-forecast_out:, 'high'].values[0]
+    high_pre12 = df.tail(12).loc[-forecast_out:, 'high'].values[0]
+    high_pre24 = df.tail(24).loc[-forecast_out:, 'high'].values[0]
+    high_pre25 = df.tail(25).loc[-forecast_out:, 'high'].values[0]
+    low = df.tail(1).loc[-forecast_out:, 'low'].values[0]
+    low_pre1 = df.tail(2).loc[-forecast_out:, 'low'].values[0]
+    low_pre12 = df.tail(12).loc[-forecast_out:, 'low'].values[0]
+    low_pre24 = df.tail(24).loc[-forecast_out:, 'low'].values[0]
+    low_pre25 = df.tail(25).loc[-forecast_out:, 'low'].values[0]
+    close = df.tail(1).loc[-forecast_out:, 'close'].values[0]
+    close_pre1 = df.tail(2).loc[-forecast_out:, 'close'].values[0]
+    close_pre12 = df.tail(12).loc[-forecast_out:, 'close'].values[0]
+    close_pre24 = df.tail(24).loc[-forecast_out:, 'close'].values[0]
+    close_pre25 = df.tail(25).loc[-forecast_out:, 'close'].values[0]
+    daychange = (close - open_pre25) * 100 / open_pre25
+    postlunchchange_high = (high - high_pre12) * 100 / high_pre12
+    morningchange_high = (high_pre12 - high_pre25) * 100 / high_pre25
+    postlunchchange_low = (low - low_pre12) * 100 / low_pre12
+    morningchange_low = (low_pre12 - low_pre25) * 100 / low_pre25
+    if ( 1 < daychange < 2 and postlunchchange_high > daychange / 2.5):
+        return "UpStairs"
+    elif (daychange > 1 and postlunchchange_high < abs(daychange) / 4):
+        return "UpPostLunchConsolidation"
+
+    if (-2 < daychange < -1 and postlunchchange_low < daychange / 2.5):
+        return "DownStairs"
+    elif (daychange < -1 and postlunchchange_low > abs(daychange) / 4):
+        return "DownPostLunchConsolidation"
+    return ""
+
 def result_data_summary(scrip):
     regression_high = db.highBuy.find_one({'scrip':scrip})
     regression_low = db.lowSell.find_one({'scrip':scrip})
@@ -772,6 +827,12 @@ def result_data_reg(scrip):
                 all_withoutml(regression_high_copy1, regressionResultHigh, ws_allFilterAcc)
                 all_withoutml(regression_low_copy1, regressionResultLow, ws_allFilterAcc)
             '''
+
+        intradaytech = ""
+        intradaytech = intraday_tech_data(regression_data['scrip'])
+        db['highBuy'].update_one({'scrip': scrip}, {"$set": {'intradaytech': intradaytech}})
+        db['lowSell'].update_one({'scrip': scrip}, {"$set": {'intradaytech': intradaytech}})
+
         insert_year5LowBreakoutY2H(regression_data)
         insert_year5LowBreakoutYH(regression_data)
         insert_year2LowReversal(regression_data)

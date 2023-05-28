@@ -28,11 +28,11 @@ with open('nselist/ind_result.csv') as csvfile:
                 
                 start_date = (datetime.datetime.now() + datetime.timedelta(days=1))
                 today_next1 = datetime.datetime(start_date.year, start_date.month, start_date.day)
-                start_date = (datetime.datetime.now() + datetime.timedelta(days=2))
-                today_next2 = datetime.datetime(start_date.year, start_date.month, start_date.day)
-                start_date = (datetime.datetime.now() + datetime.timedelta(days=3))
-                today_next3 = datetime.datetime(start_date.year, start_date.month, start_date.day)
                 start_date = (datetime.datetime.now() + datetime.timedelta(days=4))
+                today_next2 = datetime.datetime(start_date.year, start_date.month, start_date.day)
+                start_date = (datetime.datetime.now() + datetime.timedelta(days=5))
+                today_next3 = datetime.datetime(start_date.year, start_date.month, start_date.day)
+                start_date = (datetime.datetime.now() + datetime.timedelta(days=6))
                 today_next4 = datetime.datetime(start_date.year, start_date.month, start_date.day)
                 
                 result_time = datetime.datetime.strptime(row[1], "%Y-%m-%d")

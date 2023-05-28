@@ -441,14 +441,14 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
 
                         if ((dbnse['highBuy'].find_one({'scrip': scrip}) is not None)):
                             data = dbnse.highBuy.find_one({'scrip': scrip})
-                            if ('buy' in processor):
-                                mldatahigh = data['ml']
-                            mldatahigh = mldatahigh + '|' + data['filter2'] + '|' + data['filter']
+                            if ('buy' in processor and ('MLhigh' in data['ml'] or '%%' in data['filter'] or 'Buy-AnyGT2' in data['filter2'] or 'Buy-AnyGT' in data['filter2'] or 'Sell-AnyGT2' in data['filter2'])):
+                                mldatahigh = data['ml'] + ':' + data['intradaytech']
+                                mldatahigh = mldatahigh + '|' + data['filter2'] + '|' + data['filter']
                         if ((dbnse['lowSell'].find_one({'scrip': scrip}) is not None)):
                             data = dbnse.lowSell.find_one({'scrip': scrip})
-                            if ('sell' in processor):
-                                mldatalow = data['ml']
-                            mldatalow = mldatalow + '|' + data['filter2'] + '|' + data['filter']
+                            if ('sell' in processor and ('MLhigh' in data['ml'] or '%%' in data['filter'] or 'Sell-AnyGT2' in data['filter2'] or 'Suy-AnyGT' in data['filter2'] or 'Buy-AnyGT2' in data['filter2'])):
+                                mldatalow = data['ml'] + ':' + data['intradaytech']
+                                mldatalow = mldatalow + '|' + data['filter2'] + '|' + data['filter']
                     except:
                         needToPrint = True  # do-nothing
 
@@ -586,21 +586,23 @@ def regression_ta_data_buy():
         scrip = data['scrip']
         if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)):
             data = dbnse.highBuy.find_one({'scrip':scrip})
-            histData = ' %%%% ' + scrip + ' : ' + data['ml'] + '|' + data['filter2'] + '|' + data['filter'] + '|' + data['filter3']
+            histData = ' %%%% ' + scrip + ' : ' + data['ml'] + '|' + data['intradaytech'] + '|' + data['filter2'] + '|' + data['filter'] + '|' + data['filter3']
             #if(data['ml'] != '' or data['filter'] != '' or data['filter2'] != ''):
             if(('%%' in histData and 'Super' in histData)
                 or 'checkBuyConsolidationBreakout-allPreLT0' in histData
                 or '%%:checkBuy:Consolidation' in histData
+                or (data['intradaytech'] != "" and data['ml'] != "")
                 ):
                 print(histData)
+
     for data in dbnse.scrip.find({'futures': 'Yes'}):
         scrip = data['scrip']
         if ((dbnse['highBuy'].find_one({'scrip': scrip}) is not None)):
             data = dbnse.highBuy.find_one({'scrip': scrip})
-            histData = ' #### ' + scrip + ' : ' + data['ml'] + '|' + data['filter2'] + '|' + data['filter'] + '|' + data['filter3']
+            histData = ' #### ' + scrip + ' : ' + data['ml'] + '|' + data['intradaytech'] + '|' + data['filter2'] + '|' + data['filter'] + '|' + data['filter3']
             # if(data['ml'] != '' or data['filter'] != '' or data['filter2'] != ''):
             if ("$$" in histData
-                or 'ConsolidationBreakout' in histData
+                #or 'ConsolidationBreakout' in histData
                 or '%%HLTF:mayBuyTail-tailGT2-allDayLT0' in histData
                 or '%%HLTF:mayBuyTail-tailGT2-7,10thDayLT0' in histData
                 or '$$MayBuy-CheckChart(downTrend-mayReverseLast4DaysDown)' in histData
@@ -611,7 +613,7 @@ def regression_ta_data_buy():
                 or 'buyMorningStar-HighLowerTail' in histData
                 or 'sellEveningStar-0' in histData
                 or 'checkCupUp' in histData
-                or 'checkBuyConsolidationBreakUp' in histData
+                #or 'checkBuyConsolidationBreakUp' in histData
                 or 'buyYear2LowBreakingUp' in histData
                 ):
                 print(histData)
@@ -622,21 +624,22 @@ def regression_ta_data_sell():
         scrip = data['scrip']
         if((dbnse['lowSell'].find_one({'scrip':scrip}) is not None)):
             data = dbnse.lowSell.find_one({'scrip':scrip})
-            histData = ' %%%% ' + scrip + ' : ' + data['ml'] + '|' + data['filter2'] + '|' + data['filter'] + '|' + data['filter3']
+            histData = ' %%%% ' + scrip + ' : ' + data['ml'] + '|' + data['intradaytech'] + '|' + data['filter2'] + '|' + data['filter'] + '|' + data['filter3']
             #if(data['ml'] != '' or data['filter'] != '' or data['filter2'] != ''):
             if (('%%' in histData and 'Super' in histData)
                 or 'checkSellConsolidationBreakdown-allPreGT0' in histData
                 or '%%:checkBuy:Consolidation' in histData
+                or (data['intradaytech'] != "" and data['ml'] != "")
                 ):
                 print(histData) 
     for data in dbnse.scrip.find({'futures': 'Yes'}):
         scrip = data['scrip']
         if ((dbnse['lowSell'].find_one({'scrip': scrip}) is not None)):
             data = dbnse.lowSell.find_one({'scrip': scrip})
-            histData = ' #### ' + scrip + ' : ' + data['ml'] + '|' + data['filter2'] + '|' + data['filter'] + '|' + data['filter3']
+            histData = ' #### ' + scrip + ' : ' + data['ml'] + '|' + data['intradaytech'] + '|' + data['filter2'] + '|' + data['filter'] + '|' + data['filter3']
             # if(data['ml'] != '' or data['filter'] != '' or data['filter2'] != ''):
             if ("$$" in histData
-                or 'ConsolidationBreakdown' in histData
+                #or 'ConsolidationBreakdown' in histData
                 or '%%HLTF:maySellTail-tailGT2-allDayGT0' in histData
                 or '%%HLTF:maySellTail-tailGT2-7,10thDayGT0' in histData
                 or '$$MaySell-CheckChart(downTrend-mayReverseLast4DaysUp)' in histData
@@ -646,6 +649,6 @@ def regression_ta_data_sell():
                 or 'sellFinal' in histData
                 or 'sellEveningStar-0' in histData
                 or 'checkCupDown' in histData
-                or 'checkSellConsolidationBreakDown' in histData
+                #or 'checkSellConsolidationBreakDown' in histData
                 ):
                 print(histData)
