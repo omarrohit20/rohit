@@ -445,30 +445,22 @@ def intraday_tech_data(scrip):
     df = df.rename(columns={'total trade quantity': 'volume'})
     forecast_out = 0
     open = df.tail(1).loc[-forecast_out:, 'open'].values[0]
-    open_pre1 = df.tail(2).loc[-forecast_out:, 'open'].values[0]
-    open_pre12 = df.tail(12).loc[-forecast_out:, 'open'].values[0]
-    open_pre24 = df.tail(24).loc[-forecast_out:, 'open'].values[0]
-    open_pre25 = df.tail(25).loc[-forecast_out:, 'open'].values[0]
+    open_cndl12 = df.tail(12).loc[-forecast_out:, 'open'].values[0]
+    open_cndl25 = df.tail(25).loc[-forecast_out:, 'open'].values[0]
     high = df.tail(1).loc[-forecast_out:, 'high'].values[0]
-    high_pre1 = df.tail(2).loc[-forecast_out:, 'high'].values[0]
-    high_pre12 = df.tail(12).loc[-forecast_out:, 'high'].values[0]
-    high_pre24 = df.tail(24).loc[-forecast_out:, 'high'].values[0]
-    high_pre25 = df.tail(25).loc[-forecast_out:, 'high'].values[0]
+    high_cndl12 = df.tail(12).loc[-forecast_out:, 'high'].values[0]
+    high_cndl25 = df.tail(25).loc[-forecast_out:, 'high'].values[0]
     low = df.tail(1).loc[-forecast_out:, 'low'].values[0]
-    low_pre1 = df.tail(2).loc[-forecast_out:, 'low'].values[0]
-    low_pre12 = df.tail(12).loc[-forecast_out:, 'low'].values[0]
-    low_pre24 = df.tail(24).loc[-forecast_out:, 'low'].values[0]
-    low_pre25 = df.tail(25).loc[-forecast_out:, 'low'].values[0]
+    low_cndl12 = df.tail(12).loc[-forecast_out:, 'low'].values[0]
+    low_cndl25 = df.tail(25).loc[-forecast_out:, 'low'].values[0]
     close = df.tail(1).loc[-forecast_out:, 'close'].values[0]
-    close_pre1 = df.tail(2).loc[-forecast_out:, 'close'].values[0]
-    close_pre12 = df.tail(12).loc[-forecast_out:, 'close'].values[0]
-    close_pre24 = df.tail(24).loc[-forecast_out:, 'close'].values[0]
-    close_pre25 = df.tail(25).loc[-forecast_out:, 'close'].values[0]
-    daychange = (close - open_pre25) * 100 / open_pre25
-    postlunchchange_high = (high - high_pre12) * 100 / high_pre12
-    morningchange_high = (high_pre12 - high_pre25) * 100 / high_pre25
-    postlunchchange_low = (low - low_pre12) * 100 / low_pre12
-    morningchange_low = (low_pre12 - low_pre25) * 100 / low_pre25
+    close_cndl12 = df.tail(12).loc[-forecast_out:, 'close'].values[0]
+    close_cndl25 = df.tail(25).loc[-forecast_out:, 'close'].values[0]
+    daychange = (close - open_cndl25) * 100 / open_cndl25
+    postlunchchange_high = (high - high_cndl12) * 100 / high_cndl12
+    morningchange_high = (high_cndl12 - high_cndl25) * 100 / high_cndl25
+    postlunchchange_low = (low - low_cndl12) * 100 / low_cndl12
+    morningchange_low = (low_cndl12 - low_cndl25) * 100 / low_cndl25
     if ( 1 < daychange < 2 and postlunchchange_high > daychange / 2.5):
         return "UpStairs"
     elif (daychange > 1 and postlunchchange_high < abs(daychange) / 4):
@@ -478,6 +470,123 @@ def intraday_tech_data(scrip):
         return "DownStairs"
     elif (daychange < -1 and postlunchchange_low > abs(daychange) / 4):
         return "DownPostLunchConsolidation"
+
+    open_pre1 = df.tail(26).loc[-forecast_out:, 'open'].values[0]
+    open_cndl12_pre1 = df.tail(37).loc[-forecast_out:, 'open'].values[0]
+    open_cndl25_pre1 = df.tail(50).loc[-forecast_out:, 'open'].values[0]
+    high_pre1 = df.tail(26).loc[-forecast_out:, 'high'].values[0]
+    high_cndl12_pre1 = df.tail(37).loc[-forecast_out:, 'high'].values[0]
+    high_cndl25_pre1 = df.tail(50).loc[-forecast_out:, 'high'].values[0]
+    low_pre1 = df.tail(26).loc[-forecast_out:, 'low'].values[0]
+    low_cndl12_pre1 = df.tail(37).loc[-forecast_out:, 'low'].values[0]
+    low_cndl25_pre1 = df.tail(50).loc[-forecast_out:, 'low'].values[0]
+    close_pre1 = df.tail(26).loc[-forecast_out:, 'close'].values[0]
+    close_cndl12_pre1 = df.tail(37).loc[-forecast_out:, 'close'].values[0]
+    close_cndl25_pre1 = df.tail(50).loc[-forecast_out:, 'close'].values[0]
+    daychange_pre1 = (close_pre1 - open_cndl25_pre1) * 100 / open_cndl25_pre1
+    postlunchchange_high_pre1 = (high_pre1 - high_cndl12_pre1) * 100 / high_cndl12_pre1
+    morningchange_high_pre1 = (high_cndl12_pre1 - high_cndl25_pre1) * 100 / high_cndl25_pre1
+    postlunchchange_low_pre1 = (low_pre1 - low_cndl12_pre1) * 100 / low_cndl12_pre1
+    morningchange_low_pre1 = (low_cndl12_pre1 - low_cndl25_pre1) * 100 / low_cndl25_pre1
+
+    if (-1 < daychange < 1 and abs(daychange_pre1) > 3 * abs(daychange)):
+        if ( 1 < daychange_pre1  and postlunchchange_high_pre1 > daychange / 2.5):
+            return "Pre1_UpStairs"
+        elif (daychange_pre1 > 1 and postlunchchange_high_pre1 < abs(daychange) / 4):
+            return "Pre1_UpPostLunchConsolidation"
+
+        if (-2 < daychange_pre1 < -1 and postlunchchange_low_pre1 < daychange / 2.5):
+            return "Pre1_DownStairs"
+        elif (daychange_pre1 < -1 and postlunchchange_low_pre1 > abs(daychange) / 4):
+            return "Pre1_DownPostLunchConsolidation"
+
+    open_pre2 = df.tail(51).loc[-forecast_out:, 'open'].values[0]
+    open_cndl12_pre2 = df.tail(62).loc[-forecast_out:, 'open'].values[0]
+    open_cndl25_pre2 = df.tail(75).loc[-forecast_out:, 'open'].values[0]
+    high_pre2 = df.tail(51).loc[-forecast_out:, 'high'].values[0]
+    high_cndl12_pre2 = df.tail(62).loc[-forecast_out:, 'high'].values[0]
+    high_cndl25_pre2 = df.tail(75).loc[-forecast_out:, 'high'].values[0]
+    low_pre2 = df.tail(51).loc[-forecast_out:, 'low'].values[0]
+    low_cndl12_pre2 = df.tail(62).loc[-forecast_out:, 'low'].values[0]
+    low_cndl25_pre2 = df.tail(75).loc[-forecast_out:, 'low'].values[0]
+    close_pre2 = df.tail(51).loc[-forecast_out:, 'close'].values[0]
+    close_cndl12_pre2 = df.tail(62).loc[-forecast_out:, 'close'].values[0]
+    close_cndl25_pre2 = df.tail(75).loc[-forecast_out:, 'close'].values[0]
+    daychange_pre2 = (close_pre2 - open_cndl25_pre2) * 100 / open_cndl25_pre2
+    postlunchchange_high_pre2 = (high_pre2 - high_cndl12_pre2) * 100 / high_cndl12_pre2
+    morningchange_high_pre2 = (high_cndl12_pre2 - high_cndl25_pre2) * 100 / high_cndl25_pre2
+    postlunchchange_low_pre2 = (low_pre2 - low_cndl12_pre2) * 100 / low_cndl12_pre2
+    morningchange_low_pre2 = (low_cndl12_pre2 - low_cndl25_pre2) * 100 / low_cndl25_pre2
+
+    if (-1 < daychange < 1 and -1 < daychange_pre1 < 1 and abs(daychange_pre2) > 3 * abs(daychange)):
+        if (1 < daychange_pre2 and postlunchchange_high_pre2 > daychange / 2.5):
+            return "pre2_UpStairs"
+        elif (daychange_pre2 > 1 and postlunchchange_high_pre2 < abs(daychange) / 4):
+            return "pre2_UpPostLunchConsolidation"
+
+        if (-2 < daychange_pre2 < -1 and postlunchchange_low_pre2 < daychange / 2.5):
+            return "pre2_DownStairs"
+        elif (daychange_pre2 < -1 and postlunchchange_low_pre2 > abs(daychange) / 4):
+            return "Pre2_DownPostLunchConsolidation"
+
+    open_pre3 = df.tail(76).loc[-forecast_out:, 'open'].values[0]
+    open_cndl12_pre3 = df.tail(87).loc[-forecast_out:, 'open'].values[0]
+    open_cndl25_pre3 = df.tail(100).loc[-forecast_out:, 'open'].values[0]
+    high_pre3 = df.tail(76).loc[-forecast_out:, 'high'].values[0]
+    high_cndl12_pre3 = df.tail(87).loc[-forecast_out:, 'high'].values[0]
+    high_cndl25_pre3 = df.tail(100).loc[-forecast_out:, 'high'].values[0]
+    low_pre3 = df.tail(76).loc[-forecast_out:, 'low'].values[0]
+    low_cndl12_pre3 = df.tail(87).loc[-forecast_out:, 'low'].values[0]
+    low_cndl25_pre3 = df.tail(100).loc[-forecast_out:, 'low'].values[0]
+    close_pre3 = df.tail(76).loc[-forecast_out:, 'close'].values[0]
+    close_cndl12_pre3 = df.tail(87).loc[-forecast_out:, 'close'].values[0]
+    close_cndl25_pre3 = df.tail(100).loc[-forecast_out:, 'close'].values[0]
+    daychange_pre3 = (close_pre3 - open_cndl25_pre3) * 100 / open_cndl25_pre3
+    postlunchchange_high_pre3 = (high_pre3 - high_cndl12_pre3) * 100 / high_cndl12_pre3
+    morningchange_high_pre3 = (high_cndl12_pre3 - high_cndl25_pre3) * 100 / high_cndl25_pre3
+    postlunchchange_low_pre3 = (low_pre3 - low_cndl12_pre3) * 100 / low_cndl12_pre3
+    morningchange_low_pre3 = (low_cndl12_pre3 - low_cndl25_pre3) * 100 / low_cndl25_pre3
+
+    if (-1 < daychange < 1 and -1 < daychange_pre1 < 1 and -1 < daychange_pre2 < 1 and abs(daychange_pre3) > 3 * abs(daychange)):
+        if (1 < daychange_pre3 and postlunchchange_high_pre3 > daychange / 2.5):
+            return "pre3_UpStairs"
+        elif (daychange_pre3 > 1 and postlunchchange_high_pre3 < abs(daychange) / 4):
+            return "pre3_UpPostLunchConsolidation"
+
+        if (-2 < daychange_pre3 < -1 and postlunchchange_low_pre3 < daychange / 2.5):
+            return "pre3_DownStairs"
+        elif (daychange_pre3 < -1 and postlunchchange_low_pre3 > abs(daychange) / 4):
+            return "Pre3_DownPostLunchConsolidation"
+
+    open_pre4 = df.tail(101).loc[-forecast_out:, 'open'].values[0]
+    open_cndl12_pre4 = df.tail(112).loc[-forecast_out:, 'open'].values[0]
+    open_cndl25_pre4 = df.tail(125).loc[-forecast_out:, 'open'].values[0]
+    high_pre4 = df.tail(101).loc[-forecast_out:, 'high'].values[0]
+    high_cndl12_pre4 = df.tail(112).loc[-forecast_out:, 'high'].values[0]
+    high_cndl25_pre4 = df.tail(125).loc[-forecast_out:, 'high'].values[0]
+    low_pre4 = df.tail(101).loc[-forecast_out:, 'low'].values[0]
+    low_cndl12_pre4 = df.tail(112).loc[-forecast_out:, 'low'].values[0]
+    low_cndl25_pre4 = df.tail(125).loc[-forecast_out:, 'low'].values[0]
+    close_pre4 = df.tail(101).loc[-forecast_out:, 'close'].values[0]
+    close_cndl12_pre4 = df.tail(112).loc[-forecast_out:, 'close'].values[0]
+    close_cndl25_pre4 = df.tail(125).loc[-forecast_out:, 'close'].values[0]
+    daychange_pre4 = (close_pre4 - open_cndl25_pre4) * 100 / open_cndl25_pre4
+    postlunchchange_high_pre4 = (high_pre4 - high_cndl12_pre4) * 100 / high_cndl12_pre4
+    morningchange_high_pre4 = (high_cndl12_pre4 - high_cndl25_pre4) * 100 / high_cndl25_pre4
+    postlunchchange_low_pre4 = (low_pre4 - low_cndl12_pre4) * 100 / low_cndl12_pre4
+    morningchange_low_pre4 = (low_cndl12_pre4 - low_cndl25_pre4) * 100 / low_cndl25_pre4
+
+    if (-1 < daychange < 1 and -1 < daychange_pre1 < 1 and -1 < daychange_pre2 < 1 and -1 < daychange_pre3 < 1 and abs(daychange_pre4) > 3 * abs(daychange)):
+        if (1 < daychange_pre4 and postlunchchange_high_pre4 > daychange / 2.5):
+            return "pre4_UpStairs"
+        elif (daychange_pre4 > 1 and postlunchchange_high_pre4 < abs(daychange) / 4):
+            return "pre4_UpPostLunchConsolidation"
+
+        if (-2 < daychange_pre4 < -1 and postlunchchange_low_pre4 < daychange / 2.5):
+            return "pre4_DownStairs"
+        elif (daychange_pre4 < -1 and postlunchchange_low_pre4 > abs(daychange) / 4):
+            return "pre4_DownPostLunchConsolidation"
+
     return ""
 
 def result_data_summary(scrip):

@@ -109,6 +109,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         mldatalow = ''
                         highVol = ''
                         resultDeclared = ''
+                        intradaytech = ''
                         filtersFlag = False
                         
                         try:
@@ -126,8 +127,9 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 and 'CheckNews' not in processor
                                 ):
                                 datahigh = dbnse.highBuy.find_one({'scrip':scrip})
+                                intradaytech = datahigh['intradaytech']
                                 mldatahigh =  datahigh['filter2'] + '|' + datahigh['filter']
-                                mldatahigh = datahigh['ml'] + '|' + mldatahigh
+                                mldatahigh = datahigh['ml'] + ':' + datahigh['intradaytech'] + '|' + mldatahigh
                                 if('ReversalYear' in datahigh['filter3'] or 'BreakYear' in datahigh['filter3'] or 'NearYear' in datahigh['filter3']):
                                     mldatahigh = mldatahigh + '|' + datahigh['filter3']
                                 if('buy' in processor
@@ -158,7 +160,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 mldatalow = datalow['filter2'] + '|' + datalow['filter']
                                 mldatalow = datalow['ml'] + '|' + mldatalow
                                 if ('ReversalYear' in datalow['filter3'] or 'BreakYear' in datalow['filter3'] or 'NearYear' in datalow['filter3']):
-                                    mldatalow = mldatalow + '|' + datalow['filter3']
+                                    mldatalow = mldatalow + ':' + datalow['intradaytech'] + '|' + datalow['filter3']
                                 if ('sell' in processor
                                     and ('sell' in datalow['filter'] or 'Sell' in datalow['filter'])
                                     and ('%%' in datalow['filter']
@@ -181,7 +183,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             if (data1 is not None
                                 and data2 is not None
                                 and data3 is not None
-                                and ('MLhighBuyStrong' in mldatahigh or 'MLlowSellStrong' in mldatalow)
+                                and ('MLhighBuyStrong' in mldatahigh or 'MLlowSellStrong' in mldatalow or intradaytech != "")
                                 and (('buy' in processor and ('buy' in highVol or 'Buy' in highVol))
                                      or ('sell' in processor and ('sell' in highVol or 'Sell' in highVol))
                                     )
@@ -227,8 +229,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 ):
                                 filtersFlag = True
 
-                            regressionhigh = dbnse.regressionhigh.find_one({'scrip': scrip})
-                            regressionlow = dbnse.regressionlow.find_one({'scrip': scrip})
+                            regressionhigh = dbnse.highBuy.find_one({'scrip': scrip})
+                            regressionlow = dbnse.lowSell.find_one({'scrip': scrip})
                             if ('buy' in processor or 'Buy' in processor or 'breakout2-morning-volume' in processor or 'morning-volume-bs' in processor):
                                 if (regressionhigh['month3LowChange'] < 5):
                                     if (regressionhigh['month3LowChange'] == regressionhigh['weekLowChange']):
@@ -249,11 +251,11 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                         mldatahigh = mldatahigh + '|' + 'buy-m3HGT-5-shortuptrend'
                                         if ('MLhighBuyStrong' in mldatahigh or data1 is not None):
                                             filtersFlag = True
-                                #if ('shortUpTrend' in regressionhigh['filter1'] and '(upTrend)' in regressionhigh['series_trend']
-                                    #and abs(regressionhigh['month3LowChange']) < abs(regressionhigh['month3HighChange'])
-                                    #):
-                                    #mldatahigh = mldatahigh + '|' + 'shortUpTrend'
-                                    #filtersFlag = True
+                                if ('shortUpTrend' in regressionhigh['filter1'] and '(upTrend)' in regressionhigh['series_trend']
+                                    and abs(regressionhigh['month3LowChange']) < abs(regressionhigh['month3HighChange'])
+                                    ):
+                                    mldatahigh = mldatahigh + '|' + 'shortUpTrend'
+                                    filtersFlag = True
 
                                 if (regressionhigh['PCT_day_change'] < 1 or regressionhigh['PCT_day_change_pre1'] < 1
                                     or 2*abs(regressionhigh['PCT_day_change']) < abs(regressionhigh['PCT_day_change_pre1'])
@@ -279,11 +281,11 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                         mldatalow = mldatalow + '|' + 'sell-m3LowLT5-shortdowntrend'
                                         if ('MLlowSellStrong' in mldatalow or data1 is not None):
                                             filtersFlag = True
-                                #if ('shorDownTrend' in regressionhigh['filter1'] and '(downTrend)' in regressionhigh['series_trend']
-                                    #and abs(regressionhigh['month3LowChange']) > abs(regressionhigh['month3HighChange'])
-                                    #):
-                                    #mldatalow = mldatalow + '|' + 'shortDownTrend'
-                                    #filtersFlag = True
+                                if ('shorDownTrend' in regressionhigh['filter1'] and '(downTrend)' in regressionhigh['series_trend']
+                                    and abs(regressionhigh['month3LowChange']) > abs(regressionhigh['month3HighChange'])
+                                    ):
+                                    mldatalow = mldatalow + '|' + 'shortDownTrend'
+                                    filtersFlag = True
 
                                 if (regressionhigh['PCT_day_change'] > -1 or regressionhigh['PCT_day_change_pre1'] > -1
                                     or 2*abs(regressionhigh['PCT_day_change']) < abs(regressionhigh['PCT_day_change_pre1'])
@@ -453,8 +455,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                         needToPrint = True  # do-nothing
 
                     try:
-                        regressionhigh = dbnse.regressionhigh.find_one({'scrip':scrip})
-                        regressionlow = dbnse.regressionlow.find_one({'scrip':scrip})
+                        regressionhigh = dbnse.highBuy.find_one({'scrip': scrip})
+                        regressionlow = dbnse.lowSell.find_one({'scrip': scrip})
 
                         if ('buy' in processor or 'Buy' in processor or 'breakout2-morning-volume' in processor or 'morning-volume-bs' in processor):
                             if(regressionhigh['month3LowChange'] < 5):
@@ -473,10 +475,10 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                     and (regressionhigh['PCT_day_change_pre1'] > 0 or regressionhigh['PCT_day_change_pre2'] > 0)
                                     ):
                                     mldatahigh = mldatahigh + '|' + 'buy-m3HGT-5-shortuptrend'
-                            #if ('shortUpTrend' in regressionhigh['filter1'] and '(upTrend)' in regressionhigh['series_trend']
-                                #and abs(regressionhigh['month3LowChange']) < abs(regressionhigh['month3HighChange'])
-                                #):
-                                #mldatahigh = mldatahigh + '|' + 'shortUpTrend'
+                            if ('shortUpTrend' in regressionhigh['filter1'] and '(upTrend)' in regressionhigh['series_trend']
+                                and abs(regressionhigh['month3LowChange']) < abs(regressionhigh['month3HighChange'])
+                                ):
+                                mldatahigh = mldatahigh + '|' + 'shortUpTrend'
                             if (regressionhigh['PCT_day_change'] < 1 or regressionhigh['PCT_day_change_pre1'] < 1
                                 or 2 * abs(regressionhigh['PCT_day_change']) < abs(regressionhigh['PCT_day_change_pre1'])
                                 ):
@@ -499,10 +501,10 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                     and (regressionlow['PCT_day_change_pre1'] < 0 or regressionlow['PCT_day_change_pre2'] < 0)
                                     ):
                                     mldatalow = mldatalow + '|' + 'sell-m3LowLT5-shortdowntrend'
-                            #if ('shorDownTrend' in regressionhigh['filter1'] and '(downTrend)' in regressionhigh['series_trend']
-                                #and abs(regressionhigh['month3LowChange']) > abs(regressionhigh['month3HighChange'])
-                                #):
-                                #mldatalow = mldatalow + '|' + 'shortDownTrend'
+                            if ('shorDownTrend' in regressionhigh['filter1'] and '(downTrend)' in regressionhigh['series_trend']
+                                and abs(regressionhigh['month3LowChange']) > abs(regressionhigh['month3HighChange'])
+                                ):
+                                mldatalow = mldatalow + '|' + 'shortDownTrend'
                             if (regressionhigh['PCT_day_change'] > -1 or regressionhigh['PCT_day_change_pre1'] > -1
                                 or 2 * abs(regressionhigh['PCT_day_change']) < abs(regressionhigh['PCT_day_change_pre1'])
                                 ):

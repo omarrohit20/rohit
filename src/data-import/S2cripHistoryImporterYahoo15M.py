@@ -51,7 +51,7 @@ if __name__ == "__main__":
             data = db.history15m.find_one({'dataset_code':scrip})
             if(data is None):
                 ticker = yf.Ticker(scrip + '.NS')
-                data = ticker.history(period = "1d", interval = "15m")
+                data = ticker.history(period = "5d", interval = "15m")
                 #print(data)
                 insert_scripdata(scrip, data, futures)
             print(scrip)      
@@ -59,7 +59,7 @@ if __name__ == "__main__":
             time.sleep(2)
             try:
                 ticker = yf.Ticker(scrip + '.NS')
-                data = ticker.history(period = "1d", interval = "15m")
+                data = ticker.history(period = "5d", interval = "15m")
                 insert_scripdata(scrip, data, futures)
                 print(scrip)
             except:
