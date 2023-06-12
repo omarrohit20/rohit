@@ -464,16 +464,22 @@ def intraday_tech_data(regression_data):
     morningchange_low = (low_cndl12 - low_cndl25) * 100 / low_cndl25
 
 
-    if ( 1 < daychange < 4 and (postlunchchange_high > daychange / 3) and (morningchange_high > daychange / 3)):
-        return "UpStairs"
+    if ( 1 < daychange < 4 and (postlunchchange_high > daychange / 3) and (morningchange_high > daychange / 4)):
+        if (1 < regression_data['PCT_day_change_pre1']):
+            return "UpStairs(Last2DayUP-SellAt10)"
+        else:
+            return "UpStairs"
     elif (daychange > 2
         and abs(postlunchchange_high) < abs(daychange) / 4
         and close > high_cndl25
         ):
         return "UpPostLunchConsolidation"
 
-    if (-4 < daychange < -1 and (postlunchchange_low < daychange / 3) and (morningchange_low < daychange / 3)):
-        return "DownStairs"
+    if (-4 < daychange < -1 and (postlunchchange_low < daychange / 3) and (morningchange_low < daychange / 4)):
+        if (regression_data['PCT_day_change_pre1'] < -1):
+            return "DownStairs(Last2DayDown-BuyAt10)"
+        else:
+            return "DownStairs"
     elif (daychange < -2
         and abs(postlunchchange_low) < abs(daychange) / 4
         and close < low_cndl25
@@ -517,12 +523,12 @@ def intraday_tech_data(regression_data):
     morningchange_low_pre1 = (low_cndl12_pre1 - low_cndl25_pre1) * 100 / low_cndl25_pre1
 
     if (-1 < daychange < 1 and abs(daychange_pre1) > 3 * abs(daychange)):
-        if ( 1 < daychange_pre1  and (postlunchchange_high_pre1 > daychange / 3) and (morningchange_high_pre1 > daychange / 3)):
+        if ( daychange_pre1 > 1 and (postlunchchange_high_pre1 > daychange / 3) and (morningchange_high_pre1 > daychange / 4)):
             return "ZPre1_UpStairs"
         elif (daychange_pre1 > 1 and abs(postlunchchange_high_pre1) < abs(daychange) / 4):
             return "ZPre1_UpPostLunchConsolidation"
 
-        if (-2 < daychange_pre1 < -1 and (postlunchchange_low_pre1 < daychange / 3) and (morningchange_low_pre1 > daychange / 3)):
+        if (daychange_pre1 < -1 and (postlunchchange_low_pre1 < daychange / 3) and (morningchange_low_pre1 > daychange / 4)):
             return "ZPre1_DownStairs"
         elif (daychange_pre1 < -1 and abs(postlunchchange_low_pre1) < abs(daychange) / 4):
             return "ZPre1_DownPostLunchConsolidation"
@@ -546,12 +552,12 @@ def intraday_tech_data(regression_data):
     morningchange_low_pre2 = (low_cndl12_pre2 - low_cndl25_pre2) * 100 / low_cndl25_pre2
 
     if (-1 < daychange < 1 and -1 < daychange_pre1 < 1 and abs(daychange_pre2) > 3 * abs(daychange)):
-        if (1 < daychange_pre2 and (postlunchchange_high_pre2 > daychange / 3) and (morningchange_high_pre2 > daychange / 3)):
+        if (daychange_pre2 > 1 and (postlunchchange_high_pre2 > daychange / 3) and (morningchange_high_pre2 > daychange / 4)):
             return "ZPre2_UpStairs"
         elif (daychange_pre2 > 1 and abs(postlunchchange_high_pre2) < abs(daychange) / 4):
             return "ZPre2_UpPostLunchConsolidation"
 
-        if (-2 < daychange_pre2 < -1 and (postlunchchange_low_pre2 < daychange / 3) and (morningchange_low_pre2 > daychange / 3)):
+        if (daychange_pre2 < -1 and (postlunchchange_low_pre2 < daychange / 3) and (morningchange_low_pre2 > daychange / 4)):
             return "ZPre2_DownStairs"
         elif (daychange_pre2 < -1 and abs(postlunchchange_low_pre2) < abs(daychange) / 4):
             return "ZPre2_DownPostLunchConsolidation"
@@ -575,12 +581,12 @@ def intraday_tech_data(regression_data):
     morningchange_low_pre3 = (low_cndl12_pre3 - low_cndl25_pre3) * 100 / low_cndl25_pre3
 
     if (-1 < daychange < 1 and -1 < daychange_pre1 < 1 and -1 < daychange_pre2 < 1 and abs(daychange_pre3) > 3 * abs(daychange)):
-        if (1 < daychange_pre3 and (postlunchchange_high_pre3 > daychange / 3) and (morningchange_high_pre3 > daychange / 3)):
+        if (daychange_pre3 > 1 and (postlunchchange_high_pre3 > daychange / 3) and (morningchange_high_pre3 > daychange / 4)):
             return "ZPre3_UpStairs"
         elif (daychange_pre3 > 1 and abs(postlunchchange_high_pre3) < abs(daychange) / 4):
             return "ZPre3_UpPostLunchConsolidation"
 
-        if (-2 < daychange_pre3 < -1 and (postlunchchange_low_pre3 < daychange / 3) and (morningchange_low_pre3 < daychange / 3)):
+        if (daychange_pre3 < -1 and (postlunchchange_low_pre3 < daychange / 3) and (morningchange_low_pre3 < daychange / 4)):
             return "ZPre3_DownStairs"
         elif (daychange_pre3 < -1 and abs(postlunchchange_low_pre3) > abs(daychange) / 4):
             return "ZPre3_DownPostLunchConsolidation"
@@ -604,12 +610,12 @@ def intraday_tech_data(regression_data):
     morningchange_low_pre4 = (low_cndl12_pre4 - low_cndl25_pre4) * 100 / low_cndl25_pre4
 
     if (-1 < daychange < 1 and -1 < daychange_pre1 < 1 and -1 < daychange_pre2 < 1 and -1 < daychange_pre3 < 1 and abs(daychange_pre4) > 3 * abs(daychange)):
-        if (1 < daychange_pre4 and (postlunchchange_high_pre4 > daychange / 3) and (morningchange_high_pre4 > daychange / 3)):
+        if (daychange_pre4 > 1 and (postlunchchange_high_pre4 > daychange / 3) and (morningchange_high_pre4 > daychange / 4)):
             return "ZPre4_UpStairs"
         elif (daychange_pre4 > 1 and abs(postlunchchange_high_pre4) < abs(daychange) / 4):
             return "ZPre4_UpPostLunchConsolidation"
 
-        if (-2 < daychange_pre4 < -1 and (postlunchchange_low_pre4 < daychange / 3) and (morningchange_low_pre4 < daychange / 3)):
+        if (daychange_pre4 < -1 and (postlunchchange_low_pre4 < daychange / 3) and (morningchange_low_pre4 < daychange / 4)):
             return "ZPre4_DownStairs"
         elif (daychange_pre4 < -1 and abs(postlunchchange_low_pre4) > abs(daychange) / 4):
             return "ZPre4_DownPostLunchConsolidation"
