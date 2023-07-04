@@ -11,7 +11,7 @@ if __name__ == "__main__":
     print('Started')
     sb.nw = datetime.now()
     
-    while (sb.nw <= time_10_30):
+    while (sb.nw <= time_12_00):
         if (sb.nw >= time_09_45 and sb.nw <= time_12_00):
             # ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) < -0.7 and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) > -2 and ( ( ( [-1] 5 minute close - [-6] 5 minute close ) * 100 ) / [-6] 5 minute close ) < 0 and latest "close - 1 candle ago close / 1 candle ago close * 100" < -0.7 ) ) ) )
             process_url('https://chartink.com/screener/supertrend-morning-buy', 'supertrend-morning-buy', time_09_45, time_12_00)

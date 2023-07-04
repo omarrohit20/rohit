@@ -428,6 +428,7 @@ def result_data(scrip):
 
 
 def intraday_tech_data(regression_data):
+    intradaytech = ''
     scrip = regression_data['scrip']
     data = db.history15m.find_one({'dataset_code': scrip})
     if (data is None or (np.array(data['data'])).size < 25):
@@ -445,7 +446,7 @@ def intraday_tech_data(regression_data):
     df = df[['date', 'open', 'high', 'low', 'close', 'volume']]
     df = df.rename(columns={'total trade quantity': 'volume'})
     forecast_out = 0
-    open = df.tail(1).loc[-forecast_out:, 'open'].values[0]
+    open = df.tail(25).loc[-forecast_out:, 'open'].values[0]
     open_cndl12 = df.tail(12).loc[-forecast_out:, 'open'].values[0]
     open_cndl25 = df.tail(25).loc[-forecast_out:, 'open'].values[0]
     high = df.tail(1).loc[-forecast_out:, 'high'].values[0]
@@ -466,57 +467,36 @@ def intraday_tech_data(regression_data):
 
     if ( 1 < daychange < 4 and (postlunchchange_high > daychange / 3) and (morningchange_high > daychange / 4)):
         if (1 < regression_data['PCT_day_change_pre1']):
-            return "UpStairs(SellAt10-Last2DayUP)"
+            intradaytech = "UpStairs(SellAt10-Last2DayUP)"
         else:
-            return "UpStairs"
+            intradaytech = "UpStairs"
     elif (daychange > 2
         and abs(postlunchchange_high) < abs(daychange) / 3
         and close > high_cndl25
         ):
         if (1.5 < regression_data['PCT_day_change_pre1']):
-            return "UpPostLunchConsolidation(Last2DayUP)"
+            intradaytech = "UpPostLunchConsolidation(Last2DayUP)"
         else:
-            return "UpPostLunchConsolidation"
+            intradaytech = "UpPostLunchConsolidation"
 
     if (-4 < daychange < -1 and (postlunchchange_low < daychange / 3) and (morningchange_low < daychange / 4)):
         if (regression_data['PCT_day_change_pre1'] < -1):
-            return "DownStairs(BuyAt10-Last2DayDown)"
+            intradaytech = "DownStairs(BuyAt10-Last2DayDown)"
         else:
-            return "DownStairs"
+            intradaytech = "DownStairs"
     elif (daychange < -2
         and abs(postlunchchange_low) < abs(daychange) / 3
         and close < low_cndl25
         ):
         if (regression_data['PCT_day_change_pre1'] < -1.5):
-            return "DownPostLunchConsolidation(Last2DayDown)"
+            intradaytech = "DownPostLunchConsolidation(Last2DayDown)"
         else:
-            return "DownPostLunchConsolidation"
+            intradaytech = "DownPostLunchConsolidation"
+    
+    if(intradaytech != ''):
+        return intradaytech
 
-    if (-0.3 < daychange < 0.75
-        and regression_data['highTail'] < 0.5
-        and regression_data['PCT_day_change_pre1'] > 0.75
-        and regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']
-        ):
-        return "Consolidation-UP"
-    elif (-0.75 < daychange < 0.3
-          and regression_data['lowTail'] < 0.5
-          and regression_data['PCT_day_change_pre1'] < -0.75
-          and regression_data['PCT_day_change_pre1'] < regression_data['PCT_day_change']
-          ):
-        return "Consolidation-Down"
-    elif (-0.75 < daychange < 0.75
-        and regression_data['highTail'] < 0.5 and regression_data['lowTail'] < 0.5
-        and abs(regression_data['PCT_day_change_pre1']) > 1.5
-        ):
-        return "ZConsolidation"
-    elif (-0.75 < daychange < 0.75
-        and regression_data['highTail'] < 0.5 and regression_data['lowTail'] < 0.5
-        and abs(regression_data['PCT_day_change_pre1']) < 0.75
-        and abs(regression_data['PCT_day_change_pre2']) > 1.5
-        ):
-        return "Consolidation-2Day"
-
-    open_pre1 = df.tail(26).loc[-forecast_out:, 'open'].values[0]
+    open_pre1 = df.tail(50).loc[-forecast_out:, 'open'].values[0]
     open_cndl12_pre1 = df.tail(37).loc[-forecast_out:, 'open'].values[0]
     open_cndl25_pre1 = df.tail(50).loc[-forecast_out:, 'open'].values[0]
     high_pre1 = df.tail(26).loc[-forecast_out:, 'high'].values[0]
@@ -534,18 +514,21 @@ def intraday_tech_data(regression_data):
     postlunchchange_low_pre1 = (low_pre1 - low_cndl12_pre1) * 100 / low_cndl12_pre1
     morningchange_low_pre1 = (low_cndl12_pre1 - low_cndl25_pre1) * 100 / low_cndl25_pre1
 
-    if (-1 < daychange < 1 and abs(daychange_pre1) > 3 * abs(daychange)):
-        if ( daychange_pre1 > 1.5 and (postlunchchange_high_pre1 > daychange / 3) and (morningchange_high_pre1 > daychange / 4)):
-            return "ZPre1_UpStairs"
-        elif (daychange_pre1 > 1.5 and abs(postlunchchange_high_pre1) < abs(daychange) / 4):
-            return "ZPre1_UpPostLunchConsolidation"
+    if (intradaytech == '' and -1 < daychange < 1 and abs(daychange_pre1) > 3 * abs(daychange)):
+        if ( 1.5 < daychange_pre1 < 5 and (postlunchchange_high_pre1 > daychange / 3) and (morningchange_high_pre1 > daychange / 4)):
+            intradaytech = "ZPre1_UpStairs"
+        elif (1.5 < daychange_pre1 < 5 and abs(postlunchchange_high_pre1) < abs(daychange) / 4):
+            intradaytech = "ZPre1_UpPostLunchConsolidation"
 
-        if (daychange_pre1 < -1.5 and (postlunchchange_low_pre1 < daychange / 3) and (morningchange_low_pre1 > daychange / 4)):
-            return "ZPre1_DownStairs"
-        elif (daychange_pre1 < -1.5 and abs(postlunchchange_low_pre1) < abs(daychange) / 4):
-            return "ZPre1_DownPostLunchConsolidation"
+        if (-5 < daychange_pre1 < -1.5 and (postlunchchange_low_pre1 < daychange / 3) and (morningchange_low_pre1 > daychange / 4)):
+            intradaytech = "ZPre1_DownStairs"
+        elif (-5 < daychange_pre1 < -1.5 and abs(postlunchchange_low_pre1) < abs(daychange) / 4):
+            intradaytech = "ZPre1_DownPostLunchConsolidation"
+    
+    if (intradaytech != ''):
+        return intradaytech
 
-    open_pre2 = df.tail(51).loc[-forecast_out:, 'open'].values[0]
+    open_pre2 = df.tail(75).loc[-forecast_out:, 'open'].values[0]
     open_cndl12_pre2 = df.tail(62).loc[-forecast_out:, 'open'].values[0]
     open_cndl25_pre2 = df.tail(75).loc[-forecast_out:, 'open'].values[0]
     high_pre2 = df.tail(51).loc[-forecast_out:, 'high'].values[0]
@@ -563,18 +546,7 @@ def intraday_tech_data(regression_data):
     postlunchchange_low_pre2 = (low_pre2 - low_cndl12_pre2) * 100 / low_cndl12_pre2
     morningchange_low_pre2 = (low_cndl12_pre2 - low_cndl25_pre2) * 100 / low_cndl25_pre2
 
-    if (abs(daychange) < 0.7 and abs(daychange_pre1) < 0.7 and abs(daychange_pre2) > 3 * abs(daychange) and abs(daychange_pre2) > 2):
-        if (daychange_pre2 > 1.5 and (postlunchchange_high_pre2 > daychange / 3) and (morningchange_high_pre2 > daychange / 4)):
-            return "Pre2_UpStairs"
-        elif (daychange_pre2 > 1 and abs(postlunchchange_high_pre2) < abs(daychange) / 4):
-            return "Pre2_UpPostLunchConsolidation"
-
-        if (daychange_pre2 < -1.5 and (postlunchchange_low_pre2 < daychange / 3) and (morningchange_low_pre2 > daychange / 4)):
-            return "Pre2_DownStairs"
-        elif (daychange_pre2 < -1.5 and abs(postlunchchange_low_pre2) < abs(daychange) / 4):
-            return "Pre2_DownPostLunchConsolidation"
-
-    open_pre3 = df.tail(76).loc[-forecast_out:, 'open'].values[0]
+    open_pre3 = df.tail(100).loc[-forecast_out:, 'open'].values[0]
     open_cndl12_pre3 = df.tail(87).loc[-forecast_out:, 'open'].values[0]
     open_cndl25_pre3 = df.tail(100).loc[-forecast_out:, 'open'].values[0]
     high_pre3 = df.tail(76).loc[-forecast_out:, 'high'].values[0]
@@ -592,18 +564,7 @@ def intraday_tech_data(regression_data):
     postlunchchange_low_pre3 = (low_pre3 - low_cndl12_pre3) * 100 / low_cndl12_pre3
     morningchange_low_pre3 = (low_cndl12_pre3 - low_cndl25_pre3) * 100 / low_cndl25_pre3
 
-    if (abs(daychange) < 0.7 and abs(daychange_pre1) < 0.7 and abs(daychange_pre2) < 0.7 and abs(daychange_pre3) > 3 * abs(daychange) and abs(daychange_pre3) > 2):
-        if (daychange_pre3 > 1.5 and (postlunchchange_high_pre3 > daychange / 3) and (morningchange_high_pre3 > daychange / 4)):
-            return "Pre3_UpStairs"
-        elif (daychange_pre3 > 1.5 and abs(postlunchchange_high_pre3) < abs(daychange) / 4):
-            return "Pre3_UpPostLunchConsolidation"
-
-        if (daychange_pre3 < -1.5 and (postlunchchange_low_pre3 < daychange / 3) and (morningchange_low_pre3 < daychange / 4)):
-            return "Pre3_DownStairs"
-        elif (daychange_pre3 < -1.5 and abs(postlunchchange_low_pre3) > abs(daychange) / 4):
-            return "Pre3_DownPostLunchConsolidation"
-
-    open_pre4 = df.tail(101).loc[-forecast_out:, 'open'].values[0]
+    open_pre4 = df.tail(125).loc[-forecast_out:, 'open'].values[0]
     open_cndl12_pre4 = df.tail(112).loc[-forecast_out:, 'open'].values[0]
     open_cndl25_pre4 = df.tail(125).loc[-forecast_out:, 'open'].values[0]
     high_pre4 = df.tail(101).loc[-forecast_out:, 'high'].values[0]
@@ -621,18 +582,71 @@ def intraday_tech_data(regression_data):
     postlunchchange_low_pre4 = (low_pre4 - low_cndl12_pre4) * 100 / low_cndl12_pre4
     morningchange_low_pre4 = (low_cndl12_pre4 - low_cndl25_pre4) * 100 / low_cndl25_pre4
 
-    if (abs(daychange) < 0.7 and abs(daychange_pre1) < 0.7 and abs(daychange_pre2) < 0.7 and abs(daychange_pre3) < 0.7 and abs(daychange_pre4) > 3 * abs(daychange) and abs(daychange_pre4) > 2):
+    if (intradaytech == '' and abs(daychange) < 0.7 and abs(daychange_pre1) < 0.7 and abs(daychange_pre2) < 0.7 and abs(daychange_pre3) < 0.7 and abs(daychange_pre4) > 3 * abs(daychange) and abs(daychange_pre4) > 2):
         if (daychange_pre4 > 1.5 and (postlunchchange_high_pre4 > daychange / 3) and (morningchange_high_pre4 > daychange / 4)):
-            return "Pre4_UpStairs"
+            intradaytech = "Pre4_UpStairs"
         elif (daychange_pre4 > 1.5 and abs(postlunchchange_high_pre4) < abs(daychange) / 4):
-            return "Pre4_UpPostLunchConsolidation"
+            intradaytech = "Pre4_UpPostLunchConsolidation"
 
         if (daychange_pre4 < -1.5 and (postlunchchange_low_pre4 < daychange / 3) and (morningchange_low_pre4 < daychange / 4)):
-            return "Pre4_DownStairs"
+            intradaytech = "Pre4_DownStairs"
         elif (daychange_pre4 < -1.5 and abs(postlunchchange_low_pre4) > abs(daychange) / 4):
-            return "Pre4_DownPostLunchConsolidation"
+            intradaytech = "Pre4_DownPostLunchConsolidation"
 
-    return ""
+    if (intradaytech == '' and abs(daychange) < 0.7 and abs(daychange_pre1) < 0.7 and abs(daychange_pre2) < 0.7 and abs(
+            daychange_pre3) > 3 * abs(daychange) and abs(daychange_pre3) > 2):
+        if (daychange_pre3 > 1.5 and (postlunchchange_high_pre3 > daychange / 3) and (
+                morningchange_high_pre3 > daychange / 4)):
+            intradaytech = "Pre3_UpStairs"
+        elif (daychange_pre3 > 1.5 and abs(postlunchchange_high_pre3) < abs(daychange) / 4):
+            intradaytech = "Pre3_UpPostLunchConsolidation"
+
+        if (daychange_pre3 < -1.5 and (postlunchchange_low_pre3 < daychange / 3) and (
+                morningchange_low_pre3 < daychange / 4)):
+            intradaytech = "Pre3_DownStairs"
+        elif (daychange_pre3 < -1.5 and abs(postlunchchange_low_pre3) > abs(daychange) / 4):
+            intradaytech = "Pre3_DownPostLunchConsolidation"
+
+    if (intradaytech == '' and abs(daychange) < 0.7 and abs(daychange_pre1) < 0.7 and abs(daychange_pre2) > 3 * abs(
+            daychange) and abs(daychange_pre2) > 2):
+        if (daychange_pre2 > 1.5 and (postlunchchange_high_pre2 > daychange / 3) and (
+                morningchange_high_pre2 > daychange / 4)):
+            intradaytech = "Pre2_UpStairs"
+        elif (daychange_pre2 > 1 and abs(postlunchchange_high_pre2) < abs(daychange) / 4):
+            intradaytech = "Pre2_UpPostLunchConsolidation"
+
+        if (daychange_pre2 < -1.5 and (postlunchchange_low_pre2 < daychange / 3) and (
+                morningchange_low_pre2 > daychange / 4)):
+            intradaytech = "Pre2_DownStairs"
+        elif (daychange_pre2 < -1.5 and abs(postlunchchange_low_pre2) < abs(daychange) / 4):
+            intradaytech = "Pre2_DownPostLunchConsolidation"
+
+
+    if (-0.3 < daychange < 0.75
+        and regression_data['highTail'] < 0.5
+        and regression_data['PCT_day_change_pre1'] > 0.75
+        and regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']
+        ):
+        intradaytech = "Consolidation-UP," + intradaytech
+    elif (-0.75 < daychange < 0.3
+          and regression_data['lowTail'] < 0.5
+          and regression_data['PCT_day_change_pre1'] < -0.75
+          and regression_data['PCT_day_change_pre1'] < regression_data['PCT_day_change']
+          ):
+        intradaytech = "Consolidation-Down," + intradaytech
+    elif (-0.75 < daychange < 0.75
+        and regression_data['highTail'] < 0.5 and regression_data['lowTail'] < 0.5
+        and abs(regression_data['PCT_day_change_pre1']) > 1.5
+        ):
+        intradaytech = "ZConsolidation," + intradaytech
+    elif (-0.75 < daychange < 0.75
+        and regression_data['highTail'] < 0.5 and regression_data['lowTail'] < 0.5
+        and abs(regression_data['PCT_day_change_pre1']) < 0.75
+        and abs(regression_data['PCT_day_change_pre2']) > 1.5
+        ):
+        intradaytech = "Consolidation-2Day," + intradaytech
+
+    return intradaytech
 
 def result_data_summary(scrip):
     regression_high = db.highBuy.find_one({'scrip':scrip})

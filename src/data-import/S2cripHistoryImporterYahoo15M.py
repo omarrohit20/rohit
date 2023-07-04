@@ -40,7 +40,7 @@ if __name__ == "__main__":
     if(sys.argv[1] is None or sys.argv[1] != 'update'):
          db.drop_collection('history15m')
     end_date = (datetime.date.today() + datetime.timedelta(days=1))
-    start_date = (datetime.date.today() - datetime.timedelta(days=3))
+    start_date = (datetime.date.today() - datetime.timedelta(days=10))
     print(start_date.strftime('%d-%m-%Y') + ' to ' + end_date.strftime('%d-%m-%Y'))
     
     for data in db.scrip.find({'futures':sys.argv[2]}):
@@ -51,7 +51,7 @@ if __name__ == "__main__":
             data = db.history15m.find_one({'dataset_code':scrip})
             if(data is None):
                 ticker = yf.Ticker(scrip + '.NS')
-                data = ticker.history(period = "5d", interval = "15m")
+                data = ticker.history(start=start_date, end=end_date, interval = "15m")
                 #print(data)
                 insert_scripdata(scrip, data, futures)
             print(scrip)      
@@ -59,7 +59,7 @@ if __name__ == "__main__":
             time.sleep(2)
             try:
                 ticker = yf.Ticker(scrip + '.NS')
-                data = ticker.history(period = "5d", interval = "15m")
+                data = ticker.history(start=start_date, end=end_date, interval = "15m")
                 insert_scripdata(scrip, data, futures)
                 print(scrip)
             except:

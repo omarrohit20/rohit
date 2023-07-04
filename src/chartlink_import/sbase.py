@@ -66,6 +66,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
             i = 0
             needToPrint = False
             tempScrip = ''
+            mlData = ''
+            intradaytech = ''
             tobuy = ''
             tosell = ''
             while (i < len(df['aggregatedStockList'][ind])):
@@ -89,6 +91,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                     if((db[industry].find_one({'scrip':tempScrip, 'processor':processor}) is None) and tempScrip != ''):
                         record = {}
                         record['scrip'] = tempScrip
+                        record['mlData'] = mlData
+                        record['intradaytech'] = intradaytech
                         record['processor'] = processor
                         record['epochtime'] = epochtime
                         record['eventtime'] = eventtime
@@ -105,6 +109,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                     and currenttime >= starttime and currenttime <= endtime
                     ):
                     if((db[processor].find_one({'scrip':scrip}) is None)):
+                        mlData = ''
                         mldatahigh = ''
                         mldatalow = ''
                         highVol = ''
@@ -152,6 +157,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                         )
                                     ):
                                     filtersFlag = True
+                                if(intradaytech != ""):
+                                    filtersFlag = True
 
                             if ((dbnse['lowSell'].find_one({'scrip': scrip}) is not None)
                                 and 'CheckNews' not in processor
@@ -178,6 +185,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                          #or 'checkSellConsolidationBreakDown' in datalow['filter']
                                         )
                                     ):
+                                    filtersFlag = True
+                                if (intradaytech != ""):
                                     filtersFlag = True
 
                             if (data1 is not None
@@ -337,10 +346,13 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             needToPrint = True
                         
                         tempScrip = scrip
+                        mlData = mldatahigh, ' : ', mldatalow
                             
                         record = {}
                         record['dataset_code'] = scrip
                         record['scrip'] = scrip
+                        record['mlData'] = mlData
+                        record['intradaytech'] = intradaytech
                         record['epochtime'] = epochtime
                         record['eventtime'] = eventtime
                         record['systemtime'] = systemtime
@@ -458,6 +470,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             if ('sell' in processor and ('MLhigh' in data['ml'] or '%%' in data['filter'] or 'Sell-AnyGT2' in data['filter2'] or 'Suy-AnyGT' in data['filter2'] or 'Buy-AnyGT2' in data['filter2'])):
                                 mldatalow = data['ml'] + ':' + data['intradaytech']
                                 mldatalow = mldatalow + '|' + data['filter2'] + '|' + data['filter']
+                        if (data['intradaytech'] != ""):
+                            filtersFlag = True
                     except:
                         needToPrint = True  # do-nothing
 
