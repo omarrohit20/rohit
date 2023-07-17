@@ -91,7 +91,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                     if((db[industry].find_one({'scrip':tempScrip, 'processor':processor}) is None) and tempScrip != ''):
                         record = {}
                         record['scrip'] = tempScrip
-                        record['mlData'] = mlData
+                        record['mlData'] = mldata
                         record['intradaytech'] = intradaytech
                         record['processor'] = processor
                         record['epochtime'] = epochtime
@@ -109,7 +109,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                     and currenttime >= starttime and currenttime <= endtime
                     ):
                     if((db[processor].find_one({'scrip':scrip}) is None)):
-                        mlData = ''
+                        mldata = ''
                         mldatahigh = ''
                         mldatalow = ''
                         highVol = ''
@@ -241,31 +241,10 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             regressionhigh = dbnse.highBuy.find_one({'scrip': scrip})
                             regressionlow = dbnse.lowSell.find_one({'scrip': scrip})
                             if ('buy' in processor or 'Buy' in processor or 'breakout2-morning-volume' in processor or 'morning-volume-bs' in processor):
-                                if (regressionhigh['month3LowChange'] < 5):
-                                    if (regressionhigh['month3LowChange'] == regressionhigh['weekLowChange']):
-                                        mldatahigh = mldatahigh + '|' + '0-month3LowChangeLT5-shortuptrend'
-                                    elif ((regressionhigh['monthLowChange'] + regressionhigh['weekHighChange'] + regressionhigh['weekLowChange']) < 4.5):
-                                        mldatahigh = mldatahigh + '|' + '1-month3LowChangeLT5-shortdowntrend'
-                                    else:
-                                        mldatahigh = mldatahigh + '|' + 'month3LowChangeLT5-indexhigh'
-                                elif (regressionlow['month3HighChange'] > -5):
-                                    if (regressionhigh['monthHighChange'] == regressionhigh['weekHighChange']
-                                        and (regressionhigh['PCT_day_change_pre1'] < 0 or regressionhigh['PCT_day_change_pre2'] < 0)
-                                        ):
-                                        mldatahigh = mldatahigh + '|' + 'sell-m3HGT-5-shortdowntrend'
-                                    elif ((regressionhigh['monthHighChange'] + regressionhigh['weekHighChange'] +
-                                        regressionhigh['weekLowChange']) > -4.5
-                                        and (regressionhigh['PCT_day_change_pre1'] > 0 or regressionhigh['PCT_day_change_pre2'] > 0)
-                                        and regressionhigh['yearLowChange'] > 10
-                                        and (regressionhigh['year2HighChange'] < -5 or regressionhigh['year2HighChange'] < -5 or regressionhigh['PCT_day_change_pre1'] < -1)
-                                        ):
-                                        mldatahigh = mldatahigh + '|' + 'buy-m3HGT-5-shortuptrend'
-                                        if ('MLhighBuyStrong' in mldatahigh or data1 is not None):
-                                            filtersFlag = True
-                                if ('shortUpTrend' in regressionhigh['filter1'] and '(upTrend)' in regressionhigh['series_trend']
-                                    and abs(regressionhigh['month3LowChange']) < abs(regressionhigh['month3HighChange'])
-                                    ):
-                                    mldatahigh = mldatahigh + '|' + 'shortUpTrend'
+                                mldatahigh = mldatahigh + regressionhigh['shorttermtech']
+                                if ('MLhighBuyStrong' in mldatahigh or data1 is not None):
+                                    filtersFlag = True
+                                if ('shortUpTrend' in regressionhigh['shorttermtech']):
                                     filtersFlag = True
 
                                 if (regressionhigh['PCT_day_change'] < 1 or regressionhigh['PCT_day_change_pre1'] < 1
@@ -274,31 +253,11 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                     tobuy = 'buyrecommended'
 
                             if ('sell' in processor or 'Sell' in processor or 'breakout2-morning-volume' in processor or 'morning-volume-bs' in processor):
-                                if (regressionlow['month3HighChange'] > -5):
-                                    if (regressionlow['monthHighChange'] == regressionlow['weekHighChange']):
-                                        mldatalow = mldatalow + '|' + '0-month3HighChangeGT-5-shortdowntrend'
-                                    elif ((regressionlow['monthHighChange'] + regressionlow['weekHighChange'] + regressionlow['weekLowChange']) > -4.5):
-                                        mldatalow = mldatalow + '|' + '1-month3HighChangeGT-5-shortuptrend'
-                                    else:
-                                        mldatalow = mldatalow + '|' + 'month3HighChangeGT-5-indexhigh'
-                                elif (regressionhigh['month3LowChange'] < 5):
-                                    if (regressionlow['month3LowChange'] == regressionlow['weekLowChange']
-                                        and (regressionlow['PCT_day_change_pre1'] > 0 or regressionlow['PCT_day_change_pre2'] > 0)
-                                        ):
-                                        mldatalow = mldatalow + '|' + 'buy-m3LowLT5-shortuptrend'
-                                    elif ((regressionlow['monthLowChange'] + regressionlow['weekHighChange'] + regressionlow['weekLowChange']) < 4.5
-                                        and (regressionlow['PCT_day_change_pre1'] < 0 or regressionlow['PCT_day_change_pre2'] < 0)
-                                        and regressionlow['yearHighChange'] < -10
-                                        and (regressionlow['year2LowCange'] > 5 or regressionlow['yearLowCange'] > 5 or regressionlow['PCT_day_change_pre1'] > 1)
-
+                                mldatalow = mldatalow + regressionlow['shorttermtech']
+                                if ('MLlowSellStrong' in mldatalow or data1 is not None):
+                                    filtersFlag = True
+                                if ('shorDownTrend' in regressionlow['shorttermtech'] and '(downTrend)' in regressionhigh['series_trend']
                                     ):
-                                        mldatalow = mldatalow + '|' + 'sell-m3LowLT5-shortdowntrend'
-                                        if ('MLlowSellStrong' in mldatalow or data1 is not None):
-                                            filtersFlag = True
-                                if ('shorDownTrend' in regressionhigh['filter1'] and '(downTrend)' in regressionhigh['series_trend']
-                                    and abs(regressionhigh['month3LowChange']) > abs(regressionhigh['month3HighChange'])
-                                    ):
-                                    mldatalow = mldatalow + '|' + 'shortDownTrend'
                                     filtersFlag = True
 
                                 if (regressionhigh['PCT_day_change'] > -1 or regressionhigh['PCT_day_change_pre1'] > -1
@@ -346,12 +305,15 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             needToPrint = True
                         
                         tempScrip = scrip
-                        mlData = mldatahigh, ' : ', mldatalow
+                        mldata = mldatahigh + ' : ' + mldatalow + ' : ' + highVol
                             
                         record = {}
                         record['dataset_code'] = scrip
                         record['scrip'] = scrip
-                        record['mlData'] = mlData
+                        record['mlData'] = mldatahigh + ' : ' + mldatalow + ' : ' + highVol
+                        record['mldatahigh'] = mldatahigh
+                        record['mldatalow'] = mldatalow
+                        record['highVol'] = highVol
                         record['intradaytech'] = intradaytech
                         record['epochtime'] = epochtime
                         record['eventtime'] = eventtime
@@ -480,56 +442,14 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                         regressionlow = dbnse.lowSell.find_one({'scrip': scrip})
 
                         if ('buy' in processor or 'Buy' in processor or 'breakout2-morning-volume' in processor or 'morning-volume-bs' in processor):
-                            if(regressionhigh['month3LowChange'] < 5):
-                                if (regressionhigh['month3LowChange'] == regressionhigh['weekLowChange']):
-                                    mldatahigh = mldatahigh + '|' + '0-month3LowChangeLT5-shortuptrend'
-                                elif ((regressionhigh['monthLowChange'] + regressionhigh['weekHighChange'] + regressionhigh['weekLowChange']) < 4.5):
-                                    mldatahigh = mldatahigh + '|' + '1-month3LowChangeLT5-shortdowntrend'
-                                else:
-                                    mldatahigh = mldatahigh + '|' + 'month3LowChangeLT5-indexhigh'
-                            elif (regressionlow['month3HighChange'] > -5):
-                                if (regressionhigh['monthHighChange'] == regressionhigh['weekHighChange']
-                                    and (regressionhigh['PCT_day_change_pre1'] < 0 or regressionhigh['PCT_day_change_pre2'] < 0)
-                                    ):
-                                    mldatahigh = mldatahigh + '|' + 'sell-m3HGT-5-shortdowntrend'
-                                elif ((regressionhigh['monthHighChange'] + regressionhigh['weekHighChange'] + regressionhigh['weekLowChange']) > -4.5
-                                    and (regressionhigh['PCT_day_change_pre1'] > 0 or regressionhigh['PCT_day_change_pre2'] > 0)
-                                    and regressionhigh['yearLowChange'] > 10
-                                    and (regressionhigh['year2HighChange'] < -5 or regressionhigh['year2HighChange'] < -5 or regressionhigh['PCT_day_change_pre1'] < -1)
-                                    ):
-                                    mldatahigh = mldatahigh + '|' + 'buy-m3HGT-5-shortuptrend'
-                            if ('shortUpTrend' in regressionhigh['filter1'] and '(upTrend)' in regressionhigh['series_trend']
-                                and abs(regressionhigh['month3LowChange']) < abs(regressionhigh['month3HighChange'])
-                                ):
-                                mldatahigh = mldatahigh + '|' + 'shortUpTrend'
-                            if (regressionhigh['PCT_day_change'] < 1 or regressionhigh['PCT_day_change_pre1'] < 1
+                           mldatahigh = mldatahigh + regressionhigh['shorttermtech']
+                           if (regressionhigh['PCT_day_change'] < 1 or regressionhigh['PCT_day_change_pre1'] < 1
                                 or 2 * abs(regressionhigh['PCT_day_change']) < abs(regressionhigh['PCT_day_change_pre1'])
                                 ):
                                 tobuy = 'buyrecommended'
 
                         if ('sell' in processor or 'Sell' in processor or 'breakout2-morning-volume' in processor or 'morning-volume-bs' in processor):
-                            if  (regressionlow['month3HighChange'] > -5):
-                                if(regressionlow['monthHighChange'] == regressionlow['weekHighChange']):
-                                    mldatalow = mldatalow + '|' + '0-month3HighChangeGT-5-shortdowntrend'
-                                elif((regressionlow['monthHighChange'] + regressionlow['weekHighChange'] + regressionlow['weekLowChange']) > -4.5):
-                                    mldatalow = mldatalow + '|' + '1-month3HighChangeGT-5-shortuptrend'
-                                else:
-                                    mldatalow = mldatalow + '|' + 'month3HighChangeGT-5-indexhigh'
-                            elif (regressionhigh['month3LowChange'] < 5):
-                                if (regressionlow['month3LowChange'] == regressionlow['weekLowChange']
-                                    and (regressionlow['PCT_day_change_pre1'] > 0 or regressionlow['PCT_day_change_pre2'] > 0)
-                                    ):
-                                    mldatalow = mldatalow + '|' + 'buy-m3LowLT5-shortuptrend'
-                                elif ((regressionlow['monthLowChange'] + regressionlow['weekHighChange'] + regressionlow['weekLowChange']) < 4.5
-                                    and (regressionlow['PCT_day_change_pre1'] < 0 or regressionlow['PCT_day_change_pre2'] < 0)
-                                    and regressionlow['yearHighChange'] < -10
-                                    and (regressionlow['year2LowCange'] > 5 or regressionlow['yearLowCange'] > 5 or regressionlow['PCT_day_change_pre1'] > 1)
-                                    ):
-                                    mldatalow = mldatalow + '|' + 'sell-m3LowLT5-shortdowntrend'
-                            if ('shorDownTrend' in regressionhigh['filter1'] and '(downTrend)' in regressionhigh['series_trend']
-                                and abs(regressionhigh['month3LowChange']) > abs(regressionhigh['month3HighChange'])
-                                ):
-                                mldatalow = mldatalow + '|' + 'shortDownTrend'
+                            mldatalow = mldatalow + regressionlow['shorttermtech']
                             if (regressionhigh['PCT_day_change'] > -1 or regressionhigh['PCT_day_change_pre1'] > -1
                                 or 2 * abs(regressionhigh['PCT_day_change']) < abs(regressionhigh['PCT_day_change_pre1'])
                                 ):
