@@ -9,4 +9,5 @@ symbol = "INFY"
 series = "EQ"
 start_date = "08-04-2023"
 end_date ="28-04-2023"
-print(equity_history(symbol,series,start_date,end_date))
+print(nse_results("equities","Others"))
+#print(equity_history(symbol,series,start_date,end_date))

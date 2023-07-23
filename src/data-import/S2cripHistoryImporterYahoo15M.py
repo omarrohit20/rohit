@@ -64,7 +64,30 @@ if __name__ == "__main__":
                 print(scrip)
             except:
                 print('historical fail', str(data['scrip'])) 
-                pass      
+                pass
+
+    for data in db.scrip.find({'index':'nifty500'}):
+        futures = data['futures']
+        #scrip = data['scrip'].replace('&','').replace('-','_')
+        scrip = data['scrip']
+        try:
+            data = db.history15m.find_one({'dataset_code':scrip})
+            if(data is None):
+                ticker = yf.Ticker(scrip + '.NS')
+                data = ticker.history(start=start_date, end=end_date, interval = "15m")
+                #print(data)
+                insert_scripdata(scrip, data, futures)
+            print(scrip)
+        except:
+            time.sleep(2)
+            try:
+                ticker = yf.Ticker(scrip + '.NS')
+                data = ticker.history(start=start_date, end=end_date, interval = "15m")
+                insert_scripdata(scrip, data, futures)
+                print(scrip)
+            except:
+                print('historical fail', str(data['scrip']))
+                pass
             
                 
 connection.close()

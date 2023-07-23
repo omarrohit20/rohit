@@ -494,13 +494,21 @@ def intraday_tech_data(regression_data):
         else:
             intradaytech = "DownPostLunchConsolidation"
 
-    if ('Up' in intradaytech and regression_data['year5HighChange'] < -30 and regression_data['year2HighChange'] > -5):
+    if ('Up' in intradaytech and regression_data['year5HighChange'] < -20 and regression_data['year2HighChange'] > -5
+        and regression_data['highTail'] < 1
+        ):
         intradaytech = intradaytech + ':AtYear2High:Year5HighChangeLT-30'
-    elif ('Up' in intradaytech and regression_data['year5HighChange'] < -35):
+    elif ('Up' in intradaytech and regression_data['year5HighChange'] < -35 and regression_data['year2HighChange'] > -50
+        and regression_data['highTail'] < 1
+        ):
         intradaytech = intradaytech + ':Year5HighChangeLT-30'
-    if ('Down' in intradaytech and regression_data['year5LowChange'] > 35 and regression_data['year2LowChange'] < 5):
+    if ('Down' in intradaytech and regression_data['year5LowChange'] > 20 and regression_data['year2LowChange'] < 5
+        and regression_data['lowTail'] < 1
+        ):
         intradaytech = intradaytech + ':AtYear2High:Year5LowChangeGT30'
-    elif ('Down' in intradaytech and regression_data['year5LowChange'] > 35):
+    elif ('Down' in intradaytech and regression_data['year5LowChange'] > 35 and regression_data['year2LowChange'] < 50
+        and regression_data['lowTail'] < 1
+        ):
         intradaytech = intradaytech + ':Year5LowChangeGT30'
     
     if(intradaytech != ''):
@@ -540,12 +548,34 @@ def intraday_tech_data(regression_data):
         if (-5 < daychange_pre1 < -1 and postlunchchange_low_pre1 < -1 and morningchange_low_pre1 < -1):
             intradaytech = "ZPre1_DownStairs1"
     if (intradaytech == '' and -1 < daychange < 1 and abs(daychange_pre1) > 3 * abs(daychange)):
+        if ( regression_data['PCT_day_change_pre1'] > 2.5 and postlunchchange_high_pre1 > 1.5):
+            intradaytech = "ZPre1_UpStairs***"
+        if (regression_data['PCT_day_change_pre1'] < -2.5 and postlunchchange_low_pre1 < -1.5):
+            intradaytech = "ZPre1_UpStairs***"
+    if (intradaytech == '' and -1 < daychange < 1 and abs(daychange_pre1) > 3 * abs(daychange)):
         if ( daychange_pre1 > 5 and postlunchchange_high_pre1 > 1 and morningchange_high_pre1 > 1):
             intradaytech = "Pre1_HighUpStairs1"
         if (daychange_pre1 < -5 and postlunchchange_low_pre1 < -1 and morningchange_low_pre1 < -1):
             intradaytech = "Pre1_HighDownStairs1"
 
-    
+    if ('Up' in intradaytech and regression_data['year5HighChange'] < -20 and regression_data['year2HighChange'] > -5
+        and regression_data['highTail_pre1'] < 1 and regression_data['highTail'] < 2
+        ):
+        intradaytech = intradaytech + ':AtYear2High:Year5HighChangeLT-30'
+    elif ('Up' in intradaytech and regression_data['year5HighChange'] < -35 and regression_data['year2HighChange'] > -50
+        and regression_data['highTail_pre1'] < 1 and regression_data['highTail'] < 2
+        ):
+        intradaytech = intradaytech + ':Year5HighChangeLT-30'
+    if ('Down' in intradaytech and regression_data['year5LowChange'] > 20 and regression_data['year2LowChange'] < 5
+        and regression_data['lowTail_pre1'] < 1 and regression_data['lowTail'] < 2
+        ):
+        intradaytech = intradaytech + ':AtYear2High:Year5LowChangeGT30'
+    elif ('Down' in intradaytech and regression_data['year5LowChange'] > 35 and regression_data['year2LowChange'] < 50
+        and regression_data['lowTail_pre1'] < 1 and regression_data['lowTail'] < 2
+        ):
+        intradaytech = intradaytech + ':Year5LowChangeGT30'
+
+
     if (intradaytech != ''):
         return intradaytech
 
@@ -679,6 +709,14 @@ def intraday_tech_data(regression_data):
             elif (daychange_pre2 < -2 and abs(postlunchchange_low_pre2) < abs(daychange) / 4):
                 intradaytech = "Pre2_DownPostLunchConsolidation"
 
+    if ('Up' in intradaytech and regression_data['year5HighChange'] < -30 and regression_data['year2HighChange'] > -5):
+        intradaytech = intradaytech + ':AtYear2High:Year5HighChangeLT-30'
+    elif ('Up' in intradaytech and regression_data['year5HighChange'] < -35 and regression_data['year2HighChange'] > -50):
+        intradaytech = intradaytech + ':Year5HighChangeLT-30'
+    if ('Down' in intradaytech and regression_data['year5LowChange'] > 35 and regression_data['year2LowChange'] < 5):
+        intradaytech = intradaytech + ':AtYear2High:Year5LowChangeGT30'
+    elif ('Down' in intradaytech and regression_data['year5LowChange'] > 35 and regression_data['year2LowChange'] < 50):
+        intradaytech = intradaytech + ':Year5LowChangeGT30'
 
     if (-0.3 < daychange < 0.75
         and regression_data['highTail'] < 0.5
