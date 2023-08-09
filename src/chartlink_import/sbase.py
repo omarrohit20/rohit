@@ -319,8 +319,16 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         record['eventtime'] = eventtime
                         record['systemtime'] = systemtime
                         record['resultDeclared'] = resultDeclared
+                        record['processor'] = processor
                         json_data = json.loads(json.dumps(record, default=json_util.default))
                         db[processor].insert_one(json_data)
+
+                        if(filtersFlag == True):
+                            if ('buy' in processor or 'Buy' in processor):
+                                db['buy_all_processor'].insert_one(json_data)
+                            if ('sell' in processor or 'Sell' in processor):
+                                db['sell_all_processor'].insert_one(json_data)
+
                 i += 1
     except KeyError:
         None
