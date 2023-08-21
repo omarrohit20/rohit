@@ -165,9 +165,9 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 ):
                                 datalow = dbnse.lowSell.find_one({'scrip': scrip})
                                 mldatalow = datalow['filter2'] + '|' + datalow['filter']
-                                mldatalow = datalow['ml'] + '|' + mldatalow
+                                mldatalow = datalow['ml'] + ':' + datalow['intradaytech'] + '|' + mldatalow
                                 if ('ReversalYear' in datalow['filter3'] or 'BreakYear' in datalow['filter3'] or 'NearYear' in datalow['filter3']):
-                                    mldatalow = mldatalow + ':' + datalow['intradaytech'] + '|' + datalow['filter3']
+                                    mldatalow = mldatalow + '|' + datalow['filter3']
                                 if ('sell' in processor
                                     and ('sell' in datalow['filter'] or 'Sell' in datalow['filter'])
                                     and ('%%' in datalow['filter']
@@ -324,9 +324,9 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         db[processor].insert_one(json_data)
 
                         if(filtersFlag == True):
-                            if ('buy' in processor or 'Buy' in processor):
+                            if ('$buy' in processor or 'Buy' in processor):
                                 db['buy_all_processor'].insert_one(json_data)
-                            if ('sell' in processor or 'Sell' in processor):
+                            if ('$sell' in processor or 'Sell' in processor):
                                 db['sell_all_processor'].insert_one(json_data)
 
                 i += 1
@@ -378,6 +378,10 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
             needToPrint = False
             tempScrip = ''
             mlData = ''
+            mldatahigh = ''
+            mldatalow = ''
+            highVol = ''
+            intradaytech = ''
             resultDeclared = ''
             tobuy = ''
             tosell = ''
@@ -394,12 +398,16 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             record['scrip'] = tempScrip
                             record['industry'] = industry
                             record['mlData'] = mlData
+                            record['mldatahigh'] = mldatahigh
+                            record['mldatalow'] = mldatalow
+                            record['highVol'] = highVol
+                            record['intradaytech'] = intradaytech
+                            record['resultDeclared'] = resultDeclared
+                            record['processor'] = processor
                             record['epochtime'] = epochtime
                             record['eventtime'] = eventtime
                             record['systemtime'] = systemtime
-                            record['processor'] = processor
                             record['keyIndicator'] = keyIndicator
-                            record['resultDeclared'] = resultDeclared
                             record['tobuy'] = tobuy
                             record['tosell'] = tosell
 
@@ -407,6 +415,10 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             db[processor].insert_one(json_data)
                             tempScrip = ''
                             mlData = ''
+                            mldatahigh = ''
+                            mldatalow = ''
+                            highVol = ''
+                            intradaytech = ''
                             resultDeclared = ''
                             tobuy = ''
                             tosell = ''
@@ -417,9 +429,11 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     and currenttime >= starttime and currenttime <= endtime
                     ):
                     #print(scrip)
+                    mlData = ''
                     mldatahigh = ''
                     mldatalow = ''
                     highVol = ''
+                    intradaytech = ''
                     resultDeclared = ''
                     filtersFlag = False
 
@@ -441,6 +455,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 mldatalow = data['ml'] + ':' + data['intradaytech']
                                 mldatalow = mldatalow + '|' + data['filter2'] + '|' + data['filter']
                         if (data['intradaytech'] != ""):
+                            intradaytech = data['intradaytech']
                             filtersFlag = True
                     except:
                         needToPrint = True  # do-nothing

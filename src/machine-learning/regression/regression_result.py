@@ -43,6 +43,7 @@ from util.util import historical_data
 
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
+dbchartlink = connection.chartlink
 
 directory = '../../output/final'
 logname = '../../output/final' + '/all-result' + time.strftime("%d%m%y-%H%M%S")
@@ -771,6 +772,7 @@ def intraday_tech_data(regression_data):
 
 def shortterm_tech_data_buy(regressionhigh, regressionlow):
     datahigh = ''
+
     if (regressionhigh['month3LowChange'] < 5):
         if (regressionhigh['month3LowChange'] == regressionhigh['weekLowChange']):
             datahigh = datahigh + '|' + '0-month3LowChangeLT5-shortuptrend'
@@ -803,10 +805,15 @@ def shortterm_tech_data_buy(regressionhigh, regressionlow):
         and abs(regressionhigh['month3LowChange']) < abs(regressionhigh['month3HighChange'])
         ):
         datahigh = datahigh + '|' + 'shortUpTrend'
+
+    if (regressionhigh['year5HighChange'] < -30 and regressionhigh['yearHighChange'] > -5):
+        datahigh = datahigh + '|' + 'AtYearHigh'
+
     return datahigh
 
 def shortterm_tech_data_sell(regressionhigh, regressionlow):
     datalow = ''
+
     if (regressionlow['month3HighChange'] > -5):
         if (regressionlow['monthHighChange'] == regressionlow['weekHighChange']):
             datalow = datalow + '|' + '0-month3HighChangeGT-5-shortdowntrend'
@@ -840,7 +847,12 @@ def shortterm_tech_data_sell(regressionhigh, regressionlow):
         and abs(regressionhigh['month3LowChange']) > abs(regressionhigh['month3HighChange'])
         ):
         datalow = datalow + '|' + 'shortDownTrend'
-        return datalow
+
+    if (regressionlow['year5LowChange'] > 30 and regressionlow['yearLowChange'] < 5):
+        datalow = datalow + '|' + 'AtYearLow'
+
+    return datalow
+
 
 def get_index(scrip):
     data = db.scrip_futures.find_one({'scrip': scrip})
@@ -1210,6 +1222,11 @@ def result_data_reg(scrip):
         db['lowSell'].update_one({'scrip': scrip}, {"$set": {'shorttermtech': shorttermtechsell}})
         db['highBuy'].update_one({'scrip': scrip}, {"$set": {'index': index}})
         db['lowSell'].update_one({'scrip': scrip}, {"$set": {'index': index}})
+
+        if (dbchartlink['highBuy'].find_one({'scrip': regression_data['scrip']}) is None):
+            dbchartlink['highBuy'].insert_one(db['highBuy'].find_one({'scrip': regression_data['scrip']}))
+        if (dbchartlink['lowSell'].find_one({'scrip': regression_data['scrip']}) is None):
+            dbchartlink['lowSell'].insert_one(db['lowSell'].find_one({'scrip': regression_data['scrip']}))
 
         insert_year5LowBreakoutY2H(regression_data)
         insert_year5LowBreakoutYH(regression_data)
