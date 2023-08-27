@@ -134,7 +134,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 datahigh = dbnse.highBuy.find_one({'scrip':scrip})
                                 intradaytech = datahigh['intradaytech']
                                 mldatahigh =  datahigh['filter2'] + '|' + datahigh['filter']
-                                mldatahigh = datahigh['ml'] + ':' + datahigh['intradaytech'] + '|' + mldatahigh
+                                mldatahigh = datahigh['ml'] + '|' + mldatahigh
                                 if('ReversalYear' in datahigh['filter3'] or 'BreakYear' in datahigh['filter3'] or 'NearYear' in datahigh['filter3']):
                                     mldatahigh = mldatahigh + '|' + datahigh['filter3']
                                 if('buy' in processor
@@ -165,7 +165,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 ):
                                 datalow = dbnse.lowSell.find_one({'scrip': scrip})
                                 mldatalow = datalow['filter2'] + '|' + datalow['filter']
-                                mldatalow = datalow['ml'] + ':' + datalow['intradaytech'] + '|' + mldatalow
+                                mldatalow = datalow['ml'] + '|' + mldatalow
                                 if ('ReversalYear' in datalow['filter3'] or 'BreakYear' in datalow['filter3'] or 'NearYear' in datalow['filter3']):
                                     mldatalow = mldatalow + '|' + datalow['filter3']
                                 if ('sell' in processor
@@ -305,7 +305,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             needToPrint = True
                         
                         tempScrip = scrip
-                        mldata = mldatahigh + ' : ' + mldatalow + ' : ' + highVol
+                        mldata = intradaytech + ' $ ' + mldatahigh + ' $ ' + mldatalow + ' $ ' + highVol
                             
                         record = {}
                         record['dataset_code'] = scrip
@@ -324,9 +324,9 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         db[processor].insert_one(json_data)
 
                         if(filtersFlag == True):
-                            if ('$buy' in processor or 'Buy' in processor):
+                            if ('BBBbuy' in processor):
                                 db['buy_all_processor'].insert_one(json_data)
-                            if ('$sell' in processor or 'Sell' in processor):
+                            if ('SSSsell' in processor):
                                 db['sell_all_processor'].insert_one(json_data)
 
                 i += 1
@@ -382,6 +382,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
             mldatalow = ''
             highVol = ''
             intradaytech = ''
+            shorttermtech = ''
             resultDeclared = ''
             tobuy = ''
             tosell = ''
@@ -419,6 +420,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             mldatalow = ''
                             highVol = ''
                             intradaytech = ''
+                            shorttermtech = ''
                             resultDeclared = ''
                             tobuy = ''
                             tosell = ''
@@ -434,6 +436,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     mldatalow = ''
                     highVol = ''
                     intradaytech = ''
+                    shorttermtech = ''
                     resultDeclared = ''
                     filtersFlag = False
 
@@ -444,15 +447,13 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
 
                         if ((dbnse['highBuy'].find_one({'scrip': scrip}) is not None)):
                             data = dbnse.highBuy.find_one({'scrip': scrip})
-                            mldatahigh = data['intradaytech']
                             if ('buy' in processor and ('MLhigh' in data['ml'] or '%%' in data['filter'] or 'Buy-AnyGT2' in data['filter2'] or 'Buy-AnyGT' in data['filter2'] or 'Sell-AnyGT2' in data['filter2'])):
-                                mldatahigh = data['ml'] + ':' + data['intradaytech']
+                                mldatahigh = data['ml']
                                 mldatahigh = mldatahigh + '|' + data['filter2'] + '|' + data['filter']
                         if ((dbnse['lowSell'].find_one({'scrip': scrip}) is not None)):
                             data = dbnse.lowSell.find_one({'scrip': scrip})
-                            mldatalow = data['intradaytech']
-                            if ('sell' in processor and ('MLhigh' in data['ml'] or '%%' in data['filter'] or 'Sell-AnyGT2' in data['filter2'] or 'Suy-AnyGT' in data['filter2'] or 'Buy-AnyGT2' in data['filter2'])):
-                                mldatalow = data['ml'] + ':' + data['intradaytech']
+                            if ('sell' in processor and ('MLSell' in data['ml'] or '%%' in data['filter'] or 'Sell-AnyGT2' in data['filter2'] or 'Suy-AnyGT' in data['filter2'] or 'Buy-AnyGT2' in data['filter2'])):
+                                mldatalow = data['ml']
                                 mldatalow = mldatalow + '|' + data['filter2'] + '|' + data['filter']
                         if (data['intradaytech'] != ""):
                             intradaytech = data['intradaytech']
@@ -465,16 +466,16 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                         regressionlow = dbnse.lowSell.find_one({'scrip': scrip})
 
                         if ('buy' in processor or 'Buy' in processor or 'breakout2-morning-volume' in processor or 'morning-volume-bs' in processor):
-                           mldatahigh = mldatahigh + regressionhigh['shorttermtech']
+                           mldatahigh = regressionhigh['shorttermtech'] + '|' + mldatahigh
                            if (regressionhigh['PCT_day_change'] < 1 or regressionhigh['PCT_day_change_pre1'] < 1
                                 or 2 * abs(regressionhigh['PCT_day_change']) < abs(regressionhigh['PCT_day_change_pre1'])
                                 ):
                                 tobuy = 'buyrecommended'
 
                         if ('sell' in processor or 'Sell' in processor or 'breakout2-morning-volume' in processor or 'morning-volume-bs' in processor):
-                            mldatalow = mldatalow + regressionlow['shorttermtech']
-                            if (regressionhigh['PCT_day_change'] > -1 or regressionhigh['PCT_day_change_pre1'] > -1
-                                or 2 * abs(regressionhigh['PCT_day_change']) < abs(regressionhigh['PCT_day_change_pre1'])
+                            mldatalow = regressionlow['shorttermtech'] + '|' + mldatalow
+                            if (regressionlow['PCT_day_change'] > -1 or regressionlow['PCT_day_change_pre1'] > -1
+                                or 2 * abs(regressionlow['PCT_day_change']) < abs(regressionlow['PCT_day_change_pre1'])
                                 ):
                                 tosell = 'sellrecommended'
 
@@ -522,7 +523,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     needToPrint = True
                                 
                     tempScrip = scrip
-                    mlData = mldatahigh + ' : ' + mldatalow + ' : ' + highVol
+                    mlData = intradaytech + ' $ ' + mldatahigh + ' $ ' + mldatalow + ' $ ' + highVol
+                    mldatahigh = intradaytech + ' $ ' + mldatahigh
+                    mldatalow = intradaytech + ' $ ' + mldatalow
                 i = i + 1
                 
     except KeyError:

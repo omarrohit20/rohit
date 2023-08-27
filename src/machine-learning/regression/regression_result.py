@@ -807,7 +807,11 @@ def shortterm_tech_data_buy(regressionhigh, regressionlow):
         datahigh = datahigh + '|' + 'shortUpTrend'
 
     if (regressionhigh['year5HighChange'] < -30 and regressionhigh['yearHighChange'] > -5):
-        datahigh = datahigh + '|' + 'AtYearHigh'
+        datahigh = 'AtYearHighLT-30' + '|' + datahigh
+    elif (regressionhigh['year5HighChange'] > -30 and regressionhigh['year2HighChange'] > -5 and regressionhigh['PCT_day_change'] < 1 ):
+        datahigh = 'AtYear2High' + '|' + datahigh
+    elif (regressionhigh['year5HighChange'] > -10 and regressionhigh['year2HighChange'] > -10 and regressionhigh['PCT_day_change'] < 1 ):
+        datahigh = 'AtYear2High' + '|' + datahigh
 
     return datahigh
 
@@ -848,8 +852,12 @@ def shortterm_tech_data_sell(regressionhigh, regressionlow):
         ):
         datalow = datalow + '|' + 'shortDownTrend'
 
-    if (regressionlow['year5LowChange'] > 30 and regressionlow['yearLowChange'] < 5):
-        datalow = datalow + '|' + 'AtYearLow'
+    if (regressionlow['year5LowChange'] > 30 and regressionlow['yearLowChange'] < 10):
+        datalow = 'AtYearLow-GT30' + '|' + datalow
+    elif (regressionlow['year5LowChange'] < 30 and regressionhigh['year2LowChange'] < 5 and regressionhigh['PCT_day_change'] > -1):
+        datalow = 'AtYear2Low' + '|' + datalow
+    elif (regressionlow['year5LowChange'] < 10 and regressionhigh['year2LowChange'] < 10 and regressionhigh['PCT_day_change'] > -1 ):
+        datalow = 'AtYear2Low' + '|' + datalow
 
     return datalow
 
