@@ -67,7 +67,12 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
             needToPrint = False
             tempScrip = ''
             mlData = ''
+            mldatahigh = ''
+            mldatalow = ''
+            highVol = ''
             intradaytech = ''
+            shorttermtech = ''
+            resultDeclared = ''
             tobuy = ''
             tosell = ''
             while (i < len(df['aggregatedStockList'][ind])):
@@ -91,8 +96,13 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                     if((db[industry].find_one({'scrip':tempScrip, 'processor':processor}) is None) and tempScrip != ''):
                         record = {}
                         record['scrip'] = tempScrip
-                        record['mlData'] = mldata
+                        record['industry'] = industry
+                        record['mlData'] = mlData
+                        record['mldatahigh'] = mldatahigh
+                        record['mldatalow'] = mldatalow
+                        record['highVol'] = highVol
                         record['intradaytech'] = intradaytech
+                        record['resultDeclared'] = resultDeclared
                         record['processor'] = processor
                         record['epochtime'] = epochtime
                         record['eventtime'] = eventtime
@@ -100,8 +110,20 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         record['tobuy'] = tobuy
                         record['tosell'] = tosell
                         json_data = json.loads(json.dumps(record, default=json_util.default))
-                        db[industry].insert_one(json_data)
+                        db[processor].insert_one(json_data)
+                        if (filtersFlag == True):
+                            if ('BBBbuy' in processor):
+                                db['buy_all_processor'].insert_one(json_data)
+                            if ('SSSsell' in processor):
+                                db['sell_all_processor'].insert_one(json_data)
                         tempScrip = ''
+                        mlData = ''
+                        mldatahigh = ''
+                        mldatalow = ''
+                        highVol = ''
+                        intradaytech = ''
+                        shorttermtech = ''
+                        resultDeclared = ''
                         tobuy = ''
                         tosell = ''
                 if(dbnse['scrip'].find_one({'scrip':scrip}) is not None
@@ -199,16 +221,14 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 ):
                                 filtersFlag = True
 
-                            if ('CheckNews' not in processor
-                                and 'buy' in processor and ('buy' in highVol or 'Buy' in highVol)
+                            if ('buy' in processor and ('buy' in highVol or 'Buy' in highVol)
                                 and data2 is not None
                                 and data3 is not None
                                 and ('MLhighBuyStrong' in mldatahigh or data1 is not None)
                                 ):
                                 filtersFlag = True
 
-                            if ('CheckNews' not in processor
-                                and 'sell' in processor and ('sell' in highVol or 'Sell' in highVol)
+                            if ('sell' in processor and ('sell' in highVol or 'Sell' in highVol)
                                 and data2 is not None
                                 and data3 is not None
                                 and ('MLlowSellStrong' in mldatalow or data1 is not None)
@@ -303,31 +323,35 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             ):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
                             needToPrint = True
-                        
-                        tempScrip = scrip
-                        mldata = intradaytech + ' $ ' + mldatahigh + ' $ ' + mldatalow + ' $ ' + highVol
-                            
-                        record = {}
-                        record['dataset_code'] = scrip
-                        record['scrip'] = scrip
-                        record['mlData'] = mldatahigh + ' : ' + mldatalow + ' : ' + highVol
-                        record['mldatahigh'] = mldatahigh
-                        record['mldatalow'] = mldatalow
-                        record['highVol'] = highVol
-                        record['intradaytech'] = intradaytech
-                        record['epochtime'] = epochtime
-                        record['eventtime'] = eventtime
-                        record['systemtime'] = systemtime
-                        record['resultDeclared'] = resultDeclared
-                        record['processor'] = processor
-                        json_data = json.loads(json.dumps(record, default=json_util.default))
-                        db[processor].insert_one(json_data)
 
-                        if(filtersFlag == True):
-                            if ('BBBbuy' in processor):
-                                db['buy_all_processor'].insert_one(json_data)
-                            if ('SSSsell' in processor):
-                                db['sell_all_processor'].insert_one(json_data)
+                        needToPrint = True
+
+                        tempScrip = scrip
+                        mlData = intradaytech + ' $ ' + mldatahigh + ' $ ' + mldatalow + ' $ ' + highVol
+                        mldatahigh = intradaytech + ' $ ' + mldatahigh
+                        mldatalow = intradaytech + ' $ ' + mldatalow
+                            
+                        #record = {}
+                        #record['dataset_code'] = scrip
+                        #record['scrip'] = scrip
+                        #record['mlData'] = mldatahigh + ' : ' + mldatalow + ' : ' + highVol
+                        #record['mldatahigh'] = mldatahigh
+                        #record['mldatalow'] = mldatalow
+                        #record['highVol'] = highVol
+                        #record['intradaytech'] = intradaytech
+                        #record['epochtime'] = epochtime
+                        #record['eventtime'] = eventtime
+                        #record['systemtime'] = systemtime
+                        #record['resultDeclared'] = resultDeclared
+                        #record['processor'] = processor
+                        #json_data = json.loads(json.dumps(record, default=json_util.default))
+                        #db[processor].insert_one(json_data)
+
+                        #if(filtersFlag == True):
+                        #    if ('BBBbuy' in processor):
+                        #        db['buy_all_processor'].insert_one(json_data)
+                        #    if ('SSSsell' in processor):
+                        #        db['sell_all_processor'].insert_one(json_data)
 
                 i += 1
     except KeyError:
