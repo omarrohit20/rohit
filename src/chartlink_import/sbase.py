@@ -116,6 +116,12 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 db['buy_all_processor'].insert_one(json_data)
                             if ('SSSsell' in processor):
                                 db['sell_all_processor'].insert_one(json_data)
+
+                            if ('Bbuyy' in processor):
+                                db['buy_all_processor_volume'].insert_one(json_data)
+                            if ('Sselll' in processor):
+                                db['sell_all_processor_volume'].insert_one(json_data)
+
                         tempScrip = ''
                         mlData = ''
                         mldatahigh = ''
@@ -438,6 +444,17 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
 
                             json_data = json.loads(json.dumps(record, default=json_util.default))
                             db[processor].insert_one(json_data)
+
+                            if ('BBBbuy' in processor):
+                                db['buy_all_processor'].insert_one(json_data)
+                            if ('SSSsell' in processor):
+                                db['sell_all_processor'].insert_one(json_data)
+
+                            if ('Bbuyy' in processor):
+                                db['buy_all_processor_volume'].insert_one(json_data)
+                            if ('Sselll' in processor):
+                                db['sell_all_processor_volume'].insert_one(json_data)
+
                             tempScrip = ''
                             mlData = ''
                             mldatahigh = ''
