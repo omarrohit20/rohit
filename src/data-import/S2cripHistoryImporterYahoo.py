@@ -26,10 +26,15 @@ def insert_scripdata(scrip, data, futures):
         record['name'] = scrip
         data = data.iloc[::-1]
         temp = data[['Open', 'High', 'Low', 'Close', 'Volume']]
-        temp['Date'] = data.index.astype(str)
+        #temp['Date'] = data.index.astype(str)
+        temp['Date'] = pd.to_datetime(data.index.astype(str))
+        temp['Date'] = temp['Date'].dt.strftime("%Y-%m-%d")
+
         df = temp[['Date','Open', 'High', 'Low', 'Close', 'Volume']]
         df = df.round(1)
-        record['end_date'] = data.index.astype(str)[0]
+        #record['end_date'] = data.index.astype(str)[0]
+        record['end_date'] = pd.to_datetime(data.index.astype(str)[0])
+        record['end_date'] = record['end_date'].strftime("%Y-%m-%d")
         record['data'] = df.values.tolist()
         record['column_names'] = df.columns.tolist()
         record['futures'] = futures

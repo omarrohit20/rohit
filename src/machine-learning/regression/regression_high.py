@@ -57,6 +57,7 @@ gradientBoosting = False
 dR = 1
 
 def get_data_frame(df, regressor='None', type='reg'):
+    dfp = None
     if (df is not None):
         #dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
         dfp = df[['PCT_day_change']]
@@ -249,15 +250,16 @@ def create_csv(regression_data):
         json_data = json.loads(json.dumps(regression_data))
         db.regressionhigh.insert_one(json_data)    
     
-def process_regression_high(scrip, df, directory, run_ml_algo, TEST=False):
+def process_regression_high(scrip, dfraw, directory, run_ml_algo, TEST=False):
+    df = None
     dfp = None
     if TEST:
-        df = df.tail(1500)
+        df = dfraw.tail(1500)
         dfp = get_data_frame(df)
         if(int(np.floor(dfp.shape[0])) == 0):
             return 0, None
     else:
-        df = df.tail(3500)
+        df = dfraw.tail(3500)
         regression_data_db = db.regressionhigh.find_one({'scrip':scrip})
         if(regression_data_db is not None):
             return

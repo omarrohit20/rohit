@@ -53,6 +53,7 @@ gradientBoosting = False
 dR = 1
 
 def get_data_frame(df, regressor='None', type='reg'):
+    dfp = None
     if (df is not None):
         #dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
         dfp = df[['PCT_day_change']]
@@ -71,7 +72,6 @@ def get_data_frame(df, regressor='None', type='reg'):
         low = columns[3]
         close = columns[4]
         volume = columns[5]
-        EMA21 = columns[-4]
         EMA9 = columns[-5]
 #         for dele in range(1, 11):
 #             addFeaturesVolChange(df, dfp, volume, dele)     
@@ -81,14 +81,14 @@ def get_data_frame(df, regressor='None', type='reg'):
             addFeaturesLowChange(df, dfp, low, dele) 
         
         if type == 'reg':
-            dfp['EMA9'] = df['EMA9']
-            dfp['EMA21'] = df['EMA21'] 
-            dfp['EMA50'] = df['EMA50'] 
-#         if regressor != 'mlp':      
-#             for dele in range(1, 2):  
-#                 addFeaturesEMA9Change(df, dfp, EMA9, dele)
-#                 addFeaturesEMA21Change(df, dfp, EMA21, dele) 
- 
+            if regressor != 'mlp':
+                dfp['EMA9'] = df['EMA9']
+                dfp['EMA21'] = df['EMA21']
+        #         if regressor != 'mlp':
+        #             for dele in range(1, 2):
+        #                 addFeaturesEMA9Change(df, dfp, EMA9, dele)
+        #                 addFeaturesEMA21Change(df, dfp, EMA21, dele)
+
         dfp['uptrend'] = df['uptrend']
         dfp['downtrend'] = df['downtrend']
 #         dfp['greentrend'] = df['greentrend']
@@ -245,15 +245,16 @@ def create_csv(regression_data):
         json_data = json.loads(json.dumps(regression_data))
         db.regressionlow.insert_one(json_data)    
 
-def process_regression_low(scrip, df, directory, run_ml_algo, TEST=False):
+def process_regression_low(scrip, dfraw, directory, run_ml_algo, TEST=False):
+    df = None
     dfp = None
     if TEST:
-        df = df.tail(1500)
+        df = dfraw.tail(1500)
         dfp = get_data_frame(df)
         if(int(np.floor(dfp.shape[0])) == 0):
             return 0, None
     else:
-        df = df.tail(3500)
+        df = dfraw.tail(3500)
         regression_data_db = db.regressionlow.find_one({'scrip':scrip})
         if(regression_data_db is not None):
             return
