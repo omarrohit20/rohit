@@ -103,7 +103,6 @@ def regression_ta_data(scrip):
     df['EMA100'] = EMA(df,100)
     df['EMA200'] = EMA(df,200)
     df = df.round(2)
-    df.dropna(inplace=True)
     try:
         ta_lib_data_df(scrip, df, True, False) 
         process_regression_high(scrip, df, directory, run_ml_algo)
