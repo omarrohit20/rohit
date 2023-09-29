@@ -17,9 +17,9 @@ if __name__ == "__main__":
             process_url('https://chartink.com/screener/supertrend-morning-buy', 'supertrend-morning-buy', time_09_45, time_12_00)
 
 
-        if (sb.nw >= time_09_30 and sb.nw <= time_09_45):
+        if (sb.nw >= time_09_30 and sb.nw <= time_10_00):
             # ( {46553} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) > 1 and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) < 1.75 and [-1] 5 minute high > [=2] 5 minute high and [-1] 5 minute close > [=2] 5 minute high ) ) ) )
-            process_url('https://chartink.com/screener/buy-morning-volume-breakout-checknews-01', 'buy-morning-volume-breakout(Check-News)-01', time_09_25, time_09_45, True)
+            process_url('https://chartink.com/screener/buy-morning-volume-breakout-checknews-01', 'buy-morning-volume-breakout(Check-News)-01', time_09_25, time_10_00)
 
         if (sb.nw >= time_09_40 and sb.nw <= time_11_30):
             # ( {cash} ( ( {cash} ( abs ( [-1] 5 minute close - [-1] 5 minute sma ( [-1] 5 minute close , 200 ) * 100 ) / [-1] 5 minute close > 3.5 and abs ( [=-1] 5 minute close - [=-1] 5 minute sma ( [=-1] 5 minute close , 200 ) * 100 ) / [-1] 5 minute close < 2 and [=-5] 2 hour high >= 2 days ago "( (1 candle ago high + 1 candle ago low + 1 candle ago close / 3 ) * 2 - 1 candle ago low )" and abs ( [-1] 5 minute close - [0] 5 minute open * 100 ) / [-1] 5 minute close < 2 and abs ( [-1] 5 minute close - [-2] 5 minute open * 100 ) / [-1] 5 minute close < 2 and abs ( [-1] 5 minute close - [-1] 5 minute open * 100 ) / [-1] 5 minute close < 1 and [-1] 5 minute volume > [=1] 5 minute volume and [-1] 5 minute volume > [=2] 5 minute volume and [-1] 5 minute volume > [=3] 5 minute volume and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) > 2 and [0] 5 minute close > 50 and [0] 5 minute close < 3000 and market cap > 1000 ) ) ) )

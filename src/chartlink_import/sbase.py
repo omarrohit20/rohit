@@ -71,6 +71,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
             mldatalow = ''
             highVol = ''
             intradaytech = ''
+            PCT_day_change = ''
+            PCT_change = ''
             shorttermtech = ''
             resultDeclared = ''
             tobuy = ''
@@ -102,6 +104,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         record['mldatalow'] = mldatalow
                         record['highVol'] = highVol
                         record['intradaytech'] = intradaytech
+                        record['PCT_day_change'] = PCT_day_change
+                        record['PCT_change'] = PCT_change
                         record['resultDeclared'] = resultDeclared
                         record['processor'] = processor
                         record['epochtime'] = epochtime
@@ -128,6 +132,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         mldatalow = ''
                         highVol = ''
                         intradaytech = ''
+                        PCT_day_change = ''
+                        PCT_change = ''
                         shorttermtech = ''
                         resultDeclared = ''
                         tobuy = ''
@@ -143,6 +149,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         highVol = ''
                         resultDeclared = ''
                         intradaytech = ''
+                        PCT_day_change = ''
+                        PCT_change = ''
                         filtersFlag = False
                         
                         try:
@@ -156,11 +164,11 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             if (data3 is not None):
                                 highVol = '****' + highVol
 
-                            if((dbnse['highBuy'].find_one({'scrip':scrip}) is not None)
-                                and 'CheckNews' not in processor
-                                ):
+                            if(dbnse['highBuy'].find_one({'scrip':scrip}) is not None):
                                 datahigh = dbnse.highBuy.find_one({'scrip':scrip})
                                 intradaytech = datahigh['intradaytech']
+                                PCT_day_change = datahigh['PCT_day_change']
+                                PCT_change = datahigh['PCT_change']
                                 mldatahigh =  datahigh['filter2'] + '|' + datahigh['filter']
                                 mldatahigh = datahigh['ml'] + '|' + mldatahigh
                                 if('ReversalYear' in datahigh['filter3'] or 'BreakYear' in datahigh['filter3'] or 'NearYear' in datahigh['filter3']):
@@ -188,9 +196,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 if(intradaytech != ""):
                                     filtersFlag = True
 
-                            if ((dbnse['lowSell'].find_one({'scrip': scrip}) is not None)
-                                and 'CheckNews' not in processor
-                                ):
+                            if (dbnse['lowSell'].find_one({'scrip': scrip}) is not None):
                                 datalow = dbnse.lowSell.find_one({'scrip': scrip})
                                 mldatalow = datalow['filter2'] + '|' + datalow['filter']
                                 mldatalow = datalow['ml'] + '|' + mldatalow
@@ -412,6 +418,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
             mldatalow = ''
             highVol = ''
             intradaytech = ''
+            PCT_day_change = ''
+            PCT_change = ''
             shorttermtech = ''
             resultDeclared = ''
             tobuy = ''
@@ -433,6 +441,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             record['mldatalow'] = mldatalow
                             record['highVol'] = highVol
                             record['intradaytech'] = intradaytech
+                            record['PCT_day_change'] = PCT_day_change
+                            record['PCT_change'] = PCT_change
                             record['resultDeclared'] = resultDeclared
                             record['processor'] = processor
                             record['epochtime'] = epochtime
@@ -461,6 +471,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             mldatalow = ''
                             highVol = ''
                             intradaytech = ''
+                            PCT_day_change = ''
+                            PCT_change = ''
                             shorttermtech = ''
                             resultDeclared = ''
                             tobuy = ''
@@ -477,6 +489,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     mldatalow = ''
                     highVol = ''
                     intradaytech = ''
+                    PCT_day_change = ''
+                    PCT_change = ''
                     shorttermtech = ''
                     resultDeclared = ''
                     filtersFlag = False
@@ -488,6 +502,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
 
                         if ((dbnse['highBuy'].find_one({'scrip': scrip}) is not None)):
                             data = dbnse.highBuy.find_one({'scrip': scrip})
+                            PCT_day_change = data['PCT_day_change']
+                            PCT_change = data['PCT_change']
                             if ('buy' in processor and ('MLhigh' in data['ml'] or '%%' in data['filter'] or 'Buy-AnyGT2' in data['filter2'] or 'Buy-AnyGT' in data['filter2'] or 'Sell-AnyGT2' in data['filter2'])):
                                 mldatahigh = data['ml']
                                 mldatahigh = mldatahigh + '|' + data['filter2'] + '|' + data['filter']

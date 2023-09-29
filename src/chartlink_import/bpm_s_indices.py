@@ -17,9 +17,9 @@ if __name__ == "__main__":
             process_url('https://chartink.com/screener/supertrend-morning-sell', 'supertrend-morning-sell', time_09_45, time_12_00)
 
 
-        if (sb.nw >= time_09_30 and sb.nw <= time_09_45):
+        if (sb.nw >= time_09_30 and sb.nw <= time_10_00):
             # ( {46553} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) < -1 and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) > -1.75 and [-1] 5 minute low < [=2] 5 minute low and [-1] 5 minute close < [=2] 5 minute low ) ) ) )
-            process_url('https://chartink.com/screener/sell-morning-volume-breakout-checknews-01', 'sell-morning-volume-breakout(Check-News)-01', time_09_25, time_09_45, True)
+            process_url('https://chartink.com/screener/sell-morning-volume-breakout-checknews-01', 'sell-morning-volume-breakout(Check-News)-01', time_09_25, time_10_00)
 
 
 
