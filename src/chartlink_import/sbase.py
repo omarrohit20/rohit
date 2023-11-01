@@ -336,6 +336,12 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
                             needToPrint = True
 
+                        if (processor != 'morning-volume-breakout-buy' and processor != 'morning-volume-breakout-sell'):
+                            if (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
+                                or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
+                                ):
+                                intradaytech = '#top5#' + intradaytech
+
                         needToPrint = True
 
                         tempScrip = scrip
@@ -576,6 +582,13 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  #################################')
                         else:
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
+
+                    if (processor != 'morning-volume-breakout-buy' and processor != 'morning-volume-breakout-sell' ):
+                        if (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
+                            or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
+                            ):
+                            intradaytech = '#top5#' + intradaytech
+
 
                     needToPrint = True
                                 
