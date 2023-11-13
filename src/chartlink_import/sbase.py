@@ -34,8 +34,10 @@ proxy = None
 option = webdriver.ChromeOptions()
 prefs = {"profile.password_manager_enabled": True}
 option.add_experimental_option("prefs", prefs)
+option.add_argument('--headless=new')
 option.add_argument('--no-sandbox')
 option.add_argument('--disable-gpu')
+option.binary_location = 'C:\git\cft\chrome.exe'
 
 capabilities = DesiredCapabilities.CHROME.copy()
 capabilities["goog:loggingPrefs"] = {"performance": "ALL"}

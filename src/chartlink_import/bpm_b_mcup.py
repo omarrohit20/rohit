@@ -6,8 +6,7 @@ if __name__ == "__main__":
     script_directory = pathlib.Path().absolute()
     sb.option.add_experimental_option('excludeSwitches', ['enable-logging'])
     sb.option.add_argument(f"user-data-dir={script_directory}/profiles/p2")
-    sb.option.add_argument('--headless=new')
-    sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities)
+    sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities, executable_path = 'C:\git\cft\driver\chromedriver.exe')
     print('Started')
     sb.nw = datetime.now()
     

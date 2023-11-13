@@ -18,7 +18,7 @@ if __name__ == "__main__":
     # sb.option.add_argument('--proxy-server=%s' % sb.proxy.proxy)
     script_directory = pathlib.Path().absolute()
     sb.option.add_argument(f"user-data-dir={script_directory}/profiles/p")
-    sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities)
+    sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities, executable_path = 'C:\git\cft\driver\chromedriver.exe')
     sb.driver.get("https://chartink.com/login")
     time.sleep(10)
     sb.driver.find_element("id", "email").send_keys("rohit_51981@yahoo.co.in")
