@@ -63,8 +63,9 @@ if __name__ == "__main__":
                 insert_scripdata(scrip, data, futures)
                 print(scrip)
             except:
-                print('historical fail', str(data['scrip'])) 
+                print('historical fail ', scrip)
                 pass
+            pass
 
     for data in db.scrip.find({'index':'nifty500'}):
         futures = data['futures']
@@ -86,8 +87,9 @@ if __name__ == "__main__":
                 insert_scripdata(scrip, data, futures)
                 print(scrip)
             except:
-                print('historical fail', str(data['scrip']))
+                print('historical fail ', scrip)
                 pass
+            pass
             
                 
 connection.close()
