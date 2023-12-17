@@ -389,11 +389,13 @@ def process_regression_low(scrip, dfraw, directory, run_ml_algo, TEST=False):
     redtrend = df.tail(1).loc[-forecast_out:, 'redtrend'].values[0]
     
     today_date = datetime.datetime.strptime(forecast_day_date, "%Y-%m-%d").date()
-    
-    end_date = (today_date - datetime.timedelta(weeks=104)).strftime('%Y-%m-%d')
-    start_date = (today_date - datetime.timedelta(weeks=522)).strftime('%Y-%m-%d')
+
+    end_date = (today_date - datetime.timedelta(weeks=12)).strftime('%Y-%m-%d')
+    start_date = (today_date - datetime.timedelta(weeks=261)).strftime('%Y-%m-%d')
+    start_date10y = (today_date - datetime.timedelta(weeks=522)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
-    year5High = dftemp['high'].max()
+    dftemp10y = df[(df['date'] >= start_date10y) & (df['date'] <= end_date)]
+    year5High = dftemp10y['high'].max()
     year5Low = dftemp['low'].min()
     year5BarHigh = max(dftemp['open'].max(), dftemp['close'].max())
     year5BarLow = min(dftemp['open'].min(), dftemp['close'].min())
@@ -402,7 +404,7 @@ def process_regression_low(scrip, dfraw, directory, run_ml_algo, TEST=False):
     high_year5 = dftemp.tail(-1).loc[-forecast_out:, 'high'].values[0]
     low_year5 = dftemp.tail(-1).loc[-forecast_out:, 'low'].values[0]
     
-    end_date = (today_date - datetime.timedelta(weeks=26)).strftime('%Y-%m-%d')
+    end_date = (today_date - datetime.timedelta(weeks=4)).strftime('%Y-%m-%d')
     start_date = (today_date - datetime.timedelta(weeks=104)).strftime('%Y-%m-%d')
     dftemp = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
     year2High = dftemp['high'].max()

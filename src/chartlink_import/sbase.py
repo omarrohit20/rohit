@@ -75,6 +75,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
             intradaytech = ''
             PCT_day_change = ''
             PCT_change = ''
+            year5HighChange = ''
+            yearHighChange = ''
             shorttermtech = ''
             resultDeclared = ''
             tobuy = ''
@@ -108,6 +110,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         record['intradaytech'] = intradaytech
                         record['PCT_day_change'] = PCT_day_change
                         record['PCT_change'] = PCT_change
+                        record['year5HighChange'] = year5HighChange
+                        record['yearHighChange'] = yearHighChange
                         record['resultDeclared'] = resultDeclared
                         record['processor'] = processor
                         record['epochtime'] = epochtime
@@ -136,6 +140,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         intradaytech = ''
                         PCT_day_change = ''
                         PCT_change = ''
+                        year5HighChange = ''
+                        yearHighChange = ''
                         shorttermtech = ''
                         resultDeclared = ''
                         tobuy = ''
@@ -153,6 +159,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         intradaytech = ''
                         PCT_day_change = ''
                         PCT_change = ''
+                        year5HighChange = ''
+                        yearHighChange = ''
                         filtersFlag = False
                         
                         try:
@@ -171,6 +179,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 intradaytech = datahigh['intradaytech']
                                 PCT_day_change = datahigh['PCT_day_change']
                                 PCT_change = datahigh['PCT_change']
+                                year5HighChange = datahigh['year5HighChange']
+                                yearHighChange = datahigh['yearHighChange']
                                 mldatahigh =  datahigh['filter2'] + '|' + datahigh['filter']
                                 mldatahigh = datahigh['ml'] + '|' + mldatahigh
                                 if('ReversalYear' in datahigh['filter3'] or 'BreakYear' in datahigh['filter3'] or 'NearYear' in datahigh['filter3']):
@@ -428,6 +438,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
             intradaytech = ''
             PCT_day_change = ''
             PCT_change = ''
+            year5HighChange = ''
+            yearHighChange = ''
             shorttermtech = ''
             resultDeclared = ''
             tobuy = ''
@@ -451,6 +463,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             record['intradaytech'] = intradaytech
                             record['PCT_day_change'] = PCT_day_change
                             record['PCT_change'] = PCT_change
+                            record['year5HighChange'] = year5HighChange
+                            record['yearHighChange'] = yearHighChange
                             record['resultDeclared'] = resultDeclared
                             record['processor'] = processor
                             record['epochtime'] = epochtime
@@ -481,6 +495,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             intradaytech = ''
                             PCT_day_change = ''
                             PCT_change = ''
+                            year5HighChange = ''
+                            yearHighChange = ''
                             shorttermtech = ''
                             resultDeclared = ''
                             tobuy = ''
@@ -499,6 +515,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     intradaytech = ''
                     PCT_day_change = ''
                     PCT_change = ''
+                    year5HighChange = ''
+                    yearHighChange = ''
                     shorttermtech = ''
                     resultDeclared = ''
                     filtersFlag = False
@@ -512,6 +530,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             data = dbnse.highBuy.find_one({'scrip': scrip})
                             PCT_day_change = data['PCT_day_change']
                             PCT_change = data['PCT_change']
+                            year5HighChange = data['year5HighChange']
+                            yearHighChange = data['yearHighChange']
                             if ('buy' in processor and ('MLhigh' in data['ml'] or '%%' in data['filter'] or 'Buy-AnyGT2' in data['filter2'] or 'Buy-AnyGT' in data['filter2'] or 'Sell-AnyGT2' in data['filter2'])):
                                 mldatahigh = data['ml']
                                 mldatahigh = mldatahigh + '|' + data['filter2'] + '|' + data['filter']

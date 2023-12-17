@@ -549,7 +549,7 @@ def intraday_tech_data(regression_data):
     postlunchchange_low_pre1 = (low_pre1 - low_cndl12_pre1) * 100 / low_cndl12_pre1
     morningchange_low_pre1 = (low_cndl12_pre1 - low_cndl25_pre1) * 100 / low_cndl25_pre1
 
-    if (intradaytech == '' and -1 < daychange < 1 and abs(daychange_pre1) > 3 * abs(daychange)):
+    if (intradaytech == '' and -1 < daychange < 1 and abs(regression_data['PCT_day_change']) < 1 and abs(daychange_pre1) > 3 * abs(daychange)):
         if ( 1.5 < daychange_pre1 < 5 and (postlunchchange_high_pre1 > daychange / 3) and (morningchange_high_pre1 > daychange / 4)):
             intradaytech = "ZPre1_UpStairs"
         elif (1.5 < daychange_pre1 < 5 and abs(postlunchchange_high_pre1) < abs(daychange) / 4):
@@ -559,17 +559,17 @@ def intraday_tech_data(regression_data):
             intradaytech = "ZPre1_DownStairs"
         elif (-5 < daychange_pre1 < -1.5 and abs(postlunchchange_low_pre1) < abs(daychange) / 4):
             intradaytech = "Pre1_DownPostLunchConsolidation"
-    if (intradaytech == '' and -1 < daychange < 1 and abs(daychange_pre1) > 3 * abs(daychange)):
+    if (intradaytech == '' and -1 < daychange < 1 and abs(regression_data['PCT_day_change']) < 1 and abs(daychange_pre1) > 3 * abs(daychange)):
         if ( 1 < daychange_pre1 < 5 and postlunchchange_high_pre1 > 1 and morningchange_high_pre1 > 1):
             intradaytech = "ZPre1_UpStairs1"
         if (-5 < daychange_pre1 < -1 and postlunchchange_low_pre1 < -1 and morningchange_low_pre1 < -1):
             intradaytech = "ZPre1_DownStairs1"
-    if (intradaytech == '' and -1 < daychange < 1 and abs(daychange_pre1) > 3 * abs(daychange)):
+    if (intradaytech == '' and -1 < daychange < 1 and abs(regression_data['PCT_day_change']) < 1 and abs(daychange_pre1) > 3 * abs(daychange)):
         if ( regression_data['PCT_day_change_pre1'] > 2.5 and postlunchchange_high_pre1 > 1.5):
             intradaytech = "ZPre1_UpStairs***"
         if (regression_data['PCT_day_change_pre1'] < -2.5 and postlunchchange_low_pre1 < -1.5):
             intradaytech = "ZPre1_DownStairs***"
-    if (intradaytech == '' and -1 < daychange < 1 and abs(daychange_pre1) > 3 * abs(daychange)):
+    if (intradaytech == '' and -1 < daychange < 1 and abs(regression_data['PCT_day_change']) < 1 and abs(daychange_pre1) > 3 * abs(daychange)):
         if ( daychange_pre1 > 5 and postlunchchange_high_pre1 > 1 and morningchange_high_pre1 > 1):
             intradaytech = "ZPre1_HighUpStairs1"
         if (daychange_pre1 < -5 and postlunchchange_low_pre1 < -1 and morningchange_low_pre1 < -1):
@@ -760,6 +760,17 @@ def intraday_tech_data(regression_data):
         and abs(regression_data['PCT_day_change_pre2']) > 1.5
         ):
         intradaytech = "&Consolidation-2Day," + intradaytech
+    elif (-1.5 < daychange < 1 and abs(regression_data['PCT_day_change']) < 1.1
+        and abs(regression_data['PCT_day_change_pre1']) < 1
+        and abs(regression_data['PCT_day_change_pre2']) < 1
+        and (close - high_cndl25_pre1)/close < 0.5
+        and (close - high_cndl25)/close < 0.5
+        and (close - regression_data['high_pre1'])/close < 0.3
+        and (close - low_cndl25_pre1)/close > -0.5
+        and (close - low_cndl25)/close > -0.5
+        and -0.3 < (close - regression_data['low_pre1'])/close
+        ):
+        intradaytech = "&&&Consolidation-2Day," + intradaytech
     elif (-0.75 < daychange < 0.75
         and regression_data['highTail'] < 0.5 and regression_data['lowTail'] < 0.5
         and regression_data['highTail_pre1'] < 0.5 and regression_data['lowTail_pre1'] < 0.5
@@ -767,6 +778,7 @@ def intraday_tech_data(regression_data):
         and abs(regression_data['PCT_day_change_pre2']) < 0.75
         ):
         intradaytech = "&Consolidation-3Day," + intradaytech
+
 
     return intradaytech
 
@@ -866,6 +878,13 @@ def get_index(scrip):
     data = db.scrip_futures.find_one({'scrip': scrip})
     if (data is not None):
         return "futures"
+    else:
+        return ""
+
+def get_fundamental(scrip):
+    data = db.fundamental.find_one({'scrip': scrip})
+    if (data is not None):
+        return data
     else:
         return ""
 
@@ -1223,6 +1242,16 @@ def result_data_reg(scrip):
         shorttermtechbuy = shortterm_tech_data_buy(regression_high_copy2, regression_low_copy2)
         shorttermtechsell = shortterm_tech_data_sell(regression_high_copy2, regression_low_copy2)
         index = get_index(regression_data['scrip'])
+        fundamenta_data = get_fundamental(regression_data['scrip'])
+        marketcap = ''
+        netprofit = ''
+        peratio = ''
+        publicholding = ''
+        if (fundamenta_data != ''):
+            marketcap = fundamenta_data['marketcap']
+            netprofit = fundamenta_data['netprofit']
+            peratio = fundamenta_data['peratio']
+            publicholding = fundamenta_data['publicholding']
 
         db['highBuy'].update_one({'scrip': scrip}, {"$set": {'intradaytech': intradaytech}})
         db['lowSell'].update_one({'scrip': scrip}, {"$set": {'intradaytech': intradaytech}})
@@ -1230,6 +1259,14 @@ def result_data_reg(scrip):
         db['lowSell'].update_one({'scrip': scrip}, {"$set": {'shorttermtech': shorttermtechsell}})
         db['highBuy'].update_one({'scrip': scrip}, {"$set": {'index': index}})
         db['lowSell'].update_one({'scrip': scrip}, {"$set": {'index': index}})
+        db['highBuy'].update_one({'scrip': scrip}, {"$set": {'marketcap': marketcap}})
+        db['lowSell'].update_one({'scrip': scrip}, {"$set": {'marketcap': marketcap}})
+        db['highBuy'].update_one({'scrip': scrip}, {"$set": {'netprofit': netprofit}})
+        db['lowSell'].update_one({'scrip': scrip}, {"$set": {'netprofit': netprofit}})
+        db['highBuy'].update_one({'scrip': scrip}, {"$set": {'peratio': peratio}})
+        db['lowSell'].update_one({'scrip': scrip}, {"$set": {'peratio': peratio}})
+        db['highBuy'].update_one({'scrip': scrip}, {"$set": {'publicholding': publicholding}})
+        db['lowSell'].update_one({'scrip': scrip}, {"$set": {'publicholding': publicholding}})
 
         if (dbchartlink['highBuy'].find_one({'scrip': regression_data['scrip']}) is None):
             dbchartlink['highBuy'].insert_one(db['highBuy'].find_one({'scrip': regression_data['scrip']}))

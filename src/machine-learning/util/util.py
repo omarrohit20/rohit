@@ -145,7 +145,9 @@ def insert_year2HighNearBreakout(regression_data):
             db.nearY2H.insert_one(json_data)
 
 def insert_year5HighNearBreakout(regression_data):
-    if (0 > regression_data['year5HighChange'] > -5 and 5 > regression_data['year2HighChange'] > -5 and regression_data['year2LowChange'] > 30 and regression_data['industry'] != ''):
+    if (0 > regression_data['year5HighChange'] > -10 and (5 > regression_data['year2HighChange'] > -5 or 5 > regression_data['yearHighChange'] > -5)
+        and regression_data['year5LowChange'] < 400
+        and (regression_data['industry'] != '' or regression_data['yearLowChange'] < 200)):
         data = {}
         data['scrip'] = regression_data['scrip']
         data['industry'] = regression_data['industry']
