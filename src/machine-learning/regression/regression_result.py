@@ -439,15 +439,11 @@ def intraday_tech_data(regression_data):
     and (regression_data['close'] - regression_data['high_pre1'])/regression_data['close'] < 0.3
     and (regression_data['close'] - regression_data['low'])/regression_data['close'] > -0.5
     and (regression_data['close'] - regression_data['low_pre1'])/regression_data['close'] > -0.5
+    and (regression_data['close'] - regression_data['high_pre2'])/regression_data['close'] < 0
+    and (regression_data['close'] - regression_data['high_pre3'])/regression_data['close'] < 0
     ):
-        if((regression_data['close'] - regression_data['high_pre2'])/regression_data['close'] < 0
-        and (regression_data['close'] - regression_data['high_pre3'])/regression_data['close'] < 0
-        ):
-            intradaytech = "&&&Consolidation-2Day," + intradaytech
-            return intradaytech
-        else:
-            intradaytech = "&&&Consolidation-last-day," + intradaytech
-            return intradaytech
+        intradaytech = "&&&Consolidation-2Day," + intradaytech
+        return intradaytech
     elif (abs(regression_data['PCT_day_change']) < 3
     and abs(regression_data['PCT_day_change_pre1']) < 3
     and abs(regression_data['PCT_day_change_pre2']) < 3
@@ -468,9 +464,59 @@ def intraday_tech_data(regression_data):
         ):
             intradaytech = "&Consolidation-Sell/Buy-2Day," + intradaytech
             return intradaytech
+    elif (abs(regression_data['PCT_day_change']) < 1.1
+    and regression_data['PCT_day_change'] < 0.5
+    and (regression_data['close'] - regression_data['high'])/regression_data['close'] < 0.3
+    and (regression_data['close'] - regression_data['high_pre1']) / regression_data['close'] < 0.3
+    and (regression_data['close'] - regression_data['low']) / regression_data['close'] > -0.3
+    and (regression_data['close'] - regression_data['low_pre1']) / regression_data['close'] > -0.3
+    and (regression_data['close'] - regression_data['high_pre2'])/regression_data['close'] < 0
+    and (regression_data['close'] - regression_data['high_pre3']) / regression_data['close'] < 0.5
+    ):
+        intradaytech = "&&&ConsolidationHigh-3Day," + intradaytech
+        return intradaytech
+    elif (abs(regression_data['PCT_day_change']) < 1.1
+    and regression_data['PCT_day_change'] > -0.5
+    and (regression_data['close'] - regression_data['high'])/regression_data['close'] < 0.3
+    and (regression_data['close'] - regression_data['high_pre1']) / regression_data['close'] < 0.3
+    and (regression_data['close'] - regression_data['low']) / regression_data['close'] > -0.3
+    and (regression_data['close'] - regression_data['low_pre1']) / regression_data['close'] > -0.3
+    and (regression_data['close'] - regression_data['low_pre2']) / regression_data['close'] > 0
+    and (regression_data['close'] - regression_data['low_pre3']) / regression_data['close'] > -0.5
+    ):
+        intradaytech = "&&&ConsolidationLow-3Day," + intradaytech
+        return intradaytech
+    elif (abs(regression_data['PCT_day_change']) < 1.1
+    and abs(regression_data['PCT_day_change_pre1']) < 1
+    and abs(regression_data['PCT_day_change_pre2']) < 1
+    and (regression_data['close'] - regression_data['high'])/regression_data['close'] < 0.5
+    and (regression_data['close'] - regression_data['high_pre1'])/regression_data['close'] < 0.3
+    and (regression_data['close'] - regression_data['low'])/regression_data['close'] > -0.5
+    and (regression_data['close'] - regression_data['low_pre1'])/regression_data['close'] > -0.5
+    ):
+        intradaytech = "&&&Consolidation-last-day," + intradaytech
+        return intradaytech
+
+
 
     data = db.history15m.find_one({'dataset_code': scrip})
     if (data is None or (np.array(data['data'])).size < 25):
+        if (regression_data['forecast_day_PCT2_change'] > 4 and abs(regression_data['PCT_day_change']) < 1.5):
+            intradaytech = "ZPre1_uptrend"
+        elif (regression_data['forecast_day_PCT3_change'] > 4 and abs(regression_data['PCT_day_change']) < 1.5):
+            intradaytech = "ZPre2_uptrend"
+        elif (regression_data['forecast_day_PCT4_change'] > 4 and abs(regression_data['PCT_day_change']) < 1.5):
+            intradaytech = "ZPre3_uptrend"
+        elif (regression_data['forecast_day_PCT5_change'] > 4 and abs(regression_data['PCT_day_change']) < 1.5):
+            intradaytech = "ZPre4_uptrend"
+        if (regression_data['forecast_day_PCT2_change'] < -4 and abs(regression_data['PCT_day_change']) < 1.5):
+            intradaytech = "ZPre1_downtrend"
+        elif (regression_data['forecast_day_PCT3_change'] < -4 and abs(regression_data['PCT_day_change']) < 1.5):
+            intradaytech = "ZPre2_downtrend"
+        elif (regression_data['forecast_day_PCT4_change'] < -4 and abs(regression_data['PCT_day_change']) < 1.5):
+            intradaytech = "ZPre3_downtrend"
+        elif (regression_data['forecast_day_PCT5_change'] < -4 and abs(regression_data['PCT_day_change']) < 1.5):
+            intradaytech = "ZPre4_downtrend"
         return intradaytech
 
     hsdate, hsopen, hshigh, hslow, hsclose, hsquantity = historical_data(data)
@@ -814,6 +860,33 @@ def intraday_tech_data(regression_data):
 def shortterm_tech_data_buy(regressionhigh, regressionlow):
     datahigh = ''
 
+    if(regressionhigh['forecast_day_PCT3_change'] > 2
+        and -1 < regressionhigh['forecast_day_PCT2_change'] < 1
+        and -1 < regressionhigh['forecast_day_PCT_change'] < 1
+        ):
+        datahigh = 'consuptrend2day'
+    elif (regressionhigh['forecast_day_PCT4_change'] > 2
+        and -1 < regressionhigh['forecast_day_PCT3_change'] < 1
+        and -1 < regressionhigh['forecast_day_PCT2_change'] < 1
+        and -1 < regressionhigh['forecast_day_PCT_change'] < 1.5
+        ):
+        datahigh = 'consuptrend3day'
+    elif (regressionhigh['forecast_day_PCT5_change'] > 2
+        and -1 < regressionhigh['forecast_day_PCT4_change'] < 1
+        and -1 < regressionhigh['forecast_day_PCT3_change'] < 1
+        and -1 < regressionhigh['forecast_day_PCT2_change'] < 1.5
+        and -1 < regressionhigh['forecast_day_PCT_change'] < 1.5
+        ):
+        datahigh = 'consuptrend4day'
+    elif (regressionhigh['forecast_day_PCT7_change'] > 2
+        and -1 < regressionhigh['forecast_day_PCT5_change'] < 1
+        and -1 < regressionhigh['forecast_day_PCT4_change'] < 1
+        and -1 < regressionhigh['forecast_day_PCT3_change'] < 1
+        and -1 < regressionhigh['forecast_day_PCT2_change'] < 1.5
+        and -1 < regressionhigh['forecast_day_PCT_change'] < 1.5
+        ):
+        datahigh = 'consuptrend5day'
+
     if (regressionhigh['month3LowChange'] < 5):
         if (regressionhigh['month3LowChange'] == regressionhigh['weekLowChange']):
             datahigh = datahigh + '|' + '0-month3LowChangeLT5-shortuptrend'
@@ -858,6 +931,33 @@ def shortterm_tech_data_buy(regressionhigh, regressionlow):
 
 def shortterm_tech_data_sell(regressionhigh, regressionlow):
     datalow = ''
+
+    if (regressionhigh['forecast_day_PCT3_change'] < -2
+        and -1 < regressionhigh['forecast_day_PCT2_change'] < 1
+        and -1 < regressionhigh['forecast_day_PCT_change'] < 1
+        ):
+        datalow = 'consdowntrend2day'
+    elif (regressionhigh['forecast_day_PCT4_change'] < -2
+        and -1 < regressionhigh['forecast_day_PCT3_change'] < 1
+        and -1 < regressionhigh['forecast_day_PCT2_change'] < 1
+        and -1 < regressionhigh['forecast_day_PCT_change'] < 1.5
+        ):
+        datalow = 'consdowntrend3day'
+    elif (regressionhigh['forecast_day_PCT5_change'] < -2
+        and -1 < regressionhigh['forecast_day_PCT4_change'] < 1
+        and -1 < regressionhigh['forecast_day_PCT3_change'] < 1
+        and -1.5 < regressionhigh['forecast_day_PCT2_change'] < 1
+        and -1.5 < regressionhigh['forecast_day_PCT_change'] < 1
+        ):
+        datalow = 'consdowntrend4day'
+    elif (regressionhigh['forecast_day_PCT7_change'] < -2
+        and -1 < regressionhigh['forecast_day_PCT5_change'] < 1
+        and -1 < regressionhigh['forecast_day_PCT4_change'] < 1
+        and -1 < regressionhigh['forecast_day_PCT3_change'] < 1
+        and -1.5 < regressionhigh['forecast_day_PCT2_change'] < 1
+        and -1.5 < regressionhigh['forecast_day_PCT_change'] < 1
+        ):
+        datalow = 'consdowntrend5day'
 
     if (regressionlow['month3HighChange'] > -5):
         if (regressionlow['monthHighChange'] == regressionlow['weekHighChange']):

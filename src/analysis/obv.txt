@@ -1,3 +1,19 @@
+https://chartink.com/screener/morning-volume-bs
+Buy
+######
+1. First bar green, second or third bar crossed first bar and last day high, last 3rd or 4th day uptrend
+2. Second or/and third bar red, but did not crossed mid of first bar, check for baseline around 10-11
+
+
+
+Sell
+######
+1. First bar green, second bar red, crossed mid of first bar
+
+
+
+
+
 
 week2high greater than one Daybefore or Day2before  GT 3 and today doji, high greater than last 2 days
 
