@@ -1,0 +1,6 @@
+
+Market Capitalization < 5000 AND
+Sales latest quarter > 200 AND
+(Sales latest quarter > 500 OR
+Profit after tax latest quarter > 100) AND
+Price to Earning < 7

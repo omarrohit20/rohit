@@ -473,7 +473,7 @@ def intraday_tech_data(regression_data):
     and (regression_data['close'] - regression_data['high_pre2'])/regression_data['close'] < 0
     and (regression_data['close'] - regression_data['high_pre3']) / regression_data['close'] < 0.5
     ):
-        intradaytech = "&&&ConsolidationHigh-3Day," + intradaytech
+        intradaytech = "ConsolidationHigh-3Day," + intradaytech
         return intradaytech
     elif (abs(regression_data['PCT_day_change']) < 1.1
     and regression_data['PCT_day_change'] > -0.5
@@ -484,7 +484,7 @@ def intraday_tech_data(regression_data):
     and (regression_data['close'] - regression_data['low_pre2']) / regression_data['close'] > 0
     and (regression_data['close'] - regression_data['low_pre3']) / regression_data['close'] > -0.5
     ):
-        intradaytech = "&&&ConsolidationLow-3Day," + intradaytech
+        intradaytech = "ConsolidationLow-3Day," + intradaytech
         return intradaytech
     elif (abs(regression_data['PCT_day_change']) < 1.1
     and abs(regression_data['PCT_day_change_pre1']) < 1
@@ -494,7 +494,7 @@ def intraday_tech_data(regression_data):
     and (regression_data['close'] - regression_data['low'])/regression_data['close'] > -0.5
     and (regression_data['close'] - regression_data['low_pre1'])/regression_data['close'] > -0.5
     ):
-        intradaytech = "&&&Consolidation-last-day," + intradaytech
+        intradaytech = "Consolidation-last-day," + intradaytech
         return intradaytech
 
 

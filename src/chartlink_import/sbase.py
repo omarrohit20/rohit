@@ -360,29 +360,6 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         mlData = intradaytech + ' $ ' + mldatahigh + ' $ ' + mldatalow + ' $ ' + highVol
                         mldatahigh = intradaytech + ' $ ' + mldatahigh
                         mldatalow = intradaytech + ' $ ' + mldatalow
-                            
-                        #record = {}
-                        #record['dataset_code'] = scrip
-                        #record['scrip'] = scrip
-                        #record['mlData'] = mldatahigh + ' : ' + mldatalow + ' : ' + highVol
-                        #record['mldatahigh'] = mldatahigh
-                        #record['mldatalow'] = mldatalow
-                        #record['highVol'] = highVol
-                        #record['intradaytech'] = intradaytech
-                        #record['epochtime'] = epochtime
-                        #record['eventtime'] = eventtime
-                        #record['systemtime'] = systemtime
-                        #record['resultDeclared'] = resultDeclared
-                        #record['processor'] = processor
-                        #json_data = json.loads(json.dumps(record, default=json_util.default))
-                        #db[processor].insert_one(json_data)
-
-                        #if(filtersFlag == True):
-                        #    if ('BBBbuy' in processor):
-                        #        db['buy_all_processor'].insert_one(json_data)
-                        #    if ('SSSsell' in processor):
-                        #        db['sell_all_processor'].insert_one(json_data)
-
                 i += 1
     except KeyError:
         None
@@ -537,7 +514,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 mldatahigh = mldatahigh + '|' + data['filter2'] + '|' + data['filter']
                         if ((dbnse['lowSell'].find_one({'scrip': scrip}) is not None)):
                             data = dbnse.lowSell.find_one({'scrip': scrip})
-                            if ('sell' in processor and ('MLSell' in data['ml'] or '%%' in data['filter'] or 'Sell-AnyGT2' in data['filter2'] or 'Suy-AnyGT' in data['filter2'] or 'Buy-AnyGT2' in data['filter2'])):
+                            if ('sell' in processor and ('MLlow' in data['ml'] or '%%' in data['filter'] or 'Sell-AnyGT2' in data['filter2'] or 'Sell-AnyGT' in data['filter2'] or 'Buy-AnyGT2' in data['filter2'])):
                                 mldatalow = data['ml']
                                 mldatalow = mldatalow + '|' + data['filter2'] + '|' + data['filter']
                         if (data['intradaytech'] != ""):
