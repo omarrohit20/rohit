@@ -464,8 +464,9 @@ def intraday_tech_data(regression_data):
         ):
             intradaytech = "Consolidation-Sell/Buy-2Day," + intradaytech
             return intradaytech
-    elif (abs(regression_data['PCT_day_change']) < 1.1
-    and regression_data['PCT_day_change'] < 0.5
+    elif (abs(regression_data['PCT_day_change']) < 1.3
+    and regression_data['PCT_day_change'] < -0.5
+    and regression_data['PCT_day_change_pre1'] < -1.3
     and (regression_data['close'] - regression_data['high'])/regression_data['close'] < 0.3
     and (regression_data['close'] - regression_data['high_pre1']) / regression_data['close'] < 0.3
     and (regression_data['close'] - regression_data['low']) / regression_data['close'] > -0.3
@@ -475,8 +476,9 @@ def intraday_tech_data(regression_data):
     ):
         intradaytech = "ConsolidationHigh-3Day," + intradaytech
         return intradaytech
-    elif (abs(regression_data['PCT_day_change']) < 1.1
-    and regression_data['PCT_day_change'] > -0.5
+    elif (abs(regression_data['PCT_day_change']) < 1.3
+    and regression_data['PCT_day_change'] > 0.5
+    and regression_data['PCT_day_change_pre1'] > 1.3
     and (regression_data['close'] - regression_data['high'])/regression_data['close'] < 0.3
     and (regression_data['close'] - regression_data['high_pre1']) / regression_data['close'] < 0.3
     and (regression_data['close'] - regression_data['low']) / regression_data['close'] > -0.3
@@ -637,12 +639,12 @@ def intraday_tech_data(regression_data):
         if ( 1.5 < daychange_pre1 < 5 and (postlunchchange_high_pre1 > daychange / 3) and (morningchange_high_pre1 > daychange / 4)):
             intradaytech = "ZPre1_UpStairs"
         elif (1.5 < daychange_pre1 < 5 and abs(postlunchchange_high_pre1) < abs(daychange) / 4):
-            intradaytech = "Pre1_UpPostLunchConsolidation"
+            intradaytech = "ZPre1_UpPostLunchConsolidation"
 
         if (-5 < daychange_pre1 < -1.5 and (postlunchchange_low_pre1 < daychange / 3) and (morningchange_low_pre1 > daychange / 4)):
             intradaytech = "ZPre1_DownStairs"
         elif (-5 < daychange_pre1 < -1.5 and abs(postlunchchange_low_pre1) < abs(daychange) / 4):
-            intradaytech = "Pre1_DownPostLunchConsolidation"
+            intradaytech = "ZPre1_DownPostLunchConsolidation"
     if (intradaytech == '' and -1 < daychange < 1 and abs(regression_data['PCT_day_change']) < 1 and abs(daychange_pre1) > 3 * abs(daychange)):
         if ( 1 < daychange_pre1 < 5 and postlunchchange_high_pre1 > 1 and morningchange_high_pre1 > 1):
             intradaytech = "ZPre1_UpStairs1"
