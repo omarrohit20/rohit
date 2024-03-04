@@ -352,7 +352,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             if (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
                                 or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
                                 ):
-                                intradaytech = '#top5#' + intradaytech
+                                intradaytech = 'Z#top5#' + intradaytech
 
                         needToPrint = True
 
@@ -586,7 +586,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                         if (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
                             or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
                             ):
-                            intradaytech = '#top5#' + intradaytech
+                            intradaytech = 'Z#top5#' + intradaytech
 
 
                     needToPrint = True

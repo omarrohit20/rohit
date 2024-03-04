@@ -469,28 +469,34 @@ def intraday_tech_data(regression_data):
     and regression_data['PCT_day_change_pre1'] < -1.3
     and (regression_data['close'] - regression_data['high'])/regression_data['close'] < 0.3
     and (regression_data['close'] - regression_data['high_pre1']) / regression_data['close'] < 0.3
+    and (regression_data['close'] - regression_data['high_pre2']) / regression_data['close'] < 0
+    and (regression_data['close'] - regression_data['high_pre3']) / regression_data['close'] < 0.5
     and (regression_data['close'] - regression_data['low']) / regression_data['close'] > -0.3
     and (regression_data['close'] - regression_data['low_pre1']) / regression_data['close'] > -0.3
-    and (regression_data['close'] - regression_data['high_pre2'])/regression_data['close'] < 0
-    and (regression_data['close'] - regression_data['high_pre3']) / regression_data['close'] < 0.5
+    and ((regression_data['close'] - regression_data['low_pre2']) / regression_data['close'] > -0.75
+        or (regression_data['close'] - regression_data['low_pre3']) / regression_data['close'] > -0.75
+        )
     ):
-        intradaytech = "ConsolidationHigh-3Day," + intradaytech
+        intradaytech = "Z&&ConsolidationHigh-3Day," + intradaytech
         return intradaytech
     elif (abs(regression_data['PCT_day_change']) < 1.3
     and regression_data['PCT_day_change'] > 0.5
     and regression_data['PCT_day_change_pre1'] > 1.3
     and (regression_data['close'] - regression_data['high'])/regression_data['close'] < 0.3
     and (regression_data['close'] - regression_data['high_pre1']) / regression_data['close'] < 0.3
+    and ((regression_data['close'] - regression_data['high_pre2']) / regression_data['close'] < 0.75
+          or (regression_data['close'] - regression_data['high_pre3']) / regression_data['close'] < 0.75)
     and (regression_data['close'] - regression_data['low']) / regression_data['close'] > -0.3
     and (regression_data['close'] - regression_data['low_pre1']) / regression_data['close'] > -0.3
     and (regression_data['close'] - regression_data['low_pre2']) / regression_data['close'] > 0
     and (regression_data['close'] - regression_data['low_pre3']) / regression_data['close'] > -0.5
     ):
-        intradaytech = "ConsolidationLow-3Day," + intradaytech
+        intradaytech = "Z&&ConsolidationLow-3Day," + intradaytech
         return intradaytech
     elif (abs(regression_data['PCT_day_change']) < 1.1
     and abs(regression_data['PCT_day_change_pre1']) < 1
     and abs(regression_data['PCT_day_change_pre2']) < 1
+    and (abs(regression_data['month3HighChange']) > 15 or abs(regression_data['month3LowChange']) > 15)
     and (regression_data['close'] - regression_data['high'])/regression_data['close'] < 0.5
     and (regression_data['close'] - regression_data['high_pre1'])/regression_data['close'] < 0.3
     and (regression_data['close'] - regression_data['low'])/regression_data['close'] > -0.5
@@ -823,6 +829,7 @@ def intraday_tech_data(regression_data):
 
 
     if (-0.3 < daychange < 0.75
+        and - 1 < regression_data['PCT_day_change'] < 1
         and regression_data['highTail'] < 0.5
         and regression_data['highTail_pre1'] < 0.75
         and 0.75 < regression_data['PCT_day_change_pre1'] < 3.5
@@ -830,6 +837,7 @@ def intraday_tech_data(regression_data):
         ):
         intradaytech = "AConsolidation-UP," + intradaytech
     elif (-0.75 < daychange < 0.3
+        and - 1 < regression_data['PCT_day_change'] < 1
         and regression_data['lowTail'] < 0.5
         and regression_data['lowTail_pre1'] < 0.75
         and -3.5 < regression_data['PCT_day_change_pre1'] < -0.75
@@ -837,18 +845,14 @@ def intraday_tech_data(regression_data):
         ):
         intradaytech = "AConsolidation-Down," + intradaytech
     elif (-0.75 < daychange < 0.75
-        and regression_data['highTail'] < 0.5 and regression_data['lowTail'] < 0.5
-        and abs(regression_data['PCT_day_change_pre1']) >  1.5
-        ):
-        intradaytech = "AConsolidation," + intradaytech
-    elif (-0.75 < daychange < 0.75
+        and - 1 < regression_data['PCT_day_change'] < 1
         and regression_data['highTail'] < 0.5 and regression_data['lowTail'] < 0.5
         and abs(regression_data['PCT_day_change_pre1']) < 0.75
         and abs(regression_data['PCT_day_change_pre2']) > 1.5
         ):
         intradaytech = "AConsolidation-2Day," + intradaytech
-
     elif (-0.75 < daychange < 0.75
+        and - 1 < regression_data['PCT_day_change'] < 1
         and regression_data['highTail'] < 0.5 and regression_data['lowTail'] < 0.5
         and regression_data['highTail_pre1'] < 0.5 and regression_data['lowTail_pre1'] < 0.5
         and abs(regression_data['PCT_day_change_pre1']) < 0.75
