@@ -893,6 +893,9 @@ def shortterm_tech_data_buy(regressionhigh, regressionlow):
         ):
         datahigh = 'consuptrend5day'
 
+    if (regressionhigh['PCT_day_change'] < 1.5 and regressionhigh['lowTail'] > 1.5):
+        datahigh = datahigh + '|' + 'lowTail'
+
     if (regressionhigh['month3LowChange'] < 5):
         if (regressionhigh['month3LowChange'] == regressionhigh['weekLowChange']):
             datahigh = datahigh + '|' + '0-month3LowChangeLT5-shortuptrend'
@@ -964,6 +967,9 @@ def shortterm_tech_data_sell(regressionhigh, regressionlow):
         and -1.5 < regressionhigh['forecast_day_PCT_change'] < 1
         ):
         datalow = 'consdowntrend5day'
+
+    if (regressionlow['PCT_day_change'] > -1.5 and regressionlow['highTail'] > 1.5):
+        datalow = datalow + '|' + 'highTail'
 
     if (regressionlow['month3HighChange'] > -5):
         if (regressionlow['monthHighChange'] == regressionlow['weekHighChange']):
