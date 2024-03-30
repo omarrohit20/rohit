@@ -17,7 +17,7 @@ if __name__ == "__main__":
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-1', 'morning-volume-breakout-buy', time_09_00, time_09_30)
 
         if (sb.nw >= time_09_40 and sb.nw <= time_11_00):
-            # ( {46553} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) > 1 and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) < 1.75 and [-1] 5 minute high > [=2] 5 minute high and [-1] 5 minute close > [=2] 5 minute high ) ) ) )
+            #( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and abs ( ( ( 1 day ago close - 1 day ago open ) * 100 ) / 1 day ago open ) > 1.6 and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) > 0.75 and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) < 2 and [-1] 5 minute open > [=1] 5 minute open and [-1] 5 minute close > [=1] 5 minute open and [-1] 5 minute high > [-2] 5 minute high and [0] 30 minute low > [=-1] 15 minute low ) ) ) )
             process_url_volBreakout('https://chartink.com/screener/buy-morning-volume-breakout-checknews-01', 'buy-morning-volume-breakout(Check-News)-01', time_09_50, time_11_00)
 
         if (sb.nw >= time_09_50 and sb.nw <= time_11_00):
