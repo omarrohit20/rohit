@@ -56,7 +56,6 @@ def insert_scripdata_st(scrip, date, filter, avg5, pct5, avg10, pct10, count, re
             print(json_data)
             db.sttips.insert_one(json_data)
 
-
 def insert_year2LowReversal(regression_data):
     if ((regression_data['year2HighChange'] < -50 and 'ReversalLowYear2' in regression_data['filter3']
             and regression_data['industry'] != '')
@@ -77,6 +76,28 @@ def insert_year2LowReversal(regression_data):
             db.reversalY2LLT60.insert_one(json_data)
         elif (db.reversalY2LLT50.count_documents({'scrip':data['scrip']})) < 1 and regression_data['year2HighChange'] < -50:
             db.reversalY2LLT50.insert_one(json_data)
+
+    if (((regression_data['year2HighChange'] < -50 and regression_data['industry'] != '') or regression_data['year5HighChange'] < -70)
+            and ((regression_data['week2HighChange'] > 0 and regression_data['monthHighChange'] < 0)
+                or (regression_data['close'] > regression_data['week2High'] and regression_data['close'] < regression_data['monthHigh']))
+            and regression_data['month3LowChange'] < 20
+            and regression_data['yearLowChange'] < 20
+            and regression_data['close'] > 10
+        ):
+        data = {}
+        data['scrip'] = regression_data['scrip']
+        data['industry'] = regression_data['industry']
+        data['date'] = regression_data['date']
+        data['close'] = regression_data['close']
+        data['year5HighChange'] = regression_data['year5HighChange']
+        data['year2HighChange'] = regression_data['year2HighChange']
+        data['year5LowChange'] = regression_data['year5LowChange']
+        data['month3HighChange'] = regression_data['month3HighChange']
+        data['month3LowChange'] = regression_data['month3LowChange']
+        json_data = json.loads(json.dumps(data))
+        if (db.reversalY2LLT70.count_documents({'scrip':data['scrip']})) < 1 :
+            db.reversalY2LLT70.insert_one(json_data)
+
 
 def insert_year5LowBreakoutY2H(regression_data):
     if (regression_data['year2HighChange'] > -5 and regression_data['year2LowChange'] > 30 and regression_data['year5HighChange'] < -50):
@@ -109,11 +130,10 @@ def insert_year5LowBreakoutYH(regression_data):
         return True
 
 def insert_year5LowBreakoutMonthHigh(regression_data):
-    if (regression_data['year5HighChange'] < -50 and regression_data['year2HighChange'] < -40 and regression_data['yearLowChange'] > 10 and regression_data['month3LowChange'] > 10 and regression_data['monthLowChange'] > 5 and regression_data['week2LowChange'] > 0
-        and regression_data['yearLowChange'] >= regression_data['month3LowChange']
-        and regression_data['month3LowChange'] >= regression_data['monthLowChange']
-        and regression_data['monthLowChange'] > regression_data['week2LowChange']
-        and regression_data['year5HighChange'] < regression_data['year2HighChange']
+    if (regression_data['year5HighChange'] < 0 and regression_data['year2HighChange'] < 0
+        and regression_data['yearLowChange'] > 40 and regression_data['month3LowChange'] > 15
+        and regression_data['monthHighChange'] < -10 and regression_data['weekLowChange'] > 3
+        and regression_data['weekHighChange'] > -2
         ):
         data = {}
         data['scrip'] = regression_data['scrip']
@@ -122,9 +142,12 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
         data['close'] = regression_data['close']
         data['year5HighChange'] = regression_data['year5HighChange']
         data['year2HighChange'] = regression_data['year2HighChange']
+        data['monthHighChange'] = regression_data['monthHighChange']
         data['year5LowChange'] = regression_data['year5LowChange']
         data['yearLowChange'] = regression_data['yearLowChange']
+        data['month3LowChange'] = regression_data['month3LowChange']
         data['monthLowChange'] = regression_data['monthLowChange']
+        data['weekLowChange'] = regression_data['weekLowChange']
         json_data = json.loads(json.dumps(data))
         if ((db.breakoutMH.count_documents({'scrip': data['scrip']})) < 1 and (db.breakoutMH.count_documents({'scrip': data['scrip']})) < 1):
             db.breakoutMH.insert_one(json_data)

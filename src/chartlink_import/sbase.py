@@ -185,7 +185,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 mldatahigh = datahigh['ml'] + '|' + mldatahigh
                                 if ('BreakLowYear' in datahigh['filter3'] or 'NearLowYear' in datahigh['filter3']):
                                     mldatahigh = 'MaySellLowYear-OpenedOrAtHigh' + '|' + mldatahigh
-                                elif('BreakHighYear' in datahigh['filter3'] or 'NearHighYear' in datahigh['filter3']):
+                                elif(('BreakHighYear' in datahigh['filter3'] or 'NearHighYear' in datahigh['filter3']) and datahigh['year5HighChange'] < 0 ):
                                     mldatahigh = 'MayBuyHighYear-OpenedOrAtLow' + '|' + mldatahigh
                                 elif('ReversalHighYear' in datahigh['filter3']):
                                     mldatahigh = 'ReversalHighYear' + '|' + mldatahigh
@@ -220,7 +220,7 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 mldatalow = datalow['ml'] + '|' + mldatalow
                                 if ('BreakLowYear' in datalow['filter3'] or 'NearLowYear' in datalow['filter3']):
                                     mldatalow = 'MaySellLowYear-OpenedOrAtHigh' + '|' + mldatalow
-                                elif ('BreakHighYear' in datalow['filter3'] or 'NearHighYear' in datalow['filter3']):
+                                elif (('BreakHighYear' in datalow['filter3'] or 'NearHighYear' in datalow['filter3']) and datalow['year5HighChange']):
                                     mldatalow = 'MayBuyHighYear-OpenedOrAtLow' + '|' + mldatalow
                                 elif ('ReversalLowYear' in datalow['filter3']):
                                     mldatalow = 'ReversalLowYear' + '|' + mldatalow
@@ -526,7 +526,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 mldatahigh = mldatahigh + '|' + data['filter2'] + '|' + data['filter']
                             if ('BreakLowYear' in data['filter3'] or 'NearLowYear' in data['filter3']):
                                 mldatahigh = 'MaySellLowYear-OpenedOrAtHigh' + '|' + mldatahigh
-                            elif ('BreakHighYear' in data['filter3'] or 'NearHighYear' in data['filter3']):
+                            elif (('BreakHighYear' in data['filter3'] or 'NearHighYear' in data['filter3']) and data['year5HighChange']):
                                 mldatahigh = 'MayBuyHighYear-OpenedOrAtLow' + '|' + mldatahigh
                         if ((dbnse['lowSell'].find_one({'scrip': scrip}) is not None)):
                             data = dbnse.lowSell.find_one({'scrip': scrip})
@@ -535,7 +535,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 mldatalow = mldatalow + '|' + data['filter2'] + '|' + data['filter']
                             if ('BreakLowYear' in data['filter3'] or 'NearLowYear' in data['filter3']):
                                 mldatalow = 'MaySellLowYear-OpenedOrAtHigh' + '|' + mldatalow
-                            elif ('BreakHighYear' in data['filter3'] or 'NearHighYear' in data['filter3']):
+                            elif (('BreakHighYear' in data['filter3'] or 'NearHighYear' in data['filter3']) and data['year5HighChange']):
                                 mldatalow = 'MayBuyHighYear-OpenedOrAtLow' + '|' + mldatalow
                         if (data['intradaytech'] != ""):
                             intradaytech = data['intradaytech']
