@@ -1,6 +1,18 @@
 https://chartink.com/screener/morning-volume-bs
+
+after 9:20
+######################
+check buy high vol for less than -1.5
+	if first bar green, more than 0.5, crossed last day 15 candle
+	If first bar red, sell
+
+check sell high vol for greater than 1.5
+	if first bar green, more than 0.5, crossed last day 15 candle
+	If first bar green, buy
+
 Buy
 ######
+
 1. First bar green, second or third bar crossed first bar and last day high, last 3rd or 4th day uptrend
 2. Second or/and third bar red, but did not crossed mid of first bar, check for baseline around 10-11
 
