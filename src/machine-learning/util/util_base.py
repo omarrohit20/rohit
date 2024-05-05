@@ -22,13 +22,13 @@ MARKET_IN_DOWNTREND=False
 CLOSEPRICE = 40
 TEST = False
 
-buyMLP = 0.1
-buyMLP_MIN = 0
-buyKN = 0.1
+buyMLP = 1
+buyMLP_MIN = 0.5
+buyKN = 0.5
 buyKN_MIN = 0
-sellMLP = -0.1
-sellMLP_MIN = 0
-sellKN = -0.1
+sellMLP = -1
+sellMLP_MIN = -0.5
+sellKN = -0.5
 sellKN_MIN = 0
 
 connection = MongoClient('localhost',27017)
@@ -283,7 +283,7 @@ def is_algo_buy(regression_data, resticted=False):
     REG_MIN = -1.5
     CLA_MIN = -1
     if resticted:
-        REG_MIN = -0.5
+        REG_MIN = 0
         CLA_MIN = 0
     if((regression_data['mlpValue_reg'] >= REG_MIN) and (regression_data['kNeighboursValue_reg'] >= REG_MIN)
         and (regression_data['mlpValue_reg_other'] >= REG_MIN) and (regression_data['kNeighboursValue_reg_other'] >= REG_MIN)
@@ -346,7 +346,7 @@ def is_algo_sell(regression_data, resticted=False):
     REG_MAX = 1.5
     CLA_MAX = 1
     if resticted:
-        REG_MAX = 0.5
+        REG_MAX = 0
         CLA_MAX = 0
     if((regression_data['mlpValue_reg'] <= REG_MAX) and (regression_data['kNeighboursValue_reg'] <= REG_MAX)
         and (regression_data['mlpValue_reg_other'] <= REG_MAX) and (regression_data['kNeighboursValue_reg_other'] <= REG_MAX)
@@ -404,7 +404,7 @@ def is_algo_buy_classifier(regression_data, resticted=False):
     REG_MIN = -1.5
     CLA_MIN = -1
     if resticted:
-        REG_MIN = -0.5
+        REG_MIN = 0
         CLA_MIN = 0
     if((regression_data['mlpValue_reg'] >= REG_MIN) and (regression_data['kNeighboursValue_reg'] >= REG_MIN)
         and (regression_data['mlpValue_reg_other'] >= REG_MIN) and (regression_data['kNeighboursValue_reg_other'] >= REG_MIN)
@@ -426,7 +426,7 @@ def is_algo_sell_classifier(regression_data, resticted=False):
     REG_MAX = 1.5
     CLA_MAX = 1
     if resticted:
-        REG_MAX = 0.5
+        REG_MAX = 0
         CLA_MAX = 0
     if((regression_data['mlpValue_reg'] <= REG_MAX) and (regression_data['kNeighboursValue_reg'] <= REG_MAX)
         and (regression_data['mlpValue_reg_other'] <= REG_MAX) and (regression_data['kNeighboursValue_reg_other'] <= REG_MAX)
