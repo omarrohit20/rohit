@@ -11,9 +11,9 @@ if __name__ == "__main__":
     sb.nw = datetime.now()
     
     while (sb.nw <= time_14_00):
-        if (sb.nw >= time_09_30 and sb.nw <= time_11_00):
-            # ( {33489} ( ( {cash} ( ( ( ( [=1] 30 minute high - 1 day ago close ) * 100 ) / 1 day ago close ) > 2 and [=1] 30 minute high > 1 day ago close and [=1] 30 minute high = [=1] 20 minute high and [-1] 5 minute low < [=1] 5 minute open and [-1] 5 minute low < [=1] 5 minute close and ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) ) ) and [=2] 5 minute close > [=1] 5 minute open and [=2] 5 minute open > [=1] 5 minute open and [-1] 5 minute close > [=-1] 30 minute low and ( ( ( [=1] 5 minute close - [=1] 5 minute open ) * 100 ) / 1 day ago close ) > 0 and ( ( ( [=1] 30 minute high - [-1] 5 minute low ) * 100 ) / 1 day ago low ) > 1.5 ) ) ) )
-            process_url_volBreakout('https://chartink.com/screener/buy-morning-down-0', '09_30:checkChartBuy-morningDown(LastDaybeforeGT0)', time_09_30, time_11_00)
+        if (sb.nw >= time_10_00 and sb.nw <= time_11_00):
+            # ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 30  ) and [=1] 10 minute volume > greatest(  1 day ago volume / 22  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and ( ( ( [=1] 15 minute close - [=1] 5 minute open ) * 100 ) / [=1] 5 minute open ) < -0.5 and ( ( ( [=1] 15 minute close - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < -1 and ( ( ( [=1] 15 minute low - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < 0.3 and ( ( ( [-1] 5 minute close - [-3] 5 minute open ) * 100 ) / [=1] 5 minute open ) > 0.5 and ( [0] 5 minute high - [=1] 10 minute low ) > ( 1 day ago close - [0] 5 minute high ) and [0] 5 minute close > [=1] 15 minute close and [0] 5 minute close > [=3] 5 minute high ) ) ) )
+            process_url_volBreakout('https://chartink.com/screener/buy-morning-down-0', '09_30:checkChartBuy-morningDown(LastDaybeforeGT0)', time_10_00, time_11_00)
 
 
         if (sb.nw >= time_09_30 and sb.nw <= time_10_30):

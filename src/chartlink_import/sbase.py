@@ -360,11 +360,26 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
                             needToPrint = True
 
-                        if (processor != 'morning-volume-breakout-buy' and processor != 'morning-volume-breakout-sell'):
-                            if (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
-                                or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
-                                ):
-                                intradaytech = 'Z#top5#' + intradaytech
+                        # if (processor == 'morning-volume-breakout-buy'):
+                        #     if(db['morning-volume-breakout-buy'].count_documents({}) < 5):
+                        #         intradaytech = 'Z#TOP5#' + intradaytech
+                        #     elif(db['morning-volume-breakout-buy'].count_documents({}) < 15):
+                        #         intradaytech = 'TOP15' + intradaytech
+                        #
+                        # if (processor == 'morning-volume-breakout-sell'):
+                        #     if (db['morning-volume-breakout-sell'].count_documents({}) < 5):
+                        #         intradaytech = 'Z#TOP5#' + intradaytech
+                        #     elif (db['morning-volume-breakout-sell'].count_documents({}) < 15):
+                        #         intradaytech = 'TOP15' + intradaytech
+
+                        if (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
+                            or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
+                            ):
+                            intradaytech = '#TOP5#' + intradaytech
+                        elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(15))
+                            or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(15))
+                            ):
+                            intradaytech = '#TOP15#' + intradaytech
 
                         needToPrint = True
 
@@ -602,12 +617,24 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                         else:
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
 
-                    if (processor != 'morning-volume-breakout-buy' and processor != 'morning-volume-breakout-sell' ):
-                        if (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
-                            or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
-                            ):
-                            intradaytech = 'Z#top5#' + intradaytech
-
+                    if (processor == 'morning-volume-breakout-buy'):
+                        if (db['morning-volume-breakout-buy'].count_documents({}) < 5):
+                            intradaytech = '#TOP5#' + intradaytech
+                        elif (db['morning-volume-breakout-buy'].count_documents({}) < 15):
+                            intradaytech = '#TOP15#' + intradaytech
+                    elif (processor == 'morning-volume-breakout-sell'):
+                        if (db['morning-volume-breakout-sell'].count_documents({}) < 5):
+                            intradaytech = '#TOP5#' + intradaytech
+                        elif (db['morning-volume-breakout-sell'].count_documents({}) < 15):
+                            intradaytech = '#TOP15#' + intradaytech
+                    elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
+                        or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
+                        ):
+                        intradaytech = '#TOP5#' + intradaytech
+                    elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(15))
+                        or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(15))
+                        ):
+                        intradaytech = '#TOP15#' + intradaytech
 
                     needToPrint = True
                                 

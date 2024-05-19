@@ -444,26 +444,6 @@ def intraday_tech_data(regression_data):
     ):
         intradaytech = "Z&&&Consolidation-2Day," + intradaytech
         return intradaytech
-    elif (abs(regression_data['PCT_day_change']) < 3
-    and abs(regression_data['PCT_day_change_pre1']) < 3
-    and abs(regression_data['PCT_day_change_pre2']) < 3
-    and -1.5 < ((regression_data['close'] - regression_data['high_pre1'])/regression_data['close']) < 0
-    and ((regression_data['close'] - regression_data['high_pre2'])/regression_data['close']) < 0
-    and 0 < ((regression_data['close'] - regression_data['low_pre1'])/regression_data['close']) < 1.5
-    and 0 < ((regression_data['close'] - regression_data['low_pre2'])/regression_data['close'])
-    ):
-        if(regression_data['PCT_day_change_pre2'] < -1
-        and regression_data['PCT_day_change'] > 1
-        and -1 < ((regression_data['close'] - regression_data['high_pre1']) / regression_data['close'])
-        ):
-            intradaytech = "Consolidation-Buy/Sell-2Day," + intradaytech
-            return intradaytech
-        if (regression_data['PCT_day_change_pre2'] > 1
-        and regression_data['PCT_day_change'] < -1
-        and ((regression_data['close'] - regression_data['low_pre1']) / regression_data['close']) < 1
-        ):
-            intradaytech = "Consolidation-Sell/Buy-2Day," + intradaytech
-            return intradaytech
     elif (abs(regression_data['PCT_day_change']) < 1.3
     and regression_data['PCT_day_change'] < -0.5
     and regression_data['PCT_day_change_pre1'] < -1.3
@@ -832,38 +812,6 @@ def intraday_tech_data(regression_data):
         intradaytech = intradaytech + ':Year5LowChangeGT30'
 
 
-    # if (-0.3 < daychange < 0.75
-    #     and - 1 < regression_data['PCT_day_change'] < 1
-    #     and regression_data['highTail'] < 0.5
-    #     and regression_data['highTail_pre1'] < 0.75
-    #     and 0.75 < regression_data['PCT_day_change_pre1'] < 3.5
-    #     and regression_data['PCT_day_change_pre1'] > regression_data['PCT_day_change']
-    #     ):
-    #     intradaytech = "AConsolidation-UP," + intradaytech
-    # elif (-0.75 < daychange < 0.3
-    #     and - 1 < regression_data['PCT_day_change'] < 1
-    #     and regression_data['lowTail'] < 0.5
-    #     and regression_data['lowTail_pre1'] < 0.75
-    #     and -3.5 < regression_data['PCT_day_change_pre1'] < -0.75
-    #     and regression_data['PCT_day_change_pre1'] < regression_data['PCT_day_change']
-    #     ):
-    #     intradaytech = "AConsolidation-Down," + intradaytech
-    # elif (-0.75 < daychange < 0.75
-    #     and - 1 < regression_data['PCT_day_change'] < 1
-    #     and regression_data['highTail'] < 0.5 and regression_data['lowTail'] < 0.5
-    #     and abs(regression_data['PCT_day_change_pre1']) < 0.75
-    #     and abs(regression_data['PCT_day_change_pre2']) > 1.5
-    #     ):
-    #     intradaytech = "AConsolidation-2Day," + intradaytech
-    # elif (-0.75 < daychange < 0.75
-    #     and - 1 < regression_data['PCT_day_change'] < 1
-    #     and regression_data['highTail'] < 0.5 and regression_data['lowTail'] < 0.5
-    #     and regression_data['highTail_pre1'] < 0.5 and regression_data['lowTail_pre1'] < 0.5
-    #     and abs(regression_data['PCT_day_change_pre1']) < 0.75
-    #     and abs(regression_data['PCT_day_change_pre2']) < 0.75
-    #     ):
-    #     intradaytech = "AConsolidation-3Day," + intradaytech
-
 
     return intradaytech
 
@@ -900,34 +848,7 @@ def shortterm_tech_data_buy(regressionhigh, regressionlow):
     if (regressionhigh['PCT_day_change'] < 1.5 and regressionhigh['lowTail'] > 1.5):
         datahigh = datahigh + '|' + 'lowTail'
 
-    if (regressionhigh['month3LowChange'] < 5):
-        if (regressionhigh['month3LowChange'] == regressionhigh['weekLowChange']):
-            datahigh = datahigh + '|' + '0-month3LowChangeLT5-shortuptrend'
-        elif ((regressionhigh['monthLowChange'] + regressionhigh['weekHighChange'] + regressionhigh['weekLowChange']) < 4.5):
-            datahigh = datahigh + '|' + '1-month3LowChangeLT5-shortdowntrend'
-        else:
-            datahigh = datahigh + '|' + 'month3LowChangeLT5-indexhigh'
-    elif (regressionlow['month3HighChange'] > -5):
-        if (regressionhigh['monthHighChange'] == regressionhigh['weekHighChange']
-            and regressionhigh['PCT_day_change'] < 1
-            #and (regressionhigh['PCT_day_change'] > -0.3 or regressionhigh['PCT_day_change_pre1'] > -0.3)
-            and (regressionhigh['PCT_day_change_pre1'] < 0 or regressionhigh['PCT_day_change_pre2'] < 0)
-            ):
-            datahigh = datahigh + '|' + 'risky-buy-m3HGT-5-shortdowntrend'
-        if ((regressionhigh['monthHighChange'] + regressionhigh['weekHighChange'] + regressionhigh['weekLowChange']) > -4.5
-            and (regressionhigh['PCT_day_change'] < 0.5 or regressionhigh['PCT_day_change_pre1'] < 0.5)
-            and (regressionhigh['PCT_day_change'] > -0.3 or regressionhigh['PCT_day_change_pre1'] > -0.3)
-            and (regressionhigh['PCT_day_change_pre1'] > 0 or regressionhigh['PCT_day_change_pre2'] > 0)
-            and regressionhigh['yearLowChange'] > 10
-            and (regressionhigh['year5HighChange'] < -10 or regressionhigh['year2HighChange'] < -10 or regressionhigh['PCT_day_change'] < 0.5)
-            and regressionhigh['lowTail'] + regressionhigh['PCT_day_change'] < 3
-            ):
-            if (regressionhigh['year5HighChange'] > -5):
-                datahigh = datahigh + '|' + 'buy-m3HGT-5-shortuptrend-allTimeHigh'
-            elif(regressionhigh['PCT_day_change'] < 0.5):
-                datahigh = datahigh + '|' + 'buy-m3HGT-5-shortuptrend-lt0.5'
-            #else:
-                #datahigh = datahigh + '|' + 'buy-m3HGT-5-shortuptrend'
+
     if ('shortUpTrend' in regressionhigh['filter1'] and '(upTrend)' in regressionhigh['series_trend']
         and abs(regressionhigh['month3LowChange']) < abs(regressionhigh['month3HighChange'])
         ):
@@ -974,35 +895,6 @@ def shortterm_tech_data_sell(regressionhigh, regressionlow):
 
     if (regressionlow['PCT_day_change'] > -1.5 and regressionlow['highTail'] > 1.5):
         datalow = datalow + '|' + 'highTail'
-
-    if (regressionlow['month3HighChange'] > -5):
-        if (regressionlow['monthHighChange'] == regressionlow['weekHighChange']):
-            datalow = datalow + '|' + '0-month3HighChangeGT-5-shortdowntrend'
-        elif ((regressionlow['monthHighChange'] + regressionlow['weekHighChange'] + regressionlow['weekLowChange']) > -4.5):
-            datalow = datalow + '|' + '1-month3HighChangeGT-5-shortuptrend'
-        else:
-            datalow = datalow + '|' + 'month3HighChangeGT-5-indexhigh'
-    elif (regressionhigh['month3LowChange'] < 5):
-        if (regressionlow['month3LowChange'] == regressionlow['weekLowChange']
-            and regressionhigh['PCT_day_change'] > -1
-            #and (regressionhigh['PCT_day_change'] < 0.3 or regressionhigh['PCT_day_change_pre1'] < 0.3)
-            and (regressionlow['PCT_day_change_pre1'] > 0 or regressionlow['PCT_day_change_pre2'] > 0)
-            ):
-            datalow = datalow + '|' + 'risky-sell-m3LowLT5-shortuptrend'
-        elif ((regressionlow['monthLowChange'] + regressionlow['weekHighChange'] + regressionlow['weekLowChange']) < 4.5
-            and (regressionhigh['PCT_day_change'] > -0.5 or regressionhigh['PCT_day_change_pre1'] > -0.5)
-            and (regressionhigh['PCT_day_change'] < 0.3 or regressionhigh['PCT_day_change_pre1'] < 0.3)
-            and (regressionlow['PCT_day_change_pre1'] < 0 or regressionlow['PCT_day_change_pre2'] < 0)
-            and regressionlow['yearHighChange'] < -10
-            and (regressionlow['year5LowChange'] > 10 or regressionlow['year2LowChange'] > 10 or regressionlow['PCT_day_change_pre1'] > 2)
-            and regressionhigh['highTail'] - regressionhigh['PCT_day_change'] < 3
-            ):
-            if (regressionlow['year5LowChange'] < 5):
-                datalow = datalow + '|' + 'sell-m3LowLT5-shortdowntrend-allTimeLow'
-            elif (regressionhigh['PCT_day_change'] > -0.5):
-                datalow = datalow + '|' + 'sell-m3LowLT5-shortdowntrend-gt(-0.5)'
-            #else:
-                #datalow = datalow + '|' + 'sell-m3LowLT5-shortdowntrend'
 
     if ('shorDownTrend' in regressionhigh['filter1'] and '(downTrend)' in regressionhigh['series_trend']
         and abs(regressionhigh['month3LowChange']) > abs(regressionhigh['month3HighChange'])
