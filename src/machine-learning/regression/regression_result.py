@@ -432,9 +432,8 @@ def intraday_tech_data(regression_data):
     intradaytech = ''
     scrip = regression_data['scrip']
 
-    if (abs(regression_data['PCT_day_change']) < 1.1
+    if (abs(regression_data['PCT_day_change']) < 0.85
     and abs(regression_data['PCT_day_change_pre1']) < 1
-    and abs(regression_data['PCT_day_change_pre2']) < 1
     and (regression_data['close'] - regression_data['high'])/regression_data['close'] < 0.5
     and (regression_data['close'] - regression_data['high_pre1'])/regression_data['close'] < 0.3
     and (regression_data['close'] - regression_data['low'])/regression_data['close'] > -0.5
@@ -477,7 +476,7 @@ def intraday_tech_data(regression_data):
     ):
         intradaytech = "Z&&ConsolidationLow-3Day," + intradaytech
         return intradaytech
-    elif (abs(regression_data['PCT_day_change']) < 1.1
+    elif (abs(regression_data['PCT_day_change']) < 0.85
     and abs(regression_data['PCT_day_change_pre1']) < 1
     and abs(regression_data['PCT_day_change_pre2']) < 1
     and (abs(regression_data['month3HighChange']) > 15 or abs(regression_data['month3LowChange']) > 15)
