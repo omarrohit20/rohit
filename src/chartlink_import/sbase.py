@@ -77,6 +77,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
             PCT_change = ''
             year5HighChange = ''
             yearHighChange = ''
+            highTail = ''
+            lowTail = ''
             shorttermtech = ''
             resultDeclared = ''
             tobuy = ''
@@ -112,6 +114,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         record['PCT_change'] = PCT_change
                         record['year5HighChange'] = year5HighChange
                         record['yearHighChange'] = yearHighChange
+                        record['highTail'] = highTail
+                        record['lowTail'] = lowTail
                         record['resultDeclared'] = resultDeclared
                         record['processor'] = processor
                         record['epochtime'] = epochtime
@@ -142,6 +146,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         PCT_change = ''
                         year5HighChange = ''
                         yearHighChange = ''
+                        highTail = ''
+                        lowTail = ''
                         shorttermtech = ''
                         resultDeclared = ''
                         tobuy = ''
@@ -161,6 +167,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         PCT_change = ''
                         year5HighChange = ''
                         yearHighChange = ''
+                        highTail = ''
+                        lowTail = ''
                         filtersFlag = False
                         
                         try:
@@ -181,6 +189,8 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                                 PCT_change = datahigh['PCT_change']
                                 year5HighChange = datahigh['year5HighChange']
                                 yearHighChange = datahigh['yearHighChange']
+                                highTail = data['highTail']
+                                lowTail = data['lowTail']
                                 mldatahigh =  datahigh['filter2'] + '|' + datahigh['filter']
                                 mldatahigh = datahigh['ml'] + '|' + mldatahigh
                                 if ('BreakLowYear' in datahigh['filter3'] or 'NearLowYear' in datahigh['filter3']):
@@ -444,6 +454,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
             PCT_change = ''
             year5HighChange = ''
             yearHighChange = ''
+            highTail = ''
+            lowTail = ''
             shorttermtech = ''
             resultDeclared = ''
             tobuy = ''
@@ -469,6 +481,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             record['PCT_change'] = PCT_change
                             record['year5HighChange'] = year5HighChange
                             record['yearHighChange'] = yearHighChange
+                            record['highTail'] = highTail
+                            record['lowTail'] = lowTail
                             record['resultDeclared'] = resultDeclared
                             record['processor'] = processor
                             record['epochtime'] = epochtime
@@ -501,6 +515,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             PCT_change = ''
                             year5HighChange = ''
                             yearHighChange = ''
+                            highTail = ''
+                            lowTail = ''
                             shorttermtech = ''
                             resultDeclared = ''
                             tobuy = ''
@@ -521,6 +537,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     PCT_change = ''
                     year5HighChange = ''
                     yearHighChange = ''
+                    highTail = ''
+                    lowTail = ''
                     shorttermtech = ''
                     resultDeclared = ''
                     filtersFlag = False
@@ -536,6 +554,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             PCT_change = data['PCT_change']
                             year5HighChange = data['year5HighChange']
                             yearHighChange = data['yearHighChange']
+                            highTail = data['highTail']
+                            lowTail = data['lowTail']
                             if ('buy' in processor and ('MLhigh' in data['ml'] or '%%' in data['filter'] or 'Buy-AnyGT2' in data['filter2'] or 'Buy-AnyGT' in data['filter2'] or 'Sell-AnyGT2' in data['filter2'])):
                                 mldatahigh = data['ml']
                                 mldatahigh = mldatahigh + '|' + data['filter2'] + '|' + data['filter']
