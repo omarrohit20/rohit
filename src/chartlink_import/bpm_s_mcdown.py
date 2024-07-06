@@ -10,7 +10,10 @@ if __name__ == "__main__":
     print('Started')
     sb.nw = datetime.now()
 
-    while (sb.nw <= time_11_00):
+    while (sb.nw <= time_12_00):
+        if (sb.nw >= time_09_45 and sb.nw <= time_12_00):
+            # ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and abs ( 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" ) < 1.5 and abs ( [=1] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" ) > 0.5 and [0] 5 minute low < [=-1] 3 hour low and [0] 5 minute low < [=2] 10 minute low and [0] 5 minute low < [=2] 15 minute low and [0] 5 minute low < [=3] 15 minute low and [=1] 30 minute low = [=1] 15 minute low and [=2] 15 minute high > [=1] 5 minute close and [=1] 30 minute high > 2 days ago low and ( ( ( [=1] 5 minute open - [=1] 30 minute high ) * 100 ) / 1 day ago close ) > -1.5 and ( ( ( [=1] 5 minute close - [=1] 30 minute high ) * 100 ) / 1 day ago close ) > -1.5 and ( ( ( 1 day ago close - [=1] 30 minute high ) * 100 ) / 1 day ago close ) > -1.5 ) ) ) )
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-consolidation-01', 'sell-dayconsolidation-breakout-02', time_09_45, time_12_00)
 
         if (sb.nw >= time_09_30 and sb.nw <= time_11_00):
             # ( {33489} ( ( {cash} ( [-1] 5 minute close > [=1] 30 minute low and [=1] 30 minute low < 1 day ago close and [=1] 30 minute low = [=1] 20 minute low and [-1] 5 minute vwap > [-3] 5 minute vwap and [=1] 5 minute close < [=1] 5 minute open and [=2] 5 minute open < [=1] 5 minute open and [=2] 5 minute close < [=1] 5 minute open and ( ( ( [=1] 15 minute low - 1 day ago close ) * 100 ) / 1 day ago close ) < -0.75 and ( ( ( [=1] 5 minute close - [=1] 5 minute open ) * 100 ) / 1 day ago close ) < -0.5 and ( ( ( [-1] 5 minute close - [=-1] 5 minute low ) * 100 ) / 1 day ago close ) < -1.2 and ( ( ( [-1] 5 minute close - [=1] 5 minute high ) * 100 ) / 1 day ago close ) < -0.75 ) ) and ( {cash} ( [=1] 3 minute volume > greatest(  1 day ago volume / 24  ) and [0] 15 minute "close - 1 candle ago close / 1 candle ago close * 100" < 0 ) ) ) )
