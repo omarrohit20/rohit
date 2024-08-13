@@ -21,6 +21,10 @@ if __name__ == "__main__":
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-2', 'Breakout-Sell-2', time_09_35, time_12_30)
 
         if (sb.nw >= time_09_40 and sb.nw <= time_11_00):
+            # ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 30  ) and [=1] 10 minute volume > greatest(  1 day ago volume / 22  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 15  ) and [-2] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" < 0 and [-1] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" < 0.1 and [-1] 5 minute close < [=2] 5 minute low and ( ( ( [0] 5 minute low - [-2] 5 minute high ) * 100 ) / 1 day ago close ) > -0.7 and ( ( ( 1 day ago close - 1 day ago open ) * 100 ) / 1 day ago close ) > -0.5 and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) < -1 and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) > -3 ) ) ) )
+            process_url_volBreakout('https://chartink.com/screener/sell-morning-volume-breakout-checknews-02', 'sell-morning-volume-breakout(Check-News)-02', time_09_40, time_11_00)
+
+        if (sb.nw >= time_09_40 and sb.nw <= time_11_00):
             # ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and abs ( ( ( 1 day ago close - 1 day ago open ) * 100 ) / 1 day ago open ) > 1.6 and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) < -0.75 and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) > -2 and [-1] 5 minute open < [=1] 5 minute open and [-1] 5 minute close < [=1] 5 minute open and [-1] 5 minute low < [-2] 5 minute low and [0] 30 minute high < [=-1] 15 minute high ) ) ) )
             process_url_volBreakout('https://chartink.com/screener/sell-morning-volume-breakout-checknews-01', 'sell-morning-volume-breakout(Check-News)-01', time_09_40, time_11_00)
 
