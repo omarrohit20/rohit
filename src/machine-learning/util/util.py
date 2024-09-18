@@ -131,9 +131,8 @@ def insert_year5LowBreakoutYH(regression_data):
 
 def insert_year5LowBreakoutMonthHigh(regression_data):
     if (regression_data['year5HighChange'] < 0 and regression_data['year2HighChange'] < 0
-        and regression_data['yearLowChange'] > 40 and regression_data['month3LowChange'] > 15
-        and regression_data['monthHighChange'] < -10 and regression_data['weekLowChange'] > 3
-        and regression_data['weekHighChange'] > -2
+        and regression_data['yearLowChange'] > 10 and regression_data['month3LowChange'] > 10 and regression_data['monthLowChange'] > 10
+        and regression_data['yearHighChange'] < -25 and regression_data['month6HighChange'] > -1 and regression_data['monthHighChange'] > -1 and regression_data['weekHighChange'] > -2
         ):
         data = {}
         data['scrip'] = regression_data['scrip']
