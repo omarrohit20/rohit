@@ -385,6 +385,9 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                         elif (any(d['scrip'] == scrip for d in db['morninglow-high-volume-buy'].find())
                             ):
                             intradaytech = '#BUYMORNINGLOW#' + intradaytech
+                        elif (any(d['scrip'] == scrip for d in db['morninghigh-high-volume-sell'].find())
+                            ):
+                            intradaytech = '#SELLMORNINGHIGH#' + intradaytech
 
                         needToPrint = True
 
@@ -657,6 +660,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     elif (any(d['scrip'] == scrip for d in db['morninglow-high-volume-buy'].find())
                         ):
                         intradaytech = '#BUYMORNINGLOW#' + intradaytech
+                    elif (any(d['scrip'] == scrip for d in db['morninghigh-high-volume-sell'].find())
+                        ):
+                        intradaytech = '#SELLMORNINGHIGH#' + intradaytech
 
 
                     needToPrint = True

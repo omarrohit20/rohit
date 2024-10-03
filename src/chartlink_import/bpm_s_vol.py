@@ -12,6 +12,10 @@ if __name__ == "__main__":
     sb.nw = datetime.now()
     
     while (sb.nw <= time_11_00):
+        if (sb.nw >= time_09_15 and sb.nw <= time_09_35):
+            # ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 10 minute volume > greatest(  1 day ago volume / 22  ) and [=1] 15 minute volume > greatest(  2 days ago volume / 15  ) and [=1] 5 minute high < [=1] 5 minute sma ( [=1] 5 minute close , 200 ) and ( ( ( [=1] 5 minute close - [=1] 5 minute low ) * 100 ) / 1 day ago close ) > -2 and ( ( ( 1 day ago close - 1 day ago low ) * 100 ) / 1 day ago close ) > -2 and ( ( ( [=1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) < -0.5 and [=1] 5 minute open > 1 day ago low and [=1] 5 minute high > [=-2] 30 minute low and [=1] 5 minute high < 1 day ago high ) ) ) )
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-3', 'morninghigh-high-volume-sell', time_09_00, time_09_45)
+
         if (sb.nw >= time_09_20 and sb.nw <= time_09_45):
             #( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 30  ) and [=1] 10 minute volume > greatest(  1 day ago volume / 22  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and ( ( ( [0] 5 minute close - [=1] 5 minute open ) * 100 ) / [=1] 5 minute open ) < -0.6 and ( ( ( [=1] 15 minute close - [=1] 5 minute open ) * 100 ) / [=1] 5 minute open ) < -0.3 and ( ( ( [0] 5 minute low - [=-1] 5 minute low ) * 100 ) / [=1] 5 minute open ) < -0.5 and ( ( ( [=1] 15 minute close - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < 0.3 and ( ( ( [=1] 15 minute low - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < 0 and [=-1] 30 minute "close - 1 candle ago close / 1 candle ago close * 100" > -1 ) ) ) )
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-1', 'morning-volume-breakout-sell', time_09_00, time_09_45)
