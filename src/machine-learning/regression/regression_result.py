@@ -432,14 +432,14 @@ def intraday_tech_data(regression_data):
     intradaytech = ''
     scrip = regression_data['scrip']
 
-    if (regression_data['week2HighChange'] < 0 and regression_data['weekHighChange'] > 0):
-        intradaytech = intradaytech + '|' + "#BYYWEEK2HIGH<LT0WeekHighGT0,"
-    elif (regression_data['week2HighChange'] > 0 and regression_data['weekHighChange'] > 0):
+    #if (regression_data['week2HighChange'] < 0 and regression_data['weekHighChange'] > 0):
+    #    intradaytech = intradaytech + '|' + "#BYYWEEK2HIGH<LT0WeekHighGT0,"
+    if (regression_data['week2HighChange'] > 0 and regression_data['weekHighChange'] > 0):
         intradaytech = intradaytech + '|' + "#BYYWEEK2HIGH>GT0,"
 
-    if (regression_data['week2LowChange'] > 0 and regression_data['weekLowChange'] < 0):
-        intradaytech = intradaytech + '|' + "#SLLWEEK2LOW>GT0WeekLowLT0,"
-    elif (regression_data['week2LowChange'] < 0 and regression_data['weekLowChange'] < 0):
+    #if (regression_data['week2LowChange'] > 0 and regression_data['weekLowChange'] < 0):
+    #    intradaytech = intradaytech + '|' + "#SLLWEEK2LOW>GT0WeekLowLT0,"
+    if (regression_data['week2LowChange'] < 0 and regression_data['weekLowChange'] < 0):
         intradaytech = intradaytech + '|' + "#SLLWEEK2LOW<LT0,"
 
     if (abs(regression_data['PCT_day_change']) < 0.85
@@ -828,9 +828,9 @@ def shortterm_tech_data_buy(regressionhigh, regressionlow):
     datahigh = ''
 
     if (regressionhigh['week2HighChange'] < 0 and regressionhigh['weekHighChange'] > 0):
-        datahigh = datahigh + '|' + "#BYYWEEK2HIGH<LT0WeekHighGT0,"
-    elif (regressionhigh['week2HighChange'] > 0 and regressionhigh['weekHighChange'] > 0):
-        datahigh = datahigh + '|' + "#BYYWEEK2HIGH>GT0,"
+        datahigh = datahigh + '|' + "#week2high<LT0WeekHighGT0,"
+    #elif (regressionhigh['week2HighChange'] > 0 and regressionhigh['weekHighChange'] > 0):
+    #    datahigh = datahigh + '|' + "#BYYWEEK2HIGH>GT0,"
 
     if ('shortUpTrend' in regressionhigh['filter1'] and '(upTrend)' in regressionhigh['series_trend']
         and abs(regressionhigh['month3LowChange']) < abs(regressionhigh['month3HighChange'])
@@ -846,9 +846,9 @@ def shortterm_tech_data_sell(regressionhigh, regressionlow):
     datalow = ''
 
     if (regressionlow['week2LowChange'] > 0 and regressionlow['weekLowChange'] < 0):
-        datalow = datalow + '|' + "##WEEK2LOW>GT0WeekLowLT0,"
-    elif (regressionlow['week2LowChange'] < 0 and regressionlow['weekLowChange'] < 0):
-        datalow = datalow + '|' + "##WEEK2LOW<LT0,"
+        datalow = datalow + '|' + "week2low>GT0WeekLowLT0,"
+    #elif (regressionlow['week2LowChange'] < 0 and regressionlow['weekLowChange'] < 0):
+    #    datalow = datalow + '|' + "##SLLWEEK2LOW<LT0,"
 
     if ('shorDownTrend' in regressionlow['filter1'] and '(downTrend)' in regressionlow['series_trend']
         and abs(regressionlow['month3LowChange']) > abs(regressionlow['month3HighChange'])
