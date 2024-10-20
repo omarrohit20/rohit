@@ -379,6 +379,10 @@ def process_backtest(rawdata, processor, starttime, endtime, filtered=False):
                             or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(15))
                             ):
                             intradaytech = '#TOP15#' + intradaytech
+                        elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(25))
+                            or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(25))
+                            ):
+                            intradaytech = '#TOP25#' + intradaytech
                         if (any(d['scrip'] == scrip for d in db['morninglow-high-volume-buy'].find())
                             ):
                             intradaytech = '#BUYMORNINGLOW#' + intradaytech
@@ -632,6 +636,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             intradaytech = '#TOP10#' + intradaytech
                         elif (db['morning-volume-breakout-buy'].count_documents({}) < 15):
                             intradaytech = '#TOP15#' + intradaytech
+                        elif (db['morning-volume-breakout-buy'].count_documents({}) < 25):
+                            intradaytech = '#TOP25#' + intradaytech
                     elif (processor == 'morning-volume-breakout-sell'):
                         if (db['morning-volume-breakout-sell'].count_documents({}) < 5):
                             intradaytech = '#TOP5#' + intradaytech
@@ -639,6 +645,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             intradaytech = '#TOP10#' + intradaytech
                         elif (db['morning-volume-breakout-sell'].count_documents({}) < 15):
                             intradaytech = '#TOP15#' + intradaytech
+                        elif (db['morning-volume-breakout-sell'].count_documents({}) < 25):
+                            intradaytech = '#TOP25#' + intradaytech
                     elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
                         or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
                         ):
@@ -651,6 +659,10 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                         or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(15))
                         ):
                         intradaytech = '#TOP15#' + intradaytech
+                    elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(25))
+                        or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(25))
+                        ):
+                        intradaytech = '#TOP25#' + intradaytech
                     if (any(d['scrip'] == scrip for d in db['morninglow-high-volume-buy'].find())
                         ):
                         intradaytech = '#BUYMORNINGLOW#' + intradaytech

@@ -1,196 +1,40 @@
-https://chartink.com/screener/morning-volume-bs
+Before 10
+    Last Day (or today opened) midcap less than -1.3
+        Open and 10 minute red or down trend
+            Avoid sell
+            Buy top 2 and analyst recomended before 10
+        Open and 10 minute green
 
-after 9:20
-######################
-check buy high vol for less than -1.5
-	if first bar green, more than 0.5, crossed last day 15 candle
-	If first bar red, sell
+    Today midcap less than -0.5
+        sell immediately if list does not have much
 
-check sell high vol for greater than 1.5
-	if first bar green, more than 0.5, crossed last day 15 candle
-	If first bar green, buy
+    Last Day (or today opened) midcap greater than 1.3
+        Open and 10 minute green or up trend
+            Avoid Buy
+            Sell top 2 and analyst recomended before 10
+        Open and 10 minute red
 
-Buy
-######
+    Today midcap greater than 0.5
+        buy immediately if list does not have much
 
-1. First bar green, second or third bar crossed first bar and last day high, last 3rd or 4th day uptrend
-2. Second or/and third bar red, but did not crossed mid of first bar, check for baseline around 10-11
 
 
 
-Sell
-######
-1. First bar green, second bar red, crossed mid of first bar
+After 10
+    Last Day midcap less than -1.3
+        Last 30 minutes UP
+            buy after 10-15 minute
+        Last 30 minutes Down
+            sell immediately if list does not have much
 
+    Last Day midcap greater than 1.3
+        Last 30 minutes UP
+            buy immediately if list does not have much
+        Last 30 minutes Down
+            sell after 10-15 minutes
 
+    Today midcap less than -0.5
+        sell immediately if list does not have much
 
-
-
-
-week2high greater than one Daybefore or Day2before  GT 3 and today doji, high greater than last 2 days
-
-
-
-
-Morning up -->
-
-
-
-More than 40 points up(down) on following day. Market will not go down, If day earlier down or downtrend couple of days
-	take opposite call if day earlier also up(down) or up-trend earlier
-
-
-
-
-
-Uptrend-Longterm
-#########################################
-Buy
-###
-1) X_:MonthHighUptrend2Days 0r 3Days not year2HighChangeGT-5
-   2 < PCT_Day_change < 5
-2) midcap bar(LT < 0.7) avoid sell
-2) midcap bar(GT > 0.7) sell may work
-   
-Sell
-###
-1) X_:MonthHighUptrend2Days 0r 3Days or 4Days and year2HighChangeGT-5
-   1.5 < PCT_Day_change < 5 and 1.5 < PCT_Day_change_pre1 < 5
-2) midcap bar(GT > -0.7) avoid buy
-2) midcap bar(LT < -0.7) buy may work
-
-
-Downtrend-Longterm
-#########################################
-Sell
-###
-1) X_:MonthLowDowntrend2Days 0r 3Days not year2LowChangeLT5
-   -5 < PCT_Day_change < -2
-   
-Buy
-###
-1) X_:MonthHighUptrend2Days 0r 3Days or 4Days and year2LowChangeLT5
-   -5 < PCT_Day_change < -1.5 and -5 < PCT_Day_change_pre1 < -1.5
-
-
-
-Uptrend-MoreThanLast3DayUp
-#########################################
-Avoid doji and PCT_day_change less than 0 for buy - In uptrend no momentum
-Action will be for PCT_day_change more than 2%
-	At 9:30 buy If updirection for day
-	At 9:30 sell If downdirection for day
-	
-
-GlobalUp-NiftyUp and midcap up more than .7%
-#########################################
-If last day up, 
-	Buy at 9:30 on consolidation bit down. 
-	Sell only if up GT 2% and last day stock up GT 3%
-	
-	
-
-Downtrend-MoreThanLast3DayDown
-#########################################
-Avoid doji and PCT_day_change more than 0 for sell - In downtrend no momentum
-Action will be for PCT_day_change less than -2%
-	At 9:30 buy If updirection for day
-	At 9:30 sell If downdirection for day
-
-
-GlobalUp-NiftyDown and midcap down more than .7%
-#########################################
-If last day down, 
-	Sell at 9:30 on consolidation bit up. 
-	Buy only if up LT -2% and last day stock down LT -3%
-
-
-
-
-
-
-
-
-
-
-	
-	
-	
-
-
-
-    	
-	
-##############################################################	
-Rising MA
-	Check for lows in upward direction /
-	Give preferences for PCT_Day_change negative
-	Give preferences for [MLBuy]
-	If last-day up try after 9:30
-
-Downing MA
-    Check for highs in upward direction \
-	Give preferences for [MLSell]
-	If last-day down try after 9:30
-##############################################################
-
-
-
-Good result and better than expected
-	* Check for no pre rally and last day no major selling
-	* Not yearly high
-	
-Bad result and worst than expected	
-    * Check for no pre sell rally and last day no major buying
-    * Not yearly low
-
-
-
-
-UPTREND-MARKET
-###############################################################
-BuyFilters:RISKY-UPTREND-SELL:		returns moderate usually. Fail If global down or market expected down
-BuyFilters:RISKY-DOWNTREND-BUY:		returns high usually
-SellFilters:RISKY-UPTREND-SELL:		returns high If global down or market expected down. Fail If global up or market expected up
-SellFilters:RISKY-DOWNTREND-BUY:	returns high If global down or market expected down. Fail If global up or market expected up
-
-SellFilters:RISKY-BUY-UPTREND-CONT:	Sell after 9:30 or 10 after some point up. If last day UP more than 2% sell in the morning
-
-
-Sell => RISKY-UPTREND-SELL:			returns moderate If global down or market expected down. Fail If global up or market expected up
-
-
-DOWNTREND-MARKET
-###############################################################
-
-
-
-HEAVYUPRENDMARKET:
-
-
-HEAVYUPTREND-CONSOLIDATION:
-
-
-HEAVYDOWNTRENDMARKET:
-################################################################
-BuyReversal(no-news-on-stock)(Nifty-down-last-3-days) : If MLBuy or PCT_Change < -10%
-
-
-
-HEAVYDOWNTREND-CONSOLIDATION(or following short uptrend after heavydowntrend):
-################################################################
-HighBuyReg : Check for heavy down for buy, global should up direction from morning
-LowSellReg : Check for heavy up for sell, global should down direction from morning
-
-TEST:%%mayBuyContinueHighVolatileLastDayUp-GT8 : global should up direction from morning and sgxnifty also
-HighBuyAllFilter : check for PCT_Day_change > 8 and filter2 buy indicators, but not MLSell
-LowSellAllFilter : check for PCT_Day_change > 8 and filter2 buy indicators, but not MLSell
-
-
-
-/Applications/mongodb/bin/mongod --dbpath /Users/RO001OM/data/db --logpath /var/log/mongodb.log
-
-	
-	    
-		
-	
+    Today midcap greater than 0.5
+        buy immediately if list does not have much
