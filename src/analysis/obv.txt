@@ -48,16 +48,29 @@ After 10
     First 30 minute MIDCAP changed < -1.3 : Avoid Sell (if last day MIDCAP changed > -0.3)
 
     Last Day midcap less than -1.3
-        Last 30 minutes UP, less than 0.7
-            BUY after 10-15 minute
+        Last 30 minutes Down, less than -0.7
+            Don't Sell
         Last 30 minutes Down, greater than -0.7
             SELL immediately if list does not have much
+        Last 30 minutes consolidation
+            Don't Buy/Sell
+        Last 30 minutes UP, less than 0.7
+            BUY after 10-15 minute
+        Last 30 minutes UP, greater than 0.7
+            BUY
+
 
     Last Day midcap greater than 1.3
+        Last 30 minutes UP, greater than 0.7
+            Don't Buy
         Last 30 minutes UP, less than 0.7
             BUY immediately if list does not have much
+        Last 30 minutes consolidation
+            Don't Buy/Sell
         Last 30 minutes Down, greater than -0.7
             SELL after 10-15 minutes
+        Last 30 minutes Down, less than -0.7
+            SELL
 
     Today midcap less than -0.5
         SELL immediately if list does not have much

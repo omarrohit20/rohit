@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     while (sb.nw <= time_12_00):
         if (sb.nw >= time_09_45 and sb.nw <= time_12_00):
-            # ( {46553} ( ( {cash} ( [0] 5 minute low < [=-1] 3 hour low and [0] 5 minute low < [=2] 10 minute low and [0] 5 minute low < [=2] 15 minute low and [0] 5 minute low < [=3] 15 minute low and [=1] 25 minute low = [=1] 15 minute low and ( ( ( [=1] 5 minute open - [=1] 30 minute high ) * 100 ) / 1 day ago close ) > -1.5 and ( ( ( [=1] 5 minute close - [=1] 30 minute high ) * 100 ) / 1 day ago close ) > -1.5 and ( ( ( 1 day ago close - [=1] 30 minute high ) * 100 ) / 1 day ago close ) > -1 and ( ( ( [-1] 5 minute close - 1 day ago low ) * 100 ) / 1 day ago close ) < 0.5 and ( ( ( [=1] 5 minute high - [=1] 5 minute low ) * 100 ) / 1 day ago close ) < 1.3 and ( ( ( [-1] 5 minute low - [=1] 5 minute high ) * 100 ) / 1 day ago close ) > -2.5 and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) < -1 and ( ( ( [=1] 5 minute high - [-2] 5 minute low ) * 100 ) / 1 day ago close ) < 1.5 and ( ( ( [=1] 5 minute high - [=1] 5 minute open ) * 100 ) / 1 day ago close ) < 0.6 and ( ( ( [=1] 5 minute low - 1 day ago close ) * 100 ) / 1 day ago close ) < 0.1 and ( ( ( [=2] 5 minute close - [=1] 5 minute open ) * 100 ) / 1 day ago close ) < 0.7 ) ) and ( {cash} ( ( ( ( 1 day ago close - 1 day ago open ) * 100 ) / 1 day ago close ) < 1.5 and ( [=1] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" ) < -0.1 and ( [=2] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" ) > -0.5 and [-1] 10 minute "close - 1 candle ago close / 1 candle ago close * 100" > -0.5 and [-2] 10 minute "close - 1 candle ago close / 1 candle ago close * 100" > -0.5 and [-2] 5 minute low < 1 day ago low and [-2] 5 minute low < 2 days ago low ) ) ) )
+            # ( {46553} ( ( {cash} ( [0] 5 minute low < [=-1] 3 hour low and [0] 5 minute low < [=2] 10 minute low and [0] 5 minute low < [=2] 15 minute low and [0] 5 minute low < [=3] 15 minute low and [=1] 25 minute low = [=1] 15 minute low and ( ( ( [=1] 5 minute open - [=1] 30 minute high ) * 100 ) / 1 day ago close ) > -1.5 and ( ( ( [=1] 5 minute close - [=1] 30 minute high ) * 100 ) / 1 day ago close ) > -1.5 and ( ( ( 1 day ago close - [=1] 30 minute high ) * 100 ) / 1 day ago close ) > -1 and ( ( ( [-1] 5 minute close - 1 day ago low ) * 100 ) / 1 day ago close ) < 0.5 and ( ( ( [=1] 5 minute high - [=1] 5 minute low ) * 100 ) / 1 day ago close ) < 1.3 and ( ( ( [-1] 5 minute low - [=1] 5 minute high ) * 100 ) / 1 day ago close ) > -2.5 and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) < -1 and ( ( ( [=1] 5 minute high - [-2] 5 minute low ) * 100 ) / 1 day ago close ) < 1.5 and ( ( ( [=1] 5 minute high - [=1] 5 minute open ) * 100 ) / 1 day ago close ) < 0.6 and ( ( ( [=1] 5 minute low - 1 day ago close ) * 100 ) / 1 day ago close ) < 0.1 and ( ( ( [=2] 5 minute close - [=1] 5 minute open ) * 100 ) / 1 day ago close ) < 0.7 ) ) and ( {cash} ( ( ( ( 1 day ago close - 1 day ago open ) * 100 ) / 1 day ago close ) < 1.5 and ( [=1] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" ) < -0.1 and ( [=2] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" ) > -0.5 and [-1] 10 minute "close - 1 candle ago close / 1 candle ago close * 100" > -0.5 and [-2] 10 minute "close - 1 candle ago close / 1 candle ago close * 100" > -0.5 and [-2] 5 minute low < 1 day ago low and [-2] 5 minute low < 2 days ago low and [=1] 1 hour high > 1 day ago low ) ) ) )
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-consolidation-01', 'sell-dayconsolidation-breakout-02', time_09_45, time_12_00)
 
         if (sb.nw >= time_09_50 and sb.nw <= time_10_45):
@@ -20,47 +20,7 @@ if __name__ == "__main__":
             process_url_volBreakout('https://chartink.com/screener/sell-breakdown-intraday-9-50-to-10-10-04', '1-Sselll-morningDown-upConsolidation', time_09_50, time_11_00)
 
         if (sb.nw >= time_10_00 and sb.nw <= time_10_15):
-            """
-            ({33489}(({cash}([=1] 5 minute volume > greatest(  1 day ago volume/ 24) and (
-                        (([=1] 30 minute low - 1 day ago close) * 100) / 1 day ago close) < -1.5 and (
-                                 (([-1] 5 minute close -[=-1] 5 minute close) * 100) / [
-                                 =-1] 5 minute close) < -1.1 and ((([-1] 5 minute close -[=1] 5 minute high) * 100) / [
-                                                                  =1] 5 minute open) > -4 and (
-                                 (([-1] 5 minute close -[=1] 5 minute high) * 100) / [=1] 5 minute open) < -0.75 and (
-                                 ((1 day ago close - 3 days ago close) * 100) / 1 day ago close) > -6 and (
-                                 ((1 day ago close - 2 days ago close) * 100) / 2 days ago close) > -3 and (
-                                 ((1 day ago close - 2 days ago low) * 100) / 2 days ago close) > -0.5 and (
-                                 (([=1] 5 minute low - 1 day ago close) * 100) / 1 day ago close) > -3 and (
-                                 (([=1] 5 minute close -[=1] 5 minute low) * 100) / [=1] 5 minute open) < 1 and abs(
-                ((1 day ago close - 1 day ago open) * 100) / 1 day ago close) > 0.75 and [0]
-            30
-            minute
-            "close - 1 candle ago close / 1 candle ago close * 100" < 0 and [-1]
-            15
-            minute
-            "close - 1 candle ago close / 1 candle ago close * 100" < 0.3 and [0]
-            15
-            minute
-            "close - 1 candle ago close / 1 candle ago close * 100" < 0.3 and [-1]
-            5
-            minute
-            low > [ = 1] 30
-            minute
-            low and [0]
-            15
-            minute
-            low > [ = 1] 30
-            minute
-            low and [ = 1] 15
-            minute
-            high > 1
-            day
-            ago
-            low and [ = 2] 15
-            minute
-            high < [ = -1] 15
-            minute
-            low ) ) ) )"""
+            # ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and ( ( ( [=1] 30 minute low - 1 day ago close ) * 100 ) / 1 day ago close ) < -1.5 and ( ( ( [-1] 5 minute close - [=-1] 5 minute close ) * 100 ) / [=-1] 5 minute close ) < -1.1 and ( ( ( [-1] 5 minute close - [=1] 5 minute high ) * 100 ) / [=1] 5 minute open ) > -4 and ( ( ( [-1] 5 minute close - [=1] 5 minute high ) * 100 ) / [=1] 5 minute open ) < -0.75 and ( ( ( 1 day ago close - 3 days ago close ) * 100 ) / 1 day ago close ) > -6 and ( ( ( 1 day ago close - 2 days ago close ) * 100 ) / 2 days ago close ) > -3 and ( ( ( 1 day ago close - 2 days ago low ) * 100 ) / 2 days ago close ) > -0.5 and ( ( ( [=1] 5 minute low - 1 day ago close ) * 100 ) / 1 day ago close ) > -3 and ( ( ( [=1] 5 minute close - [=1] 5 minute low ) * 100 ) / [=1] 5 minute open ) < 1 and abs ( ( ( 1 day ago close - 1 day ago open ) * 100 ) / 1 day ago close ) > 0.75 and [0] 30 minute "close - 1 candle ago close / 1 candle ago close * 100" < 0 and [-1] 15 minute "close - 1 candle ago close / 1 candle ago close * 100" < 0.3 and [0] 15 minute "close - 1 candle ago close / 1 candle ago close * 100" < 0.3 and [-1] 5 minute low > [=1] 30 minute low and [0] 15 minute low > [=1] 30 minute low and [=1] 15 minute high > 1 day ago low and [=1] 15 minute high = [=1] 1 hour high and [=2] 15 minute high < [=-1] 15 minute low ) ) ) )
             process_url_volBreakout('https://chartink.com/screener/sell-dayconsolidation-breakout-02', '0-Sselll-morningDown-upConsolidation', time_09_45, time_10_45)
 
 
