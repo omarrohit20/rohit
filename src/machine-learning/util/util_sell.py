@@ -184,7 +184,7 @@ def sell_high_volatility_boundary(regression_data, regressionResult):
         and regression_data['bar_low_pre2'] < regression_data['bar_low_pre1'] 
         and regression_data['weekLowChange'] > 1
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Y_:AlternateUpDownSell-Risky-ConNextDayIfWeekLowChangeGT0AfterToday')
+        #add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Y_:AlternateUpDownSell-Risky-ConNextDayIfWeekLowChangeGT0AfterToday')
         flag = True
     if(0 < regression_data['PCT_day_change'] < 1
         and regression_data['PCT_day_change_pre1'] < -1.5 
@@ -1910,7 +1910,7 @@ def sell_up_trend(regression_data, regressionResult, reg, ws):
             )
         and 1 < regression_data['PCT_day_change'] < 3 and 1 < regression_data['PCT_change'] < 4
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, 'chisellUpTrend-month3High')
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'chisSellUpTrend-month3High')
         return True
         
     
@@ -1993,7 +1993,7 @@ def sell_down_trend(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'chisSellDownTrend-nearHigh')
             flag = True
         else:
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'chisDownTrend-Risky-nearHigh')
+            #add_in_csv(regression_data, regressionResult, ws, None, None, 'chisDownTrend-Risky-nearHigh')
             flag = True
     if(regression_data['forecast_day_PCT10_change'] < -10
         and regression_data['year2HighChange'] < -60
@@ -2069,7 +2069,7 @@ def sell_down_trend(regression_data, regressionResult, reg, ws):
         and regression_data['PCT_day_change_pre1'] < 0.5
         and float(regression_data['contract']) > 10
         and no_doji_or_spinning_sell_india(regression_data)):
-        add_in_csv(regression_data, regressionResult, ws, None, None, '##longDownTrend-Risky-IndexNotDownLastDay(checkBase)')
+        #add_in_csv(regression_data, regressionResult, ws, None, None, '##longDownTrend-Risky-IndexNotDownLastDay(checkBase)')
         flag = True
     
     if('shortDownTrend' in regression_data['series_trend']):

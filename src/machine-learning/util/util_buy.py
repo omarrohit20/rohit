@@ -186,7 +186,7 @@ def buy_high_volatility_boundary(regression_data, regressionResult):
         and regression_data['bar_high_pre2'] > regression_data['bar_high_pre1']
         and regression_data['weekHighChange'] < -1
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Y_:AlternateUpDownBuy-Risky-ConNextDayIfWeekHighChangeLT0AfterToday')
+        #add_in_csv(regression_data, regressionResult, ws, None, None, None, 'Y_:AlternateUpDownBuy-Risky-ConNextDayIfWeekHighChangeLT0AfterToday')
         flag = True
     if(-1 < regression_data['PCT_day_change'] < 0
         and regression_data['PCT_day_change_pre1'] > 1.5 
@@ -1982,7 +1982,7 @@ def buy_up_trend(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'chisBuyUpTrend-nearLow')
             flag = True
         else:
-            add_in_csv(regression_data, regressionResult, ws, None, None, 'chisUpTrend-Risky-nearLow')
+            #add_in_csv(regression_data, regressionResult, ws, None, None, 'chisUpTrend-Risky-nearLow')
             flag = True
     if((regression_data['yearLowChange'] > 20 and regression_data['month3LowChange'] > 15)
        and (regression_data['yearHighChange'] < -15 or regression_data['month3HighChange'] < -10)
@@ -4447,7 +4447,7 @@ def buy_risingMA(regression_data, regressionResult, reg, ws):
                 add_in_csv(regression_data, regressionResult, ws, None, None, '##sellRisingMA')
                 return True
             else:
-                add_in_csv(regression_data, regressionResult, ws, None, None, '##RisingMA-Risky-0')
+                #add_in_csv(regression_data, regressionResult, ws, None, None, '##RisingMA-Risky-0')
                 return True
             return False
         elif(regression_data['SMA4_2daysBack'] > 0
