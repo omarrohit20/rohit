@@ -20,7 +20,7 @@ if __name__ == "__main__":
             process_url_volBreakout('https://chartink.com/screener/buy-dayconsolidation-breakout-04', 'buy-dayconsolidation-breakout-02', time_10_00, time_12_15)
 
         if (sb.nw >= time_10_00 and sb.nw <= time_12_00):
-            # ( {33489} ( ( {cash} ( ( ( ( [=1] 5 minute high - [=1] 30 minute low ) * 100 ) / [=1] 5 minute open ) > 0.9 and ( ( ( [=1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) > -1 and ( ( ( [=1] 5 minute close - [=1] 5 minute open ) * 100 ) / 1 day ago close ) < 0.3 and ( ( ( [=1] 1 hour low - [=1] 5 minute low ) * 100 ) / 1 day ago close ) > -1 and 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" < 3 and [-1] 5 minute close > [=1] 5 minute high and [=1] 1 hour low <= latest low and [=3] 15 minute high < [=1] 15 minute high and [=2] 5 minute high < [-1] 5 minute high and [=2] 10 minute high < [-1] 5 minute high and [=2] 15 minute high < [-1] 5 minute high and [=1] 10 minute low < 1 day ago close and [=2] 10 minute high < 1 day ago high ) ) ) )
+            #
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-consolidation-02', 'buy-dayconsolidation-breakout-03', time_10_00, time_12_15)
 
 
