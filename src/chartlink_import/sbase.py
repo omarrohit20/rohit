@@ -298,38 +298,44 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
 
                     if (processor == 'morning-volume-breakout-buy'):
                         if (db['morning-volume-breakout-buy'].count_documents({}) < 5):
-                            intradaytech = '#TOP5#' + intradaytech
+                            intradaytech = '#TOP5B##' + intradaytech
                         elif (db['morning-volume-breakout-buy'].count_documents({}) < 10):
-                            intradaytech = '#TOP10#' + intradaytech
+                            intradaytech = '#TOP10B##' + intradaytech
                         elif (db['morning-volume-breakout-buy'].count_documents({}) < 15):
-                            intradaytech = '#TOP15#' + intradaytech
+                            intradaytech = '#TOP15B##' + intradaytech
                         elif (db['morning-volume-breakout-buy'].count_documents({}) < 15):
-                            intradaytech = 'TOP25' + intradaytech
+                            intradaytech = 'TOP25B##' + intradaytech
                     elif (processor == 'morning-volume-breakout-sell'):
                         if (db['morning-volume-breakout-sell'].count_documents({}) < 5):
-                            intradaytech = '#TOP5#' + intradaytech
+                            intradaytech = '#TOP5S##' + intradaytech
                         elif (db['morning-volume-breakout-sell'].count_documents({}) < 10):
-                            intradaytech = '#TOP10#' + intradaytech
+                            intradaytech = '#TOP10S##' + intradaytech
                         elif (db['morning-volume-breakout-sell'].count_documents({}) < 15):
-                            intradaytech = '#TOP15#' + intradaytech
+                            intradaytech = '#TOP15S##' + intradaytech
                         elif (db['morning-volume-breakout-sell'].count_documents({}) < 15):
-                            intradaytech = 'TOP25' + intradaytech
+                            intradaytech = 'TOP25S##' + intradaytech
                     elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
-                        or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
                         ):
-                        intradaytech = '#TOP5#' + intradaytech
-                    elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(10))
-                          or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(10))
+                        intradaytech = '#TOP5B##' + intradaytech
+                    elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(10))):
+                        intradaytech = '#TOP10B##' + intradaytech
+                    elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(15))):
+                        intradaytech = '#TOP15B##' + intradaytech
+                    elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(25))):
+                        intradaytech = '#TOP25B##' + intradaytech
+                    elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
                         ):
-                        intradaytech = '#TOP10#' + intradaytech
-                    elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(15))
-                        or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(15))
+                        intradaytech = '#TOP5S##' + intradaytech
+                    elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(10))
                         ):
-                        intradaytech = '#TOP15#' + intradaytech
-                    elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(25))
-                        or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(25))
+                        intradaytech = '#TOP10S##' + intradaytech
+                    elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(15))
                         ):
-                        intradaytech = '#TOP25#' + intradaytech
+                        intradaytech = '#TOP15S##' + intradaytech
+                    elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(25))
+                        ):
+                        intradaytech = '#TOP25S##' + intradaytech
+
                     if (any(d['scrip'] == scrip for d in db['morninglow-high-volume-buy'].find())
                         ):
                         intradaytech = '#BUYMORNINGLOW#' + intradaytech
