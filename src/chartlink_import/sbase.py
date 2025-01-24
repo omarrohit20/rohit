@@ -34,7 +34,7 @@ proxy = None
 option = webdriver.ChromeOptions()
 prefs = {"profile.password_manager_enabled": True}
 option.add_experimental_option("prefs", prefs)
-option.add_argument('--headless=new')
+#option.add_argument('--headless=new')
 option.add_argument('--no-sandbox')
 option.add_argument('--disable-gpu')
 option.binary_location = 'C:\git\cft\chrome.exe'
@@ -256,14 +256,14 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                         regressionhigh = dbnse.highBuy.find_one({'scrip': scrip})
                         regressionlow = dbnse.lowSell.find_one({'scrip': scrip})
 
-                        if ('buy' in processor or 'Buy' in processor or 'breakout2-morning-volume' in processor or 'morning-volume-bs' in processor):
+                        if ('buy' in processor or 'Buy' in processor or 'breakout2-morning-volume' in processor):
                            mldatahigh = regressionhigh['shorttermtech'] + '|' + mldatahigh
                            if (regressionhigh['PCT_day_change'] < 1 or regressionhigh['PCT_day_change_pre1'] < 1
                                 or 2 * abs(regressionhigh['PCT_day_change']) < abs(regressionhigh['PCT_day_change_pre1'])
                                 ):
                                 tobuy = 'buyrecommended'
 
-                        if ('sell' in processor or 'Sell' in processor or 'breakout2-morning-volume' in processor or 'morning-volume-bs' in processor):
+                        if ('sell' in processor or 'Sell' in processor or 'breakout2-morning-volume' in processor):
                             mldatalow = regressionlow['shorttermtech'] + '|' + mldatalow
                             if (regressionlow['PCT_day_change'] > -1 or regressionlow['PCT_day_change_pre1'] > -1
                                 or 2 * abs(regressionlow['PCT_day_change']) < abs(regressionlow['PCT_day_change_pre1'])
@@ -277,11 +277,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
 
                     except: 
                         needToPrint = True  # do-nothing
-                        
-                    data = db['morning-volume-bs'].find_one({'scrip':scrip})
-                    if(data is not None): 
-                        #filtersFlag = True
-                        highVol = data['keyIndicator']
+
                     data = db['breakout-morning-volume'].find_one({'scrip':scrip})
                     if(data is not None): 
                         #filtersFlag = True
@@ -293,7 +289,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
 
                     if filtersFlag:
                         print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
-                    elif(processor == 'morning-volume-bs' or processor == 'breakout2-morning-volume' or processor == 'breakout-morning-volume'):
+                    elif(processor == 'breakout2-morning-volume' or processor == 'breakout-morning-volume'):
                         needToPrint = True  # do-nothing
                     else:
                         if (('%%' in mldatahigh and 'buy' in processor) or ('%%' in mldatalow and 'sell' in processor)
@@ -310,6 +306,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  #################################')
                         else:
                             print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
+
+                    if (any(d['scrip'] == scrip for d in db['morning-volume-bs'].find())):
+                        intradaytech = '#LT2#' + intradaytech
 
                     if (processor == 'morning-volume-breakout-buy'):
                         if (db['morning-volume-breakout-buy'].count_documents({}) < 5):
@@ -351,12 +350,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                         ):
                         intradaytech = '#TOP25S##' + intradaytech
 
-                    if (any(d['scrip'] == scrip for d in db['morninglow-high-volume-buy'].find())
-                        ):
-                        intradaytech = '#BUYMORNINGLOW#' + intradaytech
-                    elif (any(d['scrip'] == scrip for d in db['morninghigh-high-volume-sell'].find())
-                        ):
-                        intradaytech = '#SELLMORNINGHIGH#' + intradaytech
+
+
+
 
 
                     needToPrint = True
