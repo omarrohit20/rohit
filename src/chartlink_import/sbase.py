@@ -82,6 +82,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
             highVol = ''
             intradaytech = ''
             PCT_day_change = ''
+            PCT_day_change_pre1 = ''
+            PCT_day_change_pre2 = ''
             PCT_change = ''
             year5HighChange = ''
             yearHighChange = ''
@@ -119,6 +121,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             record['highVol'] = highVol
                             record['intradaytech'] = intradaytech
                             record['PCT_day_change'] = PCT_day_change
+                            record['PCT_day_change_pre1'] = PCT_day_change_pre1
+                            record['PCT_day_change_pre2'] = PCT_day_change_pre2
                             record['PCT_change'] = PCT_change
                             record['year5HighChange'] = year5HighChange
                             record['yearHighChange'] = yearHighChange
@@ -160,6 +164,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             highVol = ''
                             intradaytech = ''
                             PCT_day_change = ''
+                            PCT_day_change_pre1 = ''
+                            PCT_day_change_pre2 = ''
                             PCT_change = ''
                             year5HighChange = ''
                             yearHighChange = ''
@@ -192,6 +198,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     highVol = ''
                     intradaytech = ''
                     PCT_day_change = ''
+                    PCT_day_change_pre1 = ''
+                    PCT_day_change_pre2 = ''
                     PCT_change = ''
                     year5HighChange = ''
                     yearHighChange = ''
@@ -219,6 +227,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                         if ((dbnse['highBuy'].find_one({'scrip': scrip}) is not None)):
                             data = dbnse.highBuy.find_one({'scrip': scrip})
                             PCT_day_change = data['PCT_day_change']
+                            PCT_day_change_pre1 = data['PCT_day_change_pre1']
+                            PCT_day_change_pre2 = data['PCT_day_change_pre2']
                             PCT_change = data['PCT_change']
                             year5HighChange = data['year5HighChange']
                             yearHighChange = data['yearHighChange']
