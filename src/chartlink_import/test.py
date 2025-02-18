@@ -5,7 +5,7 @@ from config import *
 if __name__ == "__main__":
     script_directory = pathlib.Path().absolute()
     sb.option.add_experimental_option('excludeSwitches', ['enable-logging'])
-    sb.option.add_argument(f"user-data-dir={script_directory}/profiles/p3")
+    sb.option.add_argument(f"user-data-dir={script_directory}/profiles/p6")
     sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities,
                                  executable_path='C:\git\cft\driver\chromedriver.exe')
     print('Started')
@@ -13,7 +13,9 @@ if __name__ == "__main__":
 
     if (sb.nw >= time_00_15 and sb.nw <= time_24_00):
         # ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and [=1] 10 minute close > [=1] 5 minute open and [=1] 10 minute close > [=-1] 5 minute high and abs ( ( ( [=1] 10 minute close - [=1] 5 minute open ) * 100 ) / [=1] 5 minute open ) > 0 and ( ( ( [=1] 10 minute close - 1 day ago close ) * 100 ) / [=1] 5 minute open ) > 0.5 and ( ( ( [=1] 10 minute high - 1 day ago close ) * 100 ) / [=1] 5 minute open ) > 0.75 and [=-1] 30 minute "close - 1 candle ago close / 1 candle ago close * 100" < 1 ) )
-        process_url_volBreakout('https://chartink.com/screener/morning-volume-bs','morning-volume-bs', time_00_15, time_24_00)
+        process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-2', 'test', time_00_15, time_24_00)
+        print('Hello')
+        process_url_volBreakout('https://chartink.com/screener/buy-morning-volume-breakout-checknews','test', time_00_15, time_24_00)
     time.sleep(10)
 
     #if (sb.nw >= time_10_00 and sb.nw <= time_24_00):

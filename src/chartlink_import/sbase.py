@@ -61,7 +61,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
         aggregatedStockList = response_json["aggregatedStockList"]
         tradeTimes = response_json["metaData"][0]["tradeTimes"]
         df = pd.DataFrame({'aggregatedStockList': aggregatedStockList, 'tradeTimes': tradeTimes})
-        df = df[-1:] 
+        #df = df[-1:]
         df.drop(df[df['aggregatedStockList'].str.len().lt(1)].index, inplace=True)
         df.iloc[::-1]
         

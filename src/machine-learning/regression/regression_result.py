@@ -22,8 +22,8 @@ import json
 from util.util import pct_change_filter, getScore, all_day_pct_change_negative, all_day_pct_change_positive, no_doji_or_spinning_buy_india, no_doji_or_spinning_sell_india, scrip_patterns_to_dict
 from util.util import is_algo_buy, is_algo_sell, is_filter_all_accuracy, is_filter_hist_accuracy, is_any_reg_algo_gt1, is_any_reg_algo_lt_minus1, is_any_reg_algo_gt1_not_other, is_any_reg_algo_lt_minus1_not_other
 from util.util import get_regressionResult
-from util.util import buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final
-from util.util import sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final
+from util.util import buy_all_rule, buy_year_high, buy_year_low, buy_up_trend, buy_down_trend, buy_final, trend_positive
+from util.util import sell_all_rule, sell_year_high, sell_year_low, sell_up_trend, sell_down_trend, sell_final, trend_negative
 from util.util import buy_oi, sell_oi, all_withoutml, withoutml
 from util.util import buy_other_indicator, buy_all_common, buy_all_common_High_Low, sell_other_indicator, sell_all_common, sell_all_common_High_Low
 from util.util import buy_all_rule_classifier, sell_all_rule_classifier
@@ -1064,8 +1064,8 @@ def result_data_reg(scrip):
             
         if (is_algo_buy(regression_high_copy2)):
             all_withoutml(regression_data, regressionResultHigh, ws_highBuyReg)
-        if ((is_algo_buy(regression_high_copy2) and is_any_reg_algo_gt1_not_other(regression_data))
-            or (is_algo_buy(regression_high_copy2, True) and is_algo_buy(regression_low_copy2, True) and is_any_reg_algo_gt1(regression_data))
+        if ((is_algo_buy(regression_high_copy2) and is_any_reg_algo_gt1_not_other(regression_data) and trend_positive(regression_data))
+            or (is_algo_buy(regression_high_copy2, True) and is_algo_buy(regression_low_copy2, True) and is_any_reg_algo_gt1(regression_data) and trend_positive(regression_data))
             ):
             buy_all_common_High_Low(regression_data, regressionResultHigh, True, None)
             all_withoutml(regression_data, regressionResultHigh, ws_highBuyStrong) 
@@ -1083,7 +1083,7 @@ def result_data_reg(scrip):
             all_withoutml(regression_data, regressionResultLow, ws_highSellStrong)
         
         if (is_algo_buy(regression_high_copy2, True) and is_algo_buy(regression_low_copy2, True) 
-            and is_any_reg_algo_gt1(regression_data)
+            and is_any_reg_algo_gt1(regression_data) and trend_positive(regression_data)
             #and is_any_reg_algo_gt1_not_other(regression_data)
             ):
             buy_all_common_High_Low(regression_data, regressionResultHigh, True, None)
@@ -1146,8 +1146,8 @@ def result_data_reg(scrip):
             
         if (is_algo_sell(regression_low_copy2)):
             all_withoutml(regression_data, regressionResultHigh, ws_lowSellReg)
-        if ((is_algo_sell(regression_low_copy2) and is_any_reg_algo_lt_minus1_not_other(regression_data))
-            or (is_algo_sell(regression_high_copy2, True) and is_algo_sell(regression_low_copy2, True) and is_any_reg_algo_lt_minus1(regression_data))
+        if ((is_algo_sell(regression_low_copy2) and is_any_reg_algo_lt_minus1_not_other(regression_data) and trend_negative(regression_data))
+            or (is_algo_sell(regression_high_copy2, True) and is_algo_sell(regression_low_copy2, True) and is_any_reg_algo_lt_minus1(regression_data) and trend_negative(regression_data))
             ):
             sell_all_common_High_Low(regression_data, regressionResultLow, True, None)
             all_withoutml(regression_data, regressionResultLow, ws_lowSellStrong)
@@ -1165,7 +1165,7 @@ def result_data_reg(scrip):
             all_withoutml(regression_data, regressionResultHigh, ws_lowBuyStrong)
         
         if (is_algo_sell(regression_high_copy2, True) and is_algo_sell(regression_low_copy2, True) 
-            and is_any_reg_algo_lt_minus1(regression_data)
+            and is_any_reg_algo_lt_minus1(regression_data) and trend_negative(regression_data)
             #and is_any_reg_algo_lt_minus1_not_other(regression_data)
             ):
             sell_all_common_High_Low(regression_data, regressionResultLow, True, None)

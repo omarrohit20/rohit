@@ -476,6 +476,20 @@ def getScore(vol_change, pct_change):
     except ZeroDivisionError:
         return 0
 
+def trend_negative(regression_data):
+    if((regression_data['PCT_day_change_pre1'] < -1.5 or regression_data['PCT_day_change_pre2'] < -1.5)
+    and (regression_data['PCT_day_change_pre1'] > -0.5 or regression_data['PCT_day_change_pre2'] > -0.5)):
+        return True
+    else:
+        return False
+
+def trend_positive(regression_data):
+    if((regression_data['PCT_day_change_pre1'] > 1.5 or regression_data['PCT_day_change_pre2'] > 1.5)
+    and (regression_data['PCT_day_change_pre1'] < 0.5 or regression_data['PCT_day_change_pre2'] < 0.5)):
+        return True
+    else:
+        return False
+
 def all_day_pct_change_negative(regression_data):
     if(regression_data['forecast_day_PCT_change'] < 0
         and regression_data['forecast_day_PCT2_change'] <= 0
