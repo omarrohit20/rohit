@@ -42,7 +42,7 @@ if __name__ == "__main__":
     end_date = (datetime.date.today() + datetime.timedelta(days=1))
     start_date = (datetime.date.today() - datetime.timedelta(days=10))
     print(start_date.strftime('%d-%m-%Y') + ' to ' + end_date.strftime('%d-%m-%Y'))
-    
+
     for data in db.scrip.find({'futures':sys.argv[2]}):
         futures = data['futures']
         #scrip = data['scrip'].replace('&','').replace('-','_')
@@ -50,6 +50,7 @@ if __name__ == "__main__":
         try:
             data = db.history15m.find_one({'dataset_code':scrip})
             if(data is None):
+                time.sleep(1)
                 ticker = yf.Ticker(scrip + '.NS')
                 data = ticker.history(start=start_date, end=end_date, interval = "15m")
                 #print(data)

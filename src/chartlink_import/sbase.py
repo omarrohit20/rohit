@@ -399,6 +399,29 @@ def process_url_volBreakout(url, processor, starttime, endtime, keyIndicator=Non
     except Exception as e:
         print('driver failed')
 
+
+def process_url_yahoo(url):
+    data = None
+    try:
+        time.sleep(5)
+        driver.get(url)
+        time.sleep(10)
+
+        logs_raw = driver.get_log("performance")
+        logs = [json.loads(lr["message"])["message"] for lr in logs_raw]
+
+        for log in filter(log_filter, logs):
+            request_id = log["params"]["requestId"]
+            resp_url = log["params"]["response"]["url"]
+            if resp_url.contains('https://query2.finance.yahoo.com/v8/finance'):
+                data = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": request_id})['body']
+                # print(f"Caught {resp_url}")
+                # print(data)
+        # print()
+    except Exception as e:
+        print('driver failed')
+    return data
+
 def regression_ta_data_buy():
     for data in dbnse.scrip.find({'futures':'Yes'}):
         scrip = data['scrip']
