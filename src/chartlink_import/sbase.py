@@ -382,7 +382,7 @@ def process_url_volBreakout(url, processor, starttime, endtime, keyIndicator=Non
     try:
         time.sleep(5)
         driver.get(url)
-        time.sleep(10)
+        time.sleep(5)
 
         logs_raw = driver.get_log("performance")
         logs = [json.loads(lr["message"])["message"] for lr in logs_raw]

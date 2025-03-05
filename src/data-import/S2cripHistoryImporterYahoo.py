@@ -55,7 +55,7 @@ if __name__ == "__main__":
         try:
             data = db.history.find_one({'dataset_code':scrip})
             if(data is None):
-                time.sleep(1)
+                time.sleep(0.5)
                 ticker = yf.Ticker(scrip + '.NS')
                 data = ticker.history(start=start_date, end=end_date)
                 #print(data)
