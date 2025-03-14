@@ -97,6 +97,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
             forecast_day_PCT10_change = ''
             filter = ''
             filter3 = ''
+            filter5 = ''
             highTail = ''
             lowTail = ''
             shorttermtech = ''
@@ -136,6 +137,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             record['forecast_day_PCT10_change'] = forecast_day_PCT10_change
                             record['filter'] = filter
                             record['filter3'] = filter3
+                            record['filter5'] = filter5
                             record['highTail'] = highTail
                             record['lowTail'] = lowTail
                             record['resultDeclared'] = resultDeclared
@@ -179,6 +181,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             forecast_day_PCT10_change = ''
                             filter = ''
                             filter3 = ''
+                            filter5 = ''
                             highTail = ''
                             lowTail = ''
                             shorttermtech = ''
@@ -213,6 +216,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     forecast_day_PCT10_change = ''
                     filter = ''
                     filter3 = ''
+                    filter5 = ''
                     highTail = ''
                     lowTail = ''
                     shorttermtech = ''
@@ -242,6 +246,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             forecast_day_PCT10_change = data['forecast_day_PCT10_change']
                             filter = data['filter']
                             filter3 = data['filter3']
+                            filter5 = data['filter5']
                             highTail = data['highTail']
                             lowTail = data['lowTail']
                             if ('buy' in processor and ('MLhigh' in data['ml'] or '%%' in data['filter'] or 'Buy-AnyGT2' in data['filter2'] or 'Buy-AnyGT' in data['filter2'] or 'Sell-AnyGT2' in data['filter2'])):
