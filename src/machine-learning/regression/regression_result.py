@@ -121,40 +121,7 @@ def is_buy_filter(regression_data):
         return True
     else:
         return False
-    
-def is_buy_filter2(regression_data):
-    if('RISKY-UPTREND-SELL-0' in regression_data['filter2']
-        or 'RISKY-UPTREND-SELL-1' in regression_data['filter2']
-        or 'RISKY-UPTREND-SELL-2' in regression_data['filter2']
-        or 'RISKY-UPTREND-SELL-3' in regression_data['filter2']
-        or 'RISKY-UPTREND-SELL-4' in regression_data['filter2']
-        ):
-        return True
-    else:
-        return False
-    
-def is_buy_filter5(regression_data):
-    if(regression_data['PCT_day_change'] > 2.5 or regression_data['PCT_change'] > 3 or ('DOJI' in regression_data['filter5'])):
-        if('RISKY-UPTREND-SELL' in regression_data['filter5']):
-            return 'RISKY-UPTREND-SELL'
-        elif('RISKY-BUY-UPTREND-CONT' in regression_data['filter5']):
-            return 'RISKY-BUY-UPTREND-CONT'
-        else:
-            return ""
-    else:
-        return ""
-    
-def is_buy_filterBuy(regression_data):
-    if('Last3Day(GT1)' in regression_data['filterbuy']):
-        return "Last3Day(GT1)"
-    elif('Last2Day(GT1)' in regression_data['filterbuy']):
-        return "Last2Day(GT1)"
-    elif('Last3Day(GT2)' in regression_data['filterbuy']):
-        return "Last3Day(GT2)"
-    else:
-        return ""
-    
-    
+
 def is_sell_filter(regression_data):
     if('%%:' in regression_data['filter']
         or "$$" in regression_data['filter']
@@ -184,39 +151,6 @@ def is_sell_filter(regression_data):
         return True
     else:
         return False
-    
-def is_sell_filter2(regression_data):
-    if('RISKY-DOWNTREND-BUY-0' in regression_data['filter2']
-        or 'RISKY-DOWNTREND-BUY-1' in regression_data['filter2']
-        or 'RISKY-DOWNTREND-BUY-2' in regression_data['filter2']
-        or 'RISKY-DOWNTREND-BUY-3' in regression_data['filter2']
-        or 'RISKY-DOWNTREND-BUY-4' in regression_data['filter2']
-        ):
-        return True
-    else:
-        return False
-    
-def is_sell_filter5(regression_data):
-    if(regression_data['PCT_day_change'] < -2.5 or regression_data['PCT_change'] < -3 or ('DOJI' in regression_data['filter5'])):
-        if('RISKY-DOWNTREND-BUY' in regression_data['filter5']):
-            return 'RISKY-DOWNTREND-BUY'
-        elif('RISKY-SELL-DOWNTREND-CONT' in regression_data['filter5']):
-            return 'RISKY-SELL-DOWNTREND-CONT'
-        else:
-            return ""
-    else:
-        return ""
-    
-
-def is_sell_filterSell(regression_data):
-    if('Last3Day(LT-1)' in regression_data['filtersell']):
-        return 'Last3Day(LT-1)'
-    elif('Last2Day(LT-1)' in regression_data['filtersell']):
-        return 'Last2Day(LT-1)'
-    elif('Last3Day(LT-2)' in regression_data['filtersell']):
-        return 'Last3Day(LT-2)'
-    else:
-        return ""
     
 
 def saveReports():
@@ -1015,8 +949,8 @@ def result_data_reg(scrip):
         regression_data = regression_high_copy2
         if(buy_high_volatility(regression_high_copy2, regressionResultHigh)):
             all_withoutml(regression_high_copy2, regressionResultHigh, ws_highAnalysis)
-            filterbuy = is_buy_filterBuy(regression_data)
-            filter5 = is_buy_filter5(regression_data)
+            #filterbuy = is_buy_filterBuy(regression_data)
+            #filter5 = is_buy_filter5(regression_data)
             # if(is_buy_filter2(regression_data)):
             #     if((db['highBuy'].find_one({'scrip':scrip}) is None)):
             #         record = {}
@@ -1097,8 +1031,8 @@ def result_data_reg(scrip):
         regression_data = regression_low_copy2
         if(sell_high_volatility(regression_low_copy2, regressionResultLow)):
             all_withoutml(regression_low_copy2, regressionResultLow, ws_lowAnalysis)
-            filtersell = is_sell_filterSell(regression_data)
-            filter5 = is_sell_filter5(regression_data)
+            #filtersell = is_sell_filterSell(regression_data)
+            #filter5 = is_sell_filter5(regression_data)
             # if(is_sell_filter2(regression_data)):
             #     if((db['lowSell'].find_one({'scrip':scrip}) is None)):
             #         record = {}

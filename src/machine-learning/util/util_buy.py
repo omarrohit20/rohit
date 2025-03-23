@@ -2851,72 +2851,6 @@ def buy_oi(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, None, None, 'volBuyVolumeUpsergedLast1n2DayDown')
         
     return True
-    
-#     if(((regression_data['PCT_day_change'] > 1 or regression_data['PCT_change'] > 1)
-#             or
-#             (regression_data['PCT_day_change'] > 0.75 and regression_data['PCT_change'] > 0.75
-#             and regression_data['forecast_day_PCT_change'] < 2
-#             and regression_data['forecast_day_PCT2_change'] < 2
-#             and regression_data['forecast_day_PCT3_change'] < 2
-#             and regression_data['forecast_day_PCT4_change'] < 2
-#             and regression_data['forecast_day_PCT4_change'] < 2
-#             and regression_data['forecast_day_PCT5_change'] < 2
-#             and regression_data['forecast_day_PCT7_change'] < 2
-#             and regression_data['forecast_day_PCT10_change'] < 2
-#             )
-#         )
-#         and regression_data['forecast_day_PCT_change'] > 0
-#         and regression_data['forecast_day_PCT2_change'] > 0
-#         and regression_data['forecast_day_PCT3_change'] > 0
-#         and 5 > regression_data['forecast_day_PCT4_change'] > 0
-#         and regression_data['forecast_day_PCT5_change'] < 5
-#         and regression_data['forecast_day_PCT7_change'] < 5
-#         and regression_data['forecast_day_PCT10_change'] < 5
-#         and (regression_data['PCT_day_change'] < 0
-#             or regression_data['PCT_day_change_pre1'] < 0
-#             or regression_data['PCT_day_change_pre2'] < 0
-#             or regression_data['PCT_day_change_pre3'] < 0
-#             or regression_data['PCT_day_change_pre4'] < 0
-#            )
-#         and (regression_data['forecast_day_VOL_change'] > 150
-#             or (regression_data['PCT_day_change_pre2'] < 0
-#                 and (((regression_data['volume'] - regression_data['volume_pre2'])*100)/regression_data['volume_pre2']) > 100
-#                 and (((regression_data['volume'] - regression_data['volume_pre3'])*100)/regression_data['volume_pre3']) > 100
-#                )
-#            )
-#         and float(regression_data['contract']) > 100
-#         and(regression_data['PCT_day_change_pre1'] > 0 
-#                or (regression_data['volume'] > regression_data['volume_pre2'] and regression_data['volume'] > regression_data['volume_pre3'])
-#             )
-#         and regression_data['yearHighChange'] < -5
-#         and regression_data['open'] > 50
-#         and (last_4_day_all_up(regression_data) == False)
-#         and (high_tail_pct(regression_data) < 1)
-#         and regression_data['month3HighChange'] < -7.5
-#         ):
-#         if(1 < regression_data['PCT_day_change'] < 2.5 and 1 < regression_data['PCT_change'] < 2.5       
-#         ):
-#             if(regression_data['forecast_day_PCT10_change'] < 0 or regression_data['forecast_day_PCT7_change'] < 0):
-#                 add_in_csv(regression_data, regressionResult, ws, None, None, 'openInterest-0')
-#                 return True
-#             elif(regression_data['forecast_day_PCT10_change'] < 10 or (regression_data['forecast_day_PCT5_change'] < 5 and regression_data['forecast_day_PCT7_change'] < 5)):
-#                 add_in_csv(regression_data, regressionResult, ws, None, None, 'openInterest-1')
-#                 return True
-#             else:
-#                 add_in_csv(regression_data, regressionResult, ws, None, None, 'openInterest-2-Risky')
-#                 return True
-#         if(1 < regression_data['PCT_day_change'] < 4 and 1 < regression_data['PCT_change'] < 4
-#             and float(regression_data['forecast_day_VOL_change']) > 300 
-#             ):
-#             if(regression_data['forecast_day_PCT10_change'] < 0 or regression_data['forecast_day_PCT7_change'] < 0):
-#                 add_in_csv(regression_data, regressionResult, ws, None, None, 'openInterest-0-checkConsolidation')
-#                 return True
-#             elif(regression_data['forecast_day_PCT10_change'] < 10 or (regression_data['forecast_day_PCT5_change'] < 5 and regression_data['forecast_day_PCT7_change'] < 5)):
-#                 add_in_csv(regression_data, regressionResult, ws, None, None, 'openInterest-1-checkConsolidation')
-#                 return True
-#             else:
-#                 add_in_csv(regression_data, regressionResult, ws, None, None, 'openInterest-2-checkConsolidation-Risky')
-#                 return True    
 
        
 def buy_heavy_uptrend_reversal(regression_data, regressionResult, reg, ws):
@@ -2928,18 +2862,6 @@ def buy_heavy_uptrend_reversal(regression_data, regressionResult, reg, ws):
         and (0 < regression_data['forecast_day_PCT7_change'] < 15)
         and (regression_data['forecast_day_PCT10_change'] < 15)
         ):
-#             if((regression_data['month3HighChange'] < -5)
-#                 and ((0 < regression_data['PCT_change'] < 5) and (0 < regression_data['PCT_day_change'] < 5))
-#                 ):
-#                 if((4 < regression_data['PCT_change'] < 5) and (4 < regression_data['PCT_day_change'] < 5)
-#                 ):
-#                     add_in_csv(regression_data, regressionResult, ws, None, None, '##buyHeavyUpTrend-0-Continue')
-#                 elif(ten_days_more_than_seven(regression_data)
-#                      and (('NearHighMonth3' in regression_data['filter3']) 
-#                           or ('NearHighMonth6' in regression_data['filter3'])
-#                          )
-#                 ):
-#                     add_in_csv(regression_data, regressionResult, ws, None, None, '##buyHeavyUpTrend-1-Continue')
         if((regression_data['month3HighChange'] > -5)
             and ((0 < regression_data['PCT_change'] < 5) and (0 < regression_data['PCT_day_change'] < 5))
             and regression_data['PCT_day_change_pre1'] > 1
@@ -3574,7 +3496,36 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, '%%:buyUpTrendDoji-1')
         return True
-    
+
+    if (-2.5 < regression_data['PCT_day_change'] < 1
+        and regression_data['PCT_day_change_pre1'] > 3.5
+        and abs(regression_data['PCT_day_change_pre1']) > 3*abs(regression_data['PCT_day_change'])
+        and (regression_data['bar_low'] > regression_data['bar_low_pre1'] > regression_data['bar_low_pre2'])
+        and regression_data['forecast_day_PCT3_change'] > 0
+        and regression_data['forecast_day_PCT4_change'] > 0
+        and regression_data['forecast_day_PCT5_change'] > 0
+        and regression_data['forecast_day_PCT7_change'] > 0
+        and 0 < regression_data['forecast_day_PCT10_change'] < 15
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%:buyUpDojiPre1')
+        return True
+    elif (-1.5 < regression_data['PCT_day_change'] < 1.5
+        and  - 1.5 < regression_data['PCT_day_change_pre1'] < 1.5
+        and regression_data['PCT_day_change_pre2'] > 3
+        and abs(regression_data['PCT_day_change_pre2']) > 3 * abs(regression_data['PCT_day_change'])
+        and abs(regression_data['PCT_day_change_pre2']) > 3 * abs(regression_data['PCT_day_change_pre1'])
+        and (regression_data['bar_low'] > regression_data['bar_low_pre1'])
+        and (regression_data['bar_low'] > regression_data['bar_low_pre2'])
+        and regression_data['forecast_day_PCT3_change'] > 0
+        and regression_data['forecast_day_PCT4_change'] > 0
+        and regression_data['forecast_day_PCT5_change'] > 0
+        and regression_data['forecast_day_PCT7_change'] > 0
+        and 0 < regression_data['forecast_day_PCT10_change'] < 15
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%:buyUpDojiPre2')
+        return True
+
+
     if((abs(regression_data['week2HighChange']) > 3 or abs(regression_data['week2LowChange']) > 3)
         and regression_data['monthLowChange'] > 10
         and (regression_data['PCT_day_change_pre1'] < -1.5
@@ -4611,66 +4562,7 @@ def buy_risingMA(regression_data, regressionResult, reg, ws):
                      add_in_csv(regression_data, regressionResult, ws, None, None, '##buyBottomReversal-1')
         return True
 
-       
 def buy_study_risingMA(regression_data, regressionResult, reg, ws):
-#     if(('UP-1' in regression_data['filter5'])
-#        ):
-#         add_in_csv(regression_data, regressionResult, ws, None, None,"buy-1-UP")
-#         return True
-#     elif(('UP-2' in regression_data['filter5'])
-#        ):
-#         add_in_csv(regression_data, regressionResult, ws, None, None, None)
-#         return True
-#     elif(('UP' in regression_data['filter5'])
-#        ):
-#         if((-2 < regression_data['SMA9'] < 0 or -2 < regression_data['SMA25'] < 0)
-#             and regression_data['SMA100'] < -10
-#             and regression_data['SMA200'] < -10
-#             and regression_data['year2HighChange'] < -50
-#             and regression_data['year2LowChange'] > 8
-#             ):
-#             add_in_csv(regression_data, regressionResult, ws, None, None, 'sell-UP')
-#         elif((1 < regression_data['SMA9'] < 3 or 1 < regression_data['SMA25'] < 3)
-#             and regression_data['SMA100'] < -10
-#             and regression_data['SMA200'] < -10
-#             and regression_data['year2LowChange'] > 8
-#             ):
-#             add_in_csv(regression_data, regressionResult, ws, None, None, 'sell-UP')
-#         elif((1 < regression_data['SMA9'] < 3 or 1 < regression_data['SMA25'] < 3)
-#             and regression_data['SMA100'] < -10
-#             and regression_data['SMA200'] < -10
-#             and regression_data['year2LowChange'] < 8
-#             ):
-#             add_in_csv(regression_data, regressionResult, ws, None, None, 'buy-UP')
-#         return True
-#     elif(2.5 < regression_data['PCT_day_change'] < 7
-#        and 3 < regression_data['PCT_change'] < 7
-#        and regression_data['forecast_day_PCT_change'] > 0
-#        and regression_data['forecast_day_PCT2_change'] > 0
-#        and regression_data['PCT_day_change_pre1'] < 0.75
-#        and regression_data['PCT_day_change_pre2'] < 0.5
-#        and regression_data['PCT_day_change_pre3'] < 0
-#        and high_tail_pct(regression_data) < 1
-#        and low_tail_pct(regression_data) < 1
-#        #and low_tail_pct_pre1(regression_data) < 1
-#        and regression_data['year2HighChange'] < -5
-#        and regression_data['year2LowChange'] > 15
-#        and (('P@' not in regression_data['buyIndia']) or (regression_data['forecast_day_PCT10_change'] > 4))
-#        ):
-#         add_in_csv(regression_data, regressionResult, ws, None, None, "sell-UP")
-#         return True
-#     elif(('DOWN-2' in regression_data['filter5'])
-#        ):
-#         add_in_csv(regression_data, regressionResult, ws, None, None, None)
-#     elif(('DOWN-1' in regression_data['filter5'])
-#        ):
-#         add_in_csv(regression_data, regressionResult, ws, None, None, None)
-#     elif(('DOWN' in regression_data['filter5'])
-#        ):
-#         add_in_csv(regression_data, regressionResult, ws, None, None, None)
-#         
-#     
-#     
     if(('EMA6-LT-May-MT-EMA14' in regression_data['filter4'])
         and 2.5 < regression_data['PCT_day_change'] < 4
         and 0 < regression_data['PCT_change'] < 4.5
@@ -4816,7 +4708,6 @@ def buy_study_risingMA(regression_data, regressionResult, reg, ws):
         ): 
         add_in_csv(regression_data, regressionResult, ws, None, None, "##sellSMADownTrend-2DayUp-weekHighTouch")
         return True
-
 
 def buy_test(regression_data, regressionResult, reg, ws):
     mlpValue, kNeighboursValue = get_reg_or_cla(regression_data, reg)
