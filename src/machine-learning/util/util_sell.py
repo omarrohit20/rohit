@@ -3384,28 +3384,45 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         and regression_data['PCT_day_change_pre1'] < -3.5
         and abs(regression_data['PCT_day_change_pre1']) > 3 * abs(regression_data['PCT_day_change'])
         and (regression_data['bar_high'] < regression_data['bar_high_pre1'] < regression_data['bar_high_pre2'])
-        and regression_data['forecast_day_PCT3_change'] < 0
-        and regression_data['forecast_day_PCT4_change'] < 0
-        and regression_data['forecast_day_PCT5_change'] < 0
-        and regression_data['forecast_day_PCT7_change'] < 0
-        and 0 < regression_data['forecast_day_PCT10_change'] > -15
+        #and regression_data['forecast_day_PCT3_change'] < 0
+        #and regression_data['forecast_day_PCT4_change'] < 0
+        #and regression_data['forecast_day_PCT5_change'] < 0
+        #and regression_data['forecast_day_PCT7_change'] < 0
+        #and -15 < regression_data['forecast_day_PCT10_change'] < 0
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, '%%:sellUpDojiPre1')
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%:sellDownDojiPre1')
         return True
     elif (-1.5 < regression_data['PCT_day_change'] < 1.5
         and -1.5 < regression_data['PCT_day_change_pre1'] < 1.5
         and regression_data['PCT_day_change_pre2'] < -3
         and abs(regression_data['PCT_day_change_pre2']) > 3 * abs(regression_data['PCT_day_change'])
         and abs(regression_data['PCT_day_change_pre2']) > 3 * abs(regression_data['PCT_day_change_pre1'])
-        and (regression_data['bar_high'] < regression_data['bar_high_pre1'])
+        #and (regression_data['bar_high'] < regression_data['bar_high_pre1'])
         and (regression_data['bar_high'] < regression_data['bar_high_pre2'])
         and regression_data['forecast_day_PCT3_change'] < 0
         and regression_data['forecast_day_PCT4_change'] < 0
         and regression_data['forecast_day_PCT5_change'] < 0
         and regression_data['forecast_day_PCT7_change'] < 0
-        and 0 < regression_data['forecast_day_PCT10_change'] > -15
+        and -15 < regression_data['forecast_day_PCT10_change'] < 0
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, '%%:sellUpDojiPre2')
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%:sellDownDojiPre2')
+        return True
+    elif (-2.5 < regression_data['PCT_day_change'] < 1
+        and regression_data['PCT_day_change_pre1'] > 3.5
+        and abs(regression_data['PCT_day_change_pre1']) > 3*abs(regression_data['PCT_day_change'])
+        and (regression_data['bar_low'] > regression_data['bar_low_pre1'] > regression_data['bar_low_pre2'])
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%:DojiPre1')
+        return True
+    elif (-1.5 < regression_data['PCT_day_change'] < 1.5
+        and  - 1.5 < regression_data['PCT_day_change_pre1'] < 1.5
+        and regression_data['PCT_day_change_pre2'] > 3
+        and abs(regression_data['PCT_day_change_pre2']) > 3 * abs(regression_data['PCT_day_change'])
+        and abs(regression_data['PCT_day_change_pre2']) > 3 * abs(regression_data['PCT_day_change_pre1'])
+        #and (regression_data['bar_low'] > regression_data['bar_low_pre1'])
+        and (regression_data['bar_low'] > regression_data['bar_low_pre2'])
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, '%%:DojiPre2')
         return True
 
     if((abs(regression_data['week2HighChange']) > 3 or abs(regression_data['week2LowChange']) > 3)
