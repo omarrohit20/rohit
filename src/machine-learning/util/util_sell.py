@@ -3381,6 +3381,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         flag = True
 
     if (-1 < regression_data['PCT_day_change'] < 2.5
+        and -1 < regression_data['PCT_change'] < 2.5
         and regression_data['PCT_day_change_pre1'] < -3.5
         and abs(regression_data['PCT_day_change_pre1']) > 3 * abs(regression_data['PCT_day_change'])
         and (regression_data['bar_high'] < regression_data['bar_high_pre1'] < regression_data['bar_high_pre2'])
@@ -3393,6 +3394,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, None, None, '%%:sellDownDojiPre1')
         return True
     elif (-1.5 < regression_data['PCT_day_change'] < 1.5
+        and - 1.5 < regression_data['PCT_change'] < 1.5
         and -1.5 < regression_data['PCT_day_change_pre1'] < 1.5
         and regression_data['PCT_day_change_pre2'] < -3
         and abs(regression_data['PCT_day_change_pre2']) > 3 * abs(regression_data['PCT_day_change'])
@@ -3408,6 +3410,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, None, None, '%%:sellDownDojiPre2')
         return True
     elif (-2.5 < regression_data['PCT_day_change'] < 1
+        and - 2.5 < regression_data['PCT_change'] < 1
         and regression_data['PCT_day_change_pre1'] > 3.5
         and abs(regression_data['PCT_day_change_pre1']) > 3*abs(regression_data['PCT_day_change'])
         and (regression_data['bar_low'] > regression_data['bar_low_pre1'] > regression_data['bar_low_pre2'])
@@ -3415,6 +3418,7 @@ def sell_supertrend(regression_data, regressionResult, reg, ws):
         add_in_csv(regression_data, regressionResult, ws, None, None, '%%:DojiPre1')
         return True
     elif (-1.5 < regression_data['PCT_day_change'] < 1.5
+        and -1.5 < regression_data['PCT_change'] < 1.5
         and  - 1.5 < regression_data['PCT_day_change_pre1'] < 1.5
         and regression_data['PCT_day_change_pre2'] > 3
         and abs(regression_data['PCT_day_change_pre2']) > 3 * abs(regression_data['PCT_day_change'])
