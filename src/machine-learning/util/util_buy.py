@@ -3501,7 +3501,7 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
         and -2.5 < regression_data['PCT_change'] < 1
         and regression_data['PCT_day_change_pre1'] > 3.5
         and abs(regression_data['PCT_day_change_pre1']) > 3*abs(regression_data['PCT_day_change'])
-        and (regression_data['bar_low'] > regression_data['bar_low_pre1'] > regression_data['bar_low_pre2'])
+        #and (regression_data['bar_low'] > regression_data['bar_low_pre1'] > regression_data['bar_low_pre2'])
         #and regression_data['forecast_day_PCT3_change'] > 0
         #and regression_data['forecast_day_PCT4_change'] > 0
         #and regression_data['forecast_day_PCT5_change'] > 0
@@ -3526,17 +3526,18 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
         ):
         add_in_csv(regression_data, regressionResult, ws, None, None, '%%:buyUpDojiPre2')
         return True
-    elif (-1 < regression_data['PCT_day_change'] < 2.5
-        and - 1 < regression_data['PCT_change'] < 2.5
+    elif (0 < regression_data['PCT_day_change'] < 2.5
+        and 0 < regression_data['PCT_change'] < 2.5
         and regression_data['PCT_day_change_pre1'] < -3.5
         and abs(regression_data['PCT_day_change_pre1']) > 3 * abs(regression_data['PCT_day_change'])
-        and (regression_data['bar_high'] < regression_data['bar_high_pre1'] < regression_data['bar_high_pre2'])
+        #
+          and (regression_data['bar_high'] < regression_data['bar_high_pre1'] < regression_data['bar_high_pre2'])
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, '%%:DojiPre1')
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'DojiPre1')
         return True
-    elif (-1.5 < regression_data['PCT_day_change'] < 1.5
-        and -1.5 < regression_data['PCT_change'] < 1.5
-        and -1.5 < regression_data['PCT_day_change_pre1'] < 1.5
+    elif (0 < regression_data['PCT_day_change'] < 1.5
+        and 0 < regression_data['PCT_change'] < 1.5
+        and 0 < regression_data['PCT_day_change_pre1'] < 1.5
         and regression_data['PCT_day_change_pre2'] < -3
         and abs(regression_data['PCT_day_change_pre2']) > 3 * abs(regression_data['PCT_day_change'])
         and abs(regression_data['PCT_day_change_pre2']) > 3 * abs(regression_data['PCT_day_change_pre1'])
@@ -3544,7 +3545,7 @@ def buy_supertrend(regression_data, regressionResult, reg, ws):
         and (regression_data['bar_high'] < regression_data['bar_high_pre2'])
         and -15 < regression_data['forecast_day_PCT10_change'] < 0
         ):
-        add_in_csv(regression_data, regressionResult, ws, None, None, '%%:DojiPre2')
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'DojiPre2')
         return True
 
 
