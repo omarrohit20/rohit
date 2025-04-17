@@ -210,7 +210,6 @@ def import_short_term_data_in_db_and_save():
     dbresult.drop_collection('sell_test_short_term_filter')
     dbresult.drop_collection('sell_test_short_term_filter3')
 
-
 def import_data_in_db_and_save():
     print('\n\n\n\n############################################')
     print('export_data_patterns_from_db')
