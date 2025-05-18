@@ -69,7 +69,7 @@ if __name__ == "__main__":
                 insert_scripdata(scrip, data, futures)
                 print(scrip)
             except:
-                print('historical fail', str(data['scrip'])) 
+                print('historical fail', scrip)
                 pass      
             
                 

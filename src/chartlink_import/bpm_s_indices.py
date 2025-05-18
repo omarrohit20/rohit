@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
         if (sb.nw >= time_09_45 and sb.nw <= time_11_30):
             # ( {33489} ( ( {33489} ( ( ( ( [0] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) < -1 and ( ( ( [=1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) > -4 and ( ( ( [-1] 5 minute close - [=1] 5 minute open ) * 100 ) / 1 day ago close ) < -0.75 and ( ( ( weekly low - 1 day ago low ) * 100 ) / 1 day ago close ) < -0.5 and ( ( ( 1 week ago low - [=1] 5 minute low ) * 100 ) / 1 day ago close ) < 0 and ( ( ( 1 week ago low - 1 day ago low ) * 100 ) / 1 day ago close ) < 0 and ( [=1] 15 minute high - [-1] 5 minute high ) > ( [-1] 5 minute low - [=1] 15 minute low ) ) ) and ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 30  ) and ( ( ( [-1] 5 minute close - [-2] 5 minute open ) * 100 ) / [=1] 5 minute open ) > -0.7 and ( ( ( [-1] 5 minute close - [-3] 5 minute open ) * 100 ) / [=1] 5 minute open ) > -1 ) ) ) )
-            process_url_volBreakout('https://chartink.com/screener/sell-morning-volume-breakout-checknews', 'sell-morning-volume-breakout(Check-News)', time_09_50, time_11_30)
+            process_url_volBreakout('https://chartink.com/screener/sell-morning-volume-breakout-checknews', 'sell-morning-volume-breakout(Check-News)', time_09_50, time_11_00)
             time.sleep(10)
 
 
