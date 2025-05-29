@@ -2884,6 +2884,13 @@ def is_filter_risky(regression_data, regressionResult, high_or_low, ws, filter_a
         if update:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'PRE1or2GT0')
 
+    if (regression_data['PCT_day_change_pre1'] < -0.9 or regression_data['PCT_day_change_pre2'] < -0.9):
+        if update:
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'PRE1or2LT-1')
+    if (regression_data['PCT_day_change_pre1'] > 0.9 or regression_data['PCT_day_change_pre2'] > 0.9):
+        if update:
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'PRE1or2GT1')
+
     if (regression_data['PCT_day_change_pre1'] < -1.7 or regression_data['PCT_day_change_pre2'] < -1.7):
         if update:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'PRE1or2LT-2')
@@ -2900,6 +2907,9 @@ def is_filter_risky(regression_data, regressionResult, high_or_low, ws, filter_a
     elif (regression_data['PCT_day_change_pre1'] > 1.5 and regression_data['PCT_day_change_pre2'] > 1.5):
         if update:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'BothGT1.5')
+    elif (regression_data['PCT_day_change_pre1'] > 0.9 and regression_data['PCT_day_change_pre2'] > 0.9):
+        if update:
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'BothGT1')
 
     if (regression_data['PCT_day_change_pre1'] < -3 and regression_data['PCT_day_change_pre2'] < -3):
         if update:
@@ -2910,6 +2920,9 @@ def is_filter_risky(regression_data, regressionResult, high_or_low, ws, filter_a
     elif (regression_data['PCT_day_change_pre1'] < -1.5 and regression_data['PCT_day_change_pre2'] < -1.5):
         if update:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'BothLT-1.5')
+    elif (regression_data['PCT_day_change_pre1'] < -0.9 and regression_data['PCT_day_change_pre2'] < -0.9):
+        if update:
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'BothLT-1')
 
     return BuyRisky, SellRisky  
     
