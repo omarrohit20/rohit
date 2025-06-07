@@ -2924,6 +2924,19 @@ def is_filter_risky(regression_data, regressionResult, high_or_low, ws, filter_a
         if update:
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'BothLT-1')
 
+    if ((regression_data['PCT_day_change'] > 2 and (regression_data['PCT_day_change_pre1'] > 1 or regression_data['PCT_day_change_pre2'] > 1))
+        or (regression_data['PCT_day_change_pre1'] > 1.5 or regression_data['PCT_day_change_pre2'] > 1.5)
+        ):
+        if update:
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'AnyGT1')
+
+    if ((regression_data['PCT_day_change'] < -2 and (regression_data['PCT_day_change_pre1'] < -1 or regression_data['PCT_day_change_pre2'] < -1))
+        or (regression_data['PCT_day_change_pre1'] < -1.5 or regression_data['PCT_day_change_pre2'] < -1.5)
+        ):
+        if update:
+            add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'AnyLT-1')
+
+
     return BuyRisky, SellRisky  
     
         
