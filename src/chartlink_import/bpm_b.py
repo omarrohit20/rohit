@@ -91,6 +91,10 @@ if __name__ == "__main__":
 
         # time.sleep(30)
 
+         # ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 30  ) and [=1] 10 minute volume > greatest(  1 day ago volume / 22  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 15  ) and ( ( ( [0] 5 minute close - [=1] 5 minute open ) * 100 ) / [=1] 5 minute open ) > 0.6 and ( ( ( [=1] 15 minute close - [=1] 5 minute open ) * 100 ) / [=1] 5 minute open ) > 0.3 and ( ( ( [0] 5 minute high - [=-1] 5 minute close ) * 100 ) / [=1] 5 minute open ) > 0.5 and ( ( ( [=1] 15 minute close - 1 day ago close ) * 100 ) / [=1] 5 minute open ) > -0.3 and ( ( ( [-1] 5 minute high - 1 day ago close ) * 100 ) / [=1] 5 minute open ) > 0.5 and ( ( ( [0] 5 minute close - 1 day ago close ) * 100 ) / [=1] 5 minute open ) > 1 and ( ( ( [=1] 15 minute high - 1 day ago close ) * 100 ) / [=1] 5 minute open ) > 0 and [-1] 5 minute close > [=1] 5 minute open and [-1] 5 minute close > [=1] 5 minute close and ( ( ( [=1] 10 minute high - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < 2 and 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" > -2 and ( ( ( 1 day ago close - 1 day ago open ) * 100 ) / [=1] 5 minute open ) > -2 and ( ( ( 1 day ago close - 3 days ago open ) * 100 ) / [=1] 5 minute open ) < 2.5 ) ) ) )
+         process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-1-2', 'Breakout-Bey-3',
+                                     time_09_45, time_12_00)
+
 
         #time.sleep(10)
         sb.nw = datetime.now()
