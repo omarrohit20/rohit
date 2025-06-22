@@ -92,7 +92,7 @@ def insert_year2LowReversal(regression_data):
             and regression_data['month3LowChange'] < 20
             and regression_data['yearLowChange'] < 20
             and regression_data['close'] > 10
-            and regression_data['close'] > regression_data['monthHigh']
+            and regression_data['close'] > regression_data['week2High']
         ):
         data = {}
         data['scrip'] = regression_data['scrip']
