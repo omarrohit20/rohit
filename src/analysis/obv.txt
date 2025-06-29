@@ -1,3 +1,20 @@
+Before 10:00 Buy
+    : last 2-3 days uptrend
+    : downtrend then buy last day closed in negative
+After 10:00 Buy
+    : last 15-20 minute up OR opened high and consolidation
+        : Midcap GT 1
+        : less than weekly high
+        : less than last day High + 0.3
+    : Avoid : Opened midcap in minus LT-1 and moved more than 1 before 10:00 AM still in red
+
+
+
+
+
+
+
+
 Before 10
 ####################################################################################################################
     If INDICES Up > 1.1, MIDCAP > -0.5      : BUY stock > 1.5
@@ -77,3 +94,9 @@ After 10
 
     Today midcap greater than 0.5
         BUY immediately if list does not have much
+
+
+
+
+
+
