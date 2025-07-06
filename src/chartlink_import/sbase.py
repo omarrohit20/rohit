@@ -94,6 +94,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
             monthLowChange = ''
             week2HighChange = ''
             week2LowChange = ''
+            weekHighChange = ''
+            weekLowChange = ''
             forecast_day_PCT10_change = ''
             filter = ''
             filter3 = ''
@@ -134,6 +136,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             record['monthLowChange'] = monthLowChange
                             record['week2HighChange'] = week2HighChange
                             record['week2LowChange'] = week2LowChange
+                            record['weekHighChange'] = weekHighChange
+                            record['weekLowChange'] = weekLowChange
                             record['forecast_day_PCT10_change'] = forecast_day_PCT10_change
                             record['filter'] = filter
                             record['filter3'] = filter3
@@ -178,6 +182,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             monthLowChange = ''
                             week2HighChange = ''
                             week2LowChange = ''
+                            weekHighChange = ''
+                            weekLowChange = ''
                             forecast_day_PCT10_change = ''
                             filter = ''
                             filter3 = ''
@@ -213,6 +219,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     monthLowChange = ''
                     week2HighChange = ''
                     week2LowChange = ''
+                    weekHighChange = ''
+                    weekLowChange = ''
                     forecast_day_PCT10_change = ''
                     filter = ''
                     filter3 = ''
@@ -243,6 +251,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             monthLowChange = data['monthLowChange']
                             week2HighChange = data['week2HighChange']
                             week2LowChange = data['week2LowChange']
+                            weekHighChange = data['weekHighChange']
+                            weekLowChange = data['weekLowChange']
                             forecast_day_PCT10_change = data['forecast_day_PCT10_change']
                             filter = data['filter']
                             filter3 = data['filter3']
