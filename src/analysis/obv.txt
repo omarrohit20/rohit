@@ -1,25 +1,31 @@
 
 
+
 Before 10:00
     Buy : last 2-3 days uptrend
     Buy : downtrend then buy last day closed in negative
     Avoid Buy : consolidation 50MA crossed and below 200MA, Sell after 10:30
+    Avoid Buy : Last day LT-1 and midcap LT 0.3
+
     Sell : last 2-3 days downtrend
     Avoid Sell: consolidation 50MA crossed and above 200MA
+    Avoid Sell : Last day GT1 and midcap GT -0.3
 
 After 10:00
     Buy : last 15-20 minute up OR opened high and consolidation
             : Midcap GT 1
             : less than weekly high
             : less than last day High + 0.3
-    Avoid Buy : Opened midcap in minus LT-1 and moved more than 1 before 10:00 AM still in red
+    Avoid Buy : Last day midcap in minus LT-1 after uptrend consolidation
     Avoid Buy : consolidation 50MA crossed and below 200MA, Sell after 10:30
+    Avoid Buy\Sell : Opened midcap in minus LT-1 and moved more than 0.7 before 10:00 AM still in red
     Sell : last 15-20 minute Down OR opened low and consolidation
             : Midcap LT -1
             : less than weekly low
             : less than last day low - 0.3
-    Avoid Sell : Opened midcap in minus GT 1 and moved more than -0.7 before 10:00 AM still in Green
+    Avoid Sell : Last day midcap in Plus GT 1 after downtrend consolidation
     Avoid Sell: consolidation 50MA crossed and above 200MA
+    Avoid Sell\Buy : Opened midcap in Plus GT 1 and moved more than -0.7 before 10:00 AM still in Green
 
 
 
@@ -32,13 +38,6 @@ Before 10
 ####################################################################################################################
     If INDICES Up > 1.1, MIDCAP > -0.5      : BUY stock > 1.5
     If INDICES Down < -1.1, MIDCAP < 0.5    : SELL stock < -1.5
-
-    BUY
-    First and second 5 minute high tail less than green BAR,
-    Second RED BAR if should be doji
-    SELL
-    First and second 5 minute low tail less than RED BAR,
-    Second Green BAR if should be doji
 
     Last to Last day MIDCAP UP > 1, Last day MIDCAP DOWN < 0
     Last to Last day MIDCAP DOWN < -1, Last day MIDCAP UP > 0
