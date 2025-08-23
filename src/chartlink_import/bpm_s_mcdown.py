@@ -11,7 +11,7 @@ if __name__ == "__main__":
     sb.nw = datetime.now()
 
     while (sb.nw <= time_13_00):
-        if (sb.nw >= time_09_25 and sb.nw <= time_10_30):
+        if (sb.nw >= time_09_25 and sb.nw <= time_10_15):
             # ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 30  ) and [=1] 10 minute volume > greatest(  1 day ago volume / 22  ) and [=1] 5 minute low < 1 day ago low and [=2] 5 minute high < 1 day ago close and [=2] 10 minute high < 1 day ago close and [=2] 15 minute high < 1 day ago close and [=2] 20 minute high < 1 day ago close and [=2] 25 minute high < 1 day ago close and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < -1.3 and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / [=1] 5 minute open ) > -2.5 and abs ( ( ( [=1] 5 minute close - [=1] 5 minute open ) * 100 ) / [=1] 5 minute open ) > 0.3 and [-1] 5 minute close < [=2] 5 minute open and [-1] 5 minute close < [=2] 5 minute close and [=1] 5 minute high >= [=1] 1 hour high and abs ( ( ( [=1] 1 hour low - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < 2.5 ) ) ) )
             process_url_volBreakout('https://chartink.com/screener/sell-morning-up-0', '09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)', time_09_25, time_11_00)
 

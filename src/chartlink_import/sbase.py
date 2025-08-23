@@ -294,43 +294,15 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 or 2 * abs(regressionlow['PCT_day_change']) < abs(regressionlow['PCT_day_change_pre1'])
                                 ):
                                 tosell = 'sellrecommended'
-
-                        if ('buy-breakup-intraday-9:40-to-10:10' in processor and regressionhigh['forecast_day_PCT3_change'] < 5 and regressionhigh['forecast_day_PCT4_change'] < 5):
-                            filtersFlag = True
-                        if ('sell-breakdown-intraday-9:40-to-10:10' in processor and regressionhigh['forecast_day_PCT3_change'] > -5 and regressionhigh['forecast_day_PCT4_change'] > -5):
-                            filtersFlag = True
-
-                    except: 
+                    except:
                         needToPrint = True  # do-nothing
 
                     data = db['breakout-morning-volume'].find_one({'scrip':scrip})
-                    if(data is not None): 
-                        #filtersFlag = True
+                    if(data is not None):
                         highVol = highVol + ':' + data['keyIndicator']
                     data = db['breakout2-morning-volume'].find_one({'scrip': scrip})
                     if (data is not None):
-                        # filtersFlag = True
                         highVol = '****' + highVol
-
-                    if filtersFlag:
-                        print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
-                    elif(processor == 'breakout2-morning-volume' or processor == 'breakout-morning-volume'):
-                        needToPrint = True  # do-nothing
-                    else:
-                        if (('%%' in mldatahigh and 'buy' in processor) or ('%%' in mldatalow and 'sell' in processor)
-                            or ('Buy-AnyGT2' in mldatahigh and 'buy' in processor) or ('Sell-AnyGT2' in mldatahigh and 'sell' in processor)
-                            or ('(LT2)' in processor and ('Yesterday' in resultDeclared or 'Today' in resultDeclared))
-                            or ('(GT-2)' in processor and ('Yesterday' in resultDeclared or 'Today' in resultDeclared))
-                            or (processor == 'morning-volume-breakout-buy' and resultDeclared != '')
-                            or (processor == 'morning-volume-breakout-sell' and resultDeclared != '')
-                            ):
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-                        elif(any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
-                            or any(d['scrip'] == scrip for d in db['morning-volume-breakout-sell'].find().sort('_id').limit(5))
-                            ):
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared + '  #################################')
-                        else:
-                            print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
 
                     if (any(d['scrip'] == scrip for d in db['morning-volume-bs'].find())):
                         intradaytech = '#LT2#' + intradaytech
@@ -375,10 +347,10 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                         ):
                         intradaytech = '#TOP25S##' + intradaytech
 
-
-
-
-
+                    if (processor == 'breakout2-morning-volume' or processor == 'breakout-morning-volume'):
+                        needToPrint = True  # do-nothing
+                    else:
+                        print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
 
                     needToPrint = True
                                 
