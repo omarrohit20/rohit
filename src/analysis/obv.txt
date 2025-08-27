@@ -1,15 +1,15 @@
 
-
-
 Before 10:00
     Buy : last 2-3 days uptrend
     Buy : downtrend then buy last day closed in negative
     Avoid Buy : consolidation 50MA crossed and below 200MA, Sell after 10:30
-    Avoid Buy : Last day LT-1 and midcap LT 0.3
+    Avoid Buy : Last day LT-1 and today LT 0.3
+    Avoid Buy : Last day Down after uptrend and today between -0.3 to 0.3
 
     Sell : last 2-3 days downtrend
     Avoid Sell: consolidation 50MA crossed and above 200MA
-    Avoid Sell : Last day GT1 and midcap GT -0.3
+    Avoid Sell : Last day GT1 and today GT -0.3
+    Avoid Sell : Last day Up after downtrend and today -0.3 to 0.3
 
 After 10:00
     Buy : last 15-20 minute up OR opened high and consolidation
@@ -19,16 +19,14 @@ After 10:00
     Avoid Buy : Last day midcap in minus LT-1 after uptrend consolidation
     Avoid Buy : consolidation 50MA crossed and below 200MA, Sell after 10:30
     Avoid Buy\Sell : Opened midcap in minus LT-1 and moved more than 0.7 before 10:00 AM still in red
+
     Sell : last 15-20 minute Down OR opened low and consolidation
             : Midcap LT -1
             : less than weekly low
             : less than last day low - 0.3
     Avoid Sell : Last day midcap in Plus GT 1 after downtrend consolidation
-    Avoid Sell: consolidation 50MA crossed and above 200MA
+    Avoid Sell : consolidation 50MA crossed and above 200MA
     Avoid Sell\Buy : Opened midcap in Plus GT 1 and moved more than -0.7 before 10:00 AM still in Green
-
-
-
 
 
 
