@@ -5,11 +5,13 @@ Before 10:00
     Avoid Buy : consolidation 50MA crossed and below 200MA, Sell after 10:30
     Avoid Buy : Last day LT-1 and today LT 0.3
     Avoid Buy : Last day Down after uptrend and today between -0.3 to 0.3
+    Avoid Buy : Last day GT1 and today GT1
 
     Sell : last 2-3 days downtrend
     Avoid Sell: consolidation 50MA crossed and above 200MA
     Avoid Sell : Last day GT1 and today GT -0.3
     Avoid Sell : Last day Up after downtrend and today -0.3 to 0.3
+    Avoid Sell : Last day LT-1 and today LT-1
 
 After 10:00
     Buy : last 15-20 minute up OR opened high and consolidation
