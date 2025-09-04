@@ -107,8 +107,8 @@ def regression_ta_data(scrip):
         ta_lib_data_df(scrip, df, True, False) 
         process_regression_high(scrip, df, directory, run_ml_algo)
         process_regression_low(scrip, df, directory, run_ml_algo)
-        if (run_ml_algo != 'Yes'):
-            time.sleep(1)
+        #if (run_ml_algo != 'Yes'):
+            #time.sleep(1)
     except Exception as e: 
         print(e)
         print('regression failed for', scrip) 

@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     if (sb.nw >= time_00_15 and sb.nw <= time_24_00):
         # ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and [=1] 10 minute close > [=1] 5 minute open and [=1] 10 minute close > [=-1] 5 minute high and abs ( ( ( [=1] 10 minute close - [=1] 5 minute open ) * 100 ) / [=1] 5 minute open ) > 0 and ( ( ( [=1] 10 minute close - 1 day ago close ) * 100 ) / [=1] 5 minute open ) > 0.5 and ( ( ( [=1] 10 minute high - 1 day ago close ) * 100 ) / [=1] 5 minute open ) > 0.75 and [=-1] 30 minute "close - 1 candle ago close / 1 candle ago close * 100" < 1 ) )
-        process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-2', 'test', time_00_15, time_24_00)
+        process_url_volBreakout('https://chartink.com/screener/buy-check-morning-down-breakup-01','buy-check-morning-down-breakup-01', time_00_15, time_24_00)
         print('Hello')
         process_url_volBreakout('https://chartink.com/screener/buy-morning-volume-breakout-checknews','test', time_00_15, time_24_00)
     time.sleep(10)
