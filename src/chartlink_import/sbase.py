@@ -156,11 +156,11 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             json_data = json.loads(json.dumps(record, default=json_util.default))
                             db[processor].insert_one(json_data)
 
-                            if(('morninglow-high-volume-buy' not in processor) and ('morning-volume-breakout-buy' not in processor)):
-                                if ((('buy' in processor) or ('Buy' in processor) or ('Bbuyy' in processor)) and (('09_30:' not in processor) and ('dayconsolidation-breakout-03' not in processor))):
+                            if(('morninglow-high-volume-buy' not in processor) and ('morning-volume-breakout-buy' not in processor) and ('09_30:checkChartSell' not in processor)):
+                                if (('buy' in processor) or ('Buy' in processor) or ('Bbuyy' in processor)):
                                     db['buy_all_processor'].insert_one(json_data)
-                            if (('morninghigh-high-volume-sell' not in processor) and ('morning-volume-breakout-sell' not in processor)):
-                                if ((('sell' in processor) or ('Sell' in processor) or ('Sselll' in processor)) and (('09_30:' not in processor) and ('dayconsolidation-breakout-03' not in processor))):
+                            if (('morninghigh-high-volume-sell' not in processor) and ('morning-volume-breakout-sell' not in processor) and ('09_30:checkChartBuy' not in processor)):
+                                if (('sell' in processor) or ('Sell' in processor) or ('Sselll' in processor)):
                                     db['sell_all_processor'].insert_one(json_data)
 
                             tempScrip = ''

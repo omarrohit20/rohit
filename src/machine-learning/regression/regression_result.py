@@ -36,7 +36,7 @@ from util.util import buy_filter_pct_change_accuracy, sell_filter_pct_change_acc
 from util.util import buy_filter_all_accuracy, sell_filter_all_accuracy
 from util.util_buy import buy_high_volatility     
 from util.util_sell import sell_high_volatility
-from util.util import insert_year2LowReversal, insert_year5LowBreakoutY2H, insert_year5LowBreakoutYH, insert_year2HighNearBreakout, insert_year5LowBreakoutMonthHigh, insert_year5HighNearBreakout
+from util.util import insert_year2LowReversal, insert_year5LowBreakoutY2H, insert_year5LowBreakoutYH, insert_year2HighNearBreakout, insert_year5LowBreakoutMonthHigh, insert_year5LowBreakoutMonthHighTest, insert_year5HighNearBreakout
 from util.util import historical_data
 
 
@@ -1214,6 +1214,7 @@ def result_data_reg(scrip):
         insert_year5LowBreakoutYH(regression_data)
         insert_year2LowReversal(regression_data)
         insert_year5LowBreakoutMonthHigh(regression_data)
+        insert_year5LowBreakoutMonthHighTest(regression_data)
         insert_year5HighNearBreakout(regression_data)
         #insert_year2HighNearBreakout(regression_data)
         
