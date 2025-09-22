@@ -1282,10 +1282,23 @@ def calculateParallel(threads=2, futures='Yes', processing_date=" "):
     pool.map(result_data_reg, scrips)
     pool.map(result_data_summary, scrips)
 
-                      
+def copyDB():
+    # Source and target database/collection
+    source_collection = db["breakoutMH"]
+    target_collection = dbchartlink["breakoutMH"]
+
+    # Copy documents from source to target
+    documents = source_collection.find()  # Fetch all documents
+    target_collection.insert_many(documents)  # Insert into target collection
+
+    print("Collection copied successfully!")
+
+
+
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
     calculateParallel(1, sys.argv[1], sys.argv[2])
-    connection.close()
     saveReports()
+    copyDB()
+    connection.close()

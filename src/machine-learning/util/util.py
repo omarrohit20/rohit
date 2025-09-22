@@ -188,7 +188,7 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
         data['PCT_day_change'] = regression_data['PCT_day_change']
         data['PCT_change'] = regression_data['PCT_change']
         json_data = json.loads(json.dumps(data))
-        if ((db.breakoutMH.count_documents({'scrip': data['scrip']})) < 1 and (db.breakoutMH.count_documents({'scrip': data['scrip']})) < 1):
+        if ((db.breakoutMH.count_documents({'scrip': data['scrip']})) < 1):
             db.breakoutMH.insert_one(json_data)
         return True
 
