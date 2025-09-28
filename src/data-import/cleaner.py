@@ -44,7 +44,6 @@ for collect in collection:
 DATE_FIELD = "date" # The field in your documents with the date string
 DATE_FORMAT = "%Y-%m-%d" # Your string date format, e.g., "2025-09-19"
 
-collection = db["breakoutMH"] # Replace with your collection name
 
 # Define the particular datetime
 # Example: Delete documents older than January 1, 2024, 00:00:00
@@ -56,7 +55,11 @@ cutoff_date = particular_datetime.strftime(DATE_FORMAT)
 query = {DATE_FIELD: {"$lt": cutoff_date}}
 
 # Execute the delete operation
-result = collection.delete_many(query)
-
-# Print the number of deleted documents
+result = db["breakoutMH"].delete_many(query)
+print(f"Deleted {result.deleted_count} documents.")
+result = db["breakout2MH"].delete_many(query)
+print(f"Deleted {result.deleted_count} documents.")
+result = db["breakoutML"].delete_many(query)
+print(f"Deleted {result.deleted_count} documents.")
+result = db["breakoutM2L"].delete_many(query)
 print(f"Deleted {result.deleted_count} documents.")

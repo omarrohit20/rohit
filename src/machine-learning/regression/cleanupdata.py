@@ -5,15 +5,16 @@ connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 dbchartlink = connection.chartlink
 
-# Source and target database/collection
-source_collection = db["breakoutMH"]
-target_collection = dbchartlink["breakoutMH"]
-
 # Copy documents from source to target
-documents = source_collection.find()  # Fetch all documents
-target_collection.insert_many(documents)  # Insert into target collection
+def copy_collection(source_collection, target_collection):
+    documents = source_collection.find()  # Fetch all documents
+    target_collection.insert_many(documents)  # Insert into target collection
+    print("Collection copied successfully!")
 
-print("Collection copied successfully!")
+copy_collection(db["breakoutMH"], dbchartlink["breakoutMH"])
+copy_collection(db["breakoutM2H"], dbchartlink["breakoutM2H"])
+copy_collection(db["breakoutML"], dbchartlink["breakoutML"])
+copy_collection(db["breakoutM2L"], dbchartlink["breakoutM2L"])
 
 # Close the MongoDB connection
 connection.close()
