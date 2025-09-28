@@ -56,101 +56,7 @@ def insert_scripdata_st(scrip, date, filter, avg5, pct5, avg10, pct10, count, re
             print(json_data)
             db.sttips.insert_one(json_data)
 
-def insert_year2LowReversal(regression_data):
-    if(regression_data['year2HighChange'] < -20
-        and regression_data['close'] > 20
-        ) :
-        if ((regression_data['year2HighChange'] < -50 and 'ReversalLowYear2' in regression_data['filter3'] and regression_data['close'] > regression_data['monthHigh']
-                and regression_data['industry'] != '')
-            or (regression_data['year2HighChange'] < -60
-                and regression_data['industry'] != '' and regression_data['month3HighChange'] > -10 and regression_data['month3LowChange'] < 10) and regression_data['close'] > regression_data['monthHigh']):
-            data = {}
-            data['scrip'] = regression_data['scrip']
-            data['industry'] = regression_data['industry']
-            data['date'] = regression_data['date']
-            data['close'] = regression_data['close']
-            data['year5HighChange'] = regression_data['year5HighChange']
-            data['year2HighChange'] = regression_data['year2HighChange']
-            data['month3HighChange'] = regression_data['month3HighChange']
-            data['month2HighChange'] = regression_data['month2HighChange']
-            data['monthHighChange'] = regression_data['monthHighChange']
-            data['week2HighChange'] = regression_data['week2HighChange']
-            data['weekHighChange'] = regression_data['weekHighChange']
-            data['year5LowChange'] = regression_data['year5LowChange']
-            data['yearLowChange'] = regression_data['yearLowChange']
-            data['month3LowChange'] = regression_data['month3LowChange']
-            data['month2LowChange'] = regression_data['month2LowChange']
-            data['monthLowChange'] = regression_data['monthLowChange']
-            data['week2LowChange'] = regression_data['week2LowChange']
-            data['weekLowChange'] = regression_data['weekLowChange']
-            json_data = json.loads(json.dumps(data))
-            if (db.reversalY2LLT60.count_documents({'scrip':data['scrip']})) < 1 and regression_data['year2HighChange'] < -60:
-                db.reversalY2LLT60.insert_one(json_data)
-            elif (db.reversalY2LLT50.count_documents({'scrip':data['scrip']})) < 1 and regression_data['year2HighChange'] < -50:
-                db.reversalY2LLT50.insert_one(json_data)
-
-        if (((regression_data['year2HighChange'] < -50 and regression_data['industry'] != '') or regression_data['year5HighChange'] < -70)
-                and ((regression_data['week2HighChange'] > 0 and regression_data['monthHighChange'] < 0)
-                    or (regression_data['close'] > regression_data['week2High'] and regression_data['close'] < regression_data['monthHigh']))
-                and regression_data['month3LowChange'] < 20
-                and regression_data['yearLowChange'] < 20
-                and regression_data['close'] > regression_data['week2High']
-            ):
-            data = {}
-            data['scrip'] = regression_data['scrip']
-            data['industry'] = regression_data['industry']
-            data['date'] = regression_data['date']
-            data['close'] = regression_data['close']
-            data['year5HighChange'] = regression_data['year5HighChange']
-            data['year2HighChange'] = regression_data['year2HighChange']
-            data['month3HighChange'] = regression_data['month3HighChange']
-            data['month2HighChange'] = regression_data['month2HighChange']
-            data['monthHighChange'] = regression_data['monthHighChange']
-            data['week2HighChange'] = regression_data['week2HighChange']
-            data['weekHighChange'] = regression_data['weekHighChange']
-            data['year5LowChange'] = regression_data['year5LowChange']
-            data['yearLowChange'] = regression_data['yearLowChange']
-            data['month3LowChange'] = regression_data['month3LowChange']
-            data['month2LowChange'] = regression_data['month2LowChange']
-            data['monthLowChange'] = regression_data['monthLowChange']
-            data['week2LowChange'] = regression_data['week2LowChange']
-            data['weekLowChange'] = regression_data['weekLowChange']
-            json_data = json.loads(json.dumps(data))
-            if (db.reversalY2LLT70.count_documents({'scrip':data['scrip']})) < 1 :
-                db.reversalY2LLT70.insert_one(json_data)
-
-
-def insert_year5LowBreakoutY2H(regression_data):
-    if (regression_data['year2HighChange'] > -5 and regression_data['year2LowChange'] > 30 and regression_data['year5HighChange'] < -50 and regression_data['close'] > regression_data['monthHigh']):
-        data = {}
-        data['scrip'] = regression_data['scrip']
-        data['industry'] = regression_data['industry']
-        data['date'] = regression_data['date']
-        data['close'] = regression_data['close']
-        data['year5HighChange'] = regression_data['year5HighChange']
-        data['year2HighChange'] = regression_data['year2HighChange']
-        data['year5LowChange'] = regression_data['year5LowChange']
-        json_data = json.loads(json.dumps(data))
-        if ((db.breakoutY2H.count_documents({'scrip': data['scrip']})) < 1 and (db.breakoutYH.count_documents({'scrip': data['scrip']})) < 1):
-            db.breakoutY2H.insert_one(json_data)
-        return True
-
-def insert_year5LowBreakoutYH(regression_data):
-    if (regression_data['yearHighChange'] > -5 and regression_data['yearLowChange'] > 20 and regression_data['year5HighChange'] < -70 and regression_data['close'] > regression_data['monthHigh']):
-        data = {}
-        data['scrip'] = regression_data['scrip']
-        data['industry'] = regression_data['industry']
-        data['date'] = regression_data['date']
-        data['close'] = regression_data['close']
-        data['year5HighChange'] = regression_data['year5HighChange']
-        data['year2HighChange'] = regression_data['year2HighChange']
-        data['year5LowChange'] = regression_data['year5LowChange']
-        json_data = json.loads(json.dumps(data))
-        if ((db.breakoutY2H.count_documents({'scrip': data['scrip']})) < 1 and (db.breakoutYH.count_documents({'scrip': data['scrip']})) < 1):
-            db.breakoutYH.insert_one(json_data)
-        return True
-
-def insert_year5LowBreakoutMonthHigh(regression_data):
+def data_from_regression(regression_data):
     data = {}
     data['scrip'] = regression_data['scrip']
     data['industry'] = regression_data['industry']
@@ -173,6 +79,48 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
     data['PCT_day_change'] = regression_data['PCT_day_change']
     data['PCT_change'] = regression_data['PCT_change']
     json_data = json.loads(json.dumps(data))
+    return json_data
+
+def insert_year2LowReversal(regression_data):
+    if(regression_data['year2HighChange'] < -20
+        and regression_data['close'] > 20
+        ) :
+        if ((regression_data['year2HighChange'] < -50 and 'ReversalLowYear2' in regression_data['filter3'] and regression_data['close'] > regression_data['monthHigh']
+                and regression_data['industry'] != '')
+            or (regression_data['year2HighChange'] < -60
+                and regression_data['industry'] != '' and regression_data['month3HighChange'] > -10 and regression_data['month3LowChange'] < 10) and regression_data['close'] > regression_data['monthHigh']):
+            json_data = data_from_regression(regression_data)
+            if (db.reversalY2LLT60.count_documents({'scrip':regression_data['scrip']})) < 1 and regression_data['year2HighChange'] < -60:
+                db.reversalY2LLT60.insert_one(json_data)
+            elif (db.reversalY2LLT50.count_documents({'scrip':regression_data['scrip']})) < 1 and regression_data['year2HighChange'] < -50:
+                db.reversalY2LLT50.insert_one(json_data)
+
+        if (((regression_data['year2HighChange'] < -50 and regression_data['industry'] != '') or regression_data['year5HighChange'] < -70)
+                and ((regression_data['week2HighChange'] > 0 and regression_data['monthHighChange'] < 0)
+                    or (regression_data['close'] > regression_data['week2High'] and regression_data['close'] < regression_data['monthHigh']))
+                and regression_data['month3LowChange'] < 20
+                and regression_data['yearLowChange'] < 20
+                and regression_data['close'] > regression_data['week2High']
+            ):
+            if (db.reversalY2LLT70.count_documents({'scrip':regression_data['scrip']})) < 1 :
+                json_data = data_from_regression(regression_data)
+                db.reversalY2LLT70.insert_one(json_data)
+
+def insert_year5LowBreakoutY2H(regression_data):
+    if (regression_data['year2HighChange'] > -5 and regression_data['year2LowChange'] > 30 and regression_data['year5HighChange'] < -50 and regression_data['close'] > regression_data['monthHigh']):
+        if ((db.breakoutY2H.count_documents({'scrip': regression_data['scrip']})) < 1 and (db.breakoutYH.count_documents({'scrip': regression_data['scrip']})) < 1):
+            json_data = data_from_regression(regression_data)
+            db.breakoutY2H.insert_one(json_data)
+        return True
+
+def insert_year5LowBreakoutYH(regression_data):
+    if (regression_data['yearHighChange'] > -5 and regression_data['yearLowChange'] > 20 and regression_data['year5HighChange'] < -70 and regression_data['close'] > regression_data['monthHigh']):
+        if ((db.breakoutY2H.count_documents({'scrip': regression_data['scrip']})) < 1 and (db.breakoutYH.count_documents({'scrip': regression_data['scrip']})) < 1):
+            json_data = data_from_regression(regression_data)
+            db.breakoutYH.insert_one(json_data)
+        return True
+
+def insert_year5LowBreakoutMonthHigh(regression_data):
     if (regression_data['month6HighChange'] < 0
         and regression_data['yearLowChange'] > 10 and 10 < regression_data['month3LowChange'] < 50 and 9 < regression_data['month2LowChange'] < 25 and 9 < regression_data['monthLowChange'] < 20
         and regression_data['monthHighChange'] > 0
@@ -184,11 +132,12 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
                 regression_data['low_pre1'] < regression_data['monthHigh']))
         and regression_data['close'] > regression_data['monthHigh']
         and ((regression_data['month6HighChange'] < 0)
-             or (((regression_data['month3HighChange'] != regression_data['monthHighChange']) or (
-                    regression_data['month2HighChange'] != regression_data['monthHighChange'])))
+             or (((regression_data['month3HighChange'] != regression_data['monthHighChange']) or (regression_data['month2HighChange'] != regression_data['monthHighChange'])))
             )
+        and regression_data['PCT_day_change'] > -1
         ):
-        if ((db.breakoutMH.count_documents({'scrip': data['scrip']})) < 1):
+        if ((db.breakoutMH.count_documents({'scrip': regression_data['scrip']})) < 1):
+            json_data = data_from_regression(regression_data)
             db.breakoutMH.insert_one(json_data)
         return True
     elif (regression_data['year5HighChange'] < 0
@@ -201,37 +150,16 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
                 regression_data['high_pre1'] > regression_data['monthLow']))
         and regression_data['close'] < regression_data['monthLow']
         and ((regression_data['month6LowChange'] > 0)
-             or (((regression_data['month3LowChange'] != regression_data['monthLowChange']) or (
-                    regression_data['month2LowChange'] != regression_data['monthLowChange'])))
+             or (((regression_data['month3LowChange'] != regression_data['monthLowChange']) or (regression_data['month2LowChange'] != regression_data['monthLowChange'])))
             )
+        and regression_data['PCT_day_change'] < 1
         ):
-        if ((db.breakoutML.count_documents({'scrip': data['scrip']})) < 1):
+        if ((db.breakoutML.count_documents({'scrip': regression_data['scrip']})) < 1):
+            json_data = data_from_regression(regression_data)
             db.breakoutML.insert_one(json_data)
         return True
 
 def insert_year5LowBreakoutMonth2High(regression_data):
-    data = {}
-    data['scrip'] = regression_data['scrip']
-    data['industry'] = regression_data['industry']
-    data['date'] = regression_data['date']
-    data['close'] = regression_data['close']
-    data['year5HighChange'] = regression_data['year5HighChange']
-    data['year2HighChange'] = regression_data['year2HighChange']
-    data['month3HighChange'] = regression_data['month3HighChange']
-    data['month2HighChange'] = regression_data['month2HighChange']
-    data['monthHighChange'] = regression_data['monthHighChange']
-    data['week2HighChange'] = regression_data['week2HighChange']
-    data['weekHighChange'] = regression_data['weekHighChange']
-    data['year5LowChange'] = regression_data['year5LowChange']
-    data['yearLowChange'] = regression_data['yearLowChange']
-    data['month3LowChange'] = regression_data['month3LowChange']
-    data['month2LowChange'] = regression_data['month2LowChange']
-    data['monthLowChange'] = regression_data['monthLowChange']
-    data['week2LowChange'] = regression_data['week2LowChange']
-    data['weekLowChange'] = regression_data['weekLowChange']
-    data['PCT_day_change'] = regression_data['PCT_day_change']
-    data['PCT_change'] = regression_data['PCT_change']
-    json_data = json.loads(json.dumps(data))
     if (regression_data['month6HighChange'] < 0
         and regression_data['yearLowChange'] > 10 and 10 < regression_data['month3LowChange'] < 50 and 9 < regression_data['month2LowChange'] < 25 and 9 < regression_data['monthLowChange'] < 20
         and regression_data['month2HighChange'] > 0
@@ -244,8 +172,10 @@ def insert_year5LowBreakoutMonth2High(regression_data):
         and ((regression_data['month6HighChange'] < 0)
              or (((regression_data['month3HighChange'] != regression_data['monthHighChange']) or (regression_data['month2HighChange'] != regression_data['monthHighChange'])))
             )
+        and regression_data['PCT_day_change'] > -1
         ):
-        if ((db.breakoutM2H.count_documents({'scrip': data['scrip']})) < 1):
+        if ((db.breakoutM2H.count_documents({'scrip': regression_data['scrip']})) < 1):
+            json_data = data_from_regression(regression_data)
             db.breakoutM2H.insert_one(json_data)
         return True
     elif (regression_data['year5HighChange'] < 0
@@ -259,43 +189,26 @@ def insert_year5LowBreakoutMonth2High(regression_data):
         and ((regression_data['month6LowChange'] > 0)
              or (((regression_data['month3LowChange'] != regression_data['monthLowChange']) or (regression_data['month2LowChange'] != regression_data['monthLowChange'])))
             )
+        and regression_data['PCT_day_change'] < 1
         ):
-        if ((db.breakoutM2L.count_documents({'scrip': data['scrip']})) < 1):
+        if ((db.breakoutM2L.count_documents({'scrip': regression_data['scrip']})) < 1):
+            json_data = data_from_regression(regression_data)
             db.breakoutM2L.insert_one(json_data)
         return True
 
 def insert_year2HighNearBreakout(regression_data):
     if (regression_data['year2HighChange'] > -5 and regression_data['year2LowChange'] > 30  and regression_data['year5HighChange'] > -10 and regression_data['industry'] != ''):
-        data = {}
-        data['scrip'] = regression_data['scrip']
-        data['industry'] = regression_data['industry']
-        data['date'] = regression_data['date']
-        data['close'] = regression_data['close']
-        data['year5HighChange'] = regression_data['year5HighChange']
-        data['year2HighChange'] = regression_data['year2HighChange']
-        data['year5LowChange'] = regression_data['year5LowChange']
-        json_data = json.loads(json.dumps(data))
-        if (db.nearY2H.count_documents({'scrip': data['scrip']})) < 1:
+        if (db.nearY2H.count_documents({'scrip': regression_data['scrip']})) < 1:
+            json_data = data_from_regression(regression_data)
             db.nearY2H.insert_one(json_data)
 
 def insert_year5HighNearBreakout(regression_data):
     if (0 > regression_data['year5HighChange'] > -10 and (5 > regression_data['year2HighChange'] > -5 or 5 > regression_data['yearHighChange'] > -5)
         and regression_data['year5LowChange'] < 400
         and (regression_data['industry'] != '' or regression_data['yearLowChange'] < 200)):
-        data = {}
-        data['scrip'] = regression_data['scrip']
-        data['industry'] = regression_data['industry']
-        data['date'] = regression_data['date']
-        data['close'] = regression_data['close']
-        data['year5HighChange'] = regression_data['year5HighChange']
-        data['year2HighChange'] = regression_data['year2HighChange']
-        data['year5LowChange'] = regression_data['year5LowChange']
-        data['yearLowChange'] = regression_data['yearLowChange']
-        data['monthLowChange'] = regression_data['monthLowChange']
-        json_data = json.loads(json.dumps(data))
-        if (db.nearY5H.count_documents({'scrip': data['scrip']})) < 1:
+        if (db.nearY5H.count_documents({'scrip': regression_data['scrip']})) < 1:
+            json_data = data_from_regression(regression_data)
             db.nearY5H.insert_one(json_data)
-
 
 def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
     if(high_tail_pct(regression_data) < 1.5):
