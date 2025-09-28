@@ -35,10 +35,10 @@ db.drop_collection('scrip_result')
 db.drop_collection('resultScripFutures')
 db.drop_collection('highBuy')
 db.drop_collection('lowSell')
-db = connection.chartlink
-collection = db.list_collection_names()
+
+collection = dbchartlink.list_collection_names()
 for collect in collection:
-    db.drop_collection(collect)
+    dbchartlink.drop_collection(collect)
 
 
 DATE_FIELD = "date" # The field in your documents with the date string
@@ -57,7 +57,7 @@ query = {DATE_FIELD: {"$lt": cutoff_date}}
 # Execute the delete operation
 result = db["breakoutMH"].delete_many(query)
 print(f"Deleted {result.deleted_count} documents.")
-result = db["breakout2MH"].delete_many(query)
+result = db["breakoutM2H"].delete_many(query)
 print(f"Deleted {result.deleted_count} documents.")
 result = db["breakoutML"].delete_many(query)
 print(f"Deleted {result.deleted_count} documents.")
