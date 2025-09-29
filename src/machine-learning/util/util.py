@@ -136,9 +136,11 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
             )
         and regression_data['PCT_day_change'] > -1
         ):
+        json_data = data_from_regression(regression_data)
         if ((db.breakoutMH.count_documents({'scrip': regression_data['scrip']})) < 1):
-            json_data = data_from_regression(regression_data)
             db.breakoutMH.insert_one(json_data)
+        if ((db.breakoutMHR.count_documents({'scrip': regression_data['scrip']})) < 1):
+            db.breakoutMHR.insert_one(json_data)
         return True
     elif (regression_data['year5HighChange'] < 0
         and regression_data['monthLowChange'] < 0
@@ -174,9 +176,11 @@ def insert_year5LowBreakoutMonth2High(regression_data):
             )
         and regression_data['PCT_day_change'] > -1
         ):
+        json_data = data_from_regression(regression_data)
         if ((db.breakoutM2H.count_documents({'scrip': regression_data['scrip']})) < 1):
-            json_data = data_from_regression(regression_data)
             db.breakoutM2H.insert_one(json_data)
+        if ((db.breakoutM2HR.count_documents({'scrip': regression_data['scrip']})) < 1):
+            db.breakoutM2HR.insert_one(json_data)
         return True
     elif (regression_data['year5HighChange'] < 0
         and regression_data['month2LowChange'] < 0
