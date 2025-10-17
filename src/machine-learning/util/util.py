@@ -127,6 +127,7 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
         and regression_data['week2HighChange'] > 0
         and regression_data['week2LowChange'] > 5
         and regression_data['weekLowChange'] > 2
+        and regression_data['monthHigh'] != regression_data['high']
         and regression_data['weekLow'] < regression_data['monthHigh']
         and ((regression_data['low'] < regression_data['monthHigh']) or (
                 regression_data['low_pre1'] < regression_data['monthHigh']))
@@ -147,6 +148,7 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
         and regression_data['week2HighChange'] < -5
         and regression_data['week2LowChange'] < 0
         and regression_data['weekHighChange'] < -2
+        and regression_data['monthLow'] != regression_data['low']
         and regression_data['weekHigh'] > regression_data['monthLow']
         and ((regression_data['high'] > regression_data['monthLow']) or (
                 regression_data['high_pre1'] > regression_data['monthLow']))
@@ -168,6 +170,7 @@ def insert_year5LowBreakoutMonth2High(regression_data):
         and regression_data['week2HighChange'] > 0
         and regression_data['week2LowChange'] > 5
         and regression_data['weekLowChange'] > 2
+        and regression_data['month2High'] != regression_data['high']
         and regression_data['weekLow'] < regression_data['month2High']
         and ((regression_data['low'] < regression_data['month2High']) or (regression_data['low_pre1'] < regression_data['month2High']))
         and regression_data['close'] > regression_data['month2High']
@@ -187,6 +190,7 @@ def insert_year5LowBreakoutMonth2High(regression_data):
         and regression_data['week2HighChange'] < -5
         and regression_data['week2LowChange'] < 0
         and regression_data['weekHighChange'] < -2
+        and regression_data['month2Low'] != regression_data['low']
         and regression_data['weekHigh'] > regression_data['month2Low']
         and ((regression_data['high'] > regression_data['month2Low']) or (regression_data['high_pre1'] > regression_data['month2Low']))
         and regression_data['close'] < regression_data['month2Low']
@@ -2905,6 +2909,19 @@ def is_filter_risky(regression_data, regressionResult, high_or_low, ws, filter_a
                 add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'DOJI')
             BuyRisky = True
             SellRisky = True
+
+    if (-1.5 < regression_data['week2HighChange'] < 1.5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'AtWeek2High')
+    if (-1.5 < regression_data['week2LowChange'] < 1.5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'AtWeek2Low')
+    if (-1.5 < regression_data['monthHighChange'] < 1.5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'AtMonthHigh')
+    if (-1.5 < regression_data['monthLowChange'] < 1.5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'AtMonthLow')
+    if (-1.5 < regression_data['monthHighChange'] < 1.5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'AtMonth3High')
+    if (-1.5 < regression_data['monthLowChange'] < 1.5):
+        add_in_csv(regression_data, regressionResult, ws, None, None, None, None, None, None, None, 'AtMonth3Low')
 
     if(regression_data['PCT_day_change_pre1'] < 0.3 or regression_data['PCT_day_change_pre2'] < 0.3):
         if update:
