@@ -2,10 +2,12 @@
 Before 10:00
     Buy : last 2-3 days uptrend
     Buy : downtrend then buy last day closed in negative
+    Avoid Buy : last 2-3 days uptrend, today consolidation and LT 0.3
     Avoid Buy : consolidation 50MA crossed and below 200MA, Sell after 10:30
     Avoid Buy : Last day LT-1 and today LT 0.3
     Avoid Buy : Last day Down after uptrend and today between -0.3 to 0.3
     Avoid Buy : Last day GT1 and today GT1
+    Avoid Buy : Other than index If particular index up due to news
 
     Sell : last 2-3 days downtrend
     Avoid Sell: consolidation 50MA crossed and above 200MA
