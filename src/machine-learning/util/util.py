@@ -131,7 +131,7 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
         and regression_data['weekLow'] < regression_data['monthHigh']
         and ((regression_data['low'] < regression_data['monthHigh']) or (
                 regression_data['low_pre1'] < regression_data['monthHigh']))
-        and regression_data['close'] > regression_data['monthHigh']
+        and regression_data['high'] > regression_data['monthHigh']
         and ((regression_data['month6HighChange'] < 0)
              or (((regression_data['month3HighChange'] != regression_data['monthHighChange']) or (regression_data['month2HighChange'] != regression_data['monthHighChange'])))
             )
@@ -152,7 +152,7 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
         and regression_data['weekHigh'] > regression_data['monthLow']
         and ((regression_data['high'] > regression_data['monthLow']) or (
                 regression_data['high_pre1'] > regression_data['monthLow']))
-        and regression_data['close'] < regression_data['monthLow']
+        and regression_data['low'] < regression_data['monthLow']
         and ((regression_data['month6LowChange'] > 0)
              or (((regression_data['month3LowChange'] != regression_data['monthLowChange']) or (regression_data['month2LowChange'] != regression_data['monthLowChange'])))
             )
@@ -173,7 +173,7 @@ def insert_year5LowBreakoutMonth2High(regression_data):
         and regression_data['month2High'] != regression_data['high']
         and regression_data['weekLow'] < regression_data['month2High']
         and ((regression_data['low'] < regression_data['month2High']) or (regression_data['low_pre1'] < regression_data['month2High']))
-        and regression_data['close'] > regression_data['month2High']
+        and regression_data['high'] > regression_data['month2High']
         and ((regression_data['month6HighChange'] < 0)
              or (((regression_data['month3HighChange'] != regression_data['monthHighChange']) or (regression_data['month2HighChange'] != regression_data['monthHighChange'])))
             )
@@ -193,7 +193,7 @@ def insert_year5LowBreakoutMonth2High(regression_data):
         and regression_data['month2Low'] != regression_data['low']
         and regression_data['weekHigh'] > regression_data['month2Low']
         and ((regression_data['high'] > regression_data['month2Low']) or (regression_data['high_pre1'] > regression_data['month2Low']))
-        and regression_data['close'] < regression_data['month2Low']
+        and regression_data['low'] < regression_data['month2Low']
         and ((regression_data['month6LowChange'] > 0)
              or (((regression_data['month3LowChange'] != regression_data['monthLowChange']) or (regression_data['month2LowChange'] != regression_data['monthLowChange'])))
             )
