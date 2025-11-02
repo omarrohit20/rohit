@@ -39,7 +39,7 @@ if __name__ == "__main__":
             #process_url_volBreakout('https://chartink.com/screener/sell-morning-volume-breakout-checknews-01', 'sell-morning-volume-breakout(Check-News)-01', time_09_40, time_11_00)
 
         if (sb.nw >= time_09_45 and sb.nw <= time_12_00):
-            # ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 30  ) and [=1] 10 minute volume > greatest(  1 day ago volume / 22  ) and [-1] 5 minute high < 1 day ago low and 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" > -1.5 and ( {cash} ( [=1] 10 minute low > 2 days ago low or [=1] 10 minute low > 1 day ago low ) ) and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) < -1.3 ) ) ) )
+            # ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 30  ) and [=1] 10 minute volume > greatest(  1 day ago volume / 22  ) and [-1] 5 minute high < 1 day ago low and 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" > -1.5 and [=1] 15 minute "close - 1 candle ago close / 1 candle ago close * 100" > -1.5 and ( {cash} ( [=1] 10 minute low > 2 days ago low or [=1] 10 minute low > 1 day ago low ) ) and ( {cash} ( ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) < -1.2 or ( ( ( [-1] 5 minute close - [=1] 5 minute open ) * 100 ) / 1 day ago close ) < -1.2 ) ) ) ) ) )
             process_url_volBreakout('https://chartink.com/screener/supertrend-morning-sell', 'supertrend-morning-sell', time_09_45, time_12_00)
 
         time.sleep(1)
