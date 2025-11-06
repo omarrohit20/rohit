@@ -121,8 +121,21 @@ def insert_year5LowBreakoutYH(regression_data):
         return True
 
 def insert_year5LowBreakoutMonthHigh(regression_data):
-    if (regression_data['month6HighChange'] < 0
-        and regression_data['yearLowChange'] > 10 and 10 < regression_data['month3LowChange'] < 50 and 9 < regression_data['month2LowChange'] < 25 and 9 < regression_data['monthLowChange'] < 20
+    if ((regression_data['month6HighChange'] < 0 or regression_data['year5HighChange'] < 0)
+        and regression_data['month3HighChange'] < 0
+        and regression_data['monthLowChange'] < 7
+        and regression_data['week2HighChange'] > 0
+        #and regression_data['week2LowChange'] > 0
+        #and regression_data['weekLowChange'] > 0
+        #and regression_data['weekLow'] < regression_data['week2Low']
+        and regression_data['PCT_day_change'] > 1.5
+        ):
+        json_data = data_from_regression(regression_data)
+        if ((db.breakoutW2HR.count_documents({'scrip': regression_data['scrip']})) < 1):
+            db.breakoutW2HR.insert_one(json_data)
+
+    if ((regression_data['month6HighChange'] < 0 or regression_data['year5HighChange'] < 0)
+        and regression_data['yearLowChange'] > 10 and 10 < regression_data['month3LowChange'] and 9 < regression_data['month2LowChange'] and 9 < regression_data['monthLowChange']
         and regression_data['monthHighChange'] > 0
         and regression_data['week2HighChange'] > 0
         and regression_data['week2LowChange'] > 5
@@ -132,10 +145,10 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
         and ((regression_data['low'] < regression_data['monthHigh']) or (
                 regression_data['low_pre1'] < regression_data['monthHigh']))
         and regression_data['high'] > regression_data['monthHigh']
-        and ((regression_data['month6HighChange'] < 0)
+        and ((regression_data['month6HighChange'] < 0 or regression_data['year5HighChange'] < 0)
              or (((regression_data['month3HighChange'] != regression_data['monthHighChange']) or (regression_data['month2HighChange'] != regression_data['monthHighChange'])))
             )
-        and regression_data['PCT_day_change'] > -1
+        and regression_data['PCT_day_change'] > -0.7
         ):
         json_data = data_from_regression(regression_data)
         if ((db.breakoutMH.count_documents({'scrip': regression_data['scrip']})) < 1):
@@ -164,8 +177,8 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
         return True
 
 def insert_year5LowBreakoutMonth2High(regression_data):
-    if (regression_data['month6HighChange'] < 0
-        and regression_data['yearLowChange'] > 10 and 10 < regression_data['month3LowChange'] < 50 and 9 < regression_data['month2LowChange'] < 25 and 9 < regression_data['monthLowChange'] < 20
+    if ((regression_data['month6HighChange'] < 0 or regression_data['year5HighChange'] < 0)
+        and regression_data['yearLowChange'] > 10 and 10 < regression_data['month3LowChange'] and 9 < regression_data['month2LowChange'] and 9 < regression_data['monthLowChange']
         and regression_data['month2HighChange'] > 0
         and regression_data['week2HighChange'] > 0
         and regression_data['week2LowChange'] > 5
@@ -174,10 +187,10 @@ def insert_year5LowBreakoutMonth2High(regression_data):
         and regression_data['weekLow'] < regression_data['month2High']
         and ((regression_data['low'] < regression_data['month2High']) or (regression_data['low_pre1'] < regression_data['month2High']))
         and regression_data['high'] > regression_data['month2High']
-        and ((regression_data['month6HighChange'] < 0)
+        and ((regression_data['month6HighChange'] < 0 or regression_data['year5HighChange'] < 0)
              or (((regression_data['month3HighChange'] != regression_data['monthHighChange']) or (regression_data['month2HighChange'] != regression_data['monthHighChange'])))
             )
-        and regression_data['PCT_day_change'] > -1
+        and regression_data['PCT_day_change'] > -0.7
         ):
         json_data = data_from_regression(regression_data)
         if ((db.breakoutM2H.count_documents({'scrip': regression_data['scrip']})) < 1):

@@ -63,3 +63,19 @@ result = db["breakoutML"].delete_many(query)
 print(f"Deleted {result.deleted_count} documents.")
 result = db["breakoutM2L"].delete_many(query)
 print(f"Deleted {result.deleted_count} documents.")
+
+
+particular_datetime = datetime.now() - timedelta(days=30)
+cutoff_date = particular_datetime.strftime(DATE_FORMAT)
+
+# Define the query to find documents with a 'created_at' field (or your date field)
+# that is less than the particular_datetime
+query = {DATE_FIELD: {"$lt": cutoff_date}}
+
+# Execute the delete operation
+result = db["breakoutMHR"].delete_many(query)
+print(f"Deleted {result.deleted_count} documents.")
+result = db["breakoutM2HR"].delete_many(query)
+print(f"Deleted {result.deleted_count} documents.")
+result = db["breakoutW2HR"].delete_many(query)
+print(f"Deleted {result.deleted_count} documents.")
