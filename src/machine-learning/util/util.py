@@ -142,13 +142,13 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
         and regression_data['weekLowChange'] > 2
         and regression_data['monthHigh'] != regression_data['high']
         and regression_data['weekLow'] < regression_data['monthHigh']
-        and ((regression_data['low'] < regression_data['monthHigh']) or (
-                regression_data['low_pre1'] < regression_data['monthHigh']))
-        and regression_data['high'] > regression_data['monthHigh']
+        and ((regression_data['low'] < regression_data['monthHigh'] and regression_data['PCT_day_change'] > 1)
+             or (regression_data['low_pre1'] < regression_data['monthHigh'] and regression_data['PCT_day_change'] > -0.7)
+            )
+        and ((regression_data['high'] - regression_data['monthHigh'])/regression_data['monthHigh'])*100 > -0.5
         and ((regression_data['month6HighChange'] < 0 or regression_data['year5HighChange'] < 0)
              or (((regression_data['month3HighChange'] != regression_data['monthHighChange']) or (regression_data['month2HighChange'] != regression_data['monthHighChange'])))
             )
-        and regression_data['PCT_day_change'] > -0.7
         ):
         json_data = data_from_regression(regression_data)
         if ((db.breakoutMH.count_documents({'scrip': regression_data['scrip']})) < 1):
@@ -163,13 +163,12 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
         and regression_data['weekHighChange'] < -2
         and regression_data['monthLow'] != regression_data['low']
         and regression_data['weekHigh'] > regression_data['monthLow']
-        and ((regression_data['high'] > regression_data['monthLow']) or (
-                regression_data['high_pre1'] > regression_data['monthLow']))
-        and regression_data['low'] < regression_data['monthLow']
+        and ((regression_data['high'] > regression_data['monthLow'] and regression_data['PCT_day_change'] < -1)
+             or (regression_data['high_pre1'] > regression_data['monthLow']) and regression_data['PCT_day_change'] < 0.5)
+        and ((regression_data['low'] - regression_data['monthLow'])/regression_data['monthLow'])*100 < 0.5
         and ((regression_data['month6LowChange'] > 0)
              or (((regression_data['month3LowChange'] != regression_data['monthLowChange']) or (regression_data['month2LowChange'] != regression_data['monthLowChange'])))
             )
-        and regression_data['PCT_day_change'] < 1
         ):
         if ((db.breakoutML.count_documents({'scrip': regression_data['scrip']})) < 1):
             json_data = data_from_regression(regression_data)
@@ -185,12 +184,13 @@ def insert_year5LowBreakoutMonth2High(regression_data):
         and regression_data['weekLowChange'] > 2
         and regression_data['month2High'] != regression_data['high']
         and regression_data['weekLow'] < regression_data['month2High']
-        and ((regression_data['low'] < regression_data['month2High']) or (regression_data['low_pre1'] < regression_data['month2High']))
-        and regression_data['high'] > regression_data['month2High']
+        and ((regression_data['low'] < regression_data['month2High'] and regression_data['PCT_day_change'] > 1)
+             or (regression_data['low_pre1'] < regression_data['month2High'] and regression_data['PCT_day_change'] > -0.7)
+        )
+        and ((regression_data['high'] - regression_data['month2High']) / regression_data['month2High']) * 100 > -0.5
         and ((regression_data['month6HighChange'] < 0 or regression_data['year5HighChange'] < 0)
              or (((regression_data['month3HighChange'] != regression_data['monthHighChange']) or (regression_data['month2HighChange'] != regression_data['monthHighChange'])))
             )
-        and regression_data['PCT_day_change'] > -0.7
         ):
         json_data = data_from_regression(regression_data)
         if ((db.breakoutM2H.count_documents({'scrip': regression_data['scrip']})) < 1):
@@ -205,12 +205,12 @@ def insert_year5LowBreakoutMonth2High(regression_data):
         and regression_data['weekHighChange'] < -2
         and regression_data['month2Low'] != regression_data['low']
         and regression_data['weekHigh'] > regression_data['month2Low']
-        and ((regression_data['high'] > regression_data['month2Low']) or (regression_data['high_pre1'] > regression_data['month2Low']))
-        and regression_data['low'] < regression_data['month2Low']
+        and ((regression_data['high'] > regression_data['month2Low'] and regression_data['PCT_day_change'] < -1)
+            or (regression_data['high_pre1'] > regression_data['month2Low']) and regression_data['PCT_day_change'] < 0.5)
+        and ((regression_data['low'] - regression_data['month2Low'])/regression_data['month2Low'])*100 < 0.5
         and ((regression_data['month6LowChange'] > 0)
              or (((regression_data['month3LowChange'] != regression_data['monthLowChange']) or (regression_data['month2LowChange'] != regression_data['monthLowChange'])))
             )
-        and regression_data['PCT_day_change'] < 1
         ):
         if ((db.breakoutM2L.count_documents({'scrip': regression_data['scrip']})) < 1):
             json_data = data_from_regression(regression_data)
