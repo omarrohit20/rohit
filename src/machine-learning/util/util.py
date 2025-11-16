@@ -129,6 +129,7 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
         #and regression_data['weekLowChange'] > 0
         #and regression_data['weekLow'] < regression_data['week2Low']
         and regression_data['PCT_day_change'] > 1.5
+        and regression_data['PCT_change'] > 1.5
         ):
         json_data = data_from_regression(regression_data)
         if ((db.breakoutW2HR.count_documents({'scrip': regression_data['scrip']})) < 1):
