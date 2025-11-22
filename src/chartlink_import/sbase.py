@@ -156,6 +156,48 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             json_data = json.loads(json.dumps(record, default=json_util.default))
                             db[processor].insert_one(json_data)
 
+                            if ('09_30:checkChartBuy/Sell-morningDown' in processor):
+                                search_filter = {"scrip": tempScrip}
+                                mlData = '0@@CROSSED2DayH@' + mlData
+                                update_values = {'mlData': mlData}
+                                db['morning-volume-breakout-buy'].update_one(search_filter, {"$set": update_values})
+                                db['Breakout-Beey-2'].update_one(search_filter, {"$set": update_values})
+
+                            if ('crossed-day-high' in processor):
+                                search_filter = {"scrip": tempScrip}
+                                mlData = '0@@CROSSED1DayH@' + mlData
+                                update_values = {'mlData': mlData}
+                                db['morning-volume-breakout-buy'].update_one(search_filter, {"$set": update_values})
+                                db['Breakout-Beey-2'].update_one(search_filter, {"$set": update_values})
+
+                            if ('supertrend-morning-buy' in processor):
+                                search_filter = {"scrip": tempScrip}
+                                mlData = '0@@SUPER1DayH@' + mlData
+                                update_values = {'mlData': mlData}
+                                db['morning-volume-breakout-buy'].update_one(search_filter, {"$set": update_values})
+                                db['Breakout-Beey-2'].update_one(search_filter, {"$set": update_values})
+
+                            if ('09_30:checkChartSell/Buy-morningup' in processor):
+                                search_filter = {"scrip": tempScrip}
+                                mlData = '0@@CROSSED2DayL@' + mlData
+                                update_values = {'mlData': mlData}
+                                db['morning-volume-breakout-sell'].update_one(search_filter, {"$set": update_values})
+                                db['Breakout-Siill-2'].update_one(search_filter, {"$set": update_values})
+
+                            if ('crossed-day-low' in processor):
+                                search_filter = {"scrip": tempScrip}
+                                mlData = '0@@CROSSED1DayL@' + mlData
+                                update_values = {'mlData': mlData}
+                                db['morning-volume-breakout-sell'].update_one(search_filter, {"$set": update_values})
+                                db['Breakout-Siill-2'].update_one(search_filter, {"$set": update_values})
+
+                            if ('supertrend-morning-sell' in processor):
+                                search_filter = {"scrip": tempScrip}
+                                mlData = '0@@SUPER1DayL@' + mlData
+                                update_values = {'mlData': mlData}
+                                db['morning-volume-breakout-sell'].update_one(search_filter, {"$set": update_values})
+                                db['Breakout-Siill-2'].update_one(search_filter, {"$set": update_values})
+
                             if(('morninglow-high-volume-buy' not in processor) and ('morning-volume-breakout-buy' not in processor) and ('09_30:checkChartSell' not in processor)):
                                 if (('buy' in processor) or ('Buy' in processor) or ('Bbuyy' in processor)):
                                     db['buy_all_processor'].insert_one(json_data)
@@ -307,6 +349,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     if (any(d['scrip'] == scrip for d in db['morning-volume-bs'].find())):
                         intradaytech = '#LT2#' + intradaytech
 
+
                     if (processor == 'morning-volume-breakout-buy'):
                         if (db['morning-volume-breakout-buy'].count_documents({}) < 5):
                             intradaytech = '#TOP5B##' + intradaytech
@@ -316,6 +359,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             intradaytech = '#TOP15B##' + intradaytech
                         elif (db['morning-volume-breakout-buy'].count_documents({}) < 15):
                             intradaytech = 'TOP25B##' + intradaytech
+                        if (any(d['scrip'] == scrip for d in db['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)'].find())):
+                            intradaytech = '0#CROSSED2DayH#' + intradaytech
+
                     elif (processor == 'morning-volume-breakout-sell'):
                         if (db['morning-volume-breakout-sell'].count_documents({}) < 5):
                             intradaytech = '#TOP5S##' + intradaytech
@@ -325,6 +371,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             intradaytech = '#TOP15S##' + intradaytech
                         elif (db['morning-volume-breakout-sell'].count_documents({}) < 15):
                             intradaytech = 'TOP25S##' + intradaytech
+                        if (any(d['scrip'] == scrip for d in db['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)'].find())):
+                            intradaytech = '0#CROSSED2DayL#' + intradaytech
+
                     elif (any(d['scrip'] == scrip for d in db['morning-volume-breakout-buy'].find().sort('_id').limit(5))
                         ):
                         intradaytech = '#TOP5B##' + intradaytech
