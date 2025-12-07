@@ -16,9 +16,9 @@ st.title('chartink-0')
 
 col1, col2 = st.columns(2)
 with col1:
-    rb.render(st, 'morning-volume-breakout-buy', 'morning-volume-breakout-buy')
+    rb.render(st, 'morning-volume-breakout-buy', 'morning-volume-breakout-buy', color='G')
 with col2:
-    rb.render(st, 'morning-volume-breakout-sell', 'morning-volume-breakout-buy')
+    rb.render(st, 'morning-volume-breakout-sell', 'morning-volume-breakout-buy', color='R')
 
 
 

@@ -65,12 +65,25 @@ column_order_default=["scrip",
     "processor"
 ]
 
+def highlight_category_row(df, color='NA'):
+    """Highlights the entire row based on the 'Category' column value."""
+    styled_df = ''
+    if color == 'G':
+        styled_df = df.style.set_properties(**{'background-color': '#B0FFD0', 'color': 'black'})
+    elif color == 'R':
+        styled_df = df.style.set_properties(**{'background-color': '#FA866E', 'color': 'black'})
+    elif color == 'LG':
+        styled_df = df.style.set_properties(**{'background-color': '#A1A1A1', 'color': 'black'})
+    return styled_df
+
 def getdf(collection_name):
     collection = dbcl[collection_name]
     df = pd.DataFrame(list(collection.find()))
     return df
 
-def render(st, name, collection, column_order=column_order_default, column_conf=column_config_default):
+def render(st, name, collection, height=300, color='NA', column_order=column_order_default, column_conf=column_config_default):
     st.write("********"+ name.upper() + "********")
     df = getdf(collection)
-    st.dataframe(df, column_order=column_order, column_config=column_conf, use_container_width=True)
+    if color != 'NA':
+        df = highlight_category_row(df, color=color)
+    st.dataframe(df, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
