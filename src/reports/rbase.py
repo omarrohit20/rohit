@@ -12,7 +12,7 @@ dbnse = connection.Nsedata
 column_config_default={
     "scrip": "scrip",
     "PCT_day_change": st.column_config.NumberColumn(
-            "PCTDaych",
+            "Dch",
             format="%.2f"),
     "systemtime": "systemtime",
     "industry": "industry",
@@ -117,11 +117,32 @@ def highlight_category_row(df, color='NA'):
 def getdf(collection_name):
     collection = dbcl[collection_name]
     df = pd.DataFrame(list(collection.find()))
+    try:
+        df['PCT_day_change'] = pd.to_numeric(df['PCT_day_change'])
+        df['PCT_change'] = pd.to_numeric(df['PCT_change'], errors='coerce')
+        df['PCT_day_change_pre1'] = pd.to_numeric(df['PCT_day_change_pre1'], errors='coerce')
+        df['PCT_day_change_pre2'] = pd.to_numeric(df['PCT_day_change_pre2'], errors='coerce')
+
+        df['highTail'] = pd.to_numeric(df['highTail'], errors='coerce')
+        df['lowTail'] = pd.to_numeric(df['lowTail'], errors='coerce')
+        df['year5HighChange'] = pd.to_numeric(df['year5HighChange'], errors='coerce')
+        df['yearHighChange'] = pd.to_numeric(df['year5HighChange'], errors='coerce')
+        df['yearLowChange'] = pd.to_numeric(df['yearLowChange'], errors='coerce')
+        df['month3HighChange'] = pd.to_numeric(df['month3HighChange'], errors='coerce')
+        df['month3LowChange'] = pd.to_numeric(df['month3LowChange'], errors='coerce')
+        df['monthHighChange'] = pd.to_numeric(df['monthHighChange'], errors='coerce')
+        df['monthLowChange'] = pd.to_numeric(df['monthLowChange'], errors='coerce')
+        df['week2HighChange'] = pd.to_numeric(df['week2HighChange'], errors='coerce')
+        df['week2LowChange'] = pd.to_numeric(df['week2LowChange'], errors='coerce')
+        df['weekHighChange'] = pd.to_numeric(df['weekHighChange'], errors='coerce')
+        df['weekLowChange'] = pd.to_numeric(df['weekLowChange'], errors='coerce')
+        df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
+    except KeyError as e:
+        print(f"")
     return df
 
-def render(st, name, collection, height=300, color='NA', column_order=column_order_default, column_conf=column_config_default):
-    st.write("********"+ name.upper() + "********")
-    df = getdf(collection)
+def render(st, df, name, height=300, color='NA', column_order=column_order_default, column_conf=column_config_default):
+    st.write("********"+ name + "********")
     if color != 'NA':
         df = highlight_category_row(df, color=color)
     st.dataframe(df, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
