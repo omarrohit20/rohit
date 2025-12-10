@@ -148,16 +148,67 @@ with col4:
 col1, col2, col3, col4 = st.columns(4)
 with col1:
     df = rb.getdf('morning-volume-breakout-buy')
-    rb.render(st, df, 'LastDayDownTodayUpGT1(Pre1or2GT2)', color='G', height=150)
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['PCT_day_change'] > -4) &
+            (df['PCT_day_change'] < -2.5) &
+            (df['filter5'].str.contains("PRE1or2GT2")) &
+            (df['mlData'].str.contains("#LT2")) &
+            (df['lowTail'] < 1)
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'LastDayDownTodayUpGT1(Pre1or2GT2)', color='G', height=150)
 with col2:
     df = rb.getdf('morning-volume-breakout-buy')
-    rb.render(st, df, 'LastDayMarketLT-1 : todayUpGT0.5', color='G', height=150)
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['year5HighChange'] < 0) &
+            (df['lowTail'] < 1.5) &
+            (df['PCT_day_change'] < -1.5) &
+            (df['PCT_change'] < -1.5) &
+            (df['month3HighChange'] < -10) &
+            (df['week2HighChange'] < 5) &
+            (df['week2LowChange'] > 0) &
+            (df['filter5'].str.contains("AnyLT-1")) &
+            (df['month3LowChange'] > 0)
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'LastDayMarketLT-1 : todayUpGT0.5', color='G', height=150)
 with col3:
     df = rb.getdf('morning-volume-breakout-sell')
-    rb.render(st, df, 'LastDayUpTodayDown(Pre1or2LT-2)', color='R', height=150)
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['PCT_day_change'] > 2.5) &
+            (df['PCT_day_change'] < 4) &
+            (df['filter5'].str.contains("PRE1or2GT0")) &
+            (df['mlData'].str.contains("#LT2")) &
+            (df['highTail'] < 1)
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'LastDayUpTodayDown(Pre1or2LT-2)', color='R', height=150)
 with col4:
     df = rb.getdf('morning-volume-breakout-sell')
-    rb.render(st, df, 'LastDayMarketGT1 : todayDownLT-0.5', color='R', height=150)
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['highTail'] < 1.5) &
+            (df['PCT_day_change'] > 1.5) &
+            (df['PCT_change'] > 1.5) &
+            (df['month3LowChange'] > 10) &
+            (df['week2HighChange'] < 0) &
+            (df['week2LowChange'] > -5) &
+            (df['filter5'].str.contains("AnyGT1")) &
+            (df['month3HighChange'] < 0)
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'LastDayMarketGT1 : todayDownLT-0.5', color='R', height=150)
 
 
 
