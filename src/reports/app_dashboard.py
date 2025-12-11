@@ -99,15 +99,17 @@ with col2:
     filtered_df = df
     try:
         filtered_df = df[
+            ((df['weekLowChange'] > -0.3) | (df['weekLowChange'] < -3)) &
             (df['week2LowChange'] < 5) &
             (df['week2HighChange'] < -2) &
             (df['PCT_day_change'] > -3.5) &
             (df['PCT_day_change'] < -1.5) &
-            (df['PCT_day_change'] > -4) &
-            (df['PCT_day_change'] < -1) &
+            (df['PCT_change'] > -4) &
+            (df['PCT_change'] < -1) &
             (df['month3HighChange'] > -15) &
-            (df['filter5'].str.contains("PRE1or2LT-1")) &
-            (df['highTail'] < 1)
+            (df['PCT_day_change_pre1'] > -1) &
+            (df['highTail'] < 1) &
+            (~df['systemtime'].str.contains("10:"))
         ]
     except KeyError as e:
         print("")
@@ -130,6 +132,7 @@ with col4:
     filtered_df = df
     try:
         filtered_df = df[
+            ((df['weekHighChange'] < 0) | (df['weekHighChange'] > 3)) &
             (df['week2LowChange'] > 2) &
             (df['week2HighChange'] > -5) &
             (df['PCT_day_change'] > 0.75) &
@@ -138,7 +141,8 @@ with col4:
             (df['PCT_day_change'] < 4.5) &
             (df['month3LowChange'] < 10) &
             (df['filter5'].str.contains("PRE1or2GT1")) &
-            (df['lowTail'] < 1)
+            (df['lowTail'] < 1) &
+            (~df['systemtime'].str.contains("10:"))
             ]
     except KeyError as e:
         print("")
@@ -151,11 +155,9 @@ with col1:
     filtered_df = df
     try:
         filtered_df = df[
-            (df['PCT_day_change'] > -4) &
-            (df['PCT_day_change'] < -2.5) &
-            (df['filter5'].str.contains("PRE1or2GT2")) &
-            (df['mlData'].str.contains("#LT2")) &
-            (df['lowTail'] < 1)
+            (df['PCT_day_change'] < -1) &
+            (df['mlData'].str.contains("0@@C")) &
+            (~df['systemtime'].str.contains("10:"))
             ]
     except KeyError as e:
         print("")
@@ -183,11 +185,9 @@ with col3:
     filtered_df = df
     try:
         filtered_df = df[
-            (df['PCT_day_change'] > 2.5) &
-            (df['PCT_day_change'] < 4) &
-            (df['filter5'].str.contains("PRE1or2GT0")) &
-            (df['mlData'].str.contains("#LT2")) &
-            (df['highTail'] < 1)
+            (df['PCT_day_change'] > 1) &
+            (df['mlData'].str.contains("0@@C")) &
+            (~df['systemtime'].str.contains("10:"))
             ]
     except KeyError as e:
         print("")
