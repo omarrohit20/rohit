@@ -211,6 +211,36 @@ with col4:
     rb.render(st, filtered_df, 'LastDayMarketGT1 : todayDownLT-0.5', color='R', height=150)
 
 
+col1, col2 = st.columns(2)
+with col1:
+    df = rb.getdf('morning-volume-breakout-buy')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['PCT_day_change'] < -3.5) &
+            (df['PCT_change'] < -3.5) &
+            (df['week2LowChange'] < 0) &
+            (df['yearHighChange'] < 0) &
+            (~df['systemtime'].str.contains("09:20"))
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'LastDayDownTodayUp:buyAfterSettledA10', color='LG', height=150)
+with col2:
+    df = rb.getdf('morning-volume-breakout-sell')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['PCT_day_change'] > 3.5) &
+            (df['PCT_change'] > 3.5) &
+            (df['week2HighChange'] > 0) &
+            (df['yearLowChange'] > 0) &
+            (~df['systemtime'].str.contains("09:20"))
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'LastDayUpTodayDown:sellAfterSettledA10', color='LG', height=150)
+
 
 
 
