@@ -22,6 +22,50 @@ with col2:
     df = rb.getdf('morning-volume-breakout-sell')
     rb.render(st, df, 'morning-volume-breakout-sell', color='R')
 
+col1, col2, col3, col4 = st.columns(4)
+with col1:
+    df = rb.getdf('morning-volume-breakout-buy')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            df['mlData'].str.contains("Z&&&")
+        ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'Consolidation', color='G')
+with col2:
+    df = rb.getdf('morning-volume-breakout-buy')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            df['mlData'].str.contains("#UpStairs") |
+            df['mlData'].str.contains("UpPostLunchConsolidation")
+        ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'PreUpstairs', color='G')
+with col3:
+    df = rb.getdf('morning-volume-breakout-sell')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            df['mlData'].str.contains("Z&&&")
+        ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'Consolidation', color='R')
+with col4:
+    df = rb.getdf('morning-volume-breakout-sell')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            df['mlData'].str.contains("#DownStairs") |
+            df['mlData'].str.contains("DownPostLunchConsolidation")
+        ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'PreDownstairs', color='R')
+
 
 col1, col2, col3, col4 = st.columns(4)
 with col1:
