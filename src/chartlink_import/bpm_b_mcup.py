@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
         if (sb.nw >= time_10_00 and sb.nw <= time_11_00):
             # ( {33489} ( ( {cash} ( [=1] 10 minute volume > greatest(  1 day ago volume / 22  ) and [=1] 5 minute close < [=-1] 5 minute high and [=2] 15 minute high < [=1] 15 minute high and 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" < 1 and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) > 1.1 and ( ( ( [-1] 5 minute close - [=1] 10 minute low ) * 100 ) / 1 day ago close ) > 0.4 and ( ( ( 1 day ago close - 1 day ago high ) * 100 ) / 1 day ago close ) < -1 and ( ( ( 2 days ago close - 2 days ago open ) * 100 ) / 1 day ago close ) < 2 and ( ( ( 2 days ago high - 2 days ago open ) * 100 ) / 1 day ago close ) < 2 ) ) ) )
-            process_url_volBreakout('https://chartink.com/screener/buy-check-morning-down-breakup-02','buy-check-morning-down-breakup-02', time_10_00, time_11_00)
+            process_url_volBreakout('https://chartink.com/screener/buy-check-morning-down-breakup-02','buy-check-morning-down-breakup-02', time_10_10, time_11_00)
 
         # TODO:Remove till 10:15 from dashboard
         if (sb.nw >= time_10_00 and sb.nw <= time_11_00):
