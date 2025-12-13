@@ -141,7 +141,7 @@ def getdf(collection_name):
         print(f"")
     return df
 
-def render(st, df, name, height=300, color='NA', column_order=column_order_default, column_conf=column_config_default):
+def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default):
     st.write("********"+ name + "********")
     if color != 'NA':
         df = highlight_category_row(df, color=color)
