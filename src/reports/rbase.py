@@ -141,6 +141,36 @@ def getdf(collection_name):
         print(f"")
     return df
 
+def getintersectdf(collection_name1, collection_name2):
+    collection1 = dbcl[collection_name1]
+    collection2 = dbcl[collection_name2]
+    df1 = pd.DataFrame(list(collection1.find()))
+    df2 = pd.DataFrame(list(collection2.find()))
+    df = pd.merge(df1, df2, on=['scrip'], how='inner')
+    try:
+        df['PCT_day_change'] = pd.to_numeric(df['PCT_day_change'])
+        df['PCT_change'] = pd.to_numeric(df['PCT_change'], errors='coerce')
+        df['PCT_day_change_pre1'] = pd.to_numeric(df['PCT_day_change_pre1'], errors='coerce')
+        df['PCT_day_change_pre2'] = pd.to_numeric(df['PCT_day_change_pre2'], errors='coerce')
+
+        df['highTail'] = pd.to_numeric(df['highTail'], errors='coerce')
+        df['lowTail'] = pd.to_numeric(df['lowTail'], errors='coerce')
+        df['year5HighChange'] = pd.to_numeric(df['year5HighChange'], errors='coerce')
+        df['yearHighChange'] = pd.to_numeric(df['year5HighChange'], errors='coerce')
+        df['yearLowChange'] = pd.to_numeric(df['yearLowChange'], errors='coerce')
+        df['month3HighChange'] = pd.to_numeric(df['month3HighChange'], errors='coerce')
+        df['month3LowChange'] = pd.to_numeric(df['month3LowChange'], errors='coerce')
+        df['monthHighChange'] = pd.to_numeric(df['monthHighChange'], errors='coerce')
+        df['monthLowChange'] = pd.to_numeric(df['monthLowChange'], errors='coerce')
+        df['week2HighChange'] = pd.to_numeric(df['week2HighChange'], errors='coerce')
+        df['week2LowChange'] = pd.to_numeric(df['week2LowChange'], errors='coerce')
+        df['weekHighChange'] = pd.to_numeric(df['weekHighChange'], errors='coerce')
+        df['weekLowChange'] = pd.to_numeric(df['weekLowChange'], errors='coerce')
+        df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
+    except KeyError as e:
+        print(f"")
+    return df
+
 def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default):
     st.write("********"+ name + "********")
     if color != 'NA':
