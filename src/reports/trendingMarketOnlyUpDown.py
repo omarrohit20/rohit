@@ -85,6 +85,56 @@ with col4:
         print("")
     rb.render(st, filtered_df, 'Supertrend Morning Sell', color='LG')
 
+col1, col2, col3, col4 = st.columns(4)
+with col1:
+    df = rb.getintersectdf('buy_all_processor', 'crossed-day-high')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['PCT_day_change'] >= -0.5) &
+            (df['PCT_day_change'] <= 1) &
+            (df['PCT_change'] < 1) &
+            (df['week2HighChange'] > 2)
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'Buy All Processor + Crossed Day High + week2highGT2', color='G')
+with col2:
+    df = rb.getdf('crossed-day-high')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['PCT_day_change'] > 0.3) &
+            (df['PCT_day_change'] < 2) &
+            (df['PCT_change'] < 1)
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'Crossed Day Highs - Last day market down', color='LG')
+with col3:
+    df = rb.getintersectdf('sell_all_processor', 'crossed-day-low')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['week2LowChange'] < -2)
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'Sell All Processor + Crossed Day Low + week2LowChangeLT-2', color='R')
+with col4:
+    df = rb.getdf('crossed-day-low')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['PCT_day_change'] < -0.3) &
+            (df['PCT_day_change'] > -2) &
+            (df['PCT_change'] > -1)
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'Crossed Day Lows - Last day market up', color='LG')
+
+
 
 
 
