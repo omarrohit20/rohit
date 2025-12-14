@@ -155,7 +155,6 @@ with col3:
     except KeyError as e:
         print("")
     rb.render(st, filtered_df, 'week2LowLT0-1 : #LT2', color='R')
-
 with col4:
     df = rb.getdf('morning-volume-breakout-sell')
     filtered_df = df
@@ -179,7 +178,6 @@ with col4:
     except KeyError as e:
         print("")
     rb.render(st, filtered_df, 'week2LowLT0-1 : Avoid-LT(-2)-And-Top5', color='R')
-
 
 col1, col2, col3, col4 = st.columns(4)
 with col1:
@@ -265,6 +263,70 @@ with col4:
     except KeyError as e:
         print("")
     rb.render(st, filtered_df, 'week2LowLT0', color='LG')
+
+col1, col2, col3, col4 = st.columns(4)
+with col1:
+    df = rb.getdf('morning-volume-breakout-buy')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['PCT_day_change'] > -3) &
+            (df['PCT_day_change'] < 2) &
+            (df['year5HighChange'] < -25) &
+            (df['week2HighChange'] > -2) &
+            (df['yearLowChange'] > 15) &
+            (df['month3HighChange'] > -15) &
+            (df['PCT_change'] > 0)
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'year5HighChangeLT-30 : week2High', color='G')
+with col2:
+    df = rb.getdf('morning-volume-breakout-buy')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['PCT_day_change'] < 2.5) &
+            (df['PCT_day_change'] > -3) &
+            (df['PCT_change'] > 0) &
+            (df['month3HighChange'] > -20) &
+            (df['year5HighChange'] < -25) &
+            (df['yearHighChange'] < -20)
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'year5HighChangeLT-30 + week2High', color='LG')
+with col3:
+    df = rb.getdf('morning-volume-breakout-sell')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['PCT_day_change'] < -1) &
+            (df['PCT_day_change'] > -3) &
+            (df['yearLowChange'] > 25) &
+            (df['week2LowChange'] < 2) &
+            (df['yearHighChange'] < -15) &
+            (df['month3LowChange'] < 15) &
+            (df['PCT_change'] < 0)
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'year5LowChangeGT30 : week2Low', color='LG')
+with col4:
+    df = rb.getdf('morning-volume-breakout-sell')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['PCT_day_change'] < -1) &
+            (df['PCT_day_change'] > -2.5) &
+            (df['PCT_change'] < 0) &
+            (df['month3LowChange'] < 20) &
+            (df['yearLowChange'] > 25) &
+            (df['yearLowChange'] > 20)
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'year5LowChangeGT30 + week2Low', color='LG')
 
 
 
