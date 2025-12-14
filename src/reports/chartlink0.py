@@ -12,7 +12,7 @@ st.set_page_config(layout="wide",
                    initial_sidebar_state="expanded",)
 
 # main title
-st.title('chartink-0')
+st.title('chartlink-0')
 
 col1, col2 = st.columns(2)
 with col1:
