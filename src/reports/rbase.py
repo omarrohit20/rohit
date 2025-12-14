@@ -137,6 +137,7 @@ def getdf(collection_name):
         df['weekHighChange'] = pd.to_numeric(df['weekHighChange'], errors='coerce')
         df['weekLowChange'] = pd.to_numeric(df['weekLowChange'], errors='coerce')
         df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
+        df['systemtime'] = pd.to_datetime(df['systemtime']).dt.time.astype(str)
     except KeyError as e:
         print(f"")
     return df
