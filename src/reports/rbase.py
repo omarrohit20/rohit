@@ -102,6 +102,35 @@ column_order_default=["scrip",
     "processor"
 ]
 
+column_order_p=["scrip",
+    "PCT_day_change",
+    "systemtime",
+    "processor",
+    "mlData",
+    "industry",
+    "PCT_change",
+    "PCT_day_change_pre1",
+    "PCT_day_change_pre2",
+    "highTail",
+    "lowTail",
+    "year5HighChange",
+    "yearHighChange",
+    "yearLowChange",
+    "month3HighChange",
+    "month3LowChange",
+    "monthHighChange",
+    "monthLowChange",
+    "week2HighChange",
+    "week2LowChange",
+    "weekHighChange",
+    "weekLowChange",
+    "forecast_day_PCT10_change",
+    "filter5",
+    "filter",
+    "filter3"
+]
+
+
 def highlight_category_row(df, color='NA'):
     """Highlights the entire row based on the 'Category' column value."""
     styled_df = ''
@@ -147,8 +176,15 @@ def getintersectdf(collection_name1, collection_name2):
     collection2 = dbcl[collection_name2]
     df1 = pd.DataFrame(list(collection1.find()))
     df2 = pd.DataFrame(list(collection2.find()))
-    df = pd.merge(df1, df2, on=['scrip'], how='inner')
+    expected_columns = list(set(df1.columns))
+    df = pd.DataFrame(columns=expected_columns)
     try:
+        df = df1.merge(
+            df2,
+            on='scrip',
+            how='inner',
+            suffixes=('', '_merged')
+        )
         df['PCT_day_change'] = pd.to_numeric(df['PCT_day_change'])
         df['PCT_change'] = pd.to_numeric(df['PCT_change'], errors='coerce')
         df['PCT_day_change_pre1'] = pd.to_numeric(df['PCT_day_change_pre1'], errors='coerce')
@@ -168,8 +204,10 @@ def getintersectdf(collection_name1, collection_name2):
         df['weekHighChange'] = pd.to_numeric(df['weekHighChange'], errors='coerce')
         df['weekLowChange'] = pd.to_numeric(df['weekLowChange'], errors='coerce')
         df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
+        df['systemtime'] = pd.to_datetime(df['systemtime']).dt.time.astype(str)
     except KeyError as e:
         print(f"")
+
     return df
 
 def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default):
