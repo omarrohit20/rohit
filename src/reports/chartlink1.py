@@ -12,7 +12,7 @@ st.set_page_config(layout="wide",
                    initial_sidebar_state="expanded",)
 
 # main title
-st.title('chartlink-1')
+st.title('9:30 Last day trend : No Reversal: chartlink-1')
 
 
 col1, col2, col3, col4 = st.columns(4)
@@ -33,7 +33,7 @@ with col1:
             ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'DOJI Breakout Buy', color='G')
+    rb.render(st, filtered_df, 'DOJI Breakout Buy', color='LG')
 with col2:
     df = rb.getdf('morning-volume-breakout-buy')
     filtered_df = df
@@ -47,7 +47,7 @@ with col2:
         ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Buy', color='G')
+    rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Buy', color='LG')
 with col3:
     df = rb.getdf('morning-volume-breakout-sell')
     filtered_df = df
@@ -66,7 +66,7 @@ with col3:
             ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'DOJI Breakout Sell', color='R')
+    rb.render(st, filtered_df, 'DOJI Breakout Sell', color='LG')
 with col4:
     df = rb.getdf('morning-volume-breakout-sell')
     filtered_df = df
@@ -80,7 +80,7 @@ with col4:
         ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Sell', color='R')
+    rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Sell', color='LG')
 
 col1, col2, col3, col4 = st.columns(4)
 with col1:
@@ -559,6 +559,7 @@ with col1:
     filtered_df = df
     try:
         filtered_df = df[
+            ((df['PCT_day_change'] < 2) | (df['week2LowChange'] < 7)) &
             (df['PCT_day_change_pre1'] > -1) &
             (df['PCT_day_change_pre2'] > -1) &
             (df['PCT_day_change_pre1'] < 2)
@@ -571,6 +572,7 @@ with col2:
     filtered_df = df
     try:
         filtered_df = df[
+            ((df['PCT_day_change'] < 2) | (df['week2LowChange'] < 7)) &
             (df['PCT_day_change_pre1'] > -1) &
             (df['PCT_day_change_pre2'] > -1) &
             (df['PCT_day_change_pre1'] < 2)
@@ -583,6 +585,10 @@ with col3:
     filtered_df = df
     try:
         filtered_df = df[
+            ((df['PCT_day_change'] > -2) | (df['week2HighChange'] > -7)) &
+            (df['PCT_day_change_pre1'] < 1) &
+            (df['PCT_day_change_pre2'] < 1) &
+            (df['PCT_day_change_pre1'] > -2) &
             df['month3LowChange'] > -0.5
             ]
     except KeyError as e:
@@ -593,6 +599,10 @@ with col4:
     filtered_df = df
     try:
         filtered_df = df[
+            ((df['PCT_day_change'] > -2) | (df['week2HighChange'] > -7)) &
+            (df['PCT_day_change_pre1'] < 1) &
+            (df['PCT_day_change_pre2'] < 1) &
+            (df['PCT_day_change_pre1'] > -2) &
             df['month3LowChange'] > -0.5
             ]
     except KeyError as e:

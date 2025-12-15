@@ -12,15 +12,45 @@ st.set_page_config(layout="wide",
                    initial_sidebar_state="expanded",)
 
 # main title
-st.title('chartlink-0')
+st.title('9:20 Morning : chartlink-0')
 
-col1, col2 = st.columns(2)
+col1, col2, col3, col4 = st.columns(4)
 with col1:
     df = rb.getdf('morning-volume-breakout-buy')
     rb.render(st, df, 'morning-volume-breakout-buy', color='G', height=300)
 with col2:
+    df = rb.getdf('morning-volume-breakout-buy')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['PCT_day_change'] > -1) &
+            (df['PCT_day_change'] < 1.5) &
+            (df['PCT_day_change_pre1'] < 2) &
+            #((df['PCT_day_change_pre1'] > 0) | (df['PCT_day_change_pre2'] > 0)) &
+            (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+            (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'morning-volume-breakout-buy', color='G', height=300)
+with col3:
     df = rb.getdf('morning-volume-breakout-sell')
     rb.render(st, df, 'morning-volume-breakout-sell', color='R', height=300)
+with col4:
+    df = rb.getdf('morning-volume-breakout-sell')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['PCT_day_change'] > -1.5) &
+            (df['PCT_day_change'] < 1) &
+            (df['PCT_day_change_pre1'] > -2) &
+            #((df['PCT_day_change_pre1'] < 0) | (df['PCT_day_change_pre2'] < 0)) &
+            (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+            (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'morning-volume-breakout-sell', color='R', height=300)
 
 
 col1, col2, col3, col4 = st.columns(4)

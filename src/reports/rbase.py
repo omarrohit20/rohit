@@ -14,7 +14,7 @@ column_config_default={
     "PCT_day_change": st.column_config.NumberColumn(
             "Dch",
             format="%.2f"),
-    "systemtime": "systemtime",
+    "systemtime": "systime",
     "industry": "industry",
     "mlData": "mlData",
     "PCT_change": st.column_config.NumberColumn(
