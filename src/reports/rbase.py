@@ -130,7 +130,8 @@ column_order_p=["scrip",
     "filter3"
 ]
 
-chartink1=False
+chartlink1=False
+chartlink0=False
 
 def highlight_category_row(df, color='NA'):
     """Highlights the entire row based on the 'Category' column value."""
@@ -180,6 +181,7 @@ def getdf(collection_name):
         df['weekLowChange'] = pd.to_numeric(df['weekLowChange'], errors='coerce')
         df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
         df['systemtime'] = pd.to_datetime(df['systemtime']).dt.time.astype(str)
+        df['mlData'] = df['mlData'].fillna('').astype(str)
     except KeyError as e:
         print(f"")
     return df
@@ -218,6 +220,7 @@ def getintersectdf(collection_name1, collection_name2):
         df['weekLowChange'] = pd.to_numeric(df['weekLowChange'], errors='coerce')
         df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
         df['systemtime'] = pd.to_datetime(df['systemtime']).dt.time.astype(str)
+        df['mlData'] = df['mlData'].fillna('').astype(str)
     except KeyError as e:
         print(f"")
 
@@ -228,7 +231,9 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
     # Main Code Execution
     if not df.empty:
         df_styled = highlight_category_row(df, color=color)
-        if(chartink1) and color =='LG':
+        if(chartlink1) and color =='LG':
+            df_styled = df_styled.applymap(highlight_category_column_super, subset=['mlData'])
+        elif ((chartlink0) and (color == 'G' or color == 'R')):
             df_styled = df_styled.applymap(highlight_category_column_super, subset=['mlData'])
         else:
             df_styled = df_styled.applymap(highlight_category_column, subset=['mlData'])

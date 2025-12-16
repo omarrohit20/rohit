@@ -2,6 +2,7 @@
 from streamlit_autorefresh import st_autorefresh
 import streamlit as st
 import rbase as rb
+import pandas as pd
 
 # Run the autorefresh approximately every 30000 milliseconds (30 seconds)
 st_autorefresh(interval=30000, key="data_refresher")
@@ -14,7 +15,7 @@ st.set_page_config(layout="wide",
 # main title
 st.title('9:30 Last day trend : No Reversal: chartlink-1')
 
-rb.chartink1 = True
+rb.chartlink1 = True
 
 col1, col2, col3, col4 = st.columns(4)
 with col1:
@@ -559,6 +560,8 @@ with col4:
 col1, col2, col3, col4 = st.columns(4)
 with col1:
     df = rb.getintersectdf('morning-volume-breakout-buy', 'breakoutMH')
+    expected_columns = list(set(df.columns))
+    empty_df = pd.DataFrame(columns=expected_columns)
     filtered_df = df
     try:
         filtered_df = df[
@@ -569,9 +572,14 @@ with col1:
             ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutMH', color='LG')
+    if len(filtered_df) <= 3:
+        rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutMH', color='LG')
+    else:
+        rb.render(st, empty_df, 'morning-volume-breakout-buy + breakoutMH', color='LG')
 with col2:
     df = rb.getintersectdf('morning-volume-breakout-buy', 'breakoutM2H')
+    expected_columns = list(set(df.columns))
+    empty_df = pd.DataFrame(columns=expected_columns)
     filtered_df = df
     try:
         filtered_df = df[
@@ -582,9 +590,14 @@ with col2:
             ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutM2H', color='LG')
+    if len(filtered_df) <= 3:
+        rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutM2H', color='LG')
+    else:
+        rb.render(st, empty_df, 'morning-volume-breakout-buy + breakoutM2H', color='LG')
 with col3:
     df = rb.getintersectdf('morning-volume-breakout-sell', 'breakoutML')
+    expected_columns = list(set(df.columns))
+    empty_df = pd.DataFrame(columns=expected_columns)
     filtered_df = df
     try:
         filtered_df = df[
@@ -596,9 +609,14 @@ with col3:
             ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'morning-volume-breakout-sell + breakoutML', color='LG')
+    if len(filtered_df) <= 3:
+        rb.render(st, filtered_df, 'morning-volume-breakout-sell + breakoutML', color='LG')
+    else:
+        rb.render(st, empty_df, 'morning-volume-breakout-sell + breakoutML', color='LG')
 with col4:
     df = rb.getintersectdf('morning-volume-breakout-sell', 'breakoutM2L')
+    expected_columns = list(set(df.columns))
+    empty_df = pd.DataFrame(columns=expected_columns)
     filtered_df = df
     try:
         filtered_df = df[
@@ -610,7 +628,10 @@ with col4:
             ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'morning-volume-breakout-sell + breakoutM2L', color='LG')
+    if len(filtered_df) <= 3:
+        rb.render(st, filtered_df, 'morning-volume-breakout-sell + breakoutM2L', color='LG')
+    else:
+        rb.render(st, empty_df, 'morning-volume-breakout-sell + breakoutM2L', color='LG')
 
 
 

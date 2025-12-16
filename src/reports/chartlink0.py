@@ -15,6 +15,8 @@ st.set_page_config(layout="wide",
 # main title
 st.title('9:20 Morning : chartlink-0')
 
+rb.chartlink0 = True
+
 col1, col2, col3, col4 = st.columns(4)
 with col1:
     df = rb.getdf('morning-volume-breakout-buy')
