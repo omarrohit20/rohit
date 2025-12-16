@@ -130,6 +130,7 @@ column_order_p=["scrip",
     "filter3"
 ]
 
+chartink1=False
 
 def highlight_category_row(df, color='NA'):
     """Highlights the entire row based on the 'Category' column value."""
@@ -142,6 +143,18 @@ def highlight_category_row(df, color='NA'):
         styled_df = df.style.set_properties(**{'background-color': '#A1A1A1', 'color': 'black'})
 
     return styled_df
+
+def highlight_category_column(value):
+    """Highlights the entire row based on the 'Category' column value."""
+    if "0@@CROSSED2" in value:
+        return 'background-color: #CBC3E3'
+    if "0@@SUPER" in value:
+        return 'background-color: #CBC3E3'
+
+def highlight_category_column_super(value):
+    """Highlights the entire row based on the 'Category' column value."""
+    if "0@@SUPER" in value:
+        return 'background-color: #CBC3E3'
 
 def getdf(collection_name):
     collection = dbcl[collection_name]
@@ -212,6 +225,14 @@ def getintersectdf(collection_name1, collection_name2):
 
 def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default):
     st.write("********"+ name + "********")
-    if color != 'NA':
-        df = highlight_category_row(df, color=color)
-    st.dataframe(df, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+    # Main Code Execution
+    if not df.empty:
+        df_styled = highlight_category_row(df, color=color)
+        if(chartink1) and color =='LG':
+            df_styled = df_styled.applymap(highlight_category_column_super, subset=['mlData'])
+        else:
+            df_styled = df_styled.applymap(highlight_category_column, subset=['mlData'])
+        # Apply the second style *directly* to the Styler object
+        st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+    else:
+        st.dataframe(df, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)

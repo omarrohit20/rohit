@@ -2,6 +2,7 @@
 from streamlit_autorefresh import st_autorefresh
 import streamlit as st
 import rbase as rb
+import pandas as pd
 
 # Run the autorefresh approximately every 30000 milliseconds (30 seconds)
 st_autorefresh(interval=30000, key="data_refresher")
@@ -20,6 +21,8 @@ with col1:
     rb.render(st, df, 'morning-volume-breakout-buy', color='G', height=300)
 with col2:
     df = rb.getdf('morning-volume-breakout-buy')
+    expected_columns = list(set(df.columns))
+    empty_df = pd.DataFrame(columns=expected_columns)
     filtered_df = df
     try:
         filtered_df = df[
@@ -32,12 +35,17 @@ with col2:
             ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'ABSLT1-CheckRecommendations', color='LG', height=300)
+    if len(filtered_df) < 5:
+        rb.render(st, filtered_df, 'ABSLT1-CheckRecommendations', color='LG', height=300)
+    else:
+        rb.render(st, empty_df, 'ABSLT1-CheckRecommendations', color='LG', height=300)
 with col3:
     df = rb.getdf('morning-volume-breakout-sell')
     rb.render(st, df, 'morning-volume-breakout-sell', color='R', height=300)
 with col4:
     df = rb.getdf('morning-volume-breakout-sell')
+    expected_columns = list(set(df.columns))
+    empty_df = pd.DataFrame(columns=expected_columns)
     filtered_df = df
     try:
         filtered_df = df[
@@ -50,7 +58,10 @@ with col4:
             ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'ABSLT1-CheckRecommendations', color='LG', height=300)
+    if len(filtered_df) < 5:
+        rb.render(st, filtered_df, 'ABSLT1-CheckRecommendations', color='LG', height=300)
+    else:
+        rb.render(st, empty_df, 'ABSLT1-CheckRecommendations', color='LG', height=300)
 
 
 col1, col2, col3, col4 = st.columns(4)
