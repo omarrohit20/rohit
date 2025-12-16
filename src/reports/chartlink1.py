@@ -139,18 +139,20 @@ with col3:
         filtered_df = df[
             (df['week2LowChange'] < 0) &
             (df['monthLowChange'] > -5) &
-            (df['PCT_day_change'] >= -1.5) &
-            (df['PCT_day_change'] <= -0.8) &
+            (df['PCT_day_change'] >= -2.5) &
+            (df['PCT_day_change'] <= 1) &
             (~df['filter5'].str.contains('BothLT-2', case=False, regex=True, na=False)) &
             (df['highTail'] < 1.5) &
             (df['forecast_day_PCT10_change'] < 1) &
             (df['week2HighChange'] < -2) &
             (df['highTail'] < 1) &
             (df['mlData'].str.contains('LT2', case=False, regex=True, na=False)) &
-            (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) &
-            (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
-            (df['weekHighChange'] < -1) &
-            (df['PCT_day_change_pre1'] > -2)
+            (df['weekLowChange'] > 1) &
+            (df['PCT_day_change_pre1'] <= 1.5) &
+            (df['PCT_day_change_pre1'] >= -2.3) &
+            (df['PCT_day_change_pre2'] <= 1.5) &
+            (df['PCT_day_change_pre2'] >= -3) &
+            (df['weekLowChange'] < 0)
             ]
     except KeyError as e:
         print("")

@@ -32,7 +32,7 @@ with col2:
             ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'morning-volume-breakout-buy', color='G', height=300)
+    rb.render(st, filtered_df, 'ABSLT1-CheckRecommendations', color='LG', height=300)
 with col3:
     df = rb.getdf('morning-volume-breakout-sell')
     rb.render(st, df, 'morning-volume-breakout-sell', color='R', height=300)
@@ -50,7 +50,7 @@ with col4:
             ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'morning-volume-breakout-sell', color='R', height=300)
+    rb.render(st, filtered_df, 'ABSLT1-CheckRecommendations', color='LG', height=300)
 
 
 col1, col2, col3, col4 = st.columns(4)
@@ -59,6 +59,8 @@ with col1:
     filtered_df = df
     try:
         filtered_df = df[
+            (df['PCT_day_change'] < 3) &
+            (df['PCT_change'] < 3) &
             df['mlData'].str.contains("#UpStairs") |
             df['mlData'].str.contains("UpPostLunchConsolidation")
             ]
@@ -74,12 +76,14 @@ with col2:
         ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'Consolidation', color='LG')
+    rb.render(st, filtered_df, 'Consolidation-CheckRecommendations', color='LG')
 with col3:
     df = rb.getdf('morning-volume-breakout-sell')
     filtered_df = df
     try:
         filtered_df = df[
+            (df['PCT_day_change'] > -3) &
+            (df['PCT_change'] > -3) &
             df['mlData'].str.contains("#DownStairs") |
             df['mlData'].str.contains("DownPostLunchConsolidation")
             ]
@@ -95,7 +99,7 @@ with col4:
         ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'Consolidation', color='LG')
+    rb.render(st, filtered_df, 'Consolidation-CheckRecommendations', color='LG')
 
 
 
