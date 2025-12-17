@@ -2,6 +2,7 @@
 from streamlit_autorefresh import st_autorefresh
 import streamlit as st
 import rbase as rb
+import pandas as pd
 
 # Run the autorefresh approximately every 30000 milliseconds (30 seconds)
 st_autorefresh(interval=30000, key="data_refresher")
@@ -135,104 +136,107 @@ with col4:
         print("")
     rb.render(st, filtered_df, 'Crossed Day Lows - Last day market up', color='LG')
 
-# col1, col2, col3, col4 = st.columns(4)
-# with col1:
-#     df = rb.getintersectdf('buy_all_processor', 'crossed-day-high')
-#     filtered_df = df
-#     try:
-#         filtered_df = df[
-#             (df['PCT_day_change'] >= -0.5) &
-#             (df['PCT_day_change'] <= 1) &
-#             (df['PCT_change'] < 1) &
-#             (df['weekHighChange'] < -2) &
-#             (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
-#             (~df['systemtime'].str.contains('10:00:00', case=False, regex=True, na=False)) &
-#             (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False))
-#             ]
-#     except KeyError as e:
-#         print("")
-#     rb.render(st, filtered_df, 'Buy All Processor + Crossed Day High + weekHighChange LT-2', column_order=rb.column_order_p, color='G')
-# with col2:
-#     df = rb.getdf('crossed-day-high')
-#     filtered_df = df
-#     rb.render(st, filtered_df, 'Crossed Day Highs', color='LG')
-# with col3:
-#     df = rb.getintersectdf('sell_all_processor', 'crossed-day-low')
-#     filtered_df = df
-#     try:
-#         filtered_df = df[
-#             (df['weekLowChange'] > 2) &
-#             ((df['weekHighChange'] < -1) | (df['weekHighChange'] > 1))
-#             ]
-#     except KeyError as e:
-#         print("")
-#     rb.render(st, filtered_df, 'Sell All Processor + Crossed Day Low + weeklowchangeGT2', column_order=rb.column_order_p, color='R')
-# with col4:
-#     df = rb.getdf('crossed-day-low')
-#     filtered_df = df
-#     rb.render(st, filtered_df, 'Crossed Day Lows - Last day market up', color='LG')
-#
+col1, col2, col3, col4 = st.columns(4)
+with col1:
+    df = rb.getintersectdf('buy_all_processor', '09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (~df['processor'].str.contains('09_30:checkChartBuy/Sell', case=False, na=False))
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'Buy All Processor + Crossed 2 Day High', column_order=rb.column_order_p, color='G')
+with col2:
+    df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
+    filtered_df = df
+    rb.render(st, filtered_df, 'Crossed 2 Day Highs', color='LG')
+with col3:
+    df = rb.getintersectdf('sell_all_processor', '09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (~df['processor'].str.contains('09_30:checkChartSell/Buy', case=False, na=False))
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'Sell All Processor + Crossed 2 Day Low', column_order=rb.column_order_p, color='R')
+with col4:
+    df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
+    filtered_df = df
+    rb.render(st, filtered_df, 'Crossed 2 Day Lows', color='LG')
 
-# col1, col2, col3, col4 = st.columns(4)
-# with col1:
-#     df = rb.getdf('buy_all_processor')
-#     filtered_df = df
-#     try:
-#         filtered_df = df[
-#             (~df['processor'].str.contains('09_30:checkChartSell', case=False, na=False)) &
-#             (df['mlData'].str.contains('Stairs', case=False, na=False)) &
-#             (df['mlData'].str.contains('ZPre1', case=False, na=False)) &
-#             (~df['mlData'].str.contains('DownStairs', case=False, na=False)) &
-#             (~df['systemtime'].str.contains('09:', case=False, na=False)) &
-#             (~df['systemtime'].str.contains('10:00:', case=False, na=False))
-#             ]
-#     except KeyError as e:
-#         print("")
-#     rb.render(st, filtered_df, 'Buy All Processor + ZPre1_Upstairs', column_order=rb.column_order_default, color='G')
-# with col2:
-#     df = rb.getdf('crossed-day-high')
-#     filtered_df = df
-#     try:
-#         filtered_df = df[
-#             (df['PCT_day_change'] > 0.3) &
-#             (df['PCT_day_change'] < 2) &
-#             (df['PCT_change'] < 1)
-#             ]
-#     except KeyError as e:
-#         print("")
-#     rb.render(st, filtered_df, 'Crossed Day Highs - Last day market down', color='LG')
-# with col3:
-#     df = rb.getdf('sell_all_processor')
-#     obj_cols = df.select_dtypes(include=['object']).columns
-#     df[obj_cols] = df[obj_cols].astype(str)
-#     filtered_df = df
-#     print("Rohit")
-#     for col, dtype in df.dtypes.items():
-#         print(f"{col}: {dtype}")
-#     try:
-#         filtered_df = df[
-#             (~df['processor'].str.contains('09_30:checkChartBuy', case=False, na=False)) &
-#             (df['intradaytech'].str.contains('stairs', case=False, na=False)) &
-#             (df['intradaytech'].str.contains('ZPre', case=False, na=False)) &
-#             (~df['intradaytech'].str.contains('UpStairs', case=False, na=False))
-#             (~df['systemtime'].str.contains('09:', case=False, na=False)) &
-#             (~df['systemtime'].str.contains('10:00:', case=False, na=False))
-#             ]
-#     except KeyError as e:
-#         print("")
-#     rb.render(st, filtered_df, 'Sell All Processor + ZPre1_Downstairs', column_order=rb.column_order_default, color='R')
-# with col4:
-#     df = rb.getdf('crossed-day-low')
-#     filtered_df = df
-#     try:
-#         filtered_df = df[
-#             (df['PCT_day_change'] < -0.3) &
-#             (df['PCT_day_change'] > -2) &
-#             (df['PCT_change'] > -1)
-#             ]
-#     except KeyError as e:
-#         print("")
-#     rb.render(st, filtered_df, 'Crossed Day Lows - Last day market up', color='LG')
+col1, col2 = st.columns(2)
+with col1:
+    df = rb.getintersectdf('buy_all_processor', 'buy-breakout')
+    expected_columns = list(set(df.columns))
+    empty_df = pd.DataFrame(columns=expected_columns)
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['processor'] != 'buy-breakout') &
+            (df['processor'] != 'supertrend-morning-buy') &
+            (df['processor'] != '09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)') &
+            (df['processor'] != 'buy-dayconsolidation-breakout-01')
+            ]
+    except KeyError as e:
+        print("")
+    if len(filtered_df) >= 2:
+        rb.render(st, filtered_df, 'Buy All Processor + Buy Breakout', column_order=rb.column_order_p, color='G')
+    else:
+        rb.render(st, empty_df, 'Buy All Processor + Buy Breakout', column_order=rb.column_order_p, color='G')
+with col2:
+    df = rb.getintersectdf('sell_all_processor', 'sell-breakout')
+    expected_columns = list(set(df.columns))
+    empty_df = pd.DataFrame(columns=expected_columns)
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['processor'] != 'sell-breakout') &
+            (df['processor'] != '09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)') &
+            (df['processor'] != 'supertrend-morning-sell') &
+            (df['processor'] != 'sell-dayconsolidation-breakout-01') &
+            (df['processor'] != '09_30:checkChartSell')
+            ]
+    except KeyError as e:
+        print("")
+    if len(filtered_df) >= 2:
+        rb.render(st, filtered_df, 'Sell All Processor + Sell Breakout', column_order=rb.column_order_p, color='R')
+    else:
+        rb.render(st, filtered_df, 'Sell All Processor + Sell Breakout', column_order=rb.column_order_p, color='R')
 
+
+
+col1, col2 = st.columns(2)
+with col1:
+    df = rb.getdf('buy_all_processor')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (~df['processor'].str.contains('09_30:checkChartSell', case=False, na=False)) &
+            (df['mlData'].str.contains('Stairs', case=False, na=False)) &
+            (df['mlData'].str.contains('ZPre1', case=False, na=False)) &
+            (~df['mlData'].str.contains('DownStairs', case=False, na=False)) &
+            (~df['systemtime'].str.contains('09:', case=False, na=False)) &
+            (~df['systemtime'].str.contains('10:00:', case=False, na=False))
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'Buy All Processor + ZPre1_Upstairs', column_order=rb.column_order_default, color='G')
+with col2:
+    df = rb.getdf('sell_all_processor')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (~df['processor'].str.contains('09_30:checkChartBuy', case=False, na=False)) &
+            (df['mlData'].str.contains('stairs', case=False, na=False)) &
+            (df['mlData'].str.contains('ZPre', case=False, na=False)) &
+            (~df['mlData'].str.contains('UpStairs', case=False, na=False)) &
+            (~df['systemtime'].str.contains('09:', case=False, na=False)) &
+            (~df['systemtime'].str.contains('10:00:', case=False, na=False))
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'Sell All Processor + ZPre1_Downstairs', column_order=rb.column_order_default, color='R')
 
 
