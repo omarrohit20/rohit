@@ -13,7 +13,7 @@ st.set_page_config(layout="wide",
                    initial_sidebar_state="expanded",)
 
 # main title
-st.title('9:30 Last day trend : No Reversal: chartlink-1')
+st.title('9:30 - 10:00 Last day trend : No Reversal: chartlink-1')
 
 rb.chartlink1 = True
 
@@ -301,36 +301,14 @@ with col2:
         print("")
     rb.render(st, filtered_df, 'year5HighChangeLT-30 + week2High', color='LG')
 with col3:
-    df = rb.getdf('morning-volume-breakout-sell')
-    filtered_df = df
-    try:
-        filtered_df = df[
-            (df['PCT_day_change'] < -1) &
-            (df['PCT_day_change'] > -3) &
-            (df['yearLowChange'] > 25) &
-            (df['week2LowChange'] < 2) &
-            (df['yearHighChange'] < -15) &
-            (df['month3LowChange'] < 15) &
-            (df['PCT_change'] < 0)
-            ]
-    except KeyError as e:
-        print("")
-    rb.render(st, filtered_df, 'year5LowChangeGT30 : week2Low', color='LG')
+    #df = rb.getdf('morning-volume-breakout-sell')
+    expected_columns = list(set(df.columns))
+    empty_df = pd.DataFrame(columns=expected_columns)
+    rb.render(st, empty_df, 'year5LowChangeGT30 : week2Low', color='LG')
 with col4:
-    df = rb.getdf('morning-volume-breakout-sell')
-    filtered_df = df
-    try:
-        filtered_df = df[
-            (df['PCT_day_change'] < -1) &
-            (df['PCT_day_change'] > -2.5) &
-            (df['PCT_change'] < 0) &
-            (df['month3LowChange'] < 20) &
-            (df['yearLowChange'] > 25) &
-            (df['yearLowChange'] > 20)
-            ]
-    except KeyError as e:
-        print("")
-    rb.render(st, filtered_df, 'year5LowChangeGT30 + week2Low', color='LG')
+    expected_columns = list(set(df.columns))
+    empty_df = pd.DataFrame(columns=expected_columns)
+    rb.render(st, empty_df, 'year5LowChangeGT30 + week2Low', color='LG')
 
 col1, col2, col3, col4 = st.columns(4)
 with col1:
@@ -378,6 +356,8 @@ with col3:
     try:
         filtered_df = df[
             (df['PCT_day_change'] < -1.5) &
+            (df['PCT_day_change'] > -4.5) &
+            (df['PCT_day_change_pre1'] > 0.5) &
             (df['monthHighChange'] > -5) &
             (df['forecast_day_PCT10_change'] < 4) &
             (df['PCT_change'] < -2) &

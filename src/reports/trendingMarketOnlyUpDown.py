@@ -13,7 +13,7 @@ st.set_page_config(layout="wide",
                    initial_sidebar_state="expanded",)
 
 # main title
-st.title('10 AM last 15-20 Minute trend: TrendingMarketOnlyUpDown')
+st.title('10:00 -11:15 AM last 15-20 Minute trend: TrendingMarketOnlyUpDown')
 
 col1, col2, col3, col4 = st.columns(4)
 with col1:
