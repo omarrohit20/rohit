@@ -308,7 +308,7 @@ with col4:
     rb.render(st, filtered_df, 'LastDayMarketGT1 : todayDownLT-0.5(+)', color='R', height=150)
 
 
-col1, col2, col3, col4 = st.columns(4)
+col1, col2 = st.columns(2)
 with col1:
     df = rb.getdf('morning-volume-breakout-buy')
     filtered_df = df
@@ -321,18 +321,6 @@ with col1:
         print("")
     rb.render(st, filtered_df, 'SuperTrend-ConsolidationBuy', color='G')
 with col2:
-    df = rb.getdf('morning-volume-breakout-buy')
-    filtered_df = df
-    try:
-        filtered_df = df[
-            (df['PCT_day_change'] < -1) &
-            (df['mlData'].str.contains("0@@C")) &
-            (~df['systemtime'].str.contains("10:"))
-            ]
-    except KeyError as e:
-        print("")
-    rb.render(st, filtered_df, 'CrossedDay-LastDayDownTodayUp', color='G')
-with col3:
     df = rb.getdf('morning-volume-breakout-sell')
     filtered_df = df
     try:
@@ -343,18 +331,6 @@ with col3:
     except KeyError as e:
         print("")
     rb.render(st, filtered_df, 'SuperTrend-ConsolidationSell', color='R')
-with col4:
-    df = rb.getdf('morning-volume-breakout-sell')
-    filtered_df = df
-    try:
-        filtered_df = df[
-            (df['PCT_day_change'] > 1) &
-            (df['mlData'].str.contains("0@@C")) &
-            (~df['systemtime'].str.contains("10:"))
-            ]
-    except KeyError as e:
-        print("")
-    rb.render(st, filtered_df, 'CrossedDay-LastDayUpTodayDown', color='R')
 
 
 
