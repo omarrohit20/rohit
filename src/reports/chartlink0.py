@@ -13,7 +13,7 @@ st.set_page_config(layout="wide",
                    initial_sidebar_state="expanded",)
 
 # main title
-st.title('9:20 - 10:00 Morning : chartlink-0')
+st.title('9:20 - 09:40 Morning : chartlink-0')
 
 rb.chartlink0 = True
 
@@ -79,7 +79,7 @@ with col1:
             ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'LastDayUpTodayGT0.3:PreUpstairs-CheckRecommendations(+)', color='LG')
+    rb.render(st, filtered_df, 'LastDayUpTodayOpenedGT0.3:PreUpstairs-CheckRecommendations(+)', color='LG')
 with col2:
     df = rb.getdf('morning-volume-breakout-buy')
     filtered_df = df
@@ -89,7 +89,7 @@ with col2:
         ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'LastDayUpTodayGT0.3:Consolidation-CheckRecommendations', color='LG')
+    rb.render(st, filtered_df, 'SQROFFAt10:LastDayUpTodayGT0.3:Consolidation-CheckRecommendations', color='LG')
 with col3:
     df = rb.getdf('morning-volume-breakout-sell')
     filtered_df = df
@@ -102,7 +102,7 @@ with col3:
             ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'LastDayDownTodayLT-0.3:PreDownstairs-CheckRecommendations(-)', color='LG')
+    rb.render(st, filtered_df, 'LastDayDownTodayOpenedLT-0.3:PreDownstairs-CheckRecommendations(-)', color='LG')
 with col4:
     df = rb.getdf('morning-volume-breakout-sell')
     filtered_df = df
@@ -112,7 +112,7 @@ with col4:
         ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'LastDayDownTodayLT-0.3:Consolidation-CheckRecommendations', color='LG')
+    rb.render(st, filtered_df, 'SQROFFAt10:LastDayDownTodayLT-0.3:Consolidation-CheckRecommendations', color='LG')
 
 
 
