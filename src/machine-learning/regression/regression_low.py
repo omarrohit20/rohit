@@ -36,6 +36,15 @@ from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.svm import SVC, SVR
 #from sklearn.qda import QDA
 #from sklearn.grid_search import GridSearchCV
+from sklearn.ensemble import HistGradientBoostingRegressor
+from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.neural_network import MLPRegressor
+from sklearn.neural_network import MLPClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import StackingClassifier
+from sklearn.linear_model import LogisticRegression
+
 
 connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
@@ -263,7 +272,7 @@ def process_regression_low(scrip, dfraw, directory, run_ml_algo, TEST=False):
     dfp = dfp.round(1)
     regression_data = {}
     if (kNeighbours and run_ml_algo):
-        result = performRegression(dfp, split, scrip, directory, forecast_out, KNeighborsRegressor(n_jobs=1, weights='distance'))
+        result = performRegression(dfp, split, scrip, directory, forecast_out, HistGradientBoostingRegressor(max_iter=300, learning_rate=0.05, max_depth=6, random_state=0))
         #         result = performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=2,
         #            max_features='auto', max_leaf_nodes=None,
         #            min_impurity_decrease=0.0, min_impurity_split=None,
@@ -277,7 +286,7 @@ def process_regression_low(scrip, dfraw, directory, run_ml_algo, TEST=False):
     if (mlp and run_ml_algo):
         dfp = get_data_frame(df, 'mlp', 'reg')
         # result = performRegression(dfp, split, scrip, directory, forecast_out, MLPRegressor(random_state=0, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
-        result = performRegression(dfp, split, scrip, directory, forecast_out, RandomForestRegressor(max_depth=5, n_estimators=100, min_samples_leaf=5, n_jobs=1, random_state= 0))
+        result = performRegression(dfp, split, scrip, directory, forecast_out, Pipeline([('scaler', StandardScaler()), ('mlp', MLPRegressor(hidden_layer_sizes=(100,50), activation='relu', solver='adam', max_iter=500, random_state=0))]))
         regression_data['mlpValue_reg'] = float(result[0])
     else:
         regression_data['mlpValue_reg'] = float(0)
