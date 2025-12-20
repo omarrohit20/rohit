@@ -245,15 +245,15 @@ with col2:
             (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
             (~df['systemtime'].str.contains('10:05', case=False, na=False)) &
             (~df['systemtime'].str.contains('10:10', case=False, na=False)) &
-            (~df['systemtime'].str.contains('10:15', case=False, na=False))
+            (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
+            (~df['systemtime'].str.contains('11:', case=False, na=False))
         ]
     except KeyError as e:
         print("")
     if len(filtered_df) >= 2:
-        rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_order=rb.column_order_p, color='LG')
+        rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
     else:
-        rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_order=rb.column_order_p, color='LG')
-
+        rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
 with col3:
     df = rb.getdf('morning-volume-breakout-sell')
     filtered_df = df
@@ -277,12 +277,13 @@ with col4:
             (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
             (~df['systemtime'].str.contains('10:05', case=False, na=False)) &
             (~df['systemtime'].str.contains('10:10', case=False, na=False)) &
-            (~df['systemtime'].str.contains('10:15', case=False, na=False))
+            (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
+            (~df['systemtime'].str.contains('11:', case=False, na=False))
             ]
     except KeyError as e:
         print("")
     if len(filtered_df) >= 2:
-        rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_order=rb.column_order_p, color='LG')
+        rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
     else:
-        rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_order=rb.column_order_p, color='LG')
+        rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
 

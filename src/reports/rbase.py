@@ -74,6 +74,73 @@ column_config_default={
     "processor": "processor"
 }
 
+column_config_merged={
+    "scrip": "scrip",
+    "PCT_day_change": st.column_config.NumberColumn(
+            "Dch",
+            format="%.2f"),
+    "systemtime": "systime",
+    "industry": "industry",
+    "mlData": "mlData",
+    "PCT_change": st.column_config.NumberColumn(
+            "PCT_change",
+            format="%.2f"),
+    "PCT_day_change_pre1": st.column_config.NumberColumn(
+            "PCT_day_change_pre1",
+            format="%.2f"),
+    "PCT_day_change_pre2":  st.column_config.NumberColumn(
+            "PCT_day_change_pre2",
+            format="%.2f"),
+    "highTail":  st.column_config.NumberColumn(
+            "highTail",
+            format="%.2f"),
+    "lowTail":  st.column_config.NumberColumn(
+            "lowTail",
+            format="%.2f"),
+    "year5HighChange":  st.column_config.NumberColumn(
+            "year5HighChange",
+            format="%.2f"),
+    "yearHighChange":  st.column_config.NumberColumn(
+            "yearHighChange",
+            format="%.2f"),
+    "yearLowChange":  st.column_config.NumberColumn(
+            "yearLowChange",
+            format="%.2f"),
+    "month3HighChange":  st.column_config.NumberColumn(
+            "month3HighChange",
+            format="%.2f"),
+    "month3LowChange":  st.column_config.NumberColumn(
+            "month3LowChange",
+            format="%.2f"),
+    "monthHighChange":  st.column_config.NumberColumn(
+            "monthHighChange",
+            format="%.2f"),
+    "monthLowChange":  st.column_config.NumberColumn(
+            "monthLowChange",
+            format="%.2f"),
+    "week2HighChange":  st.column_config.NumberColumn(
+            "week2HighChange",
+            format="%.2f"),
+    "week2LowChange":  st.column_config.NumberColumn(
+            "week2LowChange",
+            format="%.2f"),
+    "weekHighChange":  st.column_config.NumberColumn(
+            "weekHighChange",
+            format="%.2f"),
+    "weekLowChange":  st.column_config.NumberColumn(
+            "weekLowChange",
+            format="%.2f"),
+    "forecast_day_PCT10_change":  st.column_config.NumberColumn(
+            "forecast_day_PCT10_change",
+            format="%.2f"),
+    "filter5": "filter5",
+    "filter": "filter",
+    "filter3": "filter3",
+    "processor": "processor",
+    "systemtime_merged": "systime_merged",
+    "processor_merged": "processor_merged"
+}
+
 column_order_default=["scrip",
     "PCT_day_change",
     "systemtime",
@@ -102,6 +169,36 @@ column_order_default=["scrip",
     "processor"
 ]
 
+column_order_merged=["scrip",
+    "PCT_day_change",
+    "systemtime",
+    "mlData",
+    "industry",
+    "PCT_change",
+    "PCT_day_change_pre1",
+    "PCT_day_change_pre2",
+    "highTail",
+    "lowTail",
+    "year5HighChange",
+    "yearHighChange",
+    "yearLowChange",
+    "month3HighChange",
+    "month3LowChange",
+    "monthHighChange",
+    "monthLowChange",
+    "week2HighChange",
+    "week2LowChange",
+    "weekHighChange",
+    "weekLowChange",
+    "forecast_day_PCT10_change",
+    "filter5",
+    "filter",
+    "filter3",
+    "processor",
+    "systemtime_merged",
+    "processor_merged"
+]
+
 column_order_p=["scrip",
     "PCT_day_change",
     "systemtime",
@@ -127,7 +224,9 @@ column_order_p=["scrip",
     "forecast_day_PCT10_change",
     "filter5",
     "filter",
-    "filter3"
+    "filter3",
+    "systemtime_merged",
+    "processor_merged"
 ]
 
 chartlink1=False
@@ -220,6 +319,7 @@ def getintersectdf(collection_name1, collection_name2):
         df['weekLowChange'] = pd.to_numeric(df['weekLowChange'], errors='coerce')
         df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
         df['systemtime'] = pd.to_datetime(df['systemtime']).dt.time.astype(str)
+        df['systemtime_merged'] = pd.to_datetime(df['systemtime_merged']).dt.time.astype(str)
         df['mlData'] = df['mlData'].fillna('').astype(str)
     except KeyError as e:
         print(f"")
