@@ -39,6 +39,10 @@ with col1:
     filtered_df = df
     try:
         filtered_df = df[
+            (~df['systemtime'].str.contains('09:', case=False, na=False)) &
+            (~df['systemtime_merged'].str.contains('09:2', case=False, na=False)) &
+            (~df['systemtime_merged'].str.contains('09:3', case=False, na=False)) &
+            (~df['systemtime_merged'].str.contains('09:4', case=False, na=False)) &
             (df['processor'] != 'cash-buy-morning-volume') &
             (df['processor'] != 'supertrend-morning-buy') &
             (df['PCT_day_change'] > -0.5) &
@@ -65,9 +69,14 @@ with col3:
     filtered_df = df
     try:
         filtered_df = df[
+            (~df['systemtime'].str.contains('09:', case=False, na=False)) &
+            (~df['systemtime_merged'].str.contains('09:2', case=False, na=False)) &
+            (~df['systemtime_merged'].str.contains('09:3', case=False, na=False)) &
+            (~df['systemtime_merged'].str.contains('09:4', case=False, na=False)) &
             (df['processor'] != 'cash-sell-morning-volume') &
             (df['processor'] != 'supertrend-morning-sell') &
-            (df['PCT_day_change'] > -0.5)
+            (df['PCT_day_change'] > -0.5) &
+            (~df['processor'].str.contains('09_30:checkChartSell/', case=False, regex=True, na=False))
             ]
     except KeyError as e:
         print("")
