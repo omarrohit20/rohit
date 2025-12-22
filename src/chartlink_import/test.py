@@ -13,9 +13,9 @@ if __name__ == "__main__":
 
     if (sb.nw >= time_00_15 and sb.nw <= time_24_00):
         # ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 30  ) and [=1] 10 minute volume > greatest(  1 day ago volume / 22  ) and [-1] 5 minute low > 1 day ago high and 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" < 1.5 and [=1] 15 minute "close - 1 candle ago close / 1 candle ago close * 100" < 1.5 and ( {cash} ( [=1] 10 minute high < 2 days ago high or [=1] 10 minute high < 1 day ago high ) ) and ( {cash} ( ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) > 1.2 or ( ( ( [-1] 5 minute close - [=1] 5 minute open ) * 100 ) / 1 day ago close ) > 1.2 ) ) ) ) ) )
-        process_url_volBreakout('https://chartink.com/screener/buy-breakup-intraday-9-30-to-10', 'crossed-day-high', time_09_20, time_13_00)
-        process_url_volBreakout('https://chartink.com/screener/sell-breakdown-intraday-9-30-to-10-3', 'crossed-day-low', time_09_20, time_13_00)
-        process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-1-2', 'week2lh-not-reached', time_09_45, time_13_00)
+        process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-3', 'Breakout-Buy-after-10',time_10_00, time_10_30)
+        process_url_volBreakout('https://chartink.com/screener/buy-breakup-intraday-9-25-to-10-30-06', '1-Bbuyy-morningUp-downConsolidation', time_10_00, time_10_30)
+
         print('Hello')
     time.sleep(10)
 

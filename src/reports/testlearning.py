@@ -123,3 +123,81 @@ with col2:
     rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_order=rb.column_order_p, color='LG')
 
 
+col1, col3 = st.columns(2)
+with col1:
+    df = rb.getdf('morning-volume-breakout-buy')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+            #(~df['systemtime'].str.contains('09:3', case=False, na=False)) &
+            (df['mlData'].str.contains("0@@CROSSED2") | df['mlData'].str.contains("0@@SUPER"))
+        ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'morning-volume-breakout-buy', color='G', height=300)
+with col3:
+    df = rb.getdf('morning-volume-breakout-sell')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+            #(~df['systemtime'].str.contains('09:3', case=False, na=False)) &
+            (df['mlData'].str.contains("0@@CROSSED2") | df['mlData'].str.contains("0@@SUPER"))
+        ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'morning-volume-breakout-sell', color='R', height=300)
+
+col1, col2, col3, col4 = st.columns(4)
+with col1:
+    df = rb.getdf('Breakout-Buy-after-10')
+    rb.render(st, df, 'TodayUpOrIndexStockUpGT0.5 : Breakout Buy after 10', color='G', height=200)
+with col2:
+    df = rb.getdf('1-Bbuyy-morningUp-downConsolidation')
+    rb.render(st, df, 'Only one dip: 1-Bbuyy-morningUp-downConsolidation', color='G', height=200)
+with col3:
+    df = rb.getdf('Breakout-Sell-after-10')
+    rb.render(st, df, 'TodayDownOrIndexStockDownLT-0.5 : Breakout Sell after 10', color='R', height=200)
+with col4:
+    df = rb.getdf('1-Sselll-morningDown-upConsolidation')
+    rb.render(st, df, 'Only one up: 1-Sselll-morningDown-upConsolidation', color='R', height=200)
+
+
+col1, col2, col3, col4 = st.columns(4)
+with col1:
+    df = rb.getdf('crossed-day-high')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+            (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
+            (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
+            (df['PCT_day_change'] > -1) & (df['PCT_day_change'] < 1) &
+            (df['PCT_day_change_pre1'] > 0.5) & (df['PCT_day_change_pre1'] < 1.5)
+        ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'Crossed Day Highs', column_order=rb.column_order_p, color='G')
+with col2:
+    df = rb.getdf('crossed-day-high')
+    filtered_df = df
+    rb.render(st, filtered_df, 'Crossed Day Highs', color='LG')
+with col3:
+    df = rb.getdf('crossed-day-low')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+            (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
+            (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
+            (df['PCT_day_change'] > -1) & (df['PCT_day_change'] < 1) &
+            (df['PCT_day_change_pre1'] < -0.5) & (df['PCT_day_change_pre1'] > -1.5)
+        ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'Crossed Day Lows', color='LG')
+with col4:
+    df = rb.getdf('crossed-day-low')
+    filtered_df = df
+    rb.render(st, filtered_df, 'Crossed Day Lows', color='LG')
