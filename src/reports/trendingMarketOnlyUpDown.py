@@ -167,7 +167,8 @@ with col1:
             (~df['processor'].str.contains('buy-dayconsolidation-breakout-01')) &
             (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
             (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False)) &
-            (~df['systemtime'].str.contains('09:40', case=False, regex=True, na=False))
+            (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+            (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
             ]
     except KeyError as e:
         print("")
@@ -189,7 +190,8 @@ with col2:
             (~df['processor'].str.contains('09_30:checkChartSell')) &
             (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
             (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False)) &
-            (~df['systemtime'].str.contains('09:40', case=False, regex=True, na=False))
+            (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+            (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
             ]
     except KeyError as e:
         print("")
