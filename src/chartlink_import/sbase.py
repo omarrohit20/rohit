@@ -156,14 +156,22 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             json_data = json.loads(json.dumps(record, default=json_util.default))
                             db[processor].insert_one(json_data)
 
-                            if ('09_30:checkChartBuy/Sell-morningDown' in processor):
+                            if ('09_30:checkChartBuy/Sell-morningDown' in processor
+                                and ('09:2' not in str(systemtime))
+                                and ('09:20' not in str(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['systemtime']))
+                                ):
                                 search_filter = {"scrip": tempScrip}
                                 mlData = '0@@CROSSED2DayH@' + mlData
                                 update_values = {'mlData': mlData}
                                 db['morning-volume-breakout-buy'].update_one(search_filter, {"$set": update_values})
                                 db['Breakout-Beey-2'].update_one(search_filter, {"$set": update_values})
 
-                            if ('crossed-day-high' in processor):
+                            if ('crossed-day-high' in processor
+                                and ('09:2' not in str(systemtime))
+                                and ('09:3' not in str(systemtime))
+                                and ('09:2' not in str(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['systemtime']))
+                                and ('09:3' not in str(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['systemtime']))
+                                ):
                                 search_filter = {"scrip": tempScrip}
                                 mlData = '0@@CROSSED1DayH@' + mlData
                                 update_values = {'mlData': mlData}
@@ -177,14 +185,22 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 db['morning-volume-breakout-buy'].update_one(search_filter, {"$set": update_values})
                                 db['Breakout-Beey-2'].update_one(search_filter, {"$set": update_values})
 
-                            if ('09_30:checkChartSell/Buy-morningup' in processor):
+                            if ('09_30:checkChartSell/Buy-morningup' in processor
+                                and ('09:2' not in str(systemtime))
+                                and ('09:20' not in str(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['systemtime']))
+                                ):
                                 search_filter = {"scrip": tempScrip}
                                 mlData = '0@@CROSSED2DayL@' + mlData
                                 update_values = {'mlData': mlData}
                                 db['morning-volume-breakout-sell'].update_one(search_filter, {"$set": update_values})
                                 db['Breakout-Siill-2'].update_one(search_filter, {"$set": update_values})
 
-                            if ('crossed-day-low' in processor):
+                            if ('crossed-day-low' in processor
+                                and ('09:2' not in str(systemtime))
+                                and ('09:3' not in str(systemtime))
+                                and ('09:2' not in str(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['systemtime']))
+                                and ('09:3' not in str(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['systemtime']))
+                                ):
                                 search_filter = {"scrip": tempScrip}
                                 mlData = '0@@CROSSED1DayL@' + mlData
                                 update_values = {'mlData': mlData}

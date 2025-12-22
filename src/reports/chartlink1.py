@@ -15,7 +15,7 @@ st.set_page_config(layout="wide",
 # main title
 st.title('9:30 - 10:00 Last day trend : No Reversal: chartlink-1')
 
-rb.chartlink1 = True
+rb.chartlink1 = False
 
 col1, col2, col3, col4 = st.columns(4)
 with col1:
