@@ -114,7 +114,7 @@ def regression_ta_data(scrip):
         print('regression failed for', scrip) 
         pass    
 
-def calculateParallel(threads=1, futures='Yes', ml_algo='Yes'):
+def calculateParallel(threads=2, futures='Yes', ml_algo='Yes'):
     global run_ml_algo
     if(ml_algo != 'Yes'):
         run_ml_algo = False 
