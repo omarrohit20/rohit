@@ -74,6 +74,80 @@ column_config_default={
     "processor": "processor"
 }
 
+column_config_ml={
+    "scrip": "scrip",
+    "PCT_day_change": st.column_config.NumberColumn(
+            "Dch",
+            format="%.2f"),
+    "industry": "industry",
+    "PCT_change": st.column_config.NumberColumn(
+            "PCT_change",
+            format="%.2f"),
+    "PCT_day_change_pre1": st.column_config.NumberColumn(
+            "PCT_day_change_pre1",
+            format="%.2f"),
+    "PCT_day_change_pre2":  st.column_config.NumberColumn(
+            "PCT_day_change_pre2",
+            format="%.2f"),
+    "highTail":  st.column_config.NumberColumn(
+            "highTail",
+            format="%.2f"),
+    "lowTail":  st.column_config.NumberColumn(
+            "lowTail",
+            format="%.2f"),
+    "kNeighboursValue_reg":  st.column_config.NumberColumn(
+            "kNeighboursValue_reg",
+            format="%.2f"),
+    "mlpValue_reg":  st.column_config.NumberColumn(
+            "mlpValue_reg",
+            format="%.2f"),
+    "kNeighboursValue_reg_merged":  st.column_config.NumberColumn(
+            "kNeighboursValue_reg_merged",
+            format="%.2f"),
+    "mlpValue_reg_merged":  st.column_config.NumberColumn(
+            "mlpValue_reg_merged",
+            format="%.2f"),
+    "year5HighChange":  st.column_config.NumberColumn(
+            "year5HighChange",
+            format="%.2f"),
+    "yearHighChange":  st.column_config.NumberColumn(
+            "yearHighChange",
+            format="%.2f"),
+    "yearLowChange":  st.column_config.NumberColumn(
+            "yearLowChange",
+            format="%.2f"),
+    "month3HighChange":  st.column_config.NumberColumn(
+            "month3HighChange",
+            format="%.2f"),
+    "month3LowChange":  st.column_config.NumberColumn(
+            "month3LowChange",
+            format="%.2f"),
+    "monthHighChange":  st.column_config.NumberColumn(
+            "monthHighChange",
+            format="%.2f"),
+    "monthLowChange":  st.column_config.NumberColumn(
+            "monthLowChange",
+            format="%.2f"),
+    "week2HighChange":  st.column_config.NumberColumn(
+            "week2HighChange",
+            format="%.2f"),
+    "week2LowChange":  st.column_config.NumberColumn(
+            "week2LowChange",
+            format="%.2f"),
+    "weekHighChange":  st.column_config.NumberColumn(
+            "weekHighChange",
+            format="%.2f"),
+    "weekLowChange":  st.column_config.NumberColumn(
+            "weekLowChange",
+            format="%.2f"),
+    "forecast_day_PCT10_change":  st.column_config.NumberColumn(
+            "forecast_day_PCT10_change",
+            format="%.2f"),
+    "filter5": "filter5",
+    "filter": "filter",
+    "filter3": "filter3"
+}
+
 column_config_merged={
     "scrip": "scrip",
     "PCT_day_change": st.column_config.NumberColumn(
@@ -167,6 +241,35 @@ column_order_default=["scrip",
     "filter",
     "filter3",
     "processor"
+]
+
+column_order_ml=["scrip",
+    "PCT_day_change",
+    "industry",
+    "PCT_change",
+    "PCT_day_change_pre1",
+    "PCT_day_change_pre2",
+    "highTail",
+    "lowTail",
+    "kNeighboursValue_reg",
+    "mlpValue_reg",
+    "kNeighboursValue_reg_merged",
+    "mlpValue_reg_merged",
+    "year5HighChange",
+    "yearHighChange",
+    "yearLowChange",
+    "month3HighChange",
+    "month3LowChange",
+    "monthHighChange",
+    "monthLowChange",
+    "week2HighChange",
+    "week2LowChange",
+    "weekHighChange",
+    "weekLowChange",
+    "forecast_day_PCT10_change",
+    "filter5",
+    "filter",
+    "filter3",
 ]
 
 column_order_merged=["scrip",
@@ -326,10 +429,55 @@ def getintersectdf(collection_name1, collection_name2):
 
     return df
 
-def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default):
+def getintersectdf_ml(collection_name1, collection_name2):
+    collection1 = dbnse[collection_name1]
+    collection2 = dbnse[collection_name2]
+    df1 = pd.DataFrame(list(collection1.find()))
+    df2 = pd.DataFrame(list(collection2.find()))
+    expected_columns = list(set(df1.columns))
+    df = pd.DataFrame(columns=expected_columns)
+    try:
+        df = df1.merge(
+            df2,
+            on='scrip',
+            how='inner',
+            suffixes=('', '_merged')
+        )
+        df['PCT_day_change'] = pd.to_numeric(df['PCT_day_change'])
+        df['PCT_change'] = pd.to_numeric(df['PCT_change'], errors='coerce')
+        df['PCT_day_change_pre1'] = pd.to_numeric(df['PCT_day_change_pre1'], errors='coerce')
+        df['PCT_day_change_pre2'] = pd.to_numeric(df['PCT_day_change_pre2'], errors='coerce')
+
+        df['highTail'] = pd.to_numeric(df['highTail'], errors='coerce')
+        df['lowTail'] = pd.to_numeric(df['lowTail'], errors='coerce')
+        df['year5HighChange'] = pd.to_numeric(df['year5HighChange'], errors='coerce')
+        df['yearHighChange'] = pd.to_numeric(df['year5HighChange'], errors='coerce')
+        df['yearLowChange'] = pd.to_numeric(df['yearLowChange'], errors='coerce')
+        df['month3HighChange'] = pd.to_numeric(df['month3HighChange'], errors='coerce')
+        df['month3LowChange'] = pd.to_numeric(df['month3LowChange'], errors='coerce')
+        df['monthHighChange'] = pd.to_numeric(df['monthHighChange'], errors='coerce')
+        df['monthLowChange'] = pd.to_numeric(df['monthLowChange'], errors='coerce')
+        df['week2HighChange'] = pd.to_numeric(df['week2HighChange'], errors='coerce')
+        df['week2LowChange'] = pd.to_numeric(df['week2LowChange'], errors='coerce')
+        df['weekHighChange'] = pd.to_numeric(df['weekHighChange'], errors='coerce')
+        df['weekLowChange'] = pd.to_numeric(df['weekLowChange'], errors='coerce')
+        df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
+        df['kNeighboursValue_reg'] = pd.to_numeric(df['kNeighboursValue_reg'], errors='coerce')
+        df['mlpValue_reg'] = pd.to_numeric(df['mlpValue_reg'], errors='coerce')
+        df['kNeighboursValue_reg_merged'] = pd.to_numeric(df['kNeighboursValue_reg_merged'], errors='coerce')
+        df['mlpValue_reg_merged'] = pd.to_numeric(df['mlpValue_reg_merged'], errors='coerce')
+    except KeyError as e:
+        print(f"")
+
+    return df
+
+def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False):
     st.write("********"+ name + "********")
     # Main Code Execution
-    if not df.empty:
+    if renderml:
+        df_styled = highlight_category_row(df, color=color)
+        st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+    elif not df.empty:
         df_styled = highlight_category_row(df, color=color)
         if(chartlink1) and color =='LG':
             df_styled = df_styled.applymap(highlight_category_column_super, subset=['mlData'])
