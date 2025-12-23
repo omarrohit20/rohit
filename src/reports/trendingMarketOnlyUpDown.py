@@ -232,7 +232,7 @@ with col2:
         print("")
     rb.render(st, filtered_df, 'Sell All Processor + ZPre1_Downstairs', column_order=rb.column_order_default, color='R')
 
-col1, col2, col3, col4 = st.columns(4)
+col1, col3 = st.columns(2)
 with col1:
     df = rb.getdf('morning-volume-breakout-buy')
     filtered_df = df
@@ -245,26 +245,6 @@ with col1:
     except KeyError as e:
         print("")
     rb.render(st, filtered_df, 'CrossedDay-LastDayDownTodayUp', color='G')
-with col2:
-    df = rb.getintersectdf('week2lh-not-reached','crossed-day-high')
-    expected_columns = list(set(df.columns))
-    empty_df = pd.DataFrame(columns=expected_columns)
-    filtered_df = df
-    try:
-        filtered_df = df[
-            (~df['systemtime'].str.contains('09:', case=False, na=False)) &
-            (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
-            (~df['systemtime'].str.contains('10:05', case=False, na=False)) &
-            (~df['systemtime'].str.contains('10:10', case=False, na=False)) &
-            (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
-            (~df['systemtime'].str.contains('11:', case=False, na=False))
-        ]
-    except KeyError as e:
-        print("")
-    if len(filtered_df) >= 2:
-        rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
-    else:
-        rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
 with col3:
     df = rb.getdf('morning-volume-breakout-sell')
     filtered_df = df
@@ -277,24 +257,3 @@ with col3:
     except KeyError as e:
         print("")
     rb.render(st, filtered_df, 'CrossedDay-LastDayUpTodayDown', color='R')
-with col4:
-    df = rb.getintersectdf('week2lh-not-reached','crossed-day-low')
-    expected_columns = list(set(df.columns))
-    empty_df = pd.DataFrame(columns=expected_columns)
-    filtered_df = df
-    try:
-        filtered_df = df[
-            (~df['systemtime'].str.contains('09:', case=False, na=False)) &
-            (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
-            (~df['systemtime'].str.contains('10:05', case=False, na=False)) &
-            (~df['systemtime'].str.contains('10:10', case=False, na=False)) &
-            (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
-            (~df['systemtime'].str.contains('11:', case=False, na=False))
-            ]
-    except KeyError as e:
-        print("")
-    if len(filtered_df) >= 2:
-        rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
-    else:
-        rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
-

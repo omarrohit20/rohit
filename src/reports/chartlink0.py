@@ -132,7 +132,7 @@ with col1:
             ]
     except KeyError as e:
         print("")
-    rb.render(st, filtered_df, 'LastDayGT1:TodayNotDown : Aftert10:00AM-Try-IfDown(+)', color='LG', height=150)
+    rb.render(st, filtered_df, 'LastDayGT1:TodayNotDown(Aftert09:45-IfGT1.3(+))', color='LG', height=150)
 with col2:
     df = rb.getdf('morning-volume-breakout-buy')
     filtered_df = df
@@ -162,7 +162,7 @@ with col3:
     except KeyError as e:
         print("")
 
-    rb.render(st, filtered_df, 'LastDayLT-1:TodayNotUp : Aftert10:00AM-Try-IfDown(-)', color='LG', height=150)
+    rb.render(st, filtered_df, 'LastDayLT-1:TodayNotUp(Aftert09:45-IfLT-1.3(-))', color='LG', height=150)
 with col4:
     df = rb.getdf('morning-volume-breakout-sell')
     filtered_df = df
