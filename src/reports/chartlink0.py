@@ -136,12 +136,14 @@ with col1:
     filtered_df = df
     try:
         filtered_df = df[
-            (df['PCT_day_change'] > 2) &
+            (df['PCT_day_change'] > 1.5) &
             (df['PCT_day_change'] < 4) &
+            (df['PCT_change'] > 1.8) &
+            (df['PCT_change'] < 4) &
             (df['PCT_day_change_pre1'] > -1.3) &
             (df['PCT_day_change_pre1'] < 1) &
-            (df['PCT_day_change_pre2'] > -1.3) &
-            (df['PCT_day_change_pre2'] < 1.3) &
+            (df['PCT_day_change_pre2'] > -2.3) &
+            (df['PCT_day_change_pre2'] < 1) &
             ((df['mlData'].str.contains("TOP") | df['systemtime'].str.contains("09:20")))
             ]
     except KeyError as e:
@@ -166,11 +168,13 @@ with col3:
     try:
         filtered_df = df[
             (df['PCT_day_change'] > -4) &
-            (df['PCT_day_change'] < -1.75) &
+            (df['PCT_day_change'] < -1.5) &
+            (df['PCT_change'] > -4) &
+            (df['PCT_change'] < -1.75) &
             (df['PCT_day_change_pre1'] > -1) &
             (df['PCT_day_change_pre1'] < 1.3) &
-            (df['PCT_day_change_pre2'] > -1.3) &
-            (df['PCT_day_change_pre2'] < 1.3) &
+            (df['PCT_day_change_pre2'] > -1) &
+            (df['PCT_day_change_pre2'] < 2.3) &
             ((df['mlData'].str.contains("TOP") | df['systemtime'].str.contains("09:20")))
             ]
     except KeyError as e:
