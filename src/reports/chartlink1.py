@@ -32,6 +32,7 @@ with col1:
             (df['PCT_day_change_pre1'] >= 1) &
             (df['PCT_day_change_pre1'] <= 3.5) &
             (df['year5HighChange'] < -10) &
+            ((df['PCT_day_change_pre1'] >= 1.7) | (df['PCT_day_change_pre2'] >= 1.7)) &
             (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
             ]
     except KeyError as e:
@@ -42,6 +43,8 @@ with col2:
     filtered_df = df
     try:
         filtered_df = df[
+            (df['yearLowChange'] > 15) &
+            #(df['yearHighChange'] > -35) &
             (df['lowTail'] < 1) &
             (df['PCT_day_change_pre2'] >= 2) &
             (df['PCT_day_change_pre2'] <= 4) &
@@ -76,6 +79,7 @@ with col4:
     filtered_df = df
     try:
         filtered_df = df[
+            (df['yearHighChange'] < -15) &
             (df['highTail'] < 1) &
             (df['PCT_day_change_pre2'] >= -4) &
             (df['PCT_day_change_pre2'] <= -2) &

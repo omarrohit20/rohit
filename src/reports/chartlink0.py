@@ -85,7 +85,21 @@ with col2:
     filtered_df = df
     try:
         filtered_df = df[
-            df['mlData'].str.contains("Z&&&")
+            (df['mlData'].str.contains("Z&&&") 
+             | ((df['week2HighChange'] > -1) &
+                (df['monthHighChange'] < 5) &
+                (df['yearHighChange'] > -35) &
+                (df['PCT_day_change'] > -0.7) &
+                (df['PCT_day_change'] < 0.7) &
+                (~df['filter5'].str.contains('BothGT2', case=False, regex=True, na=False)) &
+                (df['lowTail'] < 1.5) &
+                (df['forecast_day_PCT10_change'] > -1) &
+                (df['week2LowChange'] > 0) &
+                ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                (df['PCT_day_change_pre2'] < 3.5) &
+                df['mlData'].str.contains("TOP")
+                )
+            )
         ]
     except KeyError as e:
         print("")

@@ -210,6 +210,8 @@ with col1:
             (df['mlData'].str.contains('Stairs', case=False, na=False)) &
             (df['mlData'].str.contains('ZPre1', case=False, na=False)) &
             (~df['mlData'].str.contains('DownStairs', case=False, na=False)) &
+            (~df['processor'].str.contains('supertrend', case=False, na=False)) &
+            (~df['processor'].str.contains('09_30:checkChartBuy/')) &
             (~df['systemtime'].str.contains('09:', case=False, na=False)) &
             (~df['systemtime'].str.contains('10:00:', case=False, na=False))
             ]
@@ -225,6 +227,8 @@ with col2:
             (df['mlData'].str.contains('stairs', case=False, na=False)) &
             (df['mlData'].str.contains('ZPre', case=False, na=False)) &
             (~df['mlData'].str.contains('UpStairs', case=False, na=False)) &
+            (~df['processor'].str.contains('supertrend', case=False, na=False)) &
+            (~df['processor'].str.contains('09_30:checkChartSell/')) &
             (~df['systemtime'].str.contains('09:', case=False, na=False)) &
             (~df['systemtime'].str.contains('10:00:', case=False, na=False))
             ]

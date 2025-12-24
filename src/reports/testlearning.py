@@ -356,3 +356,36 @@ with col4:
     except KeyError as e:
         print("")
     rb.render(st, filtered_df, 'MLSELL', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+
+col1, col2 = st.columns(2)
+with col1:
+    df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['PCT_change'] < 1) &
+            (df['PCT_day_change'] < 1) &
+            #(df['PCT_day_change'] > -0.5) &
+            #(df['PCT_change_pre1'] < -1) &
+            #(df['PCT_day_change_pre1'] < -1.3) &
+            (df['lowTail'] > 1.5) &
+            ((df['kNeighboursValue_reg'] > 0.5) & (df['mlpValue_reg'] > 0.5)) &
+            ((df['kNeighboursValue_reg'] > 1) | (df['mlpValue_reg'] > 1))
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'MLBUY', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='G')
+with col2:
+    df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
+    filtered_df = df
+    try:
+        filtered_df = df[
+            (df['PCT_change'] > -1) &
+            (df['PCT_day_change'] > -1) &
+            (df['highTail'] > 1.5) &
+            ((df['kNeighboursValue_reg'] < -0.5) & (df['mlpValue_reg'] < -0.5)) &
+            ((df['kNeighboursValue_reg'] < -1) | (df['mlpValue_reg'] < -1))
+            ]
+    except KeyError as e:
+        print("")
+    rb.render(st, filtered_df, 'MLBUY', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
