@@ -46,6 +46,7 @@ with col1:
             (df['processor'] != 'cash-buy-morning-volume') &
             (df['processor'] != 'supertrend-morning-buy') &
             (df['PCT_day_change'] > -0.5) &
+            ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
             (~df['processor'].str.contains('09_30:checkChartBuy/', case=False, regex=True, na=False))
             ]
     except KeyError as e:
@@ -76,6 +77,7 @@ with col3:
             (df['processor'] != 'cash-sell-morning-volume') &
             (df['processor'] != 'supertrend-morning-sell') &
             (df['PCT_day_change'] > -0.5) &
+            ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT10_change'] > 6)) &
             (~df['processor'].str.contains('09_30:checkChartSell/', case=False, regex=True, na=False))
             ]
     except KeyError as e:
@@ -105,6 +107,7 @@ with col1:
             (df['PCT_day_change'] <= 1) &
             (df['PCT_change'] < 1) &
             (df['week2HighChange'] > 2) &
+            ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
             (~df['processor'].str.contains('09_30:checkChartBuy/', case=False, regex=True, na=False))
             ]
     except KeyError as e:
@@ -115,6 +118,7 @@ with col2:
     filtered_df = df
     try:
         filtered_df = df[
+            ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT10_change'] > 6)) &
             (df['week2LowChange'] < -2)
             ]
     except KeyError as e:
@@ -127,6 +131,7 @@ with col1:
     filtered_df = df
     try:
         filtered_df = df[
+            ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
             (~df['processor'].str.contains('09_30:checkChartBuy/Sell', case=False, na=False)) &
             (~df['processor'].str.contains('1-Bbuyy-morningUp', case=False, na=False))
             ]
@@ -142,6 +147,7 @@ with col3:
     filtered_df = df
     try:
         filtered_df = df[
+            ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT10_change'] > 6)) &
             (~df['processor'].str.contains('09_30:checkChartSell/Buy', case=False, na=False)) &
             (~df['processor'].str.contains('1-Sselll-morningDown', case=False, na=False))
             ]
@@ -161,6 +167,7 @@ with col1:
     filtered_df = df
     try:
         filtered_df = df[
+            ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
             (~df['processor'].str.contains('buy-breakout')) &
             (~df['processor'].str.contains('supertrend-morning-buy')) &
             (~df['processor'].str.contains('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')) &
@@ -172,7 +179,7 @@ with col1:
             ]
     except KeyError as e:
         print("")
-    if len(filtered_df) >= 2:
+    if len(filtered_df) >= 1:
         rb.render(st, filtered_df, 'Buy All Processor + Buy Breakout', column_order=rb.column_order_p, color='G')
     else:
         rb.render(st, empty_df, 'Buy All Processor + Buy Breakout', column_order=rb.column_order_p, color='G')
@@ -183,6 +190,7 @@ with col2:
     filtered_df = df
     try:
         filtered_df = df[
+            ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT10_change'] > 6)) &
             (~df['processor'].str.contains('sell-breakout'))&
             (~df['processor'].str.contains('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')) &
             (~df['processor'].str.contains('supertrend-morning-sell'))&
@@ -195,7 +203,7 @@ with col2:
             ]
     except KeyError as e:
         print("")
-    if len(filtered_df) >= 2:
+    if len(filtered_df) >= 1:
         rb.render(st, filtered_df, 'Sell All Processor + Sell Breakout', column_order=rb.column_order_p, color='R')
     else:
         rb.render(st, empty_df, 'Sell All Processor + Sell Breakout', column_order=rb.column_order_p, color='R')
@@ -206,6 +214,7 @@ with col1:
     filtered_df = df
     try:
         filtered_df = df[
+            ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
             (~df['processor'].str.contains('09_30:checkChartSell', case=False, na=False)) &
             (df['mlData'].str.contains('Stairs', case=False, na=False)) &
             (df['mlData'].str.contains('ZPre1', case=False, na=False)) &
@@ -223,6 +232,7 @@ with col2:
     filtered_df = df
     try:
         filtered_df = df[
+            ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT10_change'] > 6)) &
             (~df['processor'].str.contains('09_30:checkChartBuy', case=False, na=False)) &
             (df['mlData'].str.contains('stairs', case=False, na=False)) &
             (df['mlData'].str.contains('ZPre', case=False, na=False)) &
