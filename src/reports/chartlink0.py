@@ -85,8 +85,9 @@ with col2:
     filtered_df = df
     try:
         filtered_df = df[
+            ((df['forecast_day_PCT10_change'] > 3.5) | (df['forecast_day_PCT10_change'] < -6)) &
             (df['mlData'].str.contains("Z&&&") 
-             | ((df['week2HighChange'] > -1) &
+               |((df['week2HighChange'] > -1) &
                 (df['monthHighChange'] < 5) &
                 (df['yearHighChange'] > -35) &
                 (df['PCT_day_change'] > -0.7) &
@@ -98,6 +99,13 @@ with col2:
                 ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
                 (df['PCT_day_change_pre2'] < 3.5) &
                 df['mlData'].str.contains("TOP")
+                )
+                |((df['PCT_day_change'] < 2.5) &
+                (df['PCT_day_change'] > -3) &
+                (df['PCT_change'] > 0) &
+                (df['month3HighChange'] > -20) &
+                (df['year5HighChange'] < -25) &
+                (df['yearHighChange'] < -20)
                 )
             )
         ]
