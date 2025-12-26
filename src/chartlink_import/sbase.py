@@ -159,6 +159,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             if ('09_30:checkChartBuy/Sell-morningDown' in processor
                                 and ('09:2' not in str(systemtime))
                                 and ('09:20' not in str(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['systemtime']))
+                                and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 2)
+                                     or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -6)
+                                    )
                                 ):
                                 search_filter = {"scrip": tempScrip}
                                 mlData = '0@@CROSSED2DayH@' + mlData
@@ -171,6 +174,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 and ('09:3' not in str(systemtime))
                                 and ('09:2' not in str(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['systemtime']))
                                 and ('09:3' not in str(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['systemtime']))
+                                and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 2)
+                                     or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -6)
+                                    )
                                 ):
                                 search_filter = {"scrip": tempScrip}
                                 mlData = '0@@CROSSED1DayH@' + mlData
@@ -178,7 +184,11 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 db['morning-volume-breakout-buy'].update_one(search_filter, {"$set": update_values})
                                 db['Breakout-Beey-2'].update_one(search_filter, {"$set": update_values})
 
-                            if ('supertrend-morning-buy' in processor):
+                            if ('supertrend-morning-buy' in processor
+                                and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 2)
+                                     or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -6)
+                                    )
+                                ):
                                 search_filter = {"scrip": tempScrip}
                                 mlData = '0@@SUPER1DayH@' + mlData
                                 update_values = {'mlData': mlData}
@@ -188,6 +198,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             if ('09_30:checkChartSell/Buy-morningup' in processor
                                 and ('09:2' not in str(systemtime))
                                 and ('09:20' not in str(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['systemtime']))
+                                and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -2)
+                                     or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 6)
+                                    )
                                 ):
                                 search_filter = {"scrip": tempScrip}
                                 mlData = '0@@CROSSED2DayL@' + mlData
@@ -200,6 +213,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 and ('09:3' not in str(systemtime))
                                 and ('09:2' not in str(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['systemtime']))
                                 and ('09:3' not in str(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['systemtime']))
+                                and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -2)
+                                     or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 6)
+                                    )
                                 ):
                                 search_filter = {"scrip": tempScrip}
                                 mlData = '0@@CROSSED1DayL@' + mlData
@@ -207,7 +223,11 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 db['morning-volume-breakout-sell'].update_one(search_filter, {"$set": update_values})
                                 db['Breakout-Siill-2'].update_one(search_filter, {"$set": update_values})
 
-                            if ('supertrend-morning-sell' in processor):
+                            if ('supertrend-morning-sell' in processor
+                                and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -2)
+                                     or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 6)
+                                    )
+                                ):
                                 search_filter = {"scrip": tempScrip}
                                 mlData = '0@@SUPER1DayL@' + mlData
                                 update_values = {'mlData': mlData}
