@@ -108,7 +108,8 @@ with col1:
             (df['PCT_change'] < 1) &
             (df['week2HighChange'] > 2) &
             ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
-            (~df['processor'].str.contains('09_30:checkChartBuy/', case=False, regex=True, na=False))
+            (~df['processor'].str.contains('09_30:checkChartBuy/', case=False, regex=True, na=False)) &
+            (~df['processor'].str.contains('1-Bbuyy', case=False, regex=True, na=False))
             ]
     except KeyError as e:
         print("")
@@ -119,7 +120,9 @@ with col2:
     try:
         filtered_df = df[
             ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT10_change'] > 6)) &
-            (df['week2LowChange'] < -2)
+            (df['week2LowChange'] < -2) &
+            (~df['processor'].str.contains('09_30:checkChartSell/', case=False, regex=True, na=False)) &
+            (~df['processor'].str.contains('1-Sselll', case=False, regex=True, na=False))
             ]
     except KeyError as e:
         print("")
