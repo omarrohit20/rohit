@@ -298,8 +298,8 @@ with col4:
     try:
         filtered_df = df[
             (df['PCT_day_change'] > -4) &
-            (df['kNeighboursValue_reg_merged'] < -2) &
-            (df['mlpValue_reg_merged'] < -2)
+            (df['kNeighboursValue_reg'] < -2) &
+            (df['mlpValue_reg'] < -2)
             ]
     except KeyError as e:
         print("")
@@ -311,12 +311,16 @@ with col1:
     filtered_df = df
     try:
         filtered_df = df[
-            (df['PCT_change'] < 4.5) &
+            (df['PCT_change_pre1'] < 3) &
+            (df['PCT_change_pre2'] < 3) &
+            ((df['PCT_change_pre1'] > 1) | (df['PCT_change_pre2'] > 1)) &
+            ((df['PCT_change_pre1'] < 0.5) | (df['PCT_change_pre2'] < 0.5)) &
             (df['PCT_day_change'] < 4) &
-            (df['PCT_day_change'] > 1.7) &
+            (df['PCT_day_change'] > -1.3) &
             ((df['kNeighboursValue_reg'] > 0.5) & (df['mlpValue_reg'] > 0.5)) &
             ((df['kNeighboursValue_reg'] > 1) | (df['mlpValue_reg'] > 1)) &
-            ((df['kNeighboursValue_reg_merged'] > 1.5) | (df['mlpValue_reg_merged'] > 2))
+            ((df['kNeighboursValue_reg_merged'] > 1) | (df['mlpValue_reg_merged'] > 1)) &
+            ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -2))
             ]
     except KeyError as e:
         print("")
@@ -339,12 +343,16 @@ with col3:
     filtered_df = df
     try:
         filtered_df = df[
-            (df['PCT_change'] > -4.5) &
+            (df['PCT_change_pre1'] > -3) &
+            (df['PCT_change_pre2'] > -3) &
+            ((df['PCT_change_pre1'] < -1) | (df['PCT_change_pre2'] < -1)) &
+            ((df['PCT_change_pre1'] > -0.5) | (df['PCT_change_pre2'] > -0.5)) &
             (df['PCT_day_change'] > -4) &
-            (df['PCT_day_change'] < -1.7) &
+            (df['PCT_day_change'] < 1.3) &
             ((df['kNeighboursValue_reg'] < -0.5) & (df['mlpValue_reg'] < -0.5)) &
             ((df['kNeighboursValue_reg'] < -1) | (df['mlpValue_reg'] < -1)) &
-            ((df['kNeighboursValue_reg_merged'] < -1.5) | (df['mlpValue_reg_merged'] < -2))
+            ((df['kNeighboursValue_reg_merged'] < -1) | (df['mlpValue_reg_merged'] < -1)) &
+            ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT10_change'] > 2))
             ]
     except KeyError as e:
         print("")
