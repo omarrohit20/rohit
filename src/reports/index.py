@@ -1,11 +1,10 @@
 # Streamlit navigation index for pages in this folder
 import streamlit as st
 from pathlib import Path
+import os
+import urllib.parse
 
 st.set_page_config(layout="wide", page_title="Reports Index", initial_sidebar_state="expanded")
-
-st.title("Reports — Page Navigator")
-st.markdown("Use this file as the entry point for reports. Run with `streamlit run src/reports/index.py` and select a page from the sidebar.")
 
 # Discover python files in the same folder
 base = Path(__file__).parent
@@ -13,17 +12,78 @@ exclude = {Path(__file__).name, "__init__.py", "rbase.py", "temp.py"}
 py_files = [p.name for p in base.glob("*.py") if p.name not in exclude]
 py_files.sort()
 
-selected = st.sidebar.selectbox("Open page", py_files)
+# Respect query params for initial page selection
+try:
+    params = st.query_params
+except Exception:
+    params = {}
+
+path_param = params.get('path', [None])[0]
+fullpath_param = params.get('fullpath', [None])[0]
+
+# Determine default index from query params (try filename first, then basename of path)
+def _find_index_from_param(p):
+    if not p:
+        return None
+    try:
+        decoded = urllib.parse.unquote_plus(p)
+    except Exception:
+        decoded = p
+    if decoded in py_files:
+        return py_files.index(decoded)
+    b = os.path.basename(decoded)
+    if b in py_files:
+        return py_files.index(b)
+    return None
+
+
+def _set_query_params(path, fullpath):
+    """Set query params using available Streamlit API (prefers stable `set_query_params`)."""
+    try:
+        setter = getattr(st, "set_query_params", None) or getattr(st, "experimental_set_query_params", None)
+        if setter:
+            setter(path=path, fullpath=fullpath)
+    except Exception:
+        pass
+
+default_index = None
+if path_param:
+    default_index = _find_index_from_param(path_param)
+if default_index is None and fullpath_param:
+    default_index = _find_index_from_param(fullpath_param)
+if default_index is None:
+    default_index = 0
+
+# Initialize selected page from query params once (don't override user changes later)
+if 'initialized_from_query' not in st.session_state:
+    if path_param or fullpath_param:
+        try:
+            st.session_state['selected_page'] = py_files[default_index]
+        except Exception:
+            pass
+    st.session_state['initialized_from_query'] = True
+
+in_process = st.sidebar.checkbox("Load pages in-process (single Streamlit app)", value=True)
+selected = st.sidebar.selectbox("Open page", py_files, index=default_index, key="selected_page")
+
+# Ensure the browser URL shows the selected page (set once per change to avoid rerun loops)
+try:
+    cur_path = selected
+    cur_full = str(base / selected)
+    if st.session_state.get('_last_query_path') != cur_path:
+        _set_query_params(cur_path, cur_full)
+        st.session_state['_last_query_path'] = cur_path
+except Exception:
+    pass
 
 st.sidebar.markdown("---")
-# Option: in-process navigation
-in_process = st.sidebar.checkbox("Load pages in-process (single Streamlit app)", value=True)
 st.sidebar.write("Select a page above to start it. In-process mode imports the module and calls `main()` (recommended). Otherwise it will start a separate Streamlit process.")
 
 import subprocess
 import sys
 import socket
 import os
+import urllib.parse
 
 
 def _find_free_port(start=8501, end=8600):
@@ -101,7 +161,11 @@ if selected:
         if running:
             proc = st.session_state['page_processes'][selected]['proc']
             port = st.session_state['page_processes'][selected]['port']
-            st.markdown(f"Open the page in a new tab: http://localhost:{port}")
+            # include the file path as a query param in the URL
+            encoded_fullpath = urllib.parse.quote_plus(str(sel_path))
+            encoded_name = urllib.parse.quote_plus(selected)
+            url = f"http://localhost:{port}/?path={encoded_name}&fullpath={encoded_fullpath}"
+            st.markdown(f"Open the page in a new tab: {url}")
             if st.button("Stop page"):
                 try:
                     proc.terminate()
