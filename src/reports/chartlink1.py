@@ -27,14 +27,27 @@ def main():
     except Exception:
         pass
 
-    col1, col2, col3, col4 = st.columns(4)
+    col0, col1, col2, col00, col3, col4 = st.columns(6)
+    with col0:
+        df = rb.getdf('supertrend-morning-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT10_change'] < 7)) |
+                ((df['forecast_day_PCT10_change'] < -6)) |
+                ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] <= -0.5))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Supertrend Morning Buy', color='LG')
     with col1:
         df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) |
-                (df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) 
+                ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT10_change'] < 7)) |
+                ((df['forecast_day_PCT10_change'] < -6)) |
+                ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] <= -0.5))
                 ]
         except KeyError as e:
             print("")
@@ -44,19 +57,33 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) |
-                (df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) 
+                ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT10_change'] < 7)) |
+                ((df['forecast_day_PCT10_change'] < -6)) |
+                ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] <= -0.5))
                 ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Crossed Day Highs', color='LG')
+    with col00:
+        df = rb.getdf('supertrend-morning-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT10_change'] > -7)) |
+                ((df['forecast_day_PCT10_change'] > 6)) |
+                ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] >= 0.5))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Supertrend Morning Sell', color='LG')
     with col3:
         df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT10_change'] > 6)) |
-                (df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) 
+                ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT10_change'] > -7)) |
+                ((df['forecast_day_PCT10_change'] > 6)) |
+                ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] >= 0.5))
                 ]
         except KeyError as e:
             print("")
@@ -66,8 +93,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT10_change'] > 6)) |
-                (df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) 
+                ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT10_change'] > -7)) |
+                ((df['forecast_day_PCT10_change'] > 6)) |
+                ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] >= 0.5))
                 ]
         except KeyError as e:
             print("")
