@@ -995,6 +995,22 @@ def result_data_reg(scrip):
                 db['highBuy'].insert_one(regression_data)
             else:
                 db['highBuy'].update_one({'scrip':scrip}, { "$set": {'ml':'MLBuy1'}})
+        elif ((regression_high_copy['PCT_change_pre1'] < 3) &
+                (regression_high_copy['PCT_change_pre2'] < 3) &
+                ((regression_high_copy['PCT_change_pre1'] > 1) | (regression_high_copy['PCT_change_pre2'] > 1)) &
+                ((regression_high_copy['PCT_change_pre1'] < 0.5) | (regression_high_copy['PCT_change_pre2'] < 0.5)) &
+                (regression_high_copy['PCT_day_change'] < 2.5) &
+                (regression_high_copy['PCT_day_change'] > -1.3) &
+                ((regression_high_copy['kNeighboursValue_reg'] > 0.5) & (regression_high_copy['mlpValue_reg'] > 0.5)) &
+                ((regression_high_copy['kNeighboursValue_reg'] > 1) | (regression_high_copy['mlpValue_reg'] > 1)) &
+                ((regression_low_copy['kNeighboursValue_reg'] > 1) | (regression_low_copy['mlpValue_reg'] > 1)) &
+                ((regression_high_copy['forecast_day_PCT10_change'] > 2) | (regression_high_copy['forecast_day_PCT10_change'] < -2))
+            ):
+            if ((db['highBuy'].find_one({'scrip': scrip}) is None)):
+                regression_data['ml'] = 'MLBuy2'
+                db['highBuy'].insert_one(regression_data)
+            else:
+                db['highBuy'].update_one({'scrip': scrip}, {"$set": {'ml': 'MLBuy2'}})
         
         regression_data = regression_low_copy2
         if(sell_high_volatility(regression_low_copy2, regressionResultLow)):
@@ -1045,6 +1061,22 @@ def result_data_reg(scrip):
                 db['lowSell'].insert_one(regression_data)
             else:
                 db['lowSell'].update_one({'scrip':scrip}, { "$set": {'ml':'MLSell1'}})
+        elif ((regression_low_copy['PCT_change_pre1'] > -3) &
+                (regression_low_copy['PCT_change_pre2'] > -3) &
+                ((regression_low_copy['PCT_change_pre1'] < -1) | (regression_low_copy['PCT_change_pre2'] < -1)) &
+                ((regression_low_copy['PCT_change_pre1'] > -0.5) | (regression_low_copy['PCT_change_pre2'] > -0.5)) &
+                (regression_low_copy['PCT_day_change'] > -2.5) &
+                (regression_low_copy['PCT_day_change'] < 1.3) &
+                ((regression_low_copy['kNeighboursValue_reg'] < -0.5) & (regression_low_copy['mlpValue_reg'] < -0.5)) &
+                ((regression_low_copy['kNeighboursValue_reg'] < -1) | (regression_low_copy['mlpValue_reg'] < -1)) &
+                ((regression_high_copy['kNeighboursValue_reg'] < -1) | (regression_high_copy['mlpValue_reg'] < -1)) &
+                ((regression_low_copy['forecast_day_PCT10_change'] < -2) | (regression_low_copy['forecast_day_PCT10_change'] > 2))
+            ):
+            if ((db['lowSell'].find_one({'scrip': scrip}) is None)):
+                regression_data['ml'] = 'MLSell2'
+                db['lowSell'].insert_one(regression_data)
+            else:
+                db['lowSell'].update_one({'scrip': scrip}, {"$set": {'ml': 'MLSell2'}})
         
         regression_high_copy['filter2']=""
         if(is_filter_all_accuracy(regression_high_copy, regression_high, regression_low, regressionResultHigh, 'High', None)):

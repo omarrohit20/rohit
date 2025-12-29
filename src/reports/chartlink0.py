@@ -425,7 +425,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'LastDayMarketGT1 : todayDownLT-0.5(+)', color='R', height=150)
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -438,6 +438,16 @@ def main():
             print("")
         rb.render(st, filtered_df, 'SuperTrend-ConsolidationBuy', color='G')
     with col2:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                df['mlData'].str.contains("MLBuy") | df['mlData'].str.contains("MLhighBuy")
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'MLBuy', color='G', height=200)
+    with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
         try:
@@ -448,6 +458,18 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'SuperTrend-ConsolidationSell', color='R')
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                df['mlData'].str.contains("MLSell") | df['mlData'].str.contains("MLlowSell")
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'MLSell', color='R', height=200)
+
+
 
 
 if __name__ == '__main__':

@@ -320,7 +320,7 @@ def main():
                 (df['PCT_change_pre2'] < 3) &
                 ((df['PCT_change_pre1'] > 1) | (df['PCT_change_pre2'] > 1)) &
                 ((df['PCT_change_pre1'] < 0.5) | (df['PCT_change_pre2'] < 0.5)) &
-                (df['PCT_day_change'] < 4) &
+                (df['PCT_day_change'] < 2.5) &
                 (df['PCT_day_change'] > -1.3) &
                 ((df['kNeighboursValue_reg'] > 0.5) & (df['mlpValue_reg'] > 0.5)) &
                 ((df['kNeighboursValue_reg'] > 1) | (df['mlpValue_reg'] > 1)) &
@@ -339,7 +339,7 @@ def main():
                 (df['PCT_change_pre2'] < 3) &
                 ((df['PCT_change_pre1'] > 1) | (df['PCT_change_pre2'] > 1)) &
                 ((df['PCT_change_pre1'] < 0.5) | (df['PCT_change_pre2'] < 0.5)) &
-                (df['PCT_day_change'] < 4) &
+                (df['PCT_day_change'] < 2.5) &
                 (df['PCT_day_change'] > -0.7) &
                 # (df['highTail'] < 1.3) &
                 # ((df['kNeighboursValue_reg'] > 0.5) & (df['mlpValue_reg'] > 0.5)) &
@@ -360,7 +360,7 @@ def main():
                 (df['PCT_change_pre2'] > -3) &
                 ((df['PCT_change_pre1'] < -1) | (df['PCT_change_pre2'] < -1)) &
                 ((df['PCT_change_pre1'] > -0.5) | (df['PCT_change_pre2'] > -0.5)) &
-                (df['PCT_day_change'] > -4) &
+                (df['PCT_day_change'] > -2.5) &
                 (df['PCT_day_change'] < 1.3) &
                 ((df['kNeighboursValue_reg'] < -0.5) & (df['mlpValue_reg'] < -0.5)) &
                 ((df['kNeighboursValue_reg'] < -1) | (df['mlpValue_reg'] < -1)) &
@@ -379,7 +379,7 @@ def main():
                 (df['PCT_change_pre2'] > -3) &
                 ((df['PCT_change_pre1'] < -1) | (df['PCT_change_pre2'] < -1)) &
                 ((df['PCT_change_pre1'] > -0.5) | (df['PCT_change_pre2'] > -0.5)) &
-                (df['PCT_day_change'] > -4) &
+                (df['PCT_day_change'] > -2.5) &
                 (df['PCT_day_change'] < 0.7) &
                 # (df['lowTail'] < 1.3) &
                 # ((df['kNeighboursValue_reg'] < -0.5) & (df['mlpValue_reg'] < -0.5)) &
