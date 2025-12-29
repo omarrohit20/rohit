@@ -349,7 +349,7 @@ def highlight_category_row(df, color='NA'):
 
 def highlight_category_column(value):
     """Highlights the entire row based on the 'Category' column value."""
-    if "0@@CROSSED2" in value:
+    if "0@@CROSSED" in value:
         return 'background-color: #CBC3E3'
     if "0@@SUPER" in value:
         return 'background-color: #CBC3E3'
@@ -480,9 +480,9 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
     elif not df.empty:
         df_styled = highlight_category_row(df, color=color)
         if(chartlink1) and color =='LG':
-            df_styled = df_styled.applymap(highlight_category_column_super, subset=['mlData'])
+            df_styled = df_styled.applymap(highlight_category_column, subset=['mlData'])
         elif ((chartlink0) and (color == 'G' or color == 'R')):
-            df_styled = df_styled.applymap(highlight_category_column_super, subset=['mlData'])
+            df_styled = df_styled.applymap(highlight_category_column, subset=['mlData'])
         else:
             df_styled = df_styled.applymap(highlight_category_column, subset=['mlData'])
         # Apply the second style *directly* to the Styler object

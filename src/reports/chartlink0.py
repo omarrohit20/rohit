@@ -98,6 +98,8 @@ def main():
         try:
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] > 3.5) | (df['forecast_day_PCT10_change'] < -6)) &
+                (df['yearLowChange'] > 10) &
+                (df['month3HighChange'] > -15) &
                 (df['mlData'].str.contains("Z&&&") 
                    |((df['week2HighChange'] > -1) &
                     (df['monthHighChange'] < 5) &

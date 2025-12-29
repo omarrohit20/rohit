@@ -29,6 +29,53 @@ def main():
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
+        df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) |
+                (df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Crossed 2 Day Highs', color='LG')
+    with col2:
+        df = rb.getdf('crossed-day-high')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) |
+                (df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Crossed Day Highs', color='LG')
+    with col3:
+        df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT10_change'] > 6)) |
+                (df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Crossed 2 Day Lows', color='LG')
+    with col4:
+        df = rb.getdf('crossed-day-low')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT10_change'] > 6)) |
+                (df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Crossed Day Lows', color='LG')
+
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
         try:

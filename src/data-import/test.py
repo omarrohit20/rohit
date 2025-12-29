@@ -1,30 +1,29 @@
-#import yfinance as yf
-#data = yf.download("INFY.NS", start="2017-01-01", end="2017-04-30")
-#print(data)
+import requests
+import pandas as pd
+from bs4 import BeautifulSoup
 
-import yfinance as yf
+def fetch_chartink_stock(symbol_url="https://chartink.com/stocks/rblbank.html"):
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
+    r = requests.get(symbol_url, headers=headers)
+    r.raise_for_status()
 
-# Define the ticker symbol
-ticker_symbol = "TCS.NS"
+    soup = BeautifulSoup(r.text, "html.parser")
 
-# Create a Ticker object
-ticker = yf.Ticker(ticker_symbol)
+    # Chartink renders historical data in a table with id 'tblHistory'
+    table = soup.find("table", {"id": "tblHistory"})
+    rows = table.find_all("tr")
 
-# Fetch historical market data
-historical_data = ticker.history(period="1y")  # data for the last year
-print("Historical Data:")
-print(historical_data)
+    data = []
+    for row in rows[1:]:  # skip header
+        cols = [col.text.strip() for col in row.find_all("td")]
+        if cols:
+            data.append(cols)
 
-# Fetch basic financials
-financials = ticker.financials
-print("\nFinancials:")
-print(financials)
+    # Convert to DataFrame
+    df = pd.DataFrame(data, columns=["Date", "Open", "High", "Low", "Close", "Volume"])
+    return df
 
-# Fetch stock actions like dividends and splits
-actions = ticker.actions
-print("\nStock Actions:")
-print(actions)
-
-
-
-
+df = fetch_chartink_stock()
+print(df.head())
