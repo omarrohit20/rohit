@@ -276,14 +276,11 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (df['PCT_change'] < 1) &
-                (df['PCT_day_change'] < 1) &
-                # (df['PCT_day_change'] > -0.5) &
-                # (df['PCT_change_pre1'] < -1) &
-                # (df['PCT_day_change_pre1'] < -1.3) &
-                # (df['lowTail'] > 1.5) &
-                ((df['kNeighboursValue_reg'] > 0.5) & (df['mlpValue_reg'] > 0.5)) &
-                ((df['kNeighboursValue_reg'] > 1) | (df['mlpValue_reg'] > 1))
+                (df['PCT_change'] < 1.5) &
+                (df['PCT_day_change'] < 1.5) &
+                (df['PCT_change'] > -0.5) &
+                (df['PCT_day_change'] > -0.5) &
+                (df['highTail'] > 2.5)
                 ]
         except KeyError as e:
             print("")
@@ -307,11 +304,11 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (df['PCT_change'] > -1) &
-                (df['PCT_day_change'] > -1) &
-                #(df['highTail'] > 1.5) &
-                ((df['kNeighboursValue_reg'] < -0.5) & (df['mlpValue_reg'] < -0.5)) &
-                ((df['kNeighboursValue_reg'] < -1) | (df['mlpValue_reg'] < -1))
+                (df['PCT_change'] > -1.5) &
+                (df['PCT_day_change'] > -1.5) &
+                (df['PCT_change'] < 0.5) &
+                (df['PCT_day_change'] < 0.5) &
+                (df['lowTail'] > 2.5)
                 ]
         except KeyError as e:
             print("")
