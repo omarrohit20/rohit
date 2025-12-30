@@ -363,8 +363,7 @@ def main():
                 (~df['systemtime'].str.contains('09:', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:0', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:1', case=False, na=False)) &
-                (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
-                ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6))
+                ((df['forecast_day_PCT10_change'] > 4) | (df['forecast_day_PCT10_change'] < -6))
             ]
         except KeyError as e:
             print("")
@@ -380,7 +379,6 @@ def main():
                 (~df['systemtime'].str.contains('09:', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:0', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:1', case=False, na=False)) &
-                (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, na=False)) &
                 ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
                 (df['PCT_day_change'] > -1) & (df['PCT_day_change'] < 1) &
@@ -418,9 +416,8 @@ def main():
                 (~df['systemtime'].str.contains('09:', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:0', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:1', case=False, na=False)) &
-                (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, na=False)) &
-                ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT10_change'] > 6))
+                ((df['forecast_day_PCT10_change'] < -4) | (df['forecast_day_PCT10_change'] > 6))
                 ]
         except KeyError as e:
             print("")
@@ -436,7 +433,6 @@ def main():
                 (~df['systemtime'].str.contains('09:', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:0', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:1', case=False, na=False)) &
-                (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
                 ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT10_change'] > 6)) &
                 (df['PCT_day_change'] > -1) & (df['PCT_day_change'] < 1) &
                 (df['PCT_day_change_pre1'] > -1.5) & (df['PCT_day_change_pre1'] < 1.5) &

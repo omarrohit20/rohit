@@ -459,6 +459,7 @@ def main():
         rb.render(st, filtered_df, 'SuperTrend-ConsolidationBuy', color='G')
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
+        empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
             filtered_df = df[
@@ -467,9 +468,13 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'MLBuy', color='G', height=200)
+        if len(df) > 5:
+            rb.render(st, filtered_df, 'MLBuy', color='G', height=200)
+        else:
+            rb.render(st, empty_df, 'MLBuy', color='G', height=200)
     with col3:
         df = rb.getdf('morning-volume-breakout-buy')
+        empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
             filtered_df = df[
@@ -479,7 +484,10 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'MLBuy', color='G', height=200)
+        if len(df) > 5:
+            rb.render(st, filtered_df, 'MLBuy', color='G', height=200)
+        else:
+            rb.render(st, empty_df, 'MLBuy', color='G', height=200)
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -493,6 +501,7 @@ def main():
         rb.render(st, filtered_df, 'SuperTrend-ConsolidationSell', color='R')
     with col5:
         df = rb.getdf('morning-volume-breakout-sell')
+        empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
             filtered_df = df[
@@ -501,9 +510,13 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'MLSell', color='R', height=200)
+        if len(df) > 5:
+            rb.render(st, filtered_df, 'MLSell', color='R', height=200)
+        else:
+            rb.render(st, empty_df, 'MLSell', color='R', height=200)
     with col6:
         df = rb.getdf('morning-volume-breakout-sell')
+        empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
             filtered_df = df[
@@ -513,9 +526,10 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'MLSell', color='R', height=200)
-
-
+        if len(df) > 5:
+            rb.render(st, filtered_df, 'MLSell', color='R', height=200)
+        else:
+            rb.render(st, empty_df, 'MLSell', color='R', height=200)
 
 
 if __name__ == '__main__':

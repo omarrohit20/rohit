@@ -256,7 +256,7 @@ def main():
                   renderml=True, color='R')
 
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
         df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
         filtered_df = df
@@ -280,13 +280,33 @@ def main():
                 (df['PCT_day_change'] < 1.5) &
                 (df['PCT_change'] > -0.5) &
                 (df['PCT_day_change'] > -0.5) &
+                ((df['PCT_day_change_pre1'] > 0.3) | (df['PCT_day_change_pre2'] > 0.3)) &
+                (df['forecast_day_PCT10_change'] > 3) &
                 (df['highTail'] > 2.5)
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'MLBUY', column_conf=rb.column_config_ml, column_order=rb.column_order_ml,
-                  renderml=True, color='LG')
+        rb.render(st, filtered_df, 'Buy-HighTail', column_conf=rb.column_config_ml, column_order=rb.column_order_ml,
+                  renderml=True, color='G')
+        
     with col3:
+        df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] < 1.5) &
+                (df['PCT_day_change'] < 1.5) &
+                (df['PCT_change'] > -0.5) &
+                (df['PCT_day_change'] > -0.5) &
+                #((df['PCT_day_change_pre1'] < 0.3) & (df['PCT_day_change_pre2'] < 0.3)) &
+                (df['forecast_day_PCT10_change'] < -3) &
+                (df['highTail'] > 2.5)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Sell-HighTail', column_conf=rb.column_config_ml, column_order=rb.column_order_ml,
+                  renderml=True, color='R')
+    with col4:
         df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
         filtered_df = df
         try:
@@ -299,7 +319,7 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'MLSELL', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
-    with col4:
+    with col5:
         df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
         filtered_df = df
         try:
@@ -308,11 +328,30 @@ def main():
                 (df['PCT_day_change'] > -1.5) &
                 (df['PCT_change'] < 0.5) &
                 (df['PCT_day_change'] < 0.5) &
+                ((df['PCT_day_change_pre1'] < -0.3) | (df['PCT_day_change_pre2'] < -0.3)) &
+                (df['forecast_day_PCT10_change'] < -3) &
                 (df['lowTail'] > 2.5)
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'MLBUY', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'Sell-LowTail', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='R')
+    with col6:
+        df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] > -1.5) &
+                (df['PCT_day_change'] > -1.5) &
+                (df['PCT_change'] < 0.5) &
+                (df['PCT_day_change'] < 0.5) &
+                #((df['PCT_day_change_pre1'] > 0.3) & (df['PCT_day_change_pre2'] > 0.3)) &
+                (df['forecast_day_PCT10_change'] > 3) &
+                (df['lowTail'] > 2.5)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Buy-LowTail', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+
 
 
 if __name__ == '__main__':
