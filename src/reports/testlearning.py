@@ -172,33 +172,6 @@ def main():
         else:
             rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
 
-    col1, col3 = st.columns(2)
-    with col1:
-        df = rb.getdf('morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
-                (~df['systemtime'].str.contains('09:30', case=False, na=False)) &
-                ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
-                (df['mlData'].str.contains("0@@CROSSED2") | df['mlData'].str.contains("0@@SUPER"))
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-buy', color='G', height=300)
-    with col3:
-        df = rb.getdf('morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
-                (~df['systemtime'].str.contains('09:30', case=False, na=False)) &
-                ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT10_change'] > 6)) &
-                (df['mlData'].str.contains("0@@CROSSED2") | df['mlData'].str.contains("0@@SUPER"))
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-sell', color='R', height=300)
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
