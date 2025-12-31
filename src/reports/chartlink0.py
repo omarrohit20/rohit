@@ -101,7 +101,7 @@ def main():
                 ((df['forecast_day_PCT10_change'] > 3.5) | (df['forecast_day_PCT10_change'] < -6)) &
                 (df['yearLowChange'] > 10) &
                 (df['yearHighChange'] >= -70) &
-                (df['month3HighChange'] > -15) &
+                #(df['month3HighChange'] > -15) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 ((df['mlData'].str.contains("Z&&&") & (df['yearHighChange'] <= -10))
                    |((df['week2HighChange'] > -1) &
@@ -148,8 +148,12 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                df['mlData'].str.contains("Z&&&") &
-                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                ((df['forecast_day_PCT10_change'] < -3.5) | (df['forecast_day_PCT10_change'] > 6)) &
+                (df['yearHighChange'] < -10) &
+                (df['yearlowChange'] < 70) &
+                #(df['month3LowChange'] < 15) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                (df['mlData'].str.contains("Z&&&")) 
             ]
         except KeyError as e:
             print("")
