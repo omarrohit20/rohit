@@ -100,9 +100,10 @@ def main():
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] > 3.5) | (df['forecast_day_PCT10_change'] < -6)) &
                 (df['yearLowChange'] > 10) &
+                (df['yearHighChange'] >= -70) &
                 (df['month3HighChange'] > -15) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                (df['mlData'].str.contains("Z&&&") 
+                ((df['mlData'].str.contains("Z&&&") & (df['yearHighChange'] <= -10))
                    |((df['week2HighChange'] > -1) &
                     (df['monthHighChange'] < 5) &
                     (df['yearHighChange'] > -35) &
@@ -366,7 +367,7 @@ def main():
         rb.render(st, filtered_df, 'LastDayMarketGT1 : todayDownLT-0.5(+)', color='R', height=150)
 
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col11, col2, col3, col33, col4 = st.columns(6)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
@@ -381,6 +382,26 @@ def main():
                 (df['PCT_day_change_pre1'] < 1.3) &
                 (df['PCT_day_change_pre2'] < 1.3) &
                 (df['mlData'].str.contains('#TOP', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(df) > 5:
+            rb.render(st, filtered_df, 'Buy Momentum', color='G', height=200)
+        else:
+            rb.render(st, empty_df, 'Buy Momentum', color='G', height=200)
+    with col11:
+        df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['forecast_day_PCT10_change'] > 2) &
+                ((df['PCT_day_change'] < -1.3) | (df['PCT_day_change_pre1'] < -1.3)) &
+                ((df['PCT_day_change'] < 0.5) & (df['PCT_day_change_pre1'] < 0.5)) &
+                ((df['PCT_day_change'] > -3) & (df['PCT_day_change_pre1'] > -3)) &
+                #(df['mlData'].str.contains('#TOP', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
                 ]
         except KeyError as e:
@@ -427,6 +448,25 @@ def main():
             rb.render(st, filtered_df, 'Sell Momentum', color='R', height=200)
         else:
             rb.render(st, empty_df, 'Sell Momentum', color='R', height=200)
+    with col33:
+        df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['forecast_day_PCT10_change'] < -5) &
+                ((df['PCT_day_change'] > 2) | (df['PCT_day_change_pre1'] > 2)) &
+                ((df['PCT_day_change'] > -0.3) & (df['PCT_day_change_pre1'] > -0.3)) &
+                (df['mlData'].str.contains('#TOP', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(df) > 5:
+            rb.render(st, filtered_df, 'Buy Momentum', color='G', height=200)
+        else:
+            rb.render(st, empty_df, 'Buy Momentum', color='G', height=200)
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
