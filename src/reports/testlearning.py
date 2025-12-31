@@ -282,7 +282,8 @@ def main():
                 (df['PCT_day_change'] > -0.5) &
                 ((df['PCT_day_change_pre1'] > 0.3) | (df['PCT_day_change_pre2'] > 0.3)) &
                 (df['forecast_day_PCT10_change'] > 3) &
-                (df['highTail'] > 2.5)
+                (df['highTail'] > 2.5) &
+                (df['lowTail'] < 1.3)
                 ]
         except KeyError as e:
             print("")
@@ -299,7 +300,8 @@ def main():
                 (df['PCT_day_change'] > -0.5) &
                 #((df['PCT_day_change_pre1'] < 0.3) & (df['PCT_day_change_pre2'] < 0.3)) &
                 (df['forecast_day_PCT10_change'] < -3) &
-                (df['highTail'] > 2.5)
+                (df['highTail'] > 2.5) &
+                (df['lowTail'] < 1.3)
                 ]
         except KeyError as e:
             print("")
@@ -331,7 +333,8 @@ def main():
                 (df['PCT_day_change'] < 0.5) &
                 ((df['PCT_day_change_pre1'] < -0.3) | (df['PCT_day_change_pre2'] < -0.3)) &
                 (df['forecast_day_PCT10_change'] < -3) &
-                (df['lowTail'] > 2.5)
+                (df['lowTail'] > 2.5) &
+                (df['highTail'] < 1.3)
                 ]
         except KeyError as e:
             print("")
@@ -347,7 +350,8 @@ def main():
                 (df['PCT_day_change'] < 0.5) &
                 #((df['PCT_day_change_pre1'] > 0.3) & (df['PCT_day_change_pre2'] > 0.3)) &
                 (df['forecast_day_PCT10_change'] > 3) &
-                (df['lowTail'] > 2.5)
+                (df['lowTail'] > 2.5) &
+                (df['highTail'] < 1.3)
                 ]
         except KeyError as e:
             print("")
