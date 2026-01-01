@@ -15,23 +15,32 @@ def main():
     # main title
     st.title('10:00 -11:15 AM last 15-20 Minute trend: TrendingMarketOnlyUpDown')
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
-        df = rb.getintersectdf('buy-check-morning-down-breakup-02', 'crossed-day-high')
-        filtered_df = df
-        rb.render(st, filtered_df, 'Buy Check Morning Down Breakup 02s', color='G')
-    with col2:
         df = rb.getdf('supertrend-morningdown-buy')
         filtered_df = df
         rb.render(st, filtered_df, 'UpNow Supertrend MorningDown Buys', color='G')
-    with col3:
-        df = rb.getintersectdf('sell-check-morning-up-breakdown-02', 'crossed-day-low')
+    with col2:
+        df = rb.getintersectdf('buy-check-morning-down-breakup-02', 'crossed-day-high')
         filtered_df = df
-        rb.render(st, filtered_df, 'Sell Check Morning Up Breakdown 02s', color='R')
+        rb.render(st, filtered_df, 'Buy Check Morning Down Breakup 02s', color='G')
+    with col3:
+        df = rb.getdf('buy-check-morning-down-breakup-02')
+        filtered_df = df
+        rb.render(st, filtered_df, 'Buy Check Morning Down Breakup 02s', color='LG')
     with col4:
         df = rb.getdf('supertrend-morningup-sell')
         filtered_df = df
         rb.render(st, filtered_df, 'DownNow Supertrend  Morningup Sells', color='R')
+    with col5:
+        df = rb.getintersectdf('sell-check-morning-up-breakdown-02', 'crossed-day-low')
+        filtered_df = df
+        rb.render(st, filtered_df, 'Sell Check Morning Up Breakdown 02s', color='R')
+    with col6:
+        df = rb.getdf('sell-check-morning-up-breakdown-02')
+        filtered_df = df
+        rb.render(st, filtered_df, 'Sell Check Morning Up Breakdown 02s', color='LG')
+    
 
 
     col1, col2, col3, col4, col5, col6 = st.columns(6)

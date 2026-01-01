@@ -123,7 +123,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'DOJI Breakout Buy', color='LG')
+        rb.render(st, filtered_df, 'DOJI Breakout Buy', color='LG', height=150)
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -140,7 +140,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Buy', color='LG')
+        rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Buy', color='LG', height=150)
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -161,7 +161,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'DOJI Breakout Sell', color='LG')
+        rb.render(st, filtered_df, 'DOJI Breakout Sell', color='LG', height=150)
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -177,7 +177,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Sell', color='LG')
+        rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Sell', color='LG', height=150)
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -207,7 +207,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'week2HighGT0 : #LT2 : Avoid index up', color='G')
+        rb.render(st, filtered_df, 'week2HighGT0 : #LT2 : Avoid index up', color='G', height=150)
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -227,11 +227,12 @@ def main():
                 (df['week2LowChange'] > 2) &
                 (df['monthHighChange'] > 0) &
                 (df['year5HighChange'] < 0) &
+                (df['mlData'].str.contains('0@@', case=False, regex=True, na=False)) &
                 (df['PCT_day_change_pre1'] < 1)
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'week2HighGT0-1 : Avoid-GT2-And-Top5', color='G')
+        rb.render(st, filtered_df, 'week2HighGT0-1 : Avoid-GT2-And-Top5', color='G', height=150)
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -254,11 +255,12 @@ def main():
                 (df['PCT_day_change_pre1'] >= -2.3) &
                 (df['PCT_day_change_pre2'] <= 1.5) &
                 (df['PCT_day_change_pre2'] >= -3) &
+                (df['mlData'].str.contains('0@@', case=False, regex=True, na=False)) &
                 (df['weekLowChange'] < 0)
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'week2LowLT0-1 : #LT2', color='R')
+        rb.render(st, filtered_df, 'week2LowLT0-1 : #LT2', color='R', height=150)
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -282,7 +284,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'week2LowLT0-1 : Avoid-LT(-2)-And-Top5', color='R')
+        rb.render(st, filtered_df, 'week2LowLT0-1 : Avoid-LT(-2)-And-Top5', color='R', height=150)
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -440,7 +442,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'MorningVolumeBreakoutBuys + NearMonthLow', color='G')
+        rb.render(st, filtered_df, 'MorningVolumeBreakoutBuys + NearMonthLow', color='G', height=150)
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -460,7 +462,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'MorningVolumeBreakoutBuys + NearMonthLow', color='LG')
+        rb.render(st, filtered_df, 'MorningVolumeBreakoutBuys + NearMonthLow', color='LG', height=150)
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -479,7 +481,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'MorningVolumeBreakoutSells + NearMonthHigh', color='R')
+        rb.render(st, filtered_df, 'MorningVolumeBreakoutSells + NearMonthHigh', color='R', height=150)
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -499,7 +501,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'MorningVolumeBreakoutSells + NearMonthHigh', color='LG')
+        rb.render(st, filtered_df, 'MorningVolumeBreakoutSells + NearMonthHigh', color='LG', height=150)
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -525,7 +527,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'LDayMarketUpGT1(TodayOpenedFlat) : PCTDayChangePre2GT1', color='LG')
+        rb.render(st, filtered_df, 'LDayMarketUpGT1(TodayOpenedFlat) : PCTDayChangePre2GT1', color='LG', height=150)
     with col2:
         df = rb.getdf('Breakout-Beey-2')
         filtered_df = df
@@ -542,7 +544,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout Beey 2s - Weekly High not reached - LT(-1)', color='LG')
+        rb.render(st, filtered_df, 'Breakout Beey 2s - Weekly High not reached - LT(-1)', color='LG', height=150)
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -564,7 +566,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'LDayMarketDownLT-1(TodayOpenedFlat) : PCTDayChangePre2LT-1', color='LG')
+        rb.render(st, filtered_df, 'LDayMarketDownLT-1(TodayOpenedFlat) : PCTDayChangePre2LT-1', color='LG', height=150)
     with col4:
         df = rb.getdf('Breakout-Siill-2')
         filtered_df = df
@@ -581,7 +583,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout Siill 2s - Weekly Low not reached -GT(1)', color='LG')
+        rb.render(st, filtered_df, 'Breakout Siill 2s - Weekly Low not reached -GT(1)', color='LG', height=150)
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -608,7 +610,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'LDayMarketUpGT1(TodayOpenedFlat) :_ TOP Buy', color='LG')
+        rb.render(st, filtered_df, 'LDayMarketUpGT1(TodayOpenedFlat) :_ TOP Buy', color='LG', height=150)
     with col2:
         df = rb.getdf('Breakout-Beey-2')
         filtered_df = df
@@ -624,7 +626,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout Beey 2s - Weekly High not reached - 09:45', color='LG')
+        rb.render(st, filtered_df, 'Breakout Beey 2s - Weekly High not reached - 09:45', color='LG', height=150)
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -646,7 +648,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'LDayMarketDownLT-1(TodayOpenedFlat) : _TOP Sell', color='LG')
+        rb.render(st, filtered_df, 'LDayMarketDownLT-1(TodayOpenedFlat) : _TOP Sell', color='LG', height=150)
     with col4:
         df = rb.getdf('Breakout-Siill-2')
         filtered_df = df
@@ -661,7 +663,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout Siill 2s - Weekly Low not reached -GT(1)- 9:45', color='LG')
+        rb.render(st, filtered_df, 'Breakout Siill 2s - Weekly Low not reached -GT(1)- 9:45', color='LG', height=150)
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -681,9 +683,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) <= 3:
-            rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutMH', color='LG')
+            rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutMH', color='LG', height=150)
         else:
-            rb.render(st, empty_df, 'morning-volume-breakout-buy + breakoutMH', color='LG')
+            rb.render(st, empty_df, 'morning-volume-breakout-buy + breakoutMH', color='LG', height=150)
     with col2:
         df = rb.getintersectdf('morning-volume-breakout-buy', 'breakoutM2H')
         expected_columns = list(set(df.columns))
@@ -700,9 +702,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) <= 3:
-            rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutM2H', color='LG')
+            rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutM2H', color='LG', height=150)
         else:
-            rb.render(st, empty_df, 'morning-volume-breakout-buy + breakoutM2H', color='LG')
+            rb.render(st, empty_df, 'morning-volume-breakout-buy + breakoutM2H', color='LG', height=150)
     with col3:
         df = rb.getintersectdf('morning-volume-breakout-sell', 'breakoutML')
         expected_columns = list(set(df.columns))
@@ -721,9 +723,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) <= 3:
-            rb.render(st, filtered_df, 'morning-volume-breakout-sell + breakoutML', color='LG')
+            rb.render(st, filtered_df, 'morning-volume-breakout-sell + breakoutML', color='LG', height=150)
         else:
-            rb.render(st, empty_df, 'morning-volume-breakout-sell + breakoutML', color='LG')
+            rb.render(st, empty_df, 'morning-volume-breakout-sell + breakoutML', color='LG', height=150)
     with col4:
         df = rb.getintersectdf('morning-volume-breakout-sell', 'breakoutM2L')
         expected_columns = list(set(df.columns))
@@ -741,9 +743,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) <= 3:
-            rb.render(st, filtered_df, 'morning-volume-breakout-sell + breakoutM2L', color='LG')
+            rb.render(st, filtered_df, 'morning-volume-breakout-sell + breakoutM2L', color='LG', height=150)
         else:
-            rb.render(st, empty_df, 'morning-volume-breakout-sell + breakoutM2L', color='LG')
+            rb.render(st, empty_df, 'morning-volume-breakout-sell + breakoutM2L', color='LG', height=150)
 
 
 if __name__ == '__main__':
