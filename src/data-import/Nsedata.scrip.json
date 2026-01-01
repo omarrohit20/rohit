@@ -1,0 +1,5010 @@
+[{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdadc"
+  },
+  "company": "360 ONE WAM Ltd.",
+  "industry": "Financial Services",
+  "scrip": "360ONE",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdadd"
+  },
+  "company": "3M India Ltd.",
+  "industry": "Diversified",
+  "scrip": "3MINDIA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdade"
+  },
+  "company": "ABB India Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "ABB",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdadf"
+  },
+  "company": "ACC Ltd.",
+  "industry": "Construction Materials",
+  "scrip": "ACC",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdae0"
+  },
+  "company": "ACME Solar Holdings Ltd.",
+  "industry": "Power",
+  "scrip": "ACMESOLAR",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdae1"
+  },
+  "company": "AIA Engineering Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "AIAENG",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdae2"
+  },
+  "company": "APL Apollo Tubes Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "APLAPOLLO",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdae3"
+  },
+  "company": "AU Small Finance Bank Ltd.",
+  "industry": "Financial Services",
+  "scrip": "AUBANK",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdae4"
+  },
+  "company": "AWL Agri Business Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "AWL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdae5"
+  },
+  "company": "Aadhar Housing Finance Ltd.",
+  "industry": "Financial Services",
+  "scrip": "AADHARHFC",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdae6"
+  },
+  "company": "Aarti Industries Ltd.",
+  "industry": "Chemicals",
+  "scrip": "AARTIIND",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdae7"
+  },
+  "company": "Aavas Financiers Ltd.",
+  "industry": "Financial Services",
+  "scrip": "AAVAS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdae8"
+  },
+  "company": "Abbott India Ltd.",
+  "industry": "Healthcare",
+  "scrip": "ABBOTINDIA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdae9"
+  },
+  "company": "Action Construction Equipment Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "ACE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaea"
+  },
+  "company": "Adani Energy Solutions Ltd.",
+  "industry": "Power",
+  "scrip": "ADANIENSOL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaeb"
+  },
+  "company": "Adani Enterprises Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "ADANIENT",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaec"
+  },
+  "company": "Adani Green Energy Ltd.",
+  "industry": "Power",
+  "scrip": "ADANIGREEN",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaed"
+  },
+  "company": "Adani Ports and Special Economic Zone Ltd.",
+  "industry": "Services",
+  "scrip": "ADANIPORTS",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaee"
+  },
+  "company": "Adani Power Ltd.",
+  "industry": "Power",
+  "scrip": "ADANIPOWER",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaef"
+  },
+  "company": "Adani Total Gas Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "ATGL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaf0"
+  },
+  "company": "Aditya Birla Capital Ltd.",
+  "industry": "Financial Services",
+  "scrip": "ABCAPITAL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaf1"
+  },
+  "company": "Aditya Birla Fashion and Retail Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "ABFRL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaf2"
+  },
+  "company": "Aditya Birla Lifestyle Brands Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "ABLBL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaf3"
+  },
+  "company": "Aditya Birla Real Estate Ltd.",
+  "industry": "Forest Materials",
+  "scrip": "ABREL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaf4"
+  },
+  "company": "Aditya Birla Sun Life AMC Ltd.",
+  "industry": "Financial Services",
+  "scrip": "ABSLAMC",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaf5"
+  },
+  "company": "Aegis Logistics Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "AEGISLOG",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaf6"
+  },
+  "company": "Aegis Vopak Terminals Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "AEGISVOPAK",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaf7"
+  },
+  "company": "Afcons Infrastructure Ltd.",
+  "industry": "Construction",
+  "scrip": "AFCONS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaf8"
+  },
+  "company": "Affle 3i Ltd.",
+  "industry": "Information Technology",
+  "scrip": "AFFLE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaf9"
+  },
+  "company": "Ajanta Pharmaceuticals Ltd.",
+  "industry": "Healthcare",
+  "scrip": "AJANTPHARM",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdafa"
+  },
+  "company": "Akums Drugs and Pharmaceuticals Ltd.",
+  "industry": "Healthcare",
+  "scrip": "AKUMS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdafb"
+  },
+  "company": "Akzo Nobel India Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "AKZOINDIA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdafc"
+  },
+  "company": "Alembic Pharmaceuticals Ltd.",
+  "industry": "Healthcare",
+  "scrip": "APLLTD",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdafd"
+  },
+  "company": "Alkem Laboratories Ltd.",
+  "industry": "Healthcare",
+  "scrip": "ALKEM",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdafe"
+  },
+  "company": "Alkyl Amines Chemicals Ltd.",
+  "industry": "Chemicals",
+  "scrip": "ALKYLAMINE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdaff"
+  },
+  "company": "Alok Industries Ltd.",
+  "industry": "Textiles",
+  "scrip": "ALOKINDS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb00"
+  },
+  "company": "Amara Raja Energy & Mobility Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "ARE&M",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb01"
+  },
+  "company": "Amber Enterprises India Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "AMBER",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb02"
+  },
+  "company": "Ambuja Cements Ltd.",
+  "industry": "Construction Materials",
+  "scrip": "AMBUJACEM",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb03"
+  },
+  "company": "Anand Rathi Wealth Ltd.",
+  "industry": "Financial Services",
+  "scrip": "ANANDRATHI",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb04"
+  },
+  "company": "Anant Raj Ltd.",
+  "industry": "Realty",
+  "scrip": "ANANTRAJ",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb05"
+  },
+  "company": "Angel One Ltd.",
+  "industry": "Financial Services",
+  "scrip": "ANGELONE",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb06"
+  },
+  "company": "Apar Industries Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "APARINDS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb07"
+  },
+  "company": "Apollo Hospitals Enterprise Ltd.",
+  "industry": "Healthcare",
+  "scrip": "APOLLOHOSP",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb08"
+  },
+  "company": "Apollo Tyres Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "APOLLOTYRE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb09"
+  },
+  "company": "Aptus Value Housing Finance India Ltd.",
+  "industry": "Financial Services",
+  "scrip": "APTUS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb0a"
+  },
+  "company": "Asahi India Glass Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "ASAHIINDIA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb0b"
+  },
+  "company": "Ashok Leyland Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "ASHOKLEY",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb0c"
+  },
+  "company": "Asian Paints Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "ASIANPAINT",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb0d"
+  },
+  "company": "Aster DM Healthcare Ltd.",
+  "industry": "Healthcare",
+  "scrip": "ASTERDM",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb0e"
+  },
+  "company": "AstraZenca Pharma India Ltd.",
+  "industry": "Healthcare",
+  "scrip": "ASTRAZEN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb0f"
+  },
+  "company": "Astral Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "ASTRAL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb10"
+  },
+  "company": "Ather Energy Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "ATHERENERG",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb11"
+  },
+  "company": "Atul Ltd.",
+  "industry": "Chemicals",
+  "scrip": "ATUL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb12"
+  },
+  "company": "Aurobindo Pharma Ltd.",
+  "industry": "Healthcare",
+  "scrip": "AUROPHARMA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb13"
+  },
+  "company": "Authum Investment & Infrastructure Ltd.",
+  "industry": "Financial Services",
+  "scrip": "AIIL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb14"
+  },
+  "company": "Avenue Supermarts Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "DMART",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb15"
+  },
+  "company": "Axis Bank Ltd.",
+  "industry": "Financial Services",
+  "scrip": "AXISBANK",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb16"
+  },
+  "company": "BASF India Ltd.",
+  "industry": "Chemicals",
+  "scrip": "BASF",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb17"
+  },
+  "company": "BEML Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "BEML",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb18"
+  },
+  "company": "BLS International Services Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "BLS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb19"
+  },
+  "company": "BSE Ltd.",
+  "industry": "Financial Services",
+  "scrip": "BSE",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb1a"
+  },
+  "company": "Bajaj Auto Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "BAJAJ-AUTO",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb1b"
+  },
+  "company": "Bajaj Finance Ltd.",
+  "industry": "Financial Services",
+  "scrip": "BAJFINANCE",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb1c"
+  },
+  "company": "Bajaj Finserv Ltd.",
+  "industry": "Financial Services",
+  "scrip": "BAJAJFINSV",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb1d"
+  },
+  "company": "Bajaj Holdings & Investment Ltd.",
+  "industry": "Financial Services",
+  "scrip": "BAJAJHLDNG",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb1e"
+  },
+  "company": "Bajaj Housing Finance Ltd.",
+  "industry": "Financial Services",
+  "scrip": "BAJAJHFL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb1f"
+  },
+  "company": "Balkrishna Industries Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "BALKRISIND",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb20"
+  },
+  "company": "Balrampur Chini Mills Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "BALRAMCHIN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb21"
+  },
+  "company": "Bandhan Bank Ltd.",
+  "industry": "Financial Services",
+  "scrip": "BANDHANBNK",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb22"
+  },
+  "company": "Bank of Baroda",
+  "industry": "Financial Services",
+  "scrip": "BANKBARODA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb23"
+  },
+  "company": "Bank of India",
+  "industry": "Financial Services",
+  "scrip": "BANKINDIA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb24"
+  },
+  "company": "Bank of Maharashtra",
+  "industry": "Financial Services",
+  "scrip": "MAHABANK",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb25"
+  },
+  "company": "Bata India Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "BATAINDIA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb26"
+  },
+  "company": "Bayer Cropscience Ltd.",
+  "industry": "Chemicals",
+  "scrip": "BAYERCROP",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb27"
+  },
+  "company": "Berger Paints India Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "BERGEPAINT",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb28"
+  },
+  "company": "Bharat Dynamics Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "BDL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb29"
+  },
+  "company": "Bharat Electronics Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "BEL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb2a"
+  },
+  "company": "Bharat Forge Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "BHARATFORG",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb2b"
+  },
+  "company": "Bharat Heavy Electricals Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "BHEL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb2c"
+  },
+  "company": "Bharat Petroleum Corporation Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "BPCL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb2d"
+  },
+  "company": "Bharti Airtel Ltd.",
+  "industry": "Telecommunication",
+  "scrip": "BHARTIARTL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb2e"
+  },
+  "company": "Bharti Hexacom Ltd.",
+  "industry": "Telecommunication",
+  "scrip": "BHARTIHEXA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb2f"
+  },
+  "company": "Bikaji Foods International Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "BIKAJI",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb30"
+  },
+  "company": "Biocon Ltd.",
+  "industry": "Healthcare",
+  "scrip": "BIOCON",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb31"
+  },
+  "company": "Birlasoft Ltd.",
+  "industry": "Information Technology",
+  "scrip": "BSOFT",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb32"
+  },
+  "company": "Blue Dart Express Ltd.",
+  "industry": "Services",
+  "scrip": "BLUEDART",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb33"
+  },
+  "company": "Blue Jet Healthcare Ltd.",
+  "industry": "Healthcare",
+  "scrip": "BLUEJET",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb34"
+  },
+  "company": "Blue Star Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "BLUESTARCO",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb35"
+  },
+  "company": "Bombay Burmah Trading Corporation Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "BBTC",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb36"
+  },
+  "company": "Bosch Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "BOSCHLTD",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb37"
+  },
+  "company": "Brainbees Solutions Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "FIRSTCRY",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb38"
+  },
+  "company": "Brigade Enterprises Ltd.",
+  "industry": "Realty",
+  "scrip": "BRIGADE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb39"
+  },
+  "company": "Britannia Industries Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "BRITANNIA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb3a"
+  },
+  "company": "C.E. Info Systems Ltd.",
+  "industry": "Information Technology",
+  "scrip": "MAPMYINDIA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb3b"
+  },
+  "company": "CCL Products (I) Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "CCL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb3c"
+  },
+  "company": "CESC Ltd.",
+  "industry": "Power",
+  "scrip": "CESC",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb3d"
+  },
+  "company": "CG Power and Industrial Solutions Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "CGPOWER",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb3e"
+  },
+  "company": "CRISIL Ltd.",
+  "industry": "Financial Services",
+  "scrip": "CRISIL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb3f"
+  },
+  "company": "Campus Activewear Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "CAMPUS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb40"
+  },
+  "company": "Can Fin Homes Ltd.",
+  "industry": "Financial Services",
+  "scrip": "CANFINHOME",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb41"
+  },
+  "company": "Canara Bank",
+  "industry": "Financial Services",
+  "scrip": "CANBK",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb42"
+  },
+  "company": "Caplin Point Laboratories Ltd.",
+  "industry": "Healthcare",
+  "scrip": "CAPLIPOINT",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb43"
+  },
+  "company": "Capri Global Capital Ltd.",
+  "industry": "Financial Services",
+  "scrip": "CGCL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb44"
+  },
+  "company": "Carborundum Universal Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "CARBORUNIV",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb45"
+  },
+  "company": "Castrol India Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "CASTROLIND",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb46"
+  },
+  "company": "Ceat Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "CEATLTD",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb47"
+  },
+  "company": "Central Bank of India",
+  "industry": "Financial Services",
+  "scrip": "CENTRALBK",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb48"
+  },
+  "company": "Central Depository Services (India) Ltd.",
+  "industry": "Financial Services",
+  "scrip": "CDSL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb49"
+  },
+  "company": "Century Plyboards (India) Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "CENTURYPLY",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb4a"
+  },
+  "company": "Cera Sanitaryware Ltd",
+  "industry": "Consumer Durables",
+  "scrip": "CERA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb4b"
+  },
+  "company": "Chalet Hotels Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "CHALET",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb4c"
+  },
+  "company": "Chambal Fertilizers & Chemicals Ltd.",
+  "industry": "Chemicals",
+  "scrip": "CHAMBLFERT",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb4d"
+  },
+  "company": "Chennai Petroleum Corporation Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "CHENNPETRO",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb4e"
+  },
+  "company": "Choice International Ltd.",
+  "industry": "Financial Services",
+  "scrip": "CHOICEIN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb4f"
+  },
+  "company": "Cholamandalam Financial Holdings Ltd.",
+  "industry": "Financial Services",
+  "scrip": "CHOLAHLDNG",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb50"
+  },
+  "company": "Cholamandalam Investment and Finance Company Ltd.",
+  "industry": "Financial Services",
+  "scrip": "CHOLAFIN",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb51"
+  },
+  "company": "Cipla Ltd.",
+  "industry": "Healthcare",
+  "scrip": "CIPLA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb52"
+  },
+  "company": "City Union Bank Ltd.",
+  "industry": "Financial Services",
+  "scrip": "CUB",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb53"
+  },
+  "company": "Clean Science and Technology Ltd.",
+  "industry": "Chemicals",
+  "scrip": "CLEAN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb54"
+  },
+  "company": "Coal India Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "COALINDIA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb55"
+  },
+  "company": "Cochin Shipyard Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "COCHINSHIP",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb56"
+  },
+  "company": "Coforge Ltd.",
+  "industry": "Information Technology",
+  "scrip": "COFORGE",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb57"
+  },
+  "company": "Cohance Lifesciences Ltd.",
+  "industry": "Healthcare",
+  "scrip": "COHANCE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb58"
+  },
+  "company": "Colgate Palmolive (India) Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "COLPAL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb59"
+  },
+  "company": "Computer Age Management Services Ltd.",
+  "industry": "Financial Services",
+  "scrip": "CAMS",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb5a"
+  },
+  "company": "Concord Biotech Ltd.",
+  "industry": "Healthcare",
+  "scrip": "CONCORDBIO",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb5b"
+  },
+  "company": "Container Corporation of India Ltd.",
+  "industry": "Services",
+  "scrip": "CONCOR",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb5c"
+  },
+  "company": "Coromandel International Ltd.",
+  "industry": "Chemicals",
+  "scrip": "COROMANDEL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb5d"
+  },
+  "company": "Craftsman Automation Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "CRAFTSMAN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb5e"
+  },
+  "company": "CreditAccess Grameen Ltd.",
+  "industry": "Financial Services",
+  "scrip": "CREDITACC",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb5f"
+  },
+  "company": "Crompton Greaves Consumer Electricals Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "CROMPTON",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb60"
+  },
+  "company": "Cummins India Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "CUMMINSIND",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb61"
+  },
+  "company": "Cyient Ltd.",
+  "industry": "Information Technology",
+  "scrip": "CYIENT",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb62"
+  },
+  "company": "DCM Shriram Ltd.",
+  "industry": "Diversified",
+  "scrip": "DCMSHRIRAM",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb63"
+  },
+  "company": "DLF Ltd.",
+  "industry": "Realty",
+  "scrip": "DLF",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb64"
+  },
+  "company": "DOMS Industries Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "DOMS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb65"
+  },
+  "company": "Dabur India Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "DABUR",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb66"
+  },
+  "company": "Dalmia Bharat Ltd.",
+  "industry": "Construction Materials",
+  "scrip": "DALBHARAT",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb67"
+  },
+  "company": "Data Patterns (India) Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "DATAPATTNS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb68"
+  },
+  "company": "Deepak Fertilisers & Petrochemicals Corp. Ltd.",
+  "industry": "Chemicals",
+  "scrip": "DEEPAKFERT",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb69"
+  },
+  "company": "Deepak Nitrite Ltd.",
+  "industry": "Chemicals",
+  "scrip": "DEEPAKNTR",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb6a"
+  },
+  "company": "Delhivery Ltd.",
+  "industry": "Services",
+  "scrip": "DELHIVERY",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb6b"
+  },
+  "company": "Devyani International Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "DEVYANI",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb6c"
+  },
+  "company": "Divi's Laboratories Ltd.",
+  "industry": "Healthcare",
+  "scrip": "DIVISLAB",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb6d"
+  },
+  "company": "Dixon Technologies (India) Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "DIXON",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb6e"
+  },
+  "company": "Dr. Agarwal's Health Care Ltd.",
+  "industry": "Healthcare",
+  "scrip": "AGARWALEYE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb6f"
+  },
+  "company": "Dr. Lal Path Labs Ltd.",
+  "industry": "Healthcare",
+  "scrip": "LALPATHLAB",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb70"
+  },
+  "company": "Dr. Reddy's Laboratories Ltd.",
+  "industry": "Healthcare",
+  "scrip": "DRREDDY",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb71"
+  },
+  "company": "Dummy SKF India Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "DUMMYSKFIN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb72"
+  },
+  "company": "E.I.D. Parry (India) Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "EIDPARRY",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb73"
+  },
+  "company": "EIH Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "EIHOTEL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb74"
+  },
+  "company": "Eicher Motors Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "EICHERMOT",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb75"
+  },
+  "company": "Elecon Engineering Co. Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "ELECON",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb76"
+  },
+  "company": "Elgi Equipments Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "ELGIEQUIP",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb77"
+  },
+  "company": "Emami Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "EMAMILTD",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb78"
+  },
+  "company": "Emcure Pharmaceuticals Ltd.",
+  "industry": "Healthcare",
+  "scrip": "EMCURE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb79"
+  },
+  "company": "Endurance Technologies Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "ENDURANCE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb7a"
+  },
+  "company": "Engineers India Ltd.",
+  "industry": "Construction",
+  "scrip": "ENGINERSIN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb7b"
+  },
+  "company": "Eris Lifesciences Ltd.",
+  "industry": "Healthcare",
+  "scrip": "ERIS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb7c"
+  },
+  "company": "Escorts Kubota Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "ESCORTS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb7d"
+  },
+  "company": "Eternal Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "ETERNAL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb7e"
+  },
+  "company": "Exide Industries Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "EXIDEIND",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb7f"
+  },
+  "company": "FSN E-Commerce Ventures Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "NYKAA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb80"
+  },
+  "company": "Federal Bank Ltd.",
+  "industry": "Financial Services",
+  "scrip": "FEDERALBNK",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb81"
+  },
+  "company": "Fertilisers and Chemicals Travancore Ltd.",
+  "industry": "Chemicals",
+  "scrip": "FACT",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb82"
+  },
+  "company": "Finolex Cables Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "FINCABLES",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb83"
+  },
+  "company": "Finolex Industries Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "FINPIPE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb84"
+  },
+  "company": "Firstsource Solutions Ltd.",
+  "industry": "Services",
+  "scrip": "FSL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb85"
+  },
+  "company": "Five-Star Business Finance Ltd.",
+  "industry": "Financial Services",
+  "scrip": "FIVESTAR",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb86"
+  },
+  "company": "Force Motors Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "FORCEMOT",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb87"
+  },
+  "company": "Fortis Healthcare Ltd.",
+  "industry": "Healthcare",
+  "scrip": "FORTIS",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb88"
+  },
+  "company": "GAIL (India) Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "GAIL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb89"
+  },
+  "company": "GE Vernova T&D India Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "GVT&D",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb8a"
+  },
+  "company": "GMR Airports Ltd.",
+  "industry": "Services",
+  "scrip": "GMRAIRPORT",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb8b"
+  },
+  "company": "Garden Reach Shipbuilders & Engineers Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "GRSE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb8c"
+  },
+  "company": "General Insurance Corporation of India",
+  "industry": "Financial Services",
+  "scrip": "GICRE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb8d"
+  },
+  "company": "Gillette India Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "GILLETTE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb8e"
+  },
+  "company": "Gland Pharma Ltd.",
+  "industry": "Healthcare",
+  "scrip": "GLAND",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb8f"
+  },
+  "company": "Glaxosmithkline Pharmaceuticals Ltd.",
+  "industry": "Healthcare",
+  "scrip": "GLAXO",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb90"
+  },
+  "company": "Glenmark Pharmaceuticals Ltd.",
+  "industry": "Healthcare",
+  "scrip": "GLENMARK",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb91"
+  },
+  "company": "Global Health Ltd.",
+  "industry": "Healthcare",
+  "scrip": "MEDANTA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb92"
+  },
+  "company": "Go Digit General Insurance Ltd.",
+  "industry": "Financial Services",
+  "scrip": "GODIGIT",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb93"
+  },
+  "company": "Godawari Power & Ispat Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "GPIL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb94"
+  },
+  "company": "Godfrey Phillips India Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "GODFRYPHLP",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb95"
+  },
+  "company": "Godrej Agrovet Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "GODREJAGRO",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb96"
+  },
+  "company": "Godrej Consumer Products Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "GODREJCP",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb97"
+  },
+  "company": "Godrej Industries Ltd.",
+  "industry": "Diversified",
+  "scrip": "GODREJIND",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb98"
+  },
+  "company": "Godrej Properties Ltd.",
+  "industry": "Realty",
+  "scrip": "GODREJPROP",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb99"
+  },
+  "company": "Granules India Ltd.",
+  "industry": "Healthcare",
+  "scrip": "GRANULES",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb9a"
+  },
+  "company": "Graphite India Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "GRAPHITE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb9b"
+  },
+  "company": "Grasim Industries Ltd.",
+  "industry": "Construction Materials",
+  "scrip": "GRASIM",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb9c"
+  },
+  "company": "Gravita India Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "GRAVITA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb9d"
+  },
+  "company": "Great Eastern Shipping Co. Ltd.",
+  "industry": "Services",
+  "scrip": "GESHIP",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb9e"
+  },
+  "company": "Gujarat Fluorochemicals Ltd.",
+  "industry": "Chemicals",
+  "scrip": "FLUOROCHEM",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdb9f"
+  },
+  "company": "Gujarat Gas Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "GUJGASLTD",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdba0"
+  },
+  "company": "Gujarat Mineral Development Corporation Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "GMDCLTD",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdba1"
+  },
+  "company": "Gujarat State Petronet Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "GSPL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdba2"
+  },
+  "company": "H.E.G. Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "HEG",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdba3"
+  },
+  "company": "HBL Engineering Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "HBLENGINE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdba4"
+  },
+  "company": "HCL Technologies Ltd.",
+  "industry": "Information Technology",
+  "scrip": "HCLTECH",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdba5"
+  },
+  "company": "HDFC Asset Management Company Ltd.",
+  "industry": "Financial Services",
+  "scrip": "HDFCAMC",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdba6"
+  },
+  "company": "HDFC Bank Ltd.",
+  "industry": "Financial Services",
+  "scrip": "HDFCBANK",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdba7"
+  },
+  "company": "HDFC Life Insurance Company Ltd.",
+  "industry": "Financial Services",
+  "scrip": "HDFCLIFE",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdba8"
+  },
+  "company": "HFCL Ltd.",
+  "industry": "Telecommunication",
+  "scrip": "HFCL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdba9"
+  },
+  "company": "Happiest Minds Technologies Ltd.",
+  "industry": "Information Technology",
+  "scrip": "HAPPSTMNDS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbaa"
+  },
+  "company": "Havells India Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "HAVELLS",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbab"
+  },
+  "company": "Hero MotoCorp Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "HEROMOTOCO",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbac"
+  },
+  "company": "Hexaware Technologies Ltd.",
+  "industry": "Information Technology",
+  "scrip": "HEXT",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbad"
+  },
+  "company": "Himadri Speciality Chemical Ltd.",
+  "industry": "Chemicals",
+  "scrip": "HSCL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbae"
+  },
+  "company": "Hindalco Industries Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "HINDALCO",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbaf"
+  },
+  "company": "Hindustan Aeronautics Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "HAL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbb0"
+  },
+  "company": "Hindustan Copper Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "HINDCOPPER",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbb1"
+  },
+  "company": "Hindustan Petroleum Corporation Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "HINDPETRO",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbb2"
+  },
+  "company": "Hindustan Unilever Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "HINDUNILVR",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbb3"
+  },
+  "company": "Hindustan Zinc Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "HINDZINC",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbb4"
+  },
+  "company": "Hitachi Energy India Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "POWERINDIA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbb5"
+  },
+  "company": "Home First Finance Company India Ltd.",
+  "industry": "Financial Services",
+  "scrip": "HOMEFIRST",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbb6"
+  },
+  "company": "Honasa Consumer Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "HONASA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbb7"
+  },
+  "company": "Honeywell Automation India Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "HONAUT",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbb8"
+  },
+  "company": "Housing & Urban Development Corporation Ltd.",
+  "industry": "Financial Services",
+  "scrip": "HUDCO",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbb9"
+  },
+  "company": "Hyundai Motor India Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "HYUNDAI",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbba"
+  },
+  "company": "ICICI Bank Ltd.",
+  "industry": "Financial Services",
+  "scrip": "ICICIBANK",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbbb"
+  },
+  "company": "ICICI Lombard General Insurance Company Ltd.",
+  "industry": "Financial Services",
+  "scrip": "ICICIGI",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbbc"
+  },
+  "company": "ICICI Prudential Life Insurance Company Ltd.",
+  "industry": "Financial Services",
+  "scrip": "ICICIPRULI",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbbd"
+  },
+  "company": "IDBI Bank Ltd.",
+  "industry": "Financial Services",
+  "scrip": "IDBI",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbbe"
+  },
+  "company": "IDFC First Bank Ltd.",
+  "industry": "Financial Services",
+  "scrip": "IDFCFIRSTB",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbbf"
+  },
+  "company": "IFCI Ltd.",
+  "industry": "Financial Services",
+  "scrip": "IFCI",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbc0"
+  },
+  "company": "IIFL Finance Ltd.",
+  "industry": "Financial Services",
+  "scrip": "IIFL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbc1"
+  },
+  "company": "INOX India Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "INOXINDIA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbc2"
+  },
+  "company": "IRB Infrastructure Developers Ltd.",
+  "industry": "Construction",
+  "scrip": "IRB",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbc3"
+  },
+  "company": "IRCON International Ltd.",
+  "industry": "Construction",
+  "scrip": "IRCON",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbc4"
+  },
+  "company": "ITC Hotels Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "ITCHOTELS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbc5"
+  },
+  "company": "ITC Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "ITC",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbc6"
+  },
+  "company": "ITI Ltd.",
+  "industry": "Telecommunication",
+  "scrip": "ITI",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbc7"
+  },
+  "company": "Indegene Ltd.",
+  "industry": "Healthcare",
+  "scrip": "INDGN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbc8"
+  },
+  "company": "India Cements Ltd.",
+  "industry": "Construction Materials",
+  "scrip": "INDIACEM",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbc9"
+  },
+  "company": "Indiamart Intermesh Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "INDIAMART",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbca"
+  },
+  "company": "Indian Bank",
+  "industry": "Financial Services",
+  "scrip": "INDIANB",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbcb"
+  },
+  "company": "Indian Energy Exchange Ltd.",
+  "industry": "Financial Services",
+  "scrip": "IEX",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbcc"
+  },
+  "company": "Indian Hotels Co. Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "INDHOTEL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbcd"
+  },
+  "company": "Indian Oil Corporation Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "IOC",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbce"
+  },
+  "company": "Indian Overseas Bank",
+  "industry": "Financial Services",
+  "scrip": "IOB",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbcf"
+  },
+  "company": "Indian Railway Catering And Tourism Corporation Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "IRCTC",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbd0"
+  },
+  "company": "Indian Railway Finance Corporation Ltd.",
+  "industry": "Financial Services",
+  "scrip": "IRFC",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbd1"
+  },
+  "company": "Indian Renewable Energy Development Agency Ltd.",
+  "industry": "Financial Services",
+  "scrip": "IREDA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbd2"
+  },
+  "company": "Indraprastha Gas Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "IGL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbd3"
+  },
+  "company": "Indus Towers Ltd.",
+  "industry": "Telecommunication",
+  "scrip": "INDUSTOWER",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbd4"
+  },
+  "company": "IndusInd Bank Ltd.",
+  "industry": "Financial Services",
+  "scrip": "INDUSINDBK",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbd5"
+  },
+  "company": "Info Edge (India) Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "NAUKRI",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbd6"
+  },
+  "company": "Infosys Ltd.",
+  "industry": "Information Technology",
+  "scrip": "INFY",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbd7"
+  },
+  "company": "Inox Wind Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "INOXWIND",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbd8"
+  },
+  "company": "Intellect Design Arena Ltd.",
+  "industry": "Information Technology",
+  "scrip": "INTELLECT",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbd9"
+  },
+  "company": "InterGlobe Aviation Ltd.",
+  "industry": "Services",
+  "scrip": "INDIGO",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbda"
+  },
+  "company": "International Gemmological Institute (India) Ltd.",
+  "industry": "Services",
+  "scrip": "IGIL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbdb"
+  },
+  "company": "Inventurus Knowledge Solutions Ltd.",
+  "industry": "Information Technology",
+  "scrip": "IKS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbdc"
+  },
+  "company": "Ipca Laboratories Ltd.",
+  "industry": "Healthcare",
+  "scrip": "IPCALAB",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbdd"
+  },
+  "company": "J.B. Chemicals & Pharmaceuticals Ltd.",
+  "industry": "Healthcare",
+  "scrip": "JBCHEPHARM",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbde"
+  },
+  "company": "J.K. Cement Ltd.",
+  "industry": "Construction Materials",
+  "scrip": "JKCEMENT",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbdf"
+  },
+  "company": "JBM Auto Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "JBMA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbe0"
+  },
+  "company": "JK Tyre & Industries Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "JKTYRE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbe1"
+  },
+  "company": "JM Financial Ltd.",
+  "industry": "Financial Services",
+  "scrip": "JMFINANCIL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbe2"
+  },
+  "company": "JSW Energy Ltd.",
+  "industry": "Power",
+  "scrip": "JSWENERGY",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbe3"
+  },
+  "company": "JSW Infrastructure Ltd.",
+  "industry": "Services",
+  "scrip": "JSWINFRA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbe4"
+  },
+  "company": "JSW Steel Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "JSWSTEEL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbe5"
+  },
+  "company": "Jaiprakash Power Ventures Ltd.",
+  "industry": "Power",
+  "scrip": "JPPOWER",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbe6"
+  },
+  "company": "Jammu & Kashmir Bank Ltd.",
+  "industry": "Financial Services",
+  "scrip": "J&KBANK",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbe7"
+  },
+  "company": "Jindal Saw Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "JINDALSAW",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbe8"
+  },
+  "company": "Jindal Stainless Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "JSL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbe9"
+  },
+  "company": "Jindal Steel Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "JINDALSTEL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbea"
+  },
+  "company": "Jio Financial Services Ltd.",
+  "industry": "Financial Services",
+  "scrip": "JIOFIN",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbeb"
+  },
+  "company": "Jubilant Foodworks Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "JUBLFOOD",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbec"
+  },
+  "company": "Jubilant Ingrevia Ltd.",
+  "industry": "Chemicals",
+  "scrip": "JUBLINGREA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbed"
+  },
+  "company": "Jubilant Pharmova Ltd.",
+  "industry": "Healthcare",
+  "scrip": "JUBLPHARMA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbee"
+  },
+  "company": "Jupiter Wagons Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "JWL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbef"
+  },
+  "company": "Jyothy Labs Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "JYOTHYLAB",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbf0"
+  },
+  "company": "Jyoti CNC Automation Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "JYOTICNC",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbf1"
+  },
+  "company": "K.P.R. Mill Ltd.",
+  "industry": "Textiles",
+  "scrip": "KPRMILL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbf2"
+  },
+  "company": "KEI Industries Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "KEI",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbf3"
+  },
+  "company": "KPIT Technologies Ltd.",
+  "industry": "Information Technology",
+  "scrip": "KPITTECH",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbf4"
+  },
+  "company": "KSB Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "KSB",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbf5"
+  },
+  "company": "Kajaria Ceramics Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "KAJARIACER",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbf6"
+  },
+  "company": "Kalpataru Projects International Ltd.",
+  "industry": "Construction",
+  "scrip": "KPIL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbf7"
+  },
+  "company": "Kalyan Jewellers India Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "KALYANKJIL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbf8"
+  },
+  "company": "Karur Vysya Bank Ltd.",
+  "industry": "Financial Services",
+  "scrip": "KARURVYSYA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbf9"
+  },
+  "company": "Kaynes Technology India Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "KAYNES",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbfa"
+  },
+  "company": "Kec International Ltd.",
+  "industry": "Construction",
+  "scrip": "KEC",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbfb"
+  },
+  "company": "Kfin Technologies Ltd.",
+  "industry": "Financial Services",
+  "scrip": "KFINTECH",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbfc"
+  },
+  "company": "Kirloskar Brothers Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "KIRLOSBROS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbfd"
+  },
+  "company": "Kirloskar Oil Eng Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "KIRLOSENG",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbfe"
+  },
+  "company": "Kotak Mahindra Bank Ltd.",
+  "industry": "Financial Services",
+  "scrip": "KOTAKBANK",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdbff"
+  },
+  "company": "Krishna Institute of Medical Sciences Ltd.",
+  "industry": "Healthcare",
+  "scrip": "KIMS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc00"
+  },
+  "company": "L&T Finance Ltd.",
+  "industry": "Financial Services",
+  "scrip": "LTF",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc01"
+  },
+  "company": "L&T Technology Services Ltd.",
+  "industry": "Information Technology",
+  "scrip": "LTTS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc02"
+  },
+  "company": "LIC Housing Finance Ltd.",
+  "industry": "Financial Services",
+  "scrip": "LICHSGFIN",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc03"
+  },
+  "company": "LT Foods Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "LTFOODS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc04"
+  },
+  "company": "LTIMindtree Ltd.",
+  "industry": "Information Technology",
+  "scrip": "LTIM",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc05"
+  },
+  "company": "Larsen & Toubro Ltd.",
+  "industry": "Construction",
+  "scrip": "LT",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc06"
+  },
+  "company": "Latent View Analytics Ltd.",
+  "industry": "Information Technology",
+  "scrip": "LATENTVIEW",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc07"
+  },
+  "company": "Laurus Labs Ltd.",
+  "industry": "Healthcare",
+  "scrip": "LAURUSLABS",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc08"
+  },
+  "company": "Leela Palaces Hotels & Resorts Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "THELEELA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc09"
+  },
+  "company": "Lemon Tree Hotels Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "LEMONTREE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc0a"
+  },
+  "company": "Life Insurance Corporation of India",
+  "industry": "Financial Services",
+  "scrip": "LICI",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc0b"
+  },
+  "company": "Linde India Ltd.",
+  "industry": "Chemicals",
+  "scrip": "LINDEINDIA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc0c"
+  },
+  "company": "Lloyds Metals And Energy Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "LLOYDSME",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc0d"
+  },
+  "company": "Lodha Developers Ltd.",
+  "industry": "Realty",
+  "scrip": "LODHA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc0e"
+  },
+  "company": "Lupin Ltd.",
+  "industry": "Healthcare",
+  "scrip": "LUPIN",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc0f"
+  },
+  "company": "MMTC Ltd.",
+  "industry": "Services",
+  "scrip": "MMTC",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc10"
+  },
+  "company": "MRF Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "MRF",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc11"
+  },
+  "company": "Mahanagar Gas Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "MGL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc12"
+  },
+  "company": "Maharashtra Scooters Ltd.",
+  "industry": "Financial Services",
+  "scrip": "MAHSCOOTER",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc13"
+  },
+  "company": "Maharashtra Seamless Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "MAHSEAMLES",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc14"
+  },
+  "company": "Mahindra & Mahindra Financial Services Ltd.",
+  "industry": "Financial Services",
+  "scrip": "M&MFIN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc15"
+  },
+  "company": "Mahindra & Mahindra Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "M&M",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc16"
+  },
+  "company": "Manappuram Finance Ltd.",
+  "industry": "Financial Services",
+  "scrip": "MANAPPURAM",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc17"
+  },
+  "company": "Mangalore Refinery & Petrochemicals Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "MRPL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc18"
+  },
+  "company": "Mankind Pharma Ltd.",
+  "industry": "Healthcare",
+  "scrip": "MANKIND",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc19"
+  },
+  "company": "Marico Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "MARICO",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc1a"
+  },
+  "company": "Maruti Suzuki India Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "MARUTI",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc1b"
+  },
+  "company": "Max Financial Services Ltd.",
+  "industry": "Financial Services",
+  "scrip": "MFSL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc1c"
+  },
+  "company": "Max Healthcare Institute Ltd.",
+  "industry": "Healthcare",
+  "scrip": "MAXHEALTH",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc1d"
+  },
+  "company": "Mazagoan Dock Shipbuilders Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "MAZDOCK",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc1e"
+  },
+  "company": "Metropolis Healthcare Ltd.",
+  "industry": "Healthcare",
+  "scrip": "METROPOLIS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc1f"
+  },
+  "company": "Minda Corporation Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "MINDACORP",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc20"
+  },
+  "company": "Motherson Sumi Wiring India Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "MSUMI",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc21"
+  },
+  "company": "Motilal Oswal Financial Services Ltd.",
+  "industry": "Financial Services",
+  "scrip": "MOTILALOFS",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc22"
+  },
+  "company": "MphasiS Ltd.",
+  "industry": "Information Technology",
+  "scrip": "MPHASIS",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc23"
+  },
+  "company": "Multi Commodity Exchange of India Ltd.",
+  "industry": "Financial Services",
+  "scrip": "MCX",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc24"
+  },
+  "company": "Muthoot Finance Ltd.",
+  "industry": "Financial Services",
+  "scrip": "MUTHOOTFIN",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc25"
+  },
+  "company": "NATCO Pharma Ltd.",
+  "industry": "Healthcare",
+  "scrip": "NATCOPHARM",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc26"
+  },
+  "company": "NBCC (India) Ltd.",
+  "industry": "Construction",
+  "scrip": "NBCC",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc27"
+  },
+  "company": "NCC Ltd.",
+  "industry": "Construction",
+  "scrip": "NCC",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc28"
+  },
+  "company": "NHPC Ltd.",
+  "industry": "Power",
+  "scrip": "NHPC",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc29"
+  },
+  "company": "NLC India Ltd.",
+  "industry": "Power",
+  "scrip": "NLCINDIA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc2a"
+  },
+  "company": "NMDC Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "NMDC",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc2b"
+  },
+  "company": "NMDC Steel Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "NSLNISP",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc2c"
+  },
+  "company": "NTPC Green Energy Ltd.",
+  "industry": "Power",
+  "scrip": "NTPCGREEN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc2d"
+  },
+  "company": "NTPC Ltd.",
+  "industry": "Power",
+  "scrip": "NTPC",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc2e"
+  },
+  "company": "Narayana Hrudayalaya Ltd.",
+  "industry": "Healthcare",
+  "scrip": "NH",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc2f"
+  },
+  "company": "National Aluminium Co. Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "NATIONALUM",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc30"
+  },
+  "company": "Nava Ltd.",
+  "industry": "Power",
+  "scrip": "NAVA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc31"
+  },
+  "company": "Navin Fluorine International Ltd.",
+  "industry": "Chemicals",
+  "scrip": "NAVINFLUOR",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc32"
+  },
+  "company": "Nestle India Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "NESTLEIND",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc33"
+  },
+  "company": "Netweb Technologies India Ltd.",
+  "industry": "Information Technology",
+  "scrip": "NETWEB",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc34"
+  },
+  "company": "Neuland Laboratories Ltd.",
+  "industry": "Healthcare",
+  "scrip": "NEULANDLAB",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc35"
+  },
+  "company": "Newgen Software Technologies Ltd.",
+  "industry": "Information Technology",
+  "scrip": "NEWGEN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc36"
+  },
+  "company": "Nippon Life India Asset Management Ltd.",
+  "industry": "Financial Services",
+  "scrip": "NAM-INDIA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc37"
+  },
+  "company": "Niva Bupa Health Insurance Company Ltd.",
+  "industry": "Financial Services",
+  "scrip": "NIVABUPA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc38"
+  },
+  "company": "Nuvama Wealth Management Ltd.",
+  "industry": "Financial Services",
+  "scrip": "NUVAMA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc39"
+  },
+  "company": "Nuvoco Vistas Corporation Ltd.",
+  "industry": "Construction Materials",
+  "scrip": "NUVOCO",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc3a"
+  },
+  "company": "Oberoi Realty Ltd.",
+  "industry": "Realty",
+  "scrip": "OBEROIRLTY",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc3b"
+  },
+  "company": "Oil & Natural Gas Corporation Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "ONGC",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc3c"
+  },
+  "company": "Oil India Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "OIL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc3d"
+  },
+  "company": "Ola Electric Mobility Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "OLAELEC",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc3e"
+  },
+  "company": "Olectra Greentech Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "OLECTRA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc3f"
+  },
+  "company": "One 97 Communications Ltd.",
+  "industry": "Financial Services",
+  "scrip": "PAYTM",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc40"
+  },
+  "company": "Onesource Specialty Pharma Ltd.",
+  "industry": "Healthcare",
+  "scrip": "ONESOURCE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc41"
+  },
+  "company": "Oracle Financial Services Software Ltd.",
+  "industry": "Information Technology",
+  "scrip": "OFSS",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc42"
+  },
+  "company": "PB Fintech Ltd.",
+  "industry": "Financial Services",
+  "scrip": "POLICYBZR",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc43"
+  },
+  "company": "PCBL Chemical Ltd.",
+  "industry": "Chemicals",
+  "scrip": "PCBL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc44"
+  },
+  "company": "PG Electroplast Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "PGEL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc45"
+  },
+  "company": "PI Industries Ltd.",
+  "industry": "Chemicals",
+  "scrip": "PIIND",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc46"
+  },
+  "company": "PNB Housing Finance Ltd.",
+  "industry": "Financial Services",
+  "scrip": "PNBHOUSING",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc47"
+  },
+  "company": "PTC Industries Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "PTCIL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc48"
+  },
+  "company": "PVR INOX Ltd.",
+  "industry": "Media Entertainment & Publication",
+  "scrip": "PVRINOX",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc49"
+  },
+  "company": "Page Industries Ltd.",
+  "industry": "Textiles",
+  "scrip": "PAGEIND",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc4a"
+  },
+  "company": "Patanjali Foods Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "PATANJALI",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc4b"
+  },
+  "company": "Persistent Systems Ltd.",
+  "industry": "Information Technology",
+  "scrip": "PERSISTENT",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc4c"
+  },
+  "company": "Petronet LNG Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "PETRONET",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc4d"
+  },
+  "company": "Pfizer Ltd.",
+  "industry": "Healthcare",
+  "scrip": "PFIZER",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc4e"
+  },
+  "company": "Phoenix Mills Ltd.",
+  "industry": "Realty",
+  "scrip": "PHOENIXLTD",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc4f"
+  },
+  "company": "Pidilite Industries Ltd.",
+  "industry": "Chemicals",
+  "scrip": "PIDILITIND",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc50"
+  },
+  "company": "Piramal Pharma Ltd.",
+  "industry": "Healthcare",
+  "scrip": "PPLPHARMA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc51"
+  },
+  "company": "Poly Medicure Ltd.",
+  "industry": "Healthcare",
+  "scrip": "POLYMED",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc52"
+  },
+  "company": "Polycab India Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "POLYCAB",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc53"
+  },
+  "company": "Poonawalla Fincorp Ltd.",
+  "industry": "Financial Services",
+  "scrip": "POONAWALLA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc54"
+  },
+  "company": "Power Finance Corporation Ltd.",
+  "industry": "Financial Services",
+  "scrip": "PFC",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc55"
+  },
+  "company": "Power Grid Corporation of India Ltd.",
+  "industry": "Power",
+  "scrip": "POWERGRID",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc56"
+  },
+  "company": "Praj Industries Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "PRAJIND",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc57"
+  },
+  "company": "Premier Energies Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "PREMIERENE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc58"
+  },
+  "company": "Prestige Estates Projects Ltd.",
+  "industry": "Realty",
+  "scrip": "PRESTIGE",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc59"
+  },
+  "company": "Procter & Gamble Hygiene & Health Care Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "PGHH",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc5a"
+  },
+  "company": "Punjab National Bank",
+  "industry": "Financial Services",
+  "scrip": "PNB",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc5b"
+  },
+  "company": "R R Kabel Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "RRKABEL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc5c"
+  },
+  "company": "RBL Bank Ltd.",
+  "industry": "Financial Services",
+  "scrip": "RBLBANK",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc5d"
+  },
+  "company": "REC Ltd.",
+  "industry": "Financial Services",
+  "scrip": "RECLTD",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc5e"
+  },
+  "company": "RHI MAGNESITA INDIA LTD.",
+  "industry": "Capital Goods",
+  "scrip": "RHIM",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc5f"
+  },
+  "company": "RITES Ltd.",
+  "industry": "Construction",
+  "scrip": "RITES",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc60"
+  },
+  "company": "Radico Khaitan Ltd",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "RADICO",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc61"
+  },
+  "company": "Rail Vikas Nigam Ltd.",
+  "industry": "Construction",
+  "scrip": "RVNL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc62"
+  },
+  "company": "Railtel Corporation Of India Ltd.",
+  "industry": "Telecommunication",
+  "scrip": "RAILTEL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc63"
+  },
+  "company": "Rainbow Childrens Medicare Ltd.",
+  "industry": "Healthcare",
+  "scrip": "RAINBOW",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc64"
+  },
+  "company": "Ramkrishna Forgings Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "RKFORGE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc65"
+  },
+  "company": "Rashtriya Chemicals & Fertilizers Ltd.",
+  "industry": "Chemicals",
+  "scrip": "RCF",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc66"
+  },
+  "company": "Redington Ltd.",
+  "industry": "Services",
+  "scrip": "REDINGTON",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc67"
+  },
+  "company": "Reliance Industries Ltd.",
+  "industry": "Oil Gas & Consumable Fuels",
+  "scrip": "RELIANCE",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc68"
+  },
+  "company": "Reliance Infrastructure Ltd.",
+  "industry": "Power",
+  "scrip": "RELINFRA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc69"
+  },
+  "company": "Reliance Power Ltd.",
+  "industry": "Power",
+  "scrip": "RPOWER",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc6a"
+  },
+  "company": "SBFC Finance Ltd.",
+  "industry": "Financial Services",
+  "scrip": "SBFC",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc6b"
+  },
+  "company": "SBI Cards and Payment Services Ltd.",
+  "industry": "Financial Services",
+  "scrip": "SBICARD",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc6c"
+  },
+  "company": "SBI Life Insurance Company Ltd.",
+  "industry": "Financial Services",
+  "scrip": "SBILIFE",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc6d"
+  },
+  "company": "SJVN Ltd.",
+  "industry": "Power",
+  "scrip": "SJVN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc6e"
+  },
+  "company": "SKF India Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "SKFINDIA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc6f"
+  },
+  "company": "SRF Ltd.",
+  "industry": "Chemicals",
+  "scrip": "SRF",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc70"
+  },
+  "company": "Sagility Ltd.",
+  "industry": "Information Technology",
+  "scrip": "SAGILITY",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc71"
+  },
+  "company": "Sai Life Sciences Ltd.",
+  "industry": "Healthcare",
+  "scrip": "SAILIFE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc72"
+  },
+  "company": "Sammaan Capital Ltd.",
+  "industry": "Financial Services",
+  "scrip": "SAMMAANCAP",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc73"
+  },
+  "company": "Samvardhana Motherson International Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "MOTHERSON",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc74"
+  },
+  "company": "Sapphire Foods India Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "SAPPHIRE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc75"
+  },
+  "company": "Sarda Energy and Minerals Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "SARDAEN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc76"
+  },
+  "company": "Saregama India Ltd",
+  "industry": "Media Entertainment & Publication",
+  "scrip": "SAREGAMA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc77"
+  },
+  "company": "Schaeffler India Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "SCHAEFFLER",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc78"
+  },
+  "company": "Schneider Electric Infrastructure Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "SCHNEIDER",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc79"
+  },
+  "company": "Shipping Corporation of India Ltd.",
+  "industry": "Services",
+  "scrip": "SCI",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc7a"
+  },
+  "company": "Shree Cement Ltd.",
+  "industry": "Construction Materials",
+  "scrip": "SHREECEM",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc7b"
+  },
+  "company": "Shriram Finance Ltd.",
+  "industry": "Financial Services",
+  "scrip": "SHRIRAMFIN",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc7c"
+  },
+  "company": "Shyam Metalics and Energy Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "SHYAMMETL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc7d"
+  },
+  "company": "Siemens Energy India Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "ENRIN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc7e"
+  },
+  "company": "Siemens Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "SIEMENS",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc7f"
+  },
+  "company": "Signatureglobal (India) Ltd.",
+  "industry": "Realty",
+  "scrip": "SIGNATURE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc80"
+  },
+  "company": "Sobha Ltd.",
+  "industry": "Realty",
+  "scrip": "SOBHA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc81"
+  },
+  "company": "Solar Industries India Ltd.",
+  "industry": "Chemicals",
+  "scrip": "SOLARINDS",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc82"
+  },
+  "company": "Sona BLW Precision Forgings Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "SONACOMS",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc83"
+  },
+  "company": "Sonata Software Ltd.",
+  "industry": "Information Technology",
+  "scrip": "SONATSOFTW",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc84"
+  },
+  "company": "Star Health and Allied Insurance Company Ltd.",
+  "industry": "Financial Services",
+  "scrip": "STARHEALTH",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc85"
+  },
+  "company": "State Bank of India",
+  "industry": "Financial Services",
+  "scrip": "SBIN",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc86"
+  },
+  "company": "Steel Authority of India Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "SAIL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc87"
+  },
+  "company": "Sumitomo Chemical India Ltd.",
+  "industry": "Chemicals",
+  "scrip": "SUMICHEM",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc88"
+  },
+  "company": "Sun Pharmaceutical Industries Ltd.",
+  "industry": "Healthcare",
+  "scrip": "SUNPHARMA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc89"
+  },
+  "company": "Sun TV Network Ltd.",
+  "industry": "Media Entertainment & Publication",
+  "scrip": "SUNTV",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc8a"
+  },
+  "company": "Sundaram Finance Ltd.",
+  "industry": "Financial Services",
+  "scrip": "SUNDARMFIN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc8b"
+  },
+  "company": "Sundram Fasteners Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "SUNDRMFAST",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc8c"
+  },
+  "company": "Supreme Industries Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "SUPREMEIND",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc8d"
+  },
+  "company": "Suzlon Energy Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "SUZLON",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc8e"
+  },
+  "company": "Swan Corp Ltd.",
+  "industry": "Chemicals",
+  "scrip": "SWANCORP",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc8f"
+  },
+  "company": "Swiggy Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "SWIGGY",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc90"
+  },
+  "company": "Syngene International Ltd.",
+  "industry": "Healthcare",
+  "scrip": "SYNGENE",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc91"
+  },
+  "company": "Syrma SGS Technology Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "SYRMA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc92"
+  },
+  "company": "TBO Tek Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "TBOTEK",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc93"
+  },
+  "company": "TVS Motor Company Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "TVSMOTOR",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc94"
+  },
+  "company": "Tata Chemicals Ltd.",
+  "industry": "Chemicals",
+  "scrip": "TATACHEM",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc95"
+  },
+  "company": "Tata Communications Ltd.",
+  "industry": "Telecommunication",
+  "scrip": "TATACOMM",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc96"
+  },
+  "company": "Tata Consultancy Services Ltd.",
+  "industry": "Information Technology",
+  "scrip": "TCS",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc97"
+  },
+  "company": "Tata Consumer Products Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "TATACONSUM",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc98"
+  },
+  "company": "Tata Elxsi Ltd.",
+  "industry": "Information Technology",
+  "scrip": "TATAELXSI",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc99"
+  },
+  "company": "Tata Investment Corporation Ltd.",
+  "industry": "Financial Services",
+  "scrip": "TATAINVEST",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc9a"
+  },
+  "company": "Tata Motors Passenger Vehicles Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "TMPV",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc9b"
+  },
+  "company": "Tata Power Co. Ltd.",
+  "industry": "Power",
+  "scrip": "TATAPOWER",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc9c"
+  },
+  "company": "Tata Steel Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "TATASTEEL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc9d"
+  },
+  "company": "Tata Technologies Ltd.",
+  "industry": "Information Technology",
+  "scrip": "TATATECH",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc9e"
+  },
+  "company": "Tata Teleservices (Maharashtra) Ltd.",
+  "industry": "Telecommunication",
+  "scrip": "TTML",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdc9f"
+  },
+  "company": "Tech Mahindra Ltd.",
+  "industry": "Information Technology",
+  "scrip": "TECHM",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdca0"
+  },
+  "company": "Techno Electric & Engineering Company Ltd.",
+  "industry": "Construction",
+  "scrip": "TECHNOE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdca1"
+  },
+  "company": "Tejas Networks Ltd.",
+  "industry": "Telecommunication",
+  "scrip": "TEJASNET",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdca2"
+  },
+  "company": "The New India Assurance Company Ltd.",
+  "industry": "Financial Services",
+  "scrip": "NIACL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdca3"
+  },
+  "company": "The Ramco Cements Ltd.",
+  "industry": "Construction Materials",
+  "scrip": "RAMCOCEM",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdca4"
+  },
+  "company": "Thermax Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "THERMAX",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdca5"
+  },
+  "company": "Timken India Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "TIMKEN",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdca6"
+  },
+  "company": "Titagarh Rail Systems Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "TITAGARH",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdca7"
+  },
+  "company": "Titan Company Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "TITAN",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdca8"
+  },
+  "company": "Torrent Pharmaceuticals Ltd.",
+  "industry": "Healthcare",
+  "scrip": "TORNTPHARM",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdca9"
+  },
+  "company": "Torrent Power Ltd.",
+  "industry": "Power",
+  "scrip": "TORNTPOWER",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcaa"
+  },
+  "company": "Transformers And Rectifiers (India) Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "TARIL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcab"
+  },
+  "company": "Trent Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "TRENT",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcac"
+  },
+  "company": "Trident Ltd.",
+  "industry": "Textiles",
+  "scrip": "TRIDENT",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcad"
+  },
+  "company": "Triveni Engineering & Industries Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "TRIVENI",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcae"
+  },
+  "company": "Triveni Turbine Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "TRITURBINE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcaf"
+  },
+  "company": "Tube Investments of India Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "TIINDIA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcb0"
+  },
+  "company": "UCO Bank",
+  "industry": "Financial Services",
+  "scrip": "UCOBANK",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcb1"
+  },
+  "company": "UNO Minda Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "UNOMINDA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcb2"
+  },
+  "company": "UPL Ltd.",
+  "industry": "Chemicals",
+  "scrip": "UPL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcb3"
+  },
+  "company": "UTI Asset Management Company Ltd.",
+  "industry": "Financial Services",
+  "scrip": "UTIAMC",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcb4"
+  },
+  "company": "UltraTech Cement Ltd.",
+  "industry": "Construction Materials",
+  "scrip": "ULTRACEMCO",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcb5"
+  },
+  "company": "Union Bank of India",
+  "industry": "Financial Services",
+  "scrip": "UNIONBANK",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcb6"
+  },
+  "company": "United Breweries Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "UBL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcb7"
+  },
+  "company": "United Spirits Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "UNITDSPR",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcb8"
+  },
+  "company": "Usha Martin Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "USHAMART",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcb9"
+  },
+  "company": "V-Guard Industries Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "VGUARD",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcba"
+  },
+  "company": "Valor Estate Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "DBREALTY",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcbb"
+  },
+  "company": "Vardhman Textiles Ltd.",
+  "industry": "Textiles",
+  "scrip": "VTL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcbc"
+  },
+  "company": "Varun Beverages Ltd.",
+  "industry": "Fast Moving Consumer Goods",
+  "scrip": "VBL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcbd"
+  },
+  "company": "Vedant Fashions Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "MANYAVAR",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcbe"
+  },
+  "company": "Vedanta Ltd.",
+  "industry": "Metals & Mining",
+  "scrip": "VEDL",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcbf"
+  },
+  "company": "Ventive Hospitality Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "VENTIVE",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcc0"
+  },
+  "company": "Vijaya Diagnostic Centre Ltd.",
+  "industry": "Healthcare",
+  "scrip": "VIJAYA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcc1"
+  },
+  "company": "Vishal Mega Mart Ltd.",
+  "industry": "Consumer Services",
+  "scrip": "VMM",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcc2"
+  },
+  "company": "Vodafone Idea Ltd.",
+  "industry": "Telecommunication",
+  "scrip": "IDEA",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcc3"
+  },
+  "company": "Voltas Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "VOLTAS",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcc4"
+  },
+  "company": "Waaree Energies Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "WAAREEENER",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcc5"
+  },
+  "company": "Welspun Corp Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "WELCORP",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcc6"
+  },
+  "company": "Welspun Living Ltd.",
+  "industry": "Textiles",
+  "scrip": "WELSPUNLIV",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcc7"
+  },
+  "company": "Whirlpool of India Ltd.",
+  "industry": "Consumer Durables",
+  "scrip": "WHIRLPOOL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcc8"
+  },
+  "company": "Wipro Ltd.",
+  "industry": "Information Technology",
+  "scrip": "WIPRO",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcc9"
+  },
+  "company": "Wockhardt Ltd.",
+  "industry": "Healthcare",
+  "scrip": "WOCKPHARMA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcca"
+  },
+  "company": "Yes Bank Ltd.",
+  "industry": "Financial Services",
+  "scrip": "YESBANK",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdccb"
+  },
+  "company": "ZF Commercial Vehicle Control Systems India Ltd.",
+  "industry": "Automobile and Auto Components",
+  "scrip": "ZFCVINDIA",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdccc"
+  },
+  "company": "Zee Entertainment Enterprises Ltd.",
+  "industry": "Media Entertainment & Publication",
+  "scrip": "ZEEL",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdccd"
+  },
+  "company": "Zen Technologies Ltd.",
+  "industry": "Capital Goods",
+  "scrip": "ZENTEC",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcce"
+  },
+  "company": "Zensar Technolgies Ltd.",
+  "industry": "Information Technology",
+  "scrip": "ZENSARTECH",
+  "futures": "No",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdccf"
+  },
+  "company": "Zydus Lifesciences Ltd.",
+  "industry": "Healthcare",
+  "scrip": "ZYDUSLIFE",
+  "futures": "Yes",
+  "index": "nifty500"
+},
+{
+  "_id": {
+    "$oid": "6942af94897c210fc95bdcd0"
+  },
+  "company": "eClerx Services Ltd.",
+  "industry": "Services",
+  "scrip": "ECLERX",
+  "futures": "No",
+  "index": "nifty500"
+}]

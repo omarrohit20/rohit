@@ -1,0 +1,17 @@
+[
+  {
+    "scrip": "TATASTEEL",
+    "company": "Tata Steel Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "headline": "Indian steel makers to benefit from proposed safeguard duty review",
+          "link": "https://www.financialexpress.com/market/commodities/steel-makers-likely-to-gain-from-safeguard-duty-review/",
+          "impact": "Positive",
+          "severity": "Medium"
+        }
+      ],
+      "overall_sentiment": "Positive"
+    }
+  }
+]

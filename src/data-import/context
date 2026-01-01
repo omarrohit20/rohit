@@ -1,0 +1,25 @@
+Analyze following Nsedata.scrip.json having nse scrip for news and sentiment in last 24 hour.
+Update the same json with link for news.
+Impact positive or negative.
+Severity high, medium, low, unknown.
+Include sectoral news and impact also.
+Exclude news for among top gainers or losers and news already factored in stock price.
+Generate downloadable json file for all the scrip where any sentiment or news ignore other.
+Generate json in following format.
+[
+  {
+    "scrip": "TATASTEEL",
+    "company": "Tata Steel Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "headline": "Tata Steel shares rise 7% in 3 sessions; up 31% in 2025",
+          "link": "https://m.economictimes.com/markets/stocks/news/tata-steel-shares-rise-7-in-3-sessions-up-31-in-2025-whats-driving-the-latest-surge/articleshow/126265899.cms",
+          "impact": "Positive",
+          "severity": "Medium"
+        }
+      ],
+      "overall_sentiment": "Positive"
+    }
+  },
+  ]
