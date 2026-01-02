@@ -287,11 +287,13 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((abs(df['week2HighChange']) > 2) | (abs(df['weekHighChange']) > 2)) &
                 (df['PCT_day_change'] > -1.3) & (df['PCT_day_change'] < 0.7) &
                 ((abs(df['PCT_day_change_pre1']) > 1) | (abs(df['PCT_day_change_pre2']) > 1)) &
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
-                (~df['systemtime_merged'].str.contains('09:', case=False, na=False))
+                (~df['systemtime_merged'].str.contains('09:', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('10:0', case=False, na=False))
             ]
         except KeyError as e:
             print("")
@@ -332,11 +334,13 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((abs(df['week2LowChange']) > 2) | (abs(df['weekLowChange']) > 2)) &
                 (df['PCT_day_change'] > -0.7) & (df['PCT_day_change'] < 1.3) &
                 ((abs(df['PCT_day_change_pre1']) > 1) | (abs(df['PCT_day_change_pre2']) > 1)) &
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
-                (~df['systemtime_merged'].str.contains('09:', case=False, na=False))
+                (~df['systemtime_merged'].str.contains('09:', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('10:0', case=False, na=False))
             ]
         except KeyError as e:
             print("")

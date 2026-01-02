@@ -167,6 +167,19 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 and ('09:20' not in str(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['systemtime']))
                                 and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 2)
                                      or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -6)
+                                     or (
+                                        (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > -1)
+                                        and (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT7_change']) > -1)
+                                        and (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT5_change']) > -1)
+                                        and ('09:' in str(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['systemtime']))
+                                        )
+                                    )
+                                and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change']) < 0.5)
+                                     or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change_pre1']) < 0.5)
+                                     or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change_pre2']) < 0.5)
+                                    )
+                                and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change']) > -0.3)
+                                     or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change_pre2']) > -0.3)
                                     )
                                 ):
                                 search_filter = {"scrip": tempScrip}
@@ -182,6 +195,13 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 and ('09:3' not in str(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['systemtime']))
                                 and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 2)
                                      or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -6)
+                                    )
+                                and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change']) < 0.5)
+                                     or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change_pre1']) < 0.5)
+                                     or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change_pre2']) < 0.5)
+                                    )
+                                and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change']) > -0.3)
+                                     or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change_pre2']) > -0.3)
                                     )
                                 ):
                                 search_filter = {"scrip": tempScrip}
@@ -206,6 +226,19 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 and ('09:20' not in str(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['systemtime']))
                                 and ((float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -2)
                                      or (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 6)
+                                     or (
+                                        (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < 1)
+                                        and (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT7_change']) < 1)
+                                        and (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT5_change']) < 1)
+                                        and ('09:' in str(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['systemtime']))
+                                        )
+                                    )
+                                and ((float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['PCT_day_change']) > -0.5)
+                                     or (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['PCT_day_change_pre1']) > -0.5)
+                                     or (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['PCT_day_change_pre2']) > -0.5)
+                                    )
+                                and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change']) < 0.3)
+                                     or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change_pre2']) < 0.3)
                                     )
                                 ):
                                 search_filter = {"scrip": tempScrip}
@@ -221,6 +254,13 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                 and ('09:3' not in str(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['systemtime']))
                                 and ((float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -2)
                                      or (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 6)
+                                     )
+                                and ((float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['PCT_day_change']) > -0.5)
+                                     or (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['PCT_day_change_pre1']) > -0.5)
+                                     or (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['PCT_day_change_pre2']) > -0.5)
+                                    )
+                                and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change']) < 0.3)
+                                     or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change_pre2']) < 0.3)
                                     )
                                 ):
                                 search_filter = {"scrip": tempScrip}

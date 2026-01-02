@@ -33,6 +33,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['PCT_day_change'] < 0.5) | (df['PCT_day_change_pre1'] < 0.5) | (df['PCT_day_change_pre2'] < 0.5)) &
+                ((df['PCT_day_change'] > -0.3) | (df['PCT_day_change_pre2'] > -0.3)) &
                 ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT10_change'] < 7)) |
                 ((df['forecast_day_PCT10_change'] < -6)) |
                 ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] <= -0.5))
@@ -45,9 +47,14 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT10_change'] < 7)) |
-                ((df['forecast_day_PCT10_change'] < -6)) |
-                ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] <= -0.5))
+                ((df['PCT_day_change'] < 0.5) | (df['PCT_day_change_pre1'] < 0.5) | (df['PCT_day_change_pre2'] < 0.5)) &
+                ((df['PCT_day_change'] > -0.3) | (df['PCT_day_change_pre2'] > -0.3)) &
+                (
+                    ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT10_change'] < 15)) |
+                    ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] > -1) & (df['forecast_day_PCT7_change'] > -1) & (df['forecast_day_PCT5_change'] > -1) & (df['forecast_day_PCT10_change'] < 7)) |
+                    ((df['forecast_day_PCT10_change'] < -6)) |
+                    ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] <= -0.5))
+                )
                 ]
         except KeyError as e:
             print("")
@@ -57,6 +64,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['PCT_day_change'] < 0.5) | (df['PCT_day_change_pre1'] < 0.5) | (df['PCT_day_change_pre2'] < 0.5)) &
+                ((df['PCT_day_change'] > -0.3) | (df['PCT_day_change_pre2'] > -0.3)) &
                 ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT10_change'] < 7) & (df['yearHighChange'] <= -10) & (df['yearHighChange'] >= -70) & (df['PCT_day_change'] <= 1.5)) |
                 ((df['forecast_day_PCT10_change'] < -6)) |
                 ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] <= -0.5))
@@ -69,6 +78,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['PCT_day_change'] > -0.5) | (df['PCT_day_change_pre1'] > -0.5) | (df['PCT_day_change_pre2'] > -0.5)) &
+                ((df['PCT_day_change'] < 0.3) | (df['PCT_day_change_pre2'] < 0.3)) &
                 ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT10_change'] > -7)) |
                 ((df['forecast_day_PCT10_change'] > 6)) |
                 ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] >= 0.5))
@@ -81,9 +92,14 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT10_change'] > -7)) |
-                ((df['forecast_day_PCT10_change'] > 6)) |
-                ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] >= 0.5))
+                ((df['PCT_day_change'] > -0.5) | (df['PCT_day_change_pre1'] > -0.5) | (df['PCT_day_change_pre2'] > -0.5)) &
+                ((df['PCT_day_change'] < 0.3) | (df['PCT_day_change_pre2'] < 0.3)) &
+                (
+                    ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT10_change'] > -15)) |
+                    ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] < 1) & (df['forecast_day_PCT7_change'] < 1) & (df['forecast_day_PCT5_change'] < 1) & (df['forecast_day_PCT10_change'] > -7)) |
+                    ((df['forecast_day_PCT10_change'] > 6)) |
+                    ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] >= 0.5))
+                )
                 ]
         except KeyError as e:
             print("")
@@ -93,6 +109,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['PCT_day_change'] > -0.5) | (df['PCT_day_change_pre1'] > -0.5) | (df['PCT_day_change_pre2'] > -0.5)) &
+                ((df['PCT_day_change'] < 0.3) | (df['PCT_day_change_pre2'] < 0.3)) &
                 ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT10_change'] > -7) & (df['yearLowChange'] > 10) & (df['yearLowChange'] <= 70) & (df['PCT_day_change'] >= -1.5)) |
                 ((df['forecast_day_PCT10_change'] > 6)) |
                 ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] >= 0.5))
@@ -280,6 +298,7 @@ def main():
                 (df['highTail'] < 1.5) &
                 (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
                 (df['week2HighChange'] < -2) &
+                (df['mlData'].str.contains('0@@', case=False, regex=True, na=False)) &
                 (df['monthLowChange'] < 0)
                 ]
         except KeyError as e:
