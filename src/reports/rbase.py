@@ -489,3 +489,7 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
     else:
         st.dataframe(df, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+
+def render_rawdata(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default):
+    st.write("********"+ name + "********")
+    st.dataframe(df, height=height, use_container_width=True)

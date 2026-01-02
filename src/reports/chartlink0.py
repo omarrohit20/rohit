@@ -30,11 +30,11 @@ def main():
     except Exception:
         pass
 
-    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
         rb.render(st, df, 'morning-volume-breakout-buy ##############', color='G', height=300)
-    with col3:
+    with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -50,24 +50,14 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 10:
+        if len(filtered_df) < 20:
             rb.render(st, filtered_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=300)
         else:
             rb.render(st, empty_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=300)
-    with col2:
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] < 5)) &
-                (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) 
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'Check News ###########################', color='G', height=300)
-    with col4:
+    with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         rb.render(st, df, 'morning-volume-breakout-sell ######################', color='R', height=300)
-    with col6:
+    with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -83,21 +73,11 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 10:
+        if len(filtered_df) < 20:
             rb.render(st, filtered_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=300)
         else:
             rb.render(st, empty_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=300)
-    with col5:
-        df = rb.getdf('morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] > -5)) &
-                (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) 
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'Check News ###########################', color='R', height=300)
+    
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -444,6 +424,7 @@ def main():
         try:
             filtered_df = df[
                 (df['forecast_day_PCT10_change'] < -6) &
+                ((df['PCT_day_change'] < -2) | (df['PCT_day_change_pre1'] < -2)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
             ]
         except KeyError as e:
@@ -520,6 +501,7 @@ def main():
         try:
             filtered_df = df[
                 (df['forecast_day_PCT10_change'] > 6) &
+                ((df['PCT_day_change'] > 2) | (df['PCT_day_change_pre1'] > 2)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
             ]
         except KeyError as e:

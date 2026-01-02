@@ -391,5 +391,81 @@ def main():
         rb.render(st, filtered_df, 'DownTrendMaySell', column_conf=rb.column_config_ml, column_order=rb.column_order_ml,
                   renderml=True, color='LG')
 
+    # Sentiment Analysis Tables
+    st.divider()
+    st.subheader('News Sentiment Analysis')
+    
+    col1, col2 = st.columns(2)
+    
+    # Load sentiment data once
+    try:
+        from pymongo import MongoClient
+        connection = MongoClient('localhost', 27017)
+        dbcl = connection.chartlink
+        sentiment_collection = dbcl['sentiment']
+        sentiment_data = list(sentiment_collection.find())
+        connection.close()
+    except Exception as e:
+        sentiment_data = []
+        st.write(f"Error loading sentiment data: {e}")
+    
+    with col1:
+        # Positive Sentiment Table
+        try:
+            if sentiment_data:
+                # Filter for positive sentiment
+                positive_data = []
+                for item in sentiment_data:
+                    if item.get('news_analysis', {}).get('overall_sentiment') == 'Positive':
+                        # Flatten the structure for display
+                        news_items = item.get('news_analysis', {}).get('news', [])
+                        for news in news_items:
+                            positive_data.append({
+                                'scrip': item.get('scrip', ''),
+                                'company': item.get('company', ''),
+                                'headline': news.get('headline', ''),
+                                'impact': news.get('impact', ''),
+                                'severity': news.get('severity', '')
+                            })
+                
+                if positive_data:
+                    df_positive = pd.DataFrame(positive_data)
+                    rb.render_rawdata(st, df_positive, 'Positive Sentiment News', color='G', height=300)
+                else:
+                    st.write("No positive sentiment news found")
+            else:
+                st.write("No sentiment data available")
+        except Exception as e:
+            st.write(f"Error processing positive sentiment: {e}")
+    
+    with col2:
+        # Negative Sentiment Table
+        try:
+            if sentiment_data:
+                # Filter for negative sentiment
+                negative_data = []
+                for item in sentiment_data:
+                    if item.get('news_analysis', {}).get('overall_sentiment') == 'Negative':
+                        # Flatten the structure for display
+                        news_items = item.get('news_analysis', {}).get('news', [])
+                        for news in news_items:
+                            negative_data.append({
+                                'scrip': item.get('scrip', ''),
+                                'company': item.get('company', ''),
+                                'headline': news.get('headline', ''),
+                                'impact': news.get('impact', ''),
+                                'severity': news.get('severity', '')
+                            })
+                
+                if negative_data:
+                    df_negative = pd.DataFrame(negative_data)
+                    rb.render_rawdata(st, df_negative, 'Negative Sentiment News', color='R', height=300)
+                else:
+                    st.write("No negative sentiment news found")
+            else:
+                st.write("No sentiment data available")
+        except Exception as e:
+            st.write(f"Error processing negative sentiment: {e}")
+
 if __name__ == '__main__':
     main()

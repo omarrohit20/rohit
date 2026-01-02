@@ -1,17 +1,98 @@
 [
-  {
-    "scrip": "TATASTEEL",
-    "company": "Tata Steel Ltd.",
-    "news_analysis": {
-      "news": [
+    [
         {
-          "headline": "Indian steel makers to benefit from proposed safeguard duty review",
-          "link": "https://www.financialexpress.com/market/commodities/steel-makers-likely-to-gain-from-safeguard-duty-review/",
-          "impact": "Positive",
-          "severity": "Medium"
+          "scrip": "TATASTEEL",
+          "company": "Tata Steel Ltd.",
+          "news_analysis": {
+            "news": [
+              {
+                "headline": "India imposes three-year import tariff on select steel products benefiting domestic producers",
+                "link": "https://www.reuters.com/business/energy/indias-steel-stocks-jump-tariff-curb-cheap-imports-2025-12-31/",
+                "impact": "Positive",
+                "severity": "Medium"
+              },
+              {
+                "headline": "Tata Steel shares rise 7% in 3 sessions; up 31% in 2025",
+                "link": "https://m.economictimes.com/markets/stocks/news/tata-steel-shares-rise-7-in-3-sessions-up-31-in-2025-whats-driving-the-latest-surge/articleshow/126265899.cms",
+                "impact": "Neutral",
+                "severity": "Low"
+              }
+            ],
+            "overall_sentiment": "Positive"
+          }
+        },
+        {
+          "scrip": "JSWSTEEL",
+          "company": "JSW Steel Ltd.",
+          "news_analysis": {
+            "news": [
+              {
+                "headline": "Indian equity markets edged higher on steel tariff uplift, led by metal stocks including JSW Steel",
+                "link": "https://www.reuters.com/world/india/indias-nifty-50-open-higher-foreign-outflows-could-cap-gains-2025-12-31/",
+                "impact": "Positive",
+                "severity": "Medium"
+              }
+            ],
+            "overall_sentiment": "Positive"
+          }
+        },
+        {
+          "scrip": "INTERGLOBE",
+          "company": "InterGlobe Aviation Ltd.",
+          "news_analysis": {
+            "news": [
+              {
+                "headline": "Airline IndusGlobe Aviation’s shares were noted in recent market coverage amid news of a substantial GST penalty notice",
+                "link": "https://upstox.com/news/market-news/stocks/stocks-to-watch-dec-31-nbcc-tata-steel-jsw-steel-indi-go-ifci-orient-technologies/article-186985/",
+                "impact": "Negative",
+                "severity": "Medium"
+              }
+            ],
+            "overall_sentiment": "Negative"
+          }
+        },
+        {
+            "scrip": "IDEA",
+            "company": "Vodafone Idea Ltd.",
+            "news_analysis": {
+            "news": [
+                {
+                "headline": "Vodafone Idea slapped with ₹638 crore GST penalty, plans legal challenge",
+                "link": "https://www.business-standard.com/companies/news/vodafone-idea-gst-penalty-legal-challenge-agr-relief-126010100770_1.html",
+                "impact": "Negative",
+                "severity": "Medium"
+                },
+                {
+                "headline": "Vodafone Idea to receive ₹5,836 crore from promoters under revised agreement",
+                "link": "https://www.business-standard.com/companies/news/additional-funding-and-relief-key-for-vi-to-meet-liabilities-expand-126010100745_1.html",
+                "impact": "Positive",
+                "severity": "Medium"
+                },
+                {
+                "headline": "Cabinet freezes Vi's AGR dues at ₹87,695 crore with 5-year moratorium",
+                "link": "https://www.business-standard.com/companies/news/vodafone-idea-union-cabinet-agr-dues-moratorium-125123100544_1.html",
+                "impact": "Mixed",
+                "severity": "High"
+                }
+            ],
+            "overall_sentiment": "Mixed"
+            }
+        },
+        {
+            "scrip": "HYUNDAI",
+            "company": "Hyundai Motor India Ltd.",
+            "news_analysis": {
+            "news": [
+                {
+                "headline": "Hyundai Motor India announces 0.6% price hike across models from January 1, 2026",
+                "link": "https://www.business-standard.com/industry/auto/hyundai-motor-india-to-hike-prices-around-0-6-pc-from-jan-1-125123100600_1.html",
+                "impact": "Neutral",
+                "severity": "Low"
+                }
+            ],
+            "overall_sentiment": "Neutral"
+            }
         }
-      ],
-      "overall_sentiment": "Positive"
-    }
-  }
+    ]
+      
 ]
