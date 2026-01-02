@@ -1,9 +1,8 @@
 Analyze following Nsedata.scrip.json having nse scrip for news and sentiment in last 24 hour.
-Update the same json with link for news.
-Impact positive or negative.
-Severity high, medium, low, unknown.
 Include sectoral news and impact also.
+Include quarterly result also.
 Exclude news for among top gainers or losers and news already factored in stock price.
+Create json with link for news. Impact positive or negative. Severity high, medium, low, unknown.
 Generate downloadable json file for all the scrip where any sentiment or news ignore other.
 Generate json in following format.
 [

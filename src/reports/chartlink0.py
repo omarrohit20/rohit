@@ -549,8 +549,12 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                df['mlData'].str.contains("MLBuy") | df['mlData'].str.contains("MLhighBuy") &
-                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                (df['mlData'].str.contains("MLBuy") | 
+                    (df['mlData'].str.contains("MLhighBuy") &
+                        ~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)
+                    )
+                ) 
                 ]
         except KeyError as e:
             print("")
@@ -564,7 +568,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                df['filter'].str.contains("[MLBuy]:") &
+                (df['filter'].str.contains("[MLBuy]:")) &
                 (abs(df['PCT_day_change']) < 2) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
                 ]
@@ -591,9 +595,13 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                df['mlData'].str.contains("MLSell") | df['mlData'].str.contains("MLlowSell") &
-                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
-            ]
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                (df['mlData'].str.contains("MLSell") | 
+                    (df['mlData'].str.contains("MLlowSell") &
+                        ~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)
+                    )
+                ) 
+                ]
         except KeyError as e:
             print("")
         if len(df) > 5:

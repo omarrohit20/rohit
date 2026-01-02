@@ -986,15 +986,15 @@ def result_data_reg(scrip):
                 db['highBuy'].insert_one(regression_data)
             else:
                 db['highBuy'].update_one({'scrip':scrip}, { "$set": {'ml':'MLBuy0'}})
-        elif((regression_high_copy['PCT_day_change'] < 4) &
-            (regression_high_copy['kNeighboursValue_reg'] > 2) &
-            (regression_high_copy['mlpValue_reg'] > 2)
-            ):
-            if((db['highBuy'].find_one({'scrip':scrip}) is None)):
-                regression_data['ml'] = 'MLBuy1'
-                db['highBuy'].insert_one(regression_data)
-            else:
-                db['highBuy'].update_one({'scrip':scrip}, { "$set": {'ml':'MLBuy1'}})
+        # elif((regression_high_copy['PCT_day_change'] < 4) &
+        #     (regression_high_copy['kNeighboursValue_reg'] > 2) &
+        #     (regression_high_copy['mlpValue_reg'] > 2)
+        #     ):
+        #     if((db['highBuy'].find_one({'scrip':scrip}) is None)):
+        #         regression_data['ml'] = 'MLBuy1'
+        #         db['highBuy'].insert_one(regression_data)
+        #     else:
+        #         db['highBuy'].update_one({'scrip':scrip}, { "$set": {'ml':'MLBuy1'}})
         elif ((regression_high_copy['PCT_change_pre1'] < 3) &
                 (regression_high_copy['PCT_change_pre2'] < 3) &
                 ((regression_high_copy['PCT_change_pre1'] > 1) | (regression_high_copy['PCT_change_pre2'] > 1)) &
@@ -1052,15 +1052,15 @@ def result_data_reg(scrip):
                 db['lowSell'].insert_one(regression_data)
             else:
                 db['lowSell'].update_one({'scrip':scrip}, { "$set": {'ml':'MLSell0'}})
-        elif((regression_low_copy['PCT_day_change'] > -4) &
-            (regression_low_copy['kNeighboursValue_reg'] < -2) &
-            (regression_low_copy['mlpValue_reg'] < -2)  
-            ):
-            if((db['lowSell'].find_one({'scrip':scrip}) is None)):
-                regression_data['ml'] = 'MLSell1'
-                db['lowSell'].insert_one(regression_data)
-            else:
-                db['lowSell'].update_one({'scrip':scrip}, { "$set": {'ml':'MLSell1'}})
+        # elif((regression_low_copy['PCT_day_change'] > -4) &
+        #     (regression_low_copy['kNeighboursValue_reg'] < -2) &
+        #     (regression_low_copy['mlpValue_reg'] < -2)  
+        #     ):
+        #     if((db['lowSell'].find_one({'scrip':scrip}) is None)):
+        #         regression_data['ml'] = 'MLSell1'
+        #         db['lowSell'].insert_one(regression_data)
+        #     else:
+        #         db['lowSell'].update_one({'scrip':scrip}, { "$set": {'ml':'MLSell1'}})
         elif ((regression_low_copy['PCT_change_pre1'] > -3) &
                 (regression_low_copy['PCT_change_pre2'] > -3) &
                 ((regression_low_copy['PCT_change_pre1'] < -1) | (regression_low_copy['PCT_change_pre2'] < -1)) &
