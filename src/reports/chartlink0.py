@@ -386,6 +386,7 @@ def main():
                 (df['PCT_day_change_pre2'] > -0.1) &
                 (df['PCT_day_change_pre1'] < 1.3) &
                 (df['PCT_day_change_pre2'] < 1.3) &
+                ((df['PCT_day_change'] > 1) | (df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
                 (df['mlData'].str.contains('#TOP', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
                 ]
@@ -463,6 +464,7 @@ def main():
                 (df['PCT_day_change_pre2'] < 0.1) &
                 (df['PCT_day_change_pre1'] > -1.3) &
                 (df['PCT_day_change_pre2'] > -1.3) &
+                ((df['PCT_day_change'] < -1) | (df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
                 (df['mlData'].str.contains('#TOP', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
                 ]
