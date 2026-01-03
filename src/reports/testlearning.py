@@ -52,9 +52,11 @@ def main():
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
-                (df['forecast_day_PCT10_change'] > 2 | df['forecast_day_PCT10_change'] < -6) &
-                (df['PCT_day_change'] > -1) & (df['PCT_day_change'] < 1) &
-                (df['PCT_day_change_pre1'] > -1.5) & (df['PCT_day_change_pre1'] < 1.5) &
+                ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
+                (df['PCT_day_change'] > -1) & 
+                (df['PCT_day_change'] < 1) &
+                (df['PCT_day_change_pre1'] > -1.5) & 
+                (df['PCT_day_change_pre1'] < 1.5) &
                 (df['PCT_day_change_pre2'] < 2)
             ]
         except KeyError as e:
@@ -94,9 +96,11 @@ def main():
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
-                (df['forecast_day_PCT10_change'] < -2 | df['forecast_day_PCT10_change'] > 6) &
-                (df['PCT_day_change'] > -1) & (df['PCT_day_change'] < 1) &
-                (df['PCT_day_change_pre1'] > -1.5) & (df['PCT_day_change_pre1'] < 1.5) &
+                ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT10_change'] > 6)) &
+                (df['PCT_day_change'] > -1) & 
+                (df['PCT_day_change'] < 1) &
+                (df['PCT_day_change_pre1'] > -1.5) & 
+                (df['PCT_day_change_pre1'] < 1.5) &
                 (df['PCT_day_change_pre2'] > -2)
             ]
         except KeyError as e:
