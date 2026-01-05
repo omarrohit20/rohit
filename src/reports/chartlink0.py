@@ -554,9 +554,9 @@ def main():
         try:
             filtered_df = df[
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                (df['mlData'].str.contains("MLBuy") | 
+                ((df['mlData'].str.contains("MLBuy0")) | (df['mlData'].str.contains("MLBuy1")) | (df['mlData'].str.contains("MLBuy2")) | 
                     (
-                        df['mlData'].str.contains("MLhighBuy") &
+                        (df['mlData'].str.contains("MLhighBuy") | df['mlData'].str.contains("MLBuy")) &
                         ((df['PCT_day_change'] < 1.5) | (df['PCT_day_change_pre1'] < 1.5)) &
                         ~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)
                     )
@@ -602,9 +602,9 @@ def main():
         try:
             filtered_df = df[
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                (df['mlData'].str.contains("MLSell") | 
+                (((df['mlData'].str.contains("MLSell0")) | (df['mlData'].str.contains("MLSell1")) | (df['mlData'].str.contains("MLSell2"))) | 
                     (
-                        df['mlData'].str.contains("MLlowSell") &
+                        (df['mlData'].str.contains("MLlowSell") | df['mlData'].str.contains("MLSell")) &
                         ((df['PCT_day_change'] > -1.5) | (df['PCT_day_change_pre1'] > -1.5)) &
                         ~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)
                     )
