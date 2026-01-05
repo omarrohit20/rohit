@@ -185,6 +185,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
+                ((df['PCT_day_change'] > 0.5) | (df['PCT_day_change_pre2'] > 0.5)) &
                 (~df['processor'].str.contains('09_30:checkChartSell', case=False, na=False)) &
                 (df['mlData'].str.contains('Stairs', case=False, na=False)) &
                 (df['mlData'].str.contains('ZPre1', case=False, na=False)) &
@@ -240,6 +241,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
+                ((df['PCT_day_change'] < -0.5) | (df['PCT_day_change_pre2'] < -0.5)) &
                 (~df['processor'].str.contains('09_30:checkChartBuy', case=False, na=False)) &
                 (df['mlData'].str.contains('stairs', case=False, na=False)) &
                 (df['mlData'].str.contains('ZPre', case=False, na=False)) &

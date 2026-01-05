@@ -397,9 +397,9 @@ def main():
         except KeyError as e:
             print("")
         if len(df) > 5:
-            rb.render(st, filtered_df, 'Buy Momentum', color='G', height=200)
+            rb.render(st, filtered_df, 'Up GT0.3:Buy Momentum', color='G', height=200)
         else:
-            rb.render(st, empty_df, 'Buy Momentum', color='G', height=200)
+            rb.render(st, empty_df, 'Up GT0.3:Buy Momentum', color='G', height=200)
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
@@ -418,9 +418,9 @@ def main():
         except KeyError as e:
             print("")
         if len(df) > 5:
-            rb.render(st, filtered_df, 'Buy Momentum', color='G', height=200)
+            rb.render(st, filtered_df, 'Up GT0.3:Buy Momentum', color='G', height=200)
         else:
-            rb.render(st, empty_df, 'Buy Momentum', color='G', height=200)
+            rb.render(st, empty_df, 'Up GT0.3:Buy Momentum', color='G', height=200)
     with col3:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
@@ -475,9 +475,9 @@ def main():
         except KeyError as e:
             print("")
         if len(df) > 5:
-            rb.render(st, filtered_df, 'Sell Momentum', color='R', height=200)
+            rb.render(st, filtered_df, 'Down LT-0.3:Sell Momentum', color='R', height=200)
         else:
-            rb.render(st, empty_df, 'Sell Momentum', color='R', height=200)
+            rb.render(st, empty_df, 'Down LT-0.3:Sell Momentum', color='R', height=200)
     with col5:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
@@ -496,9 +496,9 @@ def main():
         except KeyError as e:
             print("")
         if len(df) > 5:
-            rb.render(st, filtered_df, 'Sell Momentum', color='G', height=200)
+            rb.render(st, filtered_df, 'Down LT-0.3:Sell Momentum', color='G', height=200)
         else:
-            rb.render(st, empty_df, 'Sell Momentum', color='G', height=200)
+            rb.render(st, empty_df, 'Down LT-0.3:Sell Momentum', color='G', height=200)
     with col6:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))

@@ -52,6 +52,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['PCT_day_change'] < 0.5) | (df['PCT_day_change_pre1'] < 0.5) | (df['PCT_day_change_pre2'] < 0.5)) &
+                ((df['PCT_day_change'] > 0.5) | (abs(df['PCT_day_change_pre1']) > 0.5) | (abs(df['PCT_day_change_pre2']) > 0.5)) &
                 ((df['PCT_day_change'] < 2) | (df['PCT_day_change_pre1'] < 2)) &
                 ((df['PCT_day_change'] > -0.3) | (df['PCT_day_change_pre2'] > -0.3)) &
                 ((df['yearHighChange'] < 0) | (df['monthHighChange'] < 0) | (df['forecast_day_PCT10_change'] < -6)) &
@@ -71,6 +72,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['PCT_day_change'] < 0.5) | (df['PCT_day_change_pre1'] < 0.5) | (df['PCT_day_change_pre2'] < 0.5)) &
+                ((df['PCT_day_change'] > 0.5) | (abs(df['PCT_day_change_pre1']) > 0.5) | (abs(df['PCT_day_change_pre2']) > 0.5)) &
                 ((df['PCT_day_change'] < 2) | (df['PCT_day_change_pre1'] < 2)) &
                 ((df['PCT_day_change'] > -0.3) | (df['PCT_day_change_pre2'] > -0.3)) &
                 ((df['yearHighChange'] < 0) | (df['monthHighChange'] < 0) | (df['forecast_day_PCT10_change'] < -6)) &
@@ -107,6 +109,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['PCT_day_change'] > -0.5) | (df['PCT_day_change_pre1'] > -0.5) | (df['PCT_day_change_pre2'] > -0.5)) &
+                ((df['PCT_day_change'] < -0.5) | (abs(df['PCT_day_change_pre1']) > 0.5) | (abs(df['PCT_day_change_pre2']) > 0.5)) &
                 ((df['PCT_day_change'] > -2) | (df['PCT_day_change_pre1'] > -2)) &
                 ((df['PCT_day_change'] < 0.3) | (df['PCT_day_change_pre2'] < 0.3)) &
                 ((df['yearLowChange'] > 0) | (df['monthLowChange'] > 0) | (df['forecast_day_PCT10_change'] > 6)) &
@@ -126,6 +129,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['PCT_day_change'] > -0.5) | (df['PCT_day_change_pre1'] > -0.5) | (df['PCT_day_change_pre2'] > -0.5)) &
+                ((df['PCT_day_change'] < -0.5) | (abs(df['PCT_day_change_pre1']) > 0.5) | (abs(df['PCT_day_change_pre2']) > 0.5)) &
                 ((df['PCT_day_change'] > -2) | (df['PCT_day_change_pre1'] > -2)) &
                 ((df['PCT_day_change'] < 0.3) | (df['PCT_day_change_pre2'] < 0.3)) &
                 ((df['yearLowChange'] > 0) | (df['monthLowChange'] > 0) | (df['forecast_day_PCT10_change'] > 6)) &

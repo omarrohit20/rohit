@@ -269,6 +269,7 @@ def main():
                 (df['PCT_change'] < 4.5) &
                 (df['PCT_day_change'] < 4) &
                 (df['PCT_day_change'] > 2) &
+                ((df['PCT_day_change'] < 1) | (df['PCT_day_change_pre1'] < 1) | (df['PCT_day_change_pre2'] < -0.5)) &
                 ((df['kNeighboursValue_reg'] > 2) | (df['mlpValue_reg'] > 2)) &
                 ((df['PCT_day_change_pre1'] > 0 ) | (df['PCT_day_change_pre2'] > 0)) &
                 (df['forecast_day_PCT10_change'] > 2)
@@ -321,6 +322,7 @@ def main():
                 (df['PCT_change'] > -4.5) &
                 (df['PCT_day_change'] > -4) &
                 (df['PCT_day_change'] < -2) &
+                ((df['PCT_day_change'] > -1) | (df['PCT_day_change_pre1'] > -1) | (df['PCT_day_change_pre2'] > 0.5)) &
                 ((df['kNeighboursValue_reg'] < -2) | (df['mlpValue_reg'] < -2)) &
                 ((df['PCT_day_change_pre1'] < 0 ) | (df['PCT_day_change_pre2'] < 0)) &
                 (df['forecast_day_PCT10_change'] < -2)
