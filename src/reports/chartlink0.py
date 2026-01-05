@@ -557,6 +557,7 @@ def main():
                 (df['mlData'].str.contains("MLBuy") | 
                     (
                         df['mlData'].str.contains("MLhighBuy") &
+                        ((df['PCT_day_change'] < 1.5) | (df['PCT_day_change_pre1'] < 1.5)) &
                         ~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)
                     )
                 ) 
@@ -604,6 +605,7 @@ def main():
                 (df['mlData'].str.contains("MLSell") | 
                     (
                         df['mlData'].str.contains("MLlowSell") &
+                        ((df['PCT_day_change'] > -1.5) | (df['PCT_day_change_pre1'] > -1.5)) &
                         ~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)
                     )
                 ) 

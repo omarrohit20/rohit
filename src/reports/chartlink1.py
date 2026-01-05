@@ -34,6 +34,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['PCT_day_change'] < 0.5) | (df['PCT_day_change_pre1'] < 0.5) | (df['PCT_day_change_pre2'] < 0.5)) &
+                ((df['PCT_day_change'] < 2) | (df['PCT_day_change_pre1'] < 2)) &
                 ((df['PCT_day_change'] > -0.3) | (df['PCT_day_change_pre2'] > -0.3)) &
                 (
                     ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT10_change'] < 7)) |
@@ -50,6 +51,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['PCT_day_change'] < 0.5) | (df['PCT_day_change_pre1'] < 0.5) | (df['PCT_day_change_pre2'] < 0.5)) &
+                ((df['PCT_day_change'] < 2) | (df['PCT_day_change_pre1'] < 2)) &
                 ((df['PCT_day_change'] > -0.3) | (df['PCT_day_change_pre2'] > -0.3)) &
                 (
                     ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT10_change'] < 15)) |
@@ -67,6 +69,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['PCT_day_change'] < 0.5) | (df['PCT_day_change_pre1'] < 0.5) | (df['PCT_day_change_pre2'] < 0.5)) &
+                ((df['PCT_day_change'] < 2) | (df['PCT_day_change_pre1'] < 2)) &
                 ((df['PCT_day_change'] > -0.3) | (df['PCT_day_change_pre2'] > -0.3)) &
                 (
                     ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT10_change'] < 7) & (df['yearHighChange'] <= -10) & (df['yearHighChange'] >= -70) & (df['PCT_day_change'] <= 1.5)) |
@@ -83,6 +86,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['PCT_day_change'] > -0.5) | (df['PCT_day_change_pre1'] > -0.5) | (df['PCT_day_change_pre2'] > -0.5)) &
+                ((df['PCT_day_change'] > -2) | (df['PCT_day_change_pre1'] > -2)) &
                 ((df['PCT_day_change'] < 0.3) | (df['PCT_day_change_pre2'] < 0.3)) &
                 (
                     ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT10_change'] > -7)) |
@@ -99,6 +103,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['PCT_day_change'] > -0.5) | (df['PCT_day_change_pre1'] > -0.5) | (df['PCT_day_change_pre2'] > -0.5)) &
+                ((df['PCT_day_change'] > -2) | (df['PCT_day_change_pre1'] > -2)) &
                 ((df['PCT_day_change'] < 0.3) | (df['PCT_day_change_pre2'] < 0.3)) &
                 (
                     ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT10_change'] > -15)) |
@@ -116,6 +121,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['PCT_day_change'] > -0.5) | (df['PCT_day_change_pre1'] > -0.5) | (df['PCT_day_change_pre2'] > -0.5)) &
+                ((df['PCT_day_change'] > -2) | (df['PCT_day_change_pre1'] > -2)) &
                 ((df['PCT_day_change'] < 0.3) | (df['PCT_day_change_pre2'] < 0.3)) &
                 (
                     ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT10_change'] > -7) & (df['yearLowChange'] > 10) & (df['yearLowChange'] <= 70) & (df['PCT_day_change'] >= -1.5)) |
