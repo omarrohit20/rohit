@@ -366,8 +366,23 @@ def main():
         rb.render(st, filtered_df, 'LastDayUp:Buy-LowTail', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
 
 
-    col1, col4 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
+        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] > -4.5) &
+                (df['PCT_day_change'] > -4) &
+                (df['PCT_day_change'] < -2) &
+                ((df['PCT_day_change_pre1'] > -2 ) | (df['monthHighChange'] < 0)) &
+                (df['forecast_day_PCT10_change'] > 5) &
+                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'UpTrendMayBuy', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+    with col2:
         df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
         filtered_df = df
         try:
@@ -382,6 +397,22 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'UpTrendMayBuy', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+    with col3:
+        df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] < 4.5) &
+                (df['PCT_day_change'] < 4) &
+                (df['PCT_day_change'] > 2) &
+                ((df['PCT_day_change_pre1'] < 2 ) | (df['monthLowChange'] > 0)) &
+                (df['forecast_day_PCT10_change'] < -5) &
+                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DownTrendMaySell', column_conf=rb.column_config_ml, column_order=rb.column_order_ml,
+                  renderml=True, color='LG')
     with col4:
         df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
         filtered_df = df
