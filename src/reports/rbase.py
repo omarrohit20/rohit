@@ -406,7 +406,9 @@ def apply_f10_buy(row):
         row["forecast_day_PCT7_change"],
         row["forecast_day_PCT5_change"],
     )
-    return pd.Series([color if col in f10_cols else "" for col in row.index], index=row.index)
+    # use the same color for every column in the row
+    return pd.Series(color, index=row.index)
+
 
 def apply_f10_sell(row):
     color = highlight_category_column_f10_sell(
@@ -414,7 +416,9 @@ def apply_f10_sell(row):
         row["forecast_day_PCT7_change"],
         row["forecast_day_PCT5_change"],
     )
-    return pd.Series([color if col in f10_cols else "" for col in row.index], index=row.index)
+    # use the same color for every column in the row
+    return pd.Series(color, index=row.index)
+
 
 def highlight_category_column_f10_buy(value10, value7, value5):
     """Highlights the entire row based on the 'Category' column value."""
