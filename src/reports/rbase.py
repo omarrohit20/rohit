@@ -380,15 +380,19 @@ def highlight_category_column(value):
         return 'background-color: #3EB9FB'
     elif "0@@SUPER" in value and "2@" in value:
         return 'background-color: #3EB9FB'
+    elif "0@@CROSSED" in value and "1@" in value:
+        return 'background-color: #CBEDFF'
+    elif "0@@SUPER" in value and "1@" in value:
+        return 'background-color: #CBEDFF'
     elif "0@@CROSSED" in value and "6@" in value:
         return 'background-color: #F9FAFB'
     elif "0@@SUPER" in value and "6@" in value:
         return 'background-color: #F9FAFB'
     else:
         if "0@@CROSSED" in value:
-                return 'background-color: #CBEDFF'
+                return 'background-color: #FBED78'
         if "0@@SUPER" in value:
-                return 'background-color: #CBEDFF'
+                return 'background-color: #3EB9FB'
 
 def highlight_category_column_super(value):
     """Highlights the entire row based on the 'Category' column value."""
@@ -418,6 +422,8 @@ def getdf(collection_name):
         df['weekHighChange'] = pd.to_numeric(df['weekHighChange'], errors='coerce')
         df['weekLowChange'] = pd.to_numeric(df['weekLowChange'], errors='coerce')
         df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
+        df['forecast_day_PCT7_change'] = pd.to_numeric(df['forecast_day_PCT7_change'], errors='coerce')
+        df['forecast_day_PCT5_change'] = pd.to_numeric(df['forecast_day_PCT5_change'], errors='coerce')
         df['systemtime'] = pd.to_datetime(df['systemtime']).dt.time.astype(str)
         df['mlData'] = df['mlData'].fillna('').astype(str)
     except KeyError as e:
@@ -457,6 +463,8 @@ def getintersectdf(collection_name1, collection_name2):
         df['weekHighChange'] = pd.to_numeric(df['weekHighChange'], errors='coerce')
         df['weekLowChange'] = pd.to_numeric(df['weekLowChange'], errors='coerce')
         df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
+        df['forecast_day_PCT7_change'] = pd.to_numeric(df['forecast_day_PCT7_change'], errors='coerce')
+        df['forecast_day_PCT5_change'] = pd.to_numeric(df['forecast_day_PCT5_change'], errors='coerce')
         df['systemtime'] = pd.to_datetime(df['systemtime']).dt.time.astype(str)
         df['systemtime_merged'] = pd.to_datetime(df['systemtime_merged']).dt.time.astype(str)
         df['mlData'] = df['mlData'].fillna('').astype(str)
@@ -498,6 +506,8 @@ def getintersectdf_ml(collection_name1, collection_name2):
         df['weekHighChange'] = pd.to_numeric(df['weekHighChange'], errors='coerce')
         df['weekLowChange'] = pd.to_numeric(df['weekLowChange'], errors='coerce')
         df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
+        df['forecast_day_PCT7_change'] = pd.to_numeric(df['forecast_day_PCT7_change'], errors='coerce')
+        df['forecast_day_PCT5_change'] = pd.to_numeric(df['forecast_day_PCT5_change'], errors='coerce')
         df['kNeighboursValue_reg'] = pd.to_numeric(df['kNeighboursValue_reg'], errors='coerce')
         df['mlpValue_reg'] = pd.to_numeric(df['mlpValue_reg'], errors='coerce')
         df['kNeighboursValue_reg_merged'] = pd.to_numeric(df['kNeighboursValue_reg_merged'], errors='coerce')
