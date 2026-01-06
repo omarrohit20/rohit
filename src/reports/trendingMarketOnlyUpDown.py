@@ -137,22 +137,22 @@ def main():
     col0, col1, col2, col00, col3, col4 = st.columns(6)
     with col0:
         df = rb.getdf('supertrend-morning-buy')
-        rb.render(st, df, 'Supertrend Morning Buy', color='LG')
+        rb.render(st, df, 'Supertrend Morning Buy', color='LG', renderf10buy=True)
     with col1:
         df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
-        rb.render(st, df, 'Crossed 2 Day Highs', color='LG')
+        rb.render(st, df, 'Crossed 2 Day Highs', color='LG', renderf10buy=True)
     with col2:
         df = rb.getdf('crossed-day-high')
-        rb.render(st, df, 'Crossed Day Highs', color='LG')
+        rb.render(st, df, 'Crossed Day Highs', color='LG', renderf10buy=True)
     with col00:
         df = rb.getdf('supertrend-morning-sell')
-        rb.render(st, df, 'Supertrend Morning Sell', color='LG')
+        rb.render(st, df, 'Supertrend Morning Sell', color='LG', renderf10sell=True)
     with col3:
         df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
-        rb.render(st, df, 'Crossed 2 Day Lows', color='LG')
+        rb.render(st, df, 'Crossed 2 Day Lows', color='LG', renderf10sell=True)
     with col4:
         df = rb.getdf('crossed-day-low')
-        rb.render(st, df, 'Crossed Day Lows', color='LG')
+        rb.render(st, df, 'Crossed Day Lows', color='LG', renderf10sell=True)
 
 
     col1, col2, col3, col4, col5, col6 = st.columns(6)

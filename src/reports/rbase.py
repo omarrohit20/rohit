@@ -393,6 +393,29 @@ def highlight_category_column(value):
                 return 'background-color: #FBED78'
         if "0@@SUPER" in value:
                 return 'background-color: #3EB9FB'
+        
+def highlight_category_column_f10_buy(value):
+    """Highlights the entire row based on the 'Category' column value."""
+    if float(value) > 2 and float(value) < 10:
+        return 'background-color: #3EB9FB'
+    elif float(value) > -2 and float(value) < 3:
+        return 'background-color: #CBEDFF'
+    elif float(value) < -6:
+        return 'background-color: #F9FAFB'
+    else:
+        return 'background-color: #A1A1A1'
+        
+    
+def highlight_category_column_f10_sell(value):
+    """Highlights the entire row based on the 'Category' column value."""
+    if float(value) < -2 and float(value) > -10:
+        return 'background-color: #3EB9FB'
+    elif float(value) < 2 and float(value) > -3:
+        return 'background-color: #CBEDFF'
+    elif float(value) > 6:
+        return 'background-color: #F9FAFB'
+    else:
+        return 'background-color: #A1A1A1'
 
 def highlight_category_column_super(value):
     """Highlights the entire row based on the 'Category' column value."""
@@ -517,10 +540,18 @@ def getintersectdf_ml(collection_name1, collection_name2):
 
     return df
 
-def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False):
+def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False, renderf10buy=False, renderf10sell=False, f10=0):
     st.write("********"+ name + "********")
     # Main Code Execution
-    if renderml:
+    if renderf10buy:
+        df_styled = highlight_category_row(df, color=color)
+        df_styled = df_styled.map(highlight_category_column_f10_buy, subset=['forecast_day_PCT10_change'])
+        st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+    elif renderf10sell:
+        df_styled = highlight_category_row(df, color=color)
+        df_styled = df_styled.map(highlight_category_column_f10_sell, subset=['forecast_day_PCT10_change'])
+        st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+    elif renderml:
         df_styled = highlight_category_row(df, color=color)
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
     elif not df.empty:
