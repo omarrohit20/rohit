@@ -19,7 +19,7 @@ def main():
     with col1:
         df = rb.getdf('supertrend-morningdown-buy')
         filtered_df = df
-        rb.render(st, filtered_df, 'UpNow Supertrend MorningDown Buys', color='G')
+        rb.render(st, filtered_df, 'UpNow Supertrend MorningDown Buys', color='LG')
     with col2:
         df = rb.getintersectdf('buy-check-morning-down-breakup-02', 'crossed-day-high')
         filtered_df = df
@@ -31,7 +31,7 @@ def main():
     with col4:
         df = rb.getdf('supertrend-morningup-sell')
         filtered_df = df
-        rb.render(st, filtered_df, 'DownNow Supertrend  Morningup Sells', color='R')
+        rb.render(st, filtered_df, 'DownNow Supertrend  Morningup Sells', color='LG')
     with col5:
         df = rb.getintersectdf('sell-check-morning-up-breakdown-02', 'crossed-day-low')
         filtered_df = df
@@ -67,6 +67,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('09:', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('09:2', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('09:3', case=False, na=False)) &
                 ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
                 (~df['processor'].str.contains('09_30:checkChartBuy/Sell', case=False, na=False)) &
                 (~df['processor'].str.contains('1-Bbuyy-morningUp', case=False, na=False))
@@ -79,6 +82,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('09:', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('09:2', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('09:3', case=False, na=False)) &
                 (df['PCT_day_change'] >= -0.5) &
                 (df['PCT_day_change'] <= 1) &
                 (df['PCT_change'] < 1) &
@@ -113,6 +119,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('09:', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('09:2', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('09:3', case=False, na=False)) &
                 ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
                 (~df['processor'].str.contains('09_30:checkChartSell/Buy', case=False, na=False)) &
                 (~df['processor'].str.contains('1-Sselll-morningDown', case=False, na=False))
@@ -125,6 +134,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('09:', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('09:2', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('09:3', case=False, na=False)) &
                 ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
                 (df['week2LowChange'] < -2) &
                 (~df['processor'].str.contains('09_30:checkChartSell/', case=False, regex=True, na=False)) &

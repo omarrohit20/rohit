@@ -386,6 +386,7 @@ def main():
             filtered_df = df[
                 (df['forecast_day_PCT10_change'] >= 1) &
                 (df['forecast_day_PCT10_change'] <= 3) &
+                ((df['forecast_day_PCT5_change'] >= 0) | (df['forecast_day_PCT7_change'] >= 0)) &
                 (df['PCT_day_change_pre1'] > -0.1) &
                 (df['PCT_day_change_pre2'] > -0.1) &
                 (df['PCT_day_change_pre1'] < 1.3) &
@@ -408,6 +409,7 @@ def main():
         try:
             filtered_df = df[
                 (df['forecast_day_PCT10_change'] > 2) &
+                ((df['forecast_day_PCT5_change'] >= 0) | (df['forecast_day_PCT7_change'] >= 0)) &
                 ((df['PCT_day_change'] < -1.3) | (df['PCT_day_change_pre1'] < -1.3)) &
                 ((df['PCT_day_change'] < 0.5) & (df['PCT_day_change_pre1'] < 0.5)) &
                 ((df['PCT_day_change'] > -3) & (df['PCT_day_change_pre1'] > -3)) &
@@ -464,6 +466,7 @@ def main():
             filtered_df = df[
                 (df['forecast_day_PCT10_change'] >= -3) &
                 (df['forecast_day_PCT10_change'] <= -1) &
+                ((df['forecast_day_PCT5_change'] <= 0) | (df['forecast_day_PCT7_change'] <= 0)) &
                 (df['PCT_day_change_pre1'] < 0.1) &
                 (df['PCT_day_change_pre2'] < 0.1) &
                 (df['PCT_day_change_pre1'] > -1.3) &
@@ -486,6 +489,7 @@ def main():
         try:
             filtered_df = df[
                 (df['forecast_day_PCT10_change'] < -2) &
+                ((df['forecast_day_PCT5_change'] <= 0) | (df['forecast_day_PCT7_change'] <= 0)) &
                 ((df['PCT_day_change'] > 1.3) | (df['PCT_day_change_pre1'] > 1.3)) &
                 ((df['PCT_day_change'] > -0.5) & (df['PCT_day_change_pre1'] > -0.5)) &
                 ((df['PCT_day_change'] < 3) & (df['PCT_day_change_pre1'] < 3)) &
