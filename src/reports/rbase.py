@@ -376,6 +376,7 @@ def highlight_category_row(df, color='NA'):
 def highlight_category_column(value):
     """Highlights the entire row based on the 'Category' column value."""
 
+    
     if "0@@CROSSED" in value and "2@" in value:
         return 'background-color: #3EB9FB'
     elif "0@@SUPER" in value and "2@" in value:
@@ -388,6 +389,12 @@ def highlight_category_column(value):
         return 'background-color: #F9FAFB'
     elif "0@@SUPER" in value and "6@" in value:
         return 'background-color: #F9FAFB'
+    
+#     if "MLBuy0" in value or "MLBuy1" in value or "MLBuy2" in value:
+#         return 'background-color: #E0FFDE'
+#     if "MLSell0" in value or "MLSell1" in value or "MLSell2" in value:
+#         return 'background-color: #FCCFD2'
+    
 #     else:
 #         if "0@@CROSSED" in value:
 #                 return 'background-color: #FBED78'
