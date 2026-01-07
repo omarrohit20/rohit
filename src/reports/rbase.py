@@ -388,11 +388,11 @@ def highlight_category_column(value):
         return 'background-color: #F9FAFB'
     elif "0@@SUPER" in value and "6@" in value:
         return 'background-color: #F9FAFB'
-    else:
-        if "0@@CROSSED" in value:
-                return 'background-color: #FBED78'
-        if "0@@SUPER" in value:
-                return 'background-color: #3EB9FB'
+#     else:
+#         if "0@@CROSSED" in value:
+#                 return 'background-color: #FBED78'
+#         if "0@@SUPER" in value:
+#                 return 'background-color: #3EB9FB'
 
 f10_cols = [
     "forecast_day_PCT10_change",
@@ -426,7 +426,7 @@ def highlight_category_column_f10_buy(value10, value7, value5):
         return 'background-color: #3EB9FB'
     elif float(value10) > -2 and float(value10) < 3 and float(value7) < 3 and float(value5) < 3:
         return 'background-color: #CBEDFF'
-    elif float(value10) < -6:
+    elif float(value10) < -3:
         return 'background-color: #F9FAFB'
     else:
         return 'background-color: #A1A1A1'
@@ -437,7 +437,7 @@ def highlight_category_column_f10_sell(value10, value7, value5):
         return 'background-color: #3EB9FB'
     elif float(value10) < 2 and float(value10) > -3 and float(value7) > -3 and float(value5) > -3:
         return 'background-color: #CBEDFF'
-    elif float(value10) > 6:
+    elif float(value10) > 3:
         return 'background-color: #F9FAFB'
     else:
         return 'background-color: #A1A1A1'
