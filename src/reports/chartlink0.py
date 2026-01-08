@@ -541,7 +541,7 @@ def main():
             rb.render(st, empty_df, 'Profit Book Continue', color='R', height=200)
 
 
-    col1, col2, col3, col4, col5, col6, col7, col8 = st.columns(8)
+    col1, col3, col4, col5, col7, col8 = st.columns(6)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -553,12 +553,6 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'SuperTrend-ConsolidationBuy', color='G')
-    with col2:
-        df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
-        if len(df) < 5:
-            rb.render(st, df, 'Crossed 2 Day Highs', color='G')
-        else:
-            rb.render(st, empty_df, 'Crossed 2 Day Highs', color='G')
     with col3:
         df = rb.getdf('morning-volume-breakout-buy')
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -611,12 +605,6 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'SuperTrend-ConsolidationSell', color='R')
-    with col6:
-        df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
-        if len(df) < 3:
-            rb.render(st, df, 'Crossed 2 Day Lows', color='R')
-        else:
-            rb.render(st, empty_df, 'Crossed 2 Day Lows', color='R')
     with col7:
         df = rb.getdf('morning-volume-breakout-sell')
         empty_df = pd.DataFrame(columns=expected_columns)
