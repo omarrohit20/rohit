@@ -521,15 +521,16 @@ def main():
                 (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
                 (df['PCT_day_change'] < 2) &
                 (df['monthLowChange'] < 4) &
-                (df['monthHighChange'] < -1) &
-                (df['month3HighChange'] < 0) &
+                (df['monthHighChange'] < -5) &
+                (df['month3HighChange'] < -5) &
                 (df['month3LowChange'] > 3) &
                 (df['PCT_day_change_pre1'] < 2) &
                 (df['year5HighChange'] < -10) &
                 (df['weekLowChange'] > 1) &
                 (df['week2LowChange'] > 1) &
                 (df['PCT_change'] > -1.5) &
-                (df['yearHighChange'] > -25)
+                (df['yearHighChange'] > -25) &
+                (abs(df['monthHighChange']) > abs( df['monthLowChange']))
                 ]
         except KeyError as e:
             print("")
@@ -542,14 +543,15 @@ def main():
                 (df['forecast_day_PCT10_change'] < 0.5) &
                 (df['PCT_day_change'] < 2) &
                 (df['monthLowChange'] < 5) &
-                (df['monthHighChange'] < -1) &
-                (df['month3HighChange'] < 0) &
+                (df['monthHighChange'] < -3) &
+                (df['month3HighChange'] < -3) &
                 (df['month3LowChange'] > 3) &
                 (df['PCT_day_change_pre1'] < 2) &
                 (df['year5HighChange'] < -10) &
                 (df['month3HighChange'] > -10) &
                 (df['weekHighChange'] > -2) &
-                (df['weekHighChange'] < -1)
+                (df['weekHighChange'] < -1) &
+                (abs(df['monthHighChange']) > abs( df['monthLowChange']))
                 ]
         except KeyError as e:
             print("")
@@ -567,8 +569,9 @@ def main():
                 (df['monthHighChange'] > -5) &
                 (df['forecast_day_PCT10_change'] < 4) &
                 (df['PCT_change'] < -2) &
-                (df['monthLowChange'] > 0) &
-                (df['month3LowChange'] > 0)
+                (df['monthLowChange'] > 5) &
+                (df['month3LowChange'] > 5) &
+                (abs(df['monthHighChange']) < abs( df['monthLowChange']))
                 ]
         except KeyError as e:
             print("")
@@ -581,14 +584,15 @@ def main():
                 (df['forecast_day_PCT10_change'] > -0.5) &
                 (df['PCT_day_change'] > -2) &
                 (df['monthHighChange'] > -5) &
-                (df['monthLowChange'] > 1) &
-                (df['month3LowChange'] > 0) &
+                (df['monthLowChange'] > 3) &
+                (df['month3LowChange'] > 3) &
                 (df['month3HighChange'] < -3) &
                 (df['PCT_day_change_pre1'] > -2) &
                 (df['year5HighChange'] < -10) &
                 (df['month3LowChange'] < 10) &
                 (df['weekLowChange'] < 2) &
-                (df['weekLowChange'] > 1)
+                (df['weekLowChange'] > 1) &
+                (abs(df['monthHighChange']) < abs( df['monthLowChange']))
                 ]
         except KeyError as e:
             print("")

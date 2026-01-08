@@ -157,10 +157,10 @@ def main():
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] < -3.5) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
                 (df['yearHighChange'] < -10) &
-                (df['yearlowChange'] < 70) &
-                #(df['month3LowChange'] < 15) &
+                (df['yearLowChange'] < 70) &
+                (df['month3LowChange'] < 15) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                (df['mlData'].str.contains("Z&&&")) 
+                (df['mlData'].str.contains("Z&&&") & (df['yearLowChange'] > 10)) 
             ]
         except KeyError as e:
             print("")
@@ -430,7 +430,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0)) &
+                ((df['forecast_day_PCT10_change'] < -10) & (df['forecast_day_PCT5_change'] < 0)) &
                 ((df['PCT_day_change'] < -2) | (df['PCT_day_change_pre1'] < -2)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
             ]
@@ -447,7 +447,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (df['forecast_day_PCT10_change'] < -3) &
+                (df['forecast_day_PCT10_change'] < -5) &
+                (df['forecast_day_PCT7_change'] < -3) &
                 (df['PCT_day_change'] > 1.5) &
                 (~df['systemtime'].str.contains('9:2', case=False, regex=True, na=False))
             ]
@@ -510,7 +511,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0)) &
+                ((df['forecast_day_PCT10_change'] > 10) & (df['forecast_day_PCT5_change'] > 0)) &
                 ((df['PCT_day_change'] > 2) | (df['PCT_day_change_pre1'] > 2)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
             ]
@@ -527,7 +528,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (df['forecast_day_PCT10_change'] > 3) &
+                (df['forecast_day_PCT10_change'] > 5) & 
+                (df['forecast_day_PCT7_change'] > 3) &
                 (df['PCT_day_change'] < -1.5) &
                 (~df['systemtime'].str.contains('9:2', case=False, regex=True, na=False))
             ]
@@ -539,7 +541,7 @@ def main():
             rb.render(st, empty_df, 'Profit Book Continue', color='R', height=200)
 
 
-    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    col1, col2, col3, col4, col5, col6, col7, col8 = st.columns(8)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -552,6 +554,12 @@ def main():
             print("")
         rb.render(st, filtered_df, 'SuperTrend-ConsolidationBuy', color='G')
     with col2:
+        df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
+        if len(df) < 5:
+            rb.render(st, df, 'Crossed 2 Day Highs', color='G')
+        else:
+            rb.render(st, empty_df, 'Crossed 2 Day Highs', color='G')
+    with col3:
         df = rb.getdf('morning-volume-breakout-buy')
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
@@ -566,7 +574,7 @@ def main():
             rb.render(st, filtered_df, 'MLBuy', color='G', height=200)
         else:
             rb.render(st, empty_df, 'MLBuy', color='G', height=200)
-    with col3:
+    with col4:
         df = rb.getdf('morning-volume-breakout-buy')
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
@@ -592,7 +600,7 @@ def main():
             rb.render(st, filtered_df, 'MLBuy', color='LG', height=200)
         else:
             rb.render(st, empty_df, 'MLBuy', color='LG', height=200)
-    with col4:
+    with col5:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
         try:
@@ -603,7 +611,13 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'SuperTrend-ConsolidationSell', color='R')
-    with col5:
+    with col6:
+        df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
+        if len(df) < 3:
+            rb.render(st, df, 'Crossed 2 Day Lows', color='R')
+        else:
+            rb.render(st, empty_df, 'Crossed 2 Day Lows', color='R')
+    with col7:
         df = rb.getdf('morning-volume-breakout-sell')
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
@@ -618,7 +632,7 @@ def main():
             rb.render(st, filtered_df, 'MLSell', color='R', height=200)
         else:
             rb.render(st, empty_df, 'MLSell', color='R', height=200)
-    with col6:
+    with col8:
         df = rb.getdf('morning-volume-breakout-sell')
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
