@@ -172,6 +172,7 @@ def main():
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
+                (df['highTail'] < 1.5) &
                 ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
                 (df['PCT_day_change'] > -1) & 
                 (df['PCT_day_change'] < 1) &
@@ -195,6 +196,7 @@ def main():
             filtered_df = df[
                 ((df['PCT_day_change_pre1'] > 0.3) | (df['PCT_day_change_pre2'] > 0.3)) &
                 (abs(df['week2LowChange']) > 1.1) &
+                (df['lowTail'] < 1.5) &
                 # (~df['systemtime'].str.contains('09:', case=False, na=False)) &
                 # (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
                 # (~df['systemtime'].str.contains('10:05', case=False, na=False)) &
