@@ -139,8 +139,12 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['PCT_day_change'] < -1.3) &
                 (df['PCT_day_change'] > -3) &
+                (df['PCT_change'] < -1.3) &
                 (df['PCT_change'] > -3) &
+                (df['PCT_day_change_pre1'] < 1) &
+                (df['PCT_day_change_pre2'] < 1) &
                 (
                     df['mlData'].str.contains("#DownStairs") | 
                     df['mlData'].str.contains("DownPostLunchConsolidation")

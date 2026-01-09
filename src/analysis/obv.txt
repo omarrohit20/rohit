@@ -1,17 +1,44 @@
 
+Last Day LT-1
+    wait 15 minute
+    If market down for 15-30 minute, and sudden spike, check and wait till 10:45 'supertrend-morningdown-buy' for spike sustainence
+        In spike start check cnbc recommedations
+        If spike rally sustained check for Buy
+            "Crossed 2 Day Highs" and "'supertrend-morningdown-buy'"
+        
+        If spike rally failed check for Sell
+            "LastDayLT-1" and "LastDayDown" in chartink0 for buy opportunity
+            "Crossed 2 Day Lows" and  "Crossed Day Lows" along with f10ch>3
+
+    If no spike after 15-30 minute, and still down check for Sell
+        "Crossed 2 Day Lows" and  "Crossed Day Lows" along with f10ch>3
+
+
+Last Day GT1
+    wait 15 minute
+    If market up for 15-30 minute, and sudden lower spike, check and wait till 10:45 'supertrend-morningup-sell' for spike sustainence
+        If spike lower sustained check for Sell
+            "Crossed 2 Day Lows" and "'supertrend-morningup-sell'"
+        
+        If spike lower failed check for Buy
+            "LastDayGT1" and "LastDayUp" in chartink0 for buy opportunity
+            "Crossed 2 Day Highs" and  "Crossed Day Highs" along with f10ch<-3
+
+    If no spike after 15-30 minute, and still up check for Buy
+        "Crossed 2 Day Highs" and  "Crossed Day Highs" along with f10ch<-3
+
+
 Before 10:00
     Buy : last 2-3 days uptrend
     Buy : downtrend then buy last day closed in negative
     Avoid Buy : last 2-3 days uptrend, today consolidation and LT 0.3
     Avoid Buy : consolidation 50MA crossed and below 200MA, Sell after 10:30
-    Avoid Buy : Last day LT-1 and today LT 0.3
     Avoid Buy : Last day Down after uptrend and today between -0.3 to 0.3
     Avoid Buy : Last day GT1 and today GT1
     Avoid Buy : Other than index If particular index up due to news
 
     Sell : last 2-3 days downtrend
     Avoid Sell: consolidation 50MA crossed and above 200MA
-    Avoid Sell : Last day GT1 and today GT -0.3
     Avoid Sell : Last day Up after downtrend and today -0.3 to 0.3
     Avoid Sell : Last day LT-1 and today LT-1
 
@@ -20,7 +47,6 @@ After 10:00
             : Midcap GT 1
             : less than weekly high
             : less than last day High + 0.3
-    Avoid Buy : Last day midcap in minus LT-1 after uptrend consolidation
     Avoid Buy : consolidation 50MA crossed and below 200MA, Sell after 10:30
     Avoid Buy\Sell : Opened midcap in minus LT-1 and moved more than 0.7 before 10:00 AM still in red
 
@@ -28,9 +54,37 @@ After 10:00
             : Midcap LT -1
             : less than weekly low
             : less than last day low - 0.3
-    Avoid Sell : Last day midcap in Plus GT 1 after downtrend consolidation
     Avoid Sell : consolidation 50MA crossed and above 200MA
     Avoid Sell\Buy : Opened midcap in Plus GT 1 and moved more than -0.7 before 10:00 AM still in Green
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
