@@ -156,27 +156,8 @@ def main():
             print("")
         rb.render(st, filtered_df, 'Sell All Processor + Crossed Day Low + week2LowChangeLT-2', column_order=rb.column_order_p, color='R')
     
-    col0, col1, col2, col00, col3, col4 = st.columns(6)
-    with col0:
-        df = rb.getdf('supertrend-morning-buy')
-        rb.render(st, df, 'Supertrend Morning Buy', color='LG')
-    with col1:
-        df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
-        rb.render(st, df, 'Crossed 2 Day Highs', color='LG')
-    with col2:
-        df = rb.getdf('crossed-day-high')
-        rb.render(st, df, 'Crossed Day Highs', color='LG')
-    with col00:
-        df = rb.getdf('supertrend-morning-sell')
-        rb.render(st, df, 'Supertrend Morning Sell', color='LG')
-    with col3:
-        df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
-        rb.render(st, df, 'Crossed 2 Day Lows', color='LG')
-    with col4:
-        df = rb.getdf('crossed-day-low')
-        rb.render(st, df, 'Crossed Day Lows', color='LG')
-
-
+    
+    
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
         df = rb.getintersectdf('buy_all_processor', 'buy-breakout')
