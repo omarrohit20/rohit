@@ -18,8 +18,13 @@ def main():
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
         df = rb.getdf('supertrend-morningdown-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
-        rb.render(st, filtered_df, 'UpNow Supertrend MorningDown Buys', color='LG')
+        if len(df) > 1:
+            rb.render(st, filtered_df, 'UpNow Supertrend MorningDown Buys', color='LG')
+        else:
+            rb.render(st, empty_df, 'UpNow Supertrend MorningDown Buys', color='LG')
     with col2:
         df = rb.getintersectdf('buy-check-morning-down-breakup-02', 'crossed-day-high')
         filtered_df = df
@@ -31,7 +36,12 @@ def main():
     with col4:
         df = rb.getdf('supertrend-morningup-sell')
         filtered_df = df
-        rb.render(st, filtered_df, 'DownNow Supertrend  Morningup Sells', color='LG')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        if len(df) > 1:
+            rb.render(st, filtered_df, 'DownNow Supertrend  Morningup Sells', color='LG')
+        else:
+            rb.render(st, empty_df, 'DownNow Supertrend Morningup Sells', color='LG')
     with col5:
         df = rb.getintersectdf('sell-check-morning-up-breakdown-02', 'crossed-day-low')
         filtered_df = df

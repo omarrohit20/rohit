@@ -4,7 +4,7 @@ Last Day LT-1
     If market down for 15-30 minute, and sudden spike, check and wait till 10:45 'supertrend-morningdown-buy' for spike sustainence
         In spike start check cnbc recommedations
         If spike rally sustained check for Buy
-            "Crossed 2 Day Highs" and "'supertrend-morningdown-buy'"
+            "Crossed 2 Day Highs" and "'supertrend-morningdown-buy'" 
         
         If spike rally failed check for Sell
             "LastDayLT-1" and "LastDayDown" in chartink0 for buy opportunity
@@ -12,6 +12,13 @@ Last Day LT-1
 
     If no spike after 15-30 minute, and still down check for Sell
         "Crossed 2 Day Lows" and  "Crossed Day Lows" along with f10ch>3
+
+Last 2 Day LT-1
+    wait 15 minutes
+    If opened Up and going down 
+        Continue Sell. Exit in an hour max 11:30. Short covering any time
+    If opened Down and above rule for Buy spike not sustained.
+        Sell opportunity at 10 to 11 only. Exit in an hour max 11:30. Short covering any time
 
 
 Last Day GT1
@@ -26,6 +33,14 @@ Last Day GT1
 
     If no spike after 15-30 minute, and still up check for Buy
         "Crossed 2 Day Highs" and  "Crossed Day Highs" along with f10ch<-3
+
+
+Last 2 Day GT 1
+    wait 15 minutes
+    If opened Down and going up 
+        Continue Buy. 
+    If opened Up and above rule for Sell spike not sustained.
+        Buy opportunity at 10 to 11 only. Exit in an hour max 11:30. Short covering any time
 
 
 Before 10:00

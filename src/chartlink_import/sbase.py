@@ -291,6 +291,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                         db['Breakout-Beey-2'].update_one(search_filter, {"$set": update_values})
 
                                 if ('supertrend-morning-buy' in processor
+                                    and (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_change']) > -2)
+                                    and (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change']) > -2)
                                     and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 2)
                                          or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -6)
                                         )
@@ -438,6 +440,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                         db['Breakout-Siill-2'].update_one(search_filter, {"$set": update_values})
 
                                 if ('supertrend-morning-sell' in processor
+                                    and (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['PCT_change']) < 2)
+                                    and (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['PCT_day_change']) < 2)
                                     and ((float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -2)
                                          or (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 6)
                                         )
