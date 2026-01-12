@@ -64,7 +64,7 @@ def main():
             filtered_df = df[
                 (
                 (~df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & 
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+                #(~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 ((df['PCT_day_change'] < 2) | (df['PCT_day_change_pre1'] < 2)) &
                 (df['forecast_day_PCT10_change'] < -3.3) & (df['forecast_day_PCT10_change'] > -8) &
                 ((df['forecast_day_PCT5_change'] < 0) | (df['forecast_day_PCT7_change'] < 0))
@@ -128,7 +128,7 @@ def main():
             filtered_df = df[
                 (
                 (~df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+                #(~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 ((df['PCT_day_change'] > -2) | (df['PCT_day_change_pre1'] > -2)) &
                 (df['forecast_day_PCT10_change'] > 3.3) & (df['forecast_day_PCT10_change'] < 8) &
                 ((df['forecast_day_PCT5_change'] > 0) | (df['forecast_day_PCT7_change'] > 0))
