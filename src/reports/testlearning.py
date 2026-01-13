@@ -26,6 +26,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (abs(df['week2LowChange']) > 1) &
                 (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
@@ -71,6 +72,7 @@ def main():
                 )
                 |
                 (
+                (abs(df['week2LowChange']) > 1) &
                 (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
                 ((df['PCT_day_change'] < 2) & (df['PCT_day_change_pre1'] < 2)) &
@@ -89,6 +91,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (abs(df['week2HighChange']) > 1) &
                 (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
@@ -135,6 +138,7 @@ def main():
                 )
                 |
                 (
+                (abs(df['week2HighChange']) > 1) &
                 (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
                 ((df['PCT_day_change'] > -2) & (df['PCT_day_change_pre1'] > -2)) &
@@ -150,28 +154,7 @@ def main():
         rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell=True)
 
 
-    col0, col1, col2, col3, col4, col5 = st.columns(6)
-    with col0:
-        df = rb.getdf('supertrend-morning-buy')
-        rb.render(st, df, 'Supertrend Morning Buy', color='LG')
-    with col1:
-        df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
-        rb.render(st, df, 'Crossed 2 Day Highs', color='LG')
-    with col2:
-        df = rb.getdf('crossed-day-high')
-        rb.render(st, df, 'Crossed Day Highs', color='LG')
-    with col3:
-        df = rb.getdf('supertrend-morning-sell')
-        rb.render(st, df, 'Supertrend Morning Sell', color='LG')
-    with col4:
-        df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
-        rb.render(st, df, 'Crossed 2 Day Lows', color='LG')
-    with col5:
-        df = rb.getdf('crossed-day-low')
-        rb.render(st, df, 'Crossed Day Lows', color='LG')
-
-
-    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getintersectdf('week2lh-not-reached','crossed-day-high')
         expected_columns = list(set(df.columns))
@@ -204,7 +187,7 @@ def main():
                 (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
                 (df['highTail'] < 1.5) &
-                ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
+                (((df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT7_change'] > 2) & (df['forecast_day_PCT5_change'] > 2)) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
                 (df['PCT_day_change'] > -1) & 
                 (df['PCT_day_change'] < 1) &
                 (df['PCT_day_change_pre1'] > -1.5) & 
@@ -214,11 +197,19 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Crossed Day Highs', column_order=rb.column_order_p, color='G')
+    # with col3:
+    #     df = rb.getintersectdf('supertrend-morning-buy','crossed-day-high')
+    #     filtered_df = df
+    #     try:
+    #         filtered_df = df[
+    #             (abs(df['week2LowChange']) > 1) &
+    #             (~df['systemtime'].str.contains('11:', case=False, na=False)) &
+    #             ((df['forecast_day_PCT10_change'] > 0) & (df['forecast_day_PCT7_change'] > 0) & (df['forecast_day_PCT5_change'] > 0))
+    #         ]
+    #     except KeyError as e:
+    #         print("")
+    #     rb.render(st, filtered_df, 'supertrend-morning-buy+Crossed Day Highs', color='LG')
     with col3:
-        df = rb.getdf('crossed-day-high')
-        filtered_df = df
-        rb.render(st, filtered_df, 'Crossed Day Highs', color='LG')
-    with col4:
         df = rb.getintersectdf('week2lh-not-reached','crossed-day-low')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -242,7 +233,7 @@ def main():
             rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
         else:
             rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
-    with col5:
+    with col4:
         df = rb.getdf('crossed-day-low')
         filtered_df = df
         try:
@@ -250,7 +241,7 @@ def main():
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
-                ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
+                (((df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT7_change'] < -2) & (df['forecast_day_PCT5_change'] < -2)) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
                 (df['PCT_day_change'] > -1) & 
                 (df['PCT_day_change'] < 1) &
                 (df['PCT_day_change_pre1'] > -1.5) & 
@@ -260,11 +251,42 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Crossed Day Lows', color='LG')
-    with col6:
-        df = rb.getdf('crossed-day-low')
-        filtered_df = df
-        rb.render(st, filtered_df, 'Crossed Day Lows', color='LG')
+    # with col6:
+    #     df = rb.getintersectdf('supertrend-morning-sell','crossed-day-low')
+    #     filtered_df = df
+    #     try:
+    #         filtered_df = df[
+    #             (abs(df['week2HighChange']) > 1) &
+    #             (~df['systemtime'].str.contains('11:', case=False, na=False)) &
+    #             ((df['forecast_day_PCT10_change'] < 0) & (df['forecast_day_PCT7_change'] < 0) & (df['forecast_day_PCT5_change'] < 0))
+    #         ]
+    #     except KeyError as e:
+    #         print("")
+    #     rb.render(st, filtered_df, 'supertrend-morning-sell+Crossed Day Lows', color='LG')
 
+
+    col0, col1, col2, col3, col4, col5 = st.columns(6)
+    with col0:
+        df = rb.getdf('supertrend-morning-buy')
+        rb.render(st, df, 'Supertrend Morning Buy', color='LG')
+    with col1:
+        df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
+        rb.render(st, df, 'Crossed 2 Day Highs', color='LG')
+    with col2:
+        df = rb.getdf('crossed-day-high')
+        rb.render(st, df, 'Crossed Day Highs', color='LG')
+    with col3:
+        df = rb.getdf('supertrend-morning-sell')
+        rb.render(st, df, 'Supertrend Morning Sell', color='LG')
+    with col4:
+        df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
+        rb.render(st, df, 'Crossed 2 Day Lows', color='LG')
+    with col5:
+        df = rb.getdf('crossed-day-low')
+        rb.render(st, df, 'Crossed Day Lows', color='LG')
+
+
+    
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
         df = rb.getdf('Breakout-Buy-after-10')

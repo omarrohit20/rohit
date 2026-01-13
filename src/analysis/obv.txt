@@ -13,7 +13,7 @@ Last Day LT-1
     If no spike after 15-30 minute, and still down check for Sell
         "Crossed 2 Day Lows" and  "Crossed Day Lows" along with f10ch>3
 
-Last 2 Day LT-1
+Last 2 Day LT-1. Avoid Sell after 11:00 if already Down more than 1.
     wait 15 minutes
     If opened Up and going down 
         Continue Sell. Exit in an hour max 11:30. Short covering any time
@@ -35,7 +35,7 @@ Last Day GT1
         "Crossed 2 Day Highs" and  "Crossed Day Highs" along with f10ch<-3
 
 
-Last 2 Day GT 1
+Last 2 Day GT 1. Avoid Buy after 11:00 if already Up more than 1.
     wait 15 minutes
     If opened Down and going up 
         Continue Buy. 
