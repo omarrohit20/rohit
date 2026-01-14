@@ -377,15 +377,15 @@ def highlight_category_column(value):
     """Highlights the entire row based on the 'Category' column value."""
 
     
-    if "0@@CROSSED" in value and "2@" in value:
+    if "0@@CROSSED" in value and "2@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
         return 'background-color: #3EB9FB'
     elif "0@@SUPER" in value and "2@" in value:
         return 'background-color: #3EB9FB'
-    elif "0@@CROSSED" in value and "1@" in value:
+    elif "0@@CROSSED" in value and "1@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
         return 'background-color: #CBEDFF'
     elif "0@@SUPER" in value and "1@" in value:
         return 'background-color: #CBEDFF'
-    elif "0@@CROSSED" in value and "6@" in value:
+    elif "0@@CROSSED" in value and "6@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
         return 'background-color: #F9FAFB'
     elif "0@@SUPER" in value and "6@" in value:
         return 'background-color: #F9FAFB'
@@ -431,7 +431,7 @@ def highlight_category_column_f10_buy(value10, value7, value5):
     """Highlights the entire row based on the 'Category' column value."""
     if float(value10) > 2 and float(value10) < 10:
         return 'background-color: #3EB9FB'
-    elif float(value10) > -2 and float(value10) < 3 and float(value7) < 3 and float(value5) < 3:
+    elif float(value10) > -2 and float(value10) < 3 and float(value7) < 3 and float(value5) < 3 and float(value7) >-2 and float(value5) > -2:
         return 'background-color: #CBEDFF'
     elif float(value10) < -3:
         return 'background-color: #F9FAFB'
@@ -442,7 +442,7 @@ def highlight_category_column_f10_sell(value10, value7, value5):
     """Highlights the entire row based on the 'Category' column value."""
     if float(value10) < -2 and float(value10) > -10:
         return 'background-color: #3EB9FB'
-    elif float(value10) < 2 and float(value10) > -3 and float(value7) > -3 and float(value5) > -3:
+    elif float(value10) < 2 and float(value10) > -3 and float(value7) > -3 and float(value5) > -3 and float(value7) < 2 and float(value5) < 2:
         return 'background-color: #CBEDFF'
     elif float(value10) > 3:
         return 'background-color: #F9FAFB'

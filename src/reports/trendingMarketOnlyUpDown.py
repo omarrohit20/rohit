@@ -67,6 +67,7 @@ def main():
                 (df['processor'] != 'supertrend-morning-buy') &
                 (df['PCT_day_change'] > -0.5) &
                 ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
+                ((df['forecast_day_PCT10_change'] > -3) | ((df['forecast_day_PCT10_change'] < -4) & (df['forecast_day_PCT5_change'] < -4))) &
                 (~df['processor'].str.contains('09_30:checkChartBuy/', case=False, regex=True, na=False))
                 ]
         except KeyError as e:
@@ -119,6 +120,7 @@ def main():
                 (df['processor'] != 'supertrend-morning-sell') &
                 (df['PCT_day_change'] > -0.5) &
                 ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
+                ((df['forecast_day_PCT10_change'] < 3) | ((df['forecast_day_PCT10_change'] > 4) & (df['forecast_day_PCT5_change'] > 4))) &
                 (~df['processor'].str.contains('09_30:checkChartSell/', case=False, regex=True, na=False))
                 ]
         except KeyError as e:
