@@ -277,7 +277,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'LastDayMarketLT-1:OrDowntrend : todayUpGT0.5(-)', color='G', height=150)
+        rb.render(st, filtered_df, 'LastDayMarketLT-1:OrDowntrend : todayUpGT0.5(-)', color='LG', height=150)
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -312,7 +312,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'LastDayMarketGT1:OrUptrend : todayDownLT-0.5(+)', color='R', height=150)
+        rb.render(st, filtered_df, 'LastDayMarketGT1:OrUptrend : todayDownLT-0.5(+)', color='LG', height=150)
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -348,7 +348,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'LastDayMarketLT-1 : todayUpGT0.5(-)', color='G', height=150)
+        rb.render(st, filtered_df, 'LastDayMarketLT-1 : todayUpGT0.5(-)', color='LG', height=150)
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -381,7 +381,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'LastDayMarketGT1 : todayDownLT-0.5(+)', color='R', height=150)
+        rb.render(st, filtered_df, 'LastDayMarketGT1 : todayDownLT-0.5(+)', color='LG', height=150)
 
 
     col1, col2, col3, col30, col4, col5, col6, col60 = st.columns(8)
