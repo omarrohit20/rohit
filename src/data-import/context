@@ -1,4 +1,4 @@
-Analyze following NSE 500 stocks for news and sentiment in last 24 hour.
+Analyze NSE 500 stocks for news and sentiment in last 24 hour.
 Include sectoral news and impact also.
 Include quarterly result also.
 Exclude news for among top gainers or losers 

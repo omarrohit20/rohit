@@ -377,18 +377,18 @@ def highlight_category_column(value):
     """Highlights the entire row based on the 'Category' column value."""
 
     
-    if "0@@CROSSED" in value and "2@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
+    if "0@@CROSSED" in value and "2@" in value and "CROSSED1DayH@GT2@" not in value and "CROSSED1DayL@LT-2@" not in value:
         return 'background-color: #3EB9FB'
     elif "0@@SUPER" in value and "2@" in value:
         return 'background-color: #3EB9FB'
-    elif "0@@CROSSED" in value and "1@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
+    elif "0@@CROSSED" in value and "1@" in value:
         return 'background-color: #CBEDFF'
     elif "0@@SUPER" in value and "1@" in value:
         return 'background-color: #CBEDFF'
     elif "0@@CROSSED" in value and "6@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
-        return 'background-color: #F9FAFB'
+        return 'background-color: #fff4cf'
     elif "0@@SUPER" in value and "6@" in value:
-        return 'background-color: #F9FAFB'
+        return 'background-color: #fff4cf'
     
 #     if "MLBuy0" in value or "MLBuy1" in value or "MLBuy2" in value:
 #         return 'background-color: #E0FFDE'
@@ -433,6 +433,8 @@ def highlight_category_column_f10_buy(value10, value7, value5):
         return 'background-color: #3EB9FB'
     elif float(value10) > -2 and float(value10) < 3 and float(value7) < 3 and float(value5) < 3 and float(value7) >-2 and float(value5) > -2:
         return 'background-color: #CBEDFF'
+    elif float(value10) < -6:
+        return 'background-color: #fff4cf'
     elif float(value10) < -3:
         return 'background-color: #F9FAFB'
     else:
@@ -444,8 +446,54 @@ def highlight_category_column_f10_sell(value10, value7, value5):
         return 'background-color: #3EB9FB'
     elif float(value10) < 2 and float(value10) > -3 and float(value7) > -3 and float(value5) > -3 and float(value7) < 2 and float(value5) < 2:
         return 'background-color: #CBEDFF'
+    elif float(value10) > 6:
+        return 'background-color: #fff4cf'
     elif float(value10) > 3:
         return 'background-color: #F9FAFB'
+    else:
+        return 'background-color: #A1A1A1'
+
+def apply_f10_buy_00(row):
+    color = highlight_category_column_f10_buy_00(
+        row["forecast_day_PCT10_change"],
+        row["forecast_day_PCT7_change"],
+        row["forecast_day_PCT5_change"],
+    )
+    # use the same color for every column in the row
+    return pd.Series(color, index=row.index)
+
+def apply_f10_sell_00(row):
+    color = highlight_category_column_f10_sell_00(
+        row["forecast_day_PCT10_change"],
+        row["forecast_day_PCT7_change"],
+        row["forecast_day_PCT5_change"],
+    )
+    # use the same color for every column in the row
+    return pd.Series(color, index=row.index)
+
+def highlight_category_column_f10_buy_00(value10, value7, value5):
+    """Highlights the entire row based on the 'Category' column value."""
+    if float(value10) > 7 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
+        return 'background-color: #3EB9FB'
+    elif float(value10) > -2 and float(value10) < 1 and float(value7) < 2 and float(value5) < 2 and float(value7) >-2 and float(value5) > -2:
+        return 'background-color: #CBEDFF'
+    elif float(value10) < -7:
+        return 'background-color: #fff4cf'
+    elif float(value10) < -3:
+        return 'background-color: #A1A1A1'
+    else:
+        return 'background-color: #A1A1A1'
+        
+def highlight_category_column_f10_sell_00(value10, value7, value5):
+    """Highlights the entire row based on the 'Category' column value."""
+    if float(value10) < -7 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
+        return 'background-color: #3EB9FB'
+    elif float(value10) < 2 and float(value10) > -1 and float(value7) > -2 and float(value5) > -2 and float(value7) < 2 and float(value5) < 2:
+        return 'background-color: #CBEDFF'
+    elif float(value10) > 7:
+        return 'background-color: #fff4cf'
+    elif float(value10) > 3:
+        return 'background-color: #A1A1A1'
     else:
         return 'background-color: #A1A1A1'
 
@@ -453,6 +501,56 @@ def highlight_category_column_super(value):
     """Highlights the entire row based on the 'Category' column value."""
     if "0@@SUPER" in value:
         return 'background-color: #CBC3E3'
+
+def apply_f10_buy_01(row):
+    color = highlight_category_column_f10_buy_01(
+        row["forecast_day_PCT10_change"],
+        row["forecast_day_PCT7_change"],
+        row["forecast_day_PCT5_change"],
+    )
+    # use the same color for every column in the row
+    return pd.Series(color, index=row.index)
+
+def apply_f10_sell_01(row):
+    color = highlight_category_column_f10_sell_01(
+        row["forecast_day_PCT10_change"],
+        row["forecast_day_PCT7_change"],
+        row["forecast_day_PCT5_change"],
+    )
+    # use the same color for every column in the row
+    return pd.Series(color, index=row.index)
+
+def highlight_category_column_f10_buy_01(value10, value7, value5):
+    """Highlights the entire row based on the 'Category' column value."""
+    if float(value10) > 7 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
+        return 'background-color: #3EB9FB'
+    elif float(value10) > -2 and float(value10) < 1 and float(value7) < 2 and float(value5) < 2 and float(value7) >-2 and float(value5) > -2:
+        return 'background-color: #CBEDFF'
+    elif float(value10) < -7:
+        return 'background-color: #A1A1A1'
+    elif float(value10) < -3:
+        return 'background-color: #A1A1A1'
+    else:
+        return 'background-color: #A1A1A1'
+        
+def highlight_category_column_f10_sell_01(value10, value7, value5):
+    """Highlights the entire row based on the 'Category' column value."""
+    if float(value10) < -7 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
+        return 'background-color: #3EB9FB'
+    elif float(value10) < 2 and float(value10) > -1 and float(value7) > -2 and float(value5) > -2 and float(value7) < 2 and float(value5) < 2:
+        return 'background-color: #CBEDFF'
+    elif float(value10) > 7:
+        return 'background-color: #A1A1A1'
+    elif float(value10) > 3:
+        return 'background-color: #A1A1A1'
+    else:
+        return 'background-color: #A1A1A1'
+
+def highlight_category_column_super(value):
+    """Highlights the entire row based on the 'Category' column value."""
+    if "0@@SUPER" in value:
+        return 'background-color: #CBC3E3'
+
 
 def getdf(collection_name):
     collection = dbcl[collection_name]
@@ -572,7 +670,7 @@ def getintersectdf_ml(collection_name1, collection_name2):
 
     return df
 
-def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False, renderf10buy=False, renderf10sell=False, f10=0):
+def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False, renderf10buy=False, renderf10sell=False, f10=0, renderf10buy00=False, renderf10sell00=False, renderf10buy01=False, renderf10sell01=False):
     st.write("********"+ name + "********")
     # Main Code Execution
     if renderf10buy:
@@ -582,6 +680,22 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
     elif renderf10sell:
         df_styled = highlight_category_row(df, color=color)
         df_styled = df_styled.apply(apply_f10_sell, axis=1)
+        st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+    elif renderf10buy00:
+        df_styled = highlight_category_row(df, color=color)
+        df_styled = df_styled.apply(apply_f10_buy_00, axis=1)
+        st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+    elif renderf10sell00:
+        df_styled = highlight_category_row(df, color=color)
+        df_styled = df_styled.apply(apply_f10_sell_00, axis=1)
+        st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+    elif renderf10buy01:
+        df_styled = highlight_category_row(df, color=color)
+        df_styled = df_styled.apply(apply_f10_buy_01, axis=1)
+        st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+    elif renderf10sell01:
+        df_styled = highlight_category_row(df, color=color)
+        df_styled = df_styled.apply(apply_f10_sell_01, axis=1)
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
     elif renderml:
         df_styled = highlight_category_row(df, color=color)
