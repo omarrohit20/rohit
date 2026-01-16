@@ -14,17 +14,19 @@ if __name__ == "__main__":
     if (sb.nw >= time_00_15 and sb.nw <= time_24_00):
         # ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 30  ) and [=1] 10 minute volume > greatest(  1 day ago volume / 22  ) and [-1] 5 minute low > 1 day ago high and 1 day ago "close - 1 candle ago close / 1 candle ago close * 100" < 1.5 and [=1] 15 minute "close - 1 candle ago close / 1 candle ago close * 100" < 1.5 and ( {cash} ( [=1] 10 minute high < 2 days ago high or [=1] 10 minute high < 1 day ago high ) ) and ( {cash} ( ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / 1 day ago close ) > 1.2 or ( ( ( [-1] 5 minute close - [=1] 5 minute open ) * 100 ) / 1 day ago close ) > 1.2 ) ) ) ) ) )
         # ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 30  ) and [=1] 10 minute volume > greatest(  1 day ago volume / 22  ) and [=1] 15 minute volume > greatest(  1 day ago volume / 18  ) and ( ( ( [0] 5 minute close - [=1] 5 minute open ) * 100 ) / [=1] 5 minute open ) < -0.6 and ( ( ( [0] 5 minute low - [=-1] 5 minute low ) * 100 ) / [=1] 5 minute open ) < -0.5 and ( ( ( [-1] 5 minute low - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < -0.3 and ( ( ( [0] 5 minute low - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < -0.8 and ( ( ( [=1] 5 minute open - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < 1 and ( ( ( [=1] 5 minute high - [=-1] 5 minute high ) * 100 ) / [=1] 5 minute open ) < 1.5 and ( ( ( [-1] 5 minute close - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < -1 and ( ( ( [0] 5 minute close - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < -0.8 ) ) ) )
-        process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-1','morning-volume-breakout-buy', time_09_15, time_11_00, dropDB=True)
-        process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-1', 'morning-volume-breakout-sell', time_09_15, time_11_00, dropDB=True)
+        # process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-1','morning-volume-breakout-buy', time_09_15, time_11_00, dropDB=True)
+        # process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-1', 'morning-volume-breakout-sell', time_09_15, time_11_00, dropDB=True)
+        # process_url_volBreakout('https://chartink.com/screener/buy-breakup-intraday-9-30-to-10', 'crossed-day-high', time_09_20, time_13_00, dropDB=True)
+        # process_url_volBreakout('https://chartink.com/screener/buy-morning-down-0', '09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)', time_09_25, time_10_45, dropDB=True)
+        # process_url_volBreakout('https://chartink.com/screener/supertrend-morning-buy', 'supertrend-morning-buy', time_09_40, time_12_00, dropDB=True)
+        # process_url_volBreakout('https://chartink.com/screener/sell-breakdown-intraday-9-30-to-10-3', 'crossed-day-low', time_09_20, time_13_00, dropDB=True)
+        # process_url_volBreakout('https://chartink.com/screener/sell-morning-up-0', '09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)', time_09_25, time_10_45, dropDB=True)
+        # process_url_volBreakout('https://chartink.com/screener/supertrend-morning-sell', 'supertrend-morning-sell', time_09_40, time_12_00, dropDB=True)
+        process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-1-2', 'week2lh-not-reached', time_09_45, time_11_00, dropDB=True)
+        process_url_volBreakout('https://chartink.com/screener/sell-dayconsolidation-breakout-04', 'sell-breakout', time_10_00, time_12_30, dropDB=True)
+        process_url_volBreakout('https://chartink.com/screener/buy-dayconsolidation-breakout-04', 'buy-breakout', time_10_00, time_12_30, dropDB=True)
         process_url_volBreakout('https://chartink.com/screener/buy-breakup-intraday-9-30-to-10', 'crossed-day-high', time_09_20, time_13_00, dropDB=True)
-        process_url_volBreakout('https://chartink.com/screener/buy-morning-down-0', '09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)', time_09_25, time_10_45, dropDB=True)
-        process_url_volBreakout('https://chartink.com/screener/supertrend-morning-buy', 'supertrend-morning-buy', time_09_40, time_12_00, dropDB=True)
         process_url_volBreakout('https://chartink.com/screener/sell-breakdown-intraday-9-30-to-10-3', 'crossed-day-low', time_09_20, time_13_00, dropDB=True)
-        process_url_volBreakout('https://chartink.com/screener/sell-morning-up-0', '09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)', time_09_25, time_10_45, dropDB=True)
-        process_url_volBreakout('https://chartink.com/screener/supertrend-morning-sell', 'supertrend-morning-sell', time_09_40, time_12_00, dropDB=True)
-
-       
-
 
     print('Hello')
     time.sleep(10)
