@@ -216,6 +216,7 @@ def main():
                 )
                 |
                 (
+                    ((df['PCT_day_change'] < 1) & (df['PCT_day_change_pre1'] < 1) & (df['PCT_day_change_pre2'] < 1)) &
                     ((df['forecast_day_PCT10_change'] < -7))
                 )
             ]
@@ -247,7 +248,10 @@ def main():
                     ((df['forecast_day_PCT10_change'] > 7)) 
                 )
                 |
-                ((df['forecast_day_PCT10_change'] < -7))
+                (
+                    ((df['PCT_day_change'] < 1) & (df['PCT_day_change_pre1'] < 1) & (df['PCT_day_change_pre2'] < 1)) &
+                    (df['forecast_day_PCT10_change'] < -7)
+                )
             ]
         except KeyError as e:
             print("")
@@ -281,6 +285,7 @@ def main():
                     (df['PCT_day_change'] > -2) &
                     (df['PCT_day_change_pre1'] > -2) &
                     (df['PCT_day_change_pre2'] > -2) &
+                    ((df['PCT_day_change'] < 1) & (df['PCT_day_change_pre1'] < 1) & (df['PCT_day_change_pre2'] < 1)) &
                     ((df['forecast_day_PCT10_change'] < -7))
                 )
             ]
@@ -313,7 +318,10 @@ def main():
                     ((df['forecast_day_PCT10_change'] < -7)) 
                 )
                 |
-                ((df['forecast_day_PCT10_change'] > 7))
+                (
+                    ((df['PCT_day_change'] > -1) & (df['PCT_day_change_pre1'] > -1) & (df['PCT_day_change_pre2'] > -1)) &
+                    (df['forecast_day_PCT10_change'] > 7)
+                )
             ]
         except KeyError as e:
             print("")
@@ -344,7 +352,10 @@ def main():
                     ((df['forecast_day_PCT10_change'] < -7)) 
                 )
                 |
-                ((df['forecast_day_PCT10_change'] > 7))
+                (
+                    ((df['PCT_day_change'] > -1) & (df['PCT_day_change_pre1'] > -1) & (df['PCT_day_change_pre2'] > -1)) &
+                    (df['forecast_day_PCT10_change'] > 7)
+                )
             ]
         except KeyError as e:
             print("")
@@ -379,6 +390,7 @@ def main():
                     (df['PCT_day_change'] < 2) &
                     (df['PCT_day_change_pre1'] < 2) &
                     (df['PCT_day_change_pre2'] < 2) &
+                    ((df['PCT_day_change'] > -1) & (df['PCT_day_change_pre1'] > -1) & (df['PCT_day_change_pre2'] > -1)) &
                     ((df['forecast_day_PCT10_change'] > 7))
                 )
             ]
@@ -389,22 +401,22 @@ def main():
     col0, col1, col2, col3, col4, col5 = st.columns(6)
     with col0:
         df = rb.getdf('supertrend-morning-buy')
-        rb.render(st, df, 'Supertrend Morning Buy', color='LG')
+        rb.render(st, df, 'Supertrend Morning Buy', color='LG', renderf10buy00=True)
     with col1:
         df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
-        rb.render(st, df, 'Crossed 2 Day Highs', color='LG')
+        rb.render(st, df, 'Crossed 2 Day Highs', color='LG', renderf10buy00=True)
     with col2:
         df = rb.getdf('crossed-day-high')
-        rb.render(st, df, 'Crossed Day Highs', color='LG')
+        rb.render(st, df, 'Crossed Day Highs', color='LG', renderf10buy00=True)
     with col3:
         df = rb.getdf('supertrend-morning-sell')
-        rb.render(st, df, 'Supertrend Morning Sell', color='LG')
+        rb.render(st, df, 'Supertrend Morning Sell', color='LG', renderf10sell00=True)
     with col4:
         df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
-        rb.render(st, df, 'Crossed 2 Day Lows', color='LG')
+        rb.render(st, df, 'Crossed 2 Day Lows', color='LG', renderf10sell00=True)
     with col5:
         df = rb.getdf('crossed-day-low')
-        rb.render(st, df, 'Crossed Day Lows', color='LG')
+        rb.render(st, df, 'Crossed Day Lows', color='LG', renderf10sell01=True)
 
     
     col1, col2, col3, col5, col6, col7 = st.columns(6)
