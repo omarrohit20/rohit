@@ -30,6 +30,207 @@ def main():
     except Exception:
         pass
 
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        # Buy signals widget - Green
+        try:
+            df_buy = rb.getdf('morning-volume-breakout-buy')
+            buy_count = len(df_buy)
+            st.markdown(f"""
+                <div style="background-color: #d4edda; border: 2px solid #28a745; border-radius: 10px; padding: 20px; text-align: center;">
+                    <h3 style="color: #155724; margin: 0;">Morning Volume Breakout</h3>
+                    <h1 style="color: #155724; margin: 10px 0; font-size: 48px;">{buy_count}</h1>
+                    <p style="color: #155724; margin: 0;">Total Records</p>
+                </div>
+            """, unsafe_allow_html=True)
+        except Exception as e:
+            st.error(f"Error loading buy data: {e}")
+    with col2:
+        # Buy signals widget - Green
+        try:
+            df_buy = rb.getdf('crossed-day-high')
+            buy_count = len(df_buy)
+            st.markdown(f"""
+                <div style="background-color: #d4edda; border: 2px solid #28a745; border-radius: 10px; padding: 20px; text-align: center;">
+                    <h3 style="color: #155724; margin: 0;">Crossed Day High</h3>
+                    <h1 style="color: #155724; margin: 10px 0; font-size: 48px;">{buy_count}</h1>
+                    <p style="color: #155724; margin: 0;">Total Records</p>
+                </div>
+            """, unsafe_allow_html=True)
+        except Exception as e:
+            st.error(f"Error loading buy data: {e}")
+    with col3:
+        # Sell signals widget - Red
+        try:
+            df_sell = rb.getdf('morning-volume-breakout-sell')
+            sell_count = len(df_sell)
+            st.markdown(f"""
+                <div style="background-color: #f8d7da; border: 2px solid #dc3545; border-radius: 10px; padding: 20px; text-align: center;">
+                    <h3 style="color: #721c24; margin: 0;">Morning Volume Breakout</h3>
+                    <h1 style="color: #721c24; margin: 10px 0; font-size: 48px;">{sell_count}</h1>
+                    <p style="color: #721c24; margin: 0;">Total Records</p>
+                </div>
+            """, unsafe_allow_html=True)
+        except Exception as e:
+            st.error(f"Error loading sell data: {e}")
+    with col4:
+        # Sell signals widget - Red
+        try:
+            df_sell = rb.getdf('crossed-day-low')
+            sell_count = len(df_sell)
+            st.markdown(f"""
+                <div style="background-color: #f8d7da; border: 2px solid #dc3545; border-radius: 10px; padding: 20px; text-align: center;">
+                    <h3 style="color: #721c24; margin: 0;">Crossed Day Low</h3>
+                    <h1 style="color: #721c24; margin: 10px 0; font-size: 48px;">{sell_count}</h1>
+                    <p style="color: #721c24; margin: 0;">Total Records</p>
+                </div>
+            """, unsafe_allow_html=True)
+        except Exception as e:
+            st.error(f"Error loading sell data: {e}")
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        # Buy signals - Green line chart
+        try:
+            df_buy = rb.getdf('morning-volume-breakout-buy')
+            
+            # Extract time and round to 10-minute intervals
+            df_buy['time_parsed'] = pd.to_datetime(df_buy['systemtime'], format='%H:%M:%S', errors='coerce')
+            df_buy['time_10min'] = df_buy['time_parsed'].dt.floor('10min').dt.time
+            
+            # Count records per 10-minute interval
+            buy_counts = df_buy.groupby('time_10min').size().reset_index(name='count')
+            buy_counts = buy_counts.sort_values('time_10min')
+            buy_counts['time_10min'] = buy_counts['time_10min'].astype(str)
+            
+            # Create line chart
+            import plotly.graph_objects as go
+            fig_buy = go.Figure()
+            fig_buy.add_trace(go.Scatter(
+                x=buy_counts['time_10min'],
+                y=buy_counts['count'],
+                mode='lines+markers',
+                name='Buy Signals',
+                line=dict(color='green', width=3),
+                marker=dict(size=8)
+            ))
+            fig_buy.update_layout(
+                title='Morning Volume Breakout - Buy Signals (10 min intervals)',
+                xaxis_title='Time',
+                yaxis_title='Number of Records',
+                hovermode='x unified',
+                height=400
+            )
+            st.plotly_chart(fig_buy, use_container_width=True)
+        except Exception as e:
+            st.write(f"Error creating buy chart: {e}")
+    with col2:
+        # Buy signals - Green line chart
+        try:
+            df_buy = rb.getdf('crossed-day-high')
+            
+            # Extract time and round to 10-minute intervals
+            df_buy['time_parsed'] = pd.to_datetime(df_buy['systemtime'], format='%H:%M:%S', errors='coerce')
+            df_buy['time_10min'] = df_buy['time_parsed'].dt.floor('10min').dt.time
+            
+            # Count records per 10-minute interval
+            buy_counts = df_buy.groupby('time_10min').size().reset_index(name='count')
+            buy_counts = buy_counts.sort_values('time_10min')
+            buy_counts['time_10min'] = buy_counts['time_10min'].astype(str)
+            
+            # Create line chart
+            import plotly.graph_objects as go
+            fig_buy = go.Figure()
+            fig_buy.add_trace(go.Scatter(
+                x=buy_counts['time_10min'],
+                y=buy_counts['count'],
+                mode='lines+markers',
+                name='Buy Signals',
+                line=dict(color='green', width=3),
+                marker=dict(size=8)
+            ))
+            fig_buy.update_layout(
+                title='Crossed Day High - Buy Signals (10 min intervals)',
+                xaxis_title='Time',
+                yaxis_title='Number of Records',
+                hovermode='x unified',
+                height=400
+            )
+            st.plotly_chart(fig_buy, use_container_width=True)
+        except Exception as e:
+            st.write(f"Error creating buy chart: {e}")
+    with col3:
+        # Sell signals - Red line chart
+        try:
+            df_sell = rb.getdf('morning-volume-breakout-sell')
+            
+            # Extract time and round to 10-minute intervals
+            df_sell['time_parsed'] = pd.to_datetime(df_sell['systemtime'], format='%H:%M:%S', errors='coerce')
+            df_sell['time_10min'] = df_sell['time_parsed'].dt.floor('10min').dt.time
+            
+            # Count records per 10-minute interval
+            sell_counts = df_sell.groupby('time_10min').size().reset_index(name='count')
+            sell_counts = sell_counts.sort_values('time_10min')
+            sell_counts['time_10min'] = sell_counts['time_10min'].astype(str)
+            
+            # Create line chart
+            import plotly.graph_objects as go
+            fig_sell = go.Figure()
+            fig_sell.add_trace(go.Scatter(
+                x=sell_counts['time_10min'],
+                y=sell_counts['count'],
+                mode='lines+markers',
+                name='Sell Signals',
+                line=dict(color='red', width=3),
+                marker=dict(size=8)
+            ))
+            fig_sell.update_layout(
+                title='Morning Volume Breakout - Sell Signals (10 min intervals)',
+                xaxis_title='Time',
+                yaxis_title='Number of Records',
+                hovermode='x unified',
+                height=400
+            )
+            st.plotly_chart(fig_sell, use_container_width=True)
+        except Exception as e:
+            st.write(f"Error creating sell chart: {e}")
+    with col4:
+        # Sell signals - Red line chart
+        try:
+            df_sell = rb.getdf('crossed-day-low')
+            
+            # Extract time and round to 10-minute intervals
+            df_sell['time_parsed'] = pd.to_datetime(df_sell['systemtime'], format='%H:%M:%S', errors='coerce')
+            df_sell['time_10min'] = df_sell['time_parsed'].dt.floor('10min').dt.time
+            
+            # Count records per 10-minute interval
+            sell_counts = df_sell.groupby('time_10min').size().reset_index(name='count')
+            sell_counts = sell_counts.sort_values('time_10min')
+            sell_counts['time_10min'] = sell_counts['time_10min'].astype(str)
+            
+            # Create line chart
+            import plotly.graph_objects as go
+            fig_sell = go.Figure()
+            fig_sell.add_trace(go.Scatter(
+                x=sell_counts['time_10min'],
+                y=sell_counts['count'],
+                mode='lines+markers',
+                name='Sell Signals',
+                line=dict(color='red', width=3),
+                marker=dict(size=8)
+            ))
+            fig_sell.update_layout(
+                title='Crossed Day Low - Sell Signals (10 min intervals)',
+                xaxis_title='Time',
+                yaxis_title='Number of Records',
+                hovermode='x unified',
+                height=400
+            )
+            st.plotly_chart(fig_sell, use_container_width=True)
+        except Exception as e:
+            st.write(f"Error creating sell chart: {e}")
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
