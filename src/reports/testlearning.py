@@ -86,15 +86,23 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['PCT_day_change_pre1'] < -0.3) | (df['PCT_day_change_pre2'] < -0.3)) &
-                (abs(df['week2HighChange']) > 1.1) &
-                #(~df['systemtime'].str.contains('09:', case=False, na=False)) &
-                # (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
-                # (~df['systemtime'].str.contains('10:05', case=False, na=False)) &
-                # (~df['systemtime'].str.contains('10:10', case=False, na=False)) &
-                # (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, na=False)) &
-                ((df['forecast_day_PCT10_change'] > 3) | ((df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT5_change'] < 0)))
+                (
+                    ((df['PCT_day_change_pre1'] < -0.3) | (df['PCT_day_change_pre2'] < -0.3)) &
+                    ((df['PCT_day_change_pre1'] > -1.5) & (df['PCT_day_change_pre1'] > -1.5) & (df['PCT_day_change_pre2'] > -1.5)) &
+                    (df['forecast_day_PCT10_change'] > -1)
+                )
+                |
+                (
+                    ((df['PCT_day_change_pre1'] < -0.3) | (df['PCT_day_change_pre2'] < -0.3)) &
+                    (abs(df['week2HighChange']) > 1.1) &
+                    #(~df['systemtime'].str.contains('09:', case=False, na=False)) &
+                    # (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
+                    # (~df['systemtime'].str.contains('10:05', case=False, na=False)) &
+                    # (~df['systemtime'].str.contains('10:10', case=False, na=False)) &
+                    # (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
+                    (~df['systemtime'].str.contains('11:', case=False, na=False)) &
+                    ((df['forecast_day_PCT10_change'] > 3) | ((df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT5_change'] < 0)))
+                )
             ]
         except KeyError as e:
             print("")
@@ -140,16 +148,25 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['PCT_day_change_pre1'] > 0.3) | (df['PCT_day_change_pre2'] > 0.3)) &
-                (abs(df['week2LowChange']) > 1.1) &
-                (df['lowTail'] < 1.5) &
-                # (~df['systemtime'].str.contains('09:', case=False, na=False)) &
-                # (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
-                # (~df['systemtime'].str.contains('10:05', case=False, na=False)) &
-                # (~df['systemtime'].str.contains('10:10', case=False, na=False)) &
-                # (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, na=False)) &
-                ((df['forecast_day_PCT10_change'] < -3) | ((df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT5_change'] > 0)))
+                (
+                    ((df['PCT_day_change_pre1'] > 0.3) | (df['PCT_day_change_pre2'] > 0.3)) &
+                    ((df['PCT_day_change_pre1'] < 1.5) & (df['PCT_day_change_pre1'] < 1.5) & (df['PCT_day_change_pre2'] < 1.5)) &
+                    (df['lowTail'] < 1.5) &
+                    (df['forecast_day_PCT10_change'] < 1)
+                )
+                |
+                (
+                    ((df['PCT_day_change_pre1'] > 0.3) | (df['PCT_day_change_pre2'] > 0.3)) &
+                    (abs(df['week2LowChange']) > 1.1) &
+                    (df['lowTail'] < 1.5) &
+                    # (~df['systemtime'].str.contains('09:', case=False, na=False)) &
+                    # (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
+                    # (~df['systemtime'].str.contains('10:05', case=False, na=False)) &
+                    # (~df['systemtime'].str.contains('10:10', case=False, na=False)) &
+                    # (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
+                    (~df['systemtime'].str.contains('11:', case=False, na=False)) &
+                    ((df['forecast_day_PCT10_change'] < -3) | ((df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT5_change'] > 0)))
+                )
                 ]
         except KeyError as e:
             print("")
