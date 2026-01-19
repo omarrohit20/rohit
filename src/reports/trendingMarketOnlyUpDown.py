@@ -28,7 +28,7 @@ def main():
     with col2:
         df = rb.getintersectdf('buy-check-morning-down-breakup-02', 'crossed-day-high')
         filtered_df = df
-        rb.render(st, filtered_df, 'Buy Check Morning Down Breakup 02s', color='G')
+        rb.render(st, filtered_df, 'Buy Check Morning Down Breakup 02s', color='LG')
     with col3:
         df = rb.getdf('buy-check-morning-down-breakup-02')
         filtered_df = df
@@ -45,7 +45,7 @@ def main():
     with col5:
         df = rb.getintersectdf('sell-check-morning-up-breakdown-02', 'crossed-day-low')
         filtered_df = df
-        rb.render(st, filtered_df, 'Sell Check Morning Up Breakdown 02s', color='R')
+        rb.render(st, filtered_df, 'Sell Check Morning Up Breakdown 02s', color='LG')
     with col6:
         df = rb.getdf('sell-check-morning-up-breakdown-02')
         filtered_df = df
