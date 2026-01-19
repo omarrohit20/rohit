@@ -407,7 +407,7 @@ def main():
                 (~df['systemtime'].str.contains('10:1', case=False, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, na=False)) &
                 (df['highTail'] < 1.5) &
-                ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
+                (((df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT7_change'] > 2) & (df['forecast_day_PCT5_change'] > 2)) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
                 (df['PCT_day_change'] > -1) & (df['PCT_day_change'] < 1) &
                 (df['PCT_day_change_pre1'] > -1.5) & (df['PCT_day_change_pre1'] < 1.5) &
                 (df['PCT_day_change_pre2'] < 2)
@@ -461,7 +461,7 @@ def main():
                 (~df['systemtime'].str.contains('10:0', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:1', case=False, na=False)) &
                 (df['lowTail'] < 1.5) &
-                ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
+                (((df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT7_change'] < -2) & (df['forecast_day_PCT5_change'] < -2)) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
                 (df['PCT_day_change'] > -1) & (df['PCT_day_change'] < 1) &
                 (df['PCT_day_change_pre1'] > -1.5) & (df['PCT_day_change_pre1'] < 1.5) &
                 (df['PCT_day_change_pre2'] > -2)
