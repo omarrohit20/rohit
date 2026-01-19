@@ -376,8 +376,11 @@ def highlight_category_row(df, color='NA'):
 def highlight_category_column(value):
     """Highlights the entire row based on the 'Category' column value."""
 
-    
-    if "0@@CROSSED" in value and "2@" in value and "CROSSED1DayH@GT2@" not in value and "CROSSED1DayL@LT-2@" not in value:
+    if "0@@CROSSED" in value and "7@" in value and "CROSSED1DayH@GT7@" not in value and "CROSSED1DayL@LT-7@" not in value:
+        return 'background-color: #800080'
+    elif "0@@SUPER" in value and "7@" in value:
+        return 'background-color: #800080'
+    elif "0@@CROSSED" in value and "2@" in value and "CROSSED1DayH@GT2@" not in value and "CROSSED1DayL@LT-2@" not in value:
         return 'background-color: #3EB9FB'
     elif "0@@SUPER" in value and "2@" in value:
         return 'background-color: #3EB9FB'
@@ -429,7 +432,9 @@ def apply_f10_sell(row):
 
 def highlight_category_column_f10_buy(value10, value7, value5):
     """Highlights the entire row based on the 'Category' column value."""
-    if float(value10) > 2 and float(value10) < 10:
+    if float(value10) >= 7 :
+        return 'background-color: #800080'
+    elif float(value10) > 2 and float(value10) < 7:
         return 'background-color: #3EB9FB'
     elif float(value10) > -2 and float(value10) < 3 and float(value7) < 3 and float(value5) < 3 and float(value7) >-2 and float(value5) > -2:
         return 'background-color: #CBEDFF'
@@ -442,7 +447,9 @@ def highlight_category_column_f10_buy(value10, value7, value5):
         
 def highlight_category_column_f10_sell(value10, value7, value5):
     """Highlights the entire row based on the 'Category' column value."""
-    if float(value10) < -2 and float(value10) > -10:
+    if float(value10) <= -7:
+        return 'background-color: #800080'
+    elif float(value10) < -2 and float(value10) > -7:
         return 'background-color: #3EB9FB'
     elif float(value10) < 2 and float(value10) > -3 and float(value7) > -3 and float(value5) > -3 and float(value7) < 2 and float(value5) < 2:
         return 'background-color: #CBEDFF'
@@ -474,7 +481,7 @@ def apply_f10_sell_00(row):
 def highlight_category_column_f10_buy_00(value10, value7, value5):
     """Highlights the entire row based on the 'Category' column value."""
     if float(value10) > 7 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
-        return 'background-color: #3EB9FB'
+        return 'background-color: #800080'
     elif float(value10) > -2 and float(value10) < 1 and float(value7) < 2 and float(value5) < 2 and float(value7) > -2 and float(value5) > -2:
         return 'background-color: #CBEDFF'
     elif float(value10) < -7:
@@ -487,7 +494,7 @@ def highlight_category_column_f10_buy_00(value10, value7, value5):
 def highlight_category_column_f10_sell_00(value10, value7, value5):
     """Highlights the entire row based on the 'Category' column value."""
     if float(value10) < -7 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
-        return 'background-color: #3EB9FB'
+        return 'background-color: #800080'
     elif float(value10) < 2 and float(value10) > -1 and float(value7) > -2 and float(value5) > -2 and float(value7) < 2 and float(value5) < 2:
         return 'background-color: #CBEDFF'
     elif float(value10) > 7:
@@ -497,10 +504,10 @@ def highlight_category_column_f10_sell_00(value10, value7, value5):
     else:
         return 'background-color: #A1A1A1'
 
-def highlight_category_column_super(value):
-    """Highlights the entire row based on the 'Category' column value."""
-    if "0@@SUPER" in value:
-        return 'background-color: #CBC3E3'
+# def highlight_category_column_super(value):
+#     """Highlights the entire row based on the 'Category' column value."""
+#     if "0@@SUPER" in value:
+#         return 'background-color: #CBC3E3'
 
 def apply_f10_buy_01(row):
     color = highlight_category_column_f10_buy_01(
@@ -523,7 +530,7 @@ def apply_f10_sell_01(row):
 def highlight_category_column_f10_buy_01(value10, value7, value5):
     """Highlights the entire row based on the 'Category' column value."""
     if float(value10) > 7 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
-        return 'background-color: #3EB9FB'
+        return 'background-color: #800080'
     elif float(value10) > -2 and float(value10) < 1 and float(value7) < 2 and float(value5) < 2 and float(value7) >-2 and float(value5) > -2:
         return 'background-color: #CBEDFF'
     elif float(value10) < -7:
@@ -536,7 +543,7 @@ def highlight_category_column_f10_buy_01(value10, value7, value5):
 def highlight_category_column_f10_sell_01(value10, value7, value5):
     """Highlights the entire row based on the 'Category' column value."""
     if float(value10) < -7 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
-        return 'background-color: #3EB9FB'
+        return 'background-color: #800080'
     elif float(value10) < 2 and float(value10) > -1 and float(value7) > -2 and float(value5) > -2 and float(value7) < 2 and float(value5) < 2:
         return 'background-color: #CBEDFF'
     elif float(value10) > 7:
@@ -550,7 +557,6 @@ def highlight_category_column_super(value):
     """Highlights the entire row based on the 'Category' column value."""
     if "0@@SUPER" in value:
         return 'background-color: #CBC3E3'
-
 
 def getdf(collection_name):
     collection = dbcl[collection_name]

@@ -197,6 +197,10 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                         ):
                                         if(float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -6):
                                             keyword = '0@@CROSSED2DayH@LT-6@'
+                                        elif(float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 7
+                                             and ('09:20' not in str(db['morning-volume-breakout-buy'].find_one({'scrip': tempScrip})['systemtime']))
+                                            ):
+                                            keyword = '0@@CROSSED2DayH@GT7@'
                                         elif(float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 2
                                              and ('09:20' not in str(db['morning-volume-breakout-buy'].find_one({'scrip': tempScrip})['systemtime']))
                                             ):
@@ -266,6 +270,11 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                         ):
                                         if(float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -6):
                                             keyword = '0@@CROSSED1DayH@LT-6@'
+                                        elif(float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 7
+                                             and ('09:2' not in str(db['morning-volume-breakout-buy'].find_one({'scrip': tempScrip})['systemtime']))
+                                             and ('09:3' not in str(db['morning-volume-breakout-buy'].find_one({'scrip': tempScrip})['systemtime']))
+                                            ):
+                                            keyword = '0@@CROSSED1DayH@GT7@'
                                         elif(float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 2
                                              and ('09:2' not in str(db['morning-volume-breakout-buy'].find_one({'scrip': tempScrip})['systemtime']))
                                              and ('09:3' not in str(db['morning-volume-breakout-buy'].find_one({'scrip': tempScrip})['systemtime']))
@@ -359,6 +368,10 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
 
                                         if(float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 6):
                                             keyword = '0@@CROSSED2DayL@GT6@'
+                                        elif(float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -7
+                                             and ('09:20' not in str(db['morning-volume-breakout-sell'].find_one({'scrip': tempScrip})['systemtime']))
+                                            ):
+                                            keyword = '0@@CROSSED2DayL@LT-7@'
                                         elif(float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -2
                                              and ('09:20' not in str(db['morning-volume-breakout-sell'].find_one({'scrip': tempScrip})['systemtime']))
                                             ):
@@ -427,6 +440,11 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                         ):
                                         if(float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > 6):
                                             keyword = '0@@CROSSED1DayL@GT6@'
+                                        elif(float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -7
+                                             and ('09:2' not in str(db['morning-volume-breakout-sell'].find_one({'scrip': tempScrip})['systemtime']))
+                                             and ('09:3' not in str(db['morning-volume-breakout-sell'].find_one({'scrip': tempScrip})['systemtime']))
+                                            ):
+                                            keyword = '0@@CROSSED1DayL@LT-7@'
                                         elif(float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < -2
                                              and ('09:2' not in str(db['morning-volume-breakout-sell'].find_one({'scrip': tempScrip})['systemtime']))
                                              and ('09:3' not in str(db['morning-volume-breakout-sell'].find_one({'scrip': tempScrip})['systemtime']))
