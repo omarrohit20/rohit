@@ -884,6 +884,62 @@ def main():
             rb.render(st, empty_df, 'MLSell', color='LG', height=200)
 
 
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['forecast_day_PCT10_change'] > -2) &
+                (df['forecast_day_PCT7_change'] > -1) &
+                (df['forecast_day_PCT5_change'] > -1) &
+                (df['forecast_day_PCT7_change'] < 1) &
+                (df['forecast_day_PCT5_change'] < 1) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'F10 Consolidation Buy', color='LG')
+    with col2:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+                (df['forecast_day_PCT10_change'] < -6) &
+                (df['forecast_day_PCT7_change'] < -6) &
+                (df['forecast_day_PCT5_change'] < -6) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Short Cover - First15minutelowest', color='LG')
+    with col3:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['forecast_day_PCT10_change'] < 2) &
+                (df['forecast_day_PCT7_change'] < 1) &
+                (df['forecast_day_PCT5_change'] < 1) &
+                (df['forecast_day_PCT7_change'] > -1) &
+                (df['forecast_day_PCT5_change'] > -1) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'F10 Consolidation Sell', color='LG')
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+                (df['forecast_day_PCT10_change'] > 6) &
+                (df['forecast_day_PCT7_change'] > 6) &
+                (df['forecast_day_PCT5_change'] > 6)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Profit Book - First15minutehighest', color='LG')
+
 if __name__ == '__main__':
     main()
 

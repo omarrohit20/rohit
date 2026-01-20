@@ -678,7 +678,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'Breakout Siill 2s - Weekly Low not reached -GT(1)', color='LG', height=150)
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2 = st.columns(2)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -705,22 +705,6 @@ def main():
             print("")
         rb.render(st, filtered_df, 'LDayMarketUpGT1(TodayOpenedFlat) :_ TOP Buy', color='LG', height=150)
     with col2:
-        df = rb.getdf('Breakout-Beey-2')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
-                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False)) &
-                (df['week2LowChange'] > 1.5) &
-                (~df['intradaytech'].str.contains('#TOP5', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('09:40', case=False, regex=True, na=False)) &
-                (df['week2LowChange'] < 10)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'Breakout Beey 2s - Weekly High not reached - 09:45', color='LG', height=150)
-    with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
         try:
@@ -742,22 +726,7 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'LDayMarketDownLT-1(TodayOpenedFlat) : _TOP Sell', color='LG', height=150)
-    with col4:
-        df = rb.getdf('Breakout-Siill-2')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
-                (~df['systemtime'].str.contains('09:35', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                (df['week2HighChange'] < -1.5) &
-                (df['week2HighChange'] > -10) &
-                (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False))
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'Breakout Siill 2s - Weekly Low not reached -GT(1)- 9:45', color='LG', height=150)
-
+    
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getintersectdf('morning-volume-breakout-buy', 'breakoutMH')
