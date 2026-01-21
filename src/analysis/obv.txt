@@ -1,4 +1,3 @@
-
 Last Day LT-1
     wait 15 minute
     If market down for 15-30 minute, and sudden spike, check and wait till 10:45 'supertrend-morningdown-buy' for spike sustainence
@@ -41,6 +40,14 @@ Last 2 Day GT 1. Avoid Buy after 11:00 if already Up more than 1.
         Continue Buy. 
     If opened Up and above rule for Sell spike not sustained.
         Buy opportunity at 10 to 11 only. Exit in an hour max 11:30. Short covering any time
+
+Downtrend chartink0
+F10 Consolidation Sell
+Profit Book - First15minutehighest
+
+Uptrend chartink0
+F10 Consolidation Buy
+Short Cover - First15minutelowest
 
 
 Before 10:00
