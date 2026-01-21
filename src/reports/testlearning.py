@@ -197,6 +197,7 @@ def main():
                 ((df['PCT_day_change'] < 2) & (df['PCT_day_change_pre1'] < 2)) &
                 ((df['forecast_day_PCT7_change'] < 3) & (df['forecast_day_PCT5_change'] < 3)) &
                 (df['forecast_day_PCT7_change'] > -2) & (df['forecast_day_PCT5_change'] > -2) &
+                ((df['forecast_day_PCT10_change'] < 2) | (df['forecast_day_PCT10_change'] > 6)) &
                 ((df['PCT_day_change'] > 0) | (df['PCT_day_change_pre1'] > 0) | (df['PCT_day_change_pre2'] > 0))
                 ]
         except KeyError as e:
@@ -248,6 +249,7 @@ def main():
                 ((df['PCT_day_change'] < 2) & (df['PCT_day_change_pre1'] < 2)) &
                 ((df['forecast_day_PCT7_change'] < 3) & (df['forecast_day_PCT5_change'] < 3)) &
                 ((df['forecast_day_PCT10_change'] > -3) & (df['forecast_day_PCT7_change'] > -2) & (df['forecast_day_PCT5_change'] > -2)) &
+                (df['forecast_day_PCT10_change'] < 2) &
                 ((df['PCT_day_change'] > 0) | (df['PCT_day_change_pre1'] > 0)) &
                 ((df['PCT_day_change_pre2'] > 0) | (df['PCT_day_change_pre1'] > 0)) &
                 ((df['month3LowChange'] > 0))
@@ -268,6 +270,7 @@ def main():
                 ((df['PCT_day_change'] > -2) & (df['PCT_day_change_pre1'] > -2)) &
                 ((df['forecast_day_PCT7_change'] > -3) & (df['forecast_day_PCT5_change'] > -3))  &
                 (df['forecast_day_PCT7_change'] < 2) & (df['forecast_day_PCT5_change'] < 2) &
+                ((df['forecast_day_PCT10_change'] > -2) | (df['forecast_day_PCT10_change'] < -6)) &
                 ((df['PCT_day_change'] < 0) | (df['PCT_day_change_pre1'] < 0) | (df['PCT_day_change_pre2'] < 0))
                 ]
         except KeyError as e:
@@ -319,6 +322,7 @@ def main():
                 ((df['PCT_day_change'] > -2) & (df['PCT_day_change_pre1'] > -2)) &
                 ((df['forecast_day_PCT7_change'] > -3) & (df['forecast_day_PCT5_change'] > -3)) &
                 ((df['forecast_day_PCT10_change'] < 3) & (df['forecast_day_PCT7_change'] < 2) & (df['forecast_day_PCT5_change'] < 2)) &
+                (df['forecast_day_PCT10_change'] > -2) &
                 ((df['PCT_day_change'] < 0) | (df['PCT_day_change_pre1'] < 0)) &
                 ((df['PCT_day_change_pre2'] < 0) | (df['PCT_day_change_pre1'] < 0)) &
                 ((df['month3HighChange'] < 0))
