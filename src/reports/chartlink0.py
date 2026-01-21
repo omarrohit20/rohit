@@ -778,7 +778,11 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                df['mlData'].str.contains("Z&&&") &
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11', case=False, regex=True, na=False)) &
+                (df['mlData'].str.contains("Z&&&")) &
                 df['mlData'].str.contains("0@@SUPER")
             ]
         except KeyError as e:
@@ -832,6 +836,10 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11', case=False, regex=True, na=False)) &
                 df['mlData'].str.contains("Z&&&") &
                 df['mlData'].str.contains("0@@SUPER")
             ]

@@ -308,6 +308,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                         db['Breakout-Beey-2'].update_one(search_filter, {"$set": update_values})
 
                                 if ('supertrend-morning-buy' in processor
+                                    and ('10:4' not in (str(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['systemtime'])))
+                                    and ('10:5' not in (str(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['systemtime'])))
+                                    and ('11' not in (str(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['systemtime'])))
                                     and (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_change']) > -2)
                                     and (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['PCT_day_change']) > -2)
                                     and (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < 7)
@@ -478,6 +481,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                         db['Breakout-Siill-2'].update_one(search_filter, {"$set": update_values})
 
                                 if ('supertrend-morning-sell' in processor
+                                    and ('10:4' not in (str(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['systemtime'])))
+                                    and ('10:5' not in (str(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['systemtime'])))
+                                    and ('11' not in (str(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['systemtime'])))
                                     and (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['PCT_change']) < 2)
                                     and (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['PCT_day_change']) < 2)
                                     and (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > -7)
