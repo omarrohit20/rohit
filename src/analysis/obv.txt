@@ -81,6 +81,18 @@ After 10:00
 
 
 
+month3lowbreakout
+#################################
+-2.5 < month3low < 2.5
+monthlow < -4
+monthlow < month3low - 3
+PCT_Day_change > -4
+_pre1 > -5
+_pre2 > -5
+morning volume
+
+
+
 
 
 

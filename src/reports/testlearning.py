@@ -677,12 +677,16 @@ def main():
             filtered_df = df[
                 (
                     ((df['PCT_day_change_pre1'] < -0.3) | (df['PCT_day_change_pre2'] < -0.3)) &
-                    ((df['PCT_day_change_pre1'] > -1.5) & (df['PCT_day_change_pre1'] > -1.5) & (df['PCT_day_change_pre2'] > -1.5)) &
+                    ((df['PCT_day_change'] > -1.5) & (df['PCT_day_change_pre1'] > -1.5) & (df['PCT_day_change_pre2'] > -1.5)) &
                     (df['forecast_day_PCT10_change'] > -1)
                 )
                 |
                 (
                     ((df['PCT_day_change_pre1'] < -0.3) | (df['PCT_day_change_pre2'] < -0.3)) &
+                    (df['PCT_day_change'] < 1) &
+                    (df['PCT_day_change'] > -1) &
+                    (df['PCT_day_change_pre1'] < 1) &
+                    (df['PCT_day_change_pre1'] > -1) &
                     (abs(df['week2HighChange']) > 1.1) &
                     #(~df['systemtime'].str.contains('09:', case=False, na=False)) &
                     # (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
@@ -695,7 +699,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 2:
+        if len(filtered_df) >= 1:
             rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
         else:
             rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
@@ -728,6 +732,10 @@ def main():
                 |
                 (
                     ((df['PCT_day_change_pre1'] > 0.3) | (df['PCT_day_change_pre2'] > 0.3)) &
+                    (df['PCT_day_change'] < 1) &
+                    (df['PCT_day_change'] > -1) &
+                    (df['PCT_day_change_pre1'] < 1) &
+                    (df['PCT_day_change_pre1'] > -1) &
                     (abs(df['week2LowChange']) > 1.1) &
                     (df['lowTail'] < 1.5) &
                     # (~df['systemtime'].str.contains('09:', case=False, na=False)) &
@@ -741,7 +749,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 2:
+        if len(filtered_df) >= 1:
             rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
         else:
             rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
@@ -1095,7 +1103,7 @@ def main():
                   renderml=True, color='LG')
 
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
         df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
         filtered_df = df
@@ -1125,6 +1133,22 @@ def main():
             print("")
         rb.render(st, filtered_df, 'Test1', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
     with col3:
+        df = rb.getdf('regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['month3HighChange'] > -2.5) &
+                (df['month3HighChange'] < 2.5) &
+                (df['monthHighChange'] > 4) &
+                (df['PCT_day_change'] < 4) &
+                (df['PCT_day_change_pre1'] < 5) &
+                #(df['monthHighChange'] > (df['month3HighChange'] - 3)) &
+                (df['PCT_day_change_pre2'] < 5)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Test1', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+    with col4:
         df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
         filtered_df = df
         try:
@@ -1139,7 +1163,7 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Test2', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
-    with col4:
+    with col5:
         df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
         filtered_df = df
         try:
@@ -1152,9 +1176,22 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Test3', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
-    
-
-
+    with col6:
+        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['month3LowChange'] > -2.5) &
+                (df['month3LowChange'] < 2.5) &
+                (df['monthLowChange'] < -4) &
+                (df['PCT_day_change'] > -4) &
+                (df['PCT_day_change_pre1'] > -5) &
+                (df['monthLowChange'] < (df['month3LowChange'] - 3)) &
+                (df['PCT_day_change_pre2'] > -5)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Test3', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
 
 
 

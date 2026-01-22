@@ -641,7 +641,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['forecast_day_PCT10_change'] < -10) & (df['forecast_day_PCT5_change'] < 0)) &
+                ((df['forecast_day_PCT10_change'] < -9) & (df['forecast_day_PCT5_change'] < 0)) &
+                #(df['forecast_day_PCT7_change'] < df['forecast_day_PCT5_change']) &
                 ((df['PCT_day_change'] < -2) | (df['PCT_day_change_pre1'] < -2)) &
                 (df['PCT_day_change'] < 0) &
                 (df['PCT_day_change_pre1'] < 0) &
@@ -649,10 +650,10 @@ def main():
             ]
         except KeyError as e:
             print("")
-        if len(df) > 5:
-            rb.render(st, filtered_df, 'Short Covering', color='G', height=200)
+        if len(filtered_df) < 3:
+            rb.render(st, filtered_df, 'TodayMIDCAP LT1:Short Covering', color='G', height=200)
         else:
-            rb.render(st, empty_df, 'Short Covering', color='G', height=200)
+            rb.render(st, empty_df, 'TodayMIDCAP LT1:Short Covering', color='G', height=200)
     with col30:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
@@ -733,7 +734,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['forecast_day_PCT10_change'] > 10) & (df['forecast_day_PCT5_change'] > 0)) &
+                ((df['forecast_day_PCT10_change'] > 9) & (df['forecast_day_PCT5_change'] > 0)) &
+                #(df['forecast_day_PCT7_change'] > df['forecast_day_PCT5_change']) &
                 ((df['PCT_day_change'] > 2) | (df['PCT_day_change_pre1'] > 2)) &
                 (df['PCT_day_change'] > 0) &
                 (df['PCT_day_change_pre1'] > 0) &
@@ -741,10 +743,10 @@ def main():
             ]
         except KeyError as e:
             print("")
-        if len(df) > 5:
-            rb.render(st, filtered_df, 'Profit Booking', color='R', height=200)
+        if len(filtered_df) < 3:
+            rb.render(st, filtered_df, 'TodayMIDCAP GT-1:Profit Booking', color='R', height=200)
         else:
-            rb.render(st, empty_df, 'Profit Booking', color='R', height=200)
+            rb.render(st, empty_df, 'TodayMIDCAP GT-1:Profit Booking', color='R', height=200)
     with col60:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
@@ -898,6 +900,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['PCT_day_change'] > -1) &
+                (df['PCT_day_change'] < 3) &
                 (df['PCT_day_change_pre1'] > -2) &
                 (df['forecast_day_PCT10_change'] > -2) &
                 (df['forecast_day_PCT7_change'] > -1) &
@@ -926,6 +930,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['PCT_day_change'] < 1) &
+                (df['PCT_day_change'] > -3) &
                 (df['PCT_day_change_pre1'] < 2) &
                 (df['forecast_day_PCT10_change'] < 2) &
                 (df['forecast_day_PCT7_change'] < 1) &
@@ -949,6 +955,82 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Profit Book - First15minutehighest', color='LG')
+
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['month3HighChange'] > -2.5) &
+                (df['monthHighChange'] > 4) &
+                (df['PCT_day_change'] < 4) &
+                (df['PCT_day_change_pre1'] < 5) &
+                (df['PCT_day_change_pre2'] < 5) &
+                (df['PCT_day_change'] > -1.5) &
+                (df['PCT_day_change_pre1'] > -1.5) &
+                (df['PCT_day_change_pre2'] > -1.5) &
+                #(df['monthHighChange'] > (df['month3HighChange'] - 3)) &
+                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))  
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'morning-volume-breakout-buy-0', color='LG', height=150)
+    with col2:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['month3HighChange'] < -15) &
+                (df['monthLowChange'] > -10) &
+                (df['PCT_day_change'] < 4) &
+                (df['PCT_day_change_pre1'] < 5) &
+                (df['PCT_day_change_pre2'] < 5) &
+                (df['PCT_day_change'] > -1.5) &
+                (df['month3LowChange'] < (df['monthLowChange'] - 10)) &
+                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))   
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'morning-volume-breakout-buy-1', color='LG', height=150)
+    with col3:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['month3LowChange'] > -2.5) &
+                (df['monthLowChange'] < 0) &
+                (df['PCT_day_change'] > -4) &
+                (df['PCT_day_change_pre1'] > -5) &
+                (df['PCT_day_change_pre2'] > -5) &
+                (df['PCT_day_change'] < 1.5) &
+                (df['PCT_day_change_pre1'] < 1.5) &
+                (df['PCT_day_change_pre2'] < 1.5) &
+                (df['monthLowChange'] < (df['month3LowChange'] - 3)) &
+                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))  
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'morning-volume-breakout-sell-0', color='LG', height=150)
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['month3LowChange'] > 15) &
+                (df['monthLowChange'] < 10) &
+                (df['PCT_day_change'] > -4) &
+                (df['PCT_day_change_pre1'] > -5) &
+                (df['PCT_day_change_pre2'] > -5) &
+                (df['PCT_day_change'] < 1.5) &
+                (df['month3LowChange'] > (df['monthLowChange'] + 10)) &
+                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))  
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'morning-volume-breakout-sell-1', color='LG', height=150)
+    
 
 if __name__ == '__main__':
     main()
