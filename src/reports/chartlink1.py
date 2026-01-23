@@ -139,6 +139,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
+                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
                 (df['week2HighChange'] > -1) &
                 (df['monthHighChange'] < 5) &
                 (df['PCT_day_change_pre2'] < 3) &
@@ -148,7 +149,7 @@ def main():
                 (~df['filter5'].str.contains('BothGT2', case=False, regex=True, na=False)) &
                 (df['intradaytech'].str.contains('#TOP', case=False, regex=True, na=False)) &
                 (df['lowTail'] < 1) &
-                (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+                #(~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
                 (df['week2LowChange'] > 2) &
                 (df['monthHighChange'] > 0) &
                 (df['year5HighChange'] < 0) &
@@ -192,6 +193,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
+                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
                 (df['week2LowChange'] < 1) &
                 (df['monthLowChange'] > -5) &
                 (df['PCT_day_change_pre1'] < 3) &
@@ -203,7 +205,7 @@ def main():
                 (df['intradaytech'].str.contains('#TOP', case=False, regex=True, na=False)) &
                 (df['monthLowChange'] < 10) &
                 (df['highTail'] < 1.5) &
-                (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+                #(~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
                 (df['week2HighChange'] < -2) &
                 (df['mlData'].str.contains('0@@', case=False, regex=True, na=False)) &
                 (df['monthLowChange'] < 0)
