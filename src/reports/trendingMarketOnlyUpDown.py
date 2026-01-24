@@ -211,7 +211,7 @@ def main():
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('09:30', case=False, na=False)) &
                 ((df['PCT_day_change'] > -1.5) & (df['PCT_change'] > -1.5)) &
-                ((df['forecast_day_PCT10_change'] > 2) 
+                (((df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT5_change'] > 2))
                  | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))
                 ) &
                 (df['mlData'].str.contains("0@@CROSSED2") | df['mlData'].str.contains("0@@SUPER"))
@@ -270,7 +270,7 @@ def main():
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('09:30', case=False, na=False)) &
                 ((df['PCT_day_change'] < 1.5) & (df['PCT_change'] < 1.5)) &
-                ((df['forecast_day_PCT10_change'] < -2) 
+                (((df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT5_change'] < -2)) 
                  | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))
                 ) &
                 (df['mlData'].str.contains("0@@CROSSED2") | df['mlData'].str.contains("0@@SUPER"))

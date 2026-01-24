@@ -668,7 +668,7 @@ def main():
             filtered_df = df
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 2:
+        if len(filtered_df) >= 1:
             rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
         else:
             rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
@@ -716,7 +716,7 @@ def main():
             filtered_df = df
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 2:
+        if len(filtered_df) >= 1:
             rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
         else:
             rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')

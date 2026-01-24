@@ -1,4 +1,5 @@
 # Create a streamlit app that shows the mongodb data
+from datetime import datetime, timedelta
 import pandas as pd
 import numpy as np
 import pymongo
@@ -361,6 +362,73 @@ column_order_p=["scrip",
 chartlink1=False
 chartlink0=False
 
+ # Function to create cumulative data in 10-minute intervals
+def parse_timestamp(item):
+    # Prefer explicit systemtime stored as string in DB
+    sys_ts = item.get('systemtime')
+    if isinstance(sys_ts, str):
+        try:
+            return datetime.strptime(sys_ts, '%Y-%m-%d %H:%M:%S')
+        except Exception:
+            # Fallback to ISO parsing if format differs
+            try:
+                return datetime.fromisoformat(sys_ts.replace('Z', '+00:00'))
+            except Exception:
+                pass
+    # Other possible fields
+    ts = item.get('timestamp') or item.get('time') or item.get('datetime')
+    if isinstance(ts, str):
+        try:
+            return datetime.fromisoformat(ts.replace('Z', '+00:00'))
+        except Exception:
+            return None
+    if ts:
+        return ts
+    # Last resort: use ObjectId generation time
+    try:
+        return item.get('_id').generation_time
+    except Exception:
+        return None
+
+def create_cumulative_data(data, label):
+    if not data:
+        return [], []
+    
+    # Extract timestamps using table's stored time
+    timestamps = []
+    for item in data:
+        ts = parse_timestamp(item)
+        if ts:
+            timestamps.append(ts)
+    
+    if not timestamps:
+        return [], []
+    
+    # Sort timestamps
+    timestamps.sort()
+    
+    # Find the earliest timestamp and round down to 10-minute interval
+    min_time = timestamps[0].replace(second=0, microsecond=0)
+    min_time = min_time.replace(minute=(min_time.minute // 10) * 10)
+    
+    # Find the latest timestamp
+    max_time = timestamps[-1]
+    
+    # Create 10-minute intervals
+    intervals = []
+    cumulative_counts = []
+    current_time = min_time
+    cumulative_count = 0
+    
+    while current_time <= max_time + timedelta(minutes=10):
+        # Count records up to current_time
+        count = sum(1 for ts in timestamps if ts <= current_time)
+        intervals.append(current_time)
+        cumulative_counts.append(count)
+        current_time += timedelta(minutes=10)
+    
+    return intervals, cumulative_counts
+            
 def highlight_category_row(df, color='NA'):
     """Highlights the entire row based on the 'Category' column value."""
     styled_df = ''

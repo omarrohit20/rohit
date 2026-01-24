@@ -27,7 +27,7 @@ if __name__ == "__main__":
         #process_url_volBreakout('https://chartink.com/screener/buy-dayconsolidation-breakout-04', 'buy-breakout', time_10_00, time_12_30, dropDB=True)
         #process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-3', 'buy-sell-breakout', time_09_15, time_10_00, dropDB=True)
         #process_url_volBreakout('https://chartink.com/screener/buy-morning-volume-breakout-checknews', 'buy-morning-volume-breakout(Check-News)', time_09_20, time_11_30)
-        process_url_volBreakout('https://chartink.com/screener/sell-morning-volume-breakout-checknews', 'sell-morning-volume-breakout(Check-News)', time_09_15, time_11_30)
+        #process_url_volBreakout('https://chartink.com/screener/sell-morning-volume-breakout-checknews', 'sell-morning-volume-breakout(Check-News)', time_09_15, time_11_30)
 
     print('Hello')
     time.sleep(10)
