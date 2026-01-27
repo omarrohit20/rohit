@@ -579,18 +579,6 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (df['PCT_day_change'] > -3) &
-                (~df['systemtime'].str.contains('09:', case=False, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, na=False)) 
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'LastDayOrTodayGT0.5 : Only one dip: 1-Bbuyy-morningUp-downConsolidation', color='LG', height=200)
-    with col3:
-        df = rb.getdf('1-Bbuyy-morningUp-downConsolidation')
-        filtered_df = df
-        try:
-            filtered_df = df[
                 (df['PCT_day_change'] < 1) &
                 (df['PCT_day_change'] > -3) &
                 (~df['systemtime'].str.contains('09:', case=False, na=False)) &
@@ -599,26 +587,33 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'LastDayOrTodayGT0.5 : Only one dip: 1-Bbuyy-morningUp-downConsolidation', color='G', height=200)
-    # with col4:
-    #     df = rb.getdf('1-Bbuyy-morningUp-downConsolidation')
-    #     filtered_df = df
-    #     try:
-    #         filtered_df = df[
-    #             (~df['systemtime'].str.contains('09:', case=False, na=False)) &
-    #             (~df['systemtime'].str.contains('10:', case=False, na=False)) &
-    #             (~df['systemtime'].str.contains('11:3', case=False, na=False)) &
-    #             (~df['systemtime'].str.contains('11:4', case=False, na=False)) &
-    #             (~df['systemtime'].str.contains('11:5', case=False, na=False)) 
-    #         ]
-    #     except KeyError as e:
-    #         print("")
-    #     except KeyError as e:
-    #         print("")
-    #     rb.render(st, filtered_df, 'LastDayOrTodayNOTGT0.5 : Only one dip: 1-Bbuyy-morningUp-downConsolidation', color='G', height=200)
+    with col3:
+        df = rb.getdf('1-Bbuyy-morningUp-downConsolidation')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] > -3) &
+                (~df['systemtime'].str.contains('09:', case=False, na=False))
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'LastDayOrTodayGT0.5 : Only one dip: 1-Bbuyy-morningUp-downConsolidation', color='LG', height=200)
     with col5:
         df = rb.getdf('Breakout-Sell-after-10')
         rb.render(st, df, 'TodayDownOrIndexStockDownLT-0.5 : Breakout Sell after 10', color='R', height=200)
     with col6:
+        df = rb.getdf('1-Sselll-morningDown-upConsolidation')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] > -1) &
+                (df['PCT_day_change'] < 3) &
+                (~df['systemtime'].str.contains('09:', case=False, na=False))
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'LastDayOrTodayLT-0.5: Only one up: 1-Sselll-morningDown-upConsolidation', color='R', height=200)
+    with col7:
         df = rb.getdf('1-Sselll-morningDown-upConsolidation')
         filtered_df = df
         try:
@@ -630,49 +625,9 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'LastDayOrTodayLT-0.5: Only one up: 1-Sselll-morningDown-upConsolidation', color='LG', height=200)
-    with col7:
-        df = rb.getdf('1-Sselll-morningDown-upConsolidation')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_day_change'] > -1) &
-                (df['PCT_day_change'] < 3) &
-                (~df['systemtime'].str.contains('09:', case=False, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, na=False)) 
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'LastDayOrTodayLT-0.5: Only one up: 1-Sselll-morningDown-upConsolidation', color='R', height=200)
-    # with col8:
-    #     df = rb.getdf('1-Sselll-morningDown-upConsolidation')
-    #     filtered_df = df
-    #     try:
-    #         filtered_df = df[
-    #             (~df['systemtime'].str.contains('09:', case=False, na=False)) &
-    #             (~df['systemtime'].str.contains('10:', case=False, na=False)) &
-    #             (~df['systemtime'].str.contains('11:3', case=False, na=False)) &
-    #             (~df['systemtime'].str.contains('11:4', case=False, na=False)) &
-    #             (~df['systemtime'].str.contains('11:5', case=False, na=False)) 
-    #         ]
-    #     except KeyError as e:
-    #         print("")
-    #     rb.render(st, filtered_df, 'LastDayOrTodayNOTLT-0.5: Only one up: 1-Sselll-morningDown-upConsolidation', color='R', height=200)
-
+    
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        df = rb.getintersectdf('week2lh-not-reached','crossed-day-high')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df
-        except KeyError as e:
-            print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
-        else:
-            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
-    with col2:
         df = rb.getintersectdf('week2lh-not-reached','crossed-day-high')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -707,8 +662,8 @@ def main():
             rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
         else:
             rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
-    with col3:
-        df = rb.getintersectdf('week2lh-not-reached','crossed-day-low')
+    with col2:
+        df = rb.getintersectdf('week2lh-not-reached','crossed-day-high')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
@@ -717,10 +672,10 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
+            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
         else:
-            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
-    with col4:
+            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
+    with col3:
         df = rb.getintersectdf('week2lh-not-reached','crossed-day-low')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -751,6 +706,19 @@ def main():
                     ((df['forecast_day_PCT10_change'] < -3) | ((df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT5_change'] > 0)))
                 )
                 ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
+        else:
+            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
+    with col4:
+        df = rb.getintersectdf('week2lh-not-reached','crossed-day-low')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:

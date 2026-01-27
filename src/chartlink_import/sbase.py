@@ -206,6 +206,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                             ):
                                             keyword = '0@@CROSSED2DayH@GT2@'
                                         elif(float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > -2
+                                            and (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < 2)
                                             and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < 1)
                                             or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT7_change']) < 1)
                                             or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT5_change']) < 1))
@@ -281,6 +282,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                             ):
                                             keyword = '0@@CROSSED1DayH@GT2@'
                                         elif(float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > -2
+                                            and (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < 2)
                                             and ((float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < 1)
                                             or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT7_change']) < 1)
                                             or (float(db['morning-volume-breakout-buy'].find_one({'scrip':tempScrip})['forecast_day_PCT5_change']) < 1))
@@ -380,6 +382,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                             ):
                                             keyword = '0@@CROSSED2DayL@LT-2@'
                                         elif(float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < 2
+                                            and (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > -2)
                                             and ((float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > -1)
                                             or (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT7_change']) > -1)
                                             or (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT5_change']) > -1))
@@ -454,6 +457,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                                             ):
                                             keyword = '0@@CROSSED1DayL@LT-2@'
                                         elif(float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) < 2
+                                            and (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > -2)
                                             and ((float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT10_change']) > -1)
                                             or (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT7_change']) > -1)
                                             or (float(db['morning-volume-breakout-sell'].find_one({'scrip':tempScrip})['forecast_day_PCT5_change']) > -1))

@@ -20,6 +20,64 @@ def main():
     # main title
     st.title('Learning')
 
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    with col1:
+        df = rb.getdf('buy-morning-volume-breakout(Check-News)')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['weekHighChange'] > -4) &
+                ((df['week2LowChange'] > 0) | (df['weekLowChange'] > 0)) &
+                (df['monthLowChange'] > 0) &
+                (df['month3LowChange'] > 0)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'buy-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+    with col2:
+        df = rb.getdf('buy-morning-volume-breakout(Check-News)')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['weekLowChange'] > 3)) &
+                ((df['week2LowChange'] > 1) & (df['weekLowChange'] > 1))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'buy-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+    with col3:
+        df = rb.getdf('buy-morning-volume-breakout(Check-News)')
+        filtered_df = df
+        rb.render(st, filtered_df, 'buy-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+    with col4:
+        df = rb.getdf('sell-morning-volume-breakout(Check-News)')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['weekLowChange'] < 4) &
+                ((df['week2HighChange'] < 0) | (df['weekHighChange'] < 0)) &
+                (df['monthHighChange'] < 0) &
+                (df['month3HighChange'] < 0)
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'sell-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+    with col5:
+        df = rb.getdf('sell-morning-volume-breakout(Check-News)')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['weekHighChange'] < -3)) &
+                ((df['week2HighChange'] < -1) & (df['weekHighChange'] < -1))
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'sell-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+    with col6:
+        df = rb.getdf('sell-morning-volume-breakout(Check-News)')
+        filtered_df = df
+        rb.render(st, filtered_df, 'sell-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+
 
 # Sentiment Analysis Tables
     st.divider()
@@ -367,15 +425,6 @@ def main():
                   renderml=True, color='LG')
 
 
-    col1, col2 = st.columns(2)
-    with col1:
-        df = rb.getdf('buy-morning-volume-breakout(Check-News)')
-        filtered_df = df
-        rb.render(st, filtered_df, 'buy-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
-    with col2:
-        df = rb.getdf('sell-morning-volume-breakout(Check-News)')
-        filtered_df = df
-        rb.render(st, filtered_df, 'sell-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
     
 
 
