@@ -7,7 +7,10 @@ GROQ_MODEL = "llama-3.3-70b-versatile"  # Alternative: "mixtral-8x7b-32768" or "
 
 # News Sources
 NEWS_SOURCES = [
-    "https://pulse.zerodha.com/"
+    "https://pulse.zerodha.com/",
+    "https://www.moneycontrol.com/news/business/markets/",
+    "https://www.ndtvprofit.com/business",
+    "https://economictimes.indiatimes.com/markets/stocks/news"
 ]
 
 # NSE 500 stocks data URL (sample - replace with actual source)
@@ -105,5 +108,7 @@ EXCLUDE_KEYWORDS = [
     "Sensex plunges",
     "Nifty hits",
     "Sensex hits",
+    "Gainers & Losers",
+    "Market Wrap",
     "ITI"
 ]

@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from dateutil import parser
 import time
 import re
+from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
 class NewsArticle:
     def __init__(self, headline, link, date=None, time_str=None, content=""):
@@ -21,38 +22,192 @@ class NewsScraper:
         }
     
     def scrape_zerodha_pulse(self, url):
-        """Scrape news from Zerodha Pulse"""
+        """Scrape news from Zerodha Pulse using Playwright"""
         articles = []
+        
         try:
-            response = requests.get(url, headers=self.headers, timeout=10)
-            soup = BeautifulSoup(response.content, 'html.parser')
-            
-            # Find article containers (adjust selectors based on actual site structure)
-            news_items = soup.find_all(['article', 'div'], class_=re.compile('post|article|news'))
-            
-            for item in news_items[:50]:  # Limit to recent articles
-                try:
-                    headline_elem = item.find(['h2', 'h3', 'a'])
-                    if not headline_elem:
+            with sync_playwright() as p:
+                print("Launching browser for Zerodha Pulse...")
+                
+                # Launch browser (headless mode)
+                browser = p.chromium.launch(headless=True)
+                
+                # Create context with user agent
+                context = browser.new_context(
+                    user_agent=self.headers['User-Agent'],
+                    viewport={'width': 1920, 'height': 1080}
+                )
+                
+                # Create new page
+                page = context.new_page()
+                
+                print(f"Loading {url}...")
+                
+                # Navigate to URL with extended timeout
+                page.goto(url, wait_until='domcontentloaded', timeout=30000)
+                
+                # Wait longer for JavaScript to render
+                print("Waiting for content to load...")
+                page.wait_for_timeout(5000)
+                
+                # Scroll to load more content (if lazy loading)
+                page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+                page.wait_for_timeout(2000)
+                
+                # Get page content
+                content = page.content()
+                
+                # Save HTML for debugging
+                with open('zerodha_pulse_debug.html', 'w', encoding='utf-8') as f:
+                    f.write(content)
+                print("Saved page HTML to zerodha_pulse_debug.html for inspection")
+                
+                soup = BeautifulSoup(content, 'html.parser')
+                
+                # Try multiple selector strategies for Zerodha Pulse
+                news_items = []
+                
+                # Strategy 1: Look for article tags
+                news_items = soup.find_all('article')
+                print(f"Strategy 1 (article tags): Found {len(news_items)} items")
+                
+                # Strategy 2: Look for div with post/item classes
+                if not news_items:
+                    news_items = soup.find_all('div', class_=re.compile('post|item|entry|feed-item'))
+                    print(f"Strategy 2 (div.post/item): Found {len(news_items)} items")
+                
+                # Strategy 3: Look for list items
+                if not news_items:
+                    news_items = soup.find_all('li', class_=re.compile('post|item|entry'))
+                    print(f"Strategy 3 (li.post/item): Found {len(news_items)} items")
+                
+                # Strategy 4: Look for any container with title/headline
+                if not news_items:
+                    news_items = soup.find_all(['div', 'section'], class_=re.compile('card|story|news'))
+                    print(f"Strategy 4 (card/story/news): Found {len(news_items)} items")
+                
+                # Strategy 5: Find all links with headlines (last resort)
+                if not news_items:
+                    # Look for all h2, h3, h4 elements that might be headlines
+                    headlines = soup.find_all(['h2', 'h3', 'h4'])
+                    print(f"Strategy 5 (headline tags): Found {len(headlines)} potential headlines")
+                    
+                    for headline_elem in headlines[:50]:
+                        try:
+                            headline = headline_elem.get_text(strip=True)
+                            if len(headline) < 10:
+                                continue
+                            
+                            # Find parent container
+                            parent = headline_elem.find_parent(['div', 'article', 'section', 'li'])
+                            if parent:
+                                news_items.append(parent)
+                        except:
+                            continue
+                
+                print(f"Total items to process: {len(news_items)}")
+                
+                for idx, item in enumerate(news_items[:50]):
+                    try:
+                        # Find headline - try multiple strategies
+                        headline_elem = (
+                            item.find('h1') or 
+                            item.find('h2') or 
+                            item.find('h3') or 
+                            item.find('h4') or
+                            item.find('a', class_=re.compile('title|headline|link'))
+                        )
+                        
+                        if not headline_elem:
+                            continue
+                        
+                        headline = headline_elem.get_text(strip=True)
+                        
+                        # Skip if headline is too short
+                        if not headline or len(headline) < 10:
+                            continue
+                        
+                        print(f"Article {idx+1}: {headline[:60]}...")
+                        
+                        # Find link
+                        link = ""
+                        link_elem = headline_elem.find('a') if headline_elem.name != 'a' else headline_elem
+                        if not link_elem:
+                            link_elem = item.find('a', href=True)
+                        
+                        if link_elem and link_elem.get('href'):
+                            link = link_elem.get('href', '')
+                            # Handle relative URLs
+                            if link and not link.startswith('http'):
+                                if link.startswith('/'):
+                                    link = f"https://pulse.zerodha.com{link}"
+                                elif link.startswith('#') or not link:
+                                    link = url
+                                else:
+                                    link = f"https://pulse.zerodha.com/{link}"
+                        else:
+                            link = url
+                        
+                        # Find date/time - try multiple approaches
+                        date_str = ""
+                        date_elem = item.find('time')
+                        if date_elem:
+                            date_str = date_elem.get('datetime', '') or date_elem.get_text(strip=True)
+                        
+                        if not date_str:
+                            date_elem = item.find(['span', 'div', 'p'], class_=re.compile('date|time|timestamp|published|meta'))
+                            if date_elem:
+                                date_str = date_elem.get_text(strip=True)
+                        
+                        # Get article content/summary
+                        content = ""
+                        content_elem = item.find(['p', 'div'], class_=re.compile('summary|excerpt|content|description|text|body'))
+                        if content_elem:
+                            content = content_elem.get_text(strip=True)[:500]
+                        else:
+                            # Get all paragraphs
+                            paragraphs = item.find_all('p')
+                            if paragraphs:
+                                content = ' '.join([p.get_text(strip=True) for p in paragraphs[:3]])[:500]
+                            else:
+                                # Get all text from item, exclude headline
+                                all_text = item.get_text(strip=True)
+                                content = all_text.replace(headline, '', 1)[:500]
+                        
+                        # Parse date
+                        article_date = datetime.now().strftime("%Y-%m-%d")
+                        article_time = datetime.now().strftime("%H:%M:%S")
+                        
+                        if date_str:
+                            try:
+                                parsed_date = parser.parse(date_str, fuzzy=True)
+                                article_date = parsed_date.strftime("%Y-%m-%d")
+                                article_time = parsed_date.strftime("%H:%M:%S")
+                            except:
+                                pass
+                        
+                        articles.append(NewsArticle(
+                            headline=headline,
+                            link=link,
+                            date=article_date,
+                            time_str=article_time,
+                            content=content
+                        ))
+                        
+                    except Exception as e:
+                        print(f"Error parsing article {idx+1}: {e}")
                         continue
-                    
-                    headline = headline_elem.get_text(strip=True)
-                    link = headline_elem.get('href') or item.find('a')['href']
-                    
-                    if not link.startswith('http'):
-                        link = f"https://pulse.zerodha.com{link}"
-                    
-                    date_elem = item.find(['time', 'span'], class_=re.compile('date|time'))
-                    date_str = date_elem.get_text(strip=True) if date_elem else ""
-                    
-                    content = item.get_text(strip=True)[:500]
-                    
-                    articles.append(NewsArticle(headline, link, content=content))
-                except Exception as e:
-                    continue
+                
+                # Close browser
+                browser.close()
+                
+                print(f"Successfully scraped {len(articles)} articles from Zerodha Pulse")
                     
         except Exception as e:
-            print(f"Error scraping Zerodha Pulse: {e}")
+            print(f"Error scraping Zerodha Pulse with Playwright: {e}")
+            import traceback
+            traceback.print_exc()
+            print("Tip: Ensure Playwright is installed. Run: pip install playwright && playwright install chromium")
         
         return articles
     
@@ -99,11 +254,12 @@ class NewsScraper:
         for source in self.sources:
             print(f"Scraping: {source}")
             
-            if 'zerodha' in source:
+            if 'zerodha' in source.lower() or 'pulse' in source.lower():
                 articles = self.scrape_zerodha_pulse(source)
-            elif 'moneycontrol' in source:
+            elif 'moneycontrol' in source.lower():
                 articles = self.scrape_moneycontrol(source)
             else:
+                print(f"Unknown source: {source}")
                 continue
             
             all_articles.extend(articles)

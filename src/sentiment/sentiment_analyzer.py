@@ -180,6 +180,8 @@ class SentimentAnalyzer:
             "Nifty hits",
             "Sensex hits",
             "Nifty 50",
+            "Gainers & Losers",
+            "Market Wrap",
             "ITI"
         ]
         
