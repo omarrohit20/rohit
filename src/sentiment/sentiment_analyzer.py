@@ -157,7 +157,30 @@ class SentimentAnalyzer:
             "weekly decline",
             "weekly drop",
             "weekly fall",
-            "weekly loss"
+            "weekly loss",
+            "volume surge",
+            "Nifty rises",
+            "Sensex rises",
+            "Nifty gains",
+            "Sensex gains",
+            "Nifty climbs",
+            "Sensex climbs",
+            "Nifty soars",
+            "Sensex soars",
+            "Nifty rallies",
+            "Sensex rallies",
+            "Nifty jumps",
+            "Sensex jumps",
+            "Nifty tanks",
+            "Sensex tanks",
+            "Nifty slips",
+            "Sensex slips",
+            "Nifty plunges",
+            "Sensex plunges",
+            "Nifty hits",
+            "Sensex hits",
+            "Nifty 50",
+            "ITI"
         ]
         
         for pattern in market_index_patterns:
