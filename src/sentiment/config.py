@@ -112,3 +112,9 @@ EXCLUDE_KEYWORDS = [
     "Market Wrap",
     "ITI"
 ]
+
+# MongoDB Configuration
+MONGODB_HOST = "localhost"
+MONGODB_PORT = 27017
+MONGODB_DATABASE = "chartlink"
+MONGODB_COLLECTION = "sentiment_analysis"

@@ -4,13 +4,24 @@ from config import NEWS_SOURCES, GROQ_API_KEY, OUTPUT_FILE
 from nse_stocks import NSEStockLoader
 from web_scraper import NewsScraper
 from sentiment_analyzer import SentimentAnalyzer
+from database import MongoDBHandler
 
 class SentimentAnalysisEngine:
-    def __init__(self):
+    def __init__(self, use_mongodb=True):
         self.stock_loader = NSEStockLoader()
         self.scraper = NewsScraper(NEWS_SOURCES)
         self.analyzer = SentimentAnalyzer(GROQ_API_KEY)
         self.results = {}
+        self.use_mongodb = use_mongodb
+        self.db_handler = None
+        
+        if self.use_mongodb:
+            try:
+                self.db_handler = MongoDBHandler(db_name="chartlink")
+            except Exception as e:
+                print(f"Warning: MongoDB connection failed. Will save to JSON only.")
+                print(f"Error: {e}")
+                self.use_mongodb = False
     
     def run(self):
         """Main execution flow"""
@@ -87,11 +98,19 @@ class SentimentAnalysisEngine:
                     analysis.get("overall_sentiment", "Neutral")
         
         # Step 5: Generate output
-        print("\n5. Generating output JSON...")
+        print("\n5. Generating output...")
         self.generate_output()
         
-        print(f"\n✓ Analysis complete! Results saved to {OUTPUT_FILE}")
+        # Step 6: Save to MongoDB
+        if self.use_mongodb and self.db_handler:
+            print("\n6. Saving to MongoDB...")
+            self.save_to_mongodb()
+        
+        print(f"\n✓ Analysis complete!")
         print(f"Total stocks with news: {len(self.results)}")
+        if self.use_mongodb:
+            print(f"Data saved to MongoDB database 'chartlink'")
+        print(f"JSON file saved to: {OUTPUT_FILE}")
     
     def generate_output(self):
         """Generate downloadable JSON file"""
@@ -100,10 +119,32 @@ class SentimentAnalysisEngine:
         with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
             json.dump(output_list, f, indent=2, ensure_ascii=False)
         
-        print(f"Output saved to: {OUTPUT_FILE}")
+        print(f"JSON output saved to: {OUTPUT_FILE}")
+    
+    def save_to_mongodb(self):
+        """Save results to MongoDB"""
+        if not self.db_handler:
+            print("MongoDB handler not initialized")
+            return
+        
+        try:
+            success = self.db_handler.insert_sentiment_data(self.results)
+            if success:
+                print("✓ Data successfully saved to MongoDB")
+            else:
+                print("✗ Failed to save data to MongoDB")
+        except Exception as e:
+            print(f"Error saving to MongoDB: {e}")
+            import traceback
+            traceback.print_exc()
+    
+    def __del__(self):
+        """Cleanup on destruction"""
+        if self.db_handler:
+            self.db_handler.close()
 
 def main():
-    engine = SentimentAnalysisEngine()
+    engine = SentimentAnalysisEngine(use_mongodb=True)
     engine.run()
 
 if __name__ == "__main__":
