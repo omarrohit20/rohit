@@ -576,6 +576,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['forecast_day_PCT10_change'] > -9) &
                 (df['mlData'].str.contains("0@@"))
             ]
         except KeyError as e:
@@ -586,6 +587,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['forecast_day_PCT10_change'] < 9) &
                 (df['mlData'].str.contains("0@@"))
             ]
         except KeyError as e:
