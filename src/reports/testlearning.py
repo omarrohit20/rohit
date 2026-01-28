@@ -27,7 +27,8 @@ def main():
         try:
             filtered_df = df[
                 (df['weekHighChange'] > -4) &
-                ((df['week2LowChange'] > 0) | (df['weekLowChange'] > 0)) &
+                ((df['weekLowChange'] > 2)) &
+                ((df['week2LowChange'] > 1) | (df['weekLowChange'] > 1)) &
                 (df['monthLowChange'] > 0) &
                 (df['month3LowChange'] > 0)
                 ]
@@ -39,8 +40,12 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['weekLowChange'] > 3)) &
-                ((df['week2LowChange'] > 1) & (df['weekLowChange'] > 1))
+                (
+                    ((df['weekLowChange'] > 3)) &
+                    ((df['week2LowChange'] > 1) & (df['weekLowChange'] > 1))
+                )
+                |
+                (~(df['systemtime'].str.contains('09', case=False, na=False)))
                 ]
         except KeyError as e:
             print("")
@@ -55,7 +60,8 @@ def main():
         try:
             filtered_df = df[
                 (df['weekLowChange'] < 4) &
-                ((df['week2HighChange'] < 0) | (df['weekHighChange'] < 0)) &
+                (df['weekHighChange'] < -2) &
+                ((df['week2HighChange'] < -1) | (df['weekHighChange'] < -1)) &
                 (df['monthHighChange'] < 0) &
                 (df['month3HighChange'] < 0)
             ]
@@ -67,8 +73,12 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['weekHighChange'] < -3)) &
-                ((df['week2HighChange'] < -1) & (df['weekHighChange'] < -1))
+                (
+                    ((df['weekHighChange'] < -3)) &
+                    ((df['week2HighChange'] < -1) & (df['weekHighChange'] < -1))
+                )
+                |
+                (~(df['systemtime'].str.contains('09', case=False, na=False)))
             ]
         except KeyError as e:
             print("")
