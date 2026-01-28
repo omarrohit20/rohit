@@ -912,7 +912,7 @@ def main():
         try:
             filtered_df = df[
                 (df['PCT_day_change'] > -1) &
-                (df['PCT_day_change'] < 3) &
+                (df['PCT_day_change'] < 2) &
                 (df['PCT_day_change_pre1'] > -2) &
                 (df['forecast_day_PCT10_change'] > -2) &
                 (df['forecast_day_PCT7_change'] > -1) &
@@ -942,7 +942,7 @@ def main():
         try:
             filtered_df = df[
                 (df['PCT_day_change'] < 1) &
-                (df['PCT_day_change'] > -3) &
+                (df['PCT_day_change'] > -2) &
                 (df['PCT_day_change_pre1'] < 2) &
                 (df['forecast_day_PCT10_change'] < 2) &
                 (df['forecast_day_PCT7_change'] < 1) &

@@ -8,7 +8,9 @@ GROQ_MODEL = "llama-3.3-70b-versatile"  # Alternative: "mixtral-8x7b-32768" or "
 # News Sources
 NEWS_SOURCES = [
     "https://pulse.zerodha.com/",
-    "https://www.moneycontrol.com/news/business/stocks/"
+    "https://www.moneycontrol.com/news/business/stocks/",
+    "https://www.moneycontrol.com/news/business/markets/stock-market-live-updates-gift-nifty-indicates-a-firm-start-us-asian-markets-mixed-2-liveblog-13793449.html"
+
 ]
 
 # NSE 500 stocks data URL (sample - replace with actual source)

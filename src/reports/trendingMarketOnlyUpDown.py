@@ -160,7 +160,7 @@ def main():
     
     
     
-    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    col1, col2, col4, col5 = st.columns(4)
     with col1:
         df = rb.getintersectdf('buy_all_processor', 'buy-breakout')
         expected_columns = list(set(df.columns))
@@ -203,22 +203,6 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'BuyAllProcessor+ZPre1_Upstairs', column_order=rb.column_order_default, color='G')
-    with col3:
-        df = rb.getdf('morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
-                (~df['systemtime'].str.contains('09:30', case=False, na=False)) &
-                ((df['PCT_day_change'] > -1.5) & (df['PCT_change'] > -1.5)) &
-                (((df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT5_change'] > 2))
-                 | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))
-                ) &
-                (df['mlData'].str.contains("0@@CROSSED2") | df['mlData'].str.contains("0@@SUPER"))
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-buy', color='G')
     with col4:
         df = rb.getintersectdf('sell_all_processor', 'sell-breakout')
         expected_columns = list(set(df.columns))
@@ -262,22 +246,7 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'SellAllProcessor+ZPre1Down', column_order=rb.column_order_default, color='R')
-    with col6:
-        df = rb.getdf('morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
-                (~df['systemtime'].str.contains('09:30', case=False, na=False)) &
-                ((df['PCT_day_change'] < 1.5) & (df['PCT_change'] < 1.5)) &
-                (((df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT5_change'] < -2)) 
-                 | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))
-                ) &
-                (df['mlData'].str.contains("0@@CROSSED2") | df['mlData'].str.contains("0@@SUPER"))
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-sell', color='R')
+
 
 
     col1, col2, col3, col4, col5, col6 = st.columns(6)

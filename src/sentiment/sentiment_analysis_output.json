@@ -1,0 +1,320 @@
+[
+  {
+    "scrip": "ACE",
+    "company": "Action Construction Equipment Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Caplin Point shares in focus after USFDA approval for Methylprednisolone Acetate injection",
+          "link": "https://www.moneycontrol.com/news/business/stocks/caplin-point-shares-in-focus-after-usfda-approval-for-methylprednisolone-acetate-injection-13793192.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "LT",
+    "company": "Larsen & Toubro Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "RVNL shares in focus after winning Rs 242-crore order from South Central Railway",
+          "link": "https://www.moneycontrol.com/news/business/stocks/rvnl-shares-in-focus-after-winning-rs-242-crore-order-from-south-central-railway-13793202.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Stock Market LIVE Updates: Indices flat at pre-open; Vedanta, Asian Paints, Marico, RVNL, Vodafone in focus",
+          "link": "https://www.moneycontrol.com/news/business/markets/stock-market-live-updates-gift-nifty-indicates-a-firm-start-us-asian-markets-mixed-2-liveblog-13793449.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Stocks to Watch Today: Shadowfax, Rail Vikas Nigam, Titagarh Rail, Hindustan Zinc, Mahindra Logistics, Gopal Snacks, Vishal Mega Mart, Marico in focus on 28 January",
+          "link": "https://www.moneycontrol.com/news/business/markets/stocks-to-watch-today-shadowfax-rail-vikas-nigam-titagarh-rail-hindustan-zinc-mahindra-logistics-gopal-snacks-vishal-mega-mart-marico-in-focus-on-28-january-13793360.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "RVNL",
+    "company": "Rail Vikas Nigam Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "RVNL shares in focus after winning Rs 242-crore order from South Central Railway",
+          "link": "https://www.moneycontrol.com/news/business/stocks/rvnl-shares-in-focus-after-winning-rs-242-crore-order-from-south-central-railway-13793202.html",
+          "impact": "Positive",
+          "severity": "Medium"
+        },
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Stock Market LIVE Updates: Indices flat at pre-open; Vedanta, Asian Paints, Marico, RVNL, Vodafone in focus",
+          "link": "https://www.moneycontrol.com/news/business/markets/stock-market-live-updates-gift-nifty-indicates-a-firm-start-us-asian-markets-mixed-2-liveblog-13793449.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "ITI",
+    "company": "ITI Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "First Tick: Top global cues to watch in today’s trade",
+          "link": "https://www.moneycontrol.com/news/business/markets/first-tick-top-global-cues-to-watch-in-today-s-trade-87-13792016.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Budget 2026: Capital gains tax fears rattle markets as weak sentiment amplifies risk",
+          "link": "https://www.moneycontrol.com/news/business/markets/budget-2026-capital-gains-tax-fears-rattle-markets-as-weak-sentiment-amplifies-risk-13793450.html",
+          "impact": "Negative",
+          "severity": "Medium"
+        }
+      ],
+      "overall_sentiment": "Negative"
+    }
+  },
+  {
+    "scrip": "BIKAJI",
+    "company": "Bikaji Foods International Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Stock Market LIVE Updates: Indices flat at pre-open; Vedanta, Asian Paints, Marico, RVNL, Vodafone in focus",
+          "link": "https://www.moneycontrol.com/news/business/markets/stock-market-live-updates-gift-nifty-indicates-a-firm-start-us-asian-markets-mixed-2-liveblog-13793449.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Stocks to Watch Today: Shadowfax, Rail Vikas Nigam, Titagarh Rail, Hindustan Zinc, Mahindra Logistics, Gopal Snacks, Vishal Mega Mart, Marico in focus on 28 January",
+          "link": "https://www.moneycontrol.com/news/business/markets/stocks-to-watch-today-shadowfax-rail-vikas-nigam-titagarh-rail-hindustan-zinc-mahindra-logistics-gopal-snacks-vishal-mega-mart-marico-in-focus-on-28-january-13793360.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "HAL",
+    "company": "Hindustan Aeronautics Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Stock Market LIVE Updates: Indices flat at pre-open; Vedanta, Asian Paints, Marico, RVNL, Vodafone in focus",
+          "link": "https://www.moneycontrol.com/news/business/markets/stock-market-live-updates-gift-nifty-indicates-a-firm-start-us-asian-markets-mixed-2-liveblog-13793449.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Stocks to Watch Today: Shadowfax, Rail Vikas Nigam, Titagarh Rail, Hindustan Zinc, Mahindra Logistics, Gopal Snacks, Vishal Mega Mart, Marico in focus on 28 January",
+          "link": "https://www.moneycontrol.com/news/business/markets/stocks-to-watch-today-shadowfax-rail-vikas-nigam-titagarh-rail-hindustan-zinc-mahindra-logistics-gopal-snacks-vishal-mega-mart-marico-in-focus-on-28-january-13793360.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "MARICO",
+    "company": "Marico Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Stock Market LIVE Updates: Indices flat at pre-open; Vedanta, Asian Paints, Marico, RVNL, Vodafone in focus",
+          "link": "https://www.moneycontrol.com/news/business/markets/stock-market-live-updates-gift-nifty-indicates-a-firm-start-us-asian-markets-mixed-2-liveblog-13793449.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Stocks to Watch Today: Shadowfax, Rail Vikas Nigam, Titagarh Rail, Hindustan Zinc, Mahindra Logistics, Gopal Snacks, Vishal Mega Mart, Marico in focus on 28 January",
+          "link": "https://www.moneycontrol.com/news/business/markets/stocks-to-watch-today-shadowfax-rail-vikas-nigam-titagarh-rail-hindustan-zinc-mahindra-logistics-gopal-snacks-vishal-mega-mart-marico-in-focus-on-28-january-13793360.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "SCI",
+    "company": "Shipping Corporation of India Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Stock Market LIVE Updates: Indices flat at pre-open; Vedanta, Asian Paints, Marico, RVNL, Vodafone in focus",
+          "link": "https://www.moneycontrol.com/news/business/markets/stock-market-live-updates-gift-nifty-indicates-a-firm-start-us-asian-markets-mixed-2-liveblog-13793449.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Stocks to Watch Today: Shadowfax, Rail Vikas Nigam, Titagarh Rail, Hindustan Zinc, Mahindra Logistics, Gopal Snacks, Vishal Mega Mart, Marico in focus on 28 January",
+          "link": "https://www.moneycontrol.com/news/business/markets/stocks-to-watch-today-shadowfax-rail-vikas-nigam-titagarh-rail-hindustan-zinc-mahindra-logistics-gopal-snacks-vishal-mega-mart-marico-in-focus-on-28-january-13793360.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "IDEA",
+    "company": "Vodafone Idea Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Stock Market LIVE Updates: Indices flat at pre-open; Vedanta, Asian Paints, Marico, RVNL, Vodafone in focus",
+          "link": "https://www.moneycontrol.com/news/business/markets/stock-market-live-updates-gift-nifty-indicates-a-firm-start-us-asian-markets-mixed-2-liveblog-13793449.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Trade Spotlight: How should you trade LIC, Indian Hotels, Asahi India Glass, JSW Steel, MCX India, and others on January 28?",
+          "link": "https://www.moneycontrol.com/news/business/markets/trade-spotlight-how-should-you-trade-lic-indian-hotels-asahi-india-glass-jsw-steel-mcx-india-and-others-on-january-28-13793413.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Stocks to Watch Today: Shadowfax, Rail Vikas Nigam, Titagarh Rail, Hindustan Zinc, Mahindra Logistics, Gopal Snacks, Vishal Mega Mart, Marico in focus on 28 January",
+          "link": "https://www.moneycontrol.com/news/business/markets/stocks-to-watch-today-shadowfax-rail-vikas-nigam-titagarh-rail-hindustan-zinc-mahindra-logistics-gopal-snacks-vishal-mega-mart-marico-in-focus-on-28-january-13793360.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "BEL",
+    "company": "Bharat Electronics Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Trade Spotlight: How should you trade LIC, Indian Hotels, Asahi India Glass, JSW Steel, MCX India, and others on January 28?",
+          "link": "https://www.moneycontrol.com/news/business/markets/trade-spotlight-how-should-you-trade-lic-indian-hotels-asahi-india-glass-jsw-steel-mcx-india-and-others-on-january-28-13793413.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "MCX",
+    "company": "Multi Commodity Exchange of India Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Trade Spotlight: How should you trade LIC, Indian Hotels, Asahi India Glass, JSW Steel, MCX India, and others on January 28?",
+          "link": "https://www.moneycontrol.com/news/business/markets/trade-spotlight-how-should-you-trade-lic-indian-hotels-asahi-india-glass-jsw-steel-mcx-india-and-others-on-january-28-13793413.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "TITAGARH",
+    "company": "Titagarh Rail Systems Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Stocks to Watch Today: Shadowfax, Rail Vikas Nigam, Titagarh Rail, Hindustan Zinc, Mahindra Logistics, Gopal Snacks, Vishal Mega Mart, Marico in focus on 28 January",
+          "link": "https://www.moneycontrol.com/news/business/markets/stocks-to-watch-today-shadowfax-rail-vikas-nigam-titagarh-rail-hindustan-zinc-mahindra-logistics-gopal-snacks-vishal-mega-mart-marico-in-focus-on-28-january-13793360.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "PNB",
+    "company": "Punjab National Bank.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Bank Nifty rises 700 points as Axis Bank, PNB, other stocks rise up to 5%: Check key trading levels",
+          "link": "https://www.moneycontrol.com/news/business/markets/bank-nifty-rises-700-points-as-axis-bank-pnb-other-stocks-rise-up-to-5-check-key-trading-levels-13792663.html",
+          "impact": "Positive",
+          "severity": "Medium"
+        }
+      ],
+      "overall_sentiment": "Positive"
+    }
+  },
+  {
+    "scrip": "TITAN",
+    "company": "Titan Company Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-28",
+          "Time": "09:12:20",
+          "headline": "Titan Company shares see volume surge, fall 0.67% today",
+          "link": "https://www.moneycontrol.com/news/business/stocks/titan-company-shares-see-volume-surge-fall-0-67-today-alpha-article-13792474.html",
+          "impact": "Negative",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  }
+]

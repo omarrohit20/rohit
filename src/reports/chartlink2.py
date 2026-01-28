@@ -570,11 +570,31 @@ def main():
         rb.render(st, df, 'Crossed Day Lows', color='LG', renderf10sell01=True)
 
 
-    col1, col2, col3, col5, col6, col7 = st.columns(6)
+    col3, col6 = st.columns(2)
+    with col3:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['mlData'].str.contains("0@@"))
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'morning-volume-breakout-buy ##############', color='LG', height=150)
+    with col6:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['mlData'].str.contains("0@@"))
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'morning-volume-breakout-sell ##############', color='LG', height=150)
+
+
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
-        df = rb.getdf('Breakout-Buy-after-10')
-        rb.render(st, df, 'TodayUpOrIndexStockUpGT0.5 : Breakout Buy after 10', color='LG', height=200)
-    with col2:
         df = rb.getdf('1-Bbuyy-morningUp-downConsolidation')
         filtered_df = df
         try:
@@ -587,7 +607,7 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'LastDayOrTodayGT0.5 : Only one dip: 1-Bbuyy-morningUp-downConsolidation', color='G', height=200)
-    with col3:
+    with col2:
         df = rb.getdf('1-Bbuyy-morningUp-downConsolidation')
         filtered_df = df
         try:
@@ -598,10 +618,10 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'LastDayOrTodayGT0.5 : Only one dip: 1-Bbuyy-morningUp-downConsolidation', color='LG', height=200)
-    with col5:
-        df = rb.getdf('Breakout-Sell-after-10')
-        rb.render(st, df, 'TodayDownOrIndexStockDownLT-0.5 : Breakout Sell after 10', color='LG', height=200)
-    with col6:
+    with col3:
+        df = rb.getdf('Breakout-Buy-after-10')
+        rb.render(st, df, 'TodayUpOrIndexStockUpGT0.5 : Breakout Buy after 10', color='LG', height=200)
+    with col4:
         df = rb.getdf('1-Sselll-morningDown-upConsolidation')
         filtered_df = df
         try:
@@ -613,7 +633,7 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'LastDayOrTodayLT-0.5: Only one up: 1-Sselll-morningDown-upConsolidation', color='R', height=200)
-    with col7:
+    with col5:
         df = rb.getdf('1-Sselll-morningDown-upConsolidation')
         filtered_df = df
         try:
@@ -625,7 +645,11 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'LastDayOrTodayLT-0.5: Only one up: 1-Sselll-morningDown-upConsolidation', color='LG', height=200)
+    with col6:
+        df = rb.getdf('Breakout-Sell-after-10')
+        rb.render(st, df, 'TodayDownOrIndexStockDownLT-0.5 : Breakout Sell after 10', color='LG', height=200)
     
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getintersectdf('week2lh-not-reached','crossed-day-high')
@@ -659,9 +683,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
+            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='G')
         else:
-            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
+            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='G')
     with col2:
         df = rb.getintersectdf('week2lh-not-reached','crossed-day-high')
         expected_columns = list(set(df.columns))
@@ -709,9 +733,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
+            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='R')
         else:
-            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
+            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='R')
     with col4:
         df = rb.getintersectdf('week2lh-not-reached','crossed-day-low')
         expected_columns = list(set(df.columns))
