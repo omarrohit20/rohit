@@ -13,7 +13,7 @@ def main():
                        initial_sidebar_state="expanded",)
 
     # main title
-    st.title('10:00 -11:15 AM last 15-20 Minute trend: TrendingMarketOnlyUpDown')
+    st.title('10:00 -11:15 AM : Confirm Trend with Crossed 2 Day Chart')
 
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:

@@ -1,3 +1,5 @@
+first 30 - 45 minutes moved more than abs(1.5) in trending market avoid trading
+
 Last Day LT-1
     wait 15 minute
     If market down for 15-30 minute, and sudden spike, check and wait till 10:45 'supertrend-morningdown-buy' for spike sustainence
@@ -11,6 +13,10 @@ Last Day LT-1
 
     If no spike after 15-30 minute, and still down check for Sell
         "Crossed 2 Day Lows" and  "Crossed Day Lows" along with f10ch>3
+
+    If up since morning, check crossed 2 Day chart after 10 to confirm up for the day.
+        If failed sqr off all buy positions by 12:00 PM
+
 
 Last 2 Day LT-1. Avoid Sell after 11:00 if already Down more than 1.
     wait 15 minutes
@@ -30,8 +36,12 @@ Last Day GT1
             "LastDayGT1" and "LastDayUp" in chartink0 for buy opportunity
             "Crossed 2 Day Highs" and  "Crossed Day Highs" along with f10ch<-3
 
-    If no spike after 15-30 minute, and still up check for Buy
+    If no lower spike after 15-30 minute, and still up check for Buy
         "Crossed 2 Day Highs" and  "Crossed Day Highs" along with f10ch<-3
+
+    If down since morning, check crossed 2 Day chart after 10 to confirm down for the day.
+        If failed sqr off all sell positions by 12:00 PM
+
 
 
 Last 2 Day GT 1. Avoid Buy after 11:00 if already Up more than 1.
@@ -80,16 +90,6 @@ After 10:00
     Avoid Sell\Buy : Opened midcap in Plus GT 1 and moved more than -0.7 before 10:00 AM still in Green
 
 
-
-month3lowbreakout
-#################################
--2.5 < month3low < 2.5
-monthlow < -4
-monthlow < month3low - 3
-PCT_Day_change > -4
-_pre1 > -5
-_pre2 > -5
-morning volume
 
 
 
