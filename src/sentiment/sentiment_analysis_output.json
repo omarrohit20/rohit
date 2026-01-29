@@ -1,1 +1,409 @@
-[]
+[
+  {
+    "scrip": "LT",
+    "company": "Larsen & Toubro Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-30",
+          "Time": "01:00:00",
+          "headline": "Q3 Results On Jan 30: NTPC, Bank Of Baroda, Bajaj Auto, Jindal Steel — Check Estimates",
+          "link": "https://www.ndtvprofit.com/markets/q3-results-on-jan-30-ntpc-bank-of-baroda-bajaj-auto-jindal-steel-check-estimates-10909945#publisher=newsstand",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "02:00:00",
+          "headline": "Q3 Results Updates: Paytm Net Profit Jumped 91%; ITC, Container Corp Declared Dividend Even As Profits Slipped",
+          "link": "https://www.ndtvprofit.com/markets/q3-results-today-live-updates-itc-tata-motors-paytm-swiggy-vedanta-adani-power-rec-dabur-india-earnings-share-price-liveblog-10905029#publisher=newsstand",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "02:00:00",
+          "headline": "Bulk deal: Goldman Sachs trims Manappuram Finance stake; CLSA offloads Sunteck Realty shares",
+          "link": "https://economictimes.indiatimes.com/markets/stocks/news/bulk-deal-goldman-sachs-trims-manappuram-finance-stake-clsa-offloads-sunteck-realty-shares/articleshow/127781178.cms",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "03:00:00",
+          "headline": "Economic Survey points to decrease in agricultural growth in 2025-26",
+          "link": "https://www.thehindu.com/business/budget/economic-survey-points-to-decrease-in-agricultural-growth-in-2025-26/article70566328.ece",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "Sun Pharma Q3FY26 preview: Specialty drag eases, margins steady amid stable US, India growth",
+          "link": "https://www.moneycontrol.com/news/business/markets/sun-pharma-q3fy26-preview-specialty-drag-eases-margins-steady-amid-stable-us-india-growth-13798002.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "Big Tech results show investor demand for payoffs from heavy AI spending",
+          "link": "https://www.moneycontrol.com/news/business/companies/big-tech-results-show-investor-demand-for-payoffs-from-heavy-ai-spending-13798365.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "ITC Ltd's net profit rises 6% to Rs 5,088 crore in December quarter, announces interim dividend",
+          "link": "https://www.moneycontrol.com/news/business/markets/itc-posts-flat-net-profit-at-rs-5-088-crore-in-december-quarter-announces-interim-dividend-13798049.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "Tata Motors Q3 Results: Net profit falls 48% to Rs 705 crore on one-time cost, revenue up 16%",
+          "link": "https://www.moneycontrol.com/news/business/earnings/tata-motors-q3-results-net-profit-falls-48-to-rs-705-crore-on-one-time-cost-revenue-up-16-13797834.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "Swiggy Q3 results: Net loss widens to Rs 1,065 crore, revenue rises 54%",
+          "link": "https://www.moneycontrol.com/news/business/earnings/swiggy-q3-results-net-loss-widens-to-rs-1-065-crore-revenue-rises-54-13797647.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "NTPC",
+    "company": "NTPC Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-30",
+          "Time": "01:00:00",
+          "headline": "Q3 Results On Jan 30: NTPC, Bank Of Baroda, Bajaj Auto, Jindal Steel — Check Estimates",
+          "link": "https://www.ndtvprofit.com/markets/q3-results-on-jan-30-ntpc-bank-of-baroda-bajaj-auto-jindal-steel-check-estimates-10909945#publisher=newsstand",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "PAYTM",
+    "company": "One 97 Communications Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-30",
+          "Time": "02:00:00",
+          "headline": "Paytm Q3 PAT raises to ₹225 crore",
+          "link": "https://www.thehindu.com/business/paytm-q3-pat-raises-to-225-crore/article70566978.ece",
+          "impact": "Positive",
+          "severity": "High"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "02:00:00",
+          "headline": "Q3 Results Updates: Paytm Net Profit Jumped 91%; ITC, Container Corp Declared Dividend Even As Profits Slipped",
+          "link": "https://www.ndtvprofit.com/markets/q3-results-today-live-updates-itc-tata-motors-paytm-swiggy-vedanta-adani-power-rec-dabur-india-earnings-share-price-liveblog-10905029#publisher=newsstand",
+          "impact": "Positive",
+          "severity": "High"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "Paytm posts net profit of Rs 225 crore in December quarter, revenue up 20%",
+          "link": "https://www.moneycontrol.com/news/business/companies/paytm-posts-net-profit-of-rs-225-crore-in-december-quarter-revenue-up-20-13798061.html",
+          "impact": "Positive",
+          "severity": "High"
+        }
+      ],
+      "overall_sentiment": "Positive"
+    }
+  },
+  {
+    "scrip": "FACT",
+    "company": "Fertilisers and Chemicals Travancore Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-30",
+          "Time": "02:00:00",
+          "headline": "Manufacturing sector needs mission-based approach",
+          "link": "https://www.thehindu.com/business/manufacturing-sector-needs-mission-based-approach/article70567078.ece",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "02:30:00",
+          "headline": "Economic Survey 2026: Mobile Manufacturing Drives India Electronics Exports To Rs 5.12 Lakh Crore",
+          "link": "https://www.ndtvprofit.com/economy/economic-survey-2026-mobile-manufacturing-drives-india-electronics-exports-to-rs-5-12-lakh-crore-10909327#publisher=newsstand",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "ITC",
+    "company": "ITC Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-30",
+          "Time": "02:00:00",
+          "headline": "Q3 Results Updates: Paytm Net Profit Jumped 91%; ITC, Container Corp Declared Dividend Even As Profits Slipped",
+          "link": "https://www.ndtvprofit.com/markets/q3-results-today-live-updates-itc-tata-motors-paytm-swiggy-vedanta-adani-power-rec-dabur-india-earnings-share-price-liveblog-10905029#publisher=newsstand",
+          "impact": "Negative",
+          "severity": "Medium"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "02:30:00",
+          "headline": "Bitcoin Drops Below $86,000 As Traders Retreat From Risk Assets",
+          "link": "https://www.ndtvprofit.com/markets/bitcoin-drops-below-86-000-as-traders-retreat-from-risk-assets-10909303#publisher=newsstand",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "Bitcoin drops below $85,000 as traders retreat from risk assets",
+          "link": "https://www.moneycontrol.com/news/cryptocurrency/bitcoin-drops-below-85000-as-traders-retreat-from-risk-assets-13798424.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "ITC Ltd's net profit rises 6% to Rs 5,088 crore in December quarter, announces interim dividend",
+          "link": "https://www.moneycontrol.com/news/business/markets/itc-posts-flat-net-profit-at-rs-5-088-crore-in-december-quarter-announces-interim-dividend-13798049.html",
+          "impact": "Positive",
+          "severity": "Medium"
+        }
+      ],
+      "overall_sentiment": "Positive"
+    }
+  },
+  {
+    "scrip": "MANAPPURAM",
+    "company": "Manappuram Finance Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-30",
+          "Time": "02:00:00",
+          "headline": "Bulk deal: Goldman Sachs trims Manappuram Finance stake; CLSA offloads Sunteck Realty shares",
+          "link": "https://economictimes.indiatimes.com/markets/stocks/news/bulk-deal-goldman-sachs-trims-manappuram-finance-stake-clsa-offloads-sunteck-realty-shares/articleshow/127781178.cms",
+          "impact": "Negative",
+          "severity": "Medium"
+        }
+      ],
+      "overall_sentiment": "Negative"
+    }
+  },
+  {
+    "scrip": "BEL",
+    "company": "Bharat Electronics Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-30",
+          "Time": "02:30:00",
+          "headline": "Bitcoin Drops Below $86,000 As Traders Retreat From Risk Assets",
+          "link": "https://www.ndtvprofit.com/markets/bitcoin-drops-below-86-000-as-traders-retreat-from-risk-assets-10909303#publisher=newsstand",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "Bitcoin drops below $85,000 as traders retreat from risk assets",
+          "link": "https://www.moneycontrol.com/news/cryptocurrency/bitcoin-drops-below-85000-as-traders-retreat-from-risk-assets-13798424.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "BPCL",
+    "company": "Bharat Petroleum Corporation Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-30",
+          "Time": "03:00:00",
+          "headline": "BPCL Plans Singapore Trading Hub To Cut Costs And Boost Margins",
+          "link": "https://www.ndtvprofit.com/business/bpcl-plans-singapore-trading-hub-to-cut-costs-and-boost-margins-10909272#publisher=newsstand",
+          "impact": "Positive",
+          "severity": "Medium"
+        }
+      ],
+      "overall_sentiment": "Positive"
+    }
+  },
+  {
+    "scrip": "OIL",
+    "company": "Oil India Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-30",
+          "Time": "03:00:00",
+          "headline": "RIL To Resume Russian Oil Purchase From February, Report Says",
+          "link": "https://www.ndtvprofit.com/business/reliance-to-resume-russian-oil-purchase-from-february-report-says-10909219#publisher=newsstand",
+          "impact": "Negative",
+          "severity": "Medium"
+        }
+      ],
+      "overall_sentiment": "Negative"
+    }
+  },
+  {
+    "scrip": "UBL",
+    "company": "United Breweries Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-30",
+          "Time": "03:00:00",
+          "headline": "Economic Survey Flags 'AI-OS' Push To Make Artificial Intelligence A Public Good",
+          "link": "https://www.ndtvprofit.com/technology/economic-survey-flags-ai-os-push-to-make-artificial-intelligence-a-public-good-10909096#publisher=newsstand",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "Kasturi Metal Composite IPO subscribed 16.6 times on final day, listing likely scheduled next week",
+          "link": "https://www.moneycontrol.com/news/business/ipo/kasturi-metal-composite-ipo-subscribed-16-6-times-on-final-day-listing-likely-scheduled-next-week-13798393.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "ACC",
+    "company": "ACC Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-30",
+          "Time": "03:00:00",
+          "headline": "Airtel Subscribers Get Free Access to Adobe Express",
+          "link": "https://www.ndtvprofit.com/technology/airtel-subscribers-get-free-access-to-adobe-express-10909095#publisher=newsstand",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "Don’t fret a weak rupee, but don’t ignore it either, says Economic Survey 2026",
+          "link": "https://www.moneycontrol.com/news/opinion/economic-survey-2026-don-t-fret-a-weak-rupee-but-don-t-ignore-it-either-13797350.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "HAL",
+    "company": "Hindustan Aeronautics Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "Oracle’s value is cut in half from 2025 peak as AI caution rises",
+          "link": "https://www.moneycontrol.com/technology/oracle-s-value-is-cut-in-half-from-2025-peak-as-ai-caution-rises-article-13798448.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "ACE",
+    "company": "Action Construction Equipment Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "China’s metals mania sends copper soaring past $14,500 a ton",
+          "link": "https://www.moneycontrol.com/news/business/markets/china-s-metals-mania-sends-copper-soaring-past-14-500-a-ton-13798449.html",
+          "impact": "Positive",
+          "severity": "Medium"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "Sun Pharma Q3FY26 preview: Specialty drag eases, margins steady amid stable US, India growth",
+          "link": "https://www.moneycontrol.com/news/business/markets/sun-pharma-q3fy26-preview-specialty-drag-eases-margins-steady-amid-stable-us-india-growth-13798002.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        },
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "Technical View: 3-day rally emboldens Nifty bulls to target 25,600, Bank Nifty eyes record high but needs to sustain above 60k as VIX drops further",
+          "link": "https://www.moneycontrol.com/news/business/markets/technical-view-3-day-rally-emboldens-nifty-bulls-to-target-25-600-bank-nifty-eyes-record-high-but-needs-to-sustain-above-60k-as-vix-drops-further-13797832.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "MCX",
+    "company": "Multi Commodity Exchange of India Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "MCX hikes strike price interval for silver, silver mini options to Rs 1,000",
+          "link": "https://www.moneycontrol.com/news/business/markets/mcx-hikes-strike-price-interval-for-silver-silver-mini-options-to-rs-1-000-13797591.html",
+          "impact": "Neutral",
+          "severity": "Low"
+        }
+      ],
+      "overall_sentiment": "Neutral"
+    }
+  },
+  {
+    "scrip": "SWIGGY",
+    "company": "Swiggy Ltd.",
+    "news_analysis": {
+      "news": [
+        {
+          "Date": "2026-01-30",
+          "Time": "00:27:32",
+          "headline": "Swiggy Q3 results: Net loss widens to Rs 1,065 crore, revenue rises 54%",
+          "link": "https://www.moneycontrol.com/news/business/earnings/swiggy-q3-results-net-loss-widens-to-rs-1-065-crore-revenue-rises-54-13797647.html",
+          "impact": "Negative",
+          "severity": "Medium"
+        }
+      ],
+      "overall_sentiment": "Negative"
+    }
+  }
+]

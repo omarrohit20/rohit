@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 NSE Stock Sentiment Analysis Dashboard</h1>
+            <p class="subtitle">Real-time sentiment analysis of NSE 500 stocks based on news articles</p>
+        </header>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="card positive-card">
+                <div class="card-icon">📈</div>
+                <div class="card-content">
+                    <h3>Positive</h3>
+                    <p class="count" id="positive-count">0</p>
+                    <span class="label">Stocks</span>
+                </div>
+            </div>
+            <div class="card negative-card">
+                <div class="card-icon">📉</div>
+                <div class="card-content">
+                    <h3>Negative</h3>
+                    <p class="count" id="negative-count">0</p>
+                    <span class="label">Stocks</span>
+                </div>
+            </div>
+            <div class="card neutral-card">
+                <div class="card-icon">➖</div>
+                <div class="card-content">
+                    <h3>Neutral</h3>
+                    <p class="count" id="neutral-count">0</p>
+                    <span class="label">Stocks</span>
+                </div>
+            </div>
+            <div class="card total-card">
+                <div class="card-icon">📋</div>
+                <div class="card-content">
+                    <h3>Total</h3>
+                    <p class="count" id="total-count">0</p>
+                    <span class="label">Stocks</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="Positive">Positive</button>
+            <button class="filter-btn" data-filter="Negative">Negative</button>
+            <button class="filter-btn" data-filter="Neutral">Neutral</button>
+            <input type="text" id="search-box" placeholder="Search by Scrip or Company..." />
+        </div>
+
+        <!-- Stocks List -->
+        <div class="stocks-container">
+            <div id="stocks-list"></div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading data...</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
