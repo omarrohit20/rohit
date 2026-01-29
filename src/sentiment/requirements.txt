@@ -4,3 +4,6 @@ requests
 python-dateutil
 groq
 pymongo
+streamlit
+plotly
+pandas

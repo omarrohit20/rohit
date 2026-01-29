@@ -804,6 +804,7 @@ def main():
         try:
             filtered_df = df[
                 #(~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                (df['PCT_day_change'] < 1.3) &
                 ((df['mlData'].str.contains("MLBuy0")) | (df['mlData'].str.contains("MLBuy1")) | (df['mlData'].str.contains("MLBuy2"))) &
                 (df['lowTail'] < 2)
                 ]
@@ -834,7 +835,14 @@ def main():
                     ~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False) &
                     ~df['systemtime'].str.contains('10:', case=False, regex=True, na=False) &
                     (df['lowTail'] < 2)
-                ))
+                )
+                |
+                (
+                    (df['PCT_day_change'] >= 1.3) &
+                    ((df['mlData'].str.contains("MLBuy0")) | (df['mlData'].str.contains("MLBuy1")) | (df['mlData'].str.contains("MLBuy2"))) &
+                    (df['lowTail'] < 2)
+                )
+                )
                 ]
         except KeyError as e:
             print("")
@@ -864,6 +872,7 @@ def main():
         try:
             filtered_df = df[
                 #(~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                (df['PCT_day_change'] > -1.3) &
                 (((df['mlData'].str.contains("MLSell0")) | (df['mlData'].str.contains("MLSell1")) | (df['mlData'].str.contains("MLSell2")))) & 
                 (df['highTail'] < 2)
                 ]
@@ -895,6 +904,12 @@ def main():
                         ~df['systemtime'].str.contains('10:', case=False, regex=True, na=False) &
                         (df['highTail'] < 2)
                     )
+                    |
+                    (
+                        (df['PCT_day_change'] <= -1.3) &
+                        (((df['mlData'].str.contains("MLSell0")) | (df['mlData'].str.contains("MLSell1")) | (df['mlData'].str.contains("MLSell2")))) & 
+                        (df['highTail'] < 2)
+                    )
                 )
             ]
         except KeyError as e:
@@ -912,7 +927,7 @@ def main():
         try:
             filtered_df = df[
                 (df['PCT_day_change'] > -1) &
-                (df['PCT_day_change'] < 2) &
+                (df['PCT_day_change'] < 1) &
                 (df['PCT_day_change_pre1'] > -2) &
                 (df['forecast_day_PCT10_change'] > -2) &
                 (df['forecast_day_PCT7_change'] > -1) &
@@ -929,6 +944,8 @@ def main():
         try:
             filtered_df = df[
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+                (df['PCT_day_change'] > -4) &
+                ((df['PCT_day_change'] < -2) | (df['PCT_day_change_pre1'] < -2) | (df['PCT_day_change_pre2'] < -2)) &
                 (df['forecast_day_PCT10_change'] < -6) &
                 (df['forecast_day_PCT7_change'] < -6) &
                 (df['forecast_day_PCT5_change'] < -6) 
@@ -942,7 +959,7 @@ def main():
         try:
             filtered_df = df[
                 (df['PCT_day_change'] < 1) &
-                (df['PCT_day_change'] > -2) &
+                (df['PCT_day_change'] > -1) &
                 (df['PCT_day_change_pre1'] < 2) &
                 (df['forecast_day_PCT10_change'] < 2) &
                 (df['forecast_day_PCT7_change'] < 1) &
@@ -959,6 +976,8 @@ def main():
         try:
             filtered_df = df[
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+                (df['PCT_day_change'] < 4) &
+                ((df['PCT_day_change'] > 2) | (df['PCT_day_change_pre1'] > 2) | (df['PCT_day_change_pre2'] > 2)) &
                 (df['forecast_day_PCT10_change'] > 6) &
                 (df['forecast_day_PCT7_change'] > 6) &
                 (df['forecast_day_PCT5_change'] > 6)
@@ -974,8 +993,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (df['month3HighChange'] > -2.5) &
-                (df['monthHighChange'] > 4) &
+                (df['month3HighChange'] < 2.5) &
+                (df['monthHighChange'] > 0) &
                 (df['PCT_day_change'] < 4) &
                 (df['PCT_day_change_pre1'] < 5) &
                 (df['PCT_day_change_pre2'] < 5) &
@@ -999,6 +1018,8 @@ def main():
                 (df['PCT_day_change_pre1'] < 5) &
                 (df['PCT_day_change_pre2'] < 5) &
                 (df['PCT_day_change'] > -1.5) &
+                (df['PCT_day_change'] < 1.5) &
+                ((df['PCT_change'] > 1) | (df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
                 (df['month3LowChange'] < (df['monthLowChange'] - 10)) &
                 (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))   
                 ]
@@ -1034,7 +1055,9 @@ def main():
                 (df['PCT_day_change'] > -4) &
                 (df['PCT_day_change_pre1'] > -5) &
                 (df['PCT_day_change_pre2'] > -5) &
+                (df['PCT_day_change'] > -1.5) &
                 (df['PCT_day_change'] < 1.5) &
+                ((df['PCT_change'] < -1) | (df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
                 (df['month3LowChange'] > (df['monthLowChange'] + 10)) &
                 (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))  
                 ]

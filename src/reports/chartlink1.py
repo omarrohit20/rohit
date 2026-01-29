@@ -247,6 +247,7 @@ def main():
             filtered_df = df[
                 (df['week2HighChange'] > -1) &
                 (df['monthHighChange'] < 5) &
+                (df['PCT_day_change'] < 3) &
                 (df['PCT_day_change'] > -1.5) &
                 (~df['filter5'].str.contains('BothGT2', case=False, regex=True, na=False)) &
                 (df['lowTail'] < 1.5) &
@@ -289,6 +290,7 @@ def main():
             filtered_df = df[
                 (df['week2LowChange'] < 0) &
                 (df['monthLowChange'] > -5) &
+                (df['PCT_day_change'] > -3) &
                 (df['PCT_day_change'] < 1.3) &
                 (~df['filter5'].str.contains('BothLT-2', case=False, regex=True, na=False)) &
                 (df['highTail'] < 1.5) &

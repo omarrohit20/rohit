@@ -576,6 +576,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['PCT_day_change'] < 2) &
                 (df['forecast_day_PCT10_change'] > -9) &
                 (df['mlData'].str.contains("0@@"))
             ]
@@ -587,6 +588,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['PCT_day_change'] > -2) &
                 (df['forecast_day_PCT10_change'] < 9) &
                 (df['mlData'].str.contains("0@@"))
             ]
