@@ -1,7 +1,8 @@
 import os
 
 # Groq API Configuration
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "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")
+
 # Updated to use currently supported model
 GROQ_MODEL = "llama-3.3-70b-versatile"  # Alternative: "mixtral-8x7b-32768" or "gemma2-9b-it"
 

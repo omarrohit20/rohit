@@ -1,4 +1,8 @@
 first 30 - 45 minutes moved more than abs(1.5) in trending market avoid trading
+Opened LT -1 and going up If spike rally sustained check for Buy
+    "Crossed 2 Day Highs"(must check primarily to have more than 2 and exponential grow) and "'supertrend-morningdown-buy'" 
+Opened GT 1 and going down If brakdown rally sustained check for Sell
+    "Crossed 2 Day Lows"(must check primarily to have more than 2 and exponential grow) and "'supertrend-morningdown-buy'" 
 
 Last Day LT-1
     wait 15 minute
