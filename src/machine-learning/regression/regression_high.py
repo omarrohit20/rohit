@@ -42,6 +42,10 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import StackingClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import VotingRegressor
+from xgboost import XGBRegressor
+from lightgbm import LGBMRegressor
+from catboost import CatBoostRegressor
 
 
 
@@ -72,12 +76,14 @@ dR = 1
 def get_data_frame(df, regressor='None', type='reg'):
     dfp = None
     if (df is not None):
-        #dfp = df[['PCT_day_change', 'HL_change', 'CL_change', 'CH_change', 'OL_change', 'OH_change']]
-        dfp = df[['PCT_day_change']]
+        #dfp = df[['PCT_day_change', 'PCT_day_LH', 'PCT_day_LC', 'PCT_day_CH', 'PCT_day_OL', 'PCT_day_HO']]
+        dfp = df[['PCT_day_change', 'PCT_day_LH']]
+        #dfp = df[['PCT_day_change']]
         if regressor == 'kn':
             #dfp['PCT_change'] = df['PCT_change']
             dfp['high_tail_pct'] = df['high_tail_pct']
             dfp['low_tail_pct'] = df['low_tail_pct']
+            #dfp['VOL_change'] = df['VOL_change']
             #dfp['bar_high'] = df['bar_high']
             #dfp['bar_low'] = df['bar_low']
 #         dfp.loc[df['VOL_change'] > 20, 'VOL_change'] = 1
@@ -118,138 +124,166 @@ def get_data_frame(df, regressor='None', type='reg'):
         if regressor != 'mlp':      
             dfp['ADX'] = ADX(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index http://www.investopedia.com/terms/a/adx.asp
             dfp['ADXR'] = ADXR(df).apply(lambda x: 1 if x > 20 else 0) #Average Directional Movement Index Rating https://www.scottrade.com/knowledge-center/investment-education/research-analysis/technical-analysis/the-indicators/average-directional-movement-index-rating-adxr.html
-        dfp['APO'] = APO(df).apply(lambda x: 1 if x > 0 else 0) #Absolute Price Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/apo
-#         aroon = AROON(df) #Aroon http://www.investopedia.com/terms/a/aroon.asp
-#         dfp['AROONUP'], dfp['AROONDOWN'] = aroon['aroonup'], aroon['aroondown']
-        dfp['AROONOSC'] = AROONOSC(df).apply(lambda x: 1 if x > 0 else 0)
-        dfp['BOP'] = BOP(df).apply(lambda x: 1 if x > 0 else 0) #Balance Of Power https://www.marketvolume.com/technicalanalysis/balanceofpower.asp
-#         dfp['CCI'] = CCI(df) #Commodity Channel Index http://www.investopedia.com/articles/trading/05/041805.asp
-#         dfp['CMO'] = CMO(df) #Chande Momentum Oscillator https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/cmo
-#         dfp['DX'] = DX(df) #Directional Movement Index http://www.investopedia.com/terms/d/dmi.asp
-#         macd = MACD(df)
-#         dfp['MACD'], dfp['MACDSIGNAL'], dfp['MACDHIST'] = macd['macd'], macd['macdsignal'], macd['macdhist']
-#         #dfp['MACDEXT'] = MACDEXT(df)
-#         #dfp['MACDFIX'] = MACDFIX(df)
-#         dfp['MFI'] = MFI(df)
-#         dfp['MINUS_DI'] = MINUS_DI(df)
-#         dfp['MINUS_DM'] = MINUS_DM(df)
-#         dfp['MOM'] = MOM(df)
-#         dfp['PLUS_DI'] = PLUS_DI(df)
-#         dfp['PLUS_DM'] = PLUS_DM(df)
-#         dfp['PPO'] = PPO(df)
-#         dfp['ROC'] = ROC(df)
-#         dfp['ROCP'] = ROCP(df)
-#         dfp['ROCR'] = ROCR(df)
-#         dfp['ROCR100'] = ROCR100(df)
-#        dfp['RSI'] = RSI(df)
-        #dfp['STOCH'] = STOCH(df)
-        #dfp['STOCHF'] = STOCHF(df)
-        #dfp['STOCHRSI'] = STOCHRSI(df)
-#         dfp['TRIX'] = TRIX(df)
-#         dfp['ULTOSC'] = ULTOSC(df)
-#         dfp['WILLR'] = WILLR(df)
-#         
-#         bbands = BBANDS(df)
-#         dfp['BBANDSUPPER'], dfp['BBANDSMIDDLE'], dfp['BBANDSLOWER'] = bbands['upperband'], bbands['middleband'], bbands['lowerband']
-#         
-# #       dfp['DEMA'] = DEMA(df)
-#         dfp['EMA9'] = EMA(df,9)
-#         dfp['EMA21'] = EMA(df,21)
-#         dfp['EMA25'] = EMA(df,25)
-#         dfp['EMA50'] = EMA(df,50)
-#         dfp['EMA100'] = EMA(df,100)
-#         dfp['EMA200'] = EMA(df,200)
-#         dfp['HT_TRENDLINE'] = HT_TRENDLINE(df)
-#         dfp['KAMA'] = KAMA(df)
-#         dfp['MA'] = MA(df)
-#         #dfp['MAMA'] = MAMA(df)
-#         #dfp['MAVP'] = MAVP(df)
-#         dfp['MIDPOINT'] = MIDPOINT(df)
-#         dfp['MIDPRICE'] = MIDPRICE(df)
-#         dfp['SAR'] = SAR(df)
-#         dfp['SAREXT'] = SAREXT(df)
-#         dfp['SMA'] = SMA(df)
-#         dfp['SMA9'] = SMA(df, 9)
-#         dfp['T3'] = T3(df)
-#         dfp['TEMA'] = TEMA(df)
-#         dfp['TRIMA'] = TRIMA(df)
-#         dfp['WMA'] = WMA(df)
+        # Pre-calculate indicators that return multiple values
+        aroon = AROON(df)
+        macd = MACD(df)
+        bbands = BBANDS(df)
+        stoch = STOCH(df)
+        stochf = STOCHF(df)
+        stochrsi = STOCHRSI(df)
+        mama = MAMA(df)
 
+        # Collect all indicators in a dictionary
+        indicators = {
+            # Momentum Indicators
+            # 'APO': APO(df).apply(lambda x: 1 if x > 0 else 0),
+            # 'AROONUP': aroon['aroonup'],
+            # 'AROONDOWN': aroon['aroondown'],
+            # 'AROONOSC': AROONOSC(df).apply(lambda x: 1 if x > 0 else 0),
+            # 'BOP': BOP(df).apply(lambda x: 1 if x > 0 else 0),
+            # 'CCI': CCI(df),
+            # 'CMO': CMO(df),
+            # 'DX': DX(df),
+            'MACD': macd['macd'],
+            # 'MACDSIGNAL': macd['macdsignal'],
+            # 'MACDHIST': macd['macdhist'],
+            # 'MACDEXT': MACDEXT(df),
+            # 'MACDFIX': MACDFIX(df),
+            # 'MFI': MFI(df),
+            # 'MINUS_DI': MINUS_DI(df),
+            # 'MINUS_DM': MINUS_DM(df),
+            # 'MOM': MOM(df),
+            # 'PLUS_DI': PLUS_DI(df),
+            # 'PLUS_DM': PLUS_DM(df),
+            # 'PPO': PPO(df),
+            # 'ROC': ROC(df),
+            # 'ROCP': ROCP(df),
+            # 'ROCR': ROCR(df),
+            # 'ROCR100': ROCR100(df),
+            # 'RSI': RSI(df),
+            # 'STOCH_K': stoch['slowk'],
+            # 'STOCH_D': stoch['slowd'],
+            # 'STOCHF_K': stochf['fastk'],
+            # 'STOCHF_D': stochf['fastd'],
+            # 'STOCHRSI_K': stochrsi['fastk'],
+            # 'STOCHRSI_D': stochrsi['fastd'],
+            # 'TRIX': TRIX(df),
+            # 'ULTOSC': ULTOSC(df),
+            # 'WILLR': WILLR(df),
+            
+            # # Bollinger Bands
+            # 'BBANDSUPPER': bbands['upperband'],
+            # 'BBANDSMIDDLE': bbands['middleband'],
+            # 'BBANDSLOWER': bbands['lowerband'],
+            
+            # Overlap Studies
+            'DEMA': DEMA(df),
+            'EMA9': EMA(df, 9),
+            'EMA21': EMA(df, 21),
+            'EMA25': EMA(df, 25),
+            'EMA50': EMA(df, 50),
+            'EMA100': EMA(df, 100),
+            'EMA200': EMA(df, 200),
+            # 'HT_TRENDLINE': HT_TRENDLINE(df),
+            # 'KAMA': KAMA(df),
+            # 'MA': MA(df),
+            # 'MAMA': mama['mama'],
+            # 'FAMA': mama['fama'],
+            # 'MAVP': MAVP(df),
+            # 'MIDPOINT': MIDPOINT(df),
+            # 'MIDPRICE': MIDPRICE(df),
+            # 'SAR': SAR(df),
+            # 'SAREXT': SAREXT(df),
+            # 'SMA': SMA(df),
+            # 'SMA9': SMA(df, 9),
+            # 'T3': T3(df),
+            # 'TEMA': TEMA(df),
+            # 'TRIMA': TRIMA(df),
+            # 'WMA': WMA(df),
+            
+            # Candlestick Patterns
+            'CDL2CROWS': CDL2CROWS(df),
+            'CDL3BLACKCROWS': CDL3BLACKCROWS(df),
+            'CDL3INSIDE': CDL3INSIDE(df),
+            'CDL3LINESTRIKE': CDL3LINESTRIKE(df),
+            'CDL3OUTSIDE': CDL3OUTSIDE(df),
+            'CDL3STARSINSOUTH': CDL3STARSINSOUTH(df),
+            'CDL3WHITESOLDIERS': CDL3WHITESOLDIERS(df),
+            'CDLABANDONEDBABY': CDLABANDONEDBABY(df),
+            'CDLADVANCEBLOCK': CDLADVANCEBLOCK(df),
+            'CDLBELTHOLD': CDLBELTHOLD(df),
+            'CDLBREAKAWAY': CDLBREAKAWAY(df),
+            'CDLCLOSINGMARUBOZU': CDLCLOSINGMARUBOZU(df),
+            'CDLCONCEALBABYSWALL': CDLCONCEALBABYSWALL(df),
+            'CDLCOUNTERATTACK': CDLCOUNTERATTACK(df),
+            'CDLDARKCLOUDCOVER': CDLDARKCLOUDCOVER(df),
+            'CDLDOJI': CDLDOJI(df),
+            'CDLDOJISTAR': CDLDOJISTAR(df),
+            'CDLDRAGONFLYDOJI': CDLDRAGONFLYDOJI(df),
+            'CDLENGULFING': CDLENGULFING(df),
+            'CDLEVENINGDOJISTAR': CDLEVENINGDOJISTAR(df),
+            'CDLEVENINGSTAR': CDLEVENINGSTAR(df),
+            'CDLGAPSIDESIDEWHITE': CDLGAPSIDESIDEWHITE(df),
+            'CDLGRAVESTONEDOJI': CDLGRAVESTONEDOJI(df),
+            'CDLHAMMER': CDLHAMMER(df),
+            'CDLHANGINGMAN': CDLHANGINGMAN(df),
+            'CDLHARAMI': CDLHARAMI(df),
+            'CDLHARAMICROSS': CDLHARAMICROSS(df),
+            'CDLHIGHWAVE': CDLHIGHWAVE(df),
+            'CDLHIKKAKE': CDLHIKKAKE(df),
+            'CDLHIKKAKEMOD': CDLHIKKAKEMOD(df),
+            'CDLHOMINGPIGEON': CDLHOMINGPIGEON(df),
+            'CDLIDENTICAL3CROWS': CDLIDENTICAL3CROWS(df),
+            'CDLINNECK': CDLINNECK(df),
+            'CDLINVERTEDHAMMER': CDLINVERTEDHAMMER(df),
+            'CDLKICKING': CDLKICKING(df),
+            'CDLKICKINGBYLENGTH': CDLKICKINGBYLENGTH(df),
+            'CDLLADDERBOTTOM': CDLLADDERBOTTOM(df),
+            'CDLLONGLEGGEDDOJI': CDLLONGLEGGEDDOJI(df),
+            'CDLLONGLINE': CDLLONGLINE(df),
+            'CDLMARUBOZU': CDLMARUBOZU(df),
+            'CDLMATCHINGLOW': CDLMATCHINGLOW(df),
+            'CDLMATHOLD': CDLMATHOLD(df),
+            'CDLMORNINGDOJISTAR': CDLMORNINGDOJISTAR(df),
+            'CDLMORNINGSTAR': CDLMORNINGSTAR(df),
+            'CDLONNECK': CDLONNECK(df),
+            'CDLPIERCING': CDLPIERCING(df),
+            'CDLRICKSHAWMAN': CDLRICKSHAWMAN(df),
+            'CDLRISEFALL3METHODS': CDLRISEFALL3METHODS(df),
+            'CDLSEPARATINGLINES': CDLSEPARATINGLINES(df),
+            'CDLSHOOTINGSTAR': CDLSHOOTINGSTAR(df),
+            'CDLSHORTLINE': CDLSHORTLINE(df),
+            'CDLSPINNINGTOP': CDLSPINNINGTOP(df),
+            'CDLSTALLEDPATTERN': CDLSTALLEDPATTERN(df),
+            'CDLSTICKSANDWICH': CDLSTICKSANDWICH(df),
+            'CDLTAKURI': CDLTAKURI(df),
+            'CDLTASUKIGAP': CDLTASUKIGAP(df),
+            'CDLTHRUSTING': CDLTHRUSTING(df),
+            'CDLTRISTAR': CDLTRISTAR(df),
+            'CDLUNIQUE3RIVER': CDLUNIQUE3RIVER(df),
+            'CDLUPSIDEGAP2CROWS': CDLUPSIDEGAP2CROWS(df),
+            'CDLXSIDEGAP3METHODS': CDLXSIDEGAP3METHODS(df),
+            
+            # Price Transform
+            'AVGPRICE': AVGPRICE(df),
+            # 'MEDPRICE': MEDPRICE(df),
+            # 'TYPPRICE': TYPPRICE(df),
+            # 'WCLPRICE': WCLPRICE(df),
+            
+            # Volatility Indicators
+            'ATR': ATR(df),
+            'NATR': NATR(df),
+            'TRANGE': TRANGE(df),
+            
+            # Volume Indicators
+            'AD': AD(df),
+            'ADOSC': ADOSC(df),
+            'OBV': OBV(df)
+        }
 
-#        dfp['CDL2CROWS'] = CDL2CROWS(df)
-#        dfp['CDL3BLACKCROWS'] = CDL3BLACKCROWS(df)
-#        dfp['CDL3INSIDE'] = CDL3INSIDE(df)
-#        dfp['CDL3LINESTRIKE'] = CDL3LINESTRIKE(df)
-#        dfp['CDL3OUTSIDE'] = CDL3OUTSIDE(df)
-#        dfp['CDL3STARSINSOUTH'] = CDL3STARSINSOUTH(df)
-        dfp['CDL3WHITESOLDIERS'] = CDL3WHITESOLDIERS(df)
-        dfp['CDLABANDONEDBABY'] = CDLABANDONEDBABY(df)
-        dfp['CDLADVANCEBLOCK'] = CDLADVANCEBLOCK(df) #Bearish reversal. prior trend Upward. Look for three white candles in an upward price trend. On each candle, price opens within the body of the previous candle. The height of the shadows grow taller on the last two candles.
-        dfp['CDLBELTHOLD'] = CDLBELTHOLD(df) # Bearish reversal. prior trend upward. Price opens at the high for the day and closes near the low, forming a tall black candle, often with a small lower shadow.
-        dfp['CDLBREAKAWAY'] = CDLBREAKAWAY(df) # Bearish reversal. prior trend upward. Look for 5 candle lines in an upward price trend with the first candle being a tall white one. The second day should be a white candle with a gap between the two bodies, but the shadows can overlap. Day three should have a higher close and the candle can be any color. Day 4 shows a white candle with a higher close. The last day is a tall black candle with a close within the gap between the bodies of the first two candles.
-        dfp['CDLCLOSINGMARUBOZU'] = CDLCLOSINGMARUBOZU(df)
-        dfp['CDLCONCEALBABYSWALL'] = CDLCONCEALBABYSWALL(df)
-        dfp['CDLCOUNTERATTACK'] = CDLCOUNTERATTACK(df)
-        dfp['CDLDARKCLOUDCOVER'] = CDLDARKCLOUDCOVER(df)
-        dfp['CDLDOJI'] = CDLDOJI(df)
-        dfp['CDLDOJISTAR'] = CDLDOJISTAR(df)
-        dfp['CDLDRAGONFLYDOJI'] = CDLDRAGONFLYDOJI(df)
-        dfp['CDLENGULFING'] = CDLENGULFING(df)
-        dfp['CDLEVENINGDOJISTAR'] = CDLEVENINGDOJISTAR(df)
-        dfp['CDLEVENINGSTAR'] = CDLEVENINGSTAR(df)
-        dfp['CDLGAPSIDESIDEWHITE'] = CDLGAPSIDESIDEWHITE(df)
-        dfp['CDLGRAVESTONEDOJI'] = CDLGRAVESTONEDOJI(df)
-        dfp['CDLHAMMER'] = CDLHAMMER(df)
-        dfp['CDLHANGINGMAN'] = CDLHANGINGMAN(df)
-        dfp['CDLHARAMI'] = CDLHARAMI(df)
-        dfp['CDLHARAMICROSS'] = CDLHARAMICROSS(df)
-        dfp['CDLHIGHWAVE'] = CDLHIGHWAVE(df)
-        dfp['CDLHIKKAKE'] = CDLHIKKAKE(df)
-        dfp['CDLHIKKAKEMOD'] = CDLHIKKAKEMOD(df)
-        dfp['CDLHOMINGPIGEON'] = CDLHOMINGPIGEON(df)
-        dfp['CDLIDENTICAL3CROWS'] = CDLIDENTICAL3CROWS(df)
-        dfp['CDLINNECK'] = CDLINNECK(df)
-        dfp['CDLINVERTEDHAMMER'] = CDLINVERTEDHAMMER(df)
-        dfp['CDLKICKING'] = CDLKICKING(df)
-        dfp['CDLKICKINGBYLENGTH'] = CDLKICKINGBYLENGTH(df)
-        dfp['CDLLADDERBOTTOM'] = CDLLADDERBOTTOM(df)
-        dfp['CDLLONGLEGGEDDOJI'] = CDLLONGLEGGEDDOJI(df)
-        dfp['CDLLONGLINE'] = CDLLONGLINE(df)
-        dfp['CDLMARUBOZU'] = CDLMARUBOZU(df)
-        dfp['CDLMATCHINGLOW'] = CDLMATCHINGLOW(df)
-        dfp['CDLMATHOLD'] = CDLMATHOLD(df)
-        dfp['CDLMORNINGDOJISTAR'] = CDLMORNINGDOJISTAR(df)
-        dfp['CDLMORNINGSTAR'] = CDLMORNINGSTAR(df)
-        dfp['CDLONNECK'] = CDLONNECK(df)
-        dfp['CDLPIERCING'] = CDLPIERCING(df)
-        dfp['CDLRICKSHAWMAN'] = CDLRICKSHAWMAN(df)
-        dfp['CDLRISEFALL3METHODS'] = CDLRISEFALL3METHODS(df)
-        dfp['CDLSEPARATINGLINES'] = CDLSEPARATINGLINES(df)
-        dfp['CDLSHOOTINGSTAR'] = CDLSHOOTINGSTAR(df)
-        dfp['CDLSHORTLINE'] = CDLSHORTLINE(df)
-        dfp['CDLSPINNINGTOP'] = CDLSPINNINGTOP(df)
-        dfp['CDLSTALLEDPATTERN'] = CDLSTALLEDPATTERN(df)
-        dfp['CDLSTICKSANDWICH'] = CDLSTICKSANDWICH(df)
-        dfp['CDLTAKURI'] = CDLTAKURI(df)
-        dfp['CDLTASUKIGAP'] = CDLTASUKIGAP(df)
-        dfp['CDLTHRUSTING'] = CDLTHRUSTING(df)
-        dfp['CDLTRISTAR'] = CDLTRISTAR(df)
-        dfp['CDLUNIQUE3RIVER'] = CDLUNIQUE3RIVER(df)
-        dfp['CDLUPSIDEGAP2CROWS'] = CDLUPSIDEGAP2CROWS(df)
-        dfp['CDLXSIDEGAP3METHODS'] = CDLXSIDEGAP3METHODS(df)
-
-#         dfp['AVGPRICE'] = AVGPRICE(df)
-#         dfp['MEDPRICE'] = MEDPRICE(df)
-#         dfp['TYPPRICE'] = TYPPRICE(df)
-#         dfp['WCLPRICE'] = WCLPRICE(df)
-# 
-# #         dfp['ATR'] = ATR(df)
-# #         dfp['NATR'] = NATR(df)
-# #         dfp['TRANGE'] = TRANGE(df)
-#         
-#        dfp['AD'] = AD(df)
-#        dfp['ADOSC'] = ADOSC(df)
-#        dfp['OBV'] = OBV(df)
+        # Create DataFrame from all indicators and concat at once
+        indicators_df = pd.DataFrame(indicators)
+        dfp = pd.concat([dfp, indicators_df], axis=1)
         #if (regressor == 'kn' and (int(np.floor(dfp.shape[0])) > 1300)):
         dfp = dfp.loc[50:] 
         dfp.dropna(inplace=True)   
@@ -293,9 +327,56 @@ def process_regression_high(scrip, dfraw, directory, run_ml_algo, TEST=False):
         regression_data['kNeighboursValue_reg'] = float(0)
             
     if (mlp and run_ml_algo):
-        dfp = get_data_frame(df, 'mlp', 'reg')
+        dfp = get_data_frame(df, 'kn', 'reg')
         #result = performRegression(dfp, split, scrip, directory, forecast_out, MLPRegressor(random_state=0, activation='tanh', solver='adam', max_iter=1000, hidden_layer_sizes=(57, 39, 27)))
-        result = performRegression(dfp, split, scrip, directory, forecast_out, Pipeline([('scaler', StandardScaler()), ('mlp', MLPRegressor(hidden_layer_sizes=(100,50), activation='relu', solver='adam', max_iter=500, random_state=0))]))
+        # Create ensemble of top 3 models
+        # ensemble = VotingRegressor([
+        #     ('xgb', XGBRegressor(
+        #         n_estimators=1000,
+        #         learning_rate=0.01,
+        #         max_depth=7,
+        #         random_state=42
+        #     )),
+        #     ('lgbm', LGBMRegressor(
+        #         n_estimators=1000,
+        #         learning_rate=0.01,
+        #         num_leaves=31,
+        #         random_state=42,
+        #         verbose=-1
+        #     )),
+        #     ('catboost', CatBoostRegressor(
+        #         iterations=1000,
+        #         learning_rate=0.01,
+        #         depth=7,
+        #         random_seed=42,
+        #         verbose=False
+        #     ))
+        # ])
+
+        # performRegression(dfp, split, scrip, directory, forecast_out,
+        #     Pipeline([
+        #         ('scaler', StandardScaler()),
+        #         ('ensemble', ensemble)
+        #     ])
+        # )
+        result = performRegression(dfp, split, scrip, directory, forecast_out,
+            Pipeline([
+                ('scaler', StandardScaler()),
+                ('lgbm', LGBMRegressor(
+                    n_estimators=1000,
+                    learning_rate=0.01,
+                    num_leaves=31,
+                    max_depth=7,
+                    min_child_samples=20,
+                    subsample=0.8,
+                    colsample_bytree=0.8,
+                    reg_alpha=0.1,
+                    reg_lambda=0.1,
+                    random_state=42,
+                    verbose=-1
+                ))
+            ])
+        )
         regression_data['mlpValue_reg'] = float(result[0])
     else:
         regression_data['mlpValue_reg'] = float(0)
