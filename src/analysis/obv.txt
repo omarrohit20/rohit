@@ -1,4 +1,18 @@
-first 30 - 45 minutes moved more than abs(1.5) in trending market avoid trading
+Avoid Crossed Day High\Low in non trending up or down
+Avoid yellow marked Heavy Up\Down f10 change more than 9 for short-cover or profit-book trade
+Avoid trading moved more than abs(1.5) first 30 - 45 minutes in trending market
+
+Breakout Buy\Sell After 10
+Buy
+    If lastday stock price LT -2 and UP less than 2 then buy can be done immediately or wait till 10 AM
+    Up greater than 4 wait till 10 AM down consolidation or up reversal
+Sell
+    If lastday stock price GT 2 and today down greater than -2 then sell can be done immediately otherwise wait till 10:00
+    Up less than -4 wait till 10 AM up consolidation or down reversal
+            
+
+
+
 Opened LT -1 and going up If spike rally sustained check for Buy
     "Crossed 2 Day Highs"(must check primarily to have more than 2 and exponential grow) and "'supertrend-morningdown-buy'" 
 Opened GT 1 and going down If brakdown rally sustained check for Sell
