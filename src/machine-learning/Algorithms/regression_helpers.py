@@ -44,7 +44,7 @@ log = logging.getLogger(__name__)
 import gc
 import time
 
-plotgraph = True
+plotgraph = False
 memoize_data = {}
 plt.switch_backend('Agg')
 
