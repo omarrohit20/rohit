@@ -26,7 +26,6 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((abs(df['monthLowChange']) > 3) | (abs(df['monthHighChange']) > 3)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 ((df['PCT_day_change'] < 0.5) | (df['PCT_day_change_pre1'] < 0.5) | (df['PCT_day_change_pre2'] < 0.5)) &
                 ((df['PCT_day_change'] < 2) | (df['PCT_day_change_pre1'] < 2)) &
@@ -47,7 +46,6 @@ def main():
         try:
             filtered_df = df[
                 (
-                    ((abs(df['monthLowChange']) > 3) | (abs(df['monthHighChange']) > 3)) &
                     (((df['PCT_day_change'] < 2) | (df['PCT_day_change_pre1'] < 2)) &
                     ((df['PCT_day_change'] < 1.5) & (df['PCT_change'] < 1.5)) &
                     ((df['forecast_day_PCT10_change'] < 1) | (df['forecast_day_PCT5_change'] < 1) | (df['forecast_day_PCT7_change'] < 1) ) &
@@ -192,7 +190,6 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((abs(df['monthLowChange']) > 3) | (abs(df['monthHighChange']) > 3)) &
                 (abs(df['week2LowChange']) > 1) &
                 (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &

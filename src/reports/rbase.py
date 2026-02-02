@@ -754,6 +754,11 @@ def getintersectdf_ml(collection_name1, collection_name2):
 
 def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False, renderf10buy=False, renderf10sell=False, f10=0, renderf10buy00=False, renderf10sell00=False, renderf10buy01=False, renderf10sell01=False):
     st.write("********"+ name + "********")
+    try:
+        df = df[((abs(df['monthLowChange']) > 3) | (abs(df['monthHighChange']) > 3)) | ((abs(df['month3LowChange']) > 10) | (abs(df['month3HighChange']) > 10))]
+    except KeyError as e:
+        print("")
+    #
     # Main Code Execution
     if renderf10buy:
         df_styled = highlight_category_row(df, color=color)

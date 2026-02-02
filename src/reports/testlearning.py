@@ -20,6 +20,52 @@ def main():
     # main title
     st.title('Learning')
 
+    col1, col2 = st.columns(2)
+    with col1:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['yearLowChange'] > 10) &
+                ((df['yearLowChange'] > 15) | (df['month3HighChange'] > -2)) &
+                (df['month3HighChange'] < 2.5) &
+                (df['monthHighChange'] > 0) &
+                (df['PCT_day_change'] < 3) &
+                (df['PCT_day_change_pre1'] < 5) &
+                (df['PCT_day_change_pre2'] < 5) &
+                (df['PCT_day_change'] > 1.5) &
+                (df['PCT_day_change_pre1'] > -1.5) &
+                (df['PCT_day_change_pre2'] > -1.5) &
+                (df['week2HighChange'] > -0.5) &
+                ((df['mlData'].str.contains("BYYWEEK2HIGH>GT0"))) &
+                ( (df['month3LowChange'] > 10) | (df['filter'].str.contains("MLBuy"))) &
+                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'morning-volume-breakout-buy ##############', color='G', height=300)
+    with col2:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['yearHighChange'] < -10) &
+                ((df['yearHighChange'] < -15) | (df['month3LowChange'] < 2)) &
+                (df['PCT_day_change'] > -3) &
+                (df['PCT_day_change_pre1'] > -5) &
+                (df['PCT_day_change_pre2'] > -5) &
+                (df['PCT_day_change'] < -1.5) &
+                (df['PCT_day_change_pre1'] < 1.5) &
+                (df['PCT_day_change_pre2'] < 1.5) &
+                (df['week2LowChange'] < 0.5) &
+                ((df['mlData'].str.contains("SLLWEEK2LOW<LT0"))) &
+                ((df['month3HighChange'] < -10) | (df['filter'].str.contains("MLSell"))) &
+                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'morning-volume-breakout-sell ######################', color='R', height=300)
+
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
         df = rb.getdf('buy-morning-volume-breakout(Check-News)')
