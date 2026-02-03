@@ -20,8 +20,39 @@ def main():
     # main title
     st.title('Learning')
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
+        df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (df['highTail'] < 3) & 
+                    (df['lowTail'] < 3) & 
+                    (df['PCT_day_change'] > 0) & 
+                    (df['PCT_day_change'] < 4) & 
+                    (abs(df['PCT_day_change_pre1']) < 8) &
+                    (abs(df['PCT_day_change_pre2']) < 8) &
+                    ((df['kNeighboursValue_reg'] > 1) & (df['mlpValue_reg'] > 1.7)) &
+                    ((df['kNeighboursValue_reg'] > 2) | (df['mlpValue_reg'] > 2)) 
+                    
+                )
+                |
+                (
+                    (df['highTail'] < 3) & 
+                    (df['lowTail'] < 3) & 
+                    (df['PCT_day_change'] < 0.7) & 
+                    (abs(df['PCT_day_change_pre1']) < 8) &
+                    (abs(df['PCT_day_change_pre2']) < 8) &
+                    ((df['kNeighboursValue_reg_merged'] > 2) & (df['mlpValue_reg_merged'] > 2.7)) &
+                    ((df['kNeighboursValue_reg_merged'] > 3) | (df['mlpValue_reg_merged'] > 3))
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'MLBUY', column_conf=rb.column_config_ml, column_order=rb.column_order_ml,
+                  renderml=True, color='G')
+    with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
         try:
@@ -43,8 +74,39 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-buy ##############', color='G', height=300)
-    with col2:
+        rb.render(st, filtered_df, 'BYYWEEK2HIGH>GT0', color='G')
+    with col3:
+        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (df['highTail'] < 3) & 
+                    (df['lowTail'] < 3) & 
+                    (df['PCT_day_change'] < 0) & 
+                    (df['PCT_day_change'] > -4) & 
+                    (abs(df['PCT_day_change_pre1']) < 8) &
+                    (abs(df['PCT_day_change_pre2']) < 8) &
+                    ((df['kNeighboursValue_reg'] < -1) & (df['mlpValue_reg'] < -1.7)) &
+                    ((df['kNeighboursValue_reg'] < -2) | (df['mlpValue_reg'] < -2)) 
+                    
+                )
+                |
+                (
+                    (df['highTail'] < 3) & 
+                    (df['lowTail'] < 3) & 
+                    (df['PCT_day_change'] > -0.7) & 
+                    (abs(df['PCT_day_change_pre1']) < 8) &
+                    (abs(df['PCT_day_change_pre2']) < 8) &
+                    ((df['kNeighboursValue_reg_merged'] < -2) & (df['mlpValue_reg_merged'] < -2.7)) &
+                    ((df['kNeighboursValue_reg_merged'] < -3) | (df['mlpValue_reg_merged'] < -3))
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'MLSELL', column_conf=rb.column_config_ml, column_order=rb.column_order_ml,
+                  renderml=True, color='R')
+    with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
         try:
@@ -64,7 +126,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-sell ######################', color='R', height=300)
+        rb.render(st, filtered_df, 'SLLWEEK2LOW<LT0', color='R')
 
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
