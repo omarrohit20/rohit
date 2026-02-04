@@ -130,7 +130,7 @@ def main():
 
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
-        df = rb.getdf('buy-morning-volume-breakout(Check-News)')
+        df = rb.getintersectdf('buy-morning-volume-breakout(Check-News)', 'morning-volume-breakout-buy')
         filtered_df = df
         try:
             filtered_df = df[
@@ -144,7 +144,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'buy-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
     with col2:
-        df = rb.getdf('buy-morning-volume-breakout(Check-News)')
+        df = rb.getintersectdf('buy-morning-volume-breakout(Check-News)', 'morning-volume-breakout-buy')
         filtered_df = df
         try:
             filtered_df = df[
@@ -163,7 +163,7 @@ def main():
         filtered_df = df
         rb.render(st, filtered_df, 'buy-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
     with col4:
-        df = rb.getdf('sell-morning-volume-breakout(Check-News)')
+        df = rb.getintersectdf('sell-morning-volume-breakout(Check-News)', 'morning-volume-breakout-sell')
         filtered_df = df
         try:
             filtered_df = df[
@@ -177,7 +177,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'sell-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
     with col5:
-        df = rb.getdf('sell-morning-volume-breakout(Check-News)')
+        df = rb.getintersectdf('sell-morning-volume-breakout(Check-News)', 'morning-volume-breakout-sell')
         filtered_df = df
         try:
             filtered_df = df[

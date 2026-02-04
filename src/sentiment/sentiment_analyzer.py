@@ -215,7 +215,10 @@ Consider:
 2. Severity of impact (High/Medium/Low/Unknown)
 3. Whether it's sectoral news affecting multiple companies
 4. Whether it's about quarterly results
-5. Overall sentiment
+5. Exclude news for among top gainers or losers. 
+6. Exclude news already factored in stock price.
+7. Exclude if company or scrip not found in article or content
+7. Overall sentiment
 
 Respond only with valid JSON.
 """

@@ -755,7 +755,23 @@ def getintersectdf_ml(collection_name1, collection_name2):
 def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False, renderf10buy=False, renderf10sell=False, f10=0, renderf10buy00=False, renderf10sell00=False, renderf10buy01=False, renderf10sell01=False):
     st.write("********"+ name + "********")
     try:
-        df = df[((abs(df['monthLowChange']) > 3) | (abs(df['monthHighChange']) > 3)) | ((abs(df['month3LowChange']) > 10) | (abs(df['month3HighChange']) > 10))]
+        df = df[
+                ((abs(df['monthLowChange']) > 3) | (abs(df['monthHighChange']) > 3)) | ((abs(df['month3LowChange']) > 10) | (abs(df['month3HighChange']) > 10))
+                ]
+    except KeyError as e:
+        print("")
+    
+    try:
+        df = df[
+                ((abs(df['PCT_change']) - abs(df['PCT_day_change'])) < 4) 
+                ]
+    except KeyError as e:
+        print("")
+
+    try:
+        df = df[
+                (df['highTail'] < 3.3) & (df['lowTail'] < 3.3)
+                ]
     except KeyError as e:
         print("")
     #

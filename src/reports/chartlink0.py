@@ -966,7 +966,7 @@ def main():
                 (df['PCT_day_change'] > -1.5) &
                 (df['PCT_day_change_pre1'] > -1.5) &
                 (df['PCT_day_change_pre2'] > -1.5) &
-                #(df['monthHighChange'] > (df['month3HighChange'] - 3)) &
+                (df['monthHighChange'] > (df['month3HighChange'] - 3)) &
                 (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))  
                 ]
         except KeyError as e:
