@@ -590,7 +590,7 @@ def main():
         rb.render(st, filtered_df, 'LastDayMarketGT1 : todayDownLT-0.5(+)', color='LG', height=150)
 
 
-    col1, col2, col30, col4, col5, col60 = st.columns(6)
+    col1, col2, col3, col30, col4, col5, col6, col60 = st.columns(8)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
@@ -639,6 +639,26 @@ def main():
             rb.render(st, filtered_df, 'Up GT0.3:Buy Momentum', color='G', height=200)
         else:
             rb.render(st, empty_df, 'Up GT0.3:Buy Momentum', color='G', height=200)
+    with col3:
+        df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (df['forecast_day_PCT10_change'] < -4) &
+                    (df['forecast_day_PCT10_change'] > -12) &
+                    (df['PCT_day_change'] < -3) &
+                    ((df['systemtime'].str.contains('9:2', case=False, regex=True, na=False)) | (df['systemtime'].str.contains('9:30', case=False, regex=True, na=False)))
+                )
+            ]
+        except KeyError as e:
+            print("")
+        if len(df) > 5:
+            rb.render(st, filtered_df, 'OpenedUp : Short Cover(Avoid-LastDay-Up-Down-Up)', color='LG', height=200)
+        else:
+            rb.render(st, empty_df, 'OpenedUp : Short Cover', color='LG', height=200)
     with col30:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
@@ -714,6 +734,26 @@ def main():
         #     rb.render(st, filtered_df, 'Down LT-0.3:Sell Momentum', color='G', height=200)
         # else:
         rb.render(st, empty_df, 'Down LT-0.3:Sell Momentum', color='R', height=200)
+    with col6:
+        df = rb.getdf('morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (df['forecast_day_PCT10_change'] > 4) &
+                    (df['forecast_day_PCT10_change'] < 12) &
+                    (df['PCT_day_change'] > 3) &
+                    ((df['systemtime'].str.contains('9:2', case=False, regex=True, na=False)) | (df['systemtime'].str.contains('9:30', case=False, regex=True, na=False)))
+                )
+            ]
+        except KeyError as e:
+            print("")
+        if len(df) > 5:
+            rb.render(st, filtered_df, 'OpenedDown : Profit Book(Avoid-LastDay-Down-Up-Down)', color='LG', height=200)
+        else:
+            rb.render(st, empty_df, 'OpenedDown : Profit Book', color='G', height=200)
     with col60:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
