@@ -6,7 +6,7 @@ Purple - Stock itself in Uptrend(can be buy any time)
 yellow - Avoid Sell
 Light Yellow and white - Sell in uptrend market
 Light Blue and Blue - Sell in Downtrend, Downtrend Consolidation, or midcap low less than last 3 day low
-Purple - Stock itself in Downtrend(Can be sell in any time)
+Purple - Sell in DownTrend Stock itself in Downtrend(Can be sell in any time)
 
 
 Breakout Buy\Sell After 10

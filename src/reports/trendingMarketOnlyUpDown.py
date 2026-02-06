@@ -21,7 +21,7 @@ def main():
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
-        if len(df) > 1:
+        if len(df) >= 1:
             rb.render(st, filtered_df, 'UpNow Supertrend MorningDown Buys', color='G')
         else:
             rb.render(st, empty_df, 'UpNow Supertrend MorningDown Buys', color='G')
@@ -38,7 +38,7 @@ def main():
         filtered_df = df
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
-        if len(df) > 1:
+        if len(df) >= 1:
             rb.render(st, filtered_df, 'DownNow Supertrend  Morningup Sells', color='R')
         else:
             rb.render(st, empty_df, 'DownNow Supertrend Morningup Sells', color='R')

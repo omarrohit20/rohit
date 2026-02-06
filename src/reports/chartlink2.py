@@ -578,6 +578,7 @@ def main():
             filtered_df = df[
                 (df['PCT_day_change'] < 2) &
                 (df['forecast_day_PCT10_change'] > -9) &
+                (df['forecast_day_PCT10_change'] < 6) &
                 (df['mlData'].str.contains("0@@")) &
                 (df['mlData'].str.contains("0@@CROSSED2Day") | df['mlData'].str.contains("0@@SUPER") | df['mlData'].str.contains("DayH@GT-1"))
             ]
@@ -591,6 +592,7 @@ def main():
             filtered_df = df[
                 (df['PCT_day_change'] > -2) &
                 (df['forecast_day_PCT10_change'] < 9) &
+                (df['forecast_day_PCT10_change'] > -6) &
                 (df['mlData'].str.contains("0@@")) &
                 (df['mlData'].str.contains("0@@CROSSED2Day") | df['mlData'].str.contains("0@@SUPER") | df['mlData'].str.contains("DayL@LT1"))
             ]
@@ -601,6 +603,9 @@ def main():
 
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
+        df = rb.getdf('Breakout-Buy-after-10')
+        rb.render(st, df, 'Breakout Buy after 10', color='G', height=200)
+    with col2:
         df = rb.getdf('1-Bbuyy-morningUp-downConsolidation')
         filtered_df = df
         try:
@@ -612,8 +617,8 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BuyShouldNotFail(Check2DayCrossedChart) : Only one dip: 1-Bbuyy-morningUp-downConsolidation', color='G', height=200)
-    with col2:
+        rb.render(st, filtered_df, 'BuyShouldNotFail(Check2DayCrossedChart) : Only one dip: 1-Bbuyy-morningUp-downConsolidation', color='LG', height=200)
+    with col3:
         df = rb.getdf('1-Bbuyy-morningUp-downConsolidation')
         filtered_df = df
         try:
@@ -625,10 +630,10 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Only one dip: 1-Bbuyy-morningUp-downConsolidation', color='LG', height=200)
-    with col3:
-        df = rb.getdf('Breakout-Buy-after-10')
-        rb.render(st, df, 'Breakout Buy after 10', color='LG', height=200)
     with col4:
+        df = rb.getdf('Breakout-Sell-after-10')
+        rb.render(st, df, 'Breakout Sell after 10', color='R', height=200)
+    with col5:
         df = rb.getdf('1-Sselll-morningDown-upConsolidation')
         filtered_df = df
         try:
@@ -640,8 +645,8 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'SellShouldNotFail(Check2DayCrossedChart): Only one up: 1-Sselll-morningDown-upConsolidation', color='R', height=200)
-    with col5:
+        rb.render(st, filtered_df, 'SellShouldNotFail(Check2DayCrossedChart): Only one up: 1-Sselll-morningDown-upConsolidation', color='LG', height=200)
+    with col6:
         df = rb.getdf('1-Sselll-morningDown-upConsolidation')
         filtered_df = df
         try:
@@ -653,9 +658,6 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Only one up: 1-Sselll-morningDown-upConsolidation', color='LG', height=200)
-    with col6:
-        df = rb.getdf('Breakout-Sell-after-10')
-        rb.render(st, df, 'Breakout Sell after 10', color='LG', height=200)
     
 
     col1, col2, col3, col4 = st.columns(4)
