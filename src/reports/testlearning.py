@@ -29,7 +29,7 @@ def main():
                 (
                     (df['highTail'] < 3) & 
                     (df['lowTail'] < 3) & 
-                    (df['PCT_day_change'] > 0) & 
+                    (df['PCT_day_change'] > 2.5) & 
                     (df['PCT_day_change'] < 4) & 
                     (abs(df['PCT_day_change_pre1']) < 8) &
                     (abs(df['PCT_day_change_pre2']) < 8) &
@@ -83,7 +83,7 @@ def main():
                 (
                     (df['highTail'] < 3) & 
                     (df['lowTail'] < 3) & 
-                    (df['PCT_day_change'] < 0) & 
+                    (df['PCT_day_change'] < -2.5) & 
                     (df['PCT_day_change'] > -4) & 
                     (abs(df['PCT_day_change_pre1']) < 8) &
                     (abs(df['PCT_day_change_pre2']) < 8) &
@@ -127,6 +127,18 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'SLLWEEK2LOW<LT0', color='R')
+
+
+    col1, col3 = st.columns(2)
+    with col1:
+        df = rb.getdf('temp-rohit')
+        rb.render(st, df, 'temp-rohit', color='LG', height=300)
+    with col3:
+        df = rb.getdf('temp-rohit')
+        rb.render(st, df, 'temp-rohit', color='LG', height=300)
+    
+
+    
 
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
