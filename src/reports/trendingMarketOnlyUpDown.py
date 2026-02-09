@@ -162,21 +162,21 @@ def main():
     
     col1, col2, col4, col5 = st.columns(4)
     with col1:
-        df = rb.getintersectdf('buy_all_processor', 'buy-breakout')
+        df = rb.getintersectdf('buy_all_processor', 'buy-morning-volume-breakout(Check-News)')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
-                (~df['processor'].str.contains('buy-breakout')) &
+                #((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
+                (~df['processor'].str.contains('Check-News')) &
                 (~df['processor'].str.contains('supertrend-morning-buy')) &
-                (~df['processor'].str.contains('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')) &
-                (~df['processor'].str.contains('buy-dayconsolidation-breakout-01')) &
+                (~df['processor'].str.contains('checkChartBuy/')) &
+                #(~df['processor'].str.contains('buy-dayconsolidation-breakout-01')) 
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False))
+                #(~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
                 ]
         except KeyError as e:
             print("")
@@ -204,22 +204,22 @@ def main():
             print("")
         rb.render(st, filtered_df, 'BuyAllProcessor+ZPre1_Upstairs', column_order=rb.column_order_default, color='G')
     with col4:
-        df = rb.getintersectdf('sell_all_processor', 'sell-breakout')
+        df = rb.getintersectdf('sell_all_processor', 'sell-morning-volume-breakout(Check-News)')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
-                (~df['processor'].str.contains('sell-breakout'))&
-                (~df['processor'].str.contains('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')) &
+                #((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
+                (~df['processor'].str.contains('Check-News'))&
+                (~df['processor'].str.contains('checkChartSell/')) &
                 (~df['processor'].str.contains('supertrend-morning-sell'))&
-                (~df['processor'].str.contains('sell-dayconsolidation-breakout-01')) &
-                (~df['processor'].str.contains('09_30:checkChartSell')) &
+                #(~df['processor'].str.contains('sell-dayconsolidation-breakout-01')) &
+                (~df['processor'].str.contains('checkChartSell')) &
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False))
+                #(~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
                 ]
         except KeyError as e:
             print("")

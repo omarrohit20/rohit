@@ -132,7 +132,18 @@ def main():
     col1, col3 = st.columns(2)
     with col1:
         df = rb.getdf('temp-rohit')
-        rb.render(st, df, 'temp-rohit', color='LG', height=300)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] < 2) &
+                (df['PCT_day_change'] < 5) &
+                ((df['PCT_day_change'] < 0) | (df['PCT_day_change_pre1'] < 0)) &
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'temp-rohit', color='LG', height=300)
     with col3:
         df = rb.getdf('temp-rohit')
         rb.render(st, df, 'temp-rohit', color='LG', height=300)
@@ -146,7 +157,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                abs(df['PCT_day_change']) > 1.3
+                (df['PCT_day_change'] > 1.3) | (df['PCT_day_change'] < -2)
                 ]
         except KeyError as e:
             print("")
@@ -172,7 +183,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                abs(df['PCT_day_change']) > 1.3
+                (df['PCT_day_change'] < -1.3) | (df['PCT_day_change'] > 2)
             ]
         except KeyError as e:
             print("")
