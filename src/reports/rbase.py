@@ -500,34 +500,34 @@ def apply_f10_sell(row):
 
 def highlight_category_column_f10_buy(value10, value7, value5):
     """Highlights the entire row based on the 'Category' column value."""
-    if float(value10) >= 7 :
+    if float(value10) >= 7 and float(value7) > 0 and float(value5) > 0:
         return 'background-color: #800080'
-    elif float(value10) >= 2 and float(value10) < 7:
+    elif float(value10) >= 2 and float(value10) < 7 and float(value7) > -1 and float(value5) > -1:
         return 'background-color: #3EB9FB'
     elif float(value10) >= -2 and float(value10) < 3 and float(value7) < 3 and float(value5) < 3 and float(value7) >-2 and float(value5) > -2:
         return 'background-color: #CBEDFF'
-    elif float(value10) <= -9:
+    elif float(value10) <= -9 and float(value7) < -1 and float(value5) < -1:
         return 'background-color: #ffd546'
-    elif float(value10) <= -6:
+    elif float(value10) <= -6 and float(value7) < 0 and float(value5) < 0:
         return 'background-color: #fff0bc'
-    elif float(value10) <= -3:
+    elif float(value10) <= -3 and float(value7) < 2 and float(value5) < 2:
         return 'background-color: #F9FAFB'
     else:
         return 'background-color: #A1A1A1'
         
 def highlight_category_column_f10_sell(value10, value7, value5):
     """Highlights the entire row based on the 'Category' column value."""
-    if float(value10) <= -7:
+    if float(value10) <= -7 and float(value7) < 0 and float(value5) < 0:
         return 'background-color: #800080'
-    elif float(value10) <= -2 and float(value10) > -7:
+    elif float(value10) <= -2 and float(value10) > -7 and float(value7) < 1 and float(value5) < 1:
         return 'background-color: #3EB9FB'
     elif float(value10) <= 2 and float(value10) > -3 and float(value7) > -3 and float(value5) > -3 and float(value7) < 2 and float(value5) < 2:
         return 'background-color: #CBEDFF'
-    elif float(value10) >= 9:
+    elif float(value10) >= 9 and float(value7) > 1 and float(value5) > 1:
         return 'background-color: #ffd546'
-    elif float(value10) >= 6:
+    elif float(value10) >= 6 and float(value7) > 0 and float(value5) > 0:
         return 'background-color: #fff0bc'
-    elif float(value10) >= 3:
+    elif float(value10) >= 3 and float(value7) > -2 and float(value5) > -2:
         return 'background-color: #F9FAFB'
     else:
         return 'background-color: #A1A1A1'

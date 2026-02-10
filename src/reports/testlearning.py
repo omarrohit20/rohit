@@ -149,8 +149,6 @@ def main():
         rb.render(st, df, 'temp-rohit', color='LG', height=300)
     
 
-    
-
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
         df = rb.getintersectdf('buy-morning-volume-breakout(Check-News)', 'morning-volume-breakout-buy')
