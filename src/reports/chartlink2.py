@@ -667,7 +667,7 @@ def main():
         try:
             filtered_df = df[
                 (df['forecast_day_PCT10_change'] > -8) &
-                (df['PCT_day_change'] > 1.3) | (df['PCT_day_change'] < -2)
+                (df['PCT_day_change'] < -1.5)
                 ]
         except KeyError as e:
             print("")
@@ -677,9 +677,13 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                 (df['forecast_day_PCT10_change'] > 3) & (df['forecast_day_PCT10_change'] < 10)
-                 |
-                 ((df['forecast_day_PCT7_change'] < -1.3) & (df['forecast_day_PCT5_change'] < -1.3) & (df['forecast_day_PCT10_change'] > -2) & (df['forecast_day_PCT10_change'] < 10))
+
+                ((df['PCT_day_change'] < 1) | (df['PCT_day_change_pre1'] < 1)) &
+                (
+                    (df['forecast_day_PCT10_change'] > 3) & (df['forecast_day_PCT10_change'] < 10)
+                    |
+                    ((df['forecast_day_PCT7_change'] < -1.3) & (df['forecast_day_PCT5_change'] < -1.3) & (df['forecast_day_PCT10_change'] > -2) & (df['forecast_day_PCT10_change'] < 10))
+                )
                 ]
         except KeyError as e:
             print("")
@@ -694,7 +698,7 @@ def main():
         try:
             filtered_df = df[
                 (df['forecast_day_PCT10_change'] < 8) &
-                (df['PCT_day_change'] < -1.3) | (df['PCT_day_change'] > 2)
+                (df['PCT_day_change'] > 1.5)
             ]
         except KeyError as e:
             print("")
@@ -704,6 +708,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['PCT_day_change'] > -1) | (df['PCT_day_change_pre1'] > -1)) &
                 (
                     (df['forecast_day_PCT10_change'] < -3) & (df['forecast_day_PCT10_change'] > -10)
                     |
