@@ -115,6 +115,7 @@ def regression_ta_data(scrip):
         pass    
 
 def calculateParallel(threads=2, futures='Yes', ml_algo='Yes'):
+    time.sleep(120)
     global run_ml_algo
     if(ml_algo != 'Yes'):
         run_ml_algo = False 
