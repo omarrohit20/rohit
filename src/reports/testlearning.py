@@ -20,7 +20,7 @@ def main():
     # main title
     st.title('Learning')
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col3 = st.columns(2)
     with col1:
         df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
         filtered_df = df
@@ -52,29 +52,6 @@ def main():
             print("")
         rb.render(st, filtered_df, 'MLBUY', column_conf=rb.column_config_ml, column_order=rb.column_order_ml,
                   renderml=True, color='G')
-    with col2:
-        df = rb.getdf('morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['yearLowChange'] > 10) &
-                ((df['yearLowChange'] > 15) | (df['month3HighChange'] > -2)) &
-                (df['month3HighChange'] < 2.5) &
-                (df['monthHighChange'] > 0) &
-                (df['PCT_day_change'] < 3) &
-                (df['PCT_day_change_pre1'] < 5) &
-                (df['PCT_day_change_pre2'] < 5) &
-                (df['PCT_day_change'] > 1.5) &
-                (df['PCT_day_change_pre1'] > -1.5) &
-                (df['PCT_day_change_pre2'] > -1.5) &
-                (df['week2HighChange'] > -0.5) &
-                ((df['mlData'].str.contains("BYYWEEK2HIGH>GT0"))) &
-                ( (df['month3LowChange'] > 10) | (df['filter'].str.contains("MLBuy"))) &
-                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) 
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'BYYWEEK2HIGH>GT0', color='G')
     with col3:
         df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
         filtered_df = df
@@ -106,28 +83,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'MLSELL', column_conf=rb.column_config_ml, column_order=rb.column_order_ml,
                   renderml=True, color='R')
-    with col4:
-        df = rb.getdf('morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['yearHighChange'] < -10) &
-                ((df['yearHighChange'] < -15) | (df['month3LowChange'] < 2)) &
-                (df['PCT_day_change'] > -3) &
-                (df['PCT_day_change_pre1'] > -5) &
-                (df['PCT_day_change_pre2'] > -5) &
-                (df['PCT_day_change'] < -1.5) &
-                (df['PCT_day_change_pre1'] < 1.5) &
-                (df['PCT_day_change_pre2'] < 1.5) &
-                (df['week2LowChange'] < 0.5) &
-                ((df['mlData'].str.contains("SLLWEEK2LOW<LT0"))) &
-                ((df['month3HighChange'] < -10) | (df['filter'].str.contains("MLSell"))) &
-                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'SLLWEEK2LOW<LT0', color='R')
-
+    
 
     col1, col3 = st.columns(2)
     with col1:
