@@ -1,14 +1,22 @@
+
+General Rules
+#################################################################################
+Avoid trading - Moved more than abs(1.5) first 30 - 45 minutes in trending market
+
 yellow - Avoid Buy
-Light Yellow and white - Buy in downtrend market
+Light Yellow and white - Buy in downtrend market reversal
 Light Blue and Blue - Buy in Uptrend, Uptrend Consolidation, or midcap up more than last 3 day up
-Purple - Stock itself in Uptrend(can be buy any time)
+Purple - Stock itself in Uptrend(can be buy if market not down)
 
 yellow - Avoid Sell
-Light Yellow and white - Sell in uptrend market
+Light Yellow and white - Sell in uptrend market reversal
 Light Blue and Blue - Sell in Downtrend, Downtrend Consolidation, or midcap low less than last 3 day low
-Purple - Sell in DownTrend Stock itself in Downtrend(Can be sell in any time)
+Purple - Stock itself in Downtrend(Can be sell market not up)
 
-
+Screener Rules
+#################################################################################
+morning-down\up check for only one once lowest and no big red(for buy)\green(for sell) candle
+Crossed Day High\Low Avoid for  in non trending up or down
 Breakout Buy\Sell After 10
 Buy
     If lastday stock price LT -2 and UP less than 2 then buy can be done immediately or wait till 10 AM
@@ -16,37 +24,34 @@ Buy
 Sell
     If lastday stock price GT 2 and today down greater than -2 then sell can be done immediately otherwise wait till 10:00
     Up less than -4 wait till 10 AM up consolidation or down reversal
-            
-
-Avoid Crossed Day High\Low in non trending up or down
-Avoid trading moved more than abs(1.5) first 30 - 45 minutes in trending market
 
 
+Market Movement Rules
+#################################################################################
 opened or down LT -1 in downtrend, trend reversal if 2 half an hour candle green
 opened or GT 1 in uptrend, trend reversal if 2 half an hour candle red
-Opened LT -1 and going up If spike rally sustained check for Buy
-    "Crossed 2 Day Highs"(must check primarily to have more than 2 and exponential grow) and "'supertrend-morningdown-buy'" 
-Opened GT 1 and going down If brakdown rally sustained check for Sell
-    "Crossed 2 Day Lows"(must check primarily to have more than 2 and exponential grow) and "'supertrend-morningdown-buy'" 
 
+opened or down LT -0.5 in uptrend, if trend reversal, buy from morning-down scanner
+opened or GT 0.5 in downtrend, if trend reversal, sell from morning-up scanner
+
+Opened or down LT -1 and going up, If spike rally sustained check for Buy
+    "Crossed 2 Day Highs"(must check primarily to have more than 2 and exponential grow) and "'supertrend-morningdown-buy'" 
+Opened or up GT 1 and going down, If brakdown rally sustained check for Sell
+    "Crossed 2 Day Lows"(must check primarily to have more than 2 and exponential grow) and "'supertrend-morningdown-buy'" 
 
 Last Day LT-1
     wait 15 minute
     If market down for 15-30 minute, and sudden spike, check and wait till 10:45 'supertrend-morningdown-buy' for spike sustainence
         In spike start check cnbc recommedations
         If spike rally sustained check for Buy
-            "Crossed 2 Day Highs" and "'supertrend-morningdown-buy'" 
-        
+            "Crossed 2 Day Highs" and "'supertrend-morningdown-buy'"
         If spike rally failed check for Sell
             "LastDayLT-1" and "LastDayDown" in chartink0 for buy opportunity
             "Crossed 2 Day Lows" and  "Crossed Day Lows" along with f10ch>3
-
     If no spike after 15-30 minute, and still down check for Sell
         "Crossed 2 Day Lows" and  "Crossed Day Lows" along with f10ch>3
-
     If up since morning, check crossed 2 Day chart after 10 to confirm up for the day.
         If failed sqr off all buy positions by 12:00 PM
-
 
 Last 2 Day LT-1. Avoid Sell after 11:00 if already Down more than 1.
     wait 15 minutes
@@ -55,8 +60,7 @@ Last 2 Day LT-1. Avoid Sell after 11:00 if already Down more than 1.
     If opened Down and above rule for Buy spike not sustained.
         Sell opportunity at 10 to 11 only. Exit in an hour max 11:30. Short covering any time
 
-
-Last Day GT1
+Last Day GT 1
     wait 15 minute
     If market up for 15-30 minute, and sudden lower spike, check and wait till 10:45 'supertrend-morningup-sell' for spike sustainence
         If spike lower sustained check for Sell
@@ -65,14 +69,10 @@ Last Day GT1
         If spike lower failed check for Buy
             "LastDayGT1" and "LastDayUp" in chartink0 for buy opportunity
             "Crossed 2 Day Highs" and  "Crossed Day Highs" along with f10ch<-3
-
     If no lower spike after 15-30 minute, and still up check for Buy
         "Crossed 2 Day Highs" and  "Crossed Day Highs" along with f10ch<-3
-
     If down since morning, check crossed 2 Day chart after 10 to confirm down for the day.
         If failed sqr off all sell positions by 12:00 PM
-
-
 
 Last 2 Day GT 1. Avoid Buy after 11:00 if already Up more than 1.
     wait 15 minutes
@@ -81,15 +81,9 @@ Last 2 Day GT 1. Avoid Buy after 11:00 if already Up more than 1.
     If opened Up and above rule for Sell spike not sustained.
         Buy opportunity at 10 to 11 only. Exit in an hour max 11:30. Short covering any time
 
-Downtrend chartink0
-F10 Consolidation Sell
-Profit Book - First15minutehighest
 
-Uptrend chartink0
-F10 Consolidation Buy
-Short Cover - First15minutelowest
-
-
+Daily common strategy
+#################################################################################
 Before 10:00
     Buy : last 2-3 days uptrend
     Buy : downtrend then buy last day closed in negative

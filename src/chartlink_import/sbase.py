@@ -1,6 +1,3 @@
-from seleniumwire import webdriver
-from seleniumwire.webdriver import DesiredCapabilities
-from browsermobproxy import Server
 from datetime import datetime
 from datetime import timedelta
 from datetime import date
@@ -16,7 +13,7 @@ pd.options.mode.chained_assignment = None  # default='warn'
 
 global connection, db;
 global nw, hrs, zero
-global path, proxy, option, capabilities, driver
+global path, proxy, driver, context
 
 connection = MongoClient('localhost', 27017)
 db = connection.chartlink
@@ -31,21 +28,9 @@ path = './browsermob/bin/browsermob-proxy' #your path to browsermob-proxy
 
 proxy = None
 
-option = webdriver.ChromeOptions()
-prefs = {"profile.password_manager_enabled": True}
-option.add_experimental_option("prefs", prefs)
-option.add_argument('--headless=new')
-option.add_argument('--no-sandbox')
-option.add_argument('--disable-gpu')
-option.binary_location = 'C:\git\cft\chrome.exe'
-
-capabilities = DesiredCapabilities.CHROME.copy()
-capabilities["goog:loggingPrefs"] = {"performance": "ALL"}
-capabilities['acceptSslCerts'] = True
-capabilities['acceptInsecureCerts'] = True
-
-
-driver = None
+# Playwright page and context are initialized in the main script
+driver = None  # This will be the Playwright page object
+context = None  # This will be the Playwright context object
 
 def log_filter(log_):
     return (
@@ -747,49 +732,77 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
 def process_url_volBreakout(url, processor, starttime, endtime, keyIndicator=None, dropDB=False):
     try:
         time.sleep(5)
-        driver.get(url)
+        
+        # Store captured responses
+        captured_data = []
+        
+        # Set up response listener for Playwright
+        def handle_response(response):
+            if response.url == 'https://chartink.com/backtest/process':
+                try:
+                    data = response.text()
+                    captured_data.append(data)
+                except:
+                    pass
+        
+        driver.on("response", handle_response)
+        
+        # Navigate to the URL
+        driver.goto(url, wait_until="networkidle")
         time.sleep(5)
-
-        logs_raw = driver.get_log("performance")
-        logs = [json.loads(lr["message"])["message"] for lr in logs_raw]
-
+        
+        # Remove the listener
+        driver.remove_listener("response", handle_response)
+        
         if dropDB:
             db.drop_collection(processor)
 
-        for log in filter(log_filter, logs):
-            request_id = log["params"]["requestId"]
-            resp_url = log["params"]["response"]["url"]
-            if (resp_url == 'https://chartink.com/backtest/process'):
-                data = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": request_id})['body']
-                # print(f"Caught {resp_url}")
-                # print(data)
-                process_backtest_volBreakout(data, processor, starttime, endtime, keyIndicator)
-        # print()
+        # Process captured data
+        for data in captured_data:
+            process_backtest_volBreakout(data, processor, starttime, endtime, keyIndicator)
+            
     except Exception as e:
-        print('driver failed')
+        print(f'driver failed: {str(e)}')
+
+
+# Alias for backward compatibility
+process_url = process_url_volBreakout
 
 
 def process_url_yahoo(url):
     data = None
     try:
         time.sleep(5)
-        driver.get(url)
+        
+        # Store captured responses
+        captured_data = []
+        
+        # Set up response listener for Playwright
+        def handle_response(response):
+            if 'https://query2.finance.yahoo.com/v8/finance' in response.url:
+                try:
+                    data_text = response.text()
+                    captured_data.append(data_text)
+                except:
+                    pass
+        
+        driver.on("response", handle_response)
+        
+        # Navigate to the URL
+        driver.goto(url, wait_until="networkidle")
         time.sleep(10)
-
-        logs_raw = driver.get_log("performance")
-        logs = [json.loads(lr["message"])["message"] for lr in logs_raw]
-
-        for log in filter(log_filter, logs):
-            request_id = log["params"]["requestId"]
-            resp_url = log["params"]["response"]["url"]
-            if resp_url.contains('https://query2.finance.yahoo.com/v8/finance'):
-                data = driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": request_id})['body']
-                # print(f"Caught {resp_url}")
-                # print(data)
-        # print()
+        
+        # Remove the listener
+        driver.remove_listener("response", handle_response)
+        
+        # Return the first captured data
+        if captured_data:
+            data = captured_data[0]
+            
     except Exception as e:
-        print('driver failed')
+        print(f'driver failed: {str(e)}')
     return data
+
 
 def regression_ta_data_buy():
     for data in dbnse.scrip.find({'futures':'Yes'}):
