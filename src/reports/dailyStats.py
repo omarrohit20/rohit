@@ -65,13 +65,30 @@ def main():
             st.divider()
             st.subheader('Industry Stocks Detail')
             
-            # Get unique industries sorted
+            # Search by stock name
+            col1, col2 = st.columns([2, 1])
+            with col1:
+                stock_search = st.text_input("**Search by Stock Name**", placeholder="Enter stock name (e.g., SBIN, TCS, INFY)")
+            
+            # Determine selected industry based on search or dropdown
             industries = sorted(df_industry['industry'].dropna().unique())
-            selected_industry = st.selectbox(
-                "**Select Industry**",
-                options=industries,
-                index=0
-            )
+            
+            if stock_search:
+                # Search for the stock and get its industry
+                matching_stocks = df_industry[df_industry['scrip'].str.contains(stock_search, case=False, na=False)]
+                if not matching_stocks.empty:
+                    selected_industry = matching_stocks.iloc[0]['industry']
+                    st.info(f"Found stock in industry: **{selected_industry}**")
+                else:
+                    st.warning(f"Stock '{stock_search}' not found in data")
+                    selected_industry = industries[0]
+            else:
+                with col2:
+                    selected_industry = st.selectbox(
+                        "**Or Select Industry**",
+                        options=industries,
+                        index=0
+                    )
             
             # Filter data for selected industry
             industry_filtered = df_industry[df_industry['industry'] == selected_industry].copy()
