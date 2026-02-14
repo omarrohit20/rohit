@@ -3,7 +3,17 @@ todays sectoral news which may impact price movement of stock in nse
 
 General Rules
 #################################################################################
-Avoid trading - Moved more than abs(1.5) first 30 - 45 minutes in trending market
+•	Avoid trading if moved more than abs (1.5) in first 30-45 minutes in trending market.
+•	Uptrend avoid Sell, in case taken take only for 1-2 hour.
+•	Downtrend (Heavy), Buy only for 1-2 hour
+•	Sectoral News Short cover BUY. Check last day LT-2 and in CheckNews morning-volume-breakout-GT2
+•	Sectoral News profit booking SELL. Check last day GT2 and in CheckNews morning-volume-breakout-LT-2.
+•	Sectoral News check below and in CheckNews morning-volume-breakout.
+    	BUY  7 < F10Ch < 12, PCT_day_ch < 2
+            or F10Ch < 12, 1.3 < PCT_day_ch < 2, after 10:00 AM buy around opened BOTTOM or consolidation
+    	Sell -12 < F10Ch < -7, PCT_day_ch > -2
+            or F10Ch > -12, -2 < PCT_day_ch < -1.3, after 10:00 AM sell around opened TOP or consolidation
+
 
 yellow - Avoid Buy
 Light Yellow and white - Buy in downtrend market reversal
@@ -14,6 +24,8 @@ yellow - Avoid Sell
 Light Yellow and white - Sell in uptrend market reversal
 Light Blue and Blue - Sell in Downtrend, Downtrend Consolidation, or midcap low less than last 3 day low
 Purple - Stock itself in Downtrend(Can be sell market not up)
+
+
 
 Screener Rules
 #################################################################################
