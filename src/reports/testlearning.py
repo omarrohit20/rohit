@@ -512,9 +512,118 @@ def main():
                   renderml=True, color='LG')
 
 
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] > -2.5) &
+                (df['PCT_day_change'] > -2.5) &
+                (df['PCT_day_change'] < 0) &
+                (df['PCT_day_change_pre1'] > 1) &
+                (df['lowTail'] > 0.5) &
+                (df['lowTail'] < 1) &
+                (df['forecast_day_PCT10_change'] < 0)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'PostLunchUpStarted0:Buy:IfUpAt09:30:IfDownAfter10', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+    with col2:
+        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] > -2.5) &
+                (df['PCT_day_change'] > -2.5) &
+                (df['PCT_day_change'] < 0) &
+                (df['PCT_day_change_pre1'] > 1) &
+                (df['lowTail'] > 0.5) &
+                (df['lowTail'] < 1) &
+                ((df['PCT_day_change_pre1'] + df['PCT_day_change']) > 0) &
+                ((df['PCT_day_change_pre1'] + df['PCT_day_change']) < 2.5) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'PostLunchUpStarted1:Buy:IfUpAt09:30:IfDownAfter10', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+    with col3:
+        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] < -1.3) &
+                (df['PCT_day_change'] < -1.3) &
+                (df['PCT_day_change_pre1'] > 1) &
+                ((df['PCT_day_change_pre1'] + df['PCT_day_change']) > 0) &
+                ((df['PCT_day_change_pre1'] + df['PCT_day_change']) < 1) &
+                (df['lowTail'] <= 1) &
+                (df['highTail'] <= 1) &
+                (df['forecast_day_PCT10_change'] > 10) &
+                (df['forecast_day_PCT7_change'] > 8) &
+                (df['forecast_day_PCT5_change'] > 8) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'UpTrend: Opened-Down: Buy At first 10 minute low', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+    
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] < 2.5) &
+                (df['PCT_day_change'] < 2.5) &
+                (df['PCT_day_change'] > 0) &
+                (df['PCT_day_change_pre1'] < -1) &
+                (df['highTail'] > 0.5) &
+                (df['highTail'] < 1) &
+                (df['forecast_day_PCT10_change'] > 0)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'PostLunchDownStarted0:Sell:IfDownAt09:30:IfUpAfter10', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+    with col2:
+        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] < 2.5) &
+                (df['PCT_day_change'] < 2.5) &
+                (df['PCT_day_change'] > 0) &
+                (df['PCT_day_change_pre1'] < -1) &
+                (df['highTail'] > 0.5) &
+                (df['highTail'] < 1) &
+                ((df['PCT_day_change_pre1'] + df['PCT_day_change']) < 0) &
+                ((df['PCT_day_change_pre1'] + df['PCT_day_change']) > -2.5) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'PostLunchDownStarted1:Sell:IfDownAt09:30:IfUpAfter10', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+    with col3:
+        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] > 1.3) &
+                (df['PCT_day_change'] > 1.3) &
+                (df['PCT_day_change_pre1'] < -1) &
+                ((df['PCT_day_change_pre1'] - df['PCT_day_change']) < 0) &
+                ((df['PCT_day_change_pre1'] - df['PCT_day_change']) > -1) &
+                (df['highTail'] <= 1) &
+                (df['lowTail'] <= 1) &
+                (df['forecast_day_PCT10_change'] < -10) &
+                (df['forecast_day_PCT7_change'] < -8) &
+                (df['forecast_day_PCT5_change'] < -8)  
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DownTrend: Opened-Up: Sell At first 10 minute high', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
     
 
 
+    
     
 if __name__ == '__main__':
     main()

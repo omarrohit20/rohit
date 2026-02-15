@@ -136,6 +136,36 @@ def main():
     except Exception as e:
         st.write(f"Error generating industry chart: {e}")
 
+
+    col1, col2 = st.columns(2)
+    with col1:
+        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] < 2.5) &
+                (df['PCT_day_change'] < 2) &
+                (df['PCT_day_change'] > 1.3) &
+                (df['forecast_day_PCT10_change'] > 5) &
+                (df['forecast_day_PCT10_change'] < 12)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'MarketOpenedUp:CheckSectoralNews(BuyImmediatelyOpening)', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+    with col2:
+        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] > -2.5) &
+                (df['PCT_day_change'] > -2) &
+                (df['PCT_day_change'] < -1.3) &
+                (df['forecast_day_PCT10_change'] < -5) &
+                (df['forecast_day_PCT10_change'] > -12)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'MarketOpenedDown:CheckSectoralNews(SellImmediatelyOpening)', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
     
 
 
