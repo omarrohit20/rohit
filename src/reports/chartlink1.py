@@ -20,6 +20,29 @@ def main():
     # main title
     st.title('9:30 - 10:00 Last day trend : No Reversal: chartlink-1')
 
+    # Global collection selector at top
+    st.divider()
+    st.subheader("📊 Collection Filter")
+    col_filter1, col_filter2 = st.columns(2)
+    
+    with col_filter1:
+        collections = ["All"] + rb.get_chartlink_collections()
+        selected_coll = st.selectbox(
+            "Select DB Collection for Scrip Filtering:",
+            collections,
+            help="Select a collection to filter scrips. Only scrips in that collection will be shown in all widgets."
+        )
+        rb.set_selected_collection(selected_coll)
+    
+    with col_filter2:
+        if selected_coll != "All":
+            scrips = rb.get_collection_scrips(selected_coll)
+            st.info(f"✓ {len(scrips)} scrips in '{selected_coll}' collection")
+        else:
+            st.info("✓ Showing all scrips (no filter applied)")
+    
+    st.divider()
+
     # page-specific flag
     rb.chartlink1 = True
     try:

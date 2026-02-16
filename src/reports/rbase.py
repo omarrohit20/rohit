@@ -10,6 +10,9 @@ connection = MongoClient('localhost', 27017)
 dbcl = connection.chartlink
 dbnse = connection.Nsedata
 
+# Global collection filter
+selected_collection = None
+
 column_config_default={
     "scrip": "scrip",
     "PCT_day_change": st.column_config.NumberColumn(
@@ -634,9 +637,40 @@ def highlight_category_column_super(value):
     if "0@@SUPER" in value:
         return 'background-color: #CBC3E3'
 
+def get_chartlink_collections():
+    """Get list of collection names in chartlink database"""
+    return sorted(dbcl.list_collection_names())
+
+def get_collection_scrips(collection_name):
+    """Get unique scrips from a collection"""
+    collection = dbcl[collection_name]
+    scrips = collection.distinct('scrip')
+    return sorted(scrips) if scrips else []
+
+def set_selected_collection(collection_name):
+    """Set the selected collection globally"""
+    global selected_collection
+    selected_collection = collection_name
+
+def get_selected_collection():
+    """Get the currently selected collection"""
+    global selected_collection
+    return selected_collection
+
 def getdf(collection_name):
     collection = dbcl[collection_name]
     df = pd.DataFrame(list(collection.find()))
+    
+    # Filter by selected collection scrips if set
+    selected_coll = get_selected_collection()
+    if selected_coll and selected_coll != "All":
+        try:
+            scrips = get_collection_scrips(selected_coll)
+            if scrips:
+                df = df[df['scrip'].isin(scrips)]
+        except Exception as e:
+            print(f"Error filtering by collection: {e}")
+    
     try:
         df['PCT_day_change'] = pd.to_numeric(df['PCT_day_change'])
         df['PCT_change'] = pd.to_numeric(df['PCT_change'], errors='coerce')
