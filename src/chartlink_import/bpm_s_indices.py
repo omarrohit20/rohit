@@ -12,13 +12,13 @@ if __name__ == "__main__":
             headless=True,
             args=['--no-sandbox', '--disable-gpu']
         )
-        page = context.new_page()
-        sb.driver = page
-        sb.context = context
+        
         print('Started')
         sb.nw = datetime.now()
-        
+        page = context.new_page()
         while (sb.nw <= time_13_00):
+            sb.driver = page
+            sb.context = context
             if (sb.nw >= time_09_35 and sb.nw <= time_13_00):
                 # ( {33489} ( ( {cash} (  [=1] 5 minute volume >  greatest(   1 day ago volume /  30  ) and  [=1] 10 minute volume >  greatest(   1 day ago volume /  22  ) and  [=2] 15 minute high <  [=1] 15 minute high and  1 day ago "close - 1 candle ago close / 1 candle ago close * 100" >  -1.5 and  (  (  (  [=3] 5 minute close -  [=1] 5 minute open ) *  100 ) /  1 day ago close ) >  -1.5 and  (  (  (  [-1] 5 minute close -  [-3] 5 minute open ) *  100 ) /  1 day ago close ) >  -1.5 and  (  (  (  [-1] 5 minute close -  [=1] 5 minute open ) *  100 ) /  1 day ago close ) <  -0.5 and ( {cash} (  [=1] 10 minute low >  2 days ago low or  [=1] 10 minute low >  1 day ago low ) ) and ( {cash} (  (  (  (  [-1] 5 minute close -  1 day ago close ) *  100 ) /  1 day ago close ) <  -1.2 or  (  (  (  [-1] 5 minute close -  [=1] 5 minute open ) *  100 ) /  1 day ago close ) <  -1.2 or  (  (  (  [-1] 5 minute close -  [=2] 1 hour high ) *  100 ) /  1 day ago close ) <  -1.2 ) ) and ( {cash} ( ( {cash} (  [-1] 5 minute high <  1 day ago low and  (  (  (  [-1] 5 minute close -  [-3] 5 minute open ) *  100 ) /  1 day ago close ) >  -1 and  (  (  (  [-1] 5 minute close -  1 day ago close ) *  100 ) /  1 day ago close ) <  -1.2 and  (  (  (  daily high -  1 day ago high ) *  100 ) /  1 day ago close ) <  0.3 and  (  (  (  1 day ago close -  3 days ago open ) *  100 ) /  1 day ago close ) >  -5 and ( {cash} (  2 days ago "close - 1 candle ago close / 1 candle ago close * 100" <  0 or  3 days ago "close - 1 candle ago close / 1 candle ago close * 100" <  0 or  1 day ago "close - 1 candle ago close / 1 candle ago close * 100" <  -1.3 ) ) and  [-1] 5 minute low <  [-1] 15 minute low and  [-1] 5 minute low <  [-2] 15 minute low and  [-1] 15 minute low <  [-2] 15 minute low and  [-1] 15 minute low <  [-3] 15 minute low and  [-1] 15 minute low <  [-4] 15 minute low ) ) or ( {cash} (  [-1] 5 minute high <  [=-1] 4 hour low and  1 day ago "close - 1 candle ago close / 1 candle ago close * 100" >  1.5 and  1 day ago "close - 1 candle ago close / 1 candle ago close * 100" <  2.5 and ( {cash} (  abs (  (  (  2 days ago high -  2 days ago low ) *  100 ) /  2 days ago close ) >  2 or  (  (  (  1 day ago close -  1 day ago open ) *  100 ) /  1 day ago close ) >  2 or  1 day ago "close - 1 candle ago close / 1 candle ago close * 100" >  2 ) ) ) ) ) ) ) ) ) )
                 process_url_volBreakout('https://chartink.com/screener/supertrend-morning-sell', 'supertrend-morning-sell', time_09_40, time_12_00)
@@ -41,7 +41,8 @@ if __name__ == "__main__":
             if (sb.nw >= time_09_20 and sb.nw <= time_09_45):
                 # ( {33489} ( ( {cash} ( [=1] 5 minute volume > greatest(  1 day ago volume / 30  ) and abs ( ( ( [0] 5 minute close - [=1] 5 minute open ) * 100 ) / [=1] 5 minute open ) > 0.3 and abs ( ( ( [0] 5 minute close - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < 2.1 and abs ( ( ( [0] 15 minute high - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < 2.1 and abs ( ( ( [0] 15 minute low - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < 2.1 and abs ( ( ( [=1] 15 minute high - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < 2.1 and abs ( ( ( [=1] 15 minute low - 1 day ago close ) * 100 ) / [=1] 5 minute open ) < 2.1 ) ) ) )
                 process_url_volBreakout('https://chartink.com/screener/morning-volume-bs', 'morning-volume-bs', time_09_00, time_10_00)
-
-        time.sleep(5)
-        sb.nw = datetime.now()
+            
+            time.sleep(5)
+            sb.nw = datetime.now()
+        page.close()
     
