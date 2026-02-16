@@ -637,6 +637,101 @@ def highlight_category_column_super(value):
     if "0@@SUPER" in value:
         return 'background-color: #CBC3E3'
 
+def apply_ml_highlight(row):
+    """Return a Series of styles for a row: preserve existing mlData styles
+    but force pink for mlData when systemtime contains '10:' and mlData
+    indicates a 'CROSSED' event.
+    """
+    styles = pd.Series('', index=row.index)
+    try:
+        # Only apply this special pink highlight for chartlink1 views
+        if not chartlink1:
+            # preserve existing mlData style
+            ml_value = str(row.get('mlData', ''))
+            try:
+                styles['mlData'] = highlight_category_column(ml_value) or ''
+            except Exception:
+                styles['mlData'] = ''
+            return styles
+
+        ml_value = str(row.get('mlData', ''))
+        systime = str(row.get('systemtime', ''))
+        scrip = row.get('scrip')
+
+        # Default to existing mlData style
+        existing = ''
+        try:
+            existing = highlight_category_column(ml_value) or ''
+        except Exception:
+            existing = ''
+
+        # If systemtime contains '10:' and the scrip is present in the
+        # 'crossed-day-high' collection, set mlData cell to pink.
+        try:
+            if ('10:' in systime) and scrip:
+                try:
+                    coll = dbcl['crossed-day-high']
+                    if coll.find_one({'scrip': scrip}):
+                        styles['mlData'] = 'background-color: #fb87ec'
+                        return styles
+                except Exception:
+                    # fallback to existing style on any DB error
+                    pass
+                
+                try:
+                    coll = dbcl['crossed-day-low']
+                    if coll.find_one({'scrip': scrip}):
+                        styles['mlData'] = 'background-color: #fb87ec'
+                        return styles
+                except Exception:
+                    # fallback to existing style on any DB error
+                    pass
+                
+                try:
+                    coll = dbcl['supertrend-morning-buy']
+                    if coll.find_one({'scrip': scrip}):
+                        styles['mlData'] = 'background-color: #fb87ec'
+                        return styles
+                except Exception:
+                    # fallback to existing style on any DB error
+                    pass
+                
+                try:
+                    coll = dbcl['supertrend-morning-sell']
+                    if coll.find_one({'scrip': scrip}):
+                        styles['mlData'] = 'background-color: #fb87ec'
+                        return styles
+                except Exception:
+                    # fallback to existing style on any DB error
+                    pass
+                
+                try:
+                    coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
+                    if coll.find_one({'scrip': scrip}):
+                        styles['mlData'] = 'background-color: #fb87ec'
+                        return styles
+                except Exception:
+                    # fallback to existing style on any DB error
+                    pass
+                
+                try:
+                    coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
+                    if coll.find_one({'scrip': scrip}):
+                        styles['mlData'] = 'background-color: #fb87ec'
+                        return styles
+                except Exception:
+                    # fallback to existing style on any DB error
+                    pass
+                
+        except Exception:
+            # fallback to existing style on any DB error
+            pass
+
+        styles['mlData'] = existing
+    except Exception:
+        pass
+    return styles
+
 def get_chartlink_collections():
     """Get list of collection names in chartlink database"""
     return sorted(dbcl.list_collection_names())
@@ -839,12 +934,9 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
     elif not df.empty:
         df_styled = highlight_category_row(df, color=color)
-        if(chartlink1) and color =='LG':
-            df_styled = df_styled.applymap(highlight_category_column, subset=['mlData'])
-        elif ((chartlink0) and (color == 'G' or color == 'R')):
-            df_styled = df_styled.applymap(highlight_category_column, subset=['mlData'])
-        else:
-            df_styled = df_styled.applymap(highlight_category_column, subset=['mlData'])
+        # Apply mlData column highlighting, but use a row-level function so
+        # we can consider both `systemtime` and `mlData` when deciding style.
+        df_styled = df_styled.apply(apply_ml_highlight, axis=1)
         # Apply the second style *directly* to the Styler object
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
     else:
