@@ -670,7 +670,7 @@ def apply_ml_highlight(row):
         try:
             coll = dbcl['buy-morning-volume-breakout(Check-News)']
             if coll.find_one({'scrip': scrip}):
-                styles['mlData'] = 'background-color: #fb87ec'
+                styles['mlData'] = 'background-color: #E0FFDE'
                 return styles
         except Exception:
             # fallback to existing style on any DB error
@@ -679,7 +679,7 @@ def apply_ml_highlight(row):
         try:
             coll = dbcl['sell-morning-volume-breakout(Check-News)']
             if coll.find_one({'scrip': scrip}):
-                styles['mlData'] = 'background-color: #fb87ec'
+                styles['mlData'] = 'background-color: #FCCFD2'
                 return styles
         except Exception:
             # fallback to existing style on any DB error
@@ -688,7 +688,7 @@ def apply_ml_highlight(row):
         try:
             coll = dbcl['1-Bbuyy-morningUp-downConsolidation']
             if coll.find_one({'scrip': scrip}):
-                styles['mlData'] = 'background-color: #fb87ec'
+                styles['mlData'] = 'background-color: #E0FFDE'
                 return styles
         except Exception:
             # fallback to existing style on any DB error
@@ -697,7 +697,7 @@ def apply_ml_highlight(row):
         try:
             coll = dbcl['1-Sselll-morningDown-upConsolidation']
             if coll.find_one({'scrip': scrip}):
-                styles['mlData'] = 'background-color: #fb87ec'
+                styles['mlData'] = 'background-color: #FCCFD2'
                 return styles
         except Exception:
             # fallback to existing style on any DB error
@@ -708,8 +708,8 @@ def apply_ml_highlight(row):
             buy_df = df
             try:
                 buy_df = df[
-                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
-                    (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False))
+                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
                     ]
             except KeyError as e:
@@ -719,8 +719,8 @@ def apply_ml_highlight(row):
             sell_df = df
             try:
                 sell_df = df[
-                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
-                    (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False))
+                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
                 ]
             except KeyError as e:
