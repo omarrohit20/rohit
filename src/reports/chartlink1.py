@@ -4,6 +4,8 @@ import streamlit as st
 import rbase as rb
 import pandas as pd
 
+chartlink1 = True
+
 # Run the autorefresh approximately every 30000 milliseconds (30 seconds)
 
 def main():

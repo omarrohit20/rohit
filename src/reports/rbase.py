@@ -503,9 +503,9 @@ def apply_f10_sell(row):
 
 def highlight_category_column_f10_buy(value10, value7, value5):
     """Highlights the entire row based on the 'Category' column value."""
-    if float(value10) >= 7 and float(value7) > -2 and float(value5) > -2:
+    if float(value10) >= 7 and float(value7) > -2 and float(value5) > -2 and (float(value7) > (float(value10)-5) or float(value5) > (float(value10)-5)):
         return 'background-color: #800080'
-    elif float(value10) >= 2 and float(value10) < 7 and float(value7) > -3 and float(value5) > -3:
+    elif float(value10) >= 2 and float(value10) < 7 and float(value7) > -3 and float(value5) > -3 and (float(value7) > (float(value10)-4) or float(value5) > (float(value10)-4)):
         return 'background-color: #3EB9FB'
     elif float(value10) >= -2 and float(value10) < 2 and float(value7) < 2 and float(value5) < 2 and float(value7) >-2 and float(value5) > -2:
         return 'background-color: #CBEDFF'
@@ -520,9 +520,9 @@ def highlight_category_column_f10_buy(value10, value7, value5):
         
 def highlight_category_column_f10_sell(value10, value7, value5):
     """Highlights the entire row based on the 'Category' column value."""
-    if float(value10) <= -7 and float(value7) < 2 and float(value5) < 2:
+    if float(value10) <= -7 and float(value7) < 2 and float(value5) < 2 and (float(value7) < (float(value10)+5) or float(value5) < (float(value10)+5)):
         return 'background-color: #800080'
-    elif float(value10) <= -2 and float(value10) > -7 and float(value7) < 3 and float(value5) < 3:
+    elif float(value10) <= -2 and float(value10) > -7 and float(value7) < 3 and float(value5) < 3 and (float(value7) < (float(value10)+4) or float(value5) < (float(value10)+4)):
         return 'background-color: #3EB9FB'
     elif float(value10) <= 2 and float(value10) > -2 and float(value7) > -2 and float(value5) > -2 and float(value7) < 2 and float(value5) < 2:
         return 'background-color: #CBEDFF'
@@ -668,6 +668,43 @@ def apply_ml_highlight(row):
         # If systemtime contains '10:' and the scrip is present in the
         # 'crossed-day-high' collection, set mlData cell to pink.
         try:
+            try:
+                coll = dbcl['buy-morning-volume-breakout(Check-News)']
+                if coll.find_one({'scrip': scrip}):
+                    styles['mlData'] = 'background-color: #fb87ec'
+                    return styles
+            except Exception:
+                # fallback to existing style on any DB error
+                pass
+
+            try:
+                coll = dbcl['sell-morning-volume-breakout(Check-News)']
+                if coll.find_one({'scrip': scrip}):
+                    styles['mlData'] = 'background-color: #fb87ec'
+                    return styles
+            except Exception:
+                # fallback to existing style on any DB error
+                pass
+
+            try:
+                coll = dbcl['1-Bbuyy-morningUp-downConsolidation']
+                if coll.find_one({'scrip': scrip}):
+                    styles['mlData'] = 'background-color: #fb87ec'
+                    return styles
+            except Exception:
+                # fallback to existing style on any DB error
+                pass
+
+            try:
+                coll = dbcl['1-Sselll-morningDown-upConsolidation']
+                if coll.find_one({'scrip': scrip}):
+                    styles['mlData'] = 'background-color: #fb87ec'
+                    return styles
+            except Exception:
+                # fallback to existing style on any DB error
+                pass
+
+
             if ('10:' in systime) and scrip:
                 try:
                     coll = dbcl['crossed-day-high']
@@ -932,11 +969,12 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
     elif renderml:
         df_styled = highlight_category_row(df, color=color)
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
-    elif not df.empty:
+    elif (not df.empty):
         df_styled = highlight_category_row(df, color=color)
         # Apply mlData column highlighting, but use a row-level function so
         # we can consider both `systemtime` and `mlData` when deciding style.
-        df_styled = df_styled.apply(apply_ml_highlight, axis=1)
+        if(chartlink1):
+            df_styled = df_styled.apply(apply_ml_highlight, axis=1)
         # Apply the second style *directly* to the Styler object
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
     else:
