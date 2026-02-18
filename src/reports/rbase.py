@@ -670,7 +670,7 @@ def apply_ml_highlight(row):
         try:
             coll = dbcl['buy-morning-volume-breakout(Check-News)']
             if coll.find_one({'scrip': scrip}):
-                styles['mlData'] = 'background-color: #E0FFDE'
+                styles['scrip'] = 'background-color: #E0FFDE'
                 return styles
         except Exception:
             # fallback to existing style on any DB error
@@ -679,7 +679,7 @@ def apply_ml_highlight(row):
         try:
             coll = dbcl['sell-morning-volume-breakout(Check-News)']
             if coll.find_one({'scrip': scrip}):
-                styles['mlData'] = 'background-color: #FCCFD2'
+                styles['scrip'] = 'background-color: #FCCFD2'
                 return styles
         except Exception:
             # fallback to existing style on any DB error
@@ -688,7 +688,7 @@ def apply_ml_highlight(row):
         try:
             coll = dbcl['1-Bbuyy-morningUp-downConsolidation']
             if coll.find_one({'scrip': scrip}):
-                styles['mlData'] = 'background-color: #E0FFDE'
+                styles['scrip'] = 'background-color: #E0FFDE'
                 return styles
         except Exception:
             # fallback to existing style on any DB error
@@ -697,7 +697,7 @@ def apply_ml_highlight(row):
         try:
             coll = dbcl['1-Sselll-morningDown-upConsolidation']
             if coll.find_one({'scrip': scrip}):
-                styles['mlData'] = 'background-color: #FCCFD2'
+                styles['scrip'] = 'background-color: #FCCFD2'
                 return styles
         except Exception:
             # fallback to existing style on any DB error
@@ -1000,8 +1000,15 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
         df_styled = highlight_category_row(df, color=color)
         # Apply mlData column highlighting, but use a row-level function so
         # we can consider both `systemtime` and `mlData` when deciding style.
-        if(chartlink1):
+        if(chartlink1) and color =='LG':
             df_styled = df_styled.apply(apply_ml_highlight, axis=1)
+            df_styled = df_styled.applymap(highlight_category_column, subset=['mlData'])
+        elif ((chartlink0) and (color == 'G' or color == 'R')):
+            df_styled = df_styled.applymap(highlight_category_column, subset=['mlData'])
+        else:
+            df_styled = df_styled.applymap(highlight_category_column, subset=['mlData'])
+        
+        
         # Apply the second style *directly* to the Styler object
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
     else:
