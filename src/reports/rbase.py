@@ -709,7 +709,7 @@ def apply_ml_highlight(row):
             try:
                 buy_df = df[
                     (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                    (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) &
+                    #(~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
                     ]
             except KeyError as e:
@@ -720,14 +720,14 @@ def apply_ml_highlight(row):
             try:
                 sell_df = df[
                     (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                    (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) &
+                    #(~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
                 ]
             except KeyError as e:
                 pass
 
 
-            if ('10:' in systime) and scrip and len(buy_df) < 7:
+            if ('10:' in systime) and scrip and len(buy_df) < 8:
                 try:
                     coll = dbcl['crossed-day-high']
                     if coll.find_one({'scrip': scrip}):
@@ -758,7 +758,7 @@ def apply_ml_highlight(row):
                     pass
 
 
-            if ('10:' in systime) and scrip and len(sell_df) < 7:
+            if ('10:' in systime) and scrip and len(sell_df) < 8:
                 try:
                     coll = dbcl['crossed-day-low']
                     if coll.find_one({'scrip': scrip}):

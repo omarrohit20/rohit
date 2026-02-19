@@ -104,62 +104,25 @@ def main():
         df = rb.getdf('temp-rohit')
         rb.render(st, df, 'temp-rohit', color='LG', height=300)
     
-
-    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    col0, col1, col2, col3, col4, col5 = st.columns(6)
+    with col0:
+        df = rb.getdf('supertrend-morning-buy')
+        rb.render(st, df, 'Supertrend Morning Buy', color='LG', renderf10buy00=True)
     with col1:
-        df = rb.getintersectdf('buy-morning-volume-breakout(Check-News)', 'morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_day_change'] > 1.3) | (df['PCT_day_change'] < -2)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'buy-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+        df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
+        rb.render(st, df, 'Crossed 2 Day Highs', color='LG', renderf10buy00=True)
     with col2:
-        df = rb.getintersectdf('buy-morning-volume-breakout(Check-News)', 'morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                 (df['forecast_day_PCT10_change'] > 3)
-                 |
-                 ((df['forecast_day_PCT7_change'] < -1.3) & (df['forecast_day_PCT5_change'] < -1.3))
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'buy-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+        df = rb.getdf('crossed-day-high')
+        rb.render(st, df, 'Crossed Day Highs', color='LG', renderf10buy00=True)
     with col3:
-        df = rb.getdf('buy-morning-volume-breakout(Check-News)')
-        filtered_df = df
-        rb.render(st, filtered_df, 'buy-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+        df = rb.getdf('supertrend-morning-sell')
+        rb.render(st, df, 'Supertrend Morning Sell', color='LG', renderf10sell00=True)
     with col4:
-        df = rb.getintersectdf('sell-morning-volume-breakout(Check-News)', 'morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_day_change'] < -1.3) | (df['PCT_day_change'] > 2)
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'sell-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+        df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
+        rb.render(st, df, 'Crossed 2 Day Lows', color='LG', renderf10sell00=True)
     with col5:
-        df = rb.getintersectdf('sell-morning-volume-breakout(Check-News)', 'morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (
-                    (df['forecast_day_PCT10_change'] < -3)
-                    |
-                    ((df['forecast_day_PCT7_change'] > 1.3) & (df['forecast_day_PCT5_change'] > 1.3))
-                )
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'sell-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
-    with col6:
-        df = rb.getdf('sell-morning-volume-breakout(Check-News)')
-        filtered_df = df
-        rb.render(st, filtered_df, 'sell-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+        df = rb.getdf('crossed-day-low')
+        rb.render(st, df, 'Crossed Day Lows', color='LG', renderf10sell01=True)
 
 
 # Sentiment Analysis Tables

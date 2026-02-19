@@ -15,7 +15,7 @@ if __name__ == "__main__":
         print('Started')
         sb.nw = datetime.now()
         page = context.new_page()
-        while (sb.nw <= time_12_30):
+        while (sb.nw <= time_13_00):
             sb.driver = page
             sb.context = context
             if (sb.nw >= time_09_35 and sb.nw <= time_11_00):
@@ -57,9 +57,9 @@ if __name__ == "__main__":
 
 
 
-            if (sb.nw >= time_09_40 and sb.nw <= time_12_30):
-                # ( {33489} ( ( {cash} ( ( {cash} (  [=1] 5 minute volume >  greatest(   1 day ago volume /  30  ) and  [=1] 10 minute volume >  greatest(   1 day ago volume /  22  ) and  abs (  daily "close - 1 candle ago close / 1 candle ago close * 100" ) >  1.3 and  [-1] 5 minute high >  [=2] 5 minute open and  [-1] 5 minute high >  [=2] 5 minute close and  [=1] 5 minute low <=  [=1] 1 hour low and  [=2] 30 minute low >  1 day ago close and  (  (  (  [=1] 5 minute open -  1 day ago close ) *  100 ) /  1 day ago close ) <  0.7 and  (  (  (  [-1] 5 minute close -  [=2] 5 minute high ) *  100 ) /  1 day ago close ) >  0.3 and  (  (  (  [-1] 5 minute close -  1 day ago close ) *  100 ) /  1 day ago close ) >  1.3 and  (  (  (  [-1] 5 minute close -  [=1] 5 minute low ) *  100 ) /  1 day ago close ) >  1.3 and  (  (  (  [=2] 5 minute low -  [=4] 5 minute high ) *  100 ) /  1 day ago close ) >  -1 and  (  (  (  [=3] 5 minute close -  1 day ago close ) *  100 ) /  1 day ago close ) <  2 and  (  (  (  [=5] 5 minute close -  1 day ago close ) *  100 ) /  1 day ago close ) <  3 ) ) ) ) ) )
-                process_url_volBreakout('https://chartink.com/screener/buy-morning-volume-breakout-checknews', 'buy-morning-volume-breakout(Check-News)', time_09_40, time_12_30)
+            if (sb.nw >= time_09_40 and sb.nw <= time_13_00):
+                # ( {33489} ( ( {cash} ( ( {cash} (  [=1] 5 minute volume >  greatest(   1 day ago volume /  30  ) and  [=1] 10 minute volume >  greatest(   1 day ago volume /  22  ) and  abs (  daily "close - 1 candle ago close / 1 candle ago close * 100" ) >  1.3 and  [-1] 5 minute high >  [=2] 5 minute open and  [-1] 5 minute high >  [=2] 5 minute close and  [=1] 5 minute low <=  [=1] 1 hour low and  [=2] 30 minute low >  1 day ago close and  (  (  (  [=1] 5 minute open -  1 day ago close ) *  100 ) /  1 day ago close ) <  0.7 and  (  (  (  [-1] 5 minute close -  [=2] 5 minute high ) *  100 ) /  1 day ago close ) >  0.3 and  (  (  (  [-1] 5 minute close -  1 day ago close ) *  100 ) /  1 day ago close ) >  1 and  (  (  (  [-1] 5 minute close -  [=1] 5 minute low ) *  100 ) /  1 day ago close ) >  1 and  (  (  (  [=2] 5 minute low -  [=4] 5 minute high ) *  100 ) /  1 day ago close ) >  -1 and  (  (  (  [=3] 5 minute close -  1 day ago close ) *  100 ) /  1 day ago close ) <  2 and  (  (  (  [=5] 5 minute close -  1 day ago close ) *  100 ) /  1 day ago close ) <  3 and  (  (  (  [0] 5 minute close -  [-6] 5 minute open ) *  100 ) /  1 day ago close ) <  1.5 and ( {cash} (  (  (  (  [0] 5 minute close -  [-5] 5 minute open ) *  100 ) /  1 day ago close ) >  0.4 or  (  (  (  [-1] 15 minute high -  [-1] 5 minute high ) *  100 ) /  1 day ago close ) <  0 ) ) and ( {cash} (  1 day ago "close - 1 candle ago close / 1 candle ago close * 100" <  -2 or  (  (  (  [-1] 5 minute close -  1 day ago close ) *  100 ) /  1 day ago close ) >  1.7 ) ) and ( {cash} (  1 day ago "close - 1 candle ago close / 1 candle ago close * 100" <  2 or  (  (  (  [-1] 5 minute close -  [=1] 5 minute open ) *  100 ) /  1 day ago close ) <  1 or  (  (  (  1 day ago close -  1 day ago open ) *  100 ) /  1 day ago close ) <  1.5 or ( {cash} (  (  (  (  1 day ago close -  1 day ago open ) *  100 ) /  1 day ago close ) >  1.5 and  (  (  (  2 days ago close -  2 days ago open ) *  100 ) /  1 day ago close ) <  0 and  2 days ago "close - 1 candle ago close / 1 candle ago close * 100" <  0 ) ) ) ) ) ) ) ) ) ) 
+                process_url_volBreakout('https://chartink.com/screener/buy-morning-volume-breakout-checknews', 'buy-morning-volume-breakout(Check-News)', time_09_40, time_13_00)
             
             time.sleep(5)
             sb.nw = datetime.now()
