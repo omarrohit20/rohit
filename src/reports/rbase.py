@@ -670,7 +670,7 @@ def apply_ml_highlight(row):
         # 'crossed-day-high' collection, set mlData cell to pink.
         try:
             coll = dbcl['buy-morning-volume-breakout(Check-News)']
-            if coll.find_one({'scrip': scrip}):
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '09:'}}}):
                 styles['scrip'] = 'background-color: #E0FFDE'
                 return styles
         except Exception:
@@ -679,7 +679,7 @@ def apply_ml_highlight(row):
 
         try:
             coll = dbcl['sell-morning-volume-breakout(Check-News)']
-            if coll.find_one({'scrip': scrip}):
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '09:'}}}):
                 styles['scrip'] = 'background-color: #FCCFD2'
                 return styles
         except Exception:
@@ -714,16 +714,6 @@ def apply_ml_highlight(row):
             # fallback to existing style on any DB error
             pass
 
-            
-        try:
-            coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
-                styles['mlData'] = 'background-color: #fb87ec'
-                return styles
-        except Exception:
-            # fallback to existing style on any DB error
-            pass
-
 
         try:
             coll = dbcl['supertrend-morning-sell']
@@ -734,14 +724,7 @@ def apply_ml_highlight(row):
             # fallback to existing style on any DB error
             pass
 
-        try:
-            coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
-                styles['mlData'] = 'background-color: #fb87ec'
-                return styles
-        except Exception:
-            # fallback to existing style on any DB error
-            pass
+        
 
         try:
             df = getdf('morning-volume-breakout-buy')
@@ -754,6 +737,7 @@ def apply_ml_highlight(row):
                     ]
             except KeyError as e:
                 pass
+
 
             df = getdf('morning-volume-breakout-sell')
             sell_df = df
@@ -777,10 +761,28 @@ def apply_ml_highlight(row):
                     # fallback to existing style on any DB error
                     pass
 
+                try:
+                    coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
+                    if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
+                        styles['mlData'] = 'background-color: #fb87ec'
+                        return styles
+                except Exception:
+                    # fallback to existing style on any DB error
+                    pass
+
 
             if ('10:' in systime) and scrip and len(sell_df) < 8:
                 try:
                     coll = dbcl['crossed-day-low']
+                    if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
+                        styles['mlData'] = 'background-color: #fb87ec'
+                        return styles
+                except Exception:
+                    # fallback to existing style on any DB error
+                    pass
+
+                try:
+                    coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
                     if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
                         styles['mlData'] = 'background-color: #fb87ec'
                         return styles
