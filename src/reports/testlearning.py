@@ -485,6 +485,7 @@ def main():
                 (df['PCT_day_change'] > -2.5) &
                 (df['PCT_day_change'] < 0) &
                 (df['PCT_day_change_pre1'] > 1) &
+                (df['PCT_day_change_pre1'] < 2.5) &
                 (df['lowTail'] > 0.5) &
                 (df['lowTail'] < 1) &
                 (df['forecast_day_PCT10_change'] < 0)
@@ -501,6 +502,7 @@ def main():
                 (df['PCT_day_change'] > -2.5) &
                 (df['PCT_day_change'] < 0) &
                 (df['PCT_day_change_pre1'] > 1) &
+                (df['PCT_day_change_pre1'] < 2.5) &
                 (df['lowTail'] > 0.5) &
                 (df['lowTail'] < 1) &
                 ((df['PCT_day_change_pre1'] + df['PCT_day_change']) > 0) &
@@ -517,6 +519,7 @@ def main():
                 (df['PCT_change'] < -1.3) &
                 (df['PCT_day_change'] < -1.3) &
                 (df['PCT_day_change_pre1'] > 1) &
+                (df['PCT_day_change_pre1'] < 2.5) &
                 ((df['PCT_day_change_pre1'] + df['PCT_day_change']) > 0) &
                 ((df['PCT_day_change_pre1'] + df['PCT_day_change']) < 1) &
                 (df['lowTail'] <= 1) &
@@ -540,6 +543,7 @@ def main():
                 (df['PCT_day_change'] < 2.5) &
                 (df['PCT_day_change'] > 0) &
                 (df['PCT_day_change_pre1'] < -1) &
+                (df['PCT_day_change_pre1'] > -2.5) &
                 (df['highTail'] > 0.5) &
                 (df['highTail'] < 1) &
                 (df['forecast_day_PCT10_change'] > 0)
@@ -556,6 +560,7 @@ def main():
                 (df['PCT_day_change'] < 2.5) &
                 (df['PCT_day_change'] > 0) &
                 (df['PCT_day_change_pre1'] < -1) &
+                (df['PCT_day_change_pre1'] > -2.5) &
                 (df['highTail'] > 0.5) &
                 (df['highTail'] < 1) &
                 ((df['PCT_day_change_pre1'] + df['PCT_day_change']) < 0) &
@@ -572,6 +577,7 @@ def main():
                 (df['PCT_change'] > 1.3) &
                 (df['PCT_day_change'] > 1.3) &
                 (df['PCT_day_change_pre1'] < -1) &
+                (df['PCT_day_change_pre1'] > -2.5) &
                 ((df['PCT_day_change_pre1'] - df['PCT_day_change']) < 0) &
                 ((df['PCT_day_change_pre1'] - df['PCT_day_change']) > -1) &
                 (df['highTail'] <= 1) &

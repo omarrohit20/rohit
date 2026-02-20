@@ -686,6 +686,7 @@ def main():
                 ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
                 (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
                 ((df['PCT_day_change'] < 2) | (df['week2LowChange'] < 7)) &
+                (df['PCT_day_change'] > -1.5) &
                 (df['PCT_day_change_pre1'] > -1) &
                 (df['PCT_day_change_pre2'] > -1) &
                 (df['PCT_day_change_pre1'] < 2)
@@ -695,7 +696,7 @@ def main():
         if len(filtered_df) <= 3:
             rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutMH', color='LG', height=150)
         else:
-            rb.render(st, empty_df, 'morning-volume-breakout-buy + breakoutMH', color='LG', height=150)
+            rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutMH', color='LG', height=150)
     with col2:
         df = rb.getintersectdf('morning-volume-breakout-buy', 'breakoutM2H')
         expected_columns = list(set(df.columns))
@@ -705,6 +706,7 @@ def main():
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
                 ((df['PCT_day_change'] < 2) | (df['week2LowChange'] < 7)) &
+                (df['PCT_day_change'] > -1.5) &
                 (df['PCT_day_change_pre1'] > -1) &
                 (df['PCT_day_change_pre2'] > -1) &
                 (df['PCT_day_change_pre1'] < 2)
@@ -746,6 +748,7 @@ def main():
                 ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
                 (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
                 ((df['PCT_day_change'] > -2) | (df['week2HighChange'] > -7)) &
+                (df['PCT_day_change'] < 1.5) &
                 (df['PCT_day_change_pre1'] < 1) &
                 (df['PCT_day_change_pre2'] < 1) &
                 (df['PCT_day_change_pre1'] > -2) &
@@ -766,6 +769,7 @@ def main():
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
                 ((df['PCT_day_change'] > -2) | (df['week2HighChange'] > -7)) &
+                (df['PCT_day_change'] < 1.5) &
                 (df['PCT_day_change_pre1'] < 1) &
                 (df['PCT_day_change_pre2'] < 1) &
                 (df['PCT_day_change_pre1'] > -2) &
