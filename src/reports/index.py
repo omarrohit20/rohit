@@ -108,6 +108,7 @@ if selected:
             import rbase as rb
             rb.chartlink0 = False
             rb.chartlink1 = False
+            rb.testLearning = False
         except Exception:
             pass
 

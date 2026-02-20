@@ -364,6 +364,7 @@ column_order_p=["scrip",
 
 chartlink1=False
 chartlink0=False
+testLearning=False
 
  # Function to create cumulative data in 10-minute intervals
 def parse_timestamp(item):
@@ -645,7 +646,7 @@ def apply_ml_highlight(row):
     styles = pd.Series('', index=row.index)
     try:
         # Only apply this special pink highlight for chartlink1 views
-        if not chartlink1:
+        if not chartlink1 and not testLearning:
             # preserve existing mlData style
             ml_value = str(row.get('mlData', ''))
             try:
@@ -703,6 +704,45 @@ def apply_ml_highlight(row):
             # fallback to existing style on any DB error
             pass
 
+
+        try:
+            coll = dbcl['supertrend-morning-buy']
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
+                styles['mlData'] = 'background-color: #fb87ec'
+                return styles
+        except Exception:
+            # fallback to existing style on any DB error
+            pass
+
+            
+        try:
+            coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
+                styles['mlData'] = 'background-color: #fb87ec'
+                return styles
+        except Exception:
+            # fallback to existing style on any DB error
+            pass
+
+
+        try:
+            coll = dbcl['supertrend-morning-sell']
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
+                styles['mlData'] = 'background-color: #fb87ec'
+                return styles
+        except Exception:
+            # fallback to existing style on any DB error
+            pass
+
+        try:
+            coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
+                styles['mlData'] = 'background-color: #fb87ec'
+                return styles
+        except Exception:
+            # fallback to existing style on any DB error
+            pass
+
         try:
             df = getdf('morning-volume-breakout-buy')
             buy_df = df
@@ -726,31 +766,11 @@ def apply_ml_highlight(row):
             except KeyError as e:
                 pass
 
-
+            
             if ('10:' in systime) and scrip and len(buy_df) < 8:
                 try:
                     coll = dbcl['crossed-day-high']
-                    if coll.find_one({'scrip': scrip}):
-                        styles['mlData'] = 'background-color: #fb87ec'
-                        return styles
-                except Exception:
-                    # fallback to existing style on any DB error
-                    pass
-
-                
-                try:
-                    coll = dbcl['supertrend-morning-buy']
-                    if coll.find_one({'scrip': scrip}):
-                        styles['mlData'] = 'background-color: #fb87ec'
-                        return styles
-                except Exception:
-                    # fallback to existing style on any DB error
-                    pass
-
-                
-                try:
-                    coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
-                    if coll.find_one({'scrip': scrip}):
+                    if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
                         styles['mlData'] = 'background-color: #fb87ec'
                         return styles
                 except Exception:
@@ -761,30 +781,14 @@ def apply_ml_highlight(row):
             if ('10:' in systime) and scrip and len(sell_df) < 8:
                 try:
                     coll = dbcl['crossed-day-low']
-                    if coll.find_one({'scrip': scrip}):
+                    if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
                         styles['mlData'] = 'background-color: #fb87ec'
                         return styles
                 except Exception:
                     # fallback to existing style on any DB error
                     pass
 
-                try:
-                    coll = dbcl['supertrend-morning-sell']
-                    if coll.find_one({'scrip': scrip}):
-                        styles['mlData'] = 'background-color: #fb87ec'
-                        return styles
-                except Exception:
-                    # fallback to existing style on any DB error
-                    pass
-
-                try:
-                    coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
-                    if coll.find_one({'scrip': scrip}):
-                        styles['mlData'] = 'background-color: #fb87ec'
-                        return styles
-                except Exception:
-                    # fallback to existing style on any DB error
-                    pass
+                
 
 
         except Exception:
@@ -1000,7 +1004,7 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
         df_styled = highlight_category_row(df, color=color)
         # Apply mlData column highlighting, but use a row-level function so
         # we can consider both `systemtime` and `mlData` when deciding style.
-        if(chartlink1) and color =='LG':
+        if(chartlink1 or testLearning) and color =='LG':
             df_styled = df_styled.apply(apply_ml_highlight, axis=1)
             df_styled = df_styled.applymap(highlight_category_column, subset=['mlData'])
         elif ((chartlink0) and (color == 'G' or color == 'R')):
