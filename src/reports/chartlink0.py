@@ -92,7 +92,54 @@ def main():
         except Exception as e:
             st.error(f"Error loading sell data: {e}")
 
-    col1, col2, col3 = st.columns(3)
+    col0, col1, col2, col3 = st.columns(4)
+    with col0:
+        try:
+            # Get data from both collections
+            buy_collection = rb.dbcl['morning-volume-breakout-buy']
+            sell_collection = rb.dbcl['morning-volume-breakout-sell']
+            
+            buy_data = list(buy_collection.find())
+            sell_data = list(sell_collection.find()) 
+           
+            buy_intervals, buy_cumulative = rb.create_cumulative_data(buy_data, 'Buy')
+            sell_intervals, sell_cumulative = rb.create_cumulative_data(sell_data, 'Sell')
+            
+            # Create plotly figure
+            fig = go.Figure()
+            
+            if buy_intervals:
+                fig.add_trace(go.Scatter(
+                    x=buy_intervals,
+                    y=buy_cumulative,
+                    mode='lines+markers',
+                    name='Buy Signals',
+                    line=dict(color='green', width=2),
+                    marker=dict(size=6)
+                ))
+            
+            if sell_intervals:
+                fig.add_trace(go.Scatter(
+                    x=sell_intervals,
+                    y=sell_cumulative,
+                    mode='lines+markers',
+                    name='Sell Signals',
+                    line=dict(color='red', width=2),
+                    marker=dict(size=6)
+                ))
+            
+            fig.update_layout(
+                title='Morning Volume Breakout Buy/Sell Records',
+                xaxis_title='Time',
+                yaxis_title='Cumulative Count',
+                hovermode='x unified',
+                height=400
+            )
+            
+            st.plotly_chart(fig, use_container_width=True)  
+        except Exception as e:
+            st.write(f"Error loading volume breakout data: {e}")
+        #st.divider()
     with col1:
         try:
             # Get data from both collections
