@@ -375,57 +375,6 @@ def intraday_tech_data(regression_data):
             if (regression_data['week2HighChange'] > 0 and regression_data['weekHighChange'] > 0):
                 intradaytech = intradaytech + '|' + "#BYYWEEK2HIGH>GT0,"
 
-    
-    # determine prefix keyword for morning down followed by recent up moves
-    prefix = ''
-    # compute morning drop over first 3-4 hours (16 candles of 15m) on the latest trading day
-    morning_pct = 0
-    if len(df) >= 16:
-        # find the most recent date in the series
-        try:
-            df['date'] = pd.to_datetime(df['date'])
-        except Exception:
-            pass
-        last_day = df['date'].dt.date.max()
-        today_df = df[df['date'].dt.date == last_day]
-        if len(today_df) >= 16:
-            morn_open = today_df.iloc[0]['open']
-            morn_close = today_df.iloc[15]['close']
-            morning_pct = (morn_close - morn_open) * 100 / morn_open
-    # only check pattern if there was a morning decline
-    if morning_pct < -1:
-        last_close = close
-        last_open_val = df.iloc[-1]['open']
-        change_15 = (last_close - last_open_val) * 100 / last_open_val
-        change_30 = 0
-        change_45 = 0
-        change_120 = 0
-        if len(df) >= 2:
-            change_30 = (last_close - df.iloc[-2]['close']) * 100 / df.iloc[-2]['close']
-        if len(df) >= 3:
-            change_45 = (last_close - df.iloc[-3]['close']) * 100 / df.iloc[-3]['close']
-        if len(df) >= 8:
-            change_120 = (last_close - df.iloc[-8]['close']) * 100 / df.iloc[-8]['close']
-        if ((change_15 > 0.5 or change_30 > 0.6 or change_45 > 0.9 or change_120 > 1) and change_120 < 2.5):
-            intradaytech = intradaytech + '|' + "LastUpMorningDown:"
-
-    # only check pattern if there was a morning rise
-    if morning_pct > 1:
-        last_close = close
-        last_open_val = df.iloc[-1]['open']
-        change_15 = (last_close - last_open_val) * 100 / last_open_val
-        change_30 = 0
-        change_45 = 0
-        change_120 = 0
-        if len(df) >= 2:
-            change_30 = (last_close - df.iloc[-2]['close']) * 100 / df.iloc[-2]['close']
-        if len(df) >= 3:
-            change_45 = (last_close - df.iloc[-3]['close']) * 100 / df.iloc[-3]['close']
-        if len(df) >= 8:
-            change_120 = (last_close - df.iloc[-8]['close']) * 100 / df.iloc[-8]['close']
-        if ((change_15 < -0.5 or change_30 < -0.6 or change_45 < -0.9 or change_120 < -1) and change_120 > -2.5):
-            intradaytech = intradaytech + '|' + "LastDownMorningUp:"
-
 
     #if (regression_data['week2LowChange'] > 0 and regression_data['weekLowChange'] < 0):
     #    intradaytech = intradaytech + '|' + "#SLLWEEK2LOW>GT0WeekLowLT0,"
@@ -543,6 +492,57 @@ def intraday_tech_data(regression_data):
     morningchange_high = (high_cndl12 - high_cndl25) * 100 / high_cndl25
     postlunchchange_low = (low - low_cndl12) * 100 / low_cndl12
     morningchange_low = (low_cndl12 - low_cndl25) * 100 / low_cndl25
+
+
+    # determine prefix keyword for morning down followed by recent up moves
+    prefix = ''
+    # compute morning drop over first 3-4 hours (16 candles of 15m) on the latest trading day
+    morning_pct = 0
+    if len(df) >= 16:
+        # find the most recent date in the series
+        try:
+            df['date'] = pd.to_datetime(df['date'])
+        except Exception:
+            pass
+        last_day = df['date'].dt.date.max()
+        today_df = df[df['date'].dt.date == last_day]
+        if len(today_df) >= 16:
+            morn_open = today_df.iloc[0]['open']
+            morn_close = today_df.iloc[15]['close']
+            morning_pct = (morn_close - morn_open) * 100 / morn_open
+    # only check pattern if there was a morning decline
+    if morning_pct < -1:
+        last_close = close
+        last_open_val = df.iloc[-1]['open']
+        change_15 = (last_close - last_open_val) * 100 / last_open_val
+        change_30 = 0
+        change_45 = 0
+        change_120 = 0
+        if len(df) >= 2:
+            change_30 = (last_close - df.iloc[-2]['close']) * 100 / df.iloc[-2]['close']
+        if len(df) >= 3:
+            change_45 = (last_close - df.iloc[-3]['close']) * 100 / df.iloc[-3]['close']
+        if len(df) >= 8:
+            change_120 = (last_close - df.iloc[-8]['close']) * 100 / df.iloc[-8]['close']
+        if ((change_15 > 0.5 or change_30 > 0.6 or change_45 > 0.9 or change_120 > 1) and change_120 < 2.5):
+            intradaytech = intradaytech + '|' + "LastUpMorningDown:"
+
+    # only check pattern if there was a morning rise
+    if morning_pct > 1:
+        last_close = close
+        last_open_val = df.iloc[-1]['open']
+        change_15 = (last_close - last_open_val) * 100 / last_open_val
+        change_30 = 0
+        change_45 = 0
+        change_120 = 0
+        if len(df) >= 2:
+            change_30 = (last_close - df.iloc[-2]['close']) * 100 / df.iloc[-2]['close']
+        if len(df) >= 3:
+            change_45 = (last_close - df.iloc[-3]['close']) * 100 / df.iloc[-3]['close']
+        if len(df) >= 8:
+            change_120 = (last_close - df.iloc[-8]['close']) * 100 / df.iloc[-8]['close']
+        if ((change_15 < -0.5 or change_30 < -0.6 or change_45 < -0.9 or change_120 < -1) and change_120 > -2.5):
+            intradaytech = intradaytech + '|' + "LastDownMorningUp:"
 
 
     if ( daychange > 1 and (daychange < 4 or (regression_data['PCT_day_change_pre1'] < 5 and daychange < 7)) and (postlunchchange_high > daychange / 3) and (morningchange_high > daychange / 4)):
