@@ -526,6 +526,7 @@ def intraday_tech_data(regression_data):
             change_120 = (last_close - df.iloc[-8]['close']) * 100 / df.iloc[-8]['close']
         if ((change_15 > 0.5 or change_30 > 0.6 or change_45 > 0.9 or change_120 > 1) and change_120 < 2.5):
             intradaytech = intradaytech + '|' + "LastUpMorningDown:"
+            #print(scrip + " LastUpMorningDown: " + str(morning_pct) + "," + str(change_15) + "," + str(change_30) + "," + str(change_45) + "," + str(change_120))
 
     # only check pattern if there was a morning rise
     if morning_pct > 1:
@@ -543,6 +544,7 @@ def intraday_tech_data(regression_data):
             change_120 = (last_close - df.iloc[-8]['close']) * 100 / df.iloc[-8]['close']
         if ((change_15 < -0.5 or change_30 < -0.6 or change_45 < -0.9 or change_120 < -1) and change_120 > -2.5):
             intradaytech = intradaytech + '|' + "LastDownMorningUp:"
+            #print(scrip + " LastDownMorningUp: " + str(morning_pct) + "," + str(change_15) + "," + str(change_30) + "," + str(change_45) + "," + str(change_120))
 
 
     if ( daychange > 1 and (daychange < 4 or (regression_data['PCT_day_change_pre1'] < 5 and daychange < 7)) and (postlunchchange_high > daychange / 3) and (morningchange_high > daychange / 4)):

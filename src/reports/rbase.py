@@ -191,11 +191,11 @@ column_config_result={
     "mlpValue_reg":  st.column_config.NumberColumn(
             "mlpValue_reg",
             format="%.2f"),
-    "kNeighboursValue_reg_merged":  st.column_config.NumberColumn(
-            "kNeighboursValue_reg_merged",
+    "kNeighboursValue_reg_other":  st.column_config.NumberColumn(
+            "kNeighboursValue_reg_other",
             format="%.2f"),
-    "mlpValue_reg_merged":  st.column_config.NumberColumn(
-            "mlpValue_reg_merged",
+    "mlpValue_reg_other":  st.column_config.NumberColumn(
+            "mlpValue_reg_other",
             format="%.2f"),
     "year5HighChange":  st.column_config.NumberColumn(
             "year5HighChange",
@@ -241,7 +241,9 @@ column_config_result={
             format="%.2f"),
     "filter5": "filter5",
     "filter": "filter",
-    "filter3": "filter3"
+    "filter3": "filter3",
+    "intradaytech": "intradaytech",
+    "index": "index"
 }
 
 column_config_merged={
@@ -389,8 +391,8 @@ column_order_result=["scrip",
     "lowTail",
     "kNeighboursValue_reg",
     "mlpValue_reg",
-    "kNeighboursValue_reg_merged",
-    "mlpValue_reg_merged",
+    "kNeighboursValue_reg_other",
+    "mlpValue_reg_other",
     "year5HighChange",
     "yearHighChange",
     "yearLowChange",
@@ -407,6 +409,8 @@ column_order_result=["scrip",
     "filter5",
     "filter",
     "filter3",
+    "intradaytech",
+    "index"
 ]
 
 column_order_merged=["scrip",
@@ -1104,7 +1108,7 @@ def getdfResult(collection_name):
         df['kNeighboursValue_reg_other'] = pd.to_numeric(df['kNeighboursValue_reg_other'], errors='coerce')
         df['mlpValue_reg_other'] = pd.to_numeric(df['mlpValue_reg_other'], errors='coerce')
         df['intradaytech'] = df['intradaytech'].fillna('').astype(str)
-        df['index'] = df['intradaytech'].fillna('').astype(str)
+        df['index'] = df['index'].fillna('').astype(str)
         
     except KeyError as e:
         print(f"KeyError: {e}")

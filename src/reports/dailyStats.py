@@ -170,7 +170,7 @@ def main():
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        df = rb.getdfResult('highBuy')
         filtered_df = df
         try:
             filtered_df = df[
@@ -185,9 +185,9 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'PostLunchUpStarted0:Buy:IfUpAt09:30:IfDownAfter10', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'PostLunchUpStarted0:Buy:IfUpAt09:30:IfDownAfter10', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
     with col2:
-        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        df = rb.getdfResult('highBuy')
         filtered_df = df
         try:
             filtered_df = df[
@@ -203,9 +203,9 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'PostLunchUpStarted1:Buy:IfUpAt09:30:IfDownAfter10', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'PostLunchUpStarted1:Buy:IfUpAt09:30:IfDownAfter10', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
     with col3:
-        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        df = rb.getdfResult('highBuy')
         filtered_df = df
         try:
             filtered_df = df[
@@ -223,9 +223,9 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'UpTrend: Opened-Down: Buy At first 10 minute low', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'UpTrend: Opened-Down: Buy At first 10 minute low', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
     with col4:
-        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        df = rb.getdfResult('highBuy')
         filtered_df = df
         try:
             filtered_df = df[
@@ -240,12 +240,12 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'UpTrend', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'UpTrend', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
     
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        df = rb.getdfResult('lowSell')
         filtered_df = df
         try:
             filtered_df = df[
@@ -260,9 +260,9 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'PostLunchDownStarted0:Sell:IfDownAt09:30:IfUpAfter10', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'PostLunchDownStarted0:Sell:IfDownAt09:30:IfUpAfter10', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
     with col2:
-        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        df = rb.getdfResult('lowSell')
         filtered_df = df
         try:
             filtered_df = df[
@@ -278,9 +278,9 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'PostLunchDownStarted1:Sell:IfDownAt09:30:IfUpAfter10', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'PostLunchDownStarted1:Sell:IfDownAt09:30:IfUpAfter10', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
     with col3:
-        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        df = rb.getdfResult('lowSell')
         filtered_df = df
         try:
             filtered_df = df[
@@ -298,9 +298,9 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'DownTrend: Opened-Up: Sell At first 10 minute high', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'DownTrend: Opened-Up: Sell At first 10 minute high', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
     with col4:
-        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        df = rb.getdfResult('lowSell')
         filtered_df = df
         try:
             filtered_df = df[
@@ -315,7 +315,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'DownTrend', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'DownTrend', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
      
 
 
