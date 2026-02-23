@@ -560,7 +560,7 @@ def highlight_category_row(df, color='NA'):
 
     return styled_df
 
-def highlight_category_column(value):
+def highlight_category_column(value, systemtime):
     """Highlights the entire row based on the 'Category' column value."""
 
     if "0@@CROSSED" in value and "6@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
@@ -575,7 +575,7 @@ def highlight_category_column(value):
     except Exception:
         pass
 
-    if (count_9_3 > 6 and "H@" in value):
+    if (count_9_3 > 6 and "H@" in value and "09:" in systemtime):
         return 
 
     count_9_3 = 0
@@ -585,7 +585,7 @@ def highlight_category_column(value):
     except Exception:
         pass
 
-    if (count_9_3 > 6 and "L@" in value):
+    if (count_9_3 > 6 and "L@" in value and "09:" in systemtime):
         return 
 
     if "0@@CROSSED" in value and "7@" in value and "CROSSED1DayH@GT7@" not in value and "CROSSED1DayL@LT-7@" not in value:
@@ -615,6 +615,17 @@ def highlight_category_column(value):
 #                 return 'background-color: #FBED78'
 #         if "0@@SUPER" in value:
 #                 return 'background-color: #3EB9FB'
+
+def apply_highlight_column(row):
+    """Apply highlight_category_column to mlData column with systemtime context."""
+    styles = pd.Series('', index=row.index)
+    try:
+        ml_value = str(row.get('mlData', ''))
+        systime = str(row.get('systemtime', ''))
+        styles['mlData'] = highlight_category_column(ml_value, systime) or ''
+    except Exception:
+        pass
+    return styles
 
 f10_cols = [
     "forecast_day_PCT10_change",
@@ -847,20 +858,21 @@ def apply_ml_highlight(row):
         if not chartlink1 and not testLearning:
             # preserve existing mlData style
             ml_value = str(row.get('mlData', ''))
+            system_time = str(row.get('systemtime'))
             try:
-                styles['mlData'] = highlight_category_column(ml_value) or ''
+                styles['mlData'] = highlight_category_column(ml_value, system_time) or ''
             except Exception:
                 styles['mlData'] = ''
             return styles
 
         ml_value = str(row.get('mlData', ''))
-        systemtime = str(row.get('systemtime', ''))
+        system_time = str(row.get('systemtime'))
         scrip = row.get('scrip')
 
         # Default to existing mlData style
         existing = ''
         try:
-            existing = highlight_category_column(ml_value) or ''
+            existing = highlight_category_column(ml_value, system_time) or ''
         except Exception:
             existing = ''
 
@@ -917,7 +929,7 @@ def apply_ml_highlight(row):
                 pass
 
 
-            if ('10:' in systemtime and '10:4' not in systemtime and '10:5' not in systemtime) and scrip and len(buy_df) < 8:
+            if ('10:' in system_time and '10:4' not in system_time and '10:5' not in system_time) and scrip and len(buy_df) < 8:
                 try:
                     coll = dbcl['crossed-day-high']
                     if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
@@ -959,7 +971,7 @@ def apply_ml_highlight(row):
                 pass
 
             
-            if ('10:' in systemtime and '10:4' not in systemtime and '10:5' not in systemtime) and scrip and len(sell_df) < 8:
+            if ('10:' in system_time and '10:4' not in system_time and '10:5' not in system_time) and scrip and len(sell_df) < 8:
                 try:
                     coll = dbcl['crossed-day-low']
                     if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
@@ -1255,11 +1267,11 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
         # we can consider both `systemtime` and `mlData` when deciding style.
         if(chartlink1 or testLearning) and color =='LG':
             df_styled = df_styled.apply(apply_ml_highlight, axis=1)
-            df_styled = df_styled.applymap(highlight_category_column, subset=['mlData'])
+            df_styled = df_styled.apply(apply_highlight_column, axis=1)
         elif ((chartlink0) and (color == 'G' or color == 'R')):
-            df_styled = df_styled.applymap(highlight_category_column, subset=['mlData'])
+            df_styled = df_styled.apply(apply_highlight_column, axis=1)
         else:
-            df_styled = df_styled.applymap(highlight_category_column, subset=['mlData'])
+            df_styled = df_styled.apply(apply_highlight_column, axis=1)
         
         
         # Apply the second style *directly* to the Styler object
