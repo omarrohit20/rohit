@@ -604,17 +604,6 @@ def highlight_category_column(value, systemtime):
         return 'background-color: #fff4cf'
     elif "0@@SUPER" in value and "6@" in value:
         return 'background-color: #fff4cf'
-    
-#     if "MLBuy0" in value or "MLBuy1" in value or "MLBuy2" in value:
-#         return 'background-color: #E0FFDE'
-#     if "MLSell0" in value or "MLSell1" in value or "MLSell2" in value:
-#         return 'background-color: #FCCFD2'
-    
-#     else:
-#         if "0@@CROSSED" in value:
-#                 return 'background-color: #FBED78'
-#         if "0@@SUPER" in value:
-#                 return 'background-color: #3EB9FB'
 
 def apply_highlight_column(row):
     """Apply highlight_category_column to mlData column with systemtime context."""
@@ -643,7 +632,6 @@ def apply_f10_buy(row):
     # use the same color for every column in the row
     return pd.Series(color, index=row.index)
 
-
 def apply_f10_sell(row):
     color = highlight_category_column_f10_sell(
         row["forecast_day_PCT10_change"],
@@ -653,7 +641,6 @@ def apply_f10_sell(row):
     )
     # use the same color for every column in the row
     return pd.Series(color, index=row.index)
-
 
 def highlight_category_column_f10_buy(value10, value7, value5, systemtime):
     """Highlights the entire row based on the 'Category' column value."""
@@ -774,11 +761,6 @@ def highlight_category_column_f10_sell_00(value10, value7, value5, systemtime):
             return 'background-color: #A1A1A1'
         else:
             return 'background-color: #A1A1A1'
-
-# def highlight_category_column_super(value):
-#     """Highlights the entire row based on the 'Category' column value."""
-#     if "0@@SUPER" in value:
-#         return 'background-color: #CBC3E3'
 
 def apply_f10_buy_01(row):
     color = highlight_category_column_f10_buy_01(
@@ -941,7 +923,7 @@ def apply_ml_highlight(row):
 
                 try:
                     coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
-                    if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
+                    if len(coll) < 5 and coll.find_one({'scrip': scrip}):
                         styles['mlData'] = 'background-color: #fb87ec'
                         return styles
                 except Exception:
@@ -950,7 +932,7 @@ def apply_ml_highlight(row):
 
                 try:
                     coll = dbcl['supertrend-morning-buy']
-                    if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
+                    if len(coll) < 5 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
                         styles['mlData'] = 'background-color: #fb87ec'
                         return styles
                 except Exception:
@@ -983,7 +965,7 @@ def apply_ml_highlight(row):
 
                 try:
                     coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
-                    if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
+                    if len(coll) < 5 and coll.find_one({'scrip': scrip}):
                         styles['mlData'] = 'background-color: #fb87ec'
                         return styles
                 except Exception:
@@ -992,7 +974,7 @@ def apply_ml_highlight(row):
 
                 try:
                     coll = dbcl['supertrend-morning-sell']
-                    if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
+                    if len(coll) < 5 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
                         styles['mlData'] = 'background-color: #fb87ec'
                         return styles
                 except Exception:
