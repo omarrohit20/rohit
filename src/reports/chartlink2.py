@@ -648,7 +648,7 @@ def main():
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
         df = rb.getdf('Breakout-Buy-after-10')
-        rb.render(st, df, 'Breakout Buy after 10', color='G', height=200)
+        rb.render(st, df, 'Breakout Buy after 10', color='LG', height=200)
     with col2:
         df = rb.getdf('1-Bbuyy-morningUp-downConsolidation')
         filtered_df = df
@@ -676,7 +676,7 @@ def main():
         rb.render(st, filtered_df, 'UpGT0.5 : Only one dip: 1-Bbuyy-morningUp-downConsolidation', color='LG', height=200)
     with col4:
         df = rb.getdf('Breakout-Sell-after-10')
-        rb.render(st, df, 'Breakout Sell after 10', color='R', height=200)
+        rb.render(st, df, 'Breakout Sell after 10', color='LG', height=200)
     with col5:
         df = rb.getdf('1-Sselll-morningDown-upConsolidation')
         filtered_df = df
@@ -724,6 +724,7 @@ def main():
         try:
             filtered_df = df[
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
+                (df['PCT_day_change'] < 3) &
                 ((df['PCT_day_change'] < 1) | (df['PCT_day_change_pre1'] < 1)) &
                 (
                     (df['forecast_day_PCT10_change'] > 3) & (df['forecast_day_PCT10_change'] < 10)
@@ -757,6 +758,7 @@ def main():
         try:
             filtered_df = df[
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
+                (df['PCT_day_change'] > -3) &
                 ((df['PCT_day_change'] > -1) | (df['PCT_day_change_pre1'] > -1)) &
                 (
                     (df['forecast_day_PCT10_change'] < -3) & (df['forecast_day_PCT10_change'] > -10)
@@ -781,7 +783,11 @@ def main():
             filtered_df = df[
                 ((df['PCT_day_change_pre2'] > -1) | (df['PCT_day_change_pre1'] < 0)) &
                 (~df['systemtime'].str.contains('09:', case=False, na=False)) &
-                (~df['systemtime'].str.contains('10:00', case=False, na=False)) 
+                (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, na=False)) &
+                (~df['systemtime'].str.contains('12:', case=False, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, na=False)) 
                 ]
         except KeyError as e:
             print("")
@@ -818,7 +824,11 @@ def main():
             filtered_df = df[
                 ((df['PCT_day_change_pre2'] < 1) | (df['PCT_day_change_pre1'] > 0)) &
                 (~df['systemtime'].str.contains('09:', case=False, na=False)) &
-                (~df['systemtime'].str.contains('10:00', case=False, na=False)) 
+                (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, na=False)) &
+                (~df['systemtime'].str.contains('12:', case=False, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, na=False)) 
             ]
         except KeyError as e:
             print("")
