@@ -920,7 +920,7 @@ def apply_ml_highlight(row):
             if ('10:' in systime and '10:4' not in systime and '10:5' not in systime) and scrip and len(buy_df) < 8:
                 try:
                     coll = dbcl['crossed-day-high']
-                    if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
+                    if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
                         styles['mlData'] = 'background-color: #fb87ec'
                         return styles
                 except Exception:
@@ -929,7 +929,7 @@ def apply_ml_highlight(row):
 
                 try:
                     coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
-                    if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
+                    if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
                         styles['mlData'] = 'background-color: #fb87ec'
                         return styles
                 except Exception:
@@ -938,7 +938,7 @@ def apply_ml_highlight(row):
 
                 try:
                     coll = dbcl['supertrend-morning-buy']
-                    if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
+                    if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
                         styles['mlData'] = 'background-color: #fb87ec'
                         return styles
                 except Exception:
@@ -962,7 +962,7 @@ def apply_ml_highlight(row):
             if ('10:' in systime and '10:4' not in systime and '10:5' not in systime) and scrip and len(sell_df) < 8:
                 try:
                     coll = dbcl['crossed-day-low']
-                    if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
+                    if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
                         styles['mlData'] = 'background-color: #fb87ec'
                         return styles
                 except Exception:
@@ -971,7 +971,7 @@ def apply_ml_highlight(row):
 
                 try:
                     coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
-                    if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
+                    if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
                         styles['mlData'] = 'background-color: #fb87ec'
                         return styles
                 except Exception:
@@ -980,7 +980,7 @@ def apply_ml_highlight(row):
 
                 try:
                     coll = dbcl['supertrend-morning-sell']
-                    if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
+                    if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
                         styles['mlData'] = 'background-color: #fb87ec'
                         return styles
                 except Exception:
