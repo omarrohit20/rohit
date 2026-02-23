@@ -563,6 +563,11 @@ def highlight_category_row(df, color='NA'):
 def highlight_category_column(value):
     """Highlights the entire row based on the 'Category' column value."""
 
+    if "0@@CROSSED" in value and "6@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
+        return 'background-color: #fff4cf'
+    elif "0@@SUPER" in value and "6@" in value:
+        return 'background-color: #fff4cf'
+    
     count_9_3 = 0
     try:
         coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']

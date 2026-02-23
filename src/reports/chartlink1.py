@@ -274,7 +274,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'week2HighGT0-1 : Avoid-GT2-And-Top5', color='G', height=150)
+        rb.render(st, filtered_df, 'week2HighGT0-1 : Avoid-GT2-And-Top5', color='LG', height=150)
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -328,7 +328,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'week2LowLT0-1 : Avoid-LT(-2)-And-Top5', color='R', height=150)
+        rb.render(st, filtered_df, 'week2LowLT0-1 : Avoid-LT(-2)-And-Top5', color='LG', height=150)
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -673,7 +673,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BYYWEEK2HIGH>GT0', color='G')
+        rb.render(st, filtered_df, 'BYYWEEK2HIGH>GT0', color='LG')
     with col1:
         df = rb.getintersectdf('morning-volume-breakout-buy', 'breakoutMH')
         expected_columns = list(set(df.columns))
@@ -735,7 +735,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'SLLWEEK2LOW<LT0', color='R')
+        rb.render(st, filtered_df, 'SLLWEEK2LOW<LT0', color='LG')
     with col3:
         df = rb.getintersectdf('morning-volume-breakout-sell', 'breakoutML')
         expected_columns = list(set(df.columns))
