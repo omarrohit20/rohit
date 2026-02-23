@@ -775,7 +775,7 @@ def main():
         rb.render(st, filtered_df, 'sell-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
 
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
         df = rb.getintersectdf('buy-morning-volume-breakout(Check-News)', 'morning-volume-breakout-buy')
         filtered_df = df
@@ -818,6 +818,9 @@ def main():
         else:
             rb.render(st, empty_df, 'BuyAllProcessor + buy-morning-volume-breakout(Check-News)', column_order=rb.column_order_p, color='G')
     with col3:
+        df = rb.getintersectdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)', 'buy-morning-volume-breakout(Check-News)')
+        rb.render(st, df, 'Crossed-2Day-High + buy-morning-volume-breakout(Check-News)', column_order=rb.column_order_p, color='G') 
+    with col4:
         df = rb.getintersectdf('sell-morning-volume-breakout(Check-News)', 'morning-volume-breakout-sell')
         filtered_df = df
         try:
@@ -833,7 +836,7 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'TOP5 : sell-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
-    with col4:
+    with col5:
         df = rb.getintersectdf('sell_all_processor', 'sell-morning-volume-breakout(Check-News)')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -859,6 +862,9 @@ def main():
             rb.render(st, filtered_df, 'SellAllProcessor + sell-morning-volume-breakout(Check-News)', column_order=rb.column_order_p, color='R')
         else:
             rb.render(st, empty_df, 'SellAllProcessor + sell-morning-volume-breakout(Check-News)', column_order=rb.column_order_p, color='R') 
+    with col6:
+        df = rb.getintersectdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)', 'sell-morning-volume-breakout(Check-News)')
+        rb.render(st, df, 'Crossed-2Day-Low + sell-morning-volume-breakout(Check-News)', column_order=rb.column_order_p, color='R') 
 
 
     col1, col2, col3, col4 = st.columns(4)
