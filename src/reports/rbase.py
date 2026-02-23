@@ -563,6 +563,26 @@ def highlight_category_row(df, color='NA'):
 def highlight_category_column(value):
     """Highlights the entire row based on the 'Category' column value."""
 
+    count_9_3 = 0
+    try:
+        coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
+        count_9_3 = coll.count_documents({'systemtime': {'$regex': '9:3'}})
+    except Exception:
+        pass
+
+    if (count_9_3 > 6 and "H@" in value):
+        return 
+
+    count_9_3 = 0
+    try:
+        coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
+        count_9_3 = coll.count_documents({'systemtime': {'$regex': '9:3'}})
+    except Exception:
+        pass
+
+    if (count_9_3 > 6 and "L@" in value):
+        return 
+
     if "0@@CROSSED" in value and "7@" in value and "CROSSED1DayH@GT7@" not in value and "CROSSED1DayL@LT-7@" not in value:
         return 'background-color: #800080'
     elif "0@@SUPER" in value and "7@" in value:
@@ -602,6 +622,7 @@ def apply_f10_buy(row):
         row["forecast_day_PCT10_change"],
         row["forecast_day_PCT7_change"],
         row["forecast_day_PCT5_change"],
+        row["systemtime"],
     )
     # use the same color for every column in the row
     return pd.Series(color, index=row.index)
@@ -612,13 +633,24 @@ def apply_f10_sell(row):
         row["forecast_day_PCT10_change"],
         row["forecast_day_PCT7_change"],
         row["forecast_day_PCT5_change"],
+        row["systemtime"],
     )
     # use the same color for every column in the row
     return pd.Series(color, index=row.index)
 
 
-def highlight_category_column_f10_buy(value10, value7, value5):
+def highlight_category_column_f10_buy(value10, value7, value5, systemtime):
     """Highlights the entire row based on the 'Category' column value."""
+    count_9_3 = 0
+    try:
+        coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
+        count_9_3 = coll.count_documents({'systemtime': {'$regex': '9:3'}})
+    except Exception:
+        pass
+
+    if count_9_3 > 6 and "9:" in systemtime:
+        return 'background-color: #A1A1A1'
+
     if float(value10) >= 7 and float(value7) > -2 and float(value5) > -2 and (float(value7) > (float(value10)-5) or float(value5) > (float(value10)-5)):
         return 'background-color: #800080'
     elif float(value10) >= 2 and float(value10) < 7 and float(value7) > -3 and float(value5) > -3 and (float(value7) > (float(value10)-4) or float(value5) > (float(value10)-4)):
@@ -632,9 +664,19 @@ def highlight_category_column_f10_buy(value10, value7, value5):
     elif float(value10) <= -3 and float(value7) < 2 and float(value5) < 2:
         return 'background-color: #F9FAFB'
     else:
-        return 'background-color: #A1A1A1'
+        return 'background-color: #A1A1A1'   
         
-def highlight_category_column_f10_sell(value10, value7, value5):
+def highlight_category_column_f10_sell(value10, value7, value5, systemtime):
+    count_9_3 = 0
+    try:
+        coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
+        count_9_3 = coll.count_documents({'systemtime': {'$regex': '9:3'}})
+    except Exception:
+        pass
+
+    if count_9_3 > 6 and "9:" in systemtime:
+        return 'background-color: #A1A1A1'
+
     """Highlights the entire row based on the 'Category' column value."""
     if float(value10) <= -7 and float(value7) < 2 and float(value5) < 2 and (float(value7) < (float(value10)+5) or float(value5) < (float(value10)+5)):
         return 'background-color: #800080'
@@ -656,6 +698,7 @@ def apply_f10_buy_00(row):
         row["forecast_day_PCT10_change"],
         row["forecast_day_PCT7_change"],
         row["forecast_day_PCT5_change"],
+        row["systemtime"],
     )
     # use the same color for every column in the row
     return pd.Series(color, index=row.index)
@@ -665,39 +708,56 @@ def apply_f10_sell_00(row):
         row["forecast_day_PCT10_change"],
         row["forecast_day_PCT7_change"],
         row["forecast_day_PCT5_change"],
+        row["systemtime"],
     )
     # use the same color for every column in the row
     return pd.Series(color, index=row.index)
 
-def highlight_category_column_f10_buy_00(value10, value7, value5):
-    """Highlights the entire row based on the 'Category' column value."""
-    if float(value10) >= 7 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
-        return 'background-color: #800080'
-    elif float(value10) >= -2 and float(value10) < 1 and float(value7) < 2 and float(value5) < 2 and float(value7) > -2 and float(value5) > -2:
-        return 'background-color: #CBEDFF'
-    elif float(value10) <= -9:
-        return 'background-color: #ffd546'
-    elif float(value10) <= -6:
-        return 'background-color: #fff0bc'
-    elif float(value10) < -3:
-        return 'background-color: #A1A1A1'
-    else:
-        return 'background-color: #A1A1A1'
+def highlight_category_column_f10_buy_00(value10, value7, value5, systemtime):
+    count_9_3 = 0
+    try:
+        coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
+        count_9_3 = coll.count_documents({'systemtime': {'$regex': '9:3'}})
+    except Exception:
+        pass
+
+    if (count_9_3 < 6 or ("9:3" not in systemtime and "9:4" not in systemtime)):
+        """Highlights the entire row based on the 'Category' column value."""
+        if float(value10) >= 7 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
+            return 'background-color: #800080'
+        elif float(value10) >= -2 and float(value10) < 1 and float(value7) < 2 and float(value5) < 2 and float(value7) > -2 and float(value5) > -2:
+            return 'background-color: #CBEDFF'
+        elif float(value10) <= -9:
+            return 'background-color: #ffd546'
+        elif float(value10) <= -6:
+            return 'background-color: #fff0bc'
+        elif float(value10) < -3:
+            return 'background-color: #A1A1A1'
+        else:
+            return 'background-color: #A1A1A1'
         
-def highlight_category_column_f10_sell_00(value10, value7, value5):
-    """Highlights the entire row based on the 'Category' column value."""
-    if float(value10) <= -7 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
-        return 'background-color: #800080'
-    elif float(value10) <= 2 and float(value10) > -1 and float(value7) > -2 and float(value5) > -2 and float(value7) < 2 and float(value5) < 2:
-        return 'background-color: #CBEDFF'
-    elif float(value10) >= 9:
-        return 'background-color: #ffd546'
-    elif float(value10) >= 6:
-        return 'background-color: #fff0bc'
-    elif float(value10) >= 3:
-        return 'background-color: #A1A1A1'
-    else:
-        return 'background-color: #A1A1A1'
+def highlight_category_column_f10_sell_00(value10, value7, value5, systemtime):
+    count_9_3 = 0
+    try:
+        coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
+        count_9_3 = coll.count_documents({'systemtime': {'$regex': '9:3'}})
+    except Exception:
+        pass
+
+    if (count_9_3 < 6 or ("9:3" not in systemtime and "9:4" not in systemtime)):
+        """Highlights the entire row based on the 'Category' column value."""
+        if float(value10) <= -7 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
+            return 'background-color: #800080'
+        elif float(value10) <= 2 and float(value10) > -1 and float(value7) > -2 and float(value5) > -2 and float(value7) < 2 and float(value5) < 2:
+            return 'background-color: #CBEDFF'
+        elif float(value10) >= 9:
+            return 'background-color: #ffd546'
+        elif float(value10) >= 6:
+            return 'background-color: #fff0bc'
+        elif float(value10) >= 3:
+            return 'background-color: #A1A1A1'
+        else:
+            return 'background-color: #A1A1A1'
 
 # def highlight_category_column_super(value):
 #     """Highlights the entire row based on the 'Category' column value."""
@@ -709,6 +769,7 @@ def apply_f10_buy_01(row):
         row["forecast_day_PCT10_change"],
         row["forecast_day_PCT7_change"],
         row["forecast_day_PCT5_change"],
+        row["systemtime"],
     )
     # use the same color for every column in the row
     return pd.Series(color, index=row.index)
@@ -718,35 +779,52 @@ def apply_f10_sell_01(row):
         row["forecast_day_PCT10_change"],
         row["forecast_day_PCT7_change"],
         row["forecast_day_PCT5_change"],
+        row["systemtime"],
     )
     # use the same color for every column in the row
     return pd.Series(color, index=row.index)
 
-def highlight_category_column_f10_buy_01(value10, value7, value5):
-    """Highlights the entire row based on the 'Category' column value."""
-    if float(value10) > 7 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
-        return 'background-color: #800080'
-    elif float(value10) > -2 and float(value10) < 1 and float(value7) < 2 and float(value5) < 2 and float(value7) >-2 and float(value5) > -2:
-        return 'background-color: #CBEDFF'
-    elif float(value10) < -7:
-        return 'background-color: #A1A1A1'
-    elif float(value10) < -3:
-        return 'background-color: #A1A1A1'
-    else:
-        return 'background-color: #A1A1A1'
+def highlight_category_column_f10_buy_01(value10, value7, value5, systemtime):
+    count_9_3 = 0
+    try:
+        coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
+        count_9_3 = coll.count_documents({'systemtime': {'$regex': '9:3'}})
+    except Exception:
+        pass
+
+    if (count_9_3 < 6 or ("9:3" not in systemtime and "9:4" not in systemtime)):
+        """Highlights the entire row based on the 'Category' column value."""
+        if float(value10) > 7 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
+            return 'background-color: #800080'
+        elif float(value10) > -2 and float(value10) < 1 and float(value7) < 2 and float(value5) < 2 and float(value7) >-2 and float(value5) > -2:
+            return 'background-color: #CBEDFF'
+        elif float(value10) < -7:
+            return 'background-color: #A1A1A1'
+        elif float(value10) < -3:
+            return 'background-color: #A1A1A1'
+        else:
+            return 'background-color: #A1A1A1'
         
-def highlight_category_column_f10_sell_01(value10, value7, value5):
-    """Highlights the entire row based on the 'Category' column value."""
-    if float(value10) < -7 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
-        return 'background-color: #800080'
-    elif float(value10) < 2 and float(value10) > -1 and float(value7) > -2 and float(value5) > -2 and float(value7) < 2 and float(value5) < 2:
-        return 'background-color: #CBEDFF'
-    elif float(value10) > 7:
-        return 'background-color: #A1A1A1'
-    elif float(value10) > 3:
-        return 'background-color: #A1A1A1'
-    else:
-        return 'background-color: #A1A1A1'
+def highlight_category_column_f10_sell_01(value10, value7, value5, systemtime):
+    count_9_3 = 0
+    try:
+        coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
+        count_9_3 = coll.count_documents({'systemtime': {'$regex': '9:3'}})
+    except Exception:
+        pass
+
+    if (count_9_3 < 6 or ("9:3" not in systemtime and "9:4" not in systemtime)):
+        """Highlights the entire row based on the 'Category' column value."""
+        if float(value10) < -7 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
+            return 'background-color: #800080'
+        elif float(value10) < 2 and float(value10) > -1 and float(value7) > -2 and float(value5) > -2 and float(value7) < 2 and float(value5) < 2:
+            return 'background-color: #CBEDFF'
+        elif float(value10) > 7:
+            return 'background-color: #A1A1A1'
+        elif float(value10) > 3:
+            return 'background-color: #A1A1A1'
+        else:
+            return 'background-color: #A1A1A1'
 
 def highlight_category_column_super(value):
     """Highlights the entire row based on the 'Category' column value."""
@@ -821,52 +899,20 @@ def apply_ml_highlight(row):
 
 
         try:
-            coll = dbcl['supertrend-morning-buy']
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
-                styles['mlData'] = 'background-color: #fb87ec'
-                return styles
-        except Exception:
-            # fallback to existing style on any DB error
-            pass
-
-
-        try:
-            coll = dbcl['supertrend-morning-sell']
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
-                styles['mlData'] = 'background-color: #fb87ec'
-                return styles
-        except Exception:
-            # fallback to existing style on any DB error
-            pass
-
-        
-
-        try:
             df = getdf('morning-volume-breakout-buy')
             buy_df = df
             try:
                 buy_df = df[
                     (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                    #(~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) &
-                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                    (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
                     ]
             except KeyError as e:
                 pass
 
 
-            df = getdf('morning-volume-breakout-sell')
-            sell_df = df
-            try:
-                sell_df = df[
-                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                    #(~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) &
-                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
-                ]
-            except KeyError as e:
-                pass
-
-            
-            if ('10:' in systime) and scrip and len(buy_df) < 8:
+            if ('10:' in systime and '10:4' not in systime and '10:5' not in systime) and scrip and len(buy_df) < 8:
                 try:
                     coll = dbcl['crossed-day-high']
                     if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
@@ -885,8 +931,30 @@ def apply_ml_highlight(row):
                     # fallback to existing style on any DB error
                     pass
 
+                try:
+                    coll = dbcl['supertrend-morning-buy']
+                    if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
+                        styles['mlData'] = 'background-color: #fb87ec'
+                        return styles
+                except Exception:
+                    # fallback to existing style on any DB error
+                    pass
 
-            if ('10:' in systime) and scrip and len(sell_df) < 8:
+
+            df = getdf('morning-volume-breakout-sell')
+            sell_df = df
+            try:
+                sell_df = df[
+                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) 
+                ]
+            except KeyError as e:
+                pass
+
+            
+            if ('10:' in systime and '10:4' not in systime and '10:5' not in systime) and scrip and len(sell_df) < 8:
                 try:
                     coll = dbcl['crossed-day-low']
                     if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
@@ -904,6 +972,17 @@ def apply_ml_highlight(row):
                 except Exception:
                     # fallback to existing style on any DB error
                     pass
+
+                try:
+                    coll = dbcl['supertrend-morning-sell']
+                    if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '11:'}}}):
+                        styles['mlData'] = 'background-color: #fb87ec'
+                        return styles
+                except Exception:
+                    # fallback to existing style on any DB error
+                    pass
+
+        
 
                 
 

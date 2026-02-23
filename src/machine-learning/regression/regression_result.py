@@ -511,39 +511,42 @@ def intraday_tech_data(regression_data):
             morn_close = today_df.iloc[15]['close']
             morning_pct = (morn_close - morn_open) * 100 / morn_open
     # only check pattern if there was a morning decline
-    if morning_pct < -1:
-        last_close = close
-        last_open_val = df.iloc[-1]['open']
-        change_15 = (last_close - last_open_val) * 100 / last_open_val
-        change_30 = 0
-        change_45 = 0
-        change_120 = 0
-        if len(df) >= 2:
-            change_30 = (last_close - df.iloc[-2]['close']) * 100 / df.iloc[-2]['close']
-        if len(df) >= 3:
-            change_45 = (last_close - df.iloc[-3]['close']) * 100 / df.iloc[-3]['close']
-        if len(df) >= 8:
-            change_120 = (last_close - df.iloc[-8]['close']) * 100 / df.iloc[-8]['close']
-        if ((change_15 > 0.5 or change_30 > 0.6 or change_45 > 0.9 or change_120 > 1) and change_120 < 2.5):
-            intradaytech = intradaytech + '|' + "LastUpMorningDown:"
+    
+    last_close = close
+    last_open_val = df.iloc[-1]['open']
+    change_15 = (last_close - last_open_val) * 100 / last_open_val
+    change_30 = 0
+    change_45 = 0
+    change_120 = 0
+    if len(df) >= 2:
+        change_30 = (last_close - df.iloc[-2]['close']) * 100 / df.iloc[-2]['close']
+    if len(df) >= 3:
+        change_45 = (last_close - df.iloc[-3]['close']) * 100 / df.iloc[-3]['close']
+    if len(df) >= 8:
+        change_120 = (last_close - df.iloc[-8]['close']) * 100 / df.iloc[-8]['close']
+    if ((change_30 > 0.7 or change_45 > 0.9 or change_120 > 1 or (change_30 > 0 and change_15 > 0.5)) and change_120 < 2.5):
+        intradaytech = intradaytech + '|' + "LastUp:"
+    if ((change_30 > 0.6 or change_45 > 0.9 or change_120 > 1) and change_120 < 2.5 and morning_pct < -1):
+        intradaytech = intradaytech + '|' + "Last-Up-MorningDown:"
             #print(scrip + " LastUpMorningDown: " + str(morning_pct) + "," + str(change_15) + "," + str(change_30) + "," + str(change_45) + "," + str(change_120))
 
     # only check pattern if there was a morning rise
-    if morning_pct > 1:
-        last_close = close
-        last_open_val = df.iloc[-1]['open']
-        change_15 = (last_close - last_open_val) * 100 / last_open_val
-        change_30 = 0
-        change_45 = 0
-        change_120 = 0
-        if len(df) >= 2:
-            change_30 = (last_close - df.iloc[-2]['close']) * 100 / df.iloc[-2]['close']
-        if len(df) >= 3:
-            change_45 = (last_close - df.iloc[-3]['close']) * 100 / df.iloc[-3]['close']
-        if len(df) >= 8:
-            change_120 = (last_close - df.iloc[-8]['close']) * 100 / df.iloc[-8]['close']
-        if ((change_15 < -0.5 or change_30 < -0.6 or change_45 < -0.9 or change_120 < -1) and change_120 > -2.5):
-            intradaytech = intradaytech + '|' + "LastDownMorningUp:"
+    last_close = close
+    last_open_val = df.iloc[-1]['open']
+    change_15 = (last_close - last_open_val) * 100 / last_open_val
+    change_30 = 0
+    change_45 = 0
+    change_120 = 0
+    if len(df) >= 2:
+        change_30 = (last_close - df.iloc[-2]['close']) * 100 / df.iloc[-2]['close']
+    if len(df) >= 3:
+        change_45 = (last_close - df.iloc[-3]['close']) * 100 / df.iloc[-3]['close']
+    if len(df) >= 8:
+        change_120 = (last_close - df.iloc[-8]['close']) * 100 / df.iloc[-8]['close']
+    if ((change_30 < -0.7 or change_45 < -0.9 or change_120 < -1 or (change_30 < 0 and change_15 < -0.5)) and change_120 > -2.5):
+        intradaytech = intradaytech + '|' + "LastDown:"
+    if ((change_30 < -0.6 or change_45 < -0.9 or change_120 < -1) and change_120 > -2.5 and morning_pct > 1):
+        intradaytech = intradaytech + '|' + "Last-Down-MorningUp:"
             #print(scrip + " LastDownMorningUp: " + str(morning_pct) + "," + str(change_15) + "," + str(change_30) + "," + str(change_45) + "," + str(change_120))
 
 
