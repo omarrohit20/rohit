@@ -18,7 +18,7 @@ column_config_default={
     "PCT_day_change": st.column_config.NumberColumn(
             "Dch",
             format="%.2f"),
-    "systemtime": "systime",
+    "systemtime": "systemtime",
     "industry": "industry",
     "mlData": "mlData",
     "PCT_change": st.column_config.NumberColumn(
@@ -251,7 +251,7 @@ column_config_merged={
     "PCT_day_change": st.column_config.NumberColumn(
             "Dch",
             format="%.2f"),
-    "systemtime": "systime",
+    "systemtime": "systemtime",
     "industry": "industry",
     "mlData": "mlData",
     "PCT_change": st.column_config.NumberColumn(
@@ -315,7 +315,7 @@ column_config_merged={
     "filter": "filter",
     "filter3": "filter3",
     "processor": "processor",
-    "systemtime_merged": "systime_merged",
+    "systemtime_merged": "systemtime_merged",
     "processor_merged": "processor_merged"
 }
 
@@ -854,7 +854,7 @@ def apply_ml_highlight(row):
             return styles
 
         ml_value = str(row.get('mlData', ''))
-        systime = str(row.get('systemtime', ''))
+        systemtime = str(row.get('systemtime', ''))
         scrip = row.get('scrip')
 
         # Default to existing mlData style
@@ -917,7 +917,7 @@ def apply_ml_highlight(row):
                 pass
 
 
-            if ('10:' in systime and '10:4' not in systime and '10:5' not in systime) and scrip and len(buy_df) < 8:
+            if ('10:' in systemtime and '10:4' not in systemtime and '10:5' not in systemtime) and scrip and len(buy_df) < 8:
                 try:
                     coll = dbcl['crossed-day-high']
                     if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
@@ -959,7 +959,7 @@ def apply_ml_highlight(row):
                 pass
 
             
-            if ('10:' in systime and '10:4' not in systime and '10:5' not in systime) and scrip and len(sell_df) < 8:
+            if ('10:' in systemtime and '10:4' not in systemtime and '10:5' not in systemtime) and scrip and len(sell_df) < 8:
                 try:
                     coll = dbcl['crossed-day-low']
                     if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
