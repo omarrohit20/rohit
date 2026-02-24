@@ -862,7 +862,7 @@ def apply_ml_highlight(row):
         # 'crossed-day-high' collection, set mlData cell to pink.
         try:
             coll = dbcl['buy-morning-volume-breakout(Check-News)']
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '09:'}}}):
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
                 styles['scrip'] = 'background-color: #E0FFDE'
                 return styles
         except Exception:
@@ -871,16 +871,36 @@ def apply_ml_highlight(row):
 
         try:
             coll = dbcl['sell-morning-volume-breakout(Check-News)']
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$not': {'$regex': '09:'}}}):
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
                 styles['scrip'] = 'background-color: #FCCFD2'
                 return styles
         except Exception:
             # fallback to existing style on any DB error
             pass
 
+        
+        try:
+            coll = dbcl['Breakout-Buy-after-10']
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
+                styles['scrip'] = 'background-color: #E0FFDE'
+                return styles
+        except Exception:
+            # fallback to existing style on any DB error
+            pass
+
+        try:
+            coll = dbcl['Breakout-Sell-after-10']
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
+                styles['scrip'] = 'background-color: #FCCFD2'
+                return styles
+        except Exception:
+            # fallback to existing style on any DB error
+            pass
+
+
         try:
             coll = dbcl['1-Bbuyy-morningUp-downConsolidation']
-            if coll.find_one({'scrip': scrip}):
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
                 styles['scrip'] = 'background-color: #E0FFDE'
                 return styles
         except Exception:
@@ -889,7 +909,7 @@ def apply_ml_highlight(row):
 
         try:
             coll = dbcl['1-Sselll-morningDown-upConsolidation']
-            if coll.find_one({'scrip': scrip}):
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
                 styles['scrip'] = 'background-color: #FCCFD2'
                 return styles
         except Exception:
