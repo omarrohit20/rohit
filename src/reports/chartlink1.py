@@ -219,208 +219,6 @@ def main():
             print("")
         rb.render(st, filtered_df, 'SQROFFAt10:LastDayDownTodayLT-0.3:Consolidation-CheckRecommendations', color='LG')
 
-
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        df = rb.getdf('morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
-                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
-                (df['week2HighChange'] > 0) &
-                (df['monthHighChange'] < 5) &
-                (df['PCT_day_change'] > 1) &
-                (~df['filter5'].str.contains('BothGT2', case=False, regex=True, na=False)) &
-                (df['lowTail'] < 1.5) &
-                (df['forecast_day_PCT10_change'] > -1) &
-                (df['week2LowChange'] > 2) &
-                (df['lowTail'] < 1) &
-                (df['intradaytech'].str.contains('#LT2', case=False, regex=True, na=False)) &
-                (df['PCT_day_change'] < 2.5) &
-                (df['weekLowChange'] > 1) &
-                (df['PCT_day_change_pre1'] >= -1.5) &
-                (df['PCT_day_change_pre1'] <= 2.3) &
-                (df['PCT_day_change_pre2'] >= -1.5) &
-                (df['PCT_day_change_pre2'] <= 3) &
-                (df['weekHighChange'] > 0) &
-                (df['year5HighChange'] < 0)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'week2HighGT0 : #LT2 : Avoid index up', color='G', height=150)
-    with col2:
-        df = rb.getdf('morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
-                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
-                (df['week2HighChange'] > -1) &
-                (df['monthHighChange'] < 5) &
-                (df['PCT_day_change_pre2'] < 3) &
-                (df['PCT_day_change_pre1'] < 3) &
-                (df['PCT_day_change'] >= -1.5) &
-                (df['PCT_day_change'] <= 1) &
-                (~df['filter5'].str.contains('BothGT2', case=False, regex=True, na=False)) &
-                (df['intradaytech'].str.contains('#TOP', case=False, regex=True, na=False)) &
-                (df['lowTail'] < 1) &
-                #(~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
-                (df['week2LowChange'] > 2) &
-                (df['monthHighChange'] > 0) &
-                (df['year5HighChange'] < 0) &
-                (df['mlData'].str.contains('0@@', case=False, regex=True, na=False)) &
-                (df['PCT_day_change_pre1'] < 1)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'week2HighGT0-1 : Avoid-GT2-And-Top5', color='LG', height=150)
-    with col3:
-        df = rb.getdf('morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
-                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
-                (df['week2LowChange'] < 0) &
-                (df['monthLowChange'] > -5) &
-                (df['PCT_day_change'] >= -2.5) &
-                (df['PCT_day_change'] <= 1) &
-                (~df['filter5'].str.contains('BothLT-2', case=False, regex=True, na=False)) &
-                (df['highTail'] < 1.5) &
-                (df['forecast_day_PCT10_change'] < 1) &
-                (df['week2HighChange'] < -2) &
-                (df['highTail'] < 1) &
-                (df['mlData'].str.contains('LT2', case=False, regex=True, na=False)) &
-                (df['weekLowChange'] > 1) &
-                (df['PCT_day_change_pre1'] <= 1.5) &
-                (df['PCT_day_change_pre1'] >= -2.3) &
-                (df['PCT_day_change_pre2'] <= 1.5) &
-                (df['PCT_day_change_pre2'] >= -3) &
-                (df['mlData'].str.contains('0@@', case=False, regex=True, na=False)) &
-                (df['weekLowChange'] < 0)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'week2LowLT0-1 : #LT2', color='R', height=150)
-    with col4:
-        df = rb.getdf('morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
-                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
-                (df['week2LowChange'] < 1) &
-                (df['monthLowChange'] > -5) &
-                (df['PCT_day_change_pre1'] < 3) &
-                (df['PCT_day_change_pre2'] < 3) &
-                (df['PCT_day_change'] >= -1.5) &
-                (df['PCT_day_change'] <= 1) &
-                (~df['filter5'].str.contains('BothLT-2', case=False, regex=True, na=False)) &
-                (df['lowTail'] < 1) &
-                (df['intradaytech'].str.contains('#TOP', case=False, regex=True, na=False)) &
-                (df['monthLowChange'] < 10) &
-                (df['highTail'] < 1.5) &
-                #(~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
-                (df['week2HighChange'] < -2) &
-                (df['mlData'].str.contains('0@@', case=False, regex=True, na=False)) &
-                (df['monthLowChange'] < 0)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'week2LowLT0-1 : Avoid-LT(-2)-And-Top5', color='LG', height=150)
-
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        df = rb.getdf('morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
-                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
-                (df['week2HighChange'] > 0) &
-                (df['monthHighChange'] < 5) &
-                (df['PCT_day_change'] > 1) &
-                (~df['filter5'].str.contains('BothGT2', case=False, regex=True, na=False)) &
-                (df['forecast_day_PCT10_change'] > -1) &
-                (df['week2LowChange'] > 2) &
-                (df['lowTail'] < 1) &
-                (df['PCT_day_change_pre1'] >= -1) &
-                (df['PCT_day_change_pre1'] <= 2) &
-                (df['PCT_day_change_pre2'] >= -1) &
-                (df['PCT_day_change_pre2'] <= 3) &
-                (df['weekHighChange'] > 0) &
-                (df['month3HighChange'] > -15) &
-                (df['monthLowChange'] < 10)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'week2HighGT0 : Avoid-GT2-And-Top5 : Avoid index up', color='G')
-    with col2:
-        df = rb.getdf('morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['week2HighChange'] > -1) &
-                (df['monthHighChange'] < 5) &
-                (df['PCT_day_change'] < 3) &
-                (df['PCT_day_change'] > -1.5) &
-                (~df['filter5'].str.contains('BothGT2', case=False, regex=True, na=False)) &
-                (df['lowTail'] < 1.5) &
-                (df['forecast_day_PCT10_change'] > -1) &
-                (df['week2LowChange'] > 0) &
-                (df['PCT_day_change_pre2'] < 2)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'week2HighGT0', color='LG')
-    with col3:
-        df = rb.getdf('morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
-                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
-                (df['week2LowChange'] < 0) &
-                (df['monthLowChange'] > -5) &
-                (df['PCT_day_change'] < -1) &
-                (~df['filter5'].str.contains('BothLT2', case=False, regex=True, na=False)) &
-                (df['forecast_day_PCT10_change'] < 1) &
-                (df['week2HighChange'] < -2) &
-                (df['highTail'] < 1) &
-                (df['PCT_day_change_pre1'] >= -2) &
-                (df['PCT_day_change_pre1'] <= 1) &
-                (df['PCT_day_change_pre2'] >= -3) &
-                (df['PCT_day_change_pre2'] <= 1) &
-                (df['weekLowChange'] < 0) &
-                (df['month3LowChange'] < 15) &
-                (df['monthHighChange'] > -10)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'week2LowLT0 : Avoid-LT(-2)-And-Top5', color='R')
-    with col4:
-        df = rb.getdf('morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['week2LowChange'] < 0) &
-                (df['monthLowChange'] > -5) &
-                (df['PCT_day_change'] > -3) &
-                (df['PCT_day_change'] < 1.3) &
-                (~df['filter5'].str.contains('BothLT-2', case=False, regex=True, na=False)) &
-                (df['highTail'] < 1.5) &
-                (df['forecast_day_PCT10_change'] < 1) &
-                (df['week2HighChange'] < -2) &
-                (df['highTail'] < 1) &
-                (df['weekHighChange'] < -1) &
-                (df['PCT_day_change_pre1'] > -2) &
-                (df['PCT_day_change_pre2'] > -2)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'week2LowLT0', color='LG')
-
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
@@ -467,6 +265,151 @@ def main():
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         rb.render(st, empty_df, 'year5LowChangeGT30 + week2Low', color='LG')
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
+                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
+                (df['week2HighChange'] > 0) &
+                (df['monthHighChange'] < 5) &
+                (df['PCT_day_change'] > 1) &
+                (~df['filter5'].str.contains('BothGT2', case=False, regex=True, na=False)) &
+                (df['forecast_day_PCT10_change'] > -1) &
+                (df['week2LowChange'] > 2) &
+                (df['lowTail'] < 1) &
+                (df['PCT_day_change_pre1'] >= -1) &
+                (df['PCT_day_change_pre1'] <= 2) &
+                (df['PCT_day_change_pre2'] >= -1) &
+                (df['PCT_day_change_pre2'] <= 3) &
+                (df['weekHighChange'] > 0) &
+                (df['month3HighChange'] > -15) &
+                (df['monthLowChange'] < 10)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'week2HighGT0 : Avoid-GT2-And-Top5', color='G', height=150)
+    with col2:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
+                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
+                (df['week2HighChange'] > -1) &
+                (df['monthHighChange'] < 5) &
+                (df['PCT_day_change_pre2'] < 3) &
+                (df['PCT_day_change_pre1'] < 3) &
+                (df['PCT_day_change'] >= -1.5) &
+                (df['PCT_day_change'] <= 1) &
+                (~df['filter5'].str.contains('BothGT2', case=False, regex=True, na=False)) &
+                (df['intradaytech'].str.contains('#TOP', case=False, regex=True, na=False)) &
+                (df['lowTail'] < 1) &
+                #(~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+                (df['week2LowChange'] > 2) &
+                (df['monthHighChange'] > 0) &
+                (df['year5HighChange'] < 0) &
+                (df['mlData'].str.contains('0@@', case=False, regex=True, na=False)) &
+                (df['PCT_day_change_pre1'] < 1)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'week2HighGT0-1 : Avoid-GT2-And-Top5', color='LG', height=150)
+    with col3:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
+                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
+                (df['week2LowChange'] < 0) &
+                (df['monthLowChange'] > -5) &
+                (df['PCT_day_change'] < -1) &
+                (~df['filter5'].str.contains('BothLT2', case=False, regex=True, na=False)) &
+                (df['forecast_day_PCT10_change'] < 1) &
+                (df['week2HighChange'] < -2) &
+                (df['highTail'] < 1) &
+                (df['PCT_day_change_pre1'] >= -2) &
+                (df['PCT_day_change_pre1'] <= 1) &
+                (df['PCT_day_change_pre2'] >= -3) &
+                (df['PCT_day_change_pre2'] <= 1) &
+                (df['weekLowChange'] < 0) &
+                (df['month3LowChange'] < 15) &
+                (df['monthHighChange'] > -10)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'week2LowLT0 : Avoid-LT(-2)-And-Top5', color='R', height=150)
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
+                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
+                (df['week2LowChange'] < 1) &
+                (df['monthLowChange'] > -5) &
+                (df['PCT_day_change_pre1'] < 3) &
+                (df['PCT_day_change_pre2'] < 3) &
+                (df['PCT_day_change'] >= -1.5) &
+                (df['PCT_day_change'] <= 1) &
+                (~df['filter5'].str.contains('BothLT-2', case=False, regex=True, na=False)) &
+                (df['lowTail'] < 1) &
+                (df['intradaytech'].str.contains('#TOP', case=False, regex=True, na=False)) &
+                (df['monthLowChange'] < 10) &
+                (df['highTail'] < 1.5) &
+                #(~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+                (df['week2HighChange'] < -2) &
+                (df['mlData'].str.contains('0@@', case=False, regex=True, na=False)) &
+                (df['monthLowChange'] < 0)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'week2LowLT0-1 : Avoid-LT(-2)-And-Top5', color='LG', height=150)
+
+    col2, col4 = st.columns(2)
+    with col2:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['week2HighChange'] > -1) &
+                (df['monthHighChange'] < 5) &
+                (df['PCT_day_change'] < 3) &
+                (df['PCT_day_change'] > -1.5) &
+                (~df['filter5'].str.contains('BothGT2', case=False, regex=True, na=False)) &
+                (df['lowTail'] < 1.5) &
+                (df['forecast_day_PCT10_change'] > -1) &
+                (df['week2LowChange'] > 0) &
+                (df['PCT_day_change_pre2'] < 2)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'week2HighGT0', color='LG')
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['week2LowChange'] < 0) &
+                (df['monthLowChange'] > -5) &
+                (df['PCT_day_change'] > -3) &
+                (df['PCT_day_change'] < 1.3) &
+                (~df['filter5'].str.contains('BothLT-2', case=False, regex=True, na=False)) &
+                (df['highTail'] < 1.5) &
+                (df['forecast_day_PCT10_change'] < 1) &
+                (df['week2HighChange'] < -2) &
+                (df['highTail'] < 1) &
+                (df['weekHighChange'] < -1) &
+                (df['PCT_day_change_pre1'] > -2) &
+                (df['PCT_day_change_pre2'] > -2)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'week2LowLT0', color='LG')
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
