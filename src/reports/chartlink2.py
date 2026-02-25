@@ -725,6 +725,7 @@ def main():
             filtered_df = df[
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
                 (df['PCT_day_change'] < 3) &
+                (df['PCT_day_change'] > -1.5) &
                 ((df['PCT_day_change'] < 1) | (df['PCT_day_change_pre1'] < 1)) &
                 (
                     (df['forecast_day_PCT10_change'] > 3) & (df['forecast_day_PCT10_change'] < 10)
@@ -759,6 +760,7 @@ def main():
             filtered_df = df[
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
                 (df['PCT_day_change'] > -3) &
+                (df['PCT_day_change'] < 1.5) &
                 ((df['PCT_day_change'] > -1) | (df['PCT_day_change_pre1'] > -1)) &
                 (
                     (df['forecast_day_PCT10_change'] < -3) & (df['forecast_day_PCT10_change'] > -10)
@@ -782,6 +784,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['PCT_day_change_pre2'] > -1) | (df['PCT_day_change_pre1'] < 0)) &
+                (df['PCT_day_change'] > -1.5) &
                 (~df['systemtime'].str.contains('09:', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:4', case=False, na=False)) &
@@ -800,6 +803,7 @@ def main():
         try:
             filtered_df = df[
                 #((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
+                (df['PCT_day_change'] > -1.5) &
                 (df['forecast_day_PCT10_change'] > -2) &
                 (df['forecast_day_PCT10_change'] < 10) &
                 (~df['processor'].str.contains('Check-News')) &
@@ -826,6 +830,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['PCT_day_change_pre2'] < 1) | (df['PCT_day_change_pre1'] > 0)) &
+                (df['PCT_day_change'] < 1.5) &
                 (~df['systemtime'].str.contains('09:', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:4', case=False, na=False)) &
@@ -843,6 +848,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['PCT_day_change'] < 1.5) &
                 (df['forecast_day_PCT10_change'] < 2) &
                 (df['forecast_day_PCT10_change'] > -10) &
                 #((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
