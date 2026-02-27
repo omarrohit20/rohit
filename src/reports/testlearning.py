@@ -25,17 +25,8 @@ def main():
 
     col0, col1, col2, col3, col4, col5 = st.columns(6)
     with col0:
-        df = rb.getdf('supertrend-morning-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['forecast_day_PCT10_change'] >= 1.9) & (df['forecast_day_PCT10_change'] < 10) &
-                (df['forecast_day_PCT7_change'] > 0) & (df['forecast_day_PCT5_change'] > 0) &
-                (df['PCT_day_change'] < 0.5)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df,'Supertrend Morning Buy', color='LG', renderf10buy00=True)
+        df = rb.getdf('Breakout-Beey-2')
+        rb.render(st, df,'Breakout-Beey-2', color='LG')
     with col1:
         df = rb.getdf('buy_all_processor')
         expected_columns = list(set(df.columns))
@@ -73,17 +64,8 @@ def main():
         else:
             rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
     with col3:
-        df = rb.getdf('supertrend-morning-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['forecast_day_PCT10_change'] <= -1.9) & (df['forecast_day_PCT10_change'] > -10) &
-                (df['forecast_day_PCT7_change'] < 0) & (df['forecast_day_PCT5_change'] < 0) &
-                (df['PCT_day_change'] > -0.5)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'Supertrend Morning Sell', color='LG', renderf10sell00=True)
+        df = rb.getdf('Breakout-Siill-2')
+        rb.render(st, df, 'Breakout-Siill-2', color='LG')
     with col4:
         df = rb.getdf('sell_all_processor')
         expected_columns = list(set(df.columns))
