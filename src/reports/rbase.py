@@ -588,6 +588,28 @@ def highlight_category_column(value, systemtime):
     if (count_9_3 > 6 and "L@" in value and "09:" in systemtime):
         return 
 
+    count_9_3_s = 0
+    try:
+        coll = dbcl['supertrend-morning-buy']
+        count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
+    except Exception:
+        pass
+
+    if (count_9_3_s > 6 and "H@" in value and "09:" in systemtime):
+        return
+
+    count_9_3_s = 0
+    try:
+        coll = dbcl['supertrend-morning-sell']
+        count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
+    except Exception:
+        pass
+
+    if (count_9_3_s > 6 and "L@" in value and "09:" in systemtime):
+        return
+
+    
+
     if "0@@CROSSED" in value and "7@" in value and "CROSSED1DayH@GT7@" not in value and "CROSSED1DayL@LT-7@" not in value:
         return 'background-color: #800080'
     elif "0@@SUPER" in value and "7@" in value:
@@ -651,7 +673,14 @@ def highlight_category_column_f10_buy(value10, value7, value5, systemtime):
     except Exception:
         pass
 
-    if count_9_3 > 6 and "9:" in systemtime:
+    count_9_3_s = 0
+    try:
+        coll = dbcl['supertrend-morning-buy']
+        count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
+    except Exception:
+        pass
+
+    if (count_9_3 > 6 or count_9_3_s > 6) and "9:" in systemtime:
         return 'background-color: #A1A1A1'
 
     if float(value10) >= 7 and float(value7) > -2 and float(value5) > -2 and (float(value7) > (float(value10)-5) or float(value5) > (float(value10)-5)):
@@ -677,7 +706,14 @@ def highlight_category_column_f10_sell(value10, value7, value5, systemtime):
     except Exception:
         pass
 
-    if count_9_3 > 6 and "9:" in systemtime:
+    count_9_3_s = 0
+    try:
+        coll = dbcl['supertrend-morning-sell']
+        count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
+    except Exception:
+        pass
+
+    if (count_9_3 > 6 or count_9_3_s > 6) and "9:" in systemtime:
         return 'background-color: #A1A1A1'
 
     """Highlights the entire row based on the 'Category' column value."""
@@ -724,7 +760,15 @@ def highlight_category_column_f10_buy_00(value10, value7, value5, systemtime):
     except Exception:
         pass
 
-    if (count_9_3 < 6 or ("9:3" not in systemtime and "9:4" not in systemtime)):
+    count_9_3_s = 0
+    try:
+        coll = dbcl['supertrend-morning-buy']
+        count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
+    except Exception:
+        pass
+
+    if (((count_9_3 < 6 and count_9_3_s < 6) or ("9:3" not in systemtime and "9:4" not in systemtime))
+        ):
         """Highlights the entire row based on the 'Category' column value."""
         if float(value10) >= 7 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
             return 'background-color: #800080'
@@ -747,7 +791,14 @@ def highlight_category_column_f10_sell_00(value10, value7, value5, systemtime):
     except Exception:
         pass
 
-    if (count_9_3 < 6 or ("9:3" not in systemtime and "9:4" not in systemtime)):
+    count_9_3_s = 0
+    try:
+        coll = dbcl['supertrend-morning-sell']
+        count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
+    except Exception:
+        pass
+
+    if (((count_9_3 < 6 and count_9_3_s < 6) or ("9:3" not in systemtime and "9:4" not in systemtime))):
         """Highlights the entire row based on the 'Category' column value."""
         if float(value10) <= -7 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
             return 'background-color: #800080'
@@ -790,7 +841,14 @@ def highlight_category_column_f10_buy_01(value10, value7, value5, systemtime):
     except Exception:
         pass
 
-    if (count_9_3 < 6 or ("9:3" not in systemtime and "9:4" not in systemtime)):
+    count_9_3_s = 0
+    try:
+        coll = dbcl['supertrend-morning-buy']
+        count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
+    except Exception:
+        pass
+
+    if (((count_9_3 < 6 and count_9_3_s < 6) or ("9:3" not in systemtime and "9:4" not in systemtime))):
         """Highlights the entire row based on the 'Category' column value."""
         if float(value10) > 7 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
             return 'background-color: #800080'
@@ -811,7 +869,14 @@ def highlight_category_column_f10_sell_01(value10, value7, value5, systemtime):
     except Exception:
         pass
 
-    if (count_9_3 < 6 or ("9:3" not in systemtime and "9:4" not in systemtime)):
+    count_9_3_s = 0
+    try:
+        coll = dbcl['supertrend-morning-sell']
+        count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
+    except Exception:
+        pass
+
+    if (((count_9_3 < 6 and count_9_3_s < 6) or ("9:3" not in systemtime and "9:4" not in systemtime))):
         """Highlights the entire row based on the 'Category' column value."""
         if float(value10) < -7 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
             return 'background-color: #800080'
@@ -862,18 +927,37 @@ def apply_ml_highlight(row):
         # 'crossed-day-high' collection, set mlData cell to pink.
         try:
             coll = dbcl['buy-morning-volume-breakout(Check-News)']
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
-                styles['scrip'] = 'background-color: #E0FFDE'
-                return styles
+            count = coll.count_documents({'systemtime': {'$regex': '09:'}})
+
+            if count < 6:
+                # Check if any document exists with specific time patterns
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}}):
+                    styles['scrip'] = 'background-color: #E0FFDE'
+                    return styles
+            else:
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:2|10:3|10:4|10:50'}}):
+                    styles['scrip'] = 'background-color: #E0FFDE'
+                    return styles
+
+            
         except Exception:
             # fallback to existing style on any DB error
             pass
 
         try:
             coll = dbcl['sell-morning-volume-breakout(Check-News)']
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
-                styles['scrip'] = 'background-color: #FCCFD2'
-                return styles
+            count = coll.count_documents({'systemtime': {'$regex': '09:'}})
+
+            if count < 6:
+                # Check if any document exists with specific time patterns
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}}):
+                    styles['scrip'] = 'background-color: #FCCFD2'
+                    return styles
+            else:
+                # Check if any document exists with systemtime starting with '10:' or '11:'
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:2|10:3|10:4|10:50'}}):
+                    styles['scrip'] = 'background-color: #FCCFD2'
+                    return styles
         except Exception:
             # fallback to existing style on any DB error
             pass
