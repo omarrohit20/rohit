@@ -1334,55 +1334,37 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
     #
     # Main Code Execution
 
-    if (df.empty):
+    if renderml:
+        df_styled = highlight_category_row(df, color=color)
+        st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+    elif (df.empty):
         st.dataframe(df, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
     else:
         df_styled = highlight_category_row(df, color=color)
-        if(chartlink1 or testLearning or applyBreakOut) and color =='LG':
-            df_styled = df_styled.apply(apply_breakout_highlight, axis=1)
-
+        
         if renderf10buy:
-            #df_styled = highlight_category_row(df, color=color)
             df_styled = df_styled.apply(apply_f10_buy, axis=1)
-            st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
         elif renderf10sell:
-            #df_styled = highlight_category_row(df, color=color)
             df_styled = df_styled.apply(apply_f10_sell, axis=1)
-            st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
         elif renderf10buy00:
-            #df_styled = highlight_category_row(df, color=color)
             df_styled = df_styled.apply(apply_f10_buy_00, axis=1)
-            st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
         elif renderf10sell00:
-            #df_styled = highlight_category_row(df, color=color)
             df_styled = df_styled.apply(apply_f10_sell_00, axis=1)
-            st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
         elif renderf10buy01:
-            #df_styled = highlight_category_row(df, color=color)
             df_styled = df_styled.apply(apply_f10_buy_01, axis=1)
-            st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
         elif renderf10sell01:
-            #df_styled = highlight_category_row(df, color=color)
             df_styled = df_styled.apply(apply_f10_sell_01, axis=1)
-            st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
-        elif renderml:
-            #df_styled = highlight_category_row(df, color=color)
-            st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
         elif (not df.empty):
-            #df_styled = highlight_category_row(df, color=color)
-            # Apply mlData column highlighting, but use a row-level function so
-            # we can consider both `systemtime` and `mlData` when deciding style.
-            
             if ((chartlink0) and (color == 'G' or color == 'R')):
                 df_styled = df_styled.apply(apply_highlight_column, axis=1)
             else:
                 df_styled = df_styled.apply(apply_highlight_column, axis=1)
     
-            # Apply the second style *directly* to the Styler object
-            st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
-    
+        
+        if(chartlink1 or testLearning or applyBreakOut) and color =='LG':
+            df_styled = df_styled.apply(apply_breakout_highlight, axis=1)
+        st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
    
-    
 
 def render_rawdata(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default):
     st.write("********"+ name + "********")
