@@ -680,7 +680,17 @@ def highlight_category_column_f10_buy(value10, value7, value5, systemtime):
     except Exception:
         pass
 
-    if (count_9_3 > 6 or count_9_3_s > 6) and "9:" in systemtime:
+    count_9_3_c = 0
+    try:
+        coll = dbcl['buy-morning-volume-breakout(Check-News)']
+        count_9_3_c = coll.count_documents({'systemtime': {'$regex': '09:'}})
+    except Exception:
+        pass
+
+    if (count_9_3_s >= 10 or count_9_3_c >= 6):
+        return 'background-color: #A1A1A1'
+
+    if (count_9_3 > 6) and "9:" in systemtime:
         return 'background-color: #A1A1A1'
 
     if float(value10) >= 7 and float(value7) > -2 and float(value5) > -2 and (float(value7) > (float(value10)-5) or float(value5) > (float(value10)-5)):
@@ -713,7 +723,17 @@ def highlight_category_column_f10_sell(value10, value7, value5, systemtime):
     except Exception:
         pass
 
-    if (count_9_3 > 6 or count_9_3_s > 6) and "9:" in systemtime:
+    count_9_3_c = 0
+    try:
+        coll = dbcl['sell-morning-volume-breakout(Check-News)']
+        count_9_3_c = coll.count_documents({'systemtime': {'$regex': '09:'}})
+    except Exception:
+        pass
+
+    if (count_9_3_s >= 10 or count_9_3_c >= 6):
+        return 'background-color: #A1A1A1'
+
+    if (count_9_3 > 6) and "9:" in systemtime:
         return 'background-color: #A1A1A1'
 
     """Highlights the entire row based on the 'Category' column value."""
@@ -767,6 +787,16 @@ def highlight_category_column_f10_buy_00(value10, value7, value5, systemtime):
     except Exception:
         pass
 
+    count_9_3_c = 0
+    try:
+        coll = dbcl['buy-morning-volume-breakout(Check-News)']
+        count_9_3_c = coll.count_documents({'systemtime': {'$regex': '09:'}})
+    except Exception:
+        pass
+
+    if (count_9_3_s >= 10 or count_9_3_c >= 6):
+        return 'background-color: #A1A1A1'
+
     if (((count_9_3 < 6 and count_9_3_s < 6) or ("9:3" not in systemtime and "9:4" not in systemtime))
         ):
         """Highlights the entire row based on the 'Category' column value."""
@@ -797,6 +827,16 @@ def highlight_category_column_f10_sell_00(value10, value7, value5, systemtime):
         count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
     except Exception:
         pass
+
+    count_9_3_c = 0
+    try:
+        coll = dbcl['sell-morning-volume-breakout(Check-News)']
+        count_9_3_c = coll.count_documents({'systemtime': {'$regex': '09:'}})
+    except Exception:
+        pass
+
+    if (count_9_3_s >= 10 or count_9_3_c >= 6):
+        return 'background-color: #A1A1A1'
 
     if (((count_9_3 < 6 and count_9_3_s < 6) or ("9:3" not in systemtime and "9:4" not in systemtime))):
         """Highlights the entire row based on the 'Category' column value."""
@@ -848,6 +888,16 @@ def highlight_category_column_f10_buy_01(value10, value7, value5, systemtime):
     except Exception:
         pass
 
+    count_9_3_c = 0
+    try:
+        coll = dbcl['buy-morning-volume-breakout(Check-News)']
+        count_9_3_c = coll.count_documents({'systemtime': {'$regex': '09:'}})
+    except Exception:
+        pass
+
+    if (count_9_3_s >= 10 or count_9_3_c >= 6):
+        return 'background-color: #A1A1A1'
+
     if (((count_9_3 < 6 and count_9_3_s < 6) or ("9:3" not in systemtime and "9:4" not in systemtime))):
         """Highlights the entire row based on the 'Category' column value."""
         if float(value10) > 7 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
@@ -875,6 +925,16 @@ def highlight_category_column_f10_sell_01(value10, value7, value5, systemtime):
         count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
     except Exception:
         pass
+
+    count_9_3_c = 0
+    try:
+        coll = dbcl['sell-morning-volume-breakout(Check-News)']
+        count_9_3_c = coll.count_documents({'systemtime': {'$regex': '09:'}})
+    except Exception:
+        pass
+
+    if (count_9_3_s >= 10 or count_9_3_c >= 6):
+        return 'background-color: #A1A1A1'
 
     if (((count_9_3 < 6 and count_9_3_s < 6) or ("9:3" not in systemtime and "9:4" not in systemtime))):
         """Highlights the entire row based on the 'Category' column value."""
