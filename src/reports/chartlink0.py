@@ -1087,6 +1087,15 @@ def main():
             print("")
         rb.render(st, filtered_df, 'Sell Near Month3Low', color='LG', height=150)
 
+
+    col1, col2 = st.columns(2)
+    with col1:
+        df = rb.getdf('breakout-morning-beey')
+        rb.render(st, df, 'breakout-morning-beey', color='LG', height=500)
+    with col2:
+        df = rb.getdf('breakout-morning-siill')
+        rb.render(st, df, 'breakout-morning-siill', color='LG', height=500)
+
     
     
     

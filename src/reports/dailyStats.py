@@ -174,6 +174,56 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['index'].str.contains("futures")) &
+                (df['intradaytech'].str.contains("LastUp"))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'highBuy-LastUp', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    with col2:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['index'].str.contains("futures")) &
+                (df['intradaytech'].str.contains("Last-Up-MorningDown"))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'highBuy-LastUp-MorningDown', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    with col3:
+        df = rb.getdfResult('lowSell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['index'].str.contains("futures")) &
+                (df['intradaytech'].str.contains("LastDown"))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'lowSell-LastDown', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    with col4:
+        df = rb.getdfResult('lowSell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['index'].str.contains("futures")) &
+                (df['intradaytech'].str.contains("Last-Down-MorningUp"))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'lowSell-LastDown-MorningUp', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['intradaytech'].str.contains("LastUp")) |
+                 (df['intradaytech'].str.contains("Last-Up-MorningDown"))) &
+                #(df['index'].str.contains("futures")) &
                 (df['PCT_change'] > -2.5) &
                 (df['PCT_day_change'] > -2.5) &
                 (df['PCT_day_change'] < 0) &
@@ -191,6 +241,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['intradaytech'].str.contains("LastUp")) |
+                 (df['intradaytech'].str.contains("Last-Up-MorningDown"))) &
+                #(df['index'].str.contains("futures")) &
                 (df['PCT_change'] > -2.5) &
                 (df['PCT_day_change'] > -2.5) &
                 (df['PCT_day_change'] < 0) &
@@ -209,6 +262,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['index'].str.contains("futures")) &
                 (df['PCT_change'] < -1.3) &
                 (df['PCT_day_change'] < -1.3) &
                 (df['PCT_day_change_pre1'] > 1) &
@@ -229,6 +283,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['index'].str.contains("futures")) &
                 (df['PCT_day_change'] > -1) &
                 ((df['PCT_day_change'] > 1) | (df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
                 ((df['PCT_day_change'] < 4) & (df['PCT_day_change_pre1'] < 3) & (df['PCT_day_change_pre2'] < 3)) &
@@ -249,6 +304,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['intradaytech'].str.contains("LastDown")) |
+                 (df['intradaytech'].str.contains("Last-Down-MorningUp"))) &
+                #(df['index'].str.contains("futures")) &
                 (df['PCT_change'] < 2.5) &
                 (df['PCT_day_change'] < 2.5) &
                 (df['PCT_day_change'] > 0) &
@@ -266,6 +324,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['intradaytech'].str.contains("LastDown")) |
+                 (df['intradaytech'].str.contains("Last-Down-MorningUp"))) &
+                #(df['index'].str.contains("futures")) &
                 (df['PCT_change'] < 2.5) &
                 (df['PCT_day_change'] < 2.5) &
                 (df['PCT_day_change'] > 0) &
@@ -284,6 +345,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['index'].str.contains("futures")) &
                 (df['PCT_change'] > 1.3) &
                 (df['PCT_day_change'] > 1.3) &
                 (df['PCT_day_change_pre1'] < -1) &
@@ -304,6 +366,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['index'].str.contains("futures")) &
                 (df['PCT_day_change'] < 1) &
                 ((df['PCT_day_change'] < -1) | (df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
                 ((df['PCT_day_change'] > -4) &(df['PCT_day_change_pre1'] > -3) & (df['PCT_day_change_pre2'] > -3)) &

@@ -595,7 +595,10 @@ def highlight_category_column(value, systemtime):
     except Exception:
         pass
 
-    if (count_9_3_s > 6 and "H@" in value and "09:" in systemtime):
+    if (count_9_3_s > 6 and "H@" in value and ("09:" in systemtime)):
+        return
+
+    if (count_9_3_s > 6 and "H@" in value and "CROSSED2" not in value):
         return
 
     count_9_3_s = 0
@@ -605,9 +608,11 @@ def highlight_category_column(value, systemtime):
     except Exception:
         pass
 
-    if (count_9_3_s > 6 and "L@" in value and "09:" in systemtime):
+    if (count_9_3_s > 6 and "L@" in value and ("09:" in systemtime)):
         return
 
+    if (count_9_3_s > 6 and "L@" in value and "CROSSED2" not in value):
+        return
     
 
     if "0@@CROSSED" in value and "7@" in value and "CROSSED1DayH@GT7@" not in value and "CROSSED1DayL@LT-7@" not in value:
