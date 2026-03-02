@@ -3,41 +3,34 @@ import pathlib
 import sbase as sb
 from config import *
 import shutil
+from playwright.sync_api import sync_playwright
      
 if __name__ == "__main__":
-    
-    #shutil.rmtree("profiles")
-    
-    # sb.server = Server(sb.path, options={'existing_proxy_port_to_use': 16010})
-    # time.sleep(1)
-    # sb.server.start()
-    # time.sleep(1)
-    # sb.proxy = sb.server.create_proxy()
-    # print("Server started")
-    #
-    # sb.option.add_argument('--proxy-server=%s' % sb.proxy.proxy)
+    # create a fresh profile directory if needed
+    # shutil.rmtree("profiles")
+
     script_directory = pathlib.Path().absolute()
-    sb.option.add_argument(f"user-data-dir={script_directory}/profiles/p")
-    sb.driver = webdriver.Chrome(options=sb.option, desired_capabilities=sb.capabilities, executable_path = 'C:\git\cft\driver\chromedriver.exe')
-    sb.driver.get("https://chartink.com/login")
-    time.sleep(10)
-    sb.driver.find_element("id", "email").send_keys("rohit_51981@yahoo.co.in")
-    sb.driver.find_element("id", "password").send_keys("abc")
-    #sb.driver.find_element("css", "button.g-recaptcha").click()
-    
-    time.sleep(10)
-    
-    
-    
-    sb.driver.quit()
-    
-    shutil.copytree("profiles/p", "profiles/p1")
-    shutil.copytree("profiles/p", "profiles/p2")
-    shutil.copytree("profiles/p", "profiles/p3")
-    shutil.copytree("profiles/p", "profiles/p4")
-    shutil.copytree("profiles/p", "profiles/p5")
-    shutil.copytree("profiles/p", "profiles/p6")
-    shutil.copytree("profiles/p", "profiles/p7")
-    shutil.copytree("profiles/p", "profiles/p8")
+
+    # launch a persistent context using Playwright
+    with sync_playwright() as p:
+        context = p.chromium.launch_persistent_context(
+            user_data_dir=str(script_directory / "profiles" / "p"),
+            headless=False,  # make it visible so you can complete any captcha/login steps
+            args=["--no-sandbox", "--disable-gpu"]
+        )
+        page = context.new_page()
+        page.goto("https://chartink.com/login")
+
+        # fill credentials and wait for manual actions if needed
+        page.fill("#login-email", "rohit_51981@yahoo.co.in")
+        page.fill("#login-password", "abc")
+        # if there's a captcha you'll need to solve it manually in the opened browser
+        page.wait_for_timeout(10000)  # 10s pause to allow manual interaction
+
+        context.close()
+
+    # after logging in copy the base profile for multiple instances
+    for i in range(1, 9):
+        shutil.copytree("profiles/p", f"profiles/p{i}")
     
     
