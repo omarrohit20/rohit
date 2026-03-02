@@ -648,7 +648,7 @@ def main():
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
         df = rb.getdf('Breakout-Buy-after-10')
-        rb.render(st, df, 'Breakout Buy after 10', color='LG', height=200)
+        rb.render(st, df, 'UpGT0 : Breakout Buy after 10', color='LG', height=200)
     with col2:
         df = rb.getdf('1-Bbuyy-morningUp-downConsolidation')
         filtered_df = df
@@ -676,7 +676,7 @@ def main():
         rb.render(st, filtered_df, 'UpGT0.5 : Only one dip: 1-Bbuyy-morningUp-downConsolidation', color='LG', height=200)
     with col4:
         df = rb.getdf('Breakout-Sell-after-10')
-        rb.render(st, df, 'Breakout Sell after 10', color='LG', height=200)
+        rb.render(st, df, 'DownLT-0 : Breakout Sell after 10', color='LG', height=200)
     with col5:
         df = rb.getdf('1-Sselll-morningDown-upConsolidation')
         filtered_df = df
@@ -717,7 +717,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'buy-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'buy-morning-volume-breakout(Trending)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
     with col2:
         df = rb.getintersectdf('buy-morning-volume-breakout(Check-News)', 'morning-volume-breakout-buy')
         filtered_df = df
@@ -735,11 +735,11 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'buy-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'buy-morning-volume-breakout(Trending)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
     with col3:
         df = rb.getdf('buy-morning-volume-breakout(Check-News)')
         filtered_df = df
-        rb.render(st, filtered_df, 'buy-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'buy-morning-volume-breakout(Trending)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
     with col4:
         df = rb.getintersectdf('sell-morning-volume-breakout(Check-News)', 'morning-volume-breakout-sell')
         filtered_df = df
@@ -752,7 +752,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'sell-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'sell-morning-volume-breakout(Trending)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
     with col5:
         df = rb.getintersectdf('sell-morning-volume-breakout(Check-News)', 'morning-volume-breakout-sell')
         filtered_df = df
@@ -770,11 +770,11 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'sell-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'sell-morning-volume-breakout(Trending)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
     with col6:
         df = rb.getdf('sell-morning-volume-breakout(Check-News)')
         filtered_df = df
-        rb.render(st, filtered_df, 'sell-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'sell-morning-volume-breakout(Trending)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
 
 
     col1, col2, col3, col4, col5, col6 = st.columns(6)
@@ -794,7 +794,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'TOP5 : buy-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'TOP5 : buy-morning-volume-breakout(Trending)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
     with col2:
         df = rb.getintersectdf('buy_all_processor', 'buy-morning-volume-breakout(Check-News)')
         expected_columns = list(set(df.columns))
@@ -818,12 +818,12 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'BuyAllProcessor + buy-morning-volume-breakout(Check-News)', column_order=rb.column_order_p, color='G')
+            rb.render(st, filtered_df, 'BuyAllProcessor + buy-morning-volume-breakout(Trending)', column_order=rb.column_order_p, color='G')
         else:
-            rb.render(st, empty_df, 'BuyAllProcessor + buy-morning-volume-breakout(Check-News)', column_order=rb.column_order_p, color='G')
+            rb.render(st, empty_df, 'BuyAllProcessor + buy-morning-volume-breakout(Trending)', column_order=rb.column_order_p, color='G')
     with col3:
         df = rb.getintersectdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)', 'buy-morning-volume-breakout(Check-News)')
-        rb.render(st, df, 'Crossed-2Day-High + buy-morning-volume-breakout(Check-News)', column_order=rb.column_order_p, color='G') 
+        rb.render(st, df, 'Crossed-2Day-High + buy-morning-volume-breakout(Trending)', column_order=rb.column_order_p, color='G') 
     with col4:
         df = rb.getintersectdf('sell-morning-volume-breakout(Check-News)', 'morning-volume-breakout-sell')
         filtered_df = df
@@ -840,7 +840,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'TOP5 : sell-morning-volume-breakout(Check-News)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'TOP5 : sell-morning-volume-breakout(Trending)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True, color='LG')
     with col5:
         df = rb.getintersectdf('sell_all_processor', 'sell-morning-volume-breakout(Check-News)')
         expected_columns = list(set(df.columns))
@@ -865,12 +865,12 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'SellAllProcessor + sell-morning-volume-breakout(Check-News)', column_order=rb.column_order_p, color='R')
+            rb.render(st, filtered_df, 'SellAllProcessor + sell-morning-volume-breakout(Trending)', column_order=rb.column_order_p, color='R')
         else:
-            rb.render(st, empty_df, 'SellAllProcessor + sell-morning-volume-breakout(Check-News)', column_order=rb.column_order_p, color='R') 
+            rb.render(st, empty_df, 'SellAllProcessor + sell-morning-volume-breakout(Trending)', column_order=rb.column_order_p, color='R') 
     with col6:
         df = rb.getintersectdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)', 'sell-morning-volume-breakout(Check-News)')
-        rb.render(st, df, 'Crossed-2Day-Low + sell-morning-volume-breakout(Check-News)', column_order=rb.column_order_p, color='R') 
+        rb.render(st, df, 'Crossed-2Day-Low + sell-morning-volume-breakout(Trending)', column_order=rb.column_order_p, color='R') 
 
 
     col1, col2, col3, col4 = st.columns(4)
