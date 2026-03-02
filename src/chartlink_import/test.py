@@ -11,7 +11,7 @@ if __name__ == "__main__":
         # Launch browser with persistent context (for user data directory)
         context = p.chromium.launch_persistent_context(
             user_data_dir=str(script_directory / "profiles" / "p6"),
-            headless=True,
+            headless=False,
             args=[
                 '--no-sandbox',
                 '--disable-gpu'
@@ -29,6 +29,10 @@ if __name__ == "__main__":
         sb.nw = datetime.now()
 
         if (sb.nw >= time_00_15 and sb.nw <= time_24_00):
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-3', 'breakout-morning-siill', time_09_15, time_09_35)
+
+            process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-4', 'breakout-morning-beey', time_09_15, time_09_35)
+
             process_url_volBreakout('https://chartink.com/screener/morning-volume-bs', 'morning-volume-bs', time_09_00,
                                      time_10_00)
             process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-buy-1', 'morning-volume-breakout-buy', time_09_15, time_11_00)
@@ -111,6 +115,7 @@ if __name__ == "__main__":
             #
             process_url_volBreakout('https://chartink.com/screener/sell-breakdown-intraday-9-30-to-10-3', 'crossed-day-low', time_09_20, time_13_00)
 
+            
 
 
         print('Hello')
