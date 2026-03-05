@@ -648,7 +648,7 @@ def main():
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
         df = rb.getdf('Breakout-Buy-after-10')
-        rb.render(st, df, 'UpGT0 : Breakout Buy after 10', color='LG', height=200)
+        rb.render(st, df, 'UpGT0 (Check-News) : Breakout Buy after 10', color='LG', height=200)
     with col2:
         df = rb.getdf('1-Bbuyy-morningUp-downConsolidation')
         filtered_df = df
@@ -676,7 +676,7 @@ def main():
         rb.render(st, filtered_df, 'UpGT0.5 : Only one dip: 1-Bbuyy-morningUp-downConsolidation', color='LG', height=200)
     with col4:
         df = rb.getdf('Breakout-Sell-after-10')
-        rb.render(st, df, 'DownLT-0 : Breakout Sell after 10', color='LG', height=200)
+        rb.render(st, df, 'DownLT-0 (Check-News) : Breakout Sell after 10', color='LG', height=200)
     with col5:
         df = rb.getdf('1-Sselll-morningDown-upConsolidation')
         filtered_df = df

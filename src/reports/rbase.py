@@ -1429,7 +1429,52 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
         if(chartlink1 or testLearning or applyBreakOut) and color =='LG':
             df_styled = df_styled.apply(apply_breakout_highlight, axis=1)
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
-   
+
+def getdf_raw(collection_name, chartink=False):
+    collection = None
+    if chartink:
+        collection = dbcl[collection_name]
+    else:
+        collection = dbnse[collection_name]
+    df = pd.DataFrame(list(collection.find()))
+    
+    # Filter by selected collection scrips if set
+    selected_coll = get_selected_collection()
+    if selected_coll and selected_coll != "All":
+        try:
+            scrips = get_collection_scrips(selected_coll)
+            if scrips:
+                df = df[df['scrip'].isin(scrips)]
+        except Exception as e:
+            print(f"Error filtering by collection: {e}")
+    
+    # try:
+    #     df['PCT_day_change'] = pd.to_numeric(df['PCT_day_change'])
+    #     df['PCT_change'] = pd.to_numeric(df['PCT_change'], errors='coerce')
+    #     df['PCT_day_change_pre1'] = pd.to_numeric(df['PCT_day_change_pre1'], errors='coerce')
+    #     df['PCT_day_change_pre2'] = pd.to_numeric(df['PCT_day_change_pre2'], errors='coerce')
+
+    #     df['highTail'] = pd.to_numeric(df['highTail'], errors='coerce')
+    #     df['lowTail'] = pd.to_numeric(df['lowTail'], errors='coerce')
+    #     df['year5HighChange'] = pd.to_numeric(df['year5HighChange'], errors='coerce')
+    #     df['yearHighChange'] = pd.to_numeric(df['year5HighChange'], errors='coerce')
+    #     df['yearLowChange'] = pd.to_numeric(df['yearLowChange'], errors='coerce')
+    #     df['month3HighChange'] = pd.to_numeric(df['month3HighChange'], errors='coerce')
+    #     df['month3LowChange'] = pd.to_numeric(df['month3LowChange'], errors='coerce')
+    #     df['monthHighChange'] = pd.to_numeric(df['monthHighChange'], errors='coerce')
+    #     df['monthLowChange'] = pd.to_numeric(df['monthLowChange'], errors='coerce')
+    #     df['week2HighChange'] = pd.to_numeric(df['week2HighChange'], errors='coerce')
+    #     df['week2LowChange'] = pd.to_numeric(df['week2LowChange'], errors='coerce')
+    #     df['weekHighChange'] = pd.to_numeric(df['weekHighChange'], errors='coerce')
+    #     df['weekLowChange'] = pd.to_numeric(df['weekLowChange'], errors='coerce')
+    #     df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
+    #     df['forecast_day_PCT7_change'] = pd.to_numeric(df['forecast_day_PCT7_change'], errors='coerce')
+    #     df['forecast_day_PCT5_change'] = pd.to_numeric(df['forecast_day_PCT5_change'], errors='coerce')
+    #     df['systemtime'] = pd.to_datetime(df['systemtime']).dt.time.astype(str)
+    #     df['mlData'] = df['mlData'].fillna('').astype(str)
+    # except KeyError as e:
+    #     print(f"")
+    return df
 
 def render_rawdata(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default):
     st.write("********"+ name + "********")
