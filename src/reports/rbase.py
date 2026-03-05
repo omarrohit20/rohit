@@ -704,9 +704,9 @@ def highlight_category_column_f10_buy(value10, value7, value5, systemtime):
         return 'background-color: #3EB9FB'
     elif float(value10) >= -2 and float(value10) < 2 and float(value7) < 2 and float(value5) < 2 and float(value7) >-2 and float(value5) > -2:
         return 'background-color: #CBEDFF'
-    elif float(value10) <= -9 and float(value7) < -1 and float(value5) < -1:
+    elif float(value10) <= -9 and float(value7) < -1 and float(value5) < -1 and ("11:" not in systemtime and "10:5" not in systemtime):
         return 'background-color: #ffd546'
-    elif float(value10) <= -6 and float(value7) < 0 and float(value5) < 0:
+    elif float(value10) <= -6 and float(value7) < 0 and float(value5) < 0  and ("11:" not in systemtime and "10:5" not in systemtime):
         return 'background-color: #fff0bc'
     elif float(value10) <= -3 and float(value7) < 2 and float(value5) < 2:
         return 'background-color: #F9FAFB'
@@ -748,9 +748,9 @@ def highlight_category_column_f10_sell(value10, value7, value5, systemtime):
         return 'background-color: #3EB9FB'
     elif float(value10) <= 2 and float(value10) > -2 and float(value7) > -2 and float(value5) > -2 and float(value7) < 2 and float(value5) < 2:
         return 'background-color: #CBEDFF'
-    elif float(value10) >= 9 and float(value7) > 1 and float(value5) > 1:
+    elif float(value10) >= 9 and float(value7) > 1 and float(value5) > 1  and ("11:" not in systemtime and "10:5" not in systemtime):
         return 'background-color: #ffd546'
-    elif float(value10) >= 6 and float(value7) > 0 and float(value5) > 0:
+    elif float(value10) >= 6 and float(value7) > 0 and float(value5) > 0  and ("11:" not in systemtime and "10:5" not in systemtime):
         return 'background-color: #fff0bc'
     elif float(value10) >= 3 and float(value7) > -2 and float(value5) > -2:
         return 'background-color: #F9FAFB'
@@ -809,9 +809,9 @@ def highlight_category_column_f10_buy_00(value10, value7, value5, systemtime):
             return 'background-color: #800080'
         elif float(value10) >= -2 and float(value10) < 1 and float(value7) < 2 and float(value5) < 2 and float(value7) > -2 and float(value5) > -2:
             return 'background-color: #CBEDFF'
-        elif float(value10) <= -9:
+        elif float(value10) <= -9  and ("11:" not in systemtime and "10:5" not in systemtime):
             return 'background-color: #ffd546'
-        elif float(value10) <= -6:
+        elif float(value10) <= -6 and ("11:" not in systemtime and "10:5" not in systemtime):
             return 'background-color: #fff0bc'
         elif float(value10) < -3:
             return 'background-color: #A1A1A1'
@@ -849,9 +849,9 @@ def highlight_category_column_f10_sell_00(value10, value7, value5, systemtime):
             return 'background-color: #800080'
         elif float(value10) <= 2 and float(value10) > -1 and float(value7) > -2 and float(value5) > -2 and float(value7) < 2 and float(value5) < 2:
             return 'background-color: #CBEDFF'
-        elif float(value10) >= 9:
+        elif float(value10) >= 9 and ("11:" not in systemtime and "10:5" not in systemtime):
             return 'background-color: #ffd546'
-        elif float(value10) >= 6:
+        elif float(value10) >= 6 and ("11:" not in systemtime and "10:5" not in systemtime):
             return 'background-color: #fff0bc'
         elif float(value10) >= 3:
             return 'background-color: #A1A1A1'
@@ -909,7 +909,7 @@ def highlight_category_column_f10_buy_01(value10, value7, value5, systemtime):
             return 'background-color: #800080'
         elif float(value10) > -2 and float(value10) < 1 and float(value7) < 2 and float(value5) < 2 and float(value7) >-2 and float(value5) > -2:
             return 'background-color: #CBEDFF'
-        elif float(value10) < -7:
+        elif float(value10) < -7 and ("11:" not in systemtime and "10:5" not in systemtime):
             return 'background-color: #A1A1A1'
         elif float(value10) < -3:
             return 'background-color: #A1A1A1'
@@ -947,7 +947,7 @@ def highlight_category_column_f10_sell_01(value10, value7, value5, systemtime):
             return 'background-color: #800080'
         elif float(value10) < 2 and float(value10) > -1 and float(value7) > -2 and float(value5) > -2 and float(value7) < 2 and float(value5) < 2:
             return 'background-color: #CBEDFF'
-        elif float(value10) > 7:
+        elif float(value10) > 7 and ("11:" not in systemtime and "10:5" not in systemtime):
             return 'background-color: #A1A1A1'
         elif float(value10) > 3:
             return 'background-color: #A1A1A1'
@@ -1047,23 +1047,23 @@ def apply_breakout_highlight(row):
             pass
 
 
-        try:
-            coll = dbcl['1-Bbuyy-morningUp-downConsolidation']
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
-                styles['scrip'] = 'background-color: #E0FFDE'
-                return styles
-        except Exception:
-            # fallback to existing style on any DB error
-            pass
+        # try:
+        #     coll = dbcl['1-Bbuyy-morningUp-downConsolidation']
+        #     if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
+        #         styles['scrip'] = 'background-color: #E0FFDE'
+        #         return styles
+        # except Exception:
+        #     # fallback to existing style on any DB error
+        #     pass
 
-        try:
-            coll = dbcl['1-Sselll-morningDown-upConsolidation']
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
-                styles['scrip'] = 'background-color: #FCCFD2'
-                return styles
-        except Exception:
-            # fallback to existing style on any DB error
-            pass
+        # try:
+        #     coll = dbcl['1-Sselll-morningDown-upConsolidation']
+        #     if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
+        #         styles['scrip'] = 'background-color: #FCCFD2'
+        #         return styles
+        # except Exception:
+        #     # fallback to existing style on any DB error
+        #     pass
 
 
         try:
