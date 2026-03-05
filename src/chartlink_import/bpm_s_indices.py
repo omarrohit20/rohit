@@ -9,7 +9,7 @@ if __name__ == "__main__":
     with sync_playwright() as p:
         context = p.chromium.launch_persistent_context(
             user_data_dir=str(script_directory / "profiles" / "p4"),
-            headless=False,
+            headless=True,
             args=['--no-sandbox', '--disable-gpu']
         )
         
@@ -44,5 +44,4 @@ if __name__ == "__main__":
             
             time.sleep(5)
             sb.nw = datetime.now()
-        page.close()
     

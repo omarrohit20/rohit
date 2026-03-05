@@ -9,7 +9,7 @@ if __name__ == "__main__":
     with sync_playwright() as p:
         context = p.chromium.launch_persistent_context(
             user_data_dir=str(script_directory / "profiles" / "p5"),
-            headless=False,
+            headless=True,
             args=['--no-sandbox', '--disable-gpu']
         )
         
@@ -56,5 +56,4 @@ if __name__ == "__main__":
                 process_url_volBreakout('https://chartink.com/screener/sell-morning-volume-breakout-checknews', 'sell-morning-volume-breakout(Check-News)', time_09_50, time_13_00)
             time.sleep(5)
             sb.nw = datetime.now()
-        page.close()
     

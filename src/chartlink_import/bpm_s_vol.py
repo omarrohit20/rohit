@@ -9,7 +9,7 @@ if __name__ == "__main__":
     with sync_playwright() as p:
         context = p.chromium.launch_persistent_context(
             user_data_dir=str(script_directory / "profiles" / "p8"),
-            headless=False,
+            headless=True,
             args=['--no-sandbox', '--disable-gpu']
         )
         regression_ta_data_sell()
@@ -39,6 +39,5 @@ if __name__ == "__main__":
                 process_url_volBreakout('https://chartink.com/screener/morning-volume-breakout-sell-3', 'breakout-morning-siill', time_09_15, time_09_30)
             time.sleep(5)
             sb.nw = datetime.now()
-        page.close()
         
         

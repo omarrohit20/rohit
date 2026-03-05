@@ -39,5 +39,4 @@ if __name__ == "__main__":
             
             time.sleep(5)
             sb.nw = datetime.now()
-        page.close()
     
