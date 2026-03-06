@@ -23,6 +23,113 @@ def main():
 
     rb.testLearning = True
 
+    col2, col4 = st.columns(2)
+    with col2:
+        df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['mlData'].str.contains("BYYWEEK2HIGH>GT0") & df['mlData'].str.contains("LastUp")) | 
+                (df['mlData'].str.contains("BYYWEEK2HIGH>GT0") & df['mlData'].str.contains("LastDown")) | 
+                    ((df['PCT_day_change'] < 2.5) &
+                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                        (df['mlData'].str.contains("LastUp") |
+                        df['mlData'].str.contains("Last-Up-MorningDown") |
+                        df['mlData'].str.contains("LastDown") |
+                        df['mlData'].str.contains("Last-Down-MorningUp")
+                        )
+                    )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'morning-volume-breakout-buy : LastUpDown', color='G')
+        else:
+            rb.render(st, empty_df, 'morning-volume-breakout-buy : LastUpDown', color='G')
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['mlData'].str.contains("BYYWEEK2LOW<LT0") & df['mlData'].str.contains("LastUp")) |  
+                (df['mlData'].str.contains("BYYWEEK2LOW<LT0") & df['mlData'].str.contains("LastDown")) | 
+                    ((df['PCT_day_change'] > -2.5) &
+                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                        (df['mlData'].str.contains("LastUp") |
+                        df['mlData'].str.contains("Last-Up-MorningDown") |
+                        df['mlData'].str.contains("LastDown") |
+                        df['mlData'].str.contains("Last-Down-MorningUp")
+                        )
+                    )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'morning-volume-breakout-sell : LastUpDown', color='R')
+        else:
+            rb.render(st, empty_df, 'morning-volume-breakout-sell : LastUpDown', color='R')
+
+    col1, col2, col4 = st.columns(3)
+    with col1:
+        df = rb.getdf('morning-volume-bs')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                    ~(df['mlData'].str.contains("Last-Up-MorningDown")) &
+                    (
+                        df['mlData'].str.contains("LastUp") |
+                        df['mlData'].str.contains("LastDown") |
+                        df['mlData'].str.contains("Last-Down-MorningUp")
+                    )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'UP-BUY', color='LG', height=300)
+        else:
+            rb.render(st, empty_df, 'UP-BUY', color='LG', height=300)
+    with col2:
+        df = rb.getdf('morning-volume-bs')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                    ~(df['mlData'].str.contains("Last-Down-MorningUp")) &
+                    (
+                        df['mlData'].str.contains("LastUp") |
+                        df['mlData'].str.contains("LastDown") |
+                        df['mlData'].str.contains("Last-Up-MorningDown")
+                    )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'DOWN-SELL', color='LG', height=300)
+        else:
+            rb.render(st, empty_df, 'DOWN-SELL', color='LG', height=300)
+    with col4:
+        df = rb.getdf('morning-volume-bs')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'morning-volume-bs', color='LG', height=300)
+        else:
+            rb.render(st, empty_df, 'morning-volume-bs', color='LG', height=300)
+    
     col0, col1, col2, col3, col4, col5 = st.columns(6)
     with col0:
         df = rb.getdf('Breakout-Beey-2')
