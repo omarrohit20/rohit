@@ -12,7 +12,7 @@ def main():
     # setting the screen size (ignore if already set by index)
     try:
         st.set_page_config(layout="wide",
-                           page_title="Dashboard",
+                           page_title="Dashboard2",
                            initial_sidebar_state="expanded",)
     except Exception:
         pass
