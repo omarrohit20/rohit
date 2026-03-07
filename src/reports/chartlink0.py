@@ -1087,6 +1087,147 @@ def main():
             print("")
         rb.render(st, filtered_df, 'Sell Near Month3Low', color='LG', height=150)
 
+    col2, col4 = st.columns(2)
+    with col2:
+        df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] <= 2.5) &
+                (df['PCT_change'] <= 3)
+                ]
+
+            filtered_df = filtered_df[
+                (df['mlData'].str.contains("BYYWEEK2HIGH>GT0") & df['mlData'].str.contains("LastUp")) | 
+                (df['mlData'].str.contains("BYYWEEK2HIGH>GT0") & df['mlData'].str.contains("LastDown")) | 
+                    (
+                        (df['forecast_day_PCT10_change'] > -9) &
+                        (~df['systemtime'].str.contains('09:15', case=False, regex=True, na=False)) &
+                        (
+                            df['mlData'].str.contains("LastUp") |
+                            df['mlData'].str.contains("Last-Up-MorningDown") |
+                            df['mlData'].str.contains("LastDown") |
+                            df['mlData'].str.contains("Last-Down-MorningUp")
+                        )
+                    )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'morning-volume-breakout-buy : LastUpDown', color='LG', height=300, renderf10buy01=True)
+        else:
+            rb.render(st, empty_df, 'morning-volume-breakout-buy : LastUpDown', color='LG', height=300, renderf10buy01=True)
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] >= -2.5) &
+                (df['PCT_change'] >= -3)
+                ]
+
+            filtered_df = df[
+                (df['mlData'].str.contains("BYYWEEK2LOW<LT0") & df['mlData'].str.contains("LastUp")) |  
+                (df['mlData'].str.contains("BYYWEEK2LOW<LT0") & df['mlData'].str.contains("LastDown")) | 
+                    (
+                        (df['forecast_day_PCT10_change'] < 9) &
+                        (~df['systemtime'].str.contains('09:15', case=False, regex=True, na=False)) &
+                        (
+                            df['mlData'].str.contains("LastUp") |
+                            df['mlData'].str.contains("Last-Up-MorningDown") |
+                            df['mlData'].str.contains("LastDown") |
+                            df['mlData'].str.contains("Last-Down-MorningUp")
+                        )
+                    )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'morning-volume-breakout-sell : LastUpDown', color='LG', height=300, renderf10sell01=True)
+        else:
+            rb.render(st, empty_df, 'morning-volume-breakout-sell : LastUpDown', color='LG', height=300, renderf10sell01=True)
+
+    col1, col3 = st.columns(2)
+    with col1:
+        df = rb.getintersectdf('morning-volume-bs', 'cash-buuy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                    (df['forecast_day_PCT10_change'] > -9) &
+                    ~(df['mlData'].str.contains("Last-Up-MorningDown")) &
+                    (
+                        df['mlData'].str.contains("LastUp") |
+                        df['mlData'].str.contains("LastDown") |
+                        df['mlData'].str.contains("Last-Down-MorningUp")
+                    )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'UP-BUY', color='LG', renderf10buy01=True)
+        else:
+            rb.render(st, empty_df, 'UP-BUY', color='LG', renderf10buy01=True)
+    with col3:
+        df = rb.getintersectdf('morning-volume-bs', 'cash-seell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                    (df['forecast_day_PCT10_change'] < 9) &
+                    ~(df['mlData'].str.contains("Last-Down-MorningUp")) &
+                    (
+                        df['mlData'].str.contains("LastUp") |
+                        df['mlData'].str.contains("LastDown") |
+                        df['mlData'].str.contains("Last-Up-MorningDown")
+                    )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'DOWN-SELL', color='LG', renderf10sell01=True)
+        else:
+            rb.render(st, empty_df, 'DOWN-SELL', color='LG', renderf10sell01=True)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        df = rb.getdf('cash-buuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] > 0.3) & (df['forecast_day_PCT10_change'] < 3.5)) |
+                (
+                    (df['forecast_day_PCT10_change'] < -10) &
+                    (df['PCT_day_change'] < 2) &
+                    (df['PCT_day_change'] > 0.5) &
+                    (df['PCT_day_change_pre1'] < -1) 
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'cash-buuy', color='LG', height=300, renderf10buy01=True)
+    with col2:
+        df = rb.getdf('cash-seell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] < -0.3) & (df['forecast_day_PCT10_change'] > -3.5)) |
+                (
+                    (df['forecast_day_PCT10_change'] > 10) &
+                    (df['PCT_day_change'] < -0.5) &
+                    (df['PCT_day_change'] > -2) &
+                    (df['PCT_day_change_pre1'] > 1) 
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'cash-seell', color='LG', height=300, renderf10sell01=True)
 
     col1, col2 = st.columns(2)
     with col1:

@@ -449,7 +449,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed Day Highs', color='LG', renderf10buy01=True)
+        rb.render(st, filtered_df, 'Crossed Day Highs', color='LG', renderf10buy00=True)
     with col3:
         df = rb.getdf('supertrend-morning-sell')
         filtered_df = df
@@ -562,7 +562,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell01=True)
+        rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell00=True)
 
 
     col0, col1, col2, col3, col4, col5 = st.columns(6)
@@ -962,6 +962,87 @@ def main():
         else:
             rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='R')
     with col4:
+        df = rb.getintersectdf('week2lh-not-reached','crossed-day-low')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
+        else:
+            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
+    
+
+    col0, col1, col2, col3, col4, col5 = st.columns(6)
+    with col0:
+        df = rb.getdf('Breakout-Beey-2')
+        rb.render(st, df,'Breakout-Beey-2', color='LG')
+    with col1:
+        df = rb.getdf('buy_all_processor')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                #((df['forecast_day_PCT10_change'] >= 2) | (df['forecast_day_PCT10_change'] < -6)) &
+                (~df['processor'].str.contains('Check-News')) &
+                (~df['processor'].str.contains('supertrend')) &
+                (~df['processor'].str.contains('checkChartSell/')) &
+                (~df['processor'].str.contains('sell-breakout')) &
+                (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:00', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'BuyAllProcessor + BuyBreakout', color='LG')
+        else:
+            rb.render(st, empty_df, 'BuyAllProcessor + BuyBreakout', color='LG')
+    with col2:
+        df = rb.getintersectdf('week2lh-not-reached','crossed-day-high')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
+        else:
+            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
+    with col3:
+        df = rb.getdf('Breakout-Siill-2')
+        rb.render(st, df, 'Breakout-Siill-2', color='LG')
+    with col4:
+        df = rb.getdf('sell_all_processor')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] <= -2) | (df['forecast_day_PCT10_change'] > 6)) &
+                (~df['processor'].str.contains('Check-News')) &
+                (~df['processor'].str.contains('supertrend')) &
+                (~df['processor'].str.contains('checkChartSell/')) &
+                (~df['processor'].str.contains('sell-breakout')) &
+                (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:00', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'BuyAllProcessor + BuyBreakout', color='LG')
+        else:
+            rb.render(st, empty_df, 'BuyAllProcessor + BuyBreakout', color='LG')
+    with col5:
         df = rb.getintersectdf('week2lh-not-reached','crossed-day-low')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
