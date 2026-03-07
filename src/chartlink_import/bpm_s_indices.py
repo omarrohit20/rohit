@@ -36,9 +36,9 @@ if __name__ == "__main__":
                 process_url_volBreakout('https://chartink.com/screener/sell-breakdown-intraday-9-30-to-10-3', 'crossed-day-low', time_09_20, time_13_00)
 
 
-            if (sb.nw >= time_09_20 and sb.nw <= time_12_00):
+            if (sb.nw >= time_09_20 and sb.nw <= time_10_45):
                 # ( {cash} ( ( {cash} ( [=1] 15 minute volume > greatest(  1 day ago volume / 24  ) and [-1] 5 minute high > 1 day ago high and [-1] 5 minute high > 2 days ago high and [-1] 5 minute high > 3 days ago high and [=1] 10 minute low < 1 day ago high and [=1] 15 minute "close - 1 candle ago close / 1 candle ago close * 100" > 0 and abs ( ( [-1] 5 minute high - 7 days ago high ) * 100 ) / 1 day ago close > 3 and ( ( [=1] 5 minute high - 1 day ago close ) * 100 ) / 1 day ago close > 0 and ( {33489} not ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) ) ) and ( {45603} not ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) ) ) and ( {166311} not ( [=1] 5 minute volume > greatest(  1 day ago volume / 24  ) ) ) and [=1] 5 minute "close - 1 candle ago close / 1 candle ago close * 100" > 0.5 and daily close > 100 ) ) ) )
-                process_url_volBreakout('https://chartink.com/screener/cash-sell-404117', 'cash-seell', time_09_20, time_12_00)
+                process_url_volBreakout('https://chartink.com/screener/cash-sell-404117', 'cash-seell', time_09_20, time_10_30)
 
 
             if (sb.nw >= time_09_15 and sb.nw <= time_10_30):
