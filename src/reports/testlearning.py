@@ -89,7 +89,7 @@ def main():
 
     col1, col2, col4 = st.columns(3)
     with col1:
-        df = rb.getdf('morning-volume-bs')
+        df = rb.getintersectdf('morning-volume-bs', 'cash-buuy')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
@@ -110,7 +110,7 @@ def main():
         else:
             rb.render(st, empty_df, 'UP-BUY', color='LG', height=300)
     with col2:
-        df = rb.getdf('morning-volume-bs')
+        df = rb.getintersectdf('morning-volume-bs', 'cash-seell')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
