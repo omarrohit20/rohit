@@ -1195,13 +1195,42 @@ def main():
         else:
             rb.render(st, empty_df, 'DOWN-SELL', color='LG', renderf10sell01=True)
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('cash-buuy')
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['forecast_day_PCT10_change'] > 0.3) & (df['forecast_day_PCT10_change'] < 3.5)) |
+                ((df['forecast_day_PCT10_change'] > 0) & 
+                 (df['forecast_day_PCT10_change'] < 5) &
+                 ((df['forecast_day_PCT5_change'] > 2) | (df['forecast_day_PCT7_change'] > 2)) &
+                 (df['PCT_day_change'] > 0) &
+                 ((df['lowTail'] < 2) | (df['PCT_day_change'] < 1)) &
+                 ((df['PCT_day_change'] < 2) | (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)))
+                )
+                |
+                (
+                    (df['forecast_day_PCT10_change'] > -2) & 
+                    ((df['forecast_day_PCT5_change'] > 2) | (df['forecast_day_PCT7_change'] > 2)) &
+                    (df['PCT_day_change'] > 1) &
+                    (df['PCT_day_change'] < 5) &
+                    (df['PCT_day_change_pre1'] > -2) &
+                    (df['PCT_day_change_pre2'] > -2) &
+                    (df['PCT_day_change_pre1'] < 5) &
+                    ((df['PCT_day_change_pre1'] < 0) | (df['PCT_day_change_pre2'] < 0)) &
+                    ((df['lowTail'] < 2) | (df['PCT_day_change'] < 1)) &
+                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False))
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'UPTREND : cash-buuy', color='LG', renderf10buy01=True,height=300)
+    with col2:
+        df = rb.getdf('cash-buuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
                 (
                     (df['forecast_day_PCT10_change'] < -10) &
                     (df['PCT_day_change'] < 2) &
@@ -1211,13 +1240,42 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'cash-buuy', color='LG', height=300, renderf10buy01=True)
-    with col2:
+        rb.render(st, filtered_df, 'REVERSAL : cash-buuy', color='LG', height=300, renderf10buy01=True)
+    with col3:
         df = rb.getdf('cash-seell')
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['forecast_day_PCT10_change'] < -0.3) & (df['forecast_day_PCT10_change'] > -3.5)) |
+                ((df['forecast_day_PCT10_change'] < 0) & 
+                 (df['forecast_day_PCT10_change'] > -5) &
+                 ((df['forecast_day_PCT5_change'] < -2) | (df['forecast_day_PCT7_change'] < -2)) &
+                 (df['PCT_day_change'] < 0) &
+                 ((df['highTail'] < 2) | (df['PCT_day_change'] > -1)) &
+                 ((df['PCT_day_change'] > -2) | (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)))
+                )
+                |
+                (
+                    (df['forecast_day_PCT10_change'] < 2) & 
+                    ((df['forecast_day_PCT5_change'] < -2) | (df['forecast_day_PCT7_change'] < -2)) &
+                    (df['PCT_day_change'] < -1) &
+                    (df['PCT_day_change'] > -5) &
+                    (df['PCT_day_change_pre1'] < 2) &
+                    (df['PCT_day_change_pre2'] < 2) &
+                    (df['PCT_day_change_pre1'] > -5) &
+                    ((df['PCT_day_change_pre1'] > 0) | (df['PCT_day_change_pre2'] > 0)) &
+                    ((df['highTail'] < 2) | (df['PCT_day_change'] > -1)) &
+                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False))
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DOWNTREND :cash-seell', color='LG', renderf10sell01=True, height=300)
+    with col4:
+        df = rb.getdf('cash-seell')
+        filtered_df = df
+        try:
+            filtered_df = df[
                 (
                     (df['forecast_day_PCT10_change'] > 10) &
                     (df['PCT_day_change'] < -0.5) &
@@ -1227,7 +1285,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'cash-seell', color='LG', height=300, renderf10sell01=True)
+        rb.render(st, filtered_df, 'REVERSAL : cash-seell', color='LG', height=300, renderf10sell01=True)
 
     col1, col2 = st.columns(2)
     with col1:
