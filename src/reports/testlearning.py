@@ -79,7 +79,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'CONTINUE-Buy-AT IfMorningDown 9:30 : cash-seell', color='LG', renderf10buy01=True, height=300)
+        rb.render(st, filtered_df, 'CONTINUE-Buy AT9:30 : StockDown : cash-seell', color='LG', renderf10buy01=True, height=300)
     with col1:
         df = rb.getdf('cash-seell')
         filtered_df = df
@@ -110,8 +110,21 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'CONTINUE-Buy-AT IfMorningDown 9:30 : cash-seell', color='LG', renderf10buy01=True, height=300)
+        rb.render(st, filtered_df, 'CONTINUE-Buy AT9:30 : StockDown : cash-seell', color='LG', renderf10buy01=True, height=300)
     with col2:
+        df = rb.getdf('cash-seell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['mlData'].str.contains("Up") ) &
+                ((df['forecast_day_PCT10_change'] < -10) &
+                 (df['PCT_day_change'] < -2)
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'SHORTCOVER REVERSAL-Buy AT9:30 : Stock LT(-3) : cash-seell', color='LG', renderf10buy01=True, height=300)
+    with col3:
         df = rb.getdf('cash-buuy')
         filtered_df = df
         try:
@@ -123,10 +136,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'UPTREND : cash-buuy', color='LG', renderf10buy01=True,height=300)
-    with col3:
-        df = rb.getdf('cash-buuy')
-        rb.render(st, df, 'cash-buuy', color='LG', renderf10buy01=True,height=300)
+        rb.render(st, filtered_df, 'UPTREND : Market LT1 : cash-buuy', color='LG', renderf10buy01=True,height=300)
     with col44:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -158,7 +168,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'CONTINUE-SELL-AT IfMorningUp 9:30 : cash-buuy', color='LG', renderf10sell01=True,height=300)
+        rb.render(st, filtered_df, 'CONTINUE-SELL AT9:30 : StockUp : cash-buuy', color='LG', renderf10sell01=True,height=300)
     with col4:
         df = rb.getdf('cash-buuy')
         filtered_df = df
@@ -190,8 +200,22 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'CONTINUE-SELL-AT IfMorningUp 9:30 : cash-buuy', color='LG', renderf10sell01=True,height=300)
+        rb.render(st, filtered_df, 'CONTINUE-SELL AT9:30 : StockUp : cash-buuy', color='LG', renderf10sell01=True,height=300)
     with col5:
+        df = rb.getdf('cash-buuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (~df['mlData'].str.contains("Down") ) &
+                    (df['forecast_day_PCT10_change'] > 10) &
+                    (df['PCT_day_change'] > 2)
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'PROFITBOOK-REVERSAL-SELL AT9:30 : Stock GT(+3) : cash-buuy', color='LG', renderf10sell01=True,height=300)
+    with col6:
         df = rb.getdf('cash-seell')
         filtered_df = df
         try:
@@ -202,10 +226,19 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'DOWNTREND :cash-seell', color='LG', renderf10sell01=True, height=300)
-    with col6:
+        rb.render(st, filtered_df, 'DOWNTREND : Market GT(-1) : cash-seell', color='LG', renderf10sell01=True, height=300)
+    
+    
+
+    col1, col2 = st.columns(2)
+    with col1:
+        df = rb.getdf('cash-buuy')
+        rb.render(st, df, 'cash-buuy', color='LG', renderf10buy01=True,height=300)
+    with col2:
         df = rb.getdf('cash-seell')
         rb.render(st, df, 'cash-seell', color='LG', renderf10sell01=True, height=300)
+
+
 
     col0, col1, col2, col3, col4, col5 = st.columns(6)
     with col0:
