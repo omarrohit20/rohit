@@ -615,22 +615,25 @@ def highlight_category_column(value, systemtime):
         return
     
 
-    if "0@@CROSSED" in value and "7@" in value and "CROSSED1DayH@GT7@" not in value and "CROSSED1DayL@LT-7@" not in value:
-        return 'background-color: #800080'
-    elif "0@@SUPER" in value and "7@" in value:
-        return 'background-color: #800080'
-    elif "0@@CROSSED" in value and "2@" in value and "CROSSED1DayH@GT2@" not in value and "CROSSED1DayL@LT-2@" not in value:
-        return 'background-color: #3EB9FB'
-    elif "0@@SUPER" in value and "2@" in value:
-        return 'background-color: #3EB9FB'
-    elif "0@@CROSSED" in value and "1@" in value:
-        return 'background-color: #CBEDFF'
-    elif "0@@SUPER" in value and "1@" in value:
-        return 'background-color: #CBEDFF'
-    elif "0@@CROSSED" in value and "6@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
-        return 'background-color: #fff4cf'
-    elif "0@@SUPER" in value and "6@" in value:
-        return 'background-color: #fff4cf'
+    if("09:2" not in systemtime):
+        if "0@@CROSSED" in value and "7@" in value and "CROSSED1DayH@GT7@" not in value and "CROSSED1DayL@LT-7@" not in value:
+            return 'background-color: #800080'
+        elif "0@@SUPER" in value and "7@" in value:
+            return 'background-color: #800080'
+        elif "0@@CROSSED" in value and "2@" in value and "CROSSED1DayH@GT2@" not in value and "CROSSED1DayL@LT-2@" not in value:
+            return 'background-color: #3EB9FB'
+        elif "0@@SUPER" in value and "2@" in value:
+            return 'background-color: #3EB9FB'
+        elif "0@@CROSSED" in value and "1@" in value:
+            return 'background-color: #CBEDFF'
+        elif "0@@SUPER" in value and "1@" in value:
+            return 'background-color: #CBEDFF'
+        elif "0@@CROSSED" in value and "6@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
+            return 'background-color: #fff4cf'
+        elif "0@@SUPER" in value and "6@" in value:
+            return 'background-color: #fff4cf'
+    else:
+        return
 
 def apply_highlight_column(row):
     """Apply highlight_category_column to mlData column with systemtime context."""
@@ -1432,7 +1435,7 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
                 df_styled = df_styled.apply(apply_highlight_column, axis=1)
     
         
-        if(chartlink1 or testLearning or applyBreakOut) and color =='LG':
+        if(chartlink0 or chartlink1 or testLearning or applyBreakOut) and color =='LG':
             df_styled = df_styled.apply(apply_breakout_highlight, axis=1)
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
 

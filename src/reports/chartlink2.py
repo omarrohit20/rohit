@@ -873,113 +873,10 @@ def main():
         rb.render(st, df, 'Crossed-2Day-Low + sell-morning-volume-breakout(Trending)', column_order=rb.column_order_p, color='R') 
 
 
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        df = rb.getintersectdf('week2lh-not-reached','crossed-day-high')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (
-                    ((df['PCT_day_change_pre1'] < -0.3) | (df['PCT_day_change_pre2'] < -0.3)) &
-                    ((df['PCT_day_change'] > -1.5) & (df['PCT_day_change_pre1'] > -1.5) & (df['PCT_day_change_pre2'] > -1.5)) &
-                    (df['week2HighChange'] < 0) &
-                    (df['forecast_day_PCT10_change'] > -1)
-                )
-                |
-                (
-                    ((df['PCT_day_change_pre1'] < -0.3) | (df['PCT_day_change_pre2'] < -0.3)) &
-                    (df['PCT_day_change'] < 1) &
-                    (df['PCT_day_change'] > -1) &
-                    (df['PCT_day_change_pre1'] < 1) &
-                    (df['PCT_day_change_pre1'] > -1) &
-                    (abs(df['week2HighChange']) > 1.1) &
-                    #(~df['systemtime'].str.contains('09:', case=False, na=False)) &
-                    # (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
-                    # (~df['systemtime'].str.contains('10:05', case=False, na=False)) &
-                    # (~df['systemtime'].str.contains('10:10', case=False, na=False)) &
-                    # (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
-                    (~df['systemtime'].str.contains('11:', case=False, na=False)) &
-                    ((df['forecast_day_PCT10_change'] > 3) | ((df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT5_change'] < 0)))
-                )
-            ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='G')
-        else:
-            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='G')
-    with col2:
-        df = rb.getintersectdf('week2lh-not-reached','crossed-day-high')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df
-        except KeyError as e:
-            print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
-        else:
-            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
-    with col3:
-        df = rb.getintersectdf('week2lh-not-reached','crossed-day-low')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (
-                    ((df['PCT_day_change_pre1'] > 0.3) | (df['PCT_day_change_pre2'] > 0.3)) &
-                    ((df['PCT_day_change_pre1'] < 1.5) & (df['PCT_day_change_pre1'] < 1.5) & (df['PCT_day_change_pre2'] < 1.5)) &
-                    (df['lowTail'] < 1.5) &
-                    (df['week2LowChange'] > 0) &
-                    (df['forecast_day_PCT10_change'] < 1)
-                )
-                |
-                (
-                    ((df['PCT_day_change_pre1'] > 0.3) | (df['PCT_day_change_pre2'] > 0.3)) &
-                    (df['PCT_day_change'] < 1) &
-                    (df['PCT_day_change'] > -1) &
-                    (df['PCT_day_change_pre1'] < 1) &
-                    (df['PCT_day_change_pre1'] > -1) &
-                    (abs(df['week2LowChange']) > 1.1) &
-                    (df['lowTail'] < 1.5) &
-                    # (~df['systemtime'].str.contains('09:', case=False, na=False)) &
-                    # (~df['systemtime'].str.contains('10:00', case=False, na=False)) &
-                    # (~df['systemtime'].str.contains('10:05', case=False, na=False)) &
-                    # (~df['systemtime'].str.contains('10:10', case=False, na=False)) &
-                    # (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
-                    (~df['systemtime'].str.contains('11:', case=False, na=False)) &
-                    ((df['forecast_day_PCT10_change'] < -3) | ((df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT5_change'] > 0)))
-                )
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='R')
-        else:
-            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='R')
-    with col4:
-        df = rb.getintersectdf('week2lh-not-reached','crossed-day-low')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df
-        except KeyError as e:
-            print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
-        else:
-            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
-    
-
     col0, col1, col2, col3, col4, col5 = st.columns(6)
     with col0:
         df = rb.getdf('Breakout-Beey-2')
-        rb.render(st, df,'Breakout-Beey-2', color='LG')
+        rb.render(st, df,'Breakout-Beey-2', color='LG', applyBreakOut=True)
     with col1:
         df = rb.getdf('buy_all_processor')
         expected_columns = list(set(df.columns))
@@ -1000,9 +897,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'BuyAllProcessor + BuyBreakout', color='LG')
+            rb.render(st, filtered_df, 'BuyAllProcessor + BuyBreakout', color='LG', applyBreakOut=True)
         else:
-            rb.render(st, empty_df, 'BuyAllProcessor + BuyBreakout', color='LG')
+            rb.render(st, empty_df, 'BuyAllProcessor + BuyBreakout', color='LG', applyBreakOut=True)
     with col2:
         df = rb.getintersectdf('week2lh-not-reached','crossed-day-high')
         expected_columns = list(set(df.columns))
@@ -1013,12 +910,12 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
+            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG', applyBreakOut=True)
         else:
-            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
+            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG', applyBreakOut=True)
     with col3:
         df = rb.getdf('Breakout-Siill-2')
-        rb.render(st, df, 'Breakout-Siill-2', color='LG')
+        rb.render(st, df, 'Breakout-Siill-2', color='LG', applyBreakOut=True)
     with col4:
         df = rb.getdf('sell_all_processor')
         expected_columns = list(set(df.columns))
@@ -1039,7 +936,7 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'BuyAllProcessor + BuyBreakout', color='LG')
+            rb.render(st, filtered_df, 'BuyAllProcessor + BuyBreakout', color='LG', applyBreakOut=True)
         else:
             rb.render(st, empty_df, 'BuyAllProcessor + BuyBreakout', color='LG')
     with col5:
@@ -1052,10 +949,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
+            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG', applyBreakOut=True)
         else:
-            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG')
-    
+            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged, column_order=rb.column_order_p, color='LG', applyBreakOut=True)
 
     
 if __name__ == '__main__':
