@@ -1111,7 +1111,7 @@ def main():
                         (df['forecast_day_PCT10_change'] > -9) &
                         (~df['systemtime'].str.contains('09:15', case=False, regex=True, na=False)) &
                         (
-                            df['mlData'].str.contains("LastUp") |
+                            ((df['mlData'].str.contains("LastUp")) & (df['forecast_day_PCT10_change'] > -2)) |
                             df['mlData'].str.contains("Last-Up-MorningDown") |
                             df['mlData'].str.contains("LastDown") |
                             df['mlData'].str.contains("Last-Down-MorningUp")
@@ -1149,7 +1149,7 @@ def main():
                         (
                             df['mlData'].str.contains("LastUp") |
                             df['mlData'].str.contains("Last-Up-MorningDown") |
-                            df['mlData'].str.contains("LastDown") |
+                            ((df['mlData'].str.contains("LastDown")) & (df['forecast_day_PCT10_change'] < 2)) |
                             df['mlData'].str.contains("Last-Down-MorningUp")
                         )
                     )
@@ -1180,7 +1180,7 @@ def main():
                     (df['forecast_day_PCT10_change'] > -9) &
                     ~(df['mlData'].str.contains("Last-Up-MorningDown")) &
                     (
-                        df['mlData'].str.contains("LastUp") |
+                        ((df['mlData'].str.contains("LastUp"))) |
                         df['mlData'].str.contains("LastDown") |
                         df['mlData'].str.contains("Last-Down-MorningUp")
                     )
@@ -1210,7 +1210,7 @@ def main():
                     ~(df['mlData'].str.contains("Last-Down-MorningUp")) &
                     (
                         df['mlData'].str.contains("LastUp") |
-                        df['mlData'].str.contains("LastDown") |
+                        ((df['mlData'].str.contains("LastDown"))) |
                         df['mlData'].str.contains("Last-Up-MorningDown")
                     )
                 ]

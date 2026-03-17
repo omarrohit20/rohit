@@ -277,9 +277,9 @@ def main():
                 (df['PCT_day_change_pre1'] > -1.5) &
                 (df['PCT_day_change_pre2'] > -1.5) &
                 (df['week2HighChange'] > -0.5) &
-                ((df['mlData'].str.contains("BYYWEEK2HIGH>GT0")))
+                ((df['mlData'].str.contains("BYYWEEK2HIGH>GT0"))) &
                 #((df['month3LowChange'] > 10) | (df['filter'].str.contains("MLBuy")))
-                #(df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
                 ]
         except KeyError as e:
             print("")
@@ -298,9 +298,9 @@ def main():
                 (df['PCT_day_change_pre1'] < 1.5) &
                 (df['PCT_day_change_pre2'] < 1.5) &
                 (df['week2LowChange'] < 0.5) &
-                ((df['mlData'].str.contains("SLLWEEK2LOW<LT0")))
+                ((df['mlData'].str.contains("SLLWEEK2LOW<LT0"))) &
                 #((df['month3HighChange'] < -10) | (df['filter'].str.contains("MLSell")))
-                #(df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
                 ]
         except KeyError as e:
             print("")
