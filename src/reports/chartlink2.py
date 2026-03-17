@@ -806,9 +806,10 @@ def main():
                 (df['PCT_day_change'] > -1.5) &
                 (df['forecast_day_PCT10_change'] > -2) &
                 (df['forecast_day_PCT10_change'] < 10) &
+                (~df['processor'].str.contains('buy-breakout')) &
                 (~df['processor'].str.contains('Check-News')) &
                 (~df['processor'].str.contains('supertrend-morning-buy')) &
-                (~df['processor'].str.contains('checkChartBuy/')) &
+                (~df['processor'].str.contains('checkChartBuy')) &
                 #(~df['processor'].str.contains('buy-dayconsolidation-breakout-01')) 
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False)) &
@@ -852,7 +853,8 @@ def main():
                 (df['forecast_day_PCT10_change'] < 2) &
                 (df['forecast_day_PCT10_change'] > -10) &
                 #((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
-                (~df['processor'].str.contains('Check-News'))&
+                (~df['processor'].str.contains('sell-breakout')) &
+                (~df['processor'].str.contains('Check-News')) &
                 (~df['processor'].str.contains('checkChartSell/')) &
                 (~df['processor'].str.contains('supertrend-morning-sell'))&
                 #(~df['processor'].str.contains('sell-dayconsolidation-breakout-01')) &
@@ -936,9 +938,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'BuyAllProcessor + BuyBreakout', color='LG', applyBreakOut=True)
+            rb.render(st, filtered_df, 'SellAllProcessor + SellBreakout', color='LG', applyBreakOut=True)
         else:
-            rb.render(st, empty_df, 'BuyAllProcessor + BuyBreakout', color='LG')
+            rb.render(st, empty_df, 'SellAllProcessor + SellBreakout', color='LG')
     with col5:
         df = rb.getintersectdf('week2lh-not-reached','crossed-day-low')
         expected_columns = list(set(df.columns))
