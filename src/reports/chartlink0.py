@@ -850,7 +850,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'SuperTrend-ConsolidationBuy', color='G')
+        rb.render(st, filtered_df, 'SuperTrend-ConsolidationBuy', color='LG')
     with col3:
         df = rb.getdf('morning-volume-breakout-buy')
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -918,7 +918,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'SuperTrend-ConsolidationSell', color='R')
+        rb.render(st, filtered_df, 'SuperTrend-ConsolidationSell', color='LG')
     with col7:
         df = rb.getdf('morning-volume-breakout-sell')
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -1112,9 +1112,9 @@ def main():
                         (~df['systemtime'].str.contains('09:15', case=False, regex=True, na=False)) &
                         (
                             ((df['mlData'].str.contains("LastUp")) & (df['forecast_day_PCT10_change'] > -2)) |
-                            df['mlData'].str.contains("Last-Up-MorningDown") |
-                            df['mlData'].str.contains("LastDown") |
-                            df['mlData'].str.contains("Last-Down-MorningUp")
+                            (df['mlData'].str.contains("Last-Up-MorningDown")) |
+                            ((df['mlData'].str.contains("LastDown")) & (df['PCT_day_change'] > 1)) |
+                            ((df['mlData'].str.contains("Last-Down-MorningUp")) & (df['PCT_day_change'] > 1))
                         )
                     )
                 ]
@@ -1147,10 +1147,10 @@ def main():
                         (df['forecast_day_PCT10_change'] < 9) &
                         (~df['systemtime'].str.contains('09:15', case=False, regex=True, na=False)) &
                         (
-                            df['mlData'].str.contains("LastUp") |
-                            df['mlData'].str.contains("Last-Up-MorningDown") |
+                            ((df['mlData'].str.contains("LastUp")) & (df['PCT_day_change'] < -1)) |
+                            ((df['mlData'].str.contains("Last-Up-MorningDown")) & (df['PCT_day_change'] < -1)) |
                             ((df['mlData'].str.contains("LastDown")) & (df['forecast_day_PCT10_change'] < 2)) |
-                            df['mlData'].str.contains("Last-Down-MorningUp")
+                            (df['mlData'].str.contains("Last-Down-MorningUp"))
                         )
                     )
                 ]
@@ -1331,11 +1331,23 @@ def main():
             print("")
         rb.render(st, filtered_df, 'REVERSAL : cash-seell', color='LG', height=300, renderf10sell01=True)
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
+        df = rb.getintersectdf('morning-volume-bs', 'cash-buuy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        rb.render(st, filtered_df, 'UP: morning-volume-bs', color='LG', noColourFilter=True, height=500)
+    with col2:
         df = rb.getdf('breakout-morning-beey')
         rb.render(st, df, 'breakout-morning-beey', color='LG', height=500)
-    with col2:
+    with col3:
+        df = rb.getintersectdf('morning-volume-bs', 'cash-seell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        rb.render(st, filtered_df, 'DOWN: morning-volume-bs', color='LG', noColourFilter=True, height=500)
+    with col4:
         df = rb.getdf('breakout-morning-siill')
         rb.render(st, df, 'breakout-morning-siill', color='LG', height=500)
 

@@ -563,10 +563,10 @@ def highlight_category_row(df, color='NA'):
 def highlight_category_column(value, systemtime):
     """Highlights the entire row based on the 'Category' column value."""
 
-    if "0@@CROSSED" in value and "6@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
-        return 'background-color: #fff4cf'
-    elif "0@@SUPER" in value and "6@" in value:
-        return 'background-color: #fff4cf'
+    # if "0@@CROSSED" in value and "6@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
+    #     return 'background-color: #fff4cf'
+    # elif "0@@SUPER" in value and "6@" in value:
+    #     return 'background-color: #fff4cf'
     
     count_9_3 = 0
     try:
@@ -1039,7 +1039,7 @@ def apply_breakout_highlight(row):
         try:
             coll = dbcl['Breakout-Buy-after-10']
             if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
-                styles['scrip'] = 'background-color: #E0FFDE'
+                styles['systemtime'] = 'background-color: #009600'
                 return styles
         except Exception:
             # fallback to existing style on any DB error
@@ -1048,7 +1048,7 @@ def apply_breakout_highlight(row):
         try:
             coll = dbcl['Breakout-Sell-after-10']
             if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
-                styles['scrip'] = 'background-color: #FCCFD2'
+                styles['systemtime'] = 'background-color: #e50e1d'
                 return styles
         except Exception:
             # fallback to existing style on any DB error
@@ -1382,7 +1382,7 @@ def getdfResult(collection_name):
         print(f"KeyError: {e}")
     return df
 
-def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False, renderf10buy=False, renderf10sell=False, f10=0, renderf10buy00=False, renderf10sell00=False, renderf10buy01=False, renderf10sell01=False, applyBreakOut=False):
+def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False, renderf10buy=False, renderf10sell=False, f10=0, renderf10buy00=False, renderf10sell00=False, renderf10buy01=False, renderf10sell01=False, applyBreakOut=False, noColourFilter=False):
     st.write("********"+ name + "********")
     try:
         df = df[
@@ -1435,7 +1435,7 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
                 df_styled = df_styled.apply(apply_highlight_column, axis=1)
     
         
-        if(chartlink0 or chartlink1 or testLearning or applyBreakOut) and color =='LG':
+        if(chartlink0 or chartlink1 or testLearning or applyBreakOut) and (noColourFilter == False) and color =='LG':
             df_styled = df_styled.apply(apply_breakout_highlight, axis=1)
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
 

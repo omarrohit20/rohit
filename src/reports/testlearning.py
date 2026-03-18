@@ -30,19 +30,15 @@ def main():
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
-        if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'UP: morning-volume-bs', color='LG', renderf10buy01=True, height=300)
-        else:
-            rb.render(st, empty_df, 'UP: morning-volume-bs', color='LG', renderf10buy01=True, height=300)
+        rb.render(st, filtered_df, 'UP: morning-volume-bs', color='LG', renderf10buy01=True, height=300)
+        
     with col2:
         df = rb.getintersectdf('morning-volume-bs', 'cash-seell')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
-        if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'DOWN: morning-volume-bs', color='LG', renderf10sell01=True, height=300)
-        else:
-            rb.render(st, empty_df, 'DOWN: morning-volume-bs', color='LG', renderf10sell01=True, height=300)
+        rb.render(st, filtered_df, 'DOWN: morning-volume-bs', color='LG', renderf10sell01=True, height=300)
+        
     with col3:
         df = rb.getdf('morning-volume-bs')
         rb.render(st, df, 'morning-volume-bs', color='LG', height=300)
