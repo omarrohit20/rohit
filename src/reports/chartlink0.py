@@ -1337,18 +1337,26 @@ def main():
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
+        if 'scrip' in filtered_df.columns:
+            filtered_df = filtered_df.sort_values('scrip')
         rb.render(st, filtered_df, 'UP: morning-volume-bs', color='LG', noColourFilter=True, height=500)
     with col2:
         df = rb.getdf('breakout-morning-beey')
+        if 'scrip' in df.columns:
+            df = df.sort_values('scrip')
         rb.render(st, df, 'breakout-morning-beey', color='LG', height=500)
     with col3:
         df = rb.getintersectdf('morning-volume-bs', 'cash-seell')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
+        if 'scrip' in filtered_df.columns:
+            filtered_df = filtered_df.sort_values('scrip')
         rb.render(st, filtered_df, 'DOWN: morning-volume-bs', color='LG', noColourFilter=True, height=500)
     with col4:
         df = rb.getdf('breakout-morning-siill')
+        if 'scrip' in df.columns:
+            df = df.sort_values('scrip')
         rb.render(st, df, 'breakout-morning-siill', color='LG', height=500)
 
     
