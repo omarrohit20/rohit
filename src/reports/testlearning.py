@@ -75,7 +75,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'CONTINUE-Buy AT9:30 : StockDown : cash-seell', color='LG', renderf10buy01=True, height=300)
+        rb.render(st, filtered_df, 'CONTINUE-Buy AT9:30 : MarketDown Stock LT(-1) : cash-seell', color='LG', renderf10buy01=True, height=300)
     with col1:
         df = rb.getdf('cash-seell')
         filtered_df = df
@@ -106,7 +106,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'CONTINUE-Buy AT9:30 : StockDown : cash-seell', color='LG', renderf10buy01=True, height=300)
+        rb.render(st, filtered_df, 'CONTINUE-Buy AT9:30 : MarketDown Stock LT(-1) : cash-seell', color='LG', renderf10buy01=True, height=300)
     with col2:
         df = rb.getdf('cash-seell')
         filtered_df = df
@@ -119,7 +119,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'SHORTCOVER REVERSAL-Buy AT9:30 : Stock LT(-3) : cash-seell', color='LG', renderf10buy01=True, height=300)
+        rb.render(st, filtered_df, 'SHORTCOVER REVERSAL-Buy AT9:30 : MarketDown Stock LT(-3) : cash-seell', color='LG', renderf10buy01=True, height=300)
     with col3:
         df = rb.getdf('cash-buuy')
         filtered_df = df
@@ -164,7 +164,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'CONTINUE-SELL AT9:30 : StockUp : cash-buuy', color='LG', renderf10sell01=True,height=300)
+        rb.render(st, filtered_df, 'CONTINUE-SELL AT9:30 : MarketUp Stock GT(1) : cash-buuy', color='LG', renderf10sell01=True,height=300)
     with col4:
         df = rb.getdf('cash-buuy')
         filtered_df = df
@@ -196,7 +196,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'CONTINUE-SELL AT9:30 : StockUp : cash-buuy', color='LG', renderf10sell01=True,height=300)
+        rb.render(st, filtered_df, 'CONTINUE-SELL AT9:30 : MarketUp Stock GT(1) : cash-buuy', color='LG', renderf10sell01=True,height=300)
     with col5:
         df = rb.getdf('cash-buuy')
         filtered_df = df
@@ -210,7 +210,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'PROFITBOOK-REVERSAL-SELL AT9:30 : Stock GT(+3) : cash-buuy', color='LG', renderf10sell01=True,height=300)
+        rb.render(st, filtered_df, 'PROFITBOOK-REVERSAL-SELL AT9:30 : MarketUp Stock GT(+3) : cash-buuy', color='LG', renderf10sell01=True,height=300)
     with col6:
         df = rb.getdf('cash-seell')
         filtered_df = df
