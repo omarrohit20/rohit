@@ -33,6 +33,8 @@ def main():
     except Exception:
         pass
 
+    
+
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -1331,33 +1333,225 @@ def main():
             print("")
         rb.render(st, filtered_df, 'REVERSAL : cash-seell', color='LG', height=300, renderf10sell01=True)
 
-    col1, col2, col3, col4 = st.columns(4)
+    col11, col1, col2, col3, col44, col4, col5, col6 = st.columns(8)
+    with col11:
+        df = rb.getdf('morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    #TO-DO Test
+                    (df['forecast_day_PCT10_change'] > 10) &
+                    (df['mlData'].str.contains("morningUp") )
+                )
+                |
+                (
+                    (df['forecast_day_PCT10_change'] > 10) &
+                    (df['forecast_day_PCT10_change'] < 20) &
+                    ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
+                    ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                    (df['PCT_day_change'] > -0.5) &
+                    ((df['forecast_day_PCT5_change'] < 11) | (df['forecast_day_PCT7_change'] < 11)) 
+                )
+                |
+                (
+                    (df['forecast_day_PCT10_change'] > 10) &
+                    (df['forecast_day_PCT10_change'] < 20) &
+                    ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
+                    ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                    (df['PCT_day_change'] > 0.7) 
+                )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 5:
+            rb.render(st, filtered_df, 'CONTINUE-Buy AT9:30 : MarketDown Stock LT(-1) : cash-seell', color='LG', renderf10buy01=True)
+        else:
+            rb.render(st, empty_df, 'CONTINUE-Buy AT9:30 : MarketDown Stock LT(-1) : cash-seell', color='LG', renderf10buy01=True)
     with col1:
-        df = rb.getintersectdf('morning-volume-bs', 'cash-buuy')
+        df = rb.getdf('cash-seell')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
-        if 'scrip' in filtered_df.columns:
-            filtered_df = filtered_df.sort_values('scrip')
-        rb.render(st, filtered_df, 'UP: morning-volume-bs', color='LG', noColourFilter=True, height=500)
+        try:
+            filtered_df = df[
+                (
+                    #TO-DO Test
+                    (df['forecast_day_PCT10_change'] > 10) &
+                    (df['mlData'].str.contains("morningUp") )
+                )
+                |
+                (
+                    (df['forecast_day_PCT10_change'] > 10) &
+                    (df['forecast_day_PCT10_change'] < 20) &
+                    ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
+                    ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                    (df['PCT_day_change'] > -0.5) &
+                    ((df['forecast_day_PCT5_change'] < 11) | (df['forecast_day_PCT7_change'] < 11)) 
+                )
+                |
+                (
+                    (df['forecast_day_PCT10_change'] > 10) &
+                    (df['forecast_day_PCT10_change'] < 20) &
+                    ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
+                    ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                    (df['PCT_day_change'] > 0.7) 
+                )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 5:
+            rb.render(st, filtered_df, 'CONTINUE-Buy AT9:30 : MarketDown Stock LT(-1) : cash-seell', color='LG', renderf10buy01=True)
+        else:
+            rb.render(st, empty_df, 'CONTINUE-Buy AT9:30 : MarketDown Stock LT(-1) : cash-seell', color='LG', renderf10buy01=True)
     with col2:
-        df = rb.getdf('breakout-morning-beey')
-        if 'scrip' in df.columns:
-            df = df.sort_values('scrip')
-        rb.render(st, df, 'breakout-morning-beey', color='LG', height=500)
-    with col3:
-        df = rb.getintersectdf('morning-volume-bs', 'cash-seell')
+        df = rb.getdf('cash-seell')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
-        if 'scrip' in filtered_df.columns:
-            filtered_df = filtered_df.sort_values('scrip')
-        rb.render(st, filtered_df, 'DOWN: morning-volume-bs', color='LG', noColourFilter=True, height=500)
+        try:
+            filtered_df = df[
+                (~df['mlData'].str.contains("Up") ) &
+                ((df['forecast_day_PCT10_change'] < -10) &
+                 (df['PCT_day_change'] < -2)
+                )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 5:
+            rb.render(st, filtered_df, 'SHORTCOVER REVERSAL-Buy AT9:30 : MarketDown Stock LT(-3) : cash-seell', color='LG', renderf10buy01=True)
+        else:
+            rb.render(st, empty_df, 'SHORTCOVER REVERSAL-Buy AT9:30 : MarketDown Stock LT(-3) : cash-seell', color='LG', renderf10buy01=True)
+    with col3:
+        df = rb.getdf('cash-buuy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (df['forecast_day_PCT10_change'] > 10) &
+                    (df['PCT_day_change'] < 4)
+                )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 3:
+            rb.render(st, filtered_df, 'UPTREND : Market LT1 : cash-buuy', color='LG', renderf10buy01=True)
+        else:
+            rb.render(st, empty_df, 'UPTREND : Market LT1 : cash-buuy', color='LG', renderf10buy01=True)
+    with col44:
+        df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    #TO-DO Test
+                    (df['forecast_day_PCT10_change'] < -10) &
+                    (df['mlData'].str.contains("morningDown") )
+                )
+                |
+                (
+                    (df['forecast_day_PCT10_change'] < -10) &
+                    (df['forecast_day_PCT10_change'] > -20) &
+                    ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
+                    ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                    (df['PCT_day_change'] < 0.5) &
+                    ((df['forecast_day_PCT5_change'] > -11) | (df['forecast_day_PCT7_change'] > -11)) 
+                )
+                |
+                (
+                    (df['forecast_day_PCT10_change'] < -10) &
+                    (df['forecast_day_PCT10_change'] > -20) &
+                    ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
+                    ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                    (df['PCT_day_change'] < -0.7) &
+                    ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1))
+                )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 5:
+            rb.render(st, filtered_df, 'CONTINUE-SELL AT9:30 : MarketUp Stock GT(1) : cash-buuy', color='LG', renderf10sell01=True)
+        else:
+            rb.render(st, empty_df, 'CONTINUE-SELL AT9:30 : MarketUp Stock GT(1) : cash-buuy', color='LG', renderf10sell01=True)
     with col4:
-        df = rb.getdf('breakout-morning-siill')
-        if 'scrip' in df.columns:
-            df = df.sort_values('scrip')
-        rb.render(st, df, 'breakout-morning-siill', color='LG', height=500)
+        df = rb.getdf('cash-buuy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    #TO-DO Test
+                    (df['forecast_day_PCT10_change'] < -10) &
+                    (df['mlData'].str.contains("morningDown") )
+                )
+                |
+                (
+                    (df['forecast_day_PCT10_change'] < -10) &
+                    (df['forecast_day_PCT10_change'] > -20) &
+                    ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
+                    ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                    (df['PCT_day_change'] < 0.5) &
+                    ((df['forecast_day_PCT5_change'] > -11) | (df['forecast_day_PCT7_change'] > -11)) 
+                )
+                |
+                (
+                    (df['forecast_day_PCT10_change'] < -10) &
+                    (df['forecast_day_PCT10_change'] > -20) &
+                    ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
+                    ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                    (df['PCT_day_change'] < -0.7) &
+                    ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1))
+                )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 5:
+            rb.render(st, filtered_df, 'CONTINUE-SELL AT9:30 : MarketUp Stock GT(1) : cash-buuy', color='LG', renderf10sell01=True)
+        else:
+            rb.render(st, empty_df, 'CONTINUE-SELL AT9:30 : MarketUp Stock GT(1) : cash-buuy', color='LG', renderf10sell01=True)
+    with col5:
+        df = rb.getdf('cash-buuy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (~df['mlData'].str.contains("Down") ) &
+                    (df['forecast_day_PCT10_change'] > 10) &
+                    (df['PCT_day_change'] > 2)
+                )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 5:
+            rb.render(st, filtered_df, 'PROFITBOOK-REVERSAL-SELL AT9:30 : MarketUp Stock GT(+3) : cash-buuy', color='LG', renderf10sell01=True)
+        else:
+            rb.render(st, empty_df, 'PROFITBOOK-REVERSAL-SELL AT9:30 : MarketUp Stock GT(+3) : cash-buuy', color='LG', renderf10sell01=True)
+    with col6:
+        df = rb.getdf('cash-seell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] < -10) &
+                 (df['PCT_day_change'] > -4)
+                )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 3:
+            rb.render(st, filtered_df, 'DOWNTREND : Market GT(-1) : cash-seell', color='LG', renderf10sell01=True)
+        else:
+            rb.render(st, empty_df, 'DOWNTREND : Market GT(-1) : cash-seell', color='LG', renderf10sell01=True)
 
     
     
