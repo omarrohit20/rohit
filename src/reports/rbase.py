@@ -967,6 +967,7 @@ def highlight_category_column_super(value):
     if "0@@SUPER" in value:
         return 'background-color: #CBC3E3'
 
+@st.cache_data(ttl=10)
 def apply_breakout_highlight(row):
     """Return a Series of styles for a row: preserve existing mlData styles
     but force pink for mlData when systemtime contains '10:' and mlData
@@ -1205,6 +1206,7 @@ def get_selected_collection():
     global selected_collection
     return selected_collection
 
+@st.cache_data(ttl=10)
 def getdf(collection_name):
     collection = dbcl[collection_name]
     df = pd.DataFrame(list(collection.find()))
@@ -1247,6 +1249,7 @@ def getdf(collection_name):
         print(f"")
     return df
 
+@st.cache_data(ttl=10)
 def getintersectdf(collection_name1, collection_name2):
     collection1 = dbcl[collection_name1]
     collection2 = dbcl[collection_name2]
@@ -1290,6 +1293,7 @@ def getintersectdf(collection_name1, collection_name2):
 
     return df
 
+@st.cache_data(ttl=10)
 def getintersectdf_ml(collection_name1, collection_name2):
     collection1 = dbnse[collection_name1]
     collection2 = dbnse[collection_name2]
@@ -1334,6 +1338,7 @@ def getintersectdf_ml(collection_name1, collection_name2):
 
     return df
 
+@st.cache_data(ttl=10)
 def getdfResult(collection_name):
     collection = dbcl[collection_name]
     df = pd.DataFrame(list(collection.find()))

@@ -1333,7 +1333,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'REVERSAL : cash-seell', color='LG', height=300, renderf10sell01=True)
 
-    col11, col1, col2, col3, col44, col4, col5, col6 = st.columns(8)
+    col11, col1, col2, col44, col4, col5 = st.columns(6)
     with col11:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
@@ -1420,28 +1420,10 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 5:
+        if len(filtered_df) >= 4:
             rb.render(st, filtered_df, 'SHORTCOVER REVERSAL-Buy AT9:30 : MarketDown Stock LT(-3) : cash-seell', color='LG', renderf10buy01=True)
         else:
             rb.render(st, empty_df, 'SHORTCOVER REVERSAL-Buy AT9:30 : MarketDown Stock LT(-3) : cash-seell', color='LG', renderf10buy01=True)
-    with col3:
-        df = rb.getdf('cash-buuy')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (
-                    (df['forecast_day_PCT10_change'] > 10) &
-                    (df['PCT_day_change'] < 4)
-                )
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) < 3:
-            rb.render(st, filtered_df, 'UPTREND : Market LT1 : cash-buuy', color='LG', renderf10buy01=True)
-        else:
-            rb.render(st, empty_df, 'UPTREND : Market LT1 : cash-buuy', color='LG', renderf10buy01=True)
     with col44:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
@@ -1531,28 +1513,10 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 5:
+        if len(filtered_df) >= 4:
             rb.render(st, filtered_df, 'PROFITBOOK-REVERSAL-SELL AT9:30 : MarketUp Stock GT(+3) : cash-buuy', color='LG', renderf10sell01=True)
         else:
             rb.render(st, empty_df, 'PROFITBOOK-REVERSAL-SELL AT9:30 : MarketUp Stock GT(+3) : cash-buuy', color='LG', renderf10sell01=True)
-    with col6:
-        df = rb.getdf('cash-seell')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] < -10) &
-                 (df['PCT_day_change'] > -4)
-                )
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) < 3:
-            rb.render(st, filtered_df, 'DOWNTREND : Market GT(-1) : cash-seell', color='LG', renderf10sell01=True)
-        else:
-            rb.render(st, empty_df, 'DOWNTREND : Market GT(-1) : cash-seell', color='LG', renderf10sell01=True)
-
     
     
     
