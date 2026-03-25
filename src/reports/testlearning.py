@@ -59,6 +59,8 @@ def main():
 
     col0, col1, col2, col3, col4, col5 = st.columns(6)
     with col0:
+        df = rb.getdf('supertrend-morning-buy')
+        filtered_df = df
         try:
             filtered_df = df[
                 (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &

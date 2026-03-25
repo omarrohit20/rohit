@@ -37,6 +37,21 @@ def main():
                     ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] <= -0.5))
                 )
                 ]
+            
+            count_9_3 = df[
+                (
+                    (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                )
+            ]
+
+            if (len(count_9_3) >= 6):
+                filtered_df = filtered_df[
+                (
+                    (df['forecast_day_PCT5_change'] > 4) | 
+                    (df['forecast_day_PCT10_change'] < -4) | 
+                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                )
+            ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Supertrend Morning Buy', color='LG', renderf10buy=True, applyBreakOut=True)
@@ -72,7 +87,22 @@ def main():
                     (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))&
                     (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
                 )
-                ]
+            ]
+
+            count_9_3 = df[
+                (
+                    (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                )
+            ]
+
+            if (len(count_9_3) >= 8):
+                filtered_df = filtered_df[
+                (
+                    (df['forecast_day_PCT5_change'] > 4) | 
+                    (df['forecast_day_PCT10_change'] < -4) | 
+                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                )
+            ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Crossed 2 Day Highs', color='LG', renderf10buy=True, applyBreakOut=True)
@@ -107,6 +137,21 @@ def main():
                     )
                 )
                 ]
+            
+            count_9_3 = df[
+                (
+                    (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                )
+            ]
+
+            if (len(count_9_3) >= 8):
+                filtered_df = filtered_df[
+                (
+                    (df['forecast_day_PCT5_change'] > 4) | 
+                    (df['forecast_day_PCT10_change'] < -4) | 
+                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                )
+            ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Crossed Day Highs', color='LG', renderf10buy=True, applyBreakOut=True)
@@ -127,6 +172,21 @@ def main():
                     ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] >= 0.5))
                 )
                 ]
+            
+            count_9_3 = df[
+                    (
+                        (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                    )
+                ]
+
+            if (len(count_9_3) >= 6):
+                filtered_df = filtered_df[
+                (
+                    (df['forecast_day_PCT5_change'] > 4) | 
+                    (df['forecast_day_PCT10_change'] < -4) | 
+                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                )
+            ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Supertrend Morning Sell', color='LG', renderf10sell=True, applyBreakOut=True)
@@ -164,6 +224,21 @@ def main():
                     (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
                 )
             ]
+
+            count_9_3 = df[
+                (
+                    (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                )
+            ]
+
+            if (len(count_9_3) >= 8):
+                filtered_df = filtered_df[
+                (
+                    (df['forecast_day_PCT5_change'] > 4) | 
+                    (df['forecast_day_PCT10_change'] < -4) | 
+                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                )
+            ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Crossed 2 Day Lows', color='LG', renderf10sell=True, applyBreakOut=True)
@@ -198,6 +273,21 @@ def main():
                     )
                 )
             ]
+
+            count_9_3 = df[
+                (
+                    (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                )
+            ]
+
+            if (len(count_9_3) >= 8):
+                filtered_df = filtered_df[
+                (
+                    (df['forecast_day_PCT5_change'] > 4) | 
+                    (df['forecast_day_PCT10_change'] < -4) | 
+                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                )
+            ]
                 
         except KeyError as e:
             print("")
@@ -220,6 +310,21 @@ def main():
                 ((df['forecast_day_PCT10_change'] < 2) | (df['forecast_day_PCT10_change'] > 6)) &
                 ((df['PCT_day_change'] > 0) | (df['PCT_day_change_pre1'] > 0) | (df['PCT_day_change_pre2'] > 0))
                 ]
+            
+            count_9_3 = df[
+                (
+                    (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                )
+            ]
+
+            if (len(count_9_3) >= 6):
+                filtered_df = filtered_df[
+                (
+                    (df['forecast_day_PCT5_change'] > 4) | 
+                    (df['forecast_day_PCT10_change'] < -4) | 
+                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                )
+            ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Supertrend Morning Buy', color='LG', renderf10buy=True)
@@ -244,6 +349,21 @@ def main():
                 ((df['PCT_day_change_pre2'] > 0) | (df['PCT_day_change_pre1'] > 0)) &
                 ((df['month3LowChange'] > 0)))
                 ]
+            
+            count_9_3 = df[
+                (
+                    (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                )
+            ]
+
+            if (len(count_9_3) >= 8):
+                filtered_df = filtered_df[
+                (
+                    (df['forecast_day_PCT5_change'] > 4) | 
+                    (df['forecast_day_PCT10_change'] < -4) | 
+                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                )
+            ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Crossed 2 Day Highs', color='LG', renderf10buy=True)
@@ -275,6 +395,21 @@ def main():
                 ((df['month3LowChange'] > 0))
                 )
                 ]
+        
+            count_9_3 = df[
+                (
+                    (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                )
+            ]
+
+            if (len(count_9_3) >= 8):
+                filtered_df = filtered_df[
+                (
+                    (df['forecast_day_PCT5_change'] > 4) | 
+                    (df['forecast_day_PCT10_change'] < -4) | 
+                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                )
+            ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Crossed Day Highs', color='LG', renderf10buy=True)
@@ -293,6 +428,21 @@ def main():
                 ((df['forecast_day_PCT10_change'] > -2) | (df['forecast_day_PCT10_change'] < -6)) &
                 ((df['PCT_day_change'] < 0) | (df['PCT_day_change_pre1'] < 0) | (df['PCT_day_change_pre2'] < 0))
                 ]
+            
+            count_9_3 = df[
+                (
+                    (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                )
+            ]
+
+            if (len(count_9_3) >= 6):
+                filtered_df = filtered_df[
+                (
+                    (df['forecast_day_PCT5_change'] > 4) | 
+                    (df['forecast_day_PCT10_change'] < -4) | 
+                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                )
+            ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Supertrend Morning Sell', color='LG', renderf10sell=True)
@@ -317,6 +467,21 @@ def main():
                 ((df['PCT_day_change_pre2'] < 0) | (df['PCT_day_change_pre1'] < 0)) &
                 ((df['month3HighChange'] < 0)))
                 ]
+        
+            count_9_3 = df[
+                (
+                    (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                )
+            ]
+
+            if (len(count_9_3) >= 8):
+                filtered_df = filtered_df[
+                (
+                    (df['forecast_day_PCT5_change'] > 4) | 
+                    (df['forecast_day_PCT10_change'] < -4) | 
+                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                )
+            ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Crossed 2 Day Lows', color='LG', renderf10sell=True)
@@ -348,6 +513,21 @@ def main():
                 ((df['month3HighChange'] < 0))
                 )
                 ]
+            
+            count_9_3 = df[
+                (
+                    (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                )
+            ]
+
+            if (len(count_9_3) >= 8):
+                filtered_df = filtered_df[
+                (
+                    (df['forecast_day_PCT5_change'] > 4) | 
+                    (df['forecast_day_PCT10_change'] < -4) | 
+                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                )
+            ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell=True)
