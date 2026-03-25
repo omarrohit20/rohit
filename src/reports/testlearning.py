@@ -60,6 +60,216 @@ def main():
     col0, col1, col2, col3, col4, col5 = st.columns(6)
     with col0:
         df = rb.getdf('supertrend-morning-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+                (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
+                ((df['forecast_day_PCT10_change']) > -12) & 
+                ((df['forecast_day_PCT10_change']) < 12) 
+            ]
+
+            filtered_df = filtered_df[
+                (
+                    (
+                        (
+                            (df['mlData'].str.contains("LastUp")) |
+                            (df['mlData'].str.contains("LastDown")) |
+                            (df['mlData'].str.contains("Last-Up")) |
+                            (df['mlData'].str.contains("Last-Down"))
+                        ) 
+                        &
+                        (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4))
+                    ) 
+                    |
+                    (
+                        (df['highTail'] < 0.3)
+                    )
+
+                )
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Supertrend Morning Buy', color='LG', renderf10buy01=True)
+    with col1:
+        df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+                (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
+                ((df['forecast_day_PCT10_change']) > -12) & 
+                ((df['forecast_day_PCT10_change']) < 12)
+            ]
+
+            filtered_df = filtered_df[
+                (
+                    (
+                        (
+                            (df['mlData'].str.contains("LastUp")) |
+                            (df['mlData'].str.contains("LastDown")) |
+                            (df['mlData'].str.contains("Last-Up")) |
+                            (df['mlData'].str.contains("Last-Down"))
+                        ) 
+                        &
+                        (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4))
+                        &
+                        (
+                            ((df['highTail'] > 1.5) | (df['lowTail'] > 1.5))
+                        )
+                    ) 
+                    |
+                    (
+                        (df['highTail'] < 0.3)
+                    )
+
+                )
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Crossed 2 Day Highs', color='LG', renderf10buy01=True)
+    with col2:
+        df = rb.getdf('crossed-day-high')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+                (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
+                ((df['forecast_day_PCT10_change']) > -12) & 
+                ((df['forecast_day_PCT10_change']) < 12) 
+            ]
+
+            filtered_df = filtered_df[
+                (
+                    (
+                        (
+                            (df['mlData'].str.contains("LastUp")) |
+                            (df['mlData'].str.contains("LastDown")) |
+                            (df['mlData'].str.contains("Last-Up")) |
+                            (df['mlData'].str.contains("Last-Down"))
+                        )
+                        &
+                        (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4))
+                    ) 
+                    |
+                    (
+                        (df['highTail'] < 0.3)
+                    )
+
+                )
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Crossed Day Highs', color='LG', renderf10buy01=True)
+    with col3:
+        df = rb.getdf('supertrend-morning-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+                (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
+                ((df['forecast_day_PCT10_change']) > -12) & 
+                ((df['forecast_day_PCT10_change']) < 12) 
+            ]
+
+            filtered_df = filtered_df[
+                (
+                    (
+                        (
+                            (df['mlData'].str.contains("LastUp")) |
+                            (df['mlData'].str.contains("LastDown")) |
+                            (df['mlData'].str.contains("Last-Up")) |
+                            (df['mlData'].str.contains("Last-Down"))
+                        ) 
+                        &
+                        (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4))
+                    ) 
+                    |
+                    (
+                        (df['highTail'] < 0.3)
+                    )
+
+                )
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Supertrend Morning Sell', color='LG', renderf10sell01=True)
+    with col4:
+        df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+                (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
+                ((df['forecast_day_PCT10_change']) > -12) & 
+                ((df['forecast_day_PCT10_change']) < 12)
+            ]
+
+            filtered_df = filtered_df[
+                (
+                    (
+                        (
+                            (df['mlData'].str.contains("LastUp")) |
+                            (df['mlData'].str.contains("LastDown")) |
+                            (df['mlData'].str.contains("Last-Up")) |
+                            (df['mlData'].str.contains("Last-Down"))
+                        ) 
+                        &
+                        (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4))
+                        &
+                        (
+                            ((df['highTail'] > 1.5) | (df['lowTail'] > 1.5))
+                        )
+                    ) 
+                    |
+                    (
+                        (df['highTail'] < 0.3)
+                    )
+
+                )
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Crossed 2 Day Lows', color='LG', renderf10sell01=True)
+    with col5:
+        df = rb.getdf('crossed-day-low')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+                (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
+                ((df['forecast_day_PCT10_change']) > -12) & 
+                ((df['forecast_day_PCT10_change']) < 12) 
+            ]
+
+            filtered_df = filtered_df[
+                (
+                    (
+                        (
+                            (df['mlData'].str.contains("LastUp")) |
+                            (df['mlData'].str.contains("LastDown")) |
+                            (df['mlData'].str.contains("Last-Up")) |
+                            (df['mlData'].str.contains("Last-Down"))
+                        )
+                        &
+                        (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4))
+                    ) 
+                    |
+                    (
+                        (df['highTail'] < 0.3)
+                    )
+
+                )
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell01=True)
+
+
+
+    col0, col1, col2, col3, col4, col5 = st.columns(6)
+    with col0:
+        df = rb.getdf('supertrend-morning-buy')
         rb.render(st, df, 'Supertrend Morning Buy', color='LG', renderf10buy01=True)
     with col1:
         df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
