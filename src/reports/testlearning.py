@@ -59,14 +59,15 @@ def main():
 
     col0, col1, col2, col3, col4, col5 = st.columns(6)
     with col0:
-        df = rb.getdf('supertrend-morning-buy')
-        filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
-                ((df['forecast_day_PCT10_change']) > -12) & 
-                ((df['forecast_day_PCT10_change']) < 12) 
+                ((df['forecast_day_PCT10_change']) > -15) & 
+                ((df['forecast_day_PCT10_change']) < 15)
             ]
 
             filtered_df = filtered_df[
@@ -77,13 +78,15 @@ def main():
                             (df['mlData'].str.contains("LastDown")) |
                             (df['mlData'].str.contains("Last-Up")) |
                             (df['mlData'].str.contains("Last-Down"))
-                        ) 
+                        )
                         &
                         (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4))
+                        &
+                        (df['PCT_day_change'] < 3)
                     ) 
                     |
                     (
-                        (df['highTail'] < 0.3)
+                        (((df['forecast_day_PCT10_change']) < -4) & ((df['forecast_day_PCT5_change']) > -1))
                     )
 
                 )
@@ -96,10 +99,13 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
-                ((df['forecast_day_PCT10_change']) > -12) & 
-                ((df['forecast_day_PCT10_change']) < 12)
+                ((df['forecast_day_PCT10_change']) > -15) & 
+                ((df['forecast_day_PCT10_change']) < 15) 
             ]
 
             filtered_df = filtered_df[
@@ -114,6 +120,8 @@ def main():
                         &
                         (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4))
                         &
+                        (df['PCT_day_change'] < 3)
+                        &
                         (
                             ((df['highTail'] > 1.5) | (df['lowTail'] > 1.5))
                         )
@@ -122,7 +130,6 @@ def main():
                     (
                         (df['highTail'] < 0.3)
                     )
-
                 )
             ]
         except KeyError as e:
@@ -133,10 +140,13 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
-                ((df['forecast_day_PCT10_change']) > -12) & 
-                ((df['forecast_day_PCT10_change']) < 12) 
+                ((df['forecast_day_PCT10_change']) > -15) & 
+                ((df['forecast_day_PCT10_change']) < 15)
             ]
 
             filtered_df = filtered_df[
@@ -150,10 +160,12 @@ def main():
                         )
                         &
                         (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4))
+                        &
+                        (df['PCT_day_change'] < 3)
                     ) 
                     |
                     (
-                        (df['highTail'] < 0.3)
+                        (((df['forecast_day_PCT10_change']) < -4) & ((df['forecast_day_PCT5_change']) > -1))
                     )
 
                 )
@@ -166,10 +178,13 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
-                ((df['forecast_day_PCT10_change']) > -12) & 
-                ((df['forecast_day_PCT10_change']) < 12) 
+                ((df['forecast_day_PCT10_change']) > -15) & 
+                ((df['forecast_day_PCT10_change']) < 15)
             ]
 
             filtered_df = filtered_df[
@@ -180,13 +195,15 @@ def main():
                             (df['mlData'].str.contains("LastDown")) |
                             (df['mlData'].str.contains("Last-Up")) |
                             (df['mlData'].str.contains("Last-Down"))
-                        ) 
+                        )
                         &
                         (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4))
+                        &
+                        (df['PCT_day_change'] > -3)
                     ) 
                     |
                     (
-                        (df['highTail'] < 0.3)
+                        (((df['forecast_day_PCT10_change']) > 4) & ((df['forecast_day_PCT5_change']) < 1))
                     )
 
                 )
@@ -199,10 +216,13 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
-                ((df['forecast_day_PCT10_change']) > -12) & 
-                ((df['forecast_day_PCT10_change']) < 12)
+                ((df['forecast_day_PCT10_change']) > -15) & 
+                ((df['forecast_day_PCT10_change']) < 15) 
             ]
 
             filtered_df = filtered_df[
@@ -217,15 +237,16 @@ def main():
                         &
                         (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4))
                         &
+                        (df['PCT_day_change'] > -3)
+                        &
                         (
                             ((df['highTail'] > 1.5) | (df['lowTail'] > 1.5))
                         )
                     ) 
                     |
                     (
-                        (df['highTail'] < 0.3)
+                        (df['lowTail'] < 0.3)
                     )
-
                 )
             ]
         except KeyError as e:
@@ -236,10 +257,13 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
-                ((df['forecast_day_PCT10_change']) > -12) & 
-                ((df['forecast_day_PCT10_change']) < 12) 
+                ((df['forecast_day_PCT10_change']) > -15) & 
+                ((df['forecast_day_PCT10_change']) < 15)
             ]
 
             filtered_df = filtered_df[
@@ -253,10 +277,12 @@ def main():
                         )
                         &
                         (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4))
+                        &
+                        (df['PCT_day_change'] > -3)
                     ) 
                     |
                     (
-                        (df['highTail'] < 0.3)
+                        (((df['forecast_day_PCT10_change']) > 4) & ((df['forecast_day_PCT5_change']) < 1))
                     )
 
                 )
