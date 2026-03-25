@@ -1123,9 +1123,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'morning-volume-breakout-buy : LastUpDown', color='LG', height=300, renderf10buy01=True)
+            rb.render(st, filtered_df, 'morning-volume-breakout-buy : LastUpDown : Stock LT(2)', color='LG', height=300, renderf10buy01=True)
         else:
-            rb.render(st, empty_df, 'morning-volume-breakout-buy : LastUpDown', color='LG', height=300, renderf10buy01=True)
+            rb.render(st, empty_df, 'morning-volume-breakout-buy : LastUpDown : Stock LT(2)', color='LG', height=300, renderf10buy01=True)
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
@@ -1159,9 +1159,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'morning-volume-breakout-sell : LastUpDown', color='LG', height=300, renderf10sell01=True)
+            rb.render(st, filtered_df, 'morning-volume-breakout-sell : LastUpDown : Stock GT(-2)', color='LG', height=300, renderf10sell01=True)
         else:
-            rb.render(st, empty_df, 'morning-volume-breakout-sell : LastUpDown', color='LG', height=300, renderf10sell01=True)
+            rb.render(st, empty_df, 'morning-volume-breakout-sell : LastUpDown : Stock GT(-2)', color='LG', height=300, renderf10sell01=True)
 
     col1, col3 = st.columns(2)
     with col1:
@@ -1187,12 +1187,17 @@ def main():
                         df['mlData'].str.contains("Last-Down-MorningUp")
                     )
                 ]
+            
+            df_at_9 = filtered_df[
+                (df['systemtime'].str.contains('09:1', case=False, regex=True, na=False)) |
+                (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
+                ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'UP-BUY', color='LG', renderf10buy01=True)
+        if len(df_at_9) < 3:
+            rb.render(st, filtered_df, 'UP-BUY : Stock LT(2)', color='LG', renderf10buy01=True)
         else:
-            rb.render(st, empty_df, 'UP-BUY', color='LG', renderf10buy01=True)
+            rb.render(st, empty_df, 'UP-BUY : Stock LT(2)', color='LG', renderf10buy01=True)
     with col3:
         df = rb.getintersectdf('morning-volume-bs', 'cash-seell')
         expected_columns = list(set(df.columns))
@@ -1208,20 +1213,25 @@ def main():
                 ]
 
             filtered_df = filtered_df[
-                    (df['forecast_day_PCT10_change'] < 9) &
-                    ~(df['mlData'].str.contains("Last-Down-MorningUp")) &
-                    (
-                        df['mlData'].str.contains("LastUp") |
-                        ((df['mlData'].str.contains("LastDown"))) |
-                        df['mlData'].str.contains("Last-Up-MorningDown")
-                    )
+                (df['forecast_day_PCT10_change'] < 9) &
+                ~(df['mlData'].str.contains("Last-Down-MorningUp")) &
+                (
+                    df['mlData'].str.contains("LastUp") |
+                    ((df['mlData'].str.contains("LastDown"))) |
+                    df['mlData'].str.contains("Last-Up-MorningDown")
+                )
+                ]
+
+            df_at_9 = filtered_df[
+                (df['systemtime'].str.contains('09:1', case=False, regex=True, na=False)) |
+                (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'DOWN-SELL', color='LG', renderf10sell01=True)
+        if len(df_at_9) < 3:
+            rb.render(st, filtered_df, 'DOWN-SELL : Stock GT(-2)', color='LG', renderf10sell01=True)
         else:
-            rb.render(st, empty_df, 'DOWN-SELL', color='LG', renderf10sell01=True)
+            rb.render(st, empty_df, 'DOWN-SELL : Stock GT(-2)', color='LG', renderf10sell01=True)
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -1240,7 +1250,7 @@ def main():
                 ((df['forecast_day_PCT10_change'] > 0) & 
                  (df['forecast_day_PCT10_change'] < 5) &
                  ((df['forecast_day_PCT5_change'] > 2) | (df['forecast_day_PCT7_change'] > 2)) &
-                 (df['PCT_day_change'] > 0) &
+                 (df['PCT_day_change'] >= 0.5) &
                  ((df['lowTail'] < 2) | (df['PCT_day_change'] < 1)) &
                  ((df['PCT_day_change'] < 2) | (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)))
                 )
@@ -1261,7 +1271,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'UPTREND : cash-buuy', color='LG', renderf10buy01=True,height=300)
+        rb.render(st, filtered_df, 'UPTREND : Stock LT(1.5) or Market (GT1) consolidation Buy after 10 : cash-buuy', color='LG', renderf10buy01=True,height=300)
     with col2:
         df = rb.getdf('cash-buuy')
         filtered_df = df
@@ -1294,7 +1304,7 @@ def main():
                 ((df['forecast_day_PCT10_change'] < 0) & 
                  (df['forecast_day_PCT10_change'] > -5) &
                  ((df['forecast_day_PCT5_change'] < -2) | (df['forecast_day_PCT7_change'] < -2)) &
-                 (df['PCT_day_change'] < 0) &
+                 ((df['PCT_day_change']) <= -0.5) &
                  ((df['highTail'] < 2) | (df['PCT_day_change'] > -1)) &
                  ((df['PCT_day_change'] > -2) | (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)))
                 )
@@ -1315,7 +1325,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'DOWNTREND :cash-seell', color='LG', renderf10sell01=True, height=300)
+        rb.render(st, filtered_df, 'DOWNTREND : Stock GT(-1.5) or Market (LT-1) consolidation Buy after 10 : cash-seell', color='LG', renderf10sell01=True, height=300)
     with col4:
         df = rb.getdf('cash-seell')
         filtered_df = df

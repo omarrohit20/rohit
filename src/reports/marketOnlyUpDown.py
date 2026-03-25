@@ -301,6 +301,102 @@ def main():
         rb.render(st, filtered_df, 'SELL: week2lh-not-reached + Crossed Day High\Low + (Last2DayPCTChangeGT1)', column_order=rb.column_order_p, color='R')
     
 
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    with col1:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] < -1) &
+                (df['mlData'].str.contains("0@@C")) &
+                (~df['systemtime'].str.contains("10:"))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'CrossedDay:LastDayDownTodayUp#########################################', color='G')
+    with col2:
+        df = rb.getintersectdf('week2lh-not-reached','crossed-day-high')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((abs(df['week2HighChange']) > 2) | (abs(df['weekHighChange']) > 2)) &
+                (df['PCT_day_change'] > -1.3) & (df['PCT_day_change'] < 0.7) &
+                ((abs(df['PCT_day_change_pre1']) > 1) | (abs(df['PCT_day_change_pre2']) > 1)) &
+                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('09:', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('10:0', case=False, na=False))
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'week2lh-not-reached + CrossedDayHigh(LastDayDOJI)###############', column_order=rb.column_order_p, color='G')
+    with col3:
+        df = rb.getintersectdf('week2lh-not-reached','crossed-day-high')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] < -1) &
+                #(df['PCT_day_change_pre1'] < -1) &
+                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09', case=False, na=False))
+                #(~df['systemtime_merged'].str.contains('09:', case=False, na=False))
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'week2lh-not-reached + CrossedDayHigh + (LastDayPCTDayChangeLT-1)', column_order=rb.column_order_p, color='G')
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] > 1) &
+                (df['mlData'].str.contains("0@@C")) &
+                (~df['systemtime'].str.contains("10:"))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'CrossedDay-LastDayUpTodayDown##################################', color='R')
+    with col5:
+        df = rb.getintersectdf('week2lh-not-reached','crossed-day-low')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((abs(df['week2LowChange']) > 2) | (abs(df['weekLowChange']) > 2)) &
+                (df['PCT_day_change'] > -0.7) & (df['PCT_day_change'] < 1.3) &
+                ((abs(df['PCT_day_change_pre1']) > 1) | (abs(df['PCT_day_change_pre2']) > 1)) &
+                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('09:', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('10:0', case=False, na=False))
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'week2lh-not-reached+CrossedDayLow(LastDayDOJI)#################', column_order=rb.column_order_p, color='R')
+    with col6:
+        df = rb.getintersectdf('week2lh-not-reached','crossed-day-low')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] > 1) &
+                #(df['PCT_day_change_pre1'] < -1) &
+                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09', case=False, na=False))
+                #(~df['systemtime_merged'].str.contains('09:', case=False, na=False))
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low + (LastDayPCTDayChangeGT 1)#####', column_order=rb.column_order_p, color='R')
+
 
 if __name__ == '__main__':
     main()
