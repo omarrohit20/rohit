@@ -837,6 +837,120 @@ def main():
             rb.render(st, empty_df, 'LastDayGT-0.5 : Profit Book Continue', color='R', height=200)
 
 
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] > -1) &
+                (df['PCT_day_change'] < 1) &
+                (df['PCT_day_change_pre1'] > -2) &
+                (df['forecast_day_PCT10_change'] > -2) &
+                (df['forecast_day_PCT7_change'] > -1) &
+                (df['forecast_day_PCT5_change'] > -1) &
+                (df['forecast_day_PCT7_change'] < 1) &
+                (df['forecast_day_PCT5_change'] < 1) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'UPTREND : F10 Consolidation Buy', color='LG')
+    with col2:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+                (df['PCT_day_change'] > -4) &
+                ((df['PCT_day_change'] < -2) | (df['PCT_day_change_pre1'] < -2) | (df['PCT_day_change_pre2'] < -2)) &
+                (df['forecast_day_PCT10_change'] < -6) &
+                (df['forecast_day_PCT7_change'] < -6) &
+                (df['forecast_day_PCT5_change'] < -6) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Short Cover - First15minutelowest', color='LG')
+    with col3:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] < 1) &
+                (df['PCT_day_change'] > -1) &
+                (df['PCT_day_change_pre1'] < 2) &
+                (df['forecast_day_PCT10_change'] < 2) &
+                (df['forecast_day_PCT7_change'] < 1) &
+                (df['forecast_day_PCT5_change'] < 1) &
+                (df['forecast_day_PCT7_change'] > -1) &
+                (df['forecast_day_PCT5_change'] > -1) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DOWNTREND : F10 Consolidation Sell', color='LG')
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+                (df['PCT_day_change'] < 4) &
+                ((df['PCT_day_change'] > 2) | (df['PCT_day_change_pre1'] > 2) | (df['PCT_day_change_pre2'] > 2)) &
+                (df['forecast_day_PCT10_change'] > 6) &
+                (df['forecast_day_PCT7_change'] > 6) &
+                (df['forecast_day_PCT5_change'] > 6)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Profit Book - First15minutehighest', color='LG')
+
+
+    col1, col2 = st.columns(2)
+    with col1:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['yearLowChange'] > 10) &
+                ((df['yearLowChange'] > 15) | (df['month3HighChange'] > -2)) &
+                (df['month3HighChange'] < 2.5) &
+                (df['month3HighChange'] > -2.5) &
+                (df['monthHighChange'] > 0) &
+                (df['PCT_day_change'] < 4) &
+                (df['PCT_day_change_pre1'] < 5) &
+                (df['PCT_day_change_pre2'] < 5) &
+                (df['PCT_day_change'] > -1.5) &
+                (df['PCT_day_change_pre1'] > -1.5) &
+                (df['PCT_day_change_pre2'] > -1.5) &
+                (df['monthHighChange'] > (df['month3HighChange'] - 3)) &
+                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))  
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Buy Near Month3High', color='LG', height=150)
+    with col2:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['yearHighChange'] < -10) &
+                ((df['yearHighChange'] < -15) | (df['month3LowChange'] < 2)) &
+                (df['month3LowChange'] < 2.5) &
+                (df['month3LowChange'] > -2.5) &
+                (df['monthLowChange'] < 0) &
+                (df['PCT_day_change'] > -4) &
+                (df['PCT_day_change_pre1'] > -5) &
+                (df['PCT_day_change_pre2'] > -5) &
+                (df['PCT_day_change'] < 1.5) &
+                (df['PCT_day_change_pre1'] < 1.5) &
+                (df['PCT_day_change_pre2'] < 1.5) &
+                (df['monthLowChange'] < (df['month3LowChange'] - 3)) &
+                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))  
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Sell Near Month3Low', color='LG', height=150)
+
+    
     col1, col3, col4, col5, col7, col8 = st.columns(6)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
@@ -975,120 +1089,7 @@ def main():
         else:
             rb.render(st, empty_df, 'MLSell', color='LG', height=200)
 
-
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        df = rb.getdf('morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_day_change'] > -1) &
-                (df['PCT_day_change'] < 1) &
-                (df['PCT_day_change_pre1'] > -2) &
-                (df['forecast_day_PCT10_change'] > -2) &
-                (df['forecast_day_PCT7_change'] > -1) &
-                (df['forecast_day_PCT5_change'] > -1) &
-                (df['forecast_day_PCT7_change'] < 1) &
-                (df['forecast_day_PCT5_change'] < 1) 
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'F10 Consolidation Buy', color='LG')
-    with col2:
-        df = rb.getdf('morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
-                (df['PCT_day_change'] > -4) &
-                ((df['PCT_day_change'] < -2) | (df['PCT_day_change_pre1'] < -2) | (df['PCT_day_change_pre2'] < -2)) &
-                (df['forecast_day_PCT10_change'] < -6) &
-                (df['forecast_day_PCT7_change'] < -6) &
-                (df['forecast_day_PCT5_change'] < -6) 
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'Short Cover - First15minutelowest', color='LG')
-    with col3:
-        df = rb.getdf('morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_day_change'] < 1) &
-                (df['PCT_day_change'] > -1) &
-                (df['PCT_day_change_pre1'] < 2) &
-                (df['forecast_day_PCT10_change'] < 2) &
-                (df['forecast_day_PCT7_change'] < 1) &
-                (df['forecast_day_PCT5_change'] < 1) &
-                (df['forecast_day_PCT7_change'] > -1) &
-                (df['forecast_day_PCT5_change'] > -1) 
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'F10 Consolidation Sell', color='LG')
-    with col4:
-        df = rb.getdf('morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
-                (df['PCT_day_change'] < 4) &
-                ((df['PCT_day_change'] > 2) | (df['PCT_day_change_pre1'] > 2) | (df['PCT_day_change_pre2'] > 2)) &
-                (df['forecast_day_PCT10_change'] > 6) &
-                (df['forecast_day_PCT7_change'] > 6) &
-                (df['forecast_day_PCT5_change'] > 6)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'Profit Book - First15minutehighest', color='LG')
-
-
-    col1, col2 = st.columns(2)
-    with col1:
-        df = rb.getdf('morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['yearLowChange'] > 10) &
-                ((df['yearLowChange'] > 15) | (df['month3HighChange'] > -2)) &
-                (df['month3HighChange'] < 2.5) &
-                (df['month3HighChange'] > -2.5) &
-                (df['monthHighChange'] > 0) &
-                (df['PCT_day_change'] < 4) &
-                (df['PCT_day_change_pre1'] < 5) &
-                (df['PCT_day_change_pre2'] < 5) &
-                (df['PCT_day_change'] > -1.5) &
-                (df['PCT_day_change_pre1'] > -1.5) &
-                (df['PCT_day_change_pre2'] > -1.5) &
-                (df['monthHighChange'] > (df['month3HighChange'] - 3)) &
-                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))  
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'Buy Near Month3High', color='LG', height=150)
-    with col2:
-        df = rb.getdf('morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['yearHighChange'] < -10) &
-                ((df['yearHighChange'] < -15) | (df['month3LowChange'] < 2)) &
-                (df['month3LowChange'] < 2.5) &
-                (df['month3LowChange'] > -2.5) &
-                (df['monthLowChange'] < 0) &
-                (df['PCT_day_change'] > -4) &
-                (df['PCT_day_change_pre1'] > -5) &
-                (df['PCT_day_change_pre2'] > -5) &
-                (df['PCT_day_change'] < 1.5) &
-                (df['PCT_day_change_pre1'] < 1.5) &
-                (df['PCT_day_change_pre2'] < 1.5) &
-                (df['monthLowChange'] < (df['month3LowChange'] - 3)) &
-                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))  
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'Sell Near Month3Low', color='LG', height=150)
-
+    
     col2, col4 = st.columns(2)
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
@@ -1162,6 +1163,7 @@ def main():
             rb.render(st, filtered_df, 'morning-volume-breakout-sell : LastUpDown : Stock GT(-2)', color='LG', height=300, renderf10sell01=True)
         else:
             rb.render(st, empty_df, 'morning-volume-breakout-sell : LastUpDown : Stock GT(-2)', color='LG', height=300, renderf10sell01=True)
+
 
     col1, col3 = st.columns(2)
     with col1:

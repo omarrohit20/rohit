@@ -49,7 +49,11 @@ def main():
                 (
                     (df['forecast_day_PCT5_change'] > 4) | 
                     (df['forecast_day_PCT10_change'] < -4) | 
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                    (
+                        (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:1', case=False, regex=True, na=False))
+                    )
                 )
             ]
         except KeyError as e:
@@ -100,7 +104,11 @@ def main():
                 (
                     (df['forecast_day_PCT5_change'] > 4) | 
                     (df['forecast_day_PCT10_change'] < -4) | 
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                    (
+                        (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:1', case=False, regex=True, na=False))
+                    )
                 )
             ]
         except KeyError as e:
@@ -149,7 +157,11 @@ def main():
                 (
                     (df['forecast_day_PCT5_change'] > 4) | 
                     (df['forecast_day_PCT10_change'] < -4) | 
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                    (
+                        (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:1', case=False, regex=True, na=False))
+                    )
                 )
             ]
         except KeyError as e:
@@ -184,7 +196,11 @@ def main():
                 (
                     (df['forecast_day_PCT5_change'] > 4) | 
                     (df['forecast_day_PCT10_change'] < -4) | 
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                    (
+                        (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:1', case=False, regex=True, na=False))
+                    )
                 )
             ]
         except KeyError as e:
@@ -236,7 +252,11 @@ def main():
                 (
                     (df['forecast_day_PCT5_change'] > 4) | 
                     (df['forecast_day_PCT10_change'] < -4) | 
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                    (
+                        (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:1', case=False, regex=True, na=False))
+                    )
                 )
             ]
         except KeyError as e:
@@ -285,7 +305,11 @@ def main():
                 (
                     (df['forecast_day_PCT5_change'] > 4) | 
                     (df['forecast_day_PCT10_change'] < -4) | 
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                    (
+                        (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:1', case=False, regex=True, na=False))
+                    )
                 )
             ]
                 
@@ -322,7 +346,11 @@ def main():
                 (
                     (df['forecast_day_PCT5_change'] > 4) | 
                     (df['forecast_day_PCT10_change'] < -4) | 
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                    (
+                        (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:1', case=False, regex=True, na=False))
+                    )
                 )
             ]
         except KeyError as e:
@@ -361,7 +389,11 @@ def main():
                 (
                     (df['forecast_day_PCT5_change'] > 4) | 
                     (df['forecast_day_PCT10_change'] < -4) | 
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                    (
+                        (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:1', case=False, regex=True, na=False))
+                    )
                 )
             ]
         except KeyError as e:
@@ -407,7 +439,11 @@ def main():
                 (
                     (df['forecast_day_PCT5_change'] > 4) | 
                     (df['forecast_day_PCT10_change'] < -4) | 
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                    (
+                        (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:1', case=False, regex=True, na=False))
+                    )
                 )
             ]
         except KeyError as e:
@@ -440,7 +476,11 @@ def main():
                 (
                     (df['forecast_day_PCT5_change'] > 4) | 
                     (df['forecast_day_PCT10_change'] < -4) | 
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                    (
+                        (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:1', case=False, regex=True, na=False))
+                    )
                 )
             ]
         except KeyError as e:
@@ -479,7 +519,11 @@ def main():
                 (
                     (df['forecast_day_PCT5_change'] > 4) | 
                     (df['forecast_day_PCT10_change'] < -4) | 
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                    (
+                        (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:1', case=False, regex=True, na=False))
+                    )
                 )
             ]
         except KeyError as e:
@@ -525,7 +569,11 @@ def main():
                 (
                     (df['forecast_day_PCT5_change'] > 4) | 
                     (df['forecast_day_PCT10_change'] < -4) | 
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                    (
+                        (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:0', case=False, regex=True, na=False)) &
+                        (~df['systemtime'].str.contains('10:1', case=False, regex=True, na=False))
+                    )
                 )
             ]
         except KeyError as e:

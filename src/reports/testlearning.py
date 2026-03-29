@@ -95,7 +95,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Supertrend Morning Buy', color='LG', renderf10buy01=True)
+        rb.render(st, filtered_df, 'DOWNTREND : Supertrend Morning Buy', color='LG', renderf10buy01=True)
     with col1:
         df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
         filtered_df = df
@@ -136,7 +136,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed 2 Day Highs', color='LG', renderf10buy01=True)
+        rb.render(st, filtered_df, 'DOWNTREND : Crossed 2 Day Highs', color='LG', renderf10buy01=True)
     with col2:
         df = rb.getdf('crossed-day-high')
         filtered_df = df
@@ -174,7 +174,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed Day Highs', color='LG', renderf10buy01=True)
+        rb.render(st, filtered_df, 'DOWNTREND : Crossed Day Highs', color='LG', renderf10buy01=True)
     with col3:
         df = rb.getdf('supertrend-morning-sell')
         filtered_df = df
@@ -212,7 +212,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Supertrend Morning Sell', color='LG', renderf10sell01=True)
+        rb.render(st, filtered_df, 'UPTREND : Supertrend Morning Sell', color='LG', renderf10sell01=True)
     with col4:
         df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
         filtered_df = df
@@ -253,7 +253,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed 2 Day Lows', color='LG', renderf10sell01=True)
+        rb.render(st, filtered_df, 'UPTREND : Crossed 2 Day Lows', color='LG', renderf10sell01=True)
     with col5:
         df = rb.getdf('crossed-day-low')
         filtered_df = df
@@ -291,7 +291,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell01=True)
+        rb.render(st, filtered_df, 'UPTREND : Crossed Day Lows', color='LG', renderf10sell01=True)
 
 
 

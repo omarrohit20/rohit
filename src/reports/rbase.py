@@ -322,8 +322,8 @@ column_config_merged={
 column_order_default=["scrip",
     "PCT_day_change",
     "systemtime",
-    "mlData",
     "forecast_day_PCT10_change",
+    "mlData",
     "industry",
     "PCT_change",
     "PCT_day_change_pre1",
@@ -416,8 +416,8 @@ column_order_result=["scrip",
 column_order_merged=["scrip",
     "PCT_day_change",
     "systemtime",
-    "mlData",
     "forecast_day_PCT10_change",
+    "mlData",
     "industry",
     "PCT_change",
     "PCT_day_change_pre1",
@@ -1001,9 +1001,9 @@ def apply_breakout_highlight(row):
         # 'crossed-day-high' collection, set mlData cell to pink.
         try:
             coll = dbcl['buy-morning-volume-breakout(Check-News)']
-            count = coll.count_documents({'systemtime': {'$regex': '09:'}})
+            count = coll.count_documents({'systemtime': {'$regex': '09:|10:00:00'}})
 
-            if count < 6:
+            if count < 5:
                 # Check if any document exists with specific time patterns
                 if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}}):
                     styles['scrip'] = 'background-color: #E0FFDE'
@@ -1020,9 +1020,9 @@ def apply_breakout_highlight(row):
 
         try:
             coll = dbcl['sell-morning-volume-breakout(Check-News)']
-            count = coll.count_documents({'systemtime': {'$regex': '09:'}})
+            count = coll.count_documents({'systemtime': {'$regex': '09:|10:00:00'}})
 
-            if count < 6:
+            if count < 5:
                 # Check if any document exists with specific time patterns
                 if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}}):
                     styles['scrip'] = 'background-color: #FCCFD2'
@@ -1039,17 +1039,21 @@ def apply_breakout_highlight(row):
         
         try:
             coll = dbcl['Breakout-Buy-after-10']
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
-                styles['systemtime'] = 'background-color: #009600'
-                return styles
+            count = coll.count_documents({'systemtime': {'$regex': '09:|10:00:00'}})
+            if count < 5:
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
+                    styles['systemtime'] = 'background-color: #009600'
+                    return styles
         except Exception:
             # fallback to existing style on any DB error
             pass
 
         try:
             coll = dbcl['Breakout-Sell-after-10']
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
-                styles['systemtime'] = 'background-color: #e50e1d'
+            count = coll.count_documents({'systemtime': {'$regex': '09:|10:00:00'}})
+            if count < 5:
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
+                    styles['systemtime'] = 'background-color: #e50e1d'
                 return styles
         except Exception:
             # fallback to existing style on any DB error
