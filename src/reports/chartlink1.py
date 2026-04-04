@@ -770,6 +770,35 @@ def main():
         rb.render(st, filtered_df, 'SLLWEEK2LOW<LT0', color='LG')
 
 
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        df = rb.getdf('supertrend-morningdown-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        if len(df) >= 1:
+            rb.render(st, filtered_df, 'UpNow Supertrend MorningDown Buys', color='G')
+        else:
+            rb.render(st, empty_df, 'UpNow Supertrend MorningDown Buys', color='G')
+    with col2:
+        df = rb.getdf('buy-check-morning-down-breakup-02')
+        filtered_df = df
+        rb.render(st, filtered_df, 'Buy Check Morning Down Breakup 02s', color='LG')
+    with col3:
+        df = rb.getdf('supertrend-morningup-sell')
+        filtered_df = df
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        if len(df) >= 1:
+            rb.render(st, filtered_df, 'DownNow Supertrend  Morningup Sells', color='R')
+        else:
+            rb.render(st, empty_df, 'DownNow Supertrend Morningup Sells', color='R')
+    with col4:
+        df = rb.getdf('sell-check-morning-up-breakdown-02')
+        filtered_df = df
+        rb.render(st, filtered_df, 'Sell Check Morning Up Breakdown 02s', color='LG')
+    
+
 
 if __name__ == '__main__':
     main()

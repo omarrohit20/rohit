@@ -128,10 +128,6 @@ def main():
                             ((df['highTail'] > 1.5) | (df['lowTail'] > 1.5))
                         )
                     ) 
-                    |
-                    (
-                        (df['highTail'] < 0.3)
-                    )
                 )
             ]
         except KeyError as e:
@@ -244,10 +240,6 @@ def main():
                         (
                             ((df['highTail'] > 1.5) | (df['lowTail'] > 1.5))
                         )
-                    ) 
-                    |
-                    (
-                        (df['lowTail'] < 0.3)
                     )
                 )
             ]
@@ -326,10 +318,10 @@ def main():
             filtered_df = filtered_df.sort_values('scrip')
         rb.render(st, filtered_df, 'UP: morning-volume-bs', color='LG', noColourFilter=True, height=500)
     with col2:
-        df = rb.getdf('breakout-morning-beey')
+        df = rb.getdf('breakout-morning-buy')
         if 'scrip' in df.columns:
             df = df.sort_values('scrip')
-        rb.render(st, df, 'breakout-morning-beey', color='LG', height=500)
+        rb.render(st, df, 'breakout-morning-buy', color='LG', height=500)
     with col3:
         df = rb.getintersectdf('morning-volume-bs', 'cash-seell')
         expected_columns = list(set(df.columns))
@@ -339,10 +331,10 @@ def main():
             filtered_df = filtered_df.sort_values('scrip')
         rb.render(st, filtered_df, 'DOWN: morning-volume-bs', color='LG', noColourFilter=True, height=500)
     with col4:
-        df = rb.getdf('breakout-morning-siill')
+        df = rb.getdf('breakout-morning-sell')
         if 'scrip' in df.columns:
             df = df.sort_values('scrip')
-        rb.render(st, df, 'breakout-morning-siill', color='LG', height=500)
+        rb.render(st, df, 'breakout-morning-sell', color='LG', height=500)
 
 
 # Sentiment Analysis Tables

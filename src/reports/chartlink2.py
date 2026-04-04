@@ -887,23 +887,10 @@ def main():
         rb.render(st, filtered_df, 'morning-volume-breakout-sell ##############', color='LG', height=150)
 
 
-    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    col1, col3, col4, col6 = st.columns(4)
     with col1:
         df = rb.getdf('Breakout-Buy-after-10')
         rb.render(st, df, 'UpGT0 (Check-News) : Breakout Buy after 10', color='LG', height=200)
-    with col2:
-        df = rb.getdf('1-Bbuyy-morningUp-downConsolidation')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_day_change'] < 1) &
-                (df['PCT_day_change'] > -3) &
-                (~df['systemtime'].str.contains('09:', case=False, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, na=False)) 
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, '10:00 to 10:30 must : market LT(3) : 1-Bbuyy-morningUp-downConsolidation', color='LG', height=200)
     with col3:
         df = rb.getdf('1-Bbuyy-morningUp-downConsolidation')
         filtered_df = df
@@ -919,19 +906,6 @@ def main():
     with col4:
         df = rb.getdf('Breakout-Sell-after-10')
         rb.render(st, df, 'DownLT-0 (Check-News) : Breakout Sell after 10', color='LG', height=200)
-    with col5:
-        df = rb.getdf('1-Sselll-morningDown-upConsolidation')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_day_change'] > -1) &
-                (df['PCT_day_change'] < 3) &
-                (~df['systemtime'].str.contains('09:', case=False, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, na=False)) 
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, '10:00 to 10:30 must : market GT(-3) :  Only one up: 1-Sselll-morningDown-upConsolidation', color='LG', height=200)
     with col6:
         df = rb.getdf('1-Sselll-morningDown-upConsolidation')
         filtered_df = df
