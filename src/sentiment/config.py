@@ -1,7 +1,7 @@
 import os
 
 # Groq API Configuration
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "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")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "abc")
 
 # Updated to use currently supported model
 GROQ_MODEL = "llama-3.3-70b-versatile"  # Alternative: "mixtral-8x7b-32768" or "gemma2-9b-it"
@@ -111,7 +111,55 @@ EXCLUDE_KEYWORDS = [
     "Sensex hits",
     "Gainers & Losers",
     "Market Wrap",
-    "ITI"
+    "ITI",
+    "Trades for Today",
+    "Today's Trades",
+    "Today's Trade",
+    "Today's Top Trades",
+    "Today's Top Trade",
+    "Today's Top Gainers",
+    "Today's Top Losers",
+    "Today's Top Active",
+    "Today's Top Volume",
+    "stock surged",
+    # News already factored in
+    "already factored in",
+    "factored in",
+    "priced in",
+    "market expected",
+    "as expected",
+    # Large price movements (>4%)
+    "4%",
+    "5%",
+    "6%",
+    "7%",
+    "8%",
+    "9%",
+    "10%",
+    "11%",
+    "12%",
+    "13%",
+    "14%",
+    "15%",
+    "16%",
+    "17%",
+    "18%",
+    "19%",
+    "20%",
+    "21%",
+    "22%",
+    "23%",
+    "24%",
+    "25%",
+    "30%",
+    "40%",
+    "50%",
+    "surges",
+    "plunges",
+    "dives",
+    "crashes",
+    "skyrockets",
+    "nosedives"
 ]
 
 # MongoDB Configuration

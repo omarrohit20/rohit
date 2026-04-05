@@ -206,6 +206,7 @@ Provide analysis in JSON format:
     "severity": "High|Medium|Low|Unknown",
     "reasoning": "Brief explanation",
     "is_sectoral": true|false,
+    "sector": "Sector name if sectoral, otherwise empty string",
     "is_quarterly_result": true|false,
     "overall_sentiment": "Positive|Negative|Neutral"
 }}
@@ -213,12 +214,13 @@ Provide analysis in JSON format:
 Consider:
 1. Impact on stock price (Positive/Negative/Neutral)
 2. Severity of impact (High/Medium/Low/Unknown)
-3. Whether it's sectoral news affecting multiple companies
-4. Whether it's about quarterly results
-5. Exclude news for among top gainers or losers. 
-6. Exclude news already factored in stock price.
-7. Exclude if company or scrip not found in article or content
-7. Overall sentiment
+3. Whether it's sectoral news affecting multiple companies in a sector
+4. If sectoral, identify the sector (e.g., "Oil & Gas", "Banking", "IT", "Pharma", etc.)
+5. Whether it's about quarterly results
+6. Exclude news for among top gainers or losers. 
+7. Exclude news already factored in stock price.
+8. Exclude if company or scrip not found in article or content
+9. Overall sentiment
 
 Respond only with valid JSON.
 """
@@ -264,6 +266,7 @@ Respond only with valid JSON.
             "severity": "Unknown",
             "reasoning": "Unable to analyze",
             "is_sectoral": False,
+            "sector": "",
             "is_quarterly_result": False,
             "overall_sentiment": "Neutral"
         }

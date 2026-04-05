@@ -116,163 +116,164 @@ if df.empty:
     st.warning("⚠️ No data available. Please run the sentiment analysis first.")
     st.stop()
 
-# Filter data
-filtered_df = df.copy()
+# Display Positive and Negative Sentiment Stocks at the start
+st.markdown("## 📈 Positive & Negative Sentiment Stocks")
 
-# Apply sentiment filter
-if sentiment_filter:
-    filtered_df = filtered_df[filtered_df['Sentiment'].isin(sentiment_filter)]
-
-# Apply search filter
-if search_term:
-    search_term_lower = search_term.lower()
-    filtered_df = filtered_df[(filtered_df['Scrip'].str.lower().str.contains(search_term_lower)) | (filtered_df['Company'].str.lower().str.contains(search_term_lower))]
-
-# Summary Metrics
-st.markdown("---")
-col1, col2, col3, col4 = st.columns(4)
-
-with col1:
-    positive_count = len(df[df['Sentiment'] == 'Positive'])
-    st.metric(
-        label="📈 Positive",
-        value=positive_count,
-        delta=f"{(positive_count/len(df)*100):.1f}%" if len(df) > 0 else "0%"
-    )
-
-with col2:
-    negative_count = len(df[df['Sentiment'] == 'Negative'])
-    st.metric(
-        label="📉 Negative",
-        value=negative_count,
-        delta=f"{(negative_count/len(df)*100):.1f}%" if len(df) > 0 else "0%"
-    )
-
-with col3:
-    neutral_count = len(df[df['Sentiment'] == 'Neutral'])
-    st.metric(
-        label="➖ Neutral",
-        value=neutral_count,
-        delta=f"{(neutral_count/len(df)*100):.1f}%" if len(df) > 0 else "0%"
-    )
-
-with col4:
-    total_count = len(df)
-    st.metric(
-        label="📋 Total Stocks",
-        value=total_count
-    )
-
-st.markdown("---")
-
-# Charts
 col1, col2 = st.columns(2)
 
-# Sentiment Distribution Pie Chart
 with col1:
-    sentiment_counts = df['Sentiment'].value_counts()
-    fig_pie = px.pie(
-        values=sentiment_counts.values,
-        names=sentiment_counts.index,
-        title="Sentiment Distribution",
-        color_discrete_map={
-            'Positive': '#10b981',
-            'Negative': '#ef4444',
-            'Neutral': '#6b7280'
-        }
-    )
-    st.plotly_chart(fig_pie, use_container_width=True)
+    st.subheader("🟢 Positive Sentiment")
+    positive_df = df[df['Sentiment'] == 'Positive'].sort_values('News Count', ascending=False)
+    if not positive_df.empty:
+        st.dataframe(positive_df[['Scrip', 'Company', 'News Count']].head(10), use_container_width=True)
+    else:
+        st.info("No positive sentiment stocks found.")
 
-# News Count Distribution
 with col2:
-    top_news = df.nlargest(10, 'News Count')
-    fig_bar = px.bar(
-        top_news,
-        x='Scrip',
-        y='News Count',
-        color='Sentiment',
-        title="Top 10 Stocks by News Count",
-        color_discrete_map={
-            'Positive': '#10b981',
-            'Negative': '#ef4444',
-            'Neutral': '#6b7280'
-        }
-    )
-    st.plotly_chart(fig_bar, use_container_width=True)
+    st.subheader("🔴 Negative Sentiment")
+    negative_df = df[df['Sentiment'] == 'Negative'].sort_values('News Count', ascending=False)
+    if not negative_df.empty:
+        st.dataframe(negative_df[['Scrip', 'Company', 'News Count']].head(10), use_container_width=True)
+    else:
+        st.info("No negative sentiment stocks found.")
 
 st.markdown("---")
 
-# Stock Details with Expandable News
-st.subheader("📰 Stock Details & News")
+# Comprehensive News Table
+st.markdown("---")
+st.subheader("📰 All News Articles - Comprehensive View")
 
-if filtered_df.empty:
-    st.warning("No stocks match your filters.")
-else:
-    st.write(f"Showing {len(filtered_df)} stock(s)")
+# Flatten all news data into a table
+all_news_data = []
+for idx, row in df.iterrows():
+    news_items = row['News']
+    for news in news_items:
+        all_news_data.append({
+            'Scrip': row['Scrip'],
+            'Company': row['Company'],
+            'Overall Sentiment': row['Sentiment'],
+            'Headline': news.get('headline', 'No Headline'),
+            'Date': news.get('Date', 'N/A'),
+            'Time': news.get('Time', ''),
+            'Impact': news.get('impact', 'Neutral'),
+            'Severity': news.get('severity', 'Unknown'),
+            'Link': news.get('link', '#')
+        })
+
+if all_news_data:
+    news_df = pd.DataFrame(all_news_data)
     
-    for idx, row in filtered_df.iterrows():
-        # Determine sentiment color
-        sentiment_color = {
-            'Positive': '#10b981',
-            'Negative': '#ef4444',
-            'Neutral': '#6b7280'
-        }.get(row['Sentiment'], '#6b7280')
+    # Sort by Impact for High and Medium severity: High Positive first, High Negative second, Medium Positive third, Medium Negative fourth, then everything else
+    def get_sort_order(row):
+        severity = row['Severity']
+        impact = row['Impact']
         
-        # Stock header
-        col1, col2, col3 = st.columns([2, 2, 1])
-        
-        with col1:
-            st.markdown(f"### {row['Scrip']}")
-            st.markdown(f"**Company:** {row['Company']}")
-        
-        with col2:
-            st.markdown(f"**Sentiment:** <span style='color: {sentiment_color}; font-weight: bold;'>{row['Sentiment']}</span>", unsafe_allow_html=True)
-            st.markdown(f"**News Articles:** {row['News Count']}")
-        
-        with col3:
-            if isinstance(row['Last Updated'], datetime):
-                st.markdown(f"**Updated:** {row['Last Updated'].strftime('%Y-%m-%d %H:%M')}")
+        if severity == 'High':
+            if impact == 'Positive':
+                return 0
+            elif impact == 'Negative':
+                return 1
             else:
-                st.markdown(f"**Updated:** {row['Last Updated']}")
-        
-        # Expandable news section
-        with st.expander(f"📋 View {row['News Count']} News Articles", expanded=False):
-            if row['News Count'] > 0:
-                # Display each news item
-                news_items = row['News']
-                
-                for i, news in enumerate(news_items, 1):
-                    st.markdown(f"**{i}. {news.get('headline', 'No Headline')}**")
-                    
-                    col1, col2, col3 = st.columns(3)
-                    
-                    with col1:
-                        st.caption(f"📅 {news.get('Date', 'N/A')} {news.get('Time', '')}")
-                    
-                    with col2:
-                        impact = news.get('impact', 'Neutral')
-                        impact_color = {
-                            'Positive': '🟢',
-                            'Negative': '🔴',
-                            'Neutral': '⚪'
-                        }.get(impact, '⚪')
-                        st.caption(f"Impact: {impact_color} {impact}")
-                    
-                    with col3:
-                        severity = news.get('severity', 'Unknown')
-                        st.caption(f"Severity: {severity}")
-                    
-                    # News link
-                    link = news.get('link', '#')
-                    st.markdown(f"[🔗 Read Full Article]({link})")
-                    
-                    # Divider between news items
-                    if i < len(news_items):
-                        st.divider()
+                return 2
+        elif severity == 'Medium':
+            if impact == 'Positive':
+                return 3
+            elif impact == 'Negative':
+                return 4
             else:
-                st.info("No news articles available for this stock.")
+                return 5
+        else:
+            return 6  # All Low/Unknown severity items at the end
+    
+    news_df['sort_order'] = news_df.apply(get_sort_order, axis=1)
+    news_df = news_df.sort_values('sort_order').drop('sort_order', axis=1)
+    
+    # Function to apply row styling for High and Medium severity
+    def style_news_table(row):
+        severity = row['Severity']
+        impact = row['Impact']
         
-        st.divider()
+        if severity in ['High', 'Medium']:
+            if impact == 'Positive':
+                return ['background-color: #d4edda'] * len(row)  # Light green
+            elif impact == 'Negative':
+                return ['background-color: #f8d7da'] * len(row)  # Light red
+        
+        return [''] * len(row)  # No special color for Low/Unknown severity or neutral impact
+    
+    # Apply styling
+    styled_df = news_df.style.apply(style_news_table, axis=1)
+    
+    # Add filters for the comprehensive table
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        impact_filter = st.multiselect(
+            "Filter by Impact:",
+            options=['Positive', 'Negative', 'Neutral'],
+            default=['Positive', 'Negative', 'Neutral'],
+            key='impact_filter'
+        )
+    
+    with col2:
+        severity_filter = st.multiselect(
+            "Filter by Severity:",
+            options=['High', 'Medium', 'Low', 'Unknown'],
+            default=['High', 'Medium', 'Low', 'Unknown'],
+            key='severity_filter'
+        )
+    
+    with col3:
+        sentiment_filter_table = st.multiselect(
+            "Filter by Overall Sentiment:",
+            options=['Positive', 'Negative', 'Neutral'],
+            default=['Positive', 'Negative', 'Neutral'],
+            key='sentiment_filter_table'
+        )
+    
+    # Apply filters
+    filtered_news_df = news_df.copy()
+    if impact_filter:
+        filtered_news_df = filtered_news_df[filtered_news_df['Impact'].isin(impact_filter)]
+    if severity_filter:
+        filtered_news_df = filtered_news_df[filtered_news_df['Severity'].isin(severity_filter)]
+    if sentiment_filter_table:
+        filtered_news_df = filtered_news_df[filtered_news_df['Overall Sentiment'].isin(sentiment_filter_table)]
+    
+    # Apply styling to filtered df
+    filtered_styled_df = filtered_news_df.style.apply(style_news_table, axis=1)
+    
+    st.write(f"Showing {len(filtered_news_df)} news articles")
+    
+    # Display the styled table
+    st.dataframe(
+        filtered_styled_df,
+        column_config={
+            'Link': st.column_config.LinkColumn('Link', display_text='🔗 Read Article'),
+            'Overall Sentiment': st.column_config.TextColumn('Overall Sentiment', width='medium'),
+            'Headline': st.column_config.TextColumn('Headline', width='large'),
+            'Scrip': st.column_config.TextColumn('Scrip', width='small'),
+            'Company': st.column_config.TextColumn('Company', width='medium'),
+            'Date': st.column_config.TextColumn('Date', width='small'),
+            'Time': st.column_config.TextColumn('Time', width='small'),
+            'Impact': st.column_config.TextColumn('Impact', width='small'),
+            'Severity': st.column_config.TextColumn('Severity', width='small')
+        },
+        use_container_width=True,
+        hide_index=True
+    )
+    
+    # Export option for the comprehensive table
+    if st.button("💾 Export All News to CSV", use_container_width=True):
+        csv = filtered_news_df.to_csv(index=False)
+        st.download_button(
+            label="Download CSV",
+            data=csv,
+            file_name=f"all_news_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+            mime="text/csv"
+        )
+else:
+    st.info("No news articles available.")
 
 # Footer
 st.markdown("---")

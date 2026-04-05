@@ -5,6 +5,26 @@ from io import StringIO
 class NSEStockLoader:
     def __init__(self):
         self.stocks = {}
+        self.sectors = {
+            "Oil & Gas": ["ONGC", "OIL", "RELIANCE", "GAIL", "BPCL", "HPCL", "IOC"],
+            "Banking": ["HDFCBANK", "ICICIBANK", "KOTAKBANK", "AXISBANK", "SBIN", "PNB", "BANKBARODA"],
+            "IT": ["TCS", "INFY", "WIPRO", "HCLTECH", "LTIM", "TECHM"],
+            "Pharma": ["SUNPHARMA", "DRREDDY", "CIPLA", "AUROPHARMA", "ALKEM", "DIVISLAB"],
+            "Auto": ["MARUTI", "BAJAJ-AUTO", "HEROMOTOCO", "TATAMOTORS", "M&M"],
+            "Cement": ["ULTRACEMCO", "SHREECEM", "AMBUJACEM", "ACC", "GRASIM"],
+            "Power": ["NTPC", "POWERGRID", "ADANIPOWER", "TATAPOWER"],
+            "Telecom": ["BHARTIARTL", "IDEA", "VODAFONE"],
+            "Steel": ["TATASTEEL", "JSWSTEEL", "SAIL"],
+            "Chemicals": ["PIDILITIND", "ASIANPAINT", "BERGEPAINT", "ULTRATECH"],
+            "FMCG": ["HINDUNILVR", "ITC", "NESTLEIND", "BRITANNIA", "DABUR"],
+            "Infrastructure": ["LT", "ADANIPORTS", "RVNL", "IRFC"],
+            "Real Estate": ["DLF", "GODREJPROP", "PRESTIGE"],
+            "Mining": ["COALINDIA", "NMDC"],
+            "Defence": ["HAL", "BEL", "BDL"],
+            "Textiles": ["RAYMOND", "PAGEIND"],
+            "Retail": ["DMART", "TRENT"],
+            "Insurance": ["HDFCLIFE", "ICICILIFE", "SBILIFE"]
+        }
         
     def load_nse_500(self):
         """Load NSE 500 stocks with company names"""
@@ -531,3 +551,18 @@ class NSEStockLoader:
                 found_scrips.append(scrip)
         
         return found_scrips
+    
+    def get_sector_stocks(self, sector):
+        """Get all scrips in a given sector"""
+        return self.sectors.get(sector, [])
+    
+    def find_sector_in_text(self, text):
+        """Find mentioned sectors in text"""
+        text_lower = text.lower()
+        found_sectors = []
+        
+        for sector in self.sectors.keys():
+            if sector.lower() in text_lower:
+                found_sectors.append(sector)
+        
+        return found_sectors

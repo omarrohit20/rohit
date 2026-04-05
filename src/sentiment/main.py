@@ -60,16 +60,40 @@ class SentimentAnalysisEngine:
             if not mentioned_scrips:
                 continue
             
-            # Analyze sentiment for each mentioned scrip
-            for scrip in mentioned_scrips:
-                company = self.stock_loader.get_company_name(scrip)
+            # Analyze sentiment once for this article using the first mentioned scrip
+            primary_scrip = mentioned_scrips[0]
+            primary_company = self.stock_loader.get_company_name(primary_scrip)
+            
+            analysis = self.analyzer.analyze_sentiment(
+                article.headline,
+                article.content,
+                primary_scrip,
+                primary_company
+            )
+            
+            # Determine target scrips
+            all_target_scrips = set(mentioned_scrips)
+            
+            # Check if this is sectoral news
+            is_sectoral = analysis.get("is_sectoral", False)
+            severity = analysis.get("severity", "Unknown")
+            
+            if is_sectoral:
+                # For sectoral news, only process if severity is High
+                if severity != "High":
+                    continue  # Skip this article for sectoral processing
                 
-                analysis = self.analyzer.analyze_sentiment(
-                    article.headline,
-                    article.content,
-                    scrip,
-                    company
+                # Expand to all sector stocks
+                mentioned_sectors = self.stock_loader.find_sector_in_text(
+                    article.headline + " " + article.content
                 )
+                for sector in mentioned_sectors:
+                    sector_stocks = self.stock_loader.get_sector_stocks(sector)
+                    all_target_scrips.update(sector_stocks)
+            
+            # Apply this analysis to all target scrips
+            for scrip in all_target_scrips:
+                company = self.stock_loader.get_company_name(scrip)
                 
                 # Store result
                 if scrip not in self.results:
@@ -93,9 +117,11 @@ class SentimentAnalysisEngine:
                 
                 self.results[scrip]["news_analysis"]["news"].append(news_item)
                 
-                # Update overall sentiment
-                self.results[scrip]["news_analysis"]["overall_sentiment"] = \
-                    analysis.get("overall_sentiment", "Neutral")
+                # Note: overall_sentiment will be calculated after all news are collected
+        
+        # Step 4.5: Calculate overall sentiment for each stock
+        print("\n4.5. Calculating overall sentiment...")
+        self.calculate_overall_sentiments()
         
         # Step 5: Generate output
         print("\n5. Generating output...")
@@ -120,6 +146,54 @@ class SentimentAnalysisEngine:
             json.dump(output_list, f, indent=2, ensure_ascii=False)
         
         print(f"JSON output saved to: {OUTPUT_FILE}")
+    
+    def calculate_overall_sentiments(self):
+        """Calculate overall sentiment for each stock based on news impact and severity"""
+        for scrip, data in self.results.items():
+            news_list = data["news_analysis"]["news"]
+            
+            has_high_positive = any(
+                news.get("severity") == "High" and news.get("impact") == "Positive" 
+                for news in news_list
+            )
+            has_high_negative = any(
+                news.get("severity") == "High" and news.get("impact") == "Negative" 
+                for news in news_list
+            )
+            
+            if has_high_positive:
+                overall_sentiment = "Positive"
+            elif has_high_negative:
+                overall_sentiment = "Negative"
+            else:
+                # If no high impact news, check for medium impact
+                has_medium_positive = any(
+                    news.get("severity") == "Medium" and news.get("impact") == "Positive" 
+                    for news in news_list
+                )
+                has_medium_negative = any(
+                    news.get("severity") == "Medium" and news.get("impact") == "Negative" 
+                    for news in news_list
+                )
+                
+                if has_medium_positive:
+                    overall_sentiment = "Positive"
+                elif has_medium_negative:
+                    overall_sentiment = "Negative"
+                else:
+                    # Default to neutral or based on majority of low impact
+                    positive_count = sum(1 for news in news_list if news.get("impact") == "Positive")
+                    negative_count = sum(1 for news in news_list if news.get("impact") == "Negative")
+                    
+                    if positive_count > negative_count:
+                        overall_sentiment = "Positive"
+                    elif negative_count > positive_count:
+                        overall_sentiment = "Negative"
+                    else:
+                        overall_sentiment = "Neutral"
+            
+            data["news_analysis"]["overall_sentiment"] = overall_sentiment
+            data["last_updated"] = datetime.now().isoformat()
     
     def save_to_mongodb(self):
         """Save results to MongoDB"""
