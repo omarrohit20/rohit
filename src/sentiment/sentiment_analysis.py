@@ -141,7 +141,97 @@ st.markdown("---")
 
 # Comprehensive News Table
 st.markdown("---")
-st.subheader("📰 All News Articles - Comprehensive View")
+
+# Build a summary table grouped by unique news items
+news_summary_map = {}
+for idx, row in df.iterrows():
+    scrip = row['Scrip']
+    news_items = row['News']
+    for news in news_items:
+        key = (
+            news.get('headline', 'No Headline'),
+            news.get('link', '#'),
+            news.get('Date', 'N/A'),
+            news.get('Time', '')
+        )
+        if key not in news_summary_map:
+            news_summary_map[key] = {
+                'Headline': news.get('headline', 'No Headline'),
+                'Link': news.get('link', '#'),
+                'Date': news.get('Date', 'N/A'),
+                'Time': news.get('Time', ''),
+                'Impact': news.get('impact', 'Neutral'),
+                'Severity': news.get('severity', 'Unknown'),
+                'Overall Sentiment': row['Sentiment'],
+                'Impacting Stocks': {scrip}
+            }
+        else:
+            news_summary_map[key]['Impacting Stocks'].add(scrip)
+
+news_summary_data = []
+for item in news_summary_map.values():
+    news_summary_data.append({
+        'Headline': item['Headline'],
+        'Link': item['Link'],
+        'Date': item['Date'],
+        'Time': item['Time'],
+        'Impact': item['Impact'],
+        'Severity': item['Severity'],
+        'Overall Sentiment': item['Overall Sentiment'],
+        'Impacting Stocks': ', '.join(sorted(item['Impacting Stocks']))
+    })
+
+if news_summary_data:
+    summary_df = pd.DataFrame(news_summary_data)
+
+    # Sort summary by High severity and impact priority
+    def get_summary_sort_order(row):
+        severity = row['Severity']
+        impact = row['Impact']
+        if severity == 'High':
+            if impact == 'Positive':
+                return 0
+            elif impact == 'Negative':
+                return 1
+            else:
+                return 2
+        else:
+            return 3
+
+    summary_df['sort_order'] = summary_df.apply(get_summary_sort_order, axis=1)
+    summary_df = summary_df.sort_values('sort_order').drop('sort_order', axis=1)
+
+    def style_summary_table(row):
+        if row['Severity'] == 'High':
+            if row['Impact'] == 'Positive' or row['Overall Sentiment'] == 'Positive':
+                return ['background-color: #d4edda'] * len(row)
+            elif row['Impact'] == 'Negative' or row['Overall Sentiment'] == 'Negative':
+                return ['background-color: #f8d7da'] * len(row)
+        return [''] * len(row)
+
+    styled_summary_df = summary_df.style.apply(style_summary_table, axis=1)
+
+    st.subheader('📰 News Summary - Impacting Stocks')
+    st.dataframe(
+        styled_summary_df,
+        column_config={
+            'Link': st.column_config.LinkColumn('Link', display_text='🔗 Read Article'),
+            'Headline': st.column_config.TextColumn('Headline', width='large'),
+            'Overall Sentiment': st.column_config.TextColumn('Overall Sentiment', width='small'),
+            'Impact': st.column_config.TextColumn('Impact', width='small'),
+            'Severity': st.column_config.TextColumn('Severity', width='small'),
+            'Impacting Stocks': st.column_config.TextColumn('Impacting Stocks', width='large'),
+            'Date': st.column_config.TextColumn('Date', width='small'),
+            'Time': st.column_config.TextColumn('Time', width='small')
+        },
+        use_container_width=True,
+        hide_index=True
+    )
+else:
+    st.info('No news summary available.')
+
+st.markdown('---')
+st.subheader('📰 All News Articles - Comprehensive View')
 
 # Flatten all news data into a table
 all_news_data = []
