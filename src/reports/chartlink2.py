@@ -890,34 +890,64 @@ def main():
     col1, col3, col4, col6 = st.columns(4)
     with col1:
         df = rb.getdf('Breakout-Buy-after-10')
-        rb.render(st, df, 'UpGT0 (Check-News) : Breakout Buy after 10', color='LG', height=200)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] > -3) &
+                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:3', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'UpGT0 (Check-News) : Breakout Buy after 10', color='LG', height=200)
     with col3:
         df = rb.getdf('1-Bbuyy-morningUp-downConsolidation')
         filtered_df = df
         try:
             filtered_df = df[
                 (df['PCT_day_change'] > -3) &
-                (~df['systemtime'].str.contains('09:', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, na=False)) 
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, '10:00 to 10:30 must : market LT(3) : 1-Bbuyy-morningUp-downConsolidation', color='LG', height=200)
+        rb.render(st, filtered_df, '09:45 to 10:15 must : market LT(3) : crossed10 minute low Sell : 1-Bbuyy-morningUp-downConsolidation', color='LG', height=200)
     with col4:
         df = rb.getdf('Breakout-Sell-after-10')
-        rb.render(st, df, 'DownLT-0 (Check-News) : Breakout Sell after 10', color='LG', height=200)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] > -3) &
+                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:3', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DownLT-0 (Check-News) : Breakout Sell after 10', color='LG', height=200)
     with col6:
         df = rb.getdf('1-Sselll-morningDown-upConsolidation')
         filtered_df = df
         try:
             filtered_df = df[
                 (df['PCT_day_change'] < 3) &
-                (~df['systemtime'].str.contains('09:', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, na=False)) 
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, '10:00 to 10:30 must : market GT(-3) : 1-Sselll-morningDown-upConsolidation', color='LG', height=200)
+        rb.render(st, filtered_df, '09:45 to 10:15 must : market GT(-3) : crossed10 minute high Buy : 1-Sselll-morningDown-upConsolidation', color='LG', height=200)
     
 
     col1, col2, col3, col4, col5, col6 = st.columns(6)

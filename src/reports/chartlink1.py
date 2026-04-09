@@ -783,6 +783,15 @@ def main():
     with col2:
         df = rb.getdf('buy-check-morning-down-breakup-02')
         filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
         rb.render(st, filtered_df, 'Buy Check Morning Down Breakup 02s', color='LG')
     with col3:
         df = rb.getdf('supertrend-morningup-sell')
@@ -796,6 +805,15 @@ def main():
     with col4:
         df = rb.getdf('sell-check-morning-up-breakdown-02')
         filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
         rb.render(st, filtered_df, 'Sell Check Morning Up Breakdown 02s', color='LG')
     
 
