@@ -274,6 +274,7 @@ def main():
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
                 (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
+                (df['yearLowChange'] > 5) &
                 (df['week2HighChange'] > 0) &
                 (df['monthHighChange'] < 5) &
                 (df['PCT_day_change'] > 1) &
@@ -299,6 +300,7 @@ def main():
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
                 (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
+                (df['yearLowChange'] > 5) &
                 (df['week2HighChange'] > -1) &
                 (df['monthHighChange'] < 5) &
                 (df['PCT_day_change_pre2'] < 3) &
@@ -325,6 +327,7 @@ def main():
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
                 (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
+                (df['yearHighChange'] < -5) &
                 (df['week2LowChange'] < 0) &
                 (df['monthLowChange'] > -5) &
                 (df['PCT_day_change'] < -1) &
@@ -350,6 +353,7 @@ def main():
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
                 (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
+                (df['yearHighChange'] < -5) &
                 (df['week2LowChange'] < 1) &
                 (df['monthLowChange'] > -5) &
                 (df['PCT_day_change_pre1'] < 3) &
@@ -376,6 +380,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['yearLowChange'] > 5) &
                 (df['week2HighChange'] > -1) &
                 (df['monthHighChange'] < 5) &
                 (df['PCT_day_change'] < 3) &
@@ -394,6 +399,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['yearHighChange'] < -5) &
                 (df['week2LowChange'] < 0) &
                 (df['monthLowChange'] > -5) &
                 (df['PCT_day_change'] > -3) &
