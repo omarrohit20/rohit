@@ -29,7 +29,14 @@ def main():
         df = rb.getintersectdf('morning-volume-bs', 'cash-buuy')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
+
         filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('10:', case=False, na=False)) 
+            ]
+        except KeyError as e:
+            print("")
         rb.render(st, filtered_df, 'UP: morning-volume-bs', color='LG', renderf10buy01=True, height=300)
         
     with col2:
@@ -37,6 +44,12 @@ def main():
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('10:', case=False, na=False)) 
+            ]
+        except KeyError as e:
+            print("")
         rb.render(st, filtered_df, 'DOWN: morning-volume-bs', color='LG', renderf10sell01=True, height=300)
         
     with col3:

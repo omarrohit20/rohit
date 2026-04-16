@@ -568,6 +568,27 @@ def highlight_category_column(value, systemtime, f10ch):
     # elif "0@@SUPER" in value and "6@" in value:
     #     return 'background-color: #fff4cf'
     
+    
+    count_9_2 = 0
+    try:
+        coll = dbcl['morning-volume-breakout-buy']
+        count_9_2 = coll.count_documents({'systemtime': {'$regex': '9:2'}})
+    except Exception:
+        pass
+
+    if (count_9_2 > 10 and "H@" in value and "09:2" in systemtime):
+        return
+    
+    count_9_2 = 0
+    try:
+        coll = dbcl['morning-volume-breakout-sell']
+        count_9_2 = coll.count_documents({'systemtime': {'$regex': '9:2'}})
+    except Exception:
+        pass
+
+    if (count_9_2 > 10 and "L@" in value and "09:2" in systemtime):
+        return
+
     count_9_3 = 0
     try:
         coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
