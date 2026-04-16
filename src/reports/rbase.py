@@ -560,6 +560,7 @@ def highlight_category_row(df, color='NA'):
 
     return styled_df
 
+@st.cache_data(ttl=10)
 def highlight_category_column(value, systemtime, f10ch):
     """Highlights the entire row based on the 'Category' column value."""
 
@@ -572,21 +573,21 @@ def highlight_category_column(value, systemtime, f10ch):
     count_9_2 = 0
     try:
         coll = dbcl['morning-volume-breakout-buy']
-        count_9_2 = coll.count_documents({'systemtime': {'$regex': '9:2'}})
+        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
     except Exception:
         pass
 
-    if (count_9_2 > 10 and "H@" in value and "09:2" in systemtime):
+    if (count_9_2 > 10 and "H@" in value and ("09:2" in systemtime or "09:1" in systemtime)):
         return
     
     count_9_2 = 0
     try:
         coll = dbcl['morning-volume-breakout-sell']
-        count_9_2 = coll.count_documents({'systemtime': {'$regex': '9:2'}})
+        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
     except Exception:
         pass
 
-    if (count_9_2 > 10 and "L@" in value and "09:2" in systemtime):
+    if (count_9_2 > 10 and "L@" in value and ("09:2" in systemtime or "09:1" in systemtime)):
         return
 
     count_9_3 = 0
@@ -704,8 +705,16 @@ def apply_f10_sell(row):
     # use the same color for every column in the row
     return pd.Series(color, index=row.index)
 
+@st.cache_data(ttl=10)
 def highlight_category_column_f10_buy(value10, value7, value5, systemtime):
     """Highlights the entire row based on the 'Category' column value."""
+    count_9_2 = 0
+    try:
+        coll = dbcl['morning-volume-breakout-buy']
+        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
+    except Exception:
+        pass
+    
     count_9_3 = 0
     try:
         coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
@@ -726,6 +735,9 @@ def highlight_category_column_f10_buy(value10, value7, value5, systemtime):
         count_9_3_c = coll.count_documents({'systemtime': {'$regex': '09:'}})
     except Exception:
         pass
+
+    if (count_9_2 > 10) and ("9:1" in systemtime or "09:2" in systemtime):
+        return 'background-color: #A1A1A1'
 
     if (count_9_3_s >= 10 or count_9_3_c >= 6):
         return 'background-color: #A1A1A1'
@@ -752,7 +764,15 @@ def highlight_category_column_f10_buy(value10, value7, value5, systemtime):
     else:
         return 'background-color: #A1A1A1'   
         
+@st.cache_data(ttl=10)
 def highlight_category_column_f10_sell(value10, value7, value5, systemtime):
+    count_9_2 = 0
+    try:
+        coll = dbcl['morning-volume-breakout-sell']
+        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
+    except Exception:
+        pass
+    
     count_9_3 = 0
     try:
         coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
@@ -774,6 +794,9 @@ def highlight_category_column_f10_sell(value10, value7, value5, systemtime):
     except Exception:
         pass
 
+    if (count_9_2 > 10) and ("9:1" in systemtime or "09:2" in systemtime):
+        return 'background-color: #A1A1A1'
+    
     if (count_9_3_s >= 10 or count_9_3_c >= 6):
         return 'background-color: #A1A1A1'
 
@@ -820,7 +843,15 @@ def apply_f10_sell_00(row):
     # use the same color for every column in the row
     return pd.Series(color, index=row.index)
 
+@st.cache_data(ttl=10)
 def highlight_category_column_f10_buy_00(value10, value7, value5, systemtime):
+    count_9_2 = 0
+    try:
+        coll = dbcl['morning-volume-breakout-buy']
+        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
+    except Exception:
+        pass
+    
     count_9_3 = 0
     try:
         coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
@@ -841,6 +872,9 @@ def highlight_category_column_f10_buy_00(value10, value7, value5, systemtime):
         count_9_3_c = coll.count_documents({'systemtime': {'$regex': '09:'}})
     except Exception:
         pass
+
+    if (count_9_2 > 10) and ("9:1" in systemtime or "09:2" in systemtime):
+        return 'background-color: #A1A1A1'
 
     if (count_9_3_s >= 10 or count_9_3_c >= 6):
         return 'background-color: #A1A1A1'
@@ -864,7 +898,15 @@ def highlight_category_column_f10_buy_00(value10, value7, value5, systemtime):
         else:
             return 'background-color: #A1A1A1'
         
+@st.cache_data(ttl=10)
 def highlight_category_column_f10_sell_00(value10, value7, value5, systemtime):
+    count_9_2 = 0
+    try:
+        coll = dbcl['morning-volume-breakout-sell']
+        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
+    except Exception:
+        pass
+    
     count_9_3 = 0
     try:
         coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
@@ -885,6 +927,9 @@ def highlight_category_column_f10_sell_00(value10, value7, value5, systemtime):
         count_9_3_c = coll.count_documents({'systemtime': {'$regex': '09:'}})
     except Exception:
         pass
+
+    if (count_9_2 > 10) and ("9:1" in systemtime or "09:2" in systemtime):
+        return 'background-color: #A1A1A1'
 
     if (count_9_3_s >= 10 or count_9_3_c >= 6):
         return 'background-color: #A1A1A1'
@@ -928,7 +973,15 @@ def apply_f10_sell_01(row):
     # use the same color for every column in the row
     return pd.Series(color, index=row.index)
 
+@st.cache_data(ttl=10)
 def highlight_category_column_f10_buy_01(value10, value7, value5, systemtime):
+    count_9_2 = 0
+    try:
+        coll = dbcl['morning-volume-breakout-buy']
+        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
+    except Exception:
+        pass
+    
     # count_9_3 = 0
     # try:
     #     coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
@@ -955,6 +1008,10 @@ def highlight_category_column_f10_buy_01(value10, value7, value5, systemtime):
 
     # if (((count_9_3 < 6 and count_9_3_s < 6) or ("9:3" not in systemtime and "9:4" not in systemtime))
     #     ):
+    
+    if (count_9_2 > 10) and ("9:1" in systemtime or "09:2" in systemtime):
+        return 'background-color: #A1A1A1'
+    
     """Highlights the entire row based on the 'Category' column value."""
     if float(value10) >= 15 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
         return 'background-color: #590059'
@@ -973,7 +1030,15 @@ def highlight_category_column_f10_buy_01(value10, value7, value5, systemtime):
     else:
         return 'background-color: #A1A1A1'
         
+@st.cache_data(ttl=10)
 def highlight_category_column_f10_sell_01(value10, value7, value5, systemtime):
+    count_9_2 = 0
+    try:
+        coll = dbcl['morning-volume-breakout-sell']
+        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
+    except Exception:
+        pass
+    
     # count_9_3 = 0
     # try:
     #     coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
@@ -1000,6 +1065,10 @@ def highlight_category_column_f10_sell_01(value10, value7, value5, systemtime):
 
     # if (((count_9_3 < 6 and count_9_3_s < 6) or ("9:3" not in systemtime and "9:4" not in systemtime))):
     #     """Highlights the entire row based on the 'Category' column value."""
+    
+    if (count_9_2 > 10) and ("9:1" in systemtime or "09:2" in systemtime):
+        return 'background-color: #A1A1A1'
+
     if float(value10) <= -15 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
         return 'background-color: #590059'
     elif float(value10) <= -11 and float(value10) > -15 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
@@ -1246,6 +1315,7 @@ def apply_breakout_highlight(row):
         pass
     return styles
 
+@st.cache_data(ttl=10)
 def get_chartlink_collections():
     """Get list of collection names in chartlink database"""
     return sorted(dbcl.list_collection_names())
@@ -1504,6 +1574,7 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
             df_styled = df_styled.apply(apply_breakout_highlight, axis=1)
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
 
+@st.cache_data(ttl=10)
 def getdf_raw(collection_name, chartink=False):
     collection = None
     if chartink:
