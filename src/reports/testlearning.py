@@ -24,7 +24,24 @@ def main():
     rb.testLearning = True
 
     
-    col1, col2, col3 = st.columns(3)
+    col01, col1, col02, col2, col3 = st.columns(5)
+    with col01:
+        df = rb.getintersectdf('morning-volume-bs', 'cash-buuy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] >= 0) &
+                (df['PCT_day_change'] <= 1.5) &
+                ((df['PCT_day_change'] >=1) | (df['PCT_day_change_pre1'] >=1) | (df['PCT_day_change_pre2'] >=1)) &
+                ((df['PCT_change'] >=1) & (df['PCT_day_change_pre1'] >=0) & (df['PCT_day_change_pre2'] >=0)) &
+                (~df['systemtime'].str.contains('09:15', case=False, na=False)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'UP: morning-volume-bs', color='LG', renderf10buy01=True, height=300)
     with col1:
         df = rb.getintersectdf('morning-volume-bs', 'cash-buuy')
         expected_columns = list(set(df.columns))
@@ -39,6 +56,22 @@ def main():
             print("")
         rb.render(st, filtered_df, 'UP: morning-volume-bs', color='LG', renderf10buy01=True, height=300)
         
+    with col02:
+        df = rb.getintersectdf('morning-volume-bs', 'cash-seell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] <= 0) &
+                (df['PCT_day_change'] >= -1.5) &
+                ((df['PCT_day_change'] <=-1) | (df['PCT_day_change_pre1'] <=-1) | (df['PCT_day_change_pre2'] <=-1)) &
+                ((df['PCT_change'] <=-1) & (df['PCT_day_change_pre1'] <=0) & (df['PCT_day_change_pre2'] <=0)) &
+                (~df['systemtime'].str.contains('10:', case=False, na=False)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DOWN: morning-volume-bs', color='LG', renderf10sell01=True, height=300)
     with col2:
         df = rb.getintersectdf('morning-volume-bs', 'cash-seell')
         expected_columns = list(set(df.columns))
@@ -81,8 +114,10 @@ def main():
                 (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
+                (((df['forecast_day_PCT10_change']) < -4) | ((df['PCT_day_change_pre1']) > 1) | ((df['PCT_day_change_pre2']) > 1)) &
                 ((df['forecast_day_PCT10_change']) > -15) & 
                 ((df['forecast_day_PCT10_change']) < 15)
+
             ]
 
             filtered_df = filtered_df[
@@ -119,6 +154,7 @@ def main():
                 (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
+                (((df['forecast_day_PCT10_change']) < -4) | ((df['PCT_day_change_pre1']) > 1) | ((df['PCT_day_change_pre2']) > 1)) &
                 ((df['forecast_day_PCT10_change']) > -15) & 
                 ((df['forecast_day_PCT10_change']) < 15) 
             ]
@@ -155,7 +191,7 @@ def main():
                 (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
-                (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
+                (((df['forecast_day_PCT10_change']) < -4)) &
                 ((df['forecast_day_PCT10_change']) > -15) & 
                 ((df['forecast_day_PCT10_change']) < 15)
             ]
@@ -194,6 +230,7 @@ def main():
                 (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
+                (((df['forecast_day_PCT10_change']) > 4) | ((df['PCT_day_change_pre1']) < -1) | ((df['PCT_day_change_pre2']) < -1)) &
                 ((df['forecast_day_PCT10_change']) > -15) & 
                 ((df['forecast_day_PCT10_change']) < 15)
             ]
@@ -232,6 +269,7 @@ def main():
                 (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
+                (((df['forecast_day_PCT10_change']) > 4) | ((df['PCT_day_change_pre1']) < -1) | ((df['PCT_day_change_pre2']) < -1)) &
                 ((df['forecast_day_PCT10_change']) > -15) & 
                 ((df['forecast_day_PCT10_change']) < 15) 
             ]
@@ -268,7 +306,7 @@ def main():
                 (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
-                (((df['forecast_day_PCT10_change']) < -4) | ((df['forecast_day_PCT10_change']) > 4)) &
+                (((df['forecast_day_PCT10_change']) > 4)) &
                 ((df['forecast_day_PCT10_change']) > -15) & 
                 ((df['forecast_day_PCT10_change']) < 15)
             ]

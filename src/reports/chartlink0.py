@@ -1111,7 +1111,7 @@ def main():
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        df = rb.getdf('morning-volume-breakout-buy')
+        df = rb.getintersectdf('morning-volume-breakout-buy', 'cash-buuy')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
@@ -1154,6 +1154,7 @@ def main():
         df_at_9 = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('09:1', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
@@ -1182,7 +1183,7 @@ def main():
         else:
             rb.render(st, empty_df, 'UP-BUY : Stock LT(2)', color='LG', height=300, renderf10buy01=True)
     with col3:
-        df = rb.getdf('morning-volume-breakout-sell')
+        df = rb.getintersectdf('morning-volume-breakout-sell', 'cash-seell')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
@@ -1224,6 +1225,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('09:1', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &

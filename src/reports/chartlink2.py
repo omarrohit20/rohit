@@ -855,36 +855,36 @@ def main():
             pass
         rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell01=True)
 
-
-    col3, col6 = st.columns(2)
-    with col3:
-        df = rb.getdf('morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_day_change'] < 2) &
-                (df['forecast_day_PCT10_change'] > -9) &
-                (df['forecast_day_PCT10_change'] < 6) &
-                (df['mlData'].str.contains("0@@")) &
-                (df['mlData'].str.contains("0@@CROSSED2Day") | df['mlData'].str.contains("0@@SUPER") | df['mlData'].str.contains("DayH@GT-1"))
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-buy ##############', color='LG', height=150)
-    with col6:
-        df = rb.getdf('morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_day_change'] > -2) &
-                (df['forecast_day_PCT10_change'] < 9) &
-                (df['forecast_day_PCT10_change'] > -6) &
-                (df['mlData'].str.contains("0@@")) &
-                (df['mlData'].str.contains("0@@CROSSED2Day") | df['mlData'].str.contains("0@@SUPER") | df['mlData'].str.contains("DayL@LT1"))
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-sell ##############', color='LG', height=150)
+    #TO-DO
+    # col3, col6 = st.columns(2)
+    # with col3:
+    #     df = rb.getdf('morning-volume-breakout-buy')
+    #     filtered_df = df
+    #     try:
+    #         filtered_df = df[
+    #             (df['PCT_day_change'] < 2) &
+    #             (df['forecast_day_PCT10_change'] > -9) &
+    #             (df['forecast_day_PCT10_change'] < 6) &
+    #             (df['mlData'].str.contains("0@@")) &
+    #             (df['mlData'].str.contains("0@@CROSSED2Day") | df['mlData'].str.contains("0@@SUPER") | df['mlData'].str.contains("DayH@GT-1"))
+    #         ]
+    #     except KeyError as e:
+    #         print("")
+    #     rb.render(st, filtered_df, 'morning-volume-breakout-buy ##############', color='LG', height=150)
+    # with col6:
+    #     df = rb.getdf('morning-volume-breakout-sell')
+    #     filtered_df = df
+    #     try:
+    #         filtered_df = df[
+    #             (df['PCT_day_change'] > -2) &
+    #             (df['forecast_day_PCT10_change'] < 9) &
+    #             (df['forecast_day_PCT10_change'] > -6) &
+    #             (df['mlData'].str.contains("0@@")) &
+    #             (df['mlData'].str.contains("0@@CROSSED2Day") | df['mlData'].str.contains("0@@SUPER") | df['mlData'].str.contains("DayL@LT1"))
+    #         ]
+    #     except KeyError as e:
+    #         print("")
+    #     rb.render(st, filtered_df, 'morning-volume-breakout-sell ##############', color='LG', height=150)
 
 
     col1, col3, col4, col6 = st.columns(4)

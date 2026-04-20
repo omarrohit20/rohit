@@ -25,6 +25,7 @@ def main():
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime_merged'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime_merged'].str.contains('09:3', case=False, na=False)) &
+                (df['PCT_day_change'] > -2) &
                 (~df['processor'].str.contains('cash-buy-morning-volume')) &
                 (~df['processor'].str.contains('Check-News')) &
                 (~df['processor'].str.contains('supertrend')) &
@@ -44,12 +45,13 @@ def main():
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime_merged'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime_merged'].str.contains('09:3', case=False, na=False)) &
+                (df['PCT_day_change'] > -2) &
                 (~df['processor'].str.contains('cash-buy-morning-volume')) &
                 (~df['processor'].str.contains('Check-News')) &
                 (~df['processor'].str.contains('supertrend')) &
                 (~df['processor'].str.contains('Sell-morningDown')) &
                 (~df['processor'].str.contains('buy-breakout')) &
-                #(~df['processor'].str.contains('Breakout-Buy-after-10')) &
+                (~df['processor'].str.contains('Breakout-Buy-after-10')) &
                 (~df['processor'].str.contains('1-Bbuyy-morningUp-downConsolidation'))
                 ]
         except KeyError as e:
@@ -65,6 +67,7 @@ def main():
                 (~df['systemtime'].str.contains('09:30', case=False, na=False)) &
                 (~df['systemtime_merged'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime_merged'].str.contains('09:30', case=False, na=False)) &
+                (df['PCT_day_change'] > -2) &
                 (~df['processor'].str.contains('cash-buy-morning-volume')) &
                 (~df['processor'].str.contains('Check-News')) &
                 (~df['processor'].str.contains('supertrend')) &
@@ -84,6 +87,7 @@ def main():
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime_merged'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime_merged'].str.contains('09:3', case=False, na=False)) &
+                (df['PCT_day_change'] < 2) &
                 (~df['processor'].str.contains('cash-sell-morning-volume')) &
                 (~df['processor'].str.contains('Check-News')) &
                 (~df['processor'].str.contains('supertrend')) &
@@ -103,12 +107,13 @@ def main():
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime_merged'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime_merged'].str.contains('09:3', case=False, na=False)) &
+                (df['PCT_day_change'] < 2) &
                 (~df['processor'].str.contains('cash-sell-morning-volume')) &
                 (~df['processor'].str.contains('Check-News')) &
                 (~df['processor'].str.contains('supertrend')) &
                 (~df['processor'].str.contains('Buy-morningup')) &
                 (~df['processor'].str.contains('sell-breakout')) &
-                #(~df['processor'].str.contains('Breakout-Sell-after-10')) &
+                (~df['processor'].str.contains('Breakout-Sell-after-10')) &
                 (~df['processor'].str.contains('1-Sselll-morningDown')) 
                 ]
         except KeyError as e:
@@ -124,6 +129,7 @@ def main():
                 (~df['systemtime'].str.contains('09:30', case=False, na=False)) &
                 (~df['systemtime_merged'].str.contains('09:2', case=False, na=False)) &
                 (~df['systemtime_merged'].str.contains('09:30', case=False, na=False)) &
+                (df['PCT_day_change'] < 2) &
                 (~df['processor'].str.contains('cash-sell-morning-volume')) &
                 (~df['processor'].str.contains('Check-News')) &
                 (~df['processor'].str.contains('supertrend')) &
@@ -147,6 +153,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
+                (df['PCT_day_change'] > -2) &
                 (~df['processor'].str.contains('Check-News')) &
                 (~df['processor'].str.contains('supertrend-morning-buy')) &
                 (~df['processor'].str.contains('checkChartBuy/')) &
@@ -169,6 +176,7 @@ def main():
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
                 ((df['PCT_day_change'] > 0.5) | (df['PCT_day_change_pre2'] > 0.5)) &
+                (df['PCT_day_change'] > -2) &
                 (~df['processor'].str.contains('09_30:checkChartSell', case=False, na=False)) &
                 (df['mlData'].str.contains('Stairs', case=False, na=False)) &
                 (df['mlData'].str.contains('ZPre1', case=False, na=False)) &
@@ -189,6 +197,7 @@ def main():
         try:
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
+                (df['PCT_day_change'] < 2) &
                 (~df['processor'].str.contains('Check-News'))&
                 (~df['processor'].str.contains('checkChartSell/')) &
                 (~df['processor'].str.contains('supertrend-morning-sell'))&
@@ -212,6 +221,7 @@ def main():
             filtered_df = df[
                 ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
                 ((df['PCT_day_change'] < -0.5) | (df['PCT_day_change_pre2'] < -0.5)) &
+                (df['PCT_day_change'] < 2) &
                 (~df['processor'].str.contains('09_30:checkChartBuy', case=False, na=False)) &
                 (df['mlData'].str.contains('stairs', case=False, na=False)) &
                 (df['mlData'].str.contains('ZPre', case=False, na=False)) &
@@ -251,6 +261,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['PCT_day_change'] > 1) &
+                (df['PCT_day_change_pre1'] > 1) &
                 ((df['PCT_change'] < 0.5) | (df['PCT_day_change_pre1'] < -1)) &
                 ((df['PCT_day_change_pre1'] < -1.3) | (df['PCT_day_change_pre2'] < -1.3)) &
                 (~df['systemtime'].str.contains('09:', case=False, na=False))
@@ -281,6 +293,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['PCT_day_change'] < -1) &
+                (df['PCT_day_change_pre1'] < -1) &
                 ((df['PCT_change'] > -0.5) | (df['PCT_day_change_pre1'] > 1)) &
                 ((df['PCT_day_change_pre1'] > 1.3) | (df['PCT_day_change_pre2'] > 1.3)) &
                 (~df['systemtime'].str.contains('09:', case=False, na=False))
