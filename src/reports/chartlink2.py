@@ -853,7 +853,7 @@ def main():
                 ]
         except KeyError as e:
             pass
-        rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell01=True)
+        rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell00=True)
 
     #TO-DO
     # col3, col6 = st.columns(2)
