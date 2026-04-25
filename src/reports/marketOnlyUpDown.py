@@ -64,9 +64,9 @@ def main():
             filtered_df = df[
                 #(df['week2HighChange'] > 2) &
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
-                (~df['systemtime'].str.contains('09:30', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
                 (~df['systemtime_merged'].str.contains('09:2', case=False, na=False)) &
-                (~df['systemtime_merged'].str.contains('09:30', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('09:3', case=False, na=False)) &
                 (df['PCT_day_change'] > -2) &
                 (~df['processor'].str.contains('cash-buy-morning-volume')) &
                 (~df['processor'].str.contains('Check-News')) &
@@ -126,9 +126,9 @@ def main():
             filtered_df = df[
                 #(df['week2LowChange'] < -2) &
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
-                (~df['systemtime'].str.contains('09:30', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
                 (~df['systemtime_merged'].str.contains('09:2', case=False, na=False)) &
-                (~df['systemtime_merged'].str.contains('09:30', case=False, na=False)) &
+                (~df['systemtime_merged'].str.contains('09:3', case=False, na=False)) &
                 (df['PCT_day_change'] < 2) &
                 (~df['processor'].str.contains('cash-sell-morning-volume')) &
                 (~df['processor'].str.contains('Check-News')) &

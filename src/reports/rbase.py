@@ -597,7 +597,7 @@ def highlight_category_column(value, systemtime, f10ch):
     except Exception:
         pass
 
-    if (count_9_3 > 6 and "H@" in value and "09:" in systemtime):
+    if (count_9_3 > 6 and "H@" in value and "09:" in systemtime and (float(f10ch) < 6)):
         return 
 
     count_9_3 = 0
@@ -607,7 +607,7 @@ def highlight_category_column(value, systemtime, f10ch):
     except Exception:
         pass
 
-    if (count_9_3 > 6 and "L@" in value and "09:" in systemtime):
+    if (count_9_3 > 6 and "L@" in value and "09:" in systemtime and (float(f10ch) > -6)):
         return 
 
     count_9_3_s = 0
@@ -617,10 +617,10 @@ def highlight_category_column(value, systemtime, f10ch):
     except Exception:
         pass
 
-    if (count_9_3_s > 6 and "H@" in value and ("09:" in systemtime)):
+    if (count_9_3_s > 6 and "H@" in value and ("09:" in systemtime) and (float(f10ch) < 6)):
         return
 
-    if (count_9_3_s > 6 and "H@" in value and "CROSSED2" not in value):
+    if (count_9_3_s > 6 and "H@" in value and "CROSSED2" not in value and (float(f10ch) < 6)):
         return
 
     count_9_3_s = 0
@@ -630,42 +630,74 @@ def highlight_category_column(value, systemtime, f10ch):
     except Exception:
         pass
 
-    if (count_9_3_s > 6 and "L@" in value and ("09:" in systemtime)):
+    if (count_9_3_s > 6 and "L@" in value and ("09:" in systemtime) and (float(f10ch) > -6)):
         return
 
-    if (count_9_3_s > 6 and "L@" in value and "CROSSED2" not in value):
+    if (count_9_3_s > 6 and "L@" in value and "CROSSED2" not in value and (float(f10ch) > -6)):
         return
     
 
     # if("09:2" not in systemtime):
     
+    if("H@" in value):
+        if "0@@CROSSED" in value and "7@" in value and (float(f10ch) > 15) and "CROSSED1DayH@GT7@" not in value and "CROSSED1DayL@LT-7@" not in value:
+            return 'background-color: #590059'
+        elif "0@@SUPER" in value and "7@" in value and (float(f10ch) > 15):
+            return 'background-color: #590059'
+        elif "0@@CROSSED" in value and "7@" in value and (float(f10ch) >= 11) and "CROSSED1DayH@GT7@" not in value and "CROSSED1DayL@LT-7@" not in value:
+            return 'background-color: #800080'
+        elif "0@@SUPER" in value and "7@" in value and (float(f10ch) >= 11):
+            return 'background-color: #800080'
+        elif "0@@CROSSED" in value and "7@" in value and (float(f10ch) < 11):
+            return 'background-color: #d8b2d8'
+        elif "0@@SUPER" in value and "7@" in value and (float(f10ch) < 11):
+            return 'background-color: #d8b2d8'
+        elif "0@@CROSSED" in value and "2@" in value and "CROSSED1DayH@GT2@" not in value and "CROSSED1DayL@LT-2@" not in value:
+            return 'background-color: #3EB9FB'
+        elif "0@@SUPER" in value and "2@" in value:
+            return 'background-color: #3EB9FB'
+        elif "0@@CROSSED" in value and "1@" in value:
+            return 'background-color: #CBEDFF'
+        elif "0@@SUPER" in value and "1@" in value:
+            return 'background-color: #CBEDFF'
+        elif "0@@CROSSED" in value and "6@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
+            return 'background-color: #fff4cf'
+        elif "0@@SUPER" in value and "6@" in value:
+            return 'background-color: #fff4cf'
+        elif "0@@CROSSED" in value and (float(f10ch) > 5) and (float(f10ch) < 11):
+            return 'background-color: #d8b2d8'
+        elif "0@@SUPER" in value and (float(f10ch) > 5) and (float(f10ch) < 11):
+            return 'background-color: #d8b2d8'
     
-    if "0@@CROSSED" in value and "7@" in value and (float(f10ch) > 15) and "CROSSED1DayH@GT7@" not in value and "CROSSED1DayL@LT-7@" not in value:
-        return 'background-color: #590059'
-    elif "0@@SUPER" in value and "7@" in value and (float(f10ch) > 15):
-        return 'background-color: #590059'
-    elif "0@@CROSSED" in value and "7@" in value and (float(f10ch) >= 11) and "CROSSED1DayH@GT7@" not in value and "CROSSED1DayL@LT-7@" not in value:
-        return 'background-color: #800080'
-    elif "0@@SUPER" in value and "7@" in value and (float(f10ch) >= 11):
-        return 'background-color: #800080'
-    elif "0@@CROSSED" in value and "7@" in value and (float(f10ch) < 11):
-        return 'background-color: #d8b2d8'
-    elif "0@@SUPER" in value and "7@" in value and (float(f10ch) < 11):
-        return 'background-color: #d8b2d8'
-    elif "0@@CROSSED" in value and "2@" in value and "CROSSED1DayH@GT2@" not in value and "CROSSED1DayL@LT-2@" not in value:
-        return 'background-color: #3EB9FB'
-    elif "0@@SUPER" in value and "2@" in value:
-        return 'background-color: #3EB9FB'
-    elif "0@@CROSSED" in value and "1@" in value:
-        return 'background-color: #CBEDFF'
-    elif "0@@SUPER" in value and "1@" in value:
-        return 'background-color: #CBEDFF'
-    elif "0@@CROSSED" in value and "6@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
-        return 'background-color: #fff4cf'
-    elif "0@@SUPER" in value and "6@" in value:
-        return 'background-color: #fff4cf'
-    # else:
-    #     return
+    if("L@" in value):
+        if "0@@CROSSED" in value and "7@" in value and (float(f10ch) < -15) and "CROSSED1DayH@GT7@" not in value and "CROSSED1DayL@LT-7@" not in value:
+            return 'background-color: #590059'
+        elif "0@@SUPER" in value and "7@" in value and (float(f10ch) < -15):
+            return 'background-color: #590059'
+        elif "0@@CROSSED" in value and "7@" in value and (float(f10ch) <= -11) and "CROSSED1DayH@GT7@" not in value and "CROSSED1DayL@LT-7@" not in value:
+            return 'background-color: #800080'
+        elif "0@@SUPER" in value and "7@" in value and (float(f10ch) <= -11):
+            return 'background-color: #800080'
+        elif "0@@CROSSED" in value and "7@" in value and (float(f10ch) > -11):
+            return 'background-color: #d8b2d8'
+        elif "0@@SUPER" in value and "7@" in value and (float(f10ch) > -11):
+            return 'background-color: #d8b2d8'
+        elif "0@@CROSSED" in value and "2@" in value and "CROSSED1DayH@GT2@" not in value and "CROSSED1DayL@LT-2@" not in value:
+            return 'background-color: #3EB9FB'
+        elif "0@@SUPER" in value and "2@" in value:
+            return 'background-color: #3EB9FB'
+        elif "0@@CROSSED" in value and "1@" in value:
+            return 'background-color: #CBEDFF'
+        elif "0@@SUPER" in value and "1@" in value:
+            return 'background-color: #CBEDFF'
+        elif "0@@CROSSED" in value and "6@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
+            return 'background-color: #fff4cf'
+        elif "0@@SUPER" in value and "6@" in value:
+            return 'background-color: #fff4cf'
+        elif "0@@CROSSED" in value and (float(f10ch) < -5) and (float(f10ch) > -11):
+            return 'background-color: #d8b2d8'
+        elif "0@@SUPER" in value and (float(f10ch) < -5) and (float(f10ch) > -11):
+            return 'background-color: #d8b2d8'
 
 def apply_highlight_column(row):
     """Apply highlight_category_column to mlData column with systemtime context."""
@@ -740,16 +772,18 @@ def highlight_category_column_f10_buy(value10, value7, value5, systemtime):
         return 'background-color: #A1A1A1'
 
     if (count_9_3_s >= 10 or count_9_3_c >= 6):
-        return 'background-color: #A1A1A1'
+        if ("9:1" in systemtime or "09:2" in systemtime or "9:3" in systemtime or float(value10) < 6 or float(value10) > 11):
+            return 'background-color: #A1A1A1'
 
     if (count_9_3 > 8) and "9:" in systemtime:
-        return 'background-color: #A1A1A1'
+        if ("9:1" in systemtime or "09:2" in systemtime or "9:3" in systemtime or float(value10) < 6 or float(value10) > 11):
+            return 'background-color: #A1A1A1'
 
     if float(value10) >= 15 and float(value7) > -2 and float(value5) > -2 and (float(value7) > (float(value10)-5) or float(value5) > (float(value10)-5)):
         return 'background-color: #590059'
     elif float(value10) >= 11 and float(value10) < 15 and float(value7) > -2 and float(value5) > -2 and (float(value7) > (float(value10)-5) or float(value5) > (float(value10)-5)):
         return 'background-color: #800080'
-    elif float(value10) >= 7 and float(value10) < 11 and float(value7) > -2 and float(value5) > -2 and (float(value7) > (float(value10)-5) or float(value5) > (float(value10)-5)):
+    elif float(value10) >= 6 and float(value10) < 11 and float(value7) > -2 and float(value5) > -2 and (float(value7) > (float(value10)-5) or float(value5) > (float(value10)-5)):
         return 'background-color: #d8b2d8'
     elif float(value10) >= 2 and float(value10) < 7 and float(value7) > -3 and float(value5) > -3 and (float(value7) > (float(value10)-4) or float(value5) > (float(value10)-4)):
         return 'background-color: #3EB9FB'
@@ -798,17 +832,19 @@ def highlight_category_column_f10_sell(value10, value7, value5, systemtime):
         return 'background-color: #A1A1A1'
     
     if (count_9_3_s >= 10 or count_9_3_c >= 6):
-        return 'background-color: #A1A1A1'
+        if ("9:1" in systemtime or "09:2" in systemtime or "9:3" in systemtime or float(value10) > -6 or float(value10) < -11):
+            return 'background-color: #A1A1A1'
 
     if (count_9_3 > 8) and "9:" in systemtime:
-        return 'background-color: #A1A1A1'
+        if ("9:1" in systemtime or "09:2" in systemtime or "9:3" in systemtime or float(value10) > -6 or float(value10) < -11):
+            return 'background-color: #A1A1A1'
 
     """Highlights the entire row based on the 'Category' column value."""
     if float(value10) <= -15 and float(value5) < 2 and (float(value7) < (float(value10)+5) or float(value5) < (float(value10)+5)):
         return 'background-color: #590059'
     if float(value10) <= -11 and float(value10) > -15 and float(value7) < 2 and float(value5) < 2 and (float(value7) < (float(value10)+5) or float(value5) < (float(value10)+5)):
         return 'background-color: #800080'
-    if float(value10) <= -7 and float(value10) > -11 and float(value7) < 2 and float(value5) < 2 and (float(value7) < (float(value10)+5) or float(value5) < (float(value10)+5)):
+    if float(value10) <= -6 and float(value10) > -11 and float(value7) < 2 and float(value5) < 2 and (float(value7) < (float(value10)+5) or float(value5) < (float(value10)+5)):
         return 'background-color: #d8b2d8'
     elif float(value10) <= -2 and float(value10) > -7 and float(value7) < 3 and float(value5) < 3 and (float(value7) < (float(value10)+4) or float(value5) < (float(value10)+4)):
         return 'background-color: #3EB9FB'
@@ -877,15 +913,16 @@ def highlight_category_column_f10_buy_00(value10, value7, value5, systemtime):
         return 'background-color: #A1A1A1'
 
     if (count_9_3_s >= 10 or count_9_3_c >= 6):
-        return 'background-color: #A1A1A1'
+        if ("9:1" in systemtime or "09:2" in systemtime or "9:3" in systemtime or float(value10) < 6 or float(value10) > 11):
+            return 'background-color: #A1A1A1'
 
-    if ((count_9_3 < 8 and count_9_3_s < 6) or ("9:" not in systemtime and "10:00" not in systemtime) or (float(value10) >= 7)):
+    if ((count_9_3 < 8 and count_9_3_s < 6) or ("9:" not in systemtime and "10:00" not in systemtime) or (float(value10) >= 6)):
         """Highlights the entire row based on the 'Category' column value."""
         if float(value10) >= 15 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
             return 'background-color: #590059'
         elif float(value10) >= 11 and float(value10) < 15 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
             return 'background-color: #800080'
-        elif float(value10) >= 7 and float(value10) < 11 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
+        elif float(value10) >= 6 and float(value10) < 11 and float(value7) > 0 and float(value5) > 0 and ( float(value10) > 7 or float(value7) > 5 or float(value5) > 5):
             return 'background-color: #d8b2d8'
         elif float(value10) >= -2 and float(value10) < 1 and float(value7) < 2 and float(value5) < 2 and float(value7) > -2 and float(value5) > -2:
             return 'background-color: #CBEDFF'
@@ -932,15 +969,16 @@ def highlight_category_column_f10_sell_00(value10, value7, value5, systemtime):
         return 'background-color: #A1A1A1'
 
     if (count_9_3_s >= 10 or count_9_3_c >= 6):
-        return 'background-color: #A1A1A1'
+        if ("9:1" in systemtime or "09:2" in systemtime or "9:3" in systemtime or float(value10) > -6 or float(value10) < -11):
+            return 'background-color: #A1A1A1'
 
-    if (((count_9_3 < 8 and count_9_3_s < 6) or ("9:" not in systemtime and "10:00" not in systemtime)) or (float(value10) <= -7)):
+    if (((count_9_3 < 8 and count_9_3_s < 6) or ("9:" not in systemtime and "10:00" not in systemtime)) or (float(value10) <= -6)):
         """Highlights the entire row based on the 'Category' column value."""
         if float(value10) <= -15 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
             return 'background-color: #590059'
         elif float(value10) <= -11 and float(value10) > -15 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
             return 'background-color: #800080'
-        elif float(value10) <= -7 and float(value10) > -11 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
+        elif float(value10) <= -6 and float(value10) > -11 and float(value7) < 0 and float(value5) < 0 and ( float(value10) < -7 or float(value7) < -5 or float(value5) < -5):
             return 'background-color: #d8b2d8'
         elif float(value10) <= 2 and float(value10) > -1 and float(value7) > -2 and float(value5) > -2 and float(value7) < 2 and float(value5) < 2:
             return 'background-color: #CBEDFF'
@@ -1017,7 +1055,7 @@ def highlight_category_column_f10_buy_01(value10, value7, value5, systemtime):
         return 'background-color: #590059'
     elif float(value10) >= 11 and float(value10) < 15 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
         return 'background-color: #800080'
-    elif float(value10) >= 7 and float(value10) < 11 and float(value7) > 7 and float(value5) > 7 and ( float(value10) > 10 or float(value7) > 10 or float(value5) > 10):
+    elif float(value10) >= 6 and float(value10) < 11 and float(value7) > 0 and float(value5) > 0 and ( float(value10) > 7 or float(value7) > 5 or float(value5) > 5):
         return 'background-color: #d8b2d8'
     elif float(value10) >= -2 and float(value10) < 1 and float(value7) < 2 and float(value5) < 2 and float(value7) > -2 and float(value5) > -2:
         return 'background-color: #CBEDFF'
@@ -1073,7 +1111,7 @@ def highlight_category_column_f10_sell_01(value10, value7, value5, systemtime):
         return 'background-color: #590059'
     elif float(value10) <= -11 and float(value10) > -15 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
         return 'background-color: #800080'
-    elif float(value10) <= -7 and float(value10) > -11 and float(value7) < -7 and float(value5) < -7 and ( float(value10) < -10 or float(value7) < -10 or float(value5) < -10):
+    elif float(value10) <= -6 and float(value10) > -11 and float(value7) < 0 and float(value5) < 0 and ( float(value10) < -7 or float(value7) < -5 or float(value5) < -5):
         return 'background-color: #d8b2d8'
     elif float(value10) <= 2 and float(value10) > -1 and float(value7) > -2 and float(value5) > -2 and float(value7) < 2 and float(value5) < 2:
         return 'background-color: #CBEDFF'
@@ -1149,12 +1187,12 @@ def apply_breakout_highlight(row):
 
             if count < 5:
                 # Check if any document exists with specific time patterns
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}, 'yearHighChange': {'$lt': -15}}):
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}}):
                     styles['scrip'] = 'background-color: #FCCFD2'
                     return styles
             else:
                 # Check if any document exists with systemtime starting with '10:' or '11:'
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:2|10:3|10:4|10:50'}, 'yearHighChange': {'$lt': -15}}):
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:2|10:3|10:4|10:50'}}):
                     styles['scrip'] = 'background-color: #FCCFD2'
                     return styles
         except Exception:
