@@ -1184,10 +1184,15 @@ def apply_breakout_highlight(row):
         try:
             coll = dbcl['sell-morning-volume-breakout(Check-News)']
             count = coll.count_documents({'systemtime': {'$regex': '09:|10:00:00'}})
+            count10 = coll.count_documents({'systemtime': {'$regex': '10:0|10:1'}})
 
-            if count < 5:
+            if count < 5 and count10 < 5:
                 # Check if any document exists with specific time patterns
                 if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}}):
+                    styles['scrip'] = 'background-color: #FCCFD2'
+                    return styles
+            elif count < 5:
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}, 'yearLowChange': {'$gt': 50}}):
                     styles['scrip'] = 'background-color: #FCCFD2'
                     return styles
             else:
