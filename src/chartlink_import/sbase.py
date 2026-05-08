@@ -750,7 +750,8 @@ def process_url_volBreakout(url, processor, starttime, endtime, keyIndicator=Non
         
         # Navigate to the URL
         driver.goto(url, wait_until="networkidle")
-        time.sleep(5)
+        
+        time.sleep(10)
         
         # Remove the listener
         driver.remove_listener("response", handle_response)

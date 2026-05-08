@@ -480,6 +480,7 @@ column_order_p=["scrip",
 chartlink1=False
 chartlink0=False
 testLearning=False
+marketOnlyUpDown=False
 
  # Function to create cumulative data in 10-minute intervals
 def parse_timestamp(item):
@@ -1151,6 +1152,7 @@ def apply_breakout_highlight(row):
         ml_value = str(row.get('mlData', ''))
         system_time = str(row.get('systemtime'))
         f10ch = str(row.get('forecast_day_PCT10_change', ''))
+        pct_day_change = float(row.get('PCT_day_change', 0) or 0)
         scrip = row.get('scrip')
 
         # Default to existing mlData style
@@ -1160,6 +1162,7 @@ def apply_breakout_highlight(row):
         except Exception:
             existing = ''
 
+        
         # If systemtime contains '10:' and the scrip is present in the
         # 'crossed-day-high' collection, set mlData cell to pink.
         try:
@@ -1206,6 +1209,29 @@ def apply_breakout_highlight(row):
 
         
         try:
+            coll = dbcl['Breakout-Beey-2']
+            count = coll.count_documents({'systemtime': {'$regex': '09:2'}})
+            if count < 5:
+                if coll.find_one({'scrip': scrip}) and pct_day_change > 0.5:
+                    styles['systemtime'] = 'background-color: #009600'
+                    return styles
+        except Exception:
+            # fallback to existing style on any DB error
+            pass
+
+        try:
+            coll = dbcl['Breakout-Siill-2']
+            count = coll.count_documents({'systemtime': {'$regex': '09:2'}})
+            if count < 5:
+                if coll.find_one({'scrip': scrip}) and pct_day_change < -0.5:
+                    styles['systemtime'] = 'background-color: #e50e1d'
+                    return styles
+        except Exception:
+            # fallback to existing style on any DB error
+            pass
+        
+        
+        try:
             coll = dbcl['Breakout-Buy-after-10']
             count = coll.count_documents({'systemtime': {'$regex': '09:|10:00:00'}})
             if count < 5:
@@ -1222,7 +1248,7 @@ def apply_breakout_highlight(row):
             if count < 5:
                 if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}, 'yearHighChange': {'$lt': -15}}):
                     styles['systemtime'] = 'background-color: #e50e1d'
-                return styles
+                    return styles
         except Exception:
             # fallback to existing style on any DB error
             pass
