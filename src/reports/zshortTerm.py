@@ -30,6 +30,39 @@ def main():
     with col1:
         df = rb.getdf_raw('breakoutY2H')
         rb.render_rawdata(st, df,'breakoutY2H')
+
+
+    col0, col1, col2 = st.columns(3)
+    with col0:
+        df = rb.getdf_raw('breakoutW2HR')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['monthHighChange'] < -3) | (df['month3HighChange'] < -15)) &
+                ((df['monthHighChange'] > -5.5) | (df['month3HighChange'] < -20)) &
+                (df['week2LowChange'] < 5.5) &
+                (df['week2LowChange'] != df['weekLowChange']) &
+                ((df['yearLowChange'] > 0) | (df['month2HighChange'] > -10))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render_rawdata(st, filtered_df,'breakoutW2HR')
+    with col1:
+        df = rb.getdf_raw('breakoutW2HR')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['monthHighChange'] > -3.5) &
+                ((df['monthHighChange'] < -3) | (df['month3HighChange'] < -15))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render_rawdata(st, filtered_df,'breakoutW2HR')
+    with col2:
+        df = rb.getdf_raw('breakoutW2HR')
+        rb.render_rawdata(st, df,'breakoutW2HR')
+
+
     
 
     
