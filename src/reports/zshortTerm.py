@@ -25,16 +25,16 @@ def main():
 
     col0, col1 = st.columns(2)
     with col0:
-        df = rb.getdf_raw('breakoutYH')
-        rb.render_rawdata(st, df,'breakoutYH')
+        df = rb.getdf_sandlterm('breakoutYH')
+        rb.render_sandlterm_data(st, df,'breakoutYH', color='G')
     with col1:
-        df = rb.getdf_raw('breakoutY2H')
-        rb.render_rawdata(st, df,'breakoutY2H')
+        df = rb.getdf_sandlterm('breakoutY2H')
+        rb.render_sandlterm_data(st, df,'breakoutY2H', color='G')
 
 
     col0, col1, col2 = st.columns(3)
     with col0:
-        df = rb.getdf_raw('breakoutW2HR')
+        df = rb.getdf_sandlterm('breakoutW2HR')
         filtered_df = df
         try:
             filtered_df = df[
@@ -46,9 +46,9 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render_rawdata(st, filtered_df,'breakoutW2HR')
+        rb.render_sandlterm_data(st, filtered_df,'breakoutW2HR', color='G')
     with col1:
-        df = rb.getdf_raw('breakoutW2HR')
+        df = rb.getdf_sandlterm('breakoutW2HR')
         filtered_df = df
         try:
             filtered_df = df[
@@ -57,10 +57,10 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render_rawdata(st, filtered_df,'breakoutW2HR')
+        rb.render_sandlterm_data(st, filtered_df,'breakoutW2HR', color='G')
     with col2:
-        df = rb.getdf_raw('breakoutW2HR')
-        rb.render_rawdata(st, df,'breakoutW2HR')
+        df = rb.getdf_sandlterm('breakoutW2HR')
+        rb.render_sandlterm_data(st, df,'breakoutW2HR', color='G')
 
 
     

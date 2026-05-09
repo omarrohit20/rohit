@@ -164,6 +164,57 @@ column_config_ml={
     "filter3": "filter3"
 }
 
+column_config_sandlterm={
+    "scrip": "scrip",
+    "industry": "industry",
+    "date": "date",
+    "close": st.column_config.NumberColumn(
+            "close",
+            format="%.2f"),
+    "year5HighChange":  st.column_config.NumberColumn(
+            "year5HighChange",
+            format="%.2f"),
+    "year2HighChange":  st.column_config.NumberColumn(
+            "year2HighChange",
+            format="%.2f"),
+    "month3HighChange":  st.column_config.NumberColumn(
+            "month3HighChange",
+            format="%.2f"),
+    "monthHighChange":  st.column_config.NumberColumn(
+            "monthHighChange",
+            format="%.2f"),
+    "week2HighChange":  st.column_config.NumberColumn(
+            "week2HighChange",
+            format="%.2f"),
+    "weekHighChange":  st.column_config.NumberColumn(
+            "weekHighChange",
+            format="%.2f"),
+    "year5LowChange":  st.column_config.NumberColumn(
+            "year5LowChange",
+            format="%.2f"),    
+    "yearLowChange":  st.column_config.NumberColumn(
+            "yearLowChange",
+            format="%.2f"),
+    "month3LowChange":  st.column_config.NumberColumn(
+            "month3LowChange",
+            format="%.2f"),
+    "monthLowChange":  st.column_config.NumberColumn(
+            "monthLowChange",
+            format="%.2f"),
+    "week2LowChange":  st.column_config.NumberColumn(
+            "week2LowChange",
+            format="%.2f"),
+    "weekLowChange":  st.column_config.NumberColumn(
+            "weekLowChange",
+            format="%.2f"),
+    "PCT_day_change": st.column_config.NumberColumn(
+            "Dch",
+            format="%.2f"),
+    "PCT_change": st.column_config.NumberColumn(
+            "PCT_change",
+            format="%.2f"),
+}
+
 column_config_result={
     "scrip": "scrip",
     "PCT_day_change": st.column_config.NumberColumn(
@@ -378,6 +429,26 @@ column_order_ml=["scrip",
     "filter5",
     "filter",
     "filter3",
+]
+
+column_order_sandlterm=["scrip",
+    "date",
+    "industry",
+    "close",
+    "year5HighChange",
+    "year2HighChange",
+    "month3HighChange",
+    "monthHighChange",
+    "week2HighChange",
+    "weekHighChange",
+    "year5LowChange",
+    "yearLowChange",
+    "month3LowChange",
+    "monthLowChange",
+    "week2LowChange",
+    "weekLowChange",
+    "PCT_day_change",
+    "PCT_change",
 ]
 
 column_order_result=["scrip",
@@ -1644,7 +1715,7 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
 
 @st.cache_data(ttl=10)
-def getdf_raw(collection_name, chartink=False):
+def getdf_sandlterm(collection_name, chartink=False):
     collection = None
     if chartink:
         collection = dbcl[collection_name]
@@ -1690,6 +1761,7 @@ def getdf_raw(collection_name, chartink=False):
     #     print(f"")
     return df
 
-def render_rawdata(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default):
+def render_sandlterm_data(st, df, name, height=200, color='NA', column_order=column_order_sandlterm, column_conf=column_config_sandlterm):
+    df_styled = highlight_category_row(df, color=color)
     st.write("********"+ name + "********")
-    st.dataframe(df, height=height, use_container_width=True)
+    st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
