@@ -60,9 +60,69 @@ def main():
         rb.render_sandlterm_data(st, filtered_df,'breakoutW2HR', color='G')
     with col2:
         df = rb.getdf_sandlterm('breakoutW2HR')
-        rb.render_sandlterm_data(st, df,'breakoutW2HR', color='G')
+        rb.render_sandlterm_data(st, df,'breakoutW2HR', color='LG')
 
 
+    col0, col1, col2 = st.columns(3)
+    with col0:
+        df = rb.getdf_sandlterm('breakoutMHR')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['monthHighChange'] < -3) | (df['month3HighChange'] < -15)) &
+                ((df['monthHighChange'] > -5.5) | (df['month3HighChange'] < -20)) &
+                (df['week2LowChange'] < 5.5) &
+                (df['week2LowChange'] != df['weekLowChange']) &
+                ((df['yearLowChange'] > 0) | (df['month2HighChange'] > -10))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render_sandlterm_data(st, filtered_df,'breakoutMHR', color='LG')
+    with col1:
+        df = rb.getdf_sandlterm('breakoutMHR')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['year5HighChange'] < -30) &
+                (df['year2HighChange'] < -10) &
+                (df['month3HighChange'] < -5)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render_sandlterm_data(st, filtered_df,'breakoutMHR', color='LG')
+    with col2:
+        df = rb.getdf_sandlterm('breakoutMHR')
+        rb.render_sandlterm_data(st, df,'breakoutMHR', color='LG')
+
+    col0, col1, col2 = st.columns(3)
+    with col0:
+        df = rb.getdf_sandlterm('breakoutM2HR')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['monthHighChange'] < -3) | (df['month3HighChange'] < -15)) &
+                ((df['monthHighChange'] > -5.5) | (df['month3HighChange'] < -20)) &
+                (df['week2LowChange'] < 5.5) &
+                (df['week2LowChange'] != df['weekLowChange']) &
+                ((df['yearLowChange'] > 0) | (df['month2HighChange'] > -10))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render_sandlterm_data(st, filtered_df, 'breakoutM2HR', color='LG')
+    with col1:
+        df = rb.getdf_sandlterm('breakoutM2HR')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['monthHighChange'] > -3.5) &
+                ((df['monthHighChange'] < -3) | (df['month3HighChange'] < -15))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render_sandlterm_data(st, filtered_df, 'breakoutM2HR', color='LG')
+    with col2:
+        df = rb.getdf_sandlterm('breakoutM2HR')
+        rb.render_sandlterm_data(st, df, 'breakoutM2HR', color='LG')
     
 
     

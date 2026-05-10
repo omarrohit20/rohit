@@ -64,12 +64,14 @@ def data_from_regression(regression_data):
     data['close'] = regression_data['close']
     data['year5HighChange'] = regression_data['year5HighChange']
     data['year2HighChange'] = regression_data['year2HighChange']
+    data['yearHighChange'] = regression_data['yearHighChange']
     data['month3HighChange'] = regression_data['month3HighChange']
     data['month2HighChange'] = regression_data['month2HighChange']
     data['monthHighChange'] = regression_data['monthHighChange']
     data['week2HighChange'] = regression_data['week2HighChange']
     data['weekHighChange'] = regression_data['weekHighChange']
     data['year5LowChange'] = regression_data['year5LowChange']
+    data['year2LowChange'] = regression_data['year2LowChange']
     data['yearLowChange'] = regression_data['yearLowChange']
     data['month3LowChange'] = regression_data['month3LowChange']
     data['month2LowChange'] = regression_data['month2LowChange']
@@ -78,6 +80,12 @@ def data_from_regression(regression_data):
     data['weekLowChange'] = regression_data['weekLowChange']
     data['PCT_day_change'] = regression_data['PCT_day_change']
     data['PCT_change'] = regression_data['PCT_change']
+    data['forecast_day_PCT10_change'] = regression_data['forecast_day_PCT10_change']
+    data['forecast_day_PCT7_change'] = regression_data['forecast_day_PCT7_change']
+    data['forecast_day_PCT5_change'] = regression_data['forecast_day_PCT5_change']
+    data['forecast_day_PCT4_change'] = regression_data['forecast_day_PCT4_change']
+    data['forecast_day_PCT3_change'] = regression_data['forecast_day_PCT3_change']
+
     json_data = json.loads(json.dumps(data))
     return json_data
 
@@ -134,6 +142,19 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
         json_data = data_from_regression(regression_data)
         if ((db.breakoutW2HR.count_documents({'scrip': regression_data['scrip']})) < 1):
             db.breakoutW2HR.insert_one(json_data)
+    elif ((regression_data['month6LowChange'] > 0 or regression_data['year5LowChange'] > 0)
+        and regression_data['month3LowChange'] > 0
+        and regression_data['monthHighChange'] > -7
+        and regression_data['week2LowChange'] < 0
+        #and regression_data['week2HighChange'] < 0
+        #and regression_data['weekHighChange'] < 0
+        #and regression_data['weekHigh'] > regression_data['week2High']
+        and regression_data['PCT_day_change'] < -1.5
+        and regression_data['PCT_change'] < -1.5
+        ):
+        json_data = data_from_regression(regression_data)
+        if ((db.breakoutW2LR.count_documents({'scrip': regression_data['scrip']})) < 1):
+            db.breakoutW2LR.insert_one(json_data)
 
     if ((regression_data['month6HighChange'] < 0 or regression_data['year5HighChange'] < 0)
         and regression_data['yearLowChange'] > 10 and 10 < regression_data['month3LowChange'] and 9 < regression_data['month2LowChange'] and 9 < regression_data['monthLowChange']
@@ -174,6 +195,9 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
         if ((db.breakoutML.count_documents({'scrip': regression_data['scrip']})) < 1):
             json_data = data_from_regression(regression_data)
             db.breakoutML.insert_one(json_data)
+        if ((db.breakoutMLR.count_documents({'scrip': regression_data['scrip']})) < 1):
+            json_data = data_from_regression(regression_data)
+            db.breakoutMLR.insert_one(json_data)
         return True
 
 def insert_year5LowBreakoutMonth2High(regression_data):
@@ -216,6 +240,9 @@ def insert_year5LowBreakoutMonth2High(regression_data):
         if ((db.breakoutM2L.count_documents({'scrip': regression_data['scrip']})) < 1):
             json_data = data_from_regression(regression_data)
             db.breakoutM2L.insert_one(json_data)
+        if ((db.breakoutM2LR.count_documents({'scrip': regression_data['scrip']})) < 1):
+            json_data = data_from_regression(regression_data)
+            db.breakoutM2LR.insert_one(json_data)
         return True
 
 def insert_year2HighNearBreakout(regression_data):
