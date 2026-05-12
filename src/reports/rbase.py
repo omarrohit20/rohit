@@ -1224,6 +1224,8 @@ def apply_breakout_highlight(row):
         system_time = str(row.get('systemtime'))
         f10ch = str(row.get('forecast_day_PCT10_change', ''))
         pct_day_change = float(row.get('PCT_day_change', 0) or 0)
+        yearHighChange = float(row.get('yearHighChange', 0) or 0)
+        yearLowChange = float(row.get('yearLowChange', 0) or 0)
         scrip = row.get('scrip')
 
         # Default to existing mlData style
@@ -1282,10 +1284,21 @@ def apply_breakout_highlight(row):
         try:
             coll = dbcl['Breakout-Beey-2']
             count = coll.count_documents({'systemtime': {'$regex': '09:2'}})
-            if count < 5:
+            if count < 5 and (yearHighChange < -10 or yearHighChange > 0):
                 if coll.find_one({'scrip': scrip}) and pct_day_change > 0.5:
                     styles['systemtime'] = 'background-color: #009600'
                     return styles
+            if count > 12 and (yearHighChange < -10 or yearHighChange > 0):
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and abs(pct_day_change) > 1.9 and abs(pct_day_change) < 4:
+                    styles['systemtime'] = 'background-color: #009600'
+                    return styles
+            if (yearHighChange < -10 or yearHighChange > 0):
+                if coll.find_one({'scrip': scrip}) and pct_day_change > -0.3 and pct_day_change < 0.7:
+                        styles['systemtime'] = 'background-color: #009600'
+                        return styles
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and pct_day_change > -0.3 and pct_day_change < 0.7:
+                styles['systemtime'] = 'background-color: #009600'
+                return styles
         except Exception:
             # fallback to existing style on any DB error
             pass
@@ -1293,36 +1306,47 @@ def apply_breakout_highlight(row):
         try:
             coll = dbcl['Breakout-Siill-2']
             count = coll.count_documents({'systemtime': {'$regex': '09:2'}})
-            if count < 5:
+            if count < 5 and (yearLowChange > 10 or yearLowChange < 0):
                 if coll.find_one({'scrip': scrip}) and pct_day_change < -0.5:
                     styles['systemtime'] = 'background-color: #e50e1d'
                     return styles
-        except Exception:
-            # fallback to existing style on any DB error
-            pass
-        
-        
-        try:
-            coll = dbcl['Breakout-Buy-after-10']
-            count = coll.count_documents({'systemtime': {'$regex': '09:|10:00:00'}})
-            if count < 5:
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}, 'yearLowChange': {'$gt': 15}}):
-                    styles['systemtime'] = 'background-color: #009600'
-                    return styles
-        except Exception:
-            # fallback to existing style on any DB error
-            pass
-
-        try:
-            coll = dbcl['Breakout-Sell-after-10']
-            count = coll.count_documents({'systemtime': {'$regex': '09:|10:00:00'}})
-            if count < 5:
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}, 'yearHighChange': {'$lt': -15}}):
+            if count > 12 and (yearLowChange > 10 or yearLowChange < 0):
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and abs(pct_day_change) > 1.9 and abs(pct_day_change) < 4:
                     styles['systemtime'] = 'background-color: #e50e1d'
                     return styles
+            if (yearLowChange > 10 or yearLowChange < 0):
+                if coll.find_one({'scrip': scrip}) and pct_day_change > -0.7 and pct_day_change < 0.3:
+                        styles['systemtime'] = 'background-color: #e50e1d'
+                        return styles
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '1:'}}) and pct_day_change > -0.7 and pct_day_change < 0.3:
+                styles['systemtime'] = 'background-color: #e50e1d'
+                return styles
         except Exception:
             # fallback to existing style on any DB error
             pass
+        
+        
+        # try:
+        #     coll = dbcl['Breakout-Buy-after-10']
+        #     count = coll.count_documents({'systemtime': {'$regex': '09:|10:00:00'}})
+        #     if count < 5:
+        #         if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}, 'yearLowChange': {'$gt': 15}}):
+        #             styles['systemtime'] = 'background-color: #009600'
+        #             return styles
+        # except Exception:
+        #     # fallback to existing style on any DB error
+        #     pass
+        #
+        # try:
+        #     coll = dbcl['Breakout-Sell-after-10']
+        #     count = coll.count_documents({'systemtime': {'$regex': '09:|10:00:00'}})
+        #     if count < 5:
+        #         if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}, 'yearHighChange': {'$lt': -15}}):
+        #             styles['systemtime'] = 'background-color: #e50e1d'
+        #             return styles
+        # except Exception:
+        #     # fallback to existing style on any DB error
+        #     pass
 
 
         # try:
