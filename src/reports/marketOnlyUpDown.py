@@ -15,7 +15,8 @@ def main():
     # main title
     st.title('10:00 -11:15 AM : Confirm Trend with Crossed 2 Day Chart')
 
-    
+    rb.marketOnlyUpDown = True
+
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
         df = rb.getintersectdf('buy_all_processor', 'supertrend-morning-buy')

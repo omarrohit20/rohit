@@ -20,6 +20,9 @@ def main():
     # main title
     st.title('chartlink2')
 
+    # page-specific flags
+    rb.chartlink2 = True
+
     col0, col1, col2, col00, col3, col4 = st.columns(6)
     with col0:
         df = rb.getdf('supertrend-morning-buy')
@@ -1076,6 +1079,69 @@ def main():
         rb.render(st, filtered_df, 'Crossed-2Day-Low + sell-morning-volume-breakout(Trending)', column_order=rb.column_order_p, color='R')
 
 
+    col0, col1, col2, col3 = st.columns(4)
+    with col0:
+        df = rb.getdf('Breakout-Beey-2')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                        (df['PCT_day_change'] < 1) &
+                        (df['PCT_day_change'] > -1)
+                )
+                ]
+            filtered_df = filtered_df[
+                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Breakout-Beey-2 lowTail GT1.3', color='LG', applyBreakOut=True)
+    with col1:
+        df = rb.getdf('Breakout-Beey-2')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = filtered_df[
+                (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Breakout-Beey-2 highTail GT1.3', color='LG', applyBreakOut=True)
+    with col2:
+        df = rb.getdf('Breakout-Siill-2')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                        (df['PCT_day_change'] < 1) &
+                        (df['PCT_day_change'] > -1)
+                )
+            ]
+            filtered_df = filtered_df[
+                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Breakout-Siill-2 highTail GT1.3', color='LG', applyBreakOut=True)
+    with col3:
+        df = rb.getdf('Breakout-Siill-2')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = filtered_df[
+                (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Breakout-Siill-2 lowTail GT1.3', color='LG', applyBreakOut=True)
+
+
     col0, col1, col2, col3, col4, col5 = st.columns(6)
     with col0:
         df = rb.getdf('Breakout-Beey-2')
@@ -1106,6 +1172,9 @@ def main():
                     (df['PCT_day_change_pre2'] < -0.5)
                 )
                 ]
+            filtered_df = filtered_df[
+                    (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df,'Breakout-Beey-2 lowTail GT1.3', color='LG', applyBreakOut=True)
@@ -1116,8 +1185,12 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['PCT_day_change'] > -1) &
                 (df['highTail'] > 1.3) &
                 (df['lowTail'] < 1)
+            ]
+            filtered_df = filtered_df[
+                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
             ]
         except KeyError as e:
             print("")
@@ -1154,6 +1227,9 @@ def main():
                     (df['PCT_day_change_pre2'] < 1.5)
                 )
             ]
+            filtered_df = filtered_df[
+                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+            ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Breakout-Siill-2 highTail GT1.3', color='LG', applyBreakOut=True)
@@ -1164,8 +1240,12 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['PCT_day_change'] < 1) &
                 (df['lowTail'] > 1.3) &
                 (df['highTail'] < 1)
+            ]
+            filtered_df = filtered_df[
+                (df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
             ]
         except KeyError as e:
             print("")

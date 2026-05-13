@@ -550,6 +550,7 @@ column_order_p=["scrip",
 
 chartlink1=False
 chartlink0=False
+chartlink2=False
 testLearning=False
 marketOnlyUpDown=False
 
@@ -1222,7 +1223,9 @@ def apply_breakout_highlight(row):
 
         ml_value = str(row.get('mlData', ''))
         system_time = str(row.get('systemtime'))
-        f10ch = str(row.get('forecast_day_PCT10_change', ''))
+        f10ch = float(row.get('forecast_day_PCT10_change', 0) or 0)
+        f7ch = float(row.get('forecast_day_PCT7_change', 0) or 0)
+        f5ch = float(row.get('forecast_day_PCT5_change', 0) or 0)
         pct_day_change = float(row.get('PCT_day_change', 0) or 0)
         yearHighChange = float(row.get('yearHighChange', 0) or 0)
         yearLowChange = float(row.get('yearLowChange', 0) or 0)
@@ -1299,6 +1302,9 @@ def apply_breakout_highlight(row):
             if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and pct_day_change > -0.3 and pct_day_change < 0.7:
                 styles['systemtime'] = 'background-color: #009600'
                 return styles
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and pct_day_change < -4 and f5ch < -6:
+                styles['systemtime'] = 'background-color: #009600'
+                return styles
         except Exception:
             # fallback to existing style on any DB error
             pass
@@ -1319,6 +1325,9 @@ def apply_breakout_highlight(row):
                         styles['systemtime'] = 'background-color: #e50e1d'
                         return styles
             if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '1:'}}) and pct_day_change > -0.7 and pct_day_change < 0.3:
+                styles['systemtime'] = 'background-color: #e50e1d'
+                return styles
+            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and pct_day_change > 4 and f5ch > 6:
                 styles['systemtime'] = 'background-color: #e50e1d'
                 return styles
         except Exception:
@@ -1734,7 +1743,7 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
                 df_styled = df_styled.apply(apply_highlight_column, axis=1)
     
         
-        if(chartlink0 or chartlink1 or testLearning or applyBreakOut) and (noColourFilter == False) and color =='LG':
+        if(chartlink0 or chartlink1 or chartlink2 or applyBreakOut) and (noColourFilter == False) and color =='LG':
             df_styled = df_styled.apply(apply_breakout_highlight, axis=1)
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
 
