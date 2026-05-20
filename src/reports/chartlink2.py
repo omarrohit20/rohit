@@ -1098,7 +1098,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout-Beey-2 lowTail GT1.3', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df, 'Breakout-Beey-2 0.9to1.7', color='LG', applyBreakOut=True)
     with col1:
         df = rb.getdf('Breakout-Beey-2')
         expected_columns = list(set(df.columns))
@@ -1111,7 +1111,7 @@ def main():
                         (df['PCT_day_change'] > -1) &
                         (
                                 (df['PCT_day_change_pre2'] > 0.1) |
-                                ((df['PCT_day_change'] > 0) & (df['PCT_day_change_pre1'] > 0.1)) |
+                                ((df['PCT_day_change'] > 0) & (df['PCT_day_change_pre1'] >= -0.1)) |
                                 (((df['PCT_day_change_pre1'] + df['PCT_day_change_pre2']) < -4) & (
                                     ~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)))
                         )
@@ -1122,7 +1122,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout-Beey-2 lowTail GT1.3', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df, 'Breakout-Beey-2 -1to1', color='LG', applyBreakOut=True)
     with col2:
         df = rb.getdf('Breakout-Beey-2')
         expected_columns = list(set(df.columns))
@@ -1134,7 +1134,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout-Beey-2 highTail GT1.3', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df, 'Breakout-Beey-2 after 10', color='LG', applyBreakOut=True)
     with col3:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))
@@ -1153,7 +1153,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout-Siill-2 highTail GT1.3', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df, 'Breakout-Siill-2 -1.7to-0.9', color='LG', applyBreakOut=True)
     with col4:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))
@@ -1166,7 +1166,7 @@ def main():
                         (df['PCT_day_change'] > -1) &
                         (
                                 (df['PCT_day_change_pre2'] < -0.1) |
-                                ((df['PCT_day_change'] < 0) & (df['PCT_day_change_pre1'] < -0.1)) |
+                                ((df['PCT_day_change'] < 0) & (df['PCT_day_change_pre1'] <= 0.1)) |
                                 (((df['PCT_day_change_pre1'] + df['PCT_day_change_pre2']) > 4) & (
                                     ~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)))
                         )
@@ -1177,7 +1177,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout-Siill-2 highTail GT1.3', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df, 'Breakout-Siill-2 -1to1', color='LG', applyBreakOut=True)
     with col5:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))
@@ -1189,7 +1189,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout-Siill-2 lowTail GT1.3', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df, 'Breakout-Siill-2 after10', color='LG', applyBreakOut=True)
 
 
     col0, col1, col2, col3, col4, col5 = st.columns(6)

@@ -21,7 +21,7 @@ def main():
     # main title
     st.title('ShortTerm')
 
-    rb.testLearning = True
+    rb.shortTerm = True
 
     col0, col1 = st.columns(2)
     with col0:

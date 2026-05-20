@@ -553,6 +553,7 @@ chartlink0=False
 chartlink2=False
 testLearning=False
 marketOnlyUpDown=False
+zshortTerm=False
 
  # Function to create cumulative data in 10-minute intervals
 def parse_timestamp(item):
@@ -729,9 +730,9 @@ def highlight_category_column(value, systemtime, f10ch):
             return 'background-color: #3EB9FB'
         elif "0@@SUPER" in value and "2@" in value:
             return 'background-color: #3EB9FB'
-        elif "0@@CROSSED" in value and "1@" in value:
+        elif "0@@CROSSED" in value and "1@" in value and (float(f10ch) > -1):
             return 'background-color: #CBEDFF'
-        elif "0@@SUPER" in value and "1@" in value:
+        elif "0@@SUPER" in value and "1@" in value and (float(f10ch) > -1):
             return 'background-color: #CBEDFF'
         elif "0@@CROSSED" in value and "6@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
             return 'background-color: #fff4cf'
@@ -759,9 +760,9 @@ def highlight_category_column(value, systemtime, f10ch):
             return 'background-color: #3EB9FB'
         elif "0@@SUPER" in value and "2@" in value:
             return 'background-color: #3EB9FB'
-        elif "0@@CROSSED" in value and "1@" in value:
+        elif "0@@CROSSED" in value and "1@" in value and (float(f10ch) < 1):
             return 'background-color: #CBEDFF'
-        elif "0@@SUPER" in value and "1@" in value:
+        elif "0@@SUPER" in value and "1@" in value and (float(f10ch) < 1):
             return 'background-color: #CBEDFF'
         elif "0@@CROSSED" in value and "6@" in value and "CROSSED1DayL@GT6" not in value and "CROSSED1DayH@LT-6" not in value:
             return 'background-color: #fff4cf'
@@ -1231,6 +1232,8 @@ def apply_breakout_highlight(row):
         pct_day_change_pre2 = float(row.get('PCT_day_change_pre2', 0) or 0)
         yearHighChange = float(row.get('yearHighChange', 0) or 0)
         yearLowChange = float(row.get('yearLowChange', 0) or 0)
+        week2HighChange = float(row.get('week2HighChange', 0) or 0)
+        week2LowChange = float(row.get('week2LowChange', 0) or 0)
         scrip = row.get('scrip')
 
         # Default to existing mlData style
@@ -1289,18 +1292,21 @@ def apply_breakout_highlight(row):
         try:
             coll = dbcl['Breakout-Beey-2']
             count = coll.count_documents({'systemtime': {'$regex': '09:2'}})
-            if count < 5 and (yearHighChange < -10 or yearHighChange > 0):
+            if count < 5 and (yearHighChange < -10 or yearHighChange > 0 or week2HighChange > 0):
                 if coll.find_one({'scrip': scrip}) and pct_day_change > 0.5:
                     styles['systemtime'] = 'background-color: #009600'
                     return styles
-            if count > 12 and (yearHighChange < -10 or yearHighChange > 0):
+            if count > 12 and (yearHighChange < -10 or yearHighChange > 0 or week2HighChange > 0):
                 if (coll.count_documents({'systemtime': {'$regex': '09:2'}, 'PCT_day_change': {'$gt': 1.8}}) < 4) and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and (pct_day_change) > 1.9 and (pct_day_change) < 4:
+                    styles['systemtime'] = 'background-color: #009600'
+                    return styles
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex':'09:4|09:5|10:|11:'}}) and (pct_day_change) > 1.9 and (pct_day_change) < 4:
                     styles['systemtime'] = 'background-color: #009600'
                     return styles
                 if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and (pct_day_change) < -1.9 and (pct_day_change) > -4:
                     styles['systemtime'] = 'background-color: #009600'
                     return styles
-            if (yearHighChange < -10 or yearHighChange > 0):
+            if (yearHighChange < -10 or yearHighChange > 0 or week2HighChange > 0):
                 if coll.find_one({'scrip': scrip}) and pct_day_change > -0.3 and pct_day_change < 0.7:
                     if (pct_day_change_pre2 > 0.1) or ((pct_day_change > 0) and (pct_day_change_pre1 > 0.1)) or (((pct_day_change_pre1 + pct_day_change_pre2) < -4) and ('09:2' not in system_time)):
                         styles['systemtime'] = 'background-color: #009600'
@@ -1318,18 +1324,24 @@ def apply_breakout_highlight(row):
         try:
             coll = dbcl['Breakout-Siill-2']
             count = coll.count_documents({'systemtime': {'$regex': '09:2'}})
-            if count < 5 and (yearLowChange > 10 or yearLowChange < 0):
+            if count < 5 and (yearLowChange > 10 or yearLowChange < 0 or week2LowChange < 0):
                 if coll.find_one({'scrip': scrip}) and pct_day_change < -0.5:
                     styles['systemtime'] = 'background-color: #e50e1d'
                     return styles
-            if count > 12 and (yearLowChange > 10 or yearLowChange < 0):
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and (pct_day_change) > 1.9 and (pct_day_change) < 4:
+            if count > 12 and (yearLowChange > 10 or yearLowChange < 0 or week2LowChange < 0):
+                if (coll.count_documents({'systemtime': {'$regex': '09:2'}, 'PCT_day_change': {'$lt': -1.8}}) < 4) and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and (pct_day_change) < -1.9 and (pct_day_change) > -4:
                     styles['systemtime'] = 'background-color: #e50e1d'
                     return styles
-                if (coll.count_documents({'systemtime': {'$regex': '09:2'}, 'PCT_day_change': {'$lt': -1.8}}) < 4) and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and (pct_day_change) < -1.9 and abs(pct_day_change) > -4:
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex':'09:4|09:5'}}) and (pct_day_change) < -1.9 and (pct_day_change) > -4:
                     styles['systemtime'] = 'background-color: #e50e1d'
                     return styles
-            if (yearLowChange > 10 or yearLowChange < 0):
+                if (coll.count_documents({'systemtime': {'$regex': '09:2'}, 'PCT_day_change': {'$gt': 1.8}}) < 5) and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and (pct_day_change) > 1.9 and (pct_day_change) < 4:
+                    styles['systemtime'] = 'background-color: #e50e1d'
+                    return styles
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex':'09:4|09:5'}}) and (pct_day_change) > 1.9 and (pct_day_change) < 4:
+                    styles['systemtime'] = 'background-color: #e50e1d'
+                    return styles
+            if (yearLowChange > 10 or yearLowChange < 0 or week2LowChange < 0):
                 if coll.find_one({'scrip': scrip}) and pct_day_change > -0.7 and pct_day_change < 0.3:
                     if (pct_day_change_pre2 < -0.1) or ((pct_day_change < 0) and (pct_day_change_pre1 < -0.1)) or (((pct_day_change_pre1 + pct_day_change_pre2) > 4) and ('09:2' not in system_time)):
                         styles['systemtime'] = 'background-color: #e50e1d'

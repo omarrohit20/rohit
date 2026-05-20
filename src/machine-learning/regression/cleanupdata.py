@@ -18,6 +18,9 @@ copy_collection(db["breakoutM2L"], dbchartlink["breakoutM2L"])
 copy_collection(db["breakoutMHR"], dbchartlink["breakoutMHR"])
 copy_collection(db["breakoutM2HR"], dbchartlink["breakoutM2HR"])
 copy_collection(db["breakoutW2HR"], dbchartlink["breakoutW2HR"])
+copy_collection(db["breakoutMHR"], dbchartlink["breakoutMHL"])
+copy_collection(db["breakoutM2HR"], dbchartlink["breakoutM2HL"])
+copy_collection(db["breakoutW2HR"], dbchartlink["breakoutW2HL"])
 
 # Close the MongoDB connection
 connection.close()
