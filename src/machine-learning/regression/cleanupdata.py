@@ -11,16 +11,19 @@ def copy_collection(source_collection, target_collection):
     target_collection.insert_many(documents)  # Insert into target collection
     print("Collection copied successfully!")
 
+
 copy_collection(db["breakoutMH"], dbchartlink["breakoutMH"])
 copy_collection(db["breakoutM2H"], dbchartlink["breakoutM2H"])
 copy_collection(db["breakoutML"], dbchartlink["breakoutML"])
 copy_collection(db["breakoutM2L"], dbchartlink["breakoutM2L"])
+
+copy_collection(db["breakoutW2HR"], dbchartlink["breakoutW2HR"])
 copy_collection(db["breakoutMHR"], dbchartlink["breakoutMHR"])
 copy_collection(db["breakoutM2HR"], dbchartlink["breakoutM2HR"])
-copy_collection(db["breakoutW2HR"], dbchartlink["breakoutW2HR"])
-copy_collection(db["breakoutMHR"], dbchartlink["breakoutMHL"])
-copy_collection(db["breakoutM2HR"], dbchartlink["breakoutM2HL"])
-copy_collection(db["breakoutW2HR"], dbchartlink["breakoutW2HL"])
+copy_collection(db["breakoutW2LR"], dbchartlink["breakoutW2LR"])
+copy_collection(db["breakoutMLR"], dbchartlink["breakoutMLR"])
+copy_collection(db["breakoutM2LR"], dbchartlink["breakoutM2LR"])
+
 
 # Close the MongoDB connection
 connection.close()
