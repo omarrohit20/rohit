@@ -285,10 +285,35 @@ def main():
         #st.divider()
      
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col10, col3, col4, col40 = st.columns(6)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
         rb.render(st, df, 'morning-volume-breakout-buy ##############', color='G', height=300)
+    with col10:
+        df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['yearLowChange'] > 15) &
+                (df['month3LowChange'] > 15) &
+                (df['PCT_change'] > 1.8) &
+                (df['PCT_day_change'] > 0.5) &
+                (df['PCT_day_change_pre1'] > -1) &
+                (df['PCT_day_change_pre1'] < 0.5) &
+                (df['PCT_day_change_pre2'] < -0.7) &
+                (df['PCT_day_change_pre2'] > -2)
+                #((df['PCT_day_change_pre1'] > 0) | (df['PCT_day_change_pre2'] > 0)) &
+                #(~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                #(~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=300)
+        else:
+            rb.render(st, empty_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=300)
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
@@ -332,9 +357,34 @@ def main():
             rb.render(st, filtered_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=300)
         else:
             rb.render(st, empty_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=300)
+    with col40:
+        df = rb.getdf('morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                #(df['yearHighChange'] < -15) &
+                #(df['month3HighChange'] < -15) &
+                (df['PCT_change'] < -1.8) &
+                (df['PCT_day_change'] < -0.5) &
+                (df['PCT_day_change_pre1'] < 1) &
+                (df['PCT_day_change_pre1'] > -0.5) &
+                (df['PCT_day_change_pre2'] > 0.7) &
+                (df['PCT_day_change_pre2'] < 2)
+                #((df['PCT_day_change_pre1'] > 0) | (df['PCT_day_change_pre2'] > 0)) &
+                #(~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                #(~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=300)
+        else:
+            rb.render(st, empty_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=300)
     
 
-    col1, col3 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -355,6 +405,20 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'LastDayGT1:TodayNotDown(Aftert09:45-IfGT1.3(+))', color='LG', height=150)
+    with col2:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['month3HighChange'] < 1) & (df['monthHighChange'] < 1)) &
+                (df['forecast_day_PCT10_change'] > 1) &
+                (df['forecast_day_PCT10_change'] < 10) &
+                ((df['PCT_day_change_pre1'] < -1)) &
+                (df['PCT_day_change'] > 0.3)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'month3HighChangeLT1', color='LG', height=150)
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -376,6 +440,21 @@ def main():
             print("")
 
         rb.render(st, filtered_df, 'LastDayLT-1:TodayNotUp(Aftert09:45-IfLT-1.3(-))', color='LG', height=150)
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['month3LowChange'] > -1) & (df['monthLowChange'] > -1)) &
+                (df['forecast_day_PCT10_change'] < -1) &
+                (df['forecast_day_PCT10_change'] > -10) &
+                ((df['PCT_day_change_pre1'] > 1)) &
+                (df['PCT_day_change'] < -0.3)
+                ]
+        except KeyError as e:
+            print("")
+
+        rb.render(st, filtered_df, 'month3LowChangeGT-1', color='LG', height=150)
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -1298,7 +1377,7 @@ def main():
     with col2:
         df = rb.getdf('breakout-morning-buy')
         if len(df_at_9) < 4:
-            rb.render(st, df, 'breakout-morning-buy', color='G')
+            rb.render(st, df, 'breakout-morning-buy', color='LG')
         else: 
             rb.render(st, df, 'breakout-morning-buy : enable MACD-slow-RSI', color='LG')
     with col3:
@@ -1321,7 +1400,7 @@ def main():
     with col4:
         df = rb.getdf('breakout-morning-sell')
         if len(df_at_9) < 4:
-            rb.render(st, df, 'breakout-morning-sell', color='R')
+            rb.render(st, df, 'breakout-morning-sell', color='LG')
         else:
             rb.render(st, df, 'breakout-morning-sell : enable MACD-slow-RSI')
 
@@ -1332,9 +1411,9 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         if len(df) >= 1:
-            rb.render(st, filtered_df, 'UpNow Supertrend MorningDown Buys', color='G')
+            rb.render(st, filtered_df, 'UpNow Supertrend MorningDown Buys', color='LG')
         else:
-            rb.render(st, empty_df, 'UpNow Supertrend MorningDown Buys', color='G')
+            rb.render(st, empty_df, 'UpNow Supertrend MorningDown Buys', color='LG')
     with col2:
         df = rb.getdf('buy-check-morning-down-breakup-01')
         filtered_df = df
@@ -1367,9 +1446,9 @@ def main():
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         if len(df) >= 1:
-            rb.render(st, filtered_df, 'DownNow Supertrend  Morningup Sells', color='R')
+            rb.render(st, filtered_df, 'DownNow Supertrend  Morningup Sells', color='LG')
         else:
-            rb.render(st, empty_df, 'DownNow Supertrend Morningup Sells', color='R')
+            rb.render(st, empty_df, 'DownNow Supertrend Morningup Sells', color='LG')
     with col5:
         df = rb.getdf('sell-check-morning-up-breakdown-01')
         filtered_df = df

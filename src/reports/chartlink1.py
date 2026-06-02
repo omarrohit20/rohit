@@ -898,7 +898,7 @@ def main():
             rb.render(st, empty_df, 'SellAllProcessor + week2lh-not-reached', color='LG')
 
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2 = st.columns(2)
     with col1:
         df = rb.getdf('buy_all_processor')
         expected_columns = list(set(df.columns))
@@ -917,48 +917,24 @@ def main():
                 (~df['processor'].str.contains('supertrend')) &
                 (~df['processor'].str.contains('09_30:checkChartBuy')) &
                 (~df['processor'].str.contains('Sell-morningDown')) &
-                #(~df['processor'].str.contains('buy-breakout')) &
+                ((df['PCT_day_change_pre1'] > 0.1) | (df['PCT_day_change_pre2'] > 0.1) | (~df['processor'].str.contains('buy-breakout'))) &
                 (~df['processor'].str.contains('Breakout-Buy-after-10')) &
                 (~df['processor'].str.contains('1-Bbuyy-morningUp')) &
                 # (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 # (~df['systemtime'].str.contains('10:00', case=False, regex=True, na=False)) &
                 # (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
                 ]
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'BuyAllProcessor + week2lh-not-reached', color='LG', applyBreakOut=True)
+            rb.render(st, filtered_df, 'BuyAllProcessor', color='LG', applyBreakOut=True)
         else:
-            rb.render(st, empty_df, 'BuyAllProcessor + week2lh-not-reached', color='LG', applyBreakOut=True)
+            rb.render(st, empty_df, 'BuyAllProcessor', color='LG', applyBreakOut=True)
     with col2:
-        df = rb.getdf('buy_all_processor')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                # ((df['forecast_day_PCT10_change'] >=2) | (df['forecast_day_PCT10_change'] <= -6)) &
-                (~df['processor'].str.contains('cash-buy-morning-volume')) &
-                (~df['processor'].str.contains('Check-News')) &
-                (~df['processor'].str.contains('supertrend')) &
-                (~df['processor'].str.contains('09_30:checkChartBuy')) &
-                (~df['processor'].str.contains('Sell-morningDown')) &
-                #(~df['processor'].str.contains('buy-breakout')) &
-                (~df['processor'].str.contains('Breakout-Buy-after-10')) &
-                (~df['processor'].str.contains('1-Bbuyy-morningUp')) &
-                # (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                # (~df['systemtime'].str.contains('10:00', case=False, regex=True, na=False)) &
-                # (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'BuyAllProcessor + week2lh-not-reached', color='LG', applyBreakOut=True)
-        else:
-            rb.render(st, empty_df, 'BuyAllProcessor + week2lh-not-reached', color='LG', applyBreakOut=True)
-    with col3:
         df = rb.getdf('sell_all_processor')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -976,48 +952,23 @@ def main():
                 (~df['processor'].str.contains('supertrend')) &
                 (~df['processor'].str.contains('09_30:checkChartSell')) &
                 (~df['processor'].str.contains('Buy-morningup')) &
-                #(~df['processor'].str.contains('sell-breakout')) &
+                ((df['PCT_day_change_pre1'] < -0.1) | (df['PCT_day_change_pre2'] < -0.1) | (~df['processor'].str.contains('sell-breakout'))) &
                 (~df['processor'].str.contains('Breakout-Sell-after-10')) &
                 (~df['processor'].str.contains('1-Sselll-morningDown')) &
                 # (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 # (~df['systemtime'].str.contains('10:00', case=False, regex=True, na=False)) &
                 # (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
                 ]
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'SellAllProcessor + week2lh-not-reached', color='LG', applyBreakOut=True)
+            rb.render(st, filtered_df, 'SellAllProcessor', color='LG', applyBreakOut=True)
         else:
-            rb.render(st, empty_df, 'SellAllProcessor + week2lh-not-reached', color='LG')
-    with col4:
-        df = rb.getdf('sell_all_processor')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                # ((df['forecast_day_PCT10_change'] <= -2) | (df['forecast_day_PCT10_change'] > 6)) &
-                (~df['processor'].str.contains('cash-sell-morning-volume')) &
-                (~df['processor'].str.contains('Check-News')) &
-                (~df['processor'].str.contains('supertrend')) &
-                (~df['processor'].str.contains('09_30:checkChartSell')) &
-                (~df['processor'].str.contains('Buy-morningup')) &
-                #(~df['processor'].str.contains('sell-breakout')) &
-                (~df['processor'].str.contains('Breakout-Sell-after-10')) &
-                (~df['processor'].str.contains('1-Sselll-morningDown')) &
-                # (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                # (~df['systemtime'].str.contains('10:00', case=False, regex=True, na=False)) &
-                # (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'SellAllProcessor + week2lh-not-reached', color='LG', applyBreakOut=True)
-        else:
-            rb.render(st, empty_df, 'SellAllProcessor + week2lh-not-reached', color='LG')
-
+            rb.render(st, empty_df, 'SellAllProcessor', color='LG')
 
 if __name__ == '__main__':
     main()
