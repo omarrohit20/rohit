@@ -51,84 +51,6 @@ def main():
         pass
 
     
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        df = rb.getdf('morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
-                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
-                (df['filter5'].str.contains('DOJI', case=False, regex=True, na=False)) &
-                (df['lowTail'] < 1) &
-                (df['PCT_day_change_pre2'] > -0.5) &
-                (df['week2HighChange'] >= -2) &
-                (df['week2HighChange'] <= 5) &
-                (df['PCT_day_change_pre1'] >= 1) &
-                (df['PCT_day_change_pre1'] <= 3.5) &
-                (df['year5HighChange'] < -10) &
-                ((df['PCT_day_change_pre1'] >= 1.7) | (df['PCT_day_change_pre2'] >= 1.7)) &
-                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'DOJI Breakout Buy', color='LG', height=150)
-    with col2:
-        df = rb.getdf('morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
-                (df['yearLowChange'] > 15) &
-                #(df['yearHighChange'] > -35) &
-                (df['lowTail'] < 1) &
-                (df['PCT_day_change_pre2'] >= 2) &
-                (df['PCT_day_change_pre2'] <= 4) &
-                (df['PCT_day_change'] >= -2) &
-                (df['PCT_day_change'] <= 0)
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Buy', color='LG', height=150)
-    with col3:
-        df = rb.getdf('morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
-                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
-                (df['filter5'].str.contains('DOJI', case=False, regex=True, na=False)) &
-                (df['PCT_day_change_pre2'] >= -1) &
-                (df['PCT_day_change_pre2'] <= 0.5) &
-                (df['highTail'] < 1) &
-                (df['PCT_day_change_pre1'] >= -3.5) &
-                (df['PCT_day_change_pre1'] <= -1.5) &
-                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                (df['week2LowChange'] >= -5) &
-                (df['week2LowChange'] <= 2) &
-                (df['monthHighChange'] > -10)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'DOJI Breakout Sell', color='LG', height=150)
-    with col4:
-        df = rb.getdf('morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
-                (df['yearHighChange'] < -15) &
-                (df['highTail'] < 1) &
-                (df['PCT_day_change_pre2'] >= -4) &
-                (df['PCT_day_change_pre2'] <= -2) &
-                (df['PCT_day_change'] >= 0) &
-                (df['PCT_day_change'] <= 2)
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Sell', color='LG', height=150)
-
-
     col2, col4 = st.columns(2)
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
@@ -154,9 +76,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_9) < 5:
-            rb.render(st, filtered_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=300)
+            rb.render(st, filtered_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=200)
         else:
-            rb.render(st, empty_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=300)
+            rb.render(st, empty_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=200)
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
@@ -181,9 +103,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_9) < 5:
-            rb.render(st, filtered_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=300)
+            rb.render(st, filtered_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=200)
         else:
-            rb.render(st, empty_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=300)
+            rb.render(st, empty_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=200)
   
 
     col1, col2, col3, col4 = st.columns(4)
@@ -276,6 +198,123 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'SQROFFAt10:LastDayDownTodayLT-0.3:Consolidation-CheckRecommendations', color='LG')
+
+
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    with col1:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                #(df['lowTail'] >= 1) &
+                (df['PCT_day_change_pre1'] >= 1.5) &
+                (df['PCT_day_change_pre1'] <= 4) &
+                (df['PCT_day_change_pre2'] <= -1) &
+                (df['PCT_day_change_pre2'] >= -4) &
+                (df['PCT_day_change'] >= -0.7) &
+                (df['PCT_day_change'] <= 0.7)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DOJI Breakout Buy - Pre2LT0', color='LG', height=150)
+    with col2:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
+                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
+                (df['filter5'].str.contains('DOJI', case=False, regex=True, na=False)) &
+                (df['PCT_day_change_pre2'] <= 1) &
+                (df['PCT_day_change_pre2'] > -0.5) &
+                (df['lowTail'] < 1) &
+                (df['PCT_day_change_pre1'] >= 1.5) &
+                (df['PCT_day_change_pre1'] <= 3.5) &
+                (df['week2HighChange'] >= -2) &
+                (df['week2HighChange'] <= 5) &
+                (df['year5HighChange'] < -10) &
+                ((df['PCT_day_change'] >= 0.2) | (df['PCT_day_change_pre1'] >= 1.7)) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DOJI Breakout Buy', color='LG', height=150)
+    with col3:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
+                (df['yearLowChange'] > 15) &
+                #(df['yearHighChange'] > -35) &
+                (df['lowTail'] < 1) &
+                (df['PCT_day_change_pre1'] >= -1) &
+                (df['PCT_day_change_pre1'] <= 1) &
+                (df['PCT_day_change_pre2'] >= 2) &
+                (df['PCT_day_change_pre2'] <= 4) &
+                (df['PCT_day_change'] >= -1) &
+                (df['PCT_day_change'] <= 0)
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Buy', color='LG', height=150)
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                #(df['highTail'] >= 1) &
+                (df['PCT_day_change_pre1'] >= -4) &
+                (df['PCT_day_change_pre1'] <= -1.5) &
+                (df['PCT_day_change_pre2'] <= 4) &
+                (df['PCT_day_change_pre2'] >= 1) &
+                (df['PCT_day_change'] >= -0.7) &
+                (df['PCT_day_change'] <= 0.7)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DOJI Breakout Sell - Pre2GT0', color='LG', height=150)
+    with col5:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
+                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
+                (df['filter5'].str.contains('DOJI', case=False, regex=True, na=False)) &
+                (df['PCT_day_change_pre2'] >= -1) &
+                (df['PCT_day_change_pre2'] <= 0.5) &
+                (df['highTail'] < 1) &
+                (df['PCT_day_change_pre1'] >= -3.5) &
+                (df['PCT_day_change_pre1'] <= -1) &
+                (df['week2LowChange'] >= -5) &
+                (df['week2LowChange'] <= 2) &
+                (df['monthHighChange'] > -10) &
+                ((df['PCT_day_change'] <= -0.2) | (df['PCT_day_change_pre1'] <= -1.7)) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DOJI Breakout Sell', color='LG', height=150)
+    with col6:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
+                (df['yearHighChange'] < -15) &
+                (df['highTail'] < 1) &
+                (df['PCT_day_change_pre2'] >= -4) &
+                (df['PCT_day_change_pre2'] <= -2) &
+                (df['PCT_day_change_pre1'] >= -1) &
+                (df['PCT_day_change_pre1'] <= 1) &
+                (df['PCT_day_change'] >= 0) &
+                (df['PCT_day_change'] <= 1)
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Sell', color='LG', height=150)
+    
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:

@@ -285,35 +285,10 @@ def main():
         #st.divider()
      
 
-    col1, col2, col10, col3, col4, col40 = st.columns(6)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
         rb.render(st, df, 'morning-volume-breakout-buy ##############', color='G', height=300)
-    with col10:
-        df = rb.getdf('morning-volume-breakout-buy')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['yearLowChange'] > 15) &
-                (df['month3LowChange'] > 15) &
-                (df['PCT_change'] > 1.8) &
-                (df['PCT_day_change'] > 0.5) &
-                (df['PCT_day_change_pre1'] > -1) &
-                (df['PCT_day_change_pre1'] < 0.5) &
-                (df['PCT_day_change_pre2'] < -0.7) &
-                (df['PCT_day_change_pre2'] > -2)
-                #((df['PCT_day_change_pre1'] > 0) | (df['PCT_day_change_pre2'] > 0)) &
-                #(~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                #(~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=300)
-        else:
-            rb.render(st, empty_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=300)
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
@@ -357,7 +332,51 @@ def main():
             rb.render(st, filtered_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=300)
         else:
             rb.render(st, empty_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=300)
-    with col40:
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['yearLowChange'] > 15) &
+                (df['month3LowChange'] > 15) &
+                (df['PCT_change'] > 1.8) &
+                (df['PCT_day_change'] > 0.5) &
+                (df['PCT_day_change_pre1'] > -1) &
+                (df['PCT_day_change_pre1'] < 0.5) &
+                (df['PCT_day_change_pre2'] < -0.7) &
+                (df['PCT_day_change_pre2'] > -2)
+                #((df['PCT_day_change_pre1'] > 0) | (df['PCT_day_change_pre2'] > 0)) &
+                #(~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                #(~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'MorningDown:UpAfterDown', color='LG', height=300)
+        else:
+            rb.render(st, empty_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=300)
+    with col2:
+        df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['lowTail'] >=2.5) &
+                (df['PCT_day_change'] < 0.3) &
+                (df['weekHighChange'] < 0)
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'MorningDown:lowTail', color='LG', height=300)
+        else:
+            rb.render(st, empty_df, 'MorningDown:lowTail', color='LG', height=300)
+    with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -379,11 +398,27 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=300)
+            rb.render(st, filtered_df, 'MorningUp:DownInUptrend', color='LG', height=300)
         else:
-            rb.render(st, empty_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=300)
+            rb.render(st, empty_df, 'MorningUp:DownInUptrend', color='LG', height=300)
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['highTail'] >=2.5) &
+                (df['PCT_day_change'] > -0.3) &
+                (df['weekLowChange'] > 0)
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'MorningUp:highTail', color='LG', height=200)
+        else:
+            rb.render(st, empty_df, 'MorningUp:highTail', color='LG', height=200)
     
-
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
@@ -478,7 +513,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['weekLowChange'] > -0.3) | (df['weekLowChange'] < -3)) &
+                ( ((df['weekLowChange'] > -0.3) | (df['weekLowChange'] < -3)) &
                 (df['week2LowChange'] < 5) &
                 (df['week2HighChange'] < -2) &
                 (df['PCT_day_change'] > -3.5) &
@@ -489,6 +524,15 @@ def main():
                 (df['PCT_day_change_pre1'] > -1) &
                 (df['highTail'] < 1) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                ) 
+                | 
+                ( 
+                (df['forecast_day_PCT10_change'] < -7) &
+                (df['PCT_day_change'] > -3.5) &
+                (df['PCT_day_change'] < -1.5) &
+                (df['mlData'].str.contains("TOP"))
+                )
+                
             ]
         except KeyError as e:
             print("")
@@ -513,6 +557,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (
                 ((df['weekHighChange'] < 0) | (df['weekHighChange'] > 3)) &
                 (df['week2LowChange'] > 2) &
                 (df['week2HighChange'] > -5) &
@@ -524,6 +569,14 @@ def main():
                 (df['filter5'].str.contains("PRE1or2GT1")) &
                 (df['lowTail'] < 1) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                )
+                | 
+                ( 
+                (df['forecast_day_PCT10_change'] > 7) &
+                (df['PCT_day_change'] < 3.5) &
+                (df['PCT_day_change'] > 1.5) &
+                (df['mlData'].str.contains("TOP"))
+                )
                 ]
         except KeyError as e:
             print("")
