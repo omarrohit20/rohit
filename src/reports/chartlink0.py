@@ -1535,30 +1535,30 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (df['PCT_day_change'] > -3) &
+                #(df['PCT_day_change'] > -3) &
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
-                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, na=False))
+                (~df['systemtime'].str.contains('09:30', case=False, na=False)) 
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df,
-                  '09:45 to 10:15 must : market LT(3) : crossed10 minute low Sell : 1-Bbuyy-morningUp-downConsolidation',
+        if len(df) > 0:
+            rb.render(st, filtered_df,
+                  '1-Bbuyy-morningUp-downConsolidation : prefer opened above last 2 day high : market LT(3) : crossed10 minute low Sell',
                   color='LG', height=200)
     with col6:
         df = rb.getdf('1-Sselll-morningDown-upConsolidation')
         filtered_df = df
         try:
             filtered_df = df[
-                (df['PCT_day_change'] < 3) &
+                #(df['PCT_day_change'] < 3) &
                 (~df['systemtime'].str.contains('09:2', case=False, na=False)) &
-                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, na=False))
+                (~df['systemtime'].str.contains('09:30', case=False, na=False)) 
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df,
-                  '09:45 to 10:15 must : market GT(-3) : crossed10 minute high Buy : 1-Sselll-morningDown-upConsolidation',
+        if len(df) > 0:
+            rb.render(st, filtered_df,
+                  '1-Sselll-morningDown-upConsolidation : prefer opened below last 2 day low : market GT(-3) : crossed10 minute high Buy',
                   color='LG', height=200)
 
 

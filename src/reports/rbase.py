@@ -177,6 +177,9 @@ column_config_sandlterm={
     "year2HighChange":  st.column_config.NumberColumn(
             "year2HighChange",
             format="%.2f"),
+    "yearHighChange":  st.column_config.NumberColumn(
+            "yearHighChange",
+            format="%.2f"),
     "month3HighChange":  st.column_config.NumberColumn(
             "month3HighChange",
             format="%.2f"),
@@ -192,6 +195,9 @@ column_config_sandlterm={
     "year5LowChange":  st.column_config.NumberColumn(
             "year5LowChange",
             format="%.2f"),    
+    "year2LowChange":  st.column_config.NumberColumn(
+            "year2LowChange",
+            format="%.2f"),
     "yearLowChange":  st.column_config.NumberColumn(
             "yearLowChange",
             format="%.2f"),
@@ -437,11 +443,13 @@ column_order_sandlterm=["scrip",
     "close",
     "year5HighChange",
     "year2HighChange",
+    "yearHighChange",
     "month3HighChange",
     "monthHighChange",
     "week2HighChange",
     "weekHighChange",
     "year5LowChange",
+    "year2LowChange",
     "yearLowChange",
     "month3LowChange",
     "monthLowChange",
