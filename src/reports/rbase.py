@@ -1300,6 +1300,7 @@ def apply_breakout_highlight(row):
         try:
             coll = dbcl['Breakout-Beey-2']
             count = coll.count_documents({'systemtime': {'$regex': '09:2'}})
+            count_10 = coll.count_documents({'systemtime': {'$regex': '10:'}})
             if count < 5 and (yearHighChange < -10 or yearHighChange > 0 or week2HighChange > 0):
                 if coll.find_one({'scrip': scrip, 'systemtime': {'$regex':'09:|10:0|10:1|10:2'}}) and pct_day_change > 0.5:
                     styles['systemtime'] = 'background-color: #009600'
@@ -1322,6 +1323,9 @@ def apply_breakout_highlight(row):
             if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:0|10:1|10:2'}}) and pct_day_change > -0.3 and pct_day_change < 0.7:
                 styles['systemtime'] = 'background-color: #009600'
                 return styles
+            if count_10 < 10 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:0|10:1|10:2|10:3'}}):
+                styles['systemtime'] = 'background-color: #009600'
+                return styles
             if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and pct_day_change < -4 and f5ch < -6:
                 styles['systemtime'] = 'background-color: #009600'
                 return styles
@@ -1332,6 +1336,7 @@ def apply_breakout_highlight(row):
         try:
             coll = dbcl['Breakout-Siill-2']
             count = coll.count_documents({'systemtime': {'$regex': '09:2'}})
+            count_10 = coll.count_documents({'systemtime': {'$regex': '10:'}})
             if count < 5 and (yearLowChange > 10 or yearLowChange < 0 or week2LowChange < 0):
                 if coll.find_one({'scrip': scrip, 'systemtime': {'$regex':'09:|10:0|10:1|10:2'}}) and pct_day_change < -0.5:
                     styles['systemtime'] = 'background-color: #e50e1d'
@@ -1355,6 +1360,9 @@ def apply_breakout_highlight(row):
                         styles['systemtime'] = 'background-color: #e50e1d'
                         return styles
             if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:0|10:1|10:2'}}) and pct_day_change > -0.7 and pct_day_change < 0.3:
+                styles['systemtime'] = 'background-color: #e50e1d'
+                return styles
+            if count_10 < 10 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:0|10:1|10:2|10:3'}}):
                 styles['systemtime'] = 'background-color: #e50e1d'
                 return styles
             if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and pct_day_change > 4 and f5ch > 6:

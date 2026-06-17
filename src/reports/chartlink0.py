@@ -1541,8 +1541,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(df) > 0:
-            rb.render(st, filtered_df,
+        rb.render(st, filtered_df,
                   '1-Bbuyy-morningUp-downConsolidation : prefer opened above last 2 day high : market LT(3) : crossed10 minute low Sell',
                   color='LG', height=200)
     with col6:
@@ -1556,8 +1555,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(df) > 0:
-            rb.render(st, filtered_df,
+        rb.render(st, filtered_df,
                   '1-Sselll-morningDown-upConsolidation : prefer opened below last 2 day low : market GT(-3) : crossed10 minute high Buy',
                   color='LG', height=200)
 
