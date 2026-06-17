@@ -471,7 +471,28 @@ def main():
             print("")
         rb.render(st, filtered_df, 'week2LowLT0-1 : Avoid-LT(-2)-And-Top5', color='LG', height=150)
 
-    col2, col4 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        df = rb.getintersectdf('morning-volume-breakout-buy', 'crossed-day-high')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['yearLowChange'] > 5) &
+                (df['week2HighChange'] > -1) &
+                (df['monthHighChange'] < 5) &
+                (df['month3HighChange'] < -2) &
+                (df['PCT_day_change'] < 3) &
+                (df['PCT_day_change'] > -1.5) &
+                (~df['filter5'].str.contains('BothGT2', case=False, regex=True, na=False)) &
+                (df['lowTail'] < 0.9) &
+                (df['highTail'] < 0.5) &
+                (df['forecast_day_PCT10_change'] > -1) &
+                (df['week2LowChange'] > 0) &
+                (df['PCT_day_change_pre2'] < 2)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'week2HighGT0 + crossed-day-high', color='LG')
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -491,6 +512,30 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'week2HighGT0', color='LG')
+    with col3:
+        df = rb.getintersectdf('morning-volume-breakout-sell', 'crossed-day-low')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['yearHighChange'] < -5) &
+                (df['week2LowChange'] < 0) &
+                (df['monthLowChange'] > -5) &
+                (df['month3LowChange'] > 2) &
+                (df['PCT_day_change'] > -3) &
+                (df['PCT_day_change'] < 1.3) &
+                (~df['filter5'].str.contains('BothLT-2', case=False, regex=True, na=False)) &
+                (df['highTail'] < 0.9) &
+                (df['lowTail'] < 0.5) &
+                (df['forecast_day_PCT10_change'] < 1) &
+                (df['week2HighChange'] < -2) &
+                (df['highTail'] < 1) &
+                (df['weekHighChange'] < -1) &
+                (df['PCT_day_change_pre1'] > -2) &
+                (df['PCT_day_change_pre2'] > -2)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'week2LowLT0 + crossed-day-low', color='LG')
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
