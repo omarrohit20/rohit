@@ -480,12 +480,12 @@ def main():
                 (df['yearLowChange'] > 5) &
                 (df['week2HighChange'] > -1) &
                 (df['monthHighChange'] < 5) &
-                (df['month3HighChange'] < -2) &
+                (df['month3HighChange'] < -1) &
                 (df['PCT_day_change'] < 3) &
                 (df['PCT_day_change'] > -1.5) &
                 (~df['filter5'].str.contains('BothGT2', case=False, regex=True, na=False)) &
-                (df['lowTail'] < 0.9) &
-                (df['highTail'] < 0.5) &
+                (df['lowTail'] < 1) &
+                (df['highTail'] < 1) &
                 (df['forecast_day_PCT10_change'] > -1) &
                 (df['week2LowChange'] > 0) &
                 (df['PCT_day_change_pre2'] < 2)
@@ -520,17 +520,17 @@ def main():
                 (df['yearHighChange'] < -5) &
                 (df['week2LowChange'] < 0) &
                 (df['monthLowChange'] > -5) &
-                (df['month3LowChange'] > 2) &
+                (df['month3LowChange'] > 1) &
                 (df['PCT_day_change'] > -3) &
                 (df['PCT_day_change'] < 1.3) &
                 (~df['filter5'].str.contains('BothLT-2', case=False, regex=True, na=False)) &
-                (df['highTail'] < 0.9) &
-                (df['lowTail'] < 0.5) &
+                (df['lowTail'] < 1) &
+                (df['highTail'] < 1) &
                 (df['forecast_day_PCT10_change'] < 1) &
                 (df['week2HighChange'] < -2) &
-                (df['highTail'] < 1) &
-                (df['weekHighChange'] < -1) &
-                (df['PCT_day_change_pre1'] > -2) &
+                # (df['highTail'] < 1) &
+                # (df['weekHighChange'] < -1) &
+                # (df['PCT_day_change_pre1'] > -2) &
                 (df['PCT_day_change_pre2'] > -2)
                 ]
         except KeyError as e:
