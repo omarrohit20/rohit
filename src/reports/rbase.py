@@ -1260,11 +1260,11 @@ def apply_breakout_highlight(row):
 
             if count < 5:
                 # Check if any document exists with specific time patterns
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}, 'yearLowChange': {'$gt': 15}}):
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}, 'yearLowChange': {'$gt': 15}}) and pct_day_change < 3.5 :
                     styles['scrip'] = 'background-color: #E0FFDE'
                     return styles
             else:
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:2|10:3|10:4|10:50'}, 'yearLowChange': {'$gt': 15}}):
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:2|10:3|10:4|10:50'}, 'yearLowChange': {'$gt': 15}}) and pct_day_change < 3.5:
                     styles['scrip'] = 'background-color: #E0FFDE'
                     return styles
 
@@ -1280,16 +1280,16 @@ def apply_breakout_highlight(row):
 
             if count < 5 and count10 < 5:
                 # Check if any document exists with specific time patterns
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}}):
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}}) and pct_day_change > -3.5:
                     styles['scrip'] = 'background-color: #FCCFD2'
                     return styles
             elif count < 5:
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}, 'yearLowChange': {'$gt': 50}}):
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}, 'yearLowChange': {'$gt': 50}}) and pct_day_change > -3.5:
                     styles['scrip'] = 'background-color: #FCCFD2'
                     return styles
             else:
                 # Check if any document exists with systemtime starting with '10:' or '11:'
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:2|10:3|10:4|10:50'}}):
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:2|10:3|10:4|10:50'}}) and pct_day_change > -3.5:
                     styles['scrip'] = 'background-color: #FCCFD2'
                     return styles
         except Exception:
@@ -1323,7 +1323,7 @@ def apply_breakout_highlight(row):
             if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:0|10:1|10:2'}}) and pct_day_change > -0.3 and pct_day_change < 0.7:
                 styles['systemtime'] = 'background-color: #009600'
                 return styles
-            if count_10 < 10 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:0|10:1|10:2|10:3'}}):
+            if count_10 < 10 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:0|10:1|10:2|10:3'}}) and pct_day_change < 3.5:
                 styles['systemtime'] = 'background-color: #009600'
                 return styles
             if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and pct_day_change < -4 and f5ch < -6:
@@ -1362,7 +1362,7 @@ def apply_breakout_highlight(row):
             if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:0|10:1|10:2'}}) and pct_day_change > -0.7 and pct_day_change < 0.3:
                 styles['systemtime'] = 'background-color: #e50e1d'
                 return styles
-            if count_10 < 10 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:0|10:1|10:2|10:3'}}):
+            if count_10 < 10 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:0|10:1|10:2|10:3'}}) and pct_day_change > -3.5:
                 styles['systemtime'] = 'background-color: #e50e1d'
                 return styles
             if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and pct_day_change > 4 and f5ch > 6:

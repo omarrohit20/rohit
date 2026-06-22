@@ -345,6 +345,7 @@ def main():
                 (df['month3LowChange'] > 15) &
                 (df['PCT_change'] > 1.8) &
                 (df['PCT_day_change'] > 0.5) &
+                (df['PCT_day_change'] < 3.5) &
                 (df['PCT_day_change_pre1'] > -1) &
                 (df['PCT_day_change_pre1'] < 0.5) &
                 (df['PCT_day_change_pre2'] < -0.7) &
@@ -387,6 +388,7 @@ def main():
                 #(df['month3HighChange'] < -15) &
                 (df['PCT_change'] < -1.8) &
                 (df['PCT_day_change'] < -0.5) &
+                (df['PCT_day_change'] > -3.5) &
                 (df['PCT_day_change_pre1'] < 1) &
                 (df['PCT_day_change_pre1'] > -0.5) &
                 (df['PCT_day_change_pre2'] > 0.7) &
