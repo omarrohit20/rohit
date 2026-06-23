@@ -71,11 +71,12 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['month2HighChange'] < -3) | (df['month3HighChange'] < -15)) &
-                ((df['month2HighChange'] > -5.5) | (df['month3HighChange'] < -20)) &
-                (df['monthLowChange'] < 5.5) &
-                (df['monthLowChange'] != df['week2LowChange']) &
-                ((df['yearLowChange'] > 0) | (df['month3HighChange'] > -10))
+                (df['year5HighChange'] < -20) &
+                (df['year2HighChange'] < -10) &
+                (df['yearHighChange'] < -10) &
+                (df['month3HighChange'] > -10) &
+                (df['monthHighChange'] > -2) &
+                (df['monthHighChange'] < 2)
                 ]
         except KeyError as e:
             print("")
@@ -102,11 +103,12 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['month3HighChange'] < -3) | (df['month6HighChange'] < -15)) &
-                ((df['month3HighChange'] > -5.5) | (df['month6HighChange'] < -20)) &
-                (df['month2LowChange'] < 5.5) &
-                (df['month2LowChange'] != df['monthLowChange']) &
-                ((df['yearLowChange'] > 0) | (df['month6HighChange'] > -10))
+                (df['year5HighChange'] < -20) &
+                (df['year2HighChange'] < -10) &
+                (df['yearHighChange'] < -10) &
+                (df['month3HighChange'] > -10) &
+                (df['monthHighChange'] > -2) &
+                (df['monthHighChange'] < 2)
                 ]
         except KeyError as e:
             print("")
