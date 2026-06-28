@@ -128,7 +128,220 @@ def main():
         df = rb.getdf_sandlterm('breakoutM2HR')
         rb.render_sandlterm_data(st, df, 'breakoutM2HR', color='LG')
     
-
+    
+    col0, col1, col2, col3 = st.columns(4)
+    with col0:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['year5HighChange'] > -20) &
+                (df['yearHighChange'] > -20) &
+                (df['yearLowChange'] > 15) &
+                (df['month3LowChange'] > 15) &
+                (df['PCT_day_change'] > 1) &
+                (df['PCT_day_change_pre1'] < 1.5) &
+                (df['PCT_day_change_pre2'] < 1.5) &
+                ((df['PCT_day_change_pre1'] < 1) | (df['PCT_day_change_pre2'] < 1)) &
+                (df['filter3'].str.contains('BreakHighYear2', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakHighYear2', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    with col1:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['filter3'].str.contains('BreakHighYear2', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakHighYear2', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    with col2:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['yearLowChange'] < 20) &
+                (df['yearHighChange'] < -15) &
+                (df['month3HighChange'] < -15) &
+                (df['PCT_day_change'] < -1) &
+                (df['PCT_day_change_pre1'] > -1.5) &
+                (df['PCT_day_change_pre2'] > -1.5) &
+                ((df['PCT_day_change_pre1'] > -1) | (df['PCT_day_change_pre2'] > -1)) &
+                (df['filter3'].str.contains('BreakLowYear2', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakLowYear2', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    with col3:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['filter3'].str.contains('BreakLowYear2', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakLowYear2', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    
+    col0, col1, col2, col3 = st.columns(4)
+    with col0:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['year5HighChange'] > -20) &
+                (df['yearHighChange'] > -20) &
+                (df['yearLowChange'] > 15) &
+                (df['month3LowChange'] > 15) &
+                (df['PCT_day_change'] > 1) &
+                (df['PCT_day_change_pre1'] < 1.5) &
+                (df['PCT_day_change_pre2'] < 1.5) &
+                ((df['PCT_day_change_pre1'] < 1) | (df['PCT_day_change_pre2'] < 1)) &
+                (df['filter3'].str.contains('BreakHighYear', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakHighYear', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    with col1:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['filter3'].str.contains('BreakHighYear', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakHighYear', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    with col2:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['yearLowChange'] < 20) &
+                (df['yearHighChange'] < -15) &
+                (df['month3HighChange'] < -15) &
+                (df['PCT_day_change'] < -1) &
+                (df['PCT_day_change_pre1'] > -1.5) &
+                (df['PCT_day_change_pre2'] > -1.5) &
+                ((df['PCT_day_change_pre1'] > -1) | (df['PCT_day_change_pre2'] > -1)) &
+                (df['filter3'].str.contains('BreakLowYear', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakLowYear', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    with col3:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['filter3'].str.contains('BreakLowYear', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakLowYear', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    
+    col0, col1, col2, col3 = st.columns(4)
+    with col0:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['year5HighChange'] > -20) &
+                (df['yearHighChange'] > -20) &
+                (df['yearLowChange'] > 15) &
+                (df['month3LowChange'] > 15) &
+                (df['PCT_day_change'] > 1) &
+                (df['PCT_day_change_pre1'] < 1.5) &
+                (df['PCT_day_change_pre2'] < 1.5) &
+                ((df['PCT_day_change_pre1'] < 1) | (df['PCT_day_change_pre2'] < 1)) &
+                (df['filter3'].str.contains('BreakHighMonth6', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakHighMonth6', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')  
+    with col1:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['filter3'].str.contains('BreakHighMonth6', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakHighMonth6', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')  
+    with col2:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['yearLowChange'] < 20) &
+                (df['yearHighChange'] < -15) &
+                (df['month3HighChange'] < -15) &
+                (df['PCT_day_change'] < -1) &
+                (df['PCT_day_change_pre1'] > -1.5) &
+                (df['PCT_day_change_pre2'] > -1.5) &
+                ((df['PCT_day_change_pre1'] > -1) | (df['PCT_day_change_pre2'] > -1)) &
+                (df['filter3'].str.contains('BreakLowMonth6', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakLowMonth6', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    with col3:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['filter3'].str.contains('BreakLowMonth6', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakLowMonth6', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    
+    col0, col1, col2, col3 = st.columns(4)
+    with col0:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['filter3'].str.contains('BreakHighMonth3', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakHighMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')  
+    with col1:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['filter3'].str.contains('BreakHighMonth3', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakHighMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')  
+    with col2:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['filter3'].str.contains('BreakLowMonth3', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakLowMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    with col3:
+        df = rb.getdfResult('highBuy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['filter3'].str.contains('BreakLowMonth3', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BreakLowMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+    
     
 
 if __name__ == '__main__':

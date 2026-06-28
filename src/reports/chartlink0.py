@@ -1227,6 +1227,64 @@ def main():
         rb.render(st, filtered_df,
                   '1-Sselll-morningDown-upConsolidation : prefer opened below last 2 day low : market GT(-3) : crossed10 minute high Buy',
                   color='LG', height=200)
+        
+
+
+    col1, col3 = st.columns(2)
+    with col1:
+        df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['year5HighChange'] > -20) &
+                (df['yearHighChange'] > -20) &
+                (df['yearLowChange'] > 15) &
+                (df['month3LowChange'] > 15) &
+                (df['PCT_day_change'] > 1) &
+                (df['PCT_day_change_pre1'] < 1.5) &
+                (df['PCT_day_change_pre2'] < 1.5) &
+                ((df['PCT_day_change_pre1'] < 1) | (df['PCT_day_change_pre2'] < 1)) &
+                ((df['filter3'].str.contains('BreakHighYear2', case=False, regex=True, na=False)) |
+                 (df['filter3'].str.contains('BreakHighYear', case=False, regex=True, na=False)) |
+                 (df['filter3'].str.contains('BreakHighMonth6', case=False, regex=True, na=False)) 
+                )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'MorningDown:UpAfterDown', color='LG', height=300)
+        else:
+            rb.render(st, empty_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=300)
+    with col3:
+        df = rb.getdf('morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['yearLowChange'] < 20) &
+                (df['yearHighChange'] < -15) &
+                (df['month3HighChange'] < -15) &
+                (df['PCT_day_change'] < -1) &
+                (df['PCT_day_change_pre1'] > -1.5) &
+                (df['PCT_day_change_pre2'] > -1.5) &
+                ((df['PCT_day_change_pre1'] > -1) | (df['PCT_day_change_pre2'] > -1)) &
+                ((df['filter3'].str.contains('BreakLowYear2', case=False, regex=True, na=False)) |
+                 (df['filter3'].str.contains('BreakLowYear', case=False, regex=True, na=False)) |
+                 (df['filter3'].str.contains('BreakLowMonth6', case=False, regex=True, na=False)) 
+                )
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'MorningUp:DownInUptrend', color='LG', height=300)
+        else:
+            rb.render(st, empty_df, 'MorningUp:DownInUptrend', color='LG', height=300)
+    
+    
+    col
 
 
 if __name__ == '__main__':

@@ -925,6 +925,70 @@ def main():
             rb.render(st, empty_df, 'week2lh-not-reached + Crossed 2Day Low', column_conf=rb.column_config_merged,
                       column_order=rb.column_order_p, color='LG', applyBreakOut=True)
 
+    
+    col0, col1, col2, col3 = st.columns(4)
+    with col0:
+        df = rb.getintersectdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)', 'crossed-day-high')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'Crossed 2 Day High + Crossed Day High', column_conf=rb.column_config_merged,
+                      column_order=rb.column_order_p, color='LG', applyBreakOut=True)
+        else:
+            rb.render(st, empty_df, 'Crossed 2 Day High + Crossed Day High', column_conf=rb.column_config_merged,
+                      column_order=rb.column_order_p, color='LG', applyBreakOut=True)
+    with col1:
+        df = rb.getintersectdf('supertrend-morning-buy', 'crossed-day-high')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'supertrend-morning-buy + Crossed Day High', column_conf=rb.column_config_merged,
+                      column_order=rb.column_order_p, color='LG', applyBreakOut=True)
+        else:
+            rb.render(st, empty_df, 'supertrend-morning-buy + Crossed Day High', column_conf=rb.column_config_merged,
+                      column_order=rb.column_order_p, color='LG', applyBreakOut=True)
+    with col2:
+        df = rb.getintersectdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)', 'crossed-day-low')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'Crossed 2 Day Low + Crossed Day Low', column_conf=rb.column_config_merged,
+                      column_order=rb.column_order_p, color='LG', applyBreakOut=True)
+        else:
+            rb.render(st, empty_df, 'Crossed 2 Day Low + Crossed Day Low', column_conf=rb.column_config_merged,
+                      column_order=rb.column_order_p, color='LG', applyBreakOut=True)
+    with col3:
+        df = rb.getintersectdf('supertrend-morning-sell', 'crossed-day-low')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'supertrend-morning-sell + Crossed Day Low', column_conf=rb.column_config_merged,
+                      column_order=rb.column_order_p, color='LG', applyBreakOut=True)
+        else:
+            rb.render(st, empty_df, 'supertrend-morning-sell + Crossed Day Low', column_conf=rb.column_config_merged,
+                      column_order=rb.column_order_p, color='LG', applyBreakOut=True)
+
+    
     col1, col3 = st.columns(2)
     with col1:
         df = rb.getintersectdf('buy_all_processor', 'week2lh-not-reached')
