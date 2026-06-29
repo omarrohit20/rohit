@@ -1511,12 +1511,6 @@ def apply_breakout_highlight(row):
                 except Exception:
                     # fallback to existing style on any DB error
                     pass
-
-        
-
-                
-
-
         except Exception:
             # fallback to existing style on any DB error
             pass
@@ -1525,6 +1519,33 @@ def apply_breakout_highlight(row):
     except Exception:
         pass
     return styles
+
+@st.cache_data(ttl=10)
+def apply_breakout_highlight_ml(row):
+    """Return a Series of styles for a row: preserve existing mlData styles
+    but force pink for mlData when systemtime contains '10:' and mlData
+    indicates a 'CROSSED' event.
+    """
+    styles = pd.Series('', index=row.index)
+    try:
+        pct_day_change = float(row.get('PCT_day_change', 0) or 0)
+        scrip = row.get('scrip')
+
+        if zshortTerm:
+            coll = dbcl['Breakout-Beey-2']
+            if coll.find_one({'scrip': scrip}):
+                styles['scrip'] = 'background-color: #009600'
+                return styles
+            
+            coll = dbcl['Breakout-Siill-2']
+            if coll.find_one({'scrip': scrip}):
+                styles['scrip'] = 'background-color: #e50e1d'
+                return styles
+
+    except Exception:
+        pass
+    return styles
+
 
 @st.cache_data(ttl=10)
 def get_chartlink_collections():
@@ -1755,6 +1776,8 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
 
     if renderml:
         df_styled = highlight_category_row(df, color=color)
+        if(zshortTerm) and color =='LG':
+            df_styled = df_styled.apply(apply_breakout_highlight_ml, axis=1)
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
     elif (df.empty):
         st.dataframe(df, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)

@@ -21,15 +21,15 @@ def main():
     # main title
     st.title('ShortTerm')
 
-    rb.shortTerm = True
+    rb.zshortTerm = True
 
     col0, col1 = st.columns(2)
     with col0:
         df = rb.getdf_sandlterm('breakoutYH')
-        rb.render_sandlterm_data(st, df,'breakoutYH', color='G')
+        rb.render_sandlterm_data(st, df,'breakoutYH', color='LG')
     with col1:
         df = rb.getdf_sandlterm('breakoutY2H')
-        rb.render_sandlterm_data(st, df,'breakoutY2H', color='G')
+        rb.render_sandlterm_data(st, df,'breakoutY2H', color='LG')
 
 
     col0, col1, col2 = st.columns(3)
@@ -47,7 +47,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render_sandlterm_data(st, filtered_df,'breakoutW2HR', color='G')
+        rb.render_sandlterm_data(st, filtered_df,'breakoutW2HR', color='LG')
     with col1:
         df = rb.getdf_sandlterm('breakoutW2HR')
         filtered_df = df
@@ -59,7 +59,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render_sandlterm_data(st, filtered_df,'breakoutW2HR', color='G')
+        rb.render_sandlterm_data(st, filtered_df,'breakoutW2HR', color='LG')
     with col2:
         df = rb.getdf_sandlterm('breakoutW2HR')
         rb.render_sandlterm_data(st, df,'breakoutW2HR', color='LG')
