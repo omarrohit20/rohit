@@ -38,10 +38,14 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['monthLowChange'] > 1) | (df['monthLowChange'] < -3)) &
+                ((df['month3HighChange'] > -20) | (df['monthHighChange'] < -10)) &
+                ((df['year2LowChange'] > 10) | (df['monthLowChange'] < -3)) &
                 ((df['monthHighChange'] < -3) | (df['month3HighChange'] < -15)) &
                 ((df['monthHighChange'] > -5.5) | (df['month3HighChange'] < -20)) &
                 (df['monthHighChange'] < 5) &
                 (df['week2LowChange'] < 5.5) &
+                #((df['week2LowChange'] > 1) | (df['week2LowChange'] < -3)) &
                 (df['week2LowChange'] != df['weekLowChange']) &
                 ((df['yearLowChange'] > 0) | (df['month2HighChange'] > -10))
                 ]
@@ -53,6 +57,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['monthLowChange'] > 1) | (df['monthLowChange'] < -3)) &
+                ((df['month3HighChange'] > -20) | (df['monthHighChange'] < -10)) &
+                ((df['year2LowChange'] > 10) | (df['monthLowChange'] < -3)) &
                 (df['monthHighChange'] < 5) &
                 (df['monthHighChange'] > -3.5) &
                 ((df['monthHighChange'] < -3) | (df['month3HighChange'] < -15))
@@ -354,97 +361,182 @@ def main():
             print("")
         rb.render(st, filtered_df, 'BreakLowMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
     
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
             filtered_df = df[
-                (~df['systemtime'].str.contains('11:', case=False, na=False)) &
-                (df['filter3'].str.contains('BreakHighMonth3', case=False, regex=True, na=False)) &
-                (df['forecast_day_PCT10_change'] >-9) &
-                (df['PCT_day_change'] < 2.5) &
-                (df['PCT_day_change'] > -3) &
-                (df['PCT_change'] > 0) &
-                (df['month3HighChange'] > -20) &
-                (df['year5HighChange'] < -25) &
-                (df['yearHighChange'] < -20)
-                ]
+                (
+                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('11:', case=False, na=False)) &
+                    (df['yearHighChange'] < 0) &
+                    ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                    ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
+                    ((df['PCT_day_change_pre1'] < 2) & (df['PCT_day_change_pre2'] < 2)) &
+                    (df['PCT_day_change'] > -1.3) &
+                    (df['PCT_day_change'] < 1)
+                ) &
+                (
+                    (
+                        (~df['filter3'].str.contains('ReversalHighYear', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakHighYear2', case=False, regex=True, na=False))
+                    ) |
+                    (
+                        (~df['filter3'].str.contains('ReversalHighYear', case=False, regex=True, na=False)) &
+                        (~df['filter3'].str.contains('BreakHighYear2', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakHighYear', case=False, regex=True, na=False))
+                    ) |
+                    (
+                        (~df['filter3'].str.contains('ReversalHighMonth6', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakHighMonth6', case=False, regex=True, na=False))
+                    ) |
+                    (
+                        # (~df['filter3'].str.contains('ReversalHighMonth3', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakHighMonth3', case=False, regex=True, na=False))
+                    )
+                )
+            ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'year5HighChangeLT-30 + week2High', color='LG')
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'BreakHigh', color='LG', height=300)
+        else:
+            rb.render(st, empty_df, 'BreakHigh', color='LG', height=300)
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
             filtered_df = df[
                 (
-                    df['systemtime'].str.contains('09:', case=False, na=False) |
-                    df['systemtime'].str.contains('10:0', case=False, na=False) |
-                    df['systemtime'].str.contains('10:1', case=False, na=False)
+                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('11:', case=False, na=False)) &
+                    (df['yearLowChange'] > 0) &
+                    ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
+                    ((df['PCT_day_change_pre1'] > -1) | (df['PCT_day_change_pre2'] > -1)) &
+                    ((df['PCT_day_change_pre1'] < 2) & (df['PCT_day_change_pre2'] < 2)) &
+                    (df['PCT_day_change'] > -1) &
+                    (df['PCT_day_change'] < 1.3)
                 ) &
-                (~df['systemtime'].str.contains('11:', case=False, na=False)) &
-                (df['filter3'].str.contains('BreakHighMonth3', case=False, regex=True, na=False)) &
-                (df['yearLowChange'] > 5) &
-                (df['week2HighChange'] > -1) &
-                (df['monthHighChange'] < 5) &
-                (df['PCT_day_change'] < 3) &
-                (df['PCT_day_change'] > -1.5) &
-                (~df['filter5'].str.contains('BothGT2', case=False, regex=True, na=False)) &
-                (df['lowTail'] < 1.5) &
-                (df['forecast_day_PCT10_change'] > -1) &
-                (df['week2LowChange'] > 0) &
-                (df['PCT_day_change_pre2'] < 2)
-                ]
+                (
+                    (
+                        (~df['filter3'].str.contains('ReversalLowYear', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakLowYear2', case=False, regex=True, na=False))
+                    ) |
+                    (
+                        (~df['filter3'].str.contains('ReversalLowYear', case=False, regex=True, na=False)) &
+                        (~df['filter3'].str.contains('BreakLowYear2', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakLowYear', case=False, regex=True, na=False))
+                    ) |
+                    (
+                        (~df['filter3'].str.contains('ReversalLowMonth5', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakLowMonth6', case=False, regex=True, na=False))
+                    ) |
+                    (
+                        # (~df['filter3'].str.contains('ReversalLowMonth3', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakLowMonth3', case=False, regex=True, na=False))
+                    )
+                )
+            ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'week2HighGT0', color='LG')
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'ReversalBreakLow', color='LG', height=300)
+        else:
+            rb.render(st, empty_df, 'ReversalBreakLow', color='LG', height=300)
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['filter3'].str.contains('BreakLowMonth3', case=False, regex=True, na=False)) &
-                (df['forecast_day_PCT10_change'] < 9) &
-                (df['PCT_day_change'] < 3) &
-                (df['PCT_day_change'] > -3) &
-                (df['PCT_change'] < 0) &
-                (df['month3LowChange'] < 20) &
-                # (df['year5LowChange'] > 25) &
-                (df['yearLowChange'] > 20)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'year5HighChangeGT30 + week2LowLT0', color='LG')
-    with col4:
-        df = rb.getdf('morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
             filtered_df = df[
                 (
-                    df['systemtime'].str.contains('09:', case=False, na=False) |
-                    df['systemtime'].str.contains('10:0', case=False, na=False) |
-                    df['systemtime'].str.contains('10:1', case=False, na=False)
+                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('11:', case=False, na=False)) &
+                    (df['yearLowChange'] > 0) &
+                    ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
+                    ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                    ((df['PCT_day_change_pre1'] > -2) & (df['PCT_day_change_pre2'] > -2)) &
+                    (df['PCT_day_change'] > -1) &
+                    (df['PCT_day_change'] < 1.3)
                 ) &
-                (~df['systemtime'].str.contains('11:', case=False, na=False)) &
-                (df['filter3'].str.contains('BreakLowMonth3', case=False, regex=True, na=False)) &
-                (df['yearHighChange'] < -5) &
-                (df['week2LowChange'] < 0) &
-                (df['monthLowChange'] > -5) &
-                (df['PCT_day_change'] > -3) &
-                (df['PCT_day_change'] < 1.3) &
-                (~df['filter5'].str.contains('BothLT-2', case=False, regex=True, na=False)) &
-                (df['highTail'] < 1.5) &
-                (df['forecast_day_PCT10_change'] < 1) &
-                (df['week2HighChange'] < -2) &
-                (df['highTail'] < 1) &
-                (df['weekHighChange'] < -1) &
-                (df['PCT_day_change_pre1'] > -2) &
-                (df['PCT_day_change_pre2'] > -2)
-                ]
+                (
+                    (
+                        (~df['filter3'].str.contains('ReversalLowYear', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakLowYear2', case=False, regex=True, na=False))
+                    ) |
+                    (
+                        (~df['filter3'].str.contains('ReversalLowYear', case=False, regex=True, na=False)) &
+                        (~df['filter3'].str.contains('BreakLowYear2', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakLowYear', case=False, regex=True, na=False))
+                    ) |
+                    (
+                        (~df['filter3'].str.contains('ReversalLowMonth5', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakLowMonth6', case=False, regex=True, na=False))
+                    ) |
+                    (
+                        # (~df['filter3'].str.contains('ReversalLowMonth3', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakLowMonth3', case=False, regex=True, na=False))
+                    )
+                )
+            ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'week2LowLT0', color='LG')
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'BreakLow', color='LG', height=300)
+        else:
+            rb.render(st, empty_df, 'BreakLow', color='LG', height=300)
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('11:', case=False, na=False)) &
+                    (df['yearHighChange'] < 0) &
+                    ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                    ((df['PCT_day_change_pre1'] < 1) | (df['PCT_day_change_pre2'] < 1)) &
+                    ((df['PCT_day_change_pre1'] > -2) & (df['PCT_day_change_pre2'] > -2)) &
+                    (df['PCT_day_change'] > -1.3) &
+                    (df['PCT_day_change'] < 1)
+                ) &
+                (
+                    (
+                        (~df['filter3'].str.contains('ReversalHighYear', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakHighYear2', case=False, regex=True, na=False))
+                    ) |
+                    (
+                        (~df['filter3'].str.contains('ReversalHighYear', case=False, regex=True, na=False)) &
+                        (~df['filter3'].str.contains('BreakHighYear2', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakHighYear', case=False, regex=True, na=False))
+                    ) |
+                    (
+                        (~df['filter3'].str.contains('ReversalHighMonth6', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakHighMonth6', case=False, regex=True, na=False))
+                    ) |
+                    (
+                        # (~df['filter3'].str.contains('ReversalHighMonth3', case=False, regex=True, na=False)) &
+                        (df['filter3'].str.contains('BreakHighMonth3', case=False, regex=True, na=False))
+                    )
+                )
+            ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'ReversalBreakHigh', color='LG', height=300)
+        else:
+            rb.render(st, empty_df, 'ReversalBreakHigh', color='LG', height=300)
+    
+
 
 
 if __name__ == '__main__':
