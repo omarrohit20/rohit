@@ -1367,13 +1367,20 @@ def main():
             filtered_df = df[
                 (
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                    (~df['systemtime'].str.contains('11:', case=False, na=False))
-                    # (df['yearHighChange'] < 0) &
-                    # ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
-                    # ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
-                    # ((df['PCT_day_change_pre1'] < 2) & (df['PCT_day_change_pre2'] < 2)) &
-                    # (df['PCT_day_change'] > -1.3) &
-                    # (df['PCT_day_change'] < 1)
+                    (~df['systemtime'].str.contains('11:', case=False, na=False)) &
+                    (
+                        (
+                            (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                            (~df['systemtime'].str.contains('11:', case=False, na=False))
+                            # (df['yearHighChange'] < 0) &
+                            # ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                            # ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
+                            # ((df['PCT_day_change_pre1'] < 2) & (df['PCT_day_change_pre2'] < 2)) &
+                            # (df['PCT_day_change'] > -1.3) &
+                            # (df['PCT_day_change'] < 1)
+                        ) 
+                    ) 
+                    
                 ) &
                 (
                     (
@@ -1411,12 +1418,21 @@ def main():
                 (
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) &
-                    (df['yearLowChange'] > 0) &
-                    ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
-                    ((df['PCT_day_change_pre1'] > -1) | (df['PCT_day_change_pre2'] > -1)) &
-                    ((df['PCT_day_change_pre1'] < 2) & (df['PCT_day_change_pre2'] < 2)) &
-                    (df['PCT_day_change'] > -1) &
-                    (df['PCT_day_change'] < 1.3)
+                    (
+                        (
+                            (df['yearLowChange'] > 0) &
+                            ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
+                            ((df['PCT_day_change_pre1'] > -1) | (df['PCT_day_change_pre2'] > -1)) &
+                            ((df['PCT_day_change_pre1'] < 2) & (df['PCT_day_change_pre2'] < 2)) &
+                            (df['PCT_day_change'] > -1) &
+                            (df['PCT_day_change'] < 1.3)
+                        ) |
+                        (
+                            # (~df['filter3'].str.contains('ReversalLowMonth3', case=False, regex=True, na=False)) &
+                            (df['filter3'].str.contains('BreakLowMonth3', case=False, regex=True, na=False))
+                        )
+                    )
+                    
                 ) &
                 (
                     (
@@ -1453,13 +1469,20 @@ def main():
             filtered_df = df[
                 (
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                    (~df['systemtime'].str.contains('11:', case=False, na=False))
-                    # (df['yearLowChange'] > 0) &
-                    # ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
-                    # ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
-                    # ((df['PCT_day_change_pre1'] > -2) & (df['PCT_day_change_pre2'] > -2)) &
-                    # (df['PCT_day_change'] > -1) &
-                    # (df['PCT_day_change'] < 1.3)
+                    (~df['systemtime'].str.contains('11:', case=False, na=False)) &
+                    (
+                        (
+                            (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                            (~df['systemtime'].str.contains('11:', case=False, na=False)) 
+                            # (df['yearLowChange'] > 0) &
+                            # ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
+                            # ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                            # ((df['PCT_day_change_pre1'] > -2) & (df['PCT_day_change_pre2'] > -2)) &
+                            # (df['PCT_day_change'] > -1) &
+                            # (df['PCT_day_change'] < 1.3)
+                        )
+                    )
+                    
                 ) &
                 (
                     (
@@ -1497,12 +1520,21 @@ def main():
                 (
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) &
-                    (df['yearHighChange'] < 0) &
-                    ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
-                    ((df['PCT_day_change_pre1'] < 1) | (df['PCT_day_change_pre2'] < 1)) &
-                    ((df['PCT_day_change_pre1'] > -2) & (df['PCT_day_change_pre2'] > -2)) &
-                    (df['PCT_day_change'] > -1.3) &
-                    (df['PCT_day_change'] < 1)
+                    (
+                        (
+                            (df['yearHighChange'] < 0) &
+                            ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                            ((df['PCT_day_change_pre1'] < 1) | (df['PCT_day_change_pre2'] < 1)) &
+                            ((df['PCT_day_change_pre1'] > -2) & (df['PCT_day_change_pre2'] > -2)) &
+                            (df['PCT_day_change'] > -1.3) &
+                            (df['PCT_day_change'] < 1)
+                        ) |
+                        (
+                            # (~df['filter3'].str.contains('ReversalHighMonth3', case=False, regex=True, na=False)) &
+                            (df['filter3'].str.contains('BreakHighMonth3', case=False, regex=True, na=False))
+                        )
+                    )
+                    
                 ) &
                 (
                     (
