@@ -386,6 +386,12 @@ def main():
                         (
                             # ((df['PCT_day_change_pre1'] < 1.3) & (df['PCT_day_change_pre2'] < 1.3) & (df['PCT_day_change'] < 1.3)) &
                             (df['mlData'].str.contains('0@@', case=False, regex=True, na=False)) 
+                            # ZPre1_UpStairs 
+                             
+                        ) |
+                        (
+                            ((df['PCT_day_change'] < 1)) &
+                            (df['mlData'].str.contains('#ZPre', case=False, regex=True, na=False))  
                              
                         )
                     )
@@ -439,6 +445,11 @@ def main():
                         (
                             # ((df['PCT_day_change_pre1'] < 1.3) & (df['PCT_day_change_pre2'] < 1.3) & (df['PCT_day_change'] < 1.3)) &
                             (df['mlData'].str.contains('0@@', case=False, regex=True, na=False)) 
+                        ) |
+                        (
+                            ((df['PCT_day_change'] < 1)) &
+                            (df['mlData'].str.contains('#ZPre', case=False, regex=True, na=False))  
+                             
                         )
                     )
                     
@@ -492,6 +503,11 @@ def main():
                         (
                             # ((df['PCT_day_change_pre1'] > -1.3) & (df['PCT_day_change_pre2'] > -1.3) & (df['PCT_day_change'] > -1.3)) &
                             (df['mlData'].str.contains('0@@', case=False, regex=True, na=False)) 
+                        ) |
+                        (
+                            ((df['PCT_day_change'] > -1)) &
+                            (df['mlData'].str.contains('#ZPre', case=False, regex=True, na=False))  
+                             
                         )
                     )
                 ) &
@@ -544,6 +560,10 @@ def main():
                         (
                             # ((df['PCT_day_change_pre1'] > -1.3) & (df['PCT_day_change_pre2'] > -1.3) & (df['PCT_day_change'] > -1.3)) &
                             (df['mlData'].str.contains('0@@', case=False, regex=True, na=False))
+                        ) |
+                        (
+                            ((df['PCT_day_change'] > -1)) &
+                            (df['mlData'].str.contains('#ZPre', case=False, regex=True, na=False))   
                         )
                     )
                 ) &
@@ -564,7 +584,7 @@ def main():
                     (
                         # (~df['filter3'].str.contains('ReversalHighMonth3', case=False, regex=True, na=False)) &
                         (df['filter3'].str.contains('BreakHighMonth3', case=False, regex=True, na=False))
-                    )
+                    ) 
                 )
             ]
         except KeyError as e:
