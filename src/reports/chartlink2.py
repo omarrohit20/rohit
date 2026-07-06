@@ -1405,9 +1405,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'BreakHigh', color='LG')
+            rb.render(st, filtered_df, 'BreakHigh - Breakout-Beey-2', color='LG')
         else:
-            rb.render(st, empty_df, 'BreakHigh', color='LG')
+            rb.render(st, empty_df, 'BreakHigh - Breakout-Beey-2', color='LG')
     with col2:
         df = rb.getdf('Breakout-Beey-2')
         expected_columns = list(set(df.columns))
@@ -1457,9 +1457,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'ReversalBreakLow', color='LG')
+            rb.render(st, filtered_df, 'ReversalBreakLow - Breakout-Beey-2', color='LG')
         else:
-            rb.render(st, empty_df, 'ReversalBreakLow', color='LG')
+            rb.render(st, empty_df, 'ReversalBreakLow - Breakout-Beey-2', color='LG')
     with col3:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))
@@ -1507,9 +1507,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'BreakLow', color='LG')
+            rb.render(st, filtered_df, 'BreakLow - Breakout-Siill-2', color='LG')
         else:
-            rb.render(st, empty_df, 'BreakLow', color='LG')
+            rb.render(st, empty_df, 'BreakLow - Breakout-Siill-2', color='LG')
     with col4:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))
@@ -1559,11 +1559,10 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'ReversalBreakHigh', color='LG')
+            rb.render(st, filtered_df, 'ReversalBreakHigh - Breakout-Siill-2', color='LG')
         else:
-            rb.render(st, empty_df, 'ReversalBreakHigh', color='LG')
+            rb.render(st, empty_df, 'ReversalBreakHigh - Breakout-Siill-2', color='LG')
     
-
 
 
 if __name__ == '__main__':
