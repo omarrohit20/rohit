@@ -371,6 +371,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) &
@@ -419,9 +420,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'BreakHigh - Volume', color='LG', height=300)
+            rb.render(st, filtered_df, 'BreakHigh - Volume', color='LG')
         else:
-            rb.render(st, empty_df, 'BreakHigh - Volume', color='LG', height=300)
+            rb.render(st, empty_df, 'BreakHigh - Volume', color='LG')
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
@@ -478,9 +479,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'ReversalBreakLow - Volume', color='LG', height=300)
+            rb.render(st, filtered_df, 'ReversalBreakLow - Volume', color='LG')
         else:
-            rb.render(st, empty_df, 'ReversalBreakLow - volume', color='LG', height=300)
+            rb.render(st, empty_df, 'ReversalBreakLow - volume', color='LG')
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
@@ -489,6 +490,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) &
@@ -535,9 +537,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'BreakLow - Volume', color='LG', height=300)
+            rb.render(st, filtered_df, 'BreakLow - Volume', color='LG')
         else:
-            rb.render(st, empty_df, 'BreakLow - Volume', color='LG', height=300)
+            rb.render(st, empty_df, 'BreakLow - Volume', color='LG')
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
@@ -592,9 +594,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'ReversalBreakHigh - Volume', color='LG', height=300)
+            rb.render(st, filtered_df, 'ReversalBreakHigh - Volume', color='LG')
         else:
-            rb.render(st, empty_df, 'ReversalBreakHigh - Volume', color='LG', height=300)
+            rb.render(st, empty_df, 'ReversalBreakHigh - Volume', color='LG')
     
 
     col0, col1, col2, col3, col4, col5 = st.columns(6)
@@ -606,6 +608,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) &
@@ -653,7 +656,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Supertrend Morning Buy', color='LG', renderf10buy00=True)
+        rb.render(st, filtered_df, 'BreakHigh - Supertrend Morning Buy', color='LG', renderf10buy00=True)
     with col1:
         df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
         expected_columns = list(set(df.columns))
@@ -662,6 +665,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) &
@@ -709,7 +713,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed 2 Day Highs', color='LG', renderf10buy00=True)
+        rb.render(st, filtered_df, 'BreakHigh - Crossed 2 Day Highs', color='LG', renderf10buy00=True)
     with col2:
         df = rb.getdf('crossed-day-high')
         expected_columns = list(set(df.columns))
@@ -718,6 +722,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) &
@@ -765,7 +770,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed Day Highs', color='LG', renderf10buy00=True)
+        rb.render(st, filtered_df, 'BreakHigh - Crossed Day Highs', color='LG', renderf10buy00=True)
     with col3:
         df = rb.getdf('supertrend-morning-sell')
         expected_columns = list(set(df.columns))
@@ -774,6 +779,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) &
@@ -819,7 +825,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Supertrend Morning Sell', color='LG', renderf10sell00=True)
+        rb.render(st, filtered_df, 'BreakLow - Supertrend Morning Sell', color='LG', renderf10sell00=True)
     with col4:
         df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
         expected_columns = list(set(df.columns))
@@ -828,6 +834,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) &
@@ -873,7 +880,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed 2 Day Lows', color='LG', renderf10sell00=True)
+        rb.render(st, filtered_df, 'BreakLow - Crossed 2 Day Lows', color='LG', renderf10sell00=True)
     with col5:
         df = rb.getdf('crossed-day-low')
         expected_columns = list(set(df.columns))
@@ -882,6 +889,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) &
@@ -927,7 +935,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell00=True)
+        rb.render(st, filtered_df, 'BreakLow - Crossed Day Lows', color='LG', renderf10sell00=True)
 
 
     col0, col1, col2, col3, col4, col5 = st.columns(6)
@@ -939,6 +947,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) 
@@ -966,7 +975,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Supertrend Morning Buy', color='LG', renderf10buy00=True)
+        rb.render(st, filtered_df, 'ReversalLow - Supertrend Morning Buy', color='LG', renderf10buy00=True)
     with col1:
         df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
         expected_columns = list(set(df.columns))
@@ -975,6 +984,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) 
@@ -1002,7 +1012,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed 2 Day Highs', color='LG', renderf10buy00=True)
+        rb.render(st, filtered_df, 'ReversalLow - Crossed 2 Day Highs', color='LG', renderf10buy00=True)
     with col2:
         df = rb.getdf('crossed-day-high')
         expected_columns = list(set(df.columns))
@@ -1011,6 +1021,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) 
@@ -1038,7 +1049,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed Day Highs', color='LG', renderf10buy00=True)
+        rb.render(st, filtered_df, 'ReversalLow - Crossed Day Highs', color='LG', renderf10buy00=True)
     with col3:
         df = rb.getdf('supertrend-morning-sell')
         expected_columns = list(set(df.columns))
@@ -1047,6 +1058,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) 
@@ -1074,7 +1086,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Supertrend Morning Sell', color='LG', renderf10sell00=True)
+        rb.render(st, filtered_df, 'ReversalHigh - Supertrend Morning Sell', color='LG', renderf10sell00=True)
     with col4:
         df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
         expected_columns = list(set(df.columns))
@@ -1083,6 +1095,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) 
@@ -1110,7 +1123,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed 2 Day Lows', color='LG', renderf10sell00=True)
+        rb.render(st, filtered_df, 'ReversalHigh - Crossed 2 Day Lows', color='LG', renderf10sell00=True)
     with col5:
         df = rb.getdf('crossed-day-low')
         expected_columns = list(set(df.columns))
@@ -1119,6 +1132,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) 
@@ -1146,7 +1160,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell00=True)
+        rb.render(st, filtered_df, 'ReversalHigh - Crossed Day Lows', color='LG', renderf10sell00=True)
 
 
 
