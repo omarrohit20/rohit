@@ -1257,9 +1257,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'BreakHighBuy', color='LG', height=300)
+            rb.render(st, filtered_df, 'Volume - BreakHigh', color='LG')
         else:
-            rb.render(st, empty_df, 'BreakHighBuy', color='LG', height=300)
+            rb.render(st, empty_df, 'Volume - BreakHigh', color='LG')
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
@@ -1280,15 +1280,15 @@ def main():
                 (
                 #  (df['filter3'].str.contains('BreakHighYear2', case=False, regex=True, na=False)) |
                 #  (df['filter3'].str.contains('BreakHighYear', case=False, regex=True, na=False)) |
-                 (df['filter3'].str.contains('Reversal', case=False, regex=True, na=False)) 
+                 (df['filter3'].str.contains('ReversalLow', case=False, regex=True, na=False)) 
                 )
                 ]
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'ReversalBuy', color='LG', height=300)
+            rb.render(st, filtered_df, 'Volume - ReversalLow', color='LG')
         else:
-            rb.render(st, empty_df, 'ReversalBuy', color='LG', height=300)
+            rb.render(st, empty_df, 'Volume - ReversalLow', color='LG')
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
@@ -1315,9 +1315,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'BreakLowSell', color='LG', height=300)
+            rb.render(st, filtered_df, 'Volume - BreakLow', color='LG')
         else:
-            rb.render(st, empty_df, 'BreakLowSell', color='LG', height=300)
+            rb.render(st, empty_df, 'Volume - BreakLow', color='LG')
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
@@ -1338,17 +1338,18 @@ def main():
                 (
                 #  (df['filter3'].str.contains('BreakLowYear2', case=False, regex=True, na=False)) |
                 #  (df['filter3'].str.contains('BreakLowYear', case=False, regex=True, na=False)) |
-                 (df['filter3'].str.contains('Reversal', case=False, regex=True, na=False)) 
+                 (df['filter3'].str.contains('ReversalHigh', case=False, regex=True, na=False)) 
                 )
                 ]
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'ReversalSell', color='LG', height=300)
+            rb.render(st, filtered_df, 'Volume - ReversalHigh', color='LG')
         else:
-            rb.render(st, empty_df, 'ReversalSell', color='LG', height=300)
+            rb.render(st, empty_df, 'ReversalHigh', color='LG')
 
-    col1, col3 = st.columns(2)
+
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -1367,7 +1368,25 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'year5HighChangeLT-30 + week2High', color='LG')
+        rb.render(st, filtered_df, 'year5HighChangeLT-30 + BreakHighMonth3', color='LG')
+    with col2:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (df['filter3'].str.contains('ReversalLowYear2', case=False, regex=True, na=False)) |
+                        (df['filter3'].str.contains('ReversalLowYear', case=False, regex=True, na=False)) |
+                        (df['filter3'].str.contains('ReversalLowMonth6', case=False, regex=True, na=False)) |
+                        (df['filter3'].str.contains('ReversalLowMonth3', case=False, regex=True, na=False))
+                ) &
+                (df['month3HighChange'] < -5) &
+                (df['week2HighChange'] < -2) &
+                (df['weekLowChange'] > 2)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'ReversalLow-BelowWeek2High', color='LG')
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -1386,7 +1405,25 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'year5HighChangeGT30 + week2LowLT0', color='LG')
+        rb.render(st, filtered_df, 'year5HighChangeGT30 + BreakLowMonth3', color='LG')
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (df['filter3'].str.contains('ReversalHighYear2', case=False, regex=True, na=False)) |
+                    (df['filter3'].str.contains('ReversalHighYear', case=False, regex=True, na=False)) |
+                    (df['filter3'].str.contains('ReversalHighMonth6', case=False, regex=True, na=False)) |
+                    (df['filter3'].str.contains('ReversalHighMonth3', case=False, regex=True, na=False))
+                ) &
+                (df['month3LowChange'] > 5) &
+                (df['week2LowChange'] > 2) &
+                (df['weekHighChange'] < -2)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'ReversalHigh-AboveWeek2Low', color='LG')
     
     
 if __name__ == '__main__':
