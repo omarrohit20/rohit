@@ -71,6 +71,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
             PCT_day_change_pre2 = ''
             PCT_change = ''
             year5HighChange = ''
+            year5LowChange = ''
+            year2HighChange = ''
+            year2LowChange = ''
             yearHighChange = ''
             yearLowChange = ''
             month3HighChange = ''
@@ -116,6 +119,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             record['PCT_day_change_pre2'] = PCT_day_change_pre2
                             record['PCT_change'] = PCT_change
                             record['year5HighChange'] = year5HighChange
+                            record['year5LowChange'] = year5LowChange
+                            record['year2HighChange'] = year2HighChange
+                            record['year2LowChange'] = year2LowChange
                             record['yearHighChange'] = yearHighChange
                             record['yearLowChange'] = yearLowChange
                             record['month3HighChange'] = month3HighChange
@@ -524,6 +530,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             PCT_day_change_pre2 = ''
                             PCT_change = ''
                             year5HighChange = ''
+                            year5LowChange = ''
+                            year2HighChange = ''
+                            year2LowChange = ''
                             yearHighChange = ''
                             yearLowChange = ''
                             month3HighChange = ''
@@ -564,6 +573,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     PCT_day_change_pre2 = ''
                     PCT_change = ''
                     year5HighChange = ''
+                    year5LowChange = ''
+                    year2HighChange = ''
+                    year2LowChange = ''
                     yearHighChange = ''
                     yearLowChange = ''
                     month3HighChange = ''
@@ -599,6 +611,9 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                             PCT_day_change_pre2 = data['PCT_day_change_pre2']
                             PCT_change = data['PCT_change']
                             year5HighChange = data['year5HighChange']
+                            year5LowChange = data['year5LowChange']
+                            year2HighChange = data['year2HighChange']
+                            year2LowChange = data['year2LowChange']
                             yearHighChange = data['yearHighChange']
                             yearLowChange = data['yearLowChange']
                             month3HighChange = data['month3HighChange']

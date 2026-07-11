@@ -269,27 +269,9 @@ def insert_movingavg_crossed_up(regression_data):
         and regression_data['ma21c_pre40'] > regression_data['ma10c_pre40']
         and regression_data['industry'] != ''
         ):
-        data = {}
-        data['scrip'] = regression_data['scrip']
-        data['industry'] = regression_data['industry']
-        data['date'] = regression_data['date']
-        data['close'] = regression_data['close']
-        data['ma10c'] = regression_data['ma10c']
-        data['ma21c'] = regression_data['ma21c']
-        data['ma10c_pre5'] = regression_data['ma10c_pre5']
-        data['ma21c_pre5'] = regression_data['ma21c_pre5']
-        data['ma10c_pre10'] = regression_data['ma10c_pre10']
-        data['ma21c_pre10'] = regression_data['ma21c_pre10']
-        data['ma10c_pre20'] = regression_data['ma10c_pre20']
-        data['ma21c_pre20'] = regression_data['ma21c_pre20']
-        data['ma10c_pre40'] = regression_data['ma10c_pre40']
-        data['ma21c_pre40'] = regression_data['ma21c_pre40']
-        data['PCT_day_change'] = regression_data['PCT_day_change']
-        data['PCT_change'] = regression_data['PCT_change']
         
-        json_data = json.loads(json.dumps(data))
         if (db.movingavg_crossed_up.count_documents({'scrip': regression_data['scrip']})) < 1:
-            print(json_data)
+            json_data = data_from_regression(regression_data)
             db.movingavg_crossed_up.insert_one(json_data)
 
 def insert_movingavg_crossed_down(regression_data):
@@ -300,27 +282,8 @@ def insert_movingavg_crossed_down(regression_data):
         and regression_data['ma21c_pre40'] < regression_data['ma10c_pre40']
         and regression_data['industry'] != ''
         ):
-        data = {}
-        data['scrip'] = regression_data['scrip']
-        data['industry'] = regression_data['industry']
-        data['date'] = regression_data['date']
-        data['close'] = regression_data['close']
-        data['ma10c'] = regression_data['ma10c']
-        data['ma21c'] = regression_data['ma21c']
-        data['ma10c_pre5'] = regression_data['ma10c_pre5']
-        data['ma21c_pre5'] = regression_data['ma21c_pre5']
-        data['ma10c_pre10'] = regression_data['ma10c_pre10']
-        data['ma21c_pre10'] = regression_data['ma21c_pre10']
-        data['ma10c_pre20'] = regression_data['ma10c_pre20']
-        data['ma21c_pre20'] = regression_data['ma21c_pre20']
-        data['ma10c_pre40'] = regression_data['ma10c_pre40']
-        data['ma21c_pre40'] = regression_data['ma21c_pre40']
-        data['PCT_day_change'] = regression_data['PCT_day_change']
-        data['PCT_change'] = regression_data['PCT_change']
-        
-        json_data = json.loads(json.dumps(data))
         if (db.movingavg_crossed_down.count_documents({'scrip': regression_data['scrip']})) < 1:
-            print(json_data)
+            json_data = data_from_regression(regression_data)
             db.movingavg_crossed_down.insert_one(json_data)
 
 def buy_all_rule(regression_data, regressionResult, buyIndiaAvg, ws):
