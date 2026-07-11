@@ -38,6 +38,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['weekHighChange'] > 0) &
+                ((df['weekHighChange'] > 2) | (df['weekLowChange'] > 5)) &
                 ((df['monthLowChange'] > 1) | (df['monthLowChange'] < -3)) &
                 ((df['month3HighChange'] > -20) | (df['monthHighChange'] < -10)) &
                 ((df['year2LowChange'] > 10) | (df['monthLowChange'] < -3)) &
@@ -57,6 +59,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['weekHighChange'] > 0) &
+                ((df['weekHighChange'] > 2) | (df['weekLowChange'] > 5)) &
                 ((df['monthLowChange'] > 1) | (df['monthLowChange'] < -3)) &
                 ((df['month3HighChange'] > -20) | (df['monthHighChange'] < -10)) &
                 ((df['year2LowChange'] > 10) | (df['monthLowChange'] < -3)) &
@@ -125,8 +129,27 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (df['month3HighChange'] > -3.5) &
-                ((df['month3HighChange'] < -3) | (df['month6HighChange'] < -15))
+                (
+                    (df['yearHighChange'] <-10) &
+                    (df['month3LowChange'] > 50) &
+                    #(df['monthLowChange'] < 20) &
+                    #(df['week2LowChange'] < 20) &
+                    #(df['weekLowChange'] < 10) &
+                    (df['PCT_day_change'] < 4)
+
+                ) |
+                (
+                    ((df['PCT_day_change'] < 1) | (df['PCT_change'] < 1)) &
+                    (df['yearHighChange'] < -10) &
+                    (df['month6HighChange'] < -5) &
+                    (df['weekHighChange'] < 2) &
+                    (df['month3LowChange'] < 20)
+                )
+                #((df['PCT_day_change'] < 1) | (df['PCT_change'] < 1)) &
+                #(df['month6HighChange'] < -5)
+
+                #(df['month3HighChange'] > -3.5) &
+                #((df['month3HighChange'] < -3) | (df['month6HighChange'] < -15))
                 ]
         except KeyError as e:
             print("")
@@ -409,6 +432,8 @@ def main():
                     ) |
                     (
                         (~df['filter3'].str.contains('ReversalHighMonth6', case=False, regex=True, na=False)) &
+                        (~df['filter3'].str.contains('ReversalHighMonth3', case=False, regex=True, na=False)) &
+                        (~df['filter3'].str.contains('ReversalLowMonth3', case=False, regex=True, na=False)) &
                         (df['filter3'].str.contains('BreakHighMonth6', case=False, regex=True, na=False))
                     ) |
                     (
@@ -467,7 +492,9 @@ def main():
                         (df['filter3'].str.contains('BreakLowYear', case=False, regex=True, na=False))
                     ) |
                     (
-                        (~df['filter3'].str.contains('ReversalLowMonth5', case=False, regex=True, na=False)) &
+                        (~df['filter3'].str.contains('ReversalLowMonth6', case=False, regex=True, na=False)) &
+                        (~df['filter3'].str.contains('ReversalHighMonth3', case=False, regex=True, na=False)) &
+                        (~df['filter3'].str.contains('ReversalLowMonth3', case=False, regex=True, na=False)) &
                         (df['filter3'].str.contains('BreakLowMonth6', case=False, regex=True, na=False))
                     ) |
                     (
@@ -525,7 +552,9 @@ def main():
                         (df['filter3'].str.contains('BreakLowYear', case=False, regex=True, na=False))
                     ) |
                     (
-                        (~df['filter3'].str.contains('ReversalLowMonth5', case=False, regex=True, na=False)) &
+                        (~df['filter3'].str.contains('ReversalLowMonth6', case=False, regex=True, na=False)) &
+                        (~df['filter3'].str.contains('ReversalHighMonth3', case=False, regex=True, na=False)) &
+                        (~df['filter3'].str.contains('ReversalLowMonth3', case=False, regex=True, na=False)) &
                         (df['filter3'].str.contains('BreakLowMonth6', case=False, regex=True, na=False))
                     ) |
                     (
@@ -583,6 +612,8 @@ def main():
                     ) |
                     (
                         (~df['filter3'].str.contains('ReversalHighMonth6', case=False, regex=True, na=False)) &
+                        (~df['filter3'].str.contains('ReversalHighMonth3', case=False, regex=True, na=False)) &
+                        (~df['filter3'].str.contains('ReversalLowMonth3', case=False, regex=True, na=False)) &
                         (df['filter3'].str.contains('BreakHighMonth6', case=False, regex=True, na=False))
                     ) |
                     (
@@ -722,7 +753,7 @@ def main():
         try:
             filtered_df = df[
                 (
-                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) &
@@ -889,7 +920,7 @@ def main():
         try:
             filtered_df = df[
                 (
-                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     # (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) &

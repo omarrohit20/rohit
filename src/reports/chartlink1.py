@@ -207,6 +207,7 @@ def main():
         try:
             filtered_df = df[
                 #(df['lowTail'] >= 1) &
+                (abs(df['monthHighChange']) < abs(df['monthLowChange'])) &
                 (df['PCT_day_change_pre1'] >= 1.5) &
                 (df['PCT_day_change_pre1'] <= 4) &
                 (df['PCT_day_change_pre2'] <= -1) &
@@ -264,6 +265,7 @@ def main():
         try:
             filtered_df = df[
                 #(df['highTail'] >= 1) &
+                (abs(df['monthHighChange']) > abs(df['monthLowChange'])) &
                 (df['PCT_day_change_pre1'] >= -4) &
                 (df['PCT_day_change_pre1'] <= -1.5) &
                 (df['PCT_day_change_pre2'] <= 4) &
