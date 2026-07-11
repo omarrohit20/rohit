@@ -2119,6 +2119,14 @@ def buy_up_trend(regression_data, regressionResult, reg, ws):
             add_in_csv(regression_data, regressionResult, ws, None, None, 'shortUpTrendSellReversal-MonthHigh')
             flag = True
     
+    if(regression_data['ma21c'] < regression_data['ma10c']
+        and regression_data['ma21c_pre20'] > regression_data['ma10c_pre20']
+        and regression_data['ma21c_pre40'] > regression_data['ma10c_pre40']
+        and regression_data['PCT_day_change'] > 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'chisBuyUpTrend-MovingAvgCrossedUp')
+        flag = True
+    
     return flag
 
 

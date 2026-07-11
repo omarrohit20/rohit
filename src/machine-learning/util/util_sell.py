@@ -2119,6 +2119,15 @@ def sell_down_trend(regression_data, regressionResult, reg, ws):
             ):
             add_in_csv(regression_data, regressionResult, ws, None, None, None, None,'shortDownTrendBuyReversal-MonthLow')
             flag = True
+    
+    if(regression_data['ma21c'] > regression_data['ma10c']
+        and regression_data['ma21c_pre20'] < regression_data['ma10c_pre20']
+        and regression_data['ma21c_pre40'] < regression_data['ma10c_pre40']
+        and regression_data['PCT_day_change'] < 0
+        ):
+        add_in_csv(regression_data, regressionResult, ws, None, None, 'chisSellDownTrend-MovingAvgCrossedDown')
+        flag = True
+    
     return flag
 
 def sell_final(regression_data, regressionResult, reg, ws, ws1):
