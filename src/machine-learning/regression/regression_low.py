@@ -393,6 +393,22 @@ def process_regression_low(scrip, dfraw, directory, run_ml_algo, TEST=False):
         regression_data['mlpValue_cla'] = float(0)
     
     dfp = dfp.round(1)
+    
+    # Calculate moving averages
+    ma10 = df['close'].rolling(window=10).mean()
+    ma21 = df['close'].rolling(window=21).mean()
+    
+    ma10c = ma10.tail(1).values[0] if len(ma10) > 0 else 0
+    ma21c = ma21.tail(1).values[0] if len(ma21) > 0 else 0
+    ma10c_pre5 = ma10.tail(6).values[0] if len(ma10) >= 6 else 0
+    ma21c_pre5 = ma21.tail(6).values[0] if len(ma21) >= 6 else 0
+    ma10c_pre10 = ma10.tail(11).values[0] if len(ma10) >= 11 else 0
+    ma21c_pre10 = ma21.tail(11).values[0] if len(ma21) >= 11 else 0
+    ma10c_pre20 = ma10.tail(21).values[0] if len(ma10) >= 21 else 0
+    ma21c_pre20 = ma21.tail(21).values[0] if len(ma21) >= 21 else 0
+    ma10c_pre40 = ma10.tail(41).values[0] if len(ma10) >= 41 else 0
+    ma21c_pre40 = ma21.tail(41).values[0] if len(ma21) >= 41 else 0
+    
     forecast_day_PCT_change = dfp.tail(1).loc[-forecast_out:, 'Low_change1'].values[0]
     forecast_day_PCT2_change = dfp.tail(1).loc[-forecast_out:, 'Low_change2'].values[0]
     forecast_day_PCT3_change = dfp.tail(1).loc[-forecast_out:, 'Low_change3'].values[0]
@@ -765,6 +781,16 @@ def process_regression_low(scrip, dfraw, directory, run_ml_algo, TEST=False):
     regression_data['close_pre4'] = float(close_pre4)
     regression_data['close_pre5'] = float(close_pre5)
     #regression_data['close_pre10'] = float(close_pre10)
+    regression_data['ma10c'] = float(ma10c) if not pd.isna(ma10c) else 0
+    regression_data['ma21c'] = float(ma21c) if not pd.isna(ma21c) else 0
+    regression_data['ma10c_pre5'] = float(ma10c_pre5) if not pd.isna(ma10c_pre5) else 0
+    regression_data['ma21c_pre5'] = float(ma21c_pre5) if not pd.isna(ma21c_pre5) else 0
+    regression_data['ma10c_pre10'] = float(ma10c_pre10) if not pd.isna(ma10c_pre10) else 0
+    regression_data['ma21c_pre10'] = float(ma21c_pre10) if not pd.isna(ma21c_pre10) else 0
+    regression_data['ma10c_pre20'] = float(ma10c_pre20) if not pd.isna(ma10c_pre20) else 0
+    regression_data['ma21c_pre20'] = float(ma21c_pre20) if not pd.isna(ma21c_pre20) else 0
+    regression_data['ma10c_pre40'] = float(ma10c_pre40) if not pd.isna(ma10c_pre40) else 0
+    regression_data['ma21c_pre40'] = float(ma21c_pre40) if not pd.isna(ma21c_pre40) else 0
     regression_data['bar_high'] = float(bar_high)
     regression_data['bar_high_pre1'] = float(bar_high_pre1)
     regression_data['bar_high_pre2'] = float(bar_high_pre2)
