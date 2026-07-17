@@ -61,7 +61,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Supertrend Morning Buy', color='LG', renderf10buy=True, applyBreakOut=True)
+        rb.render(st, filtered_df, 'Supertrend Morning Buy', color='LG', renderf10buy=True)
     with col1:
         df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
         filtered_df = df
@@ -116,7 +116,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed 2 Day Highs', color='LG', renderf10buy=True, applyBreakOut=True)
+        rb.render(st, filtered_df, 'Crossed 2 Day Highs', color='LG', renderf10buy=True)
     with col2:
         df = rb.getdf('crossed-day-high')
         filtered_df = df
@@ -169,7 +169,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed Day Highs', color='LG', renderf10buy=True, applyBreakOut=True)
+        rb.render(st, filtered_df, 'Crossed Day Highs', color='LG', renderf10buy=True)
     with col00:
         df = rb.getdf('supertrend-morning-sell')
         filtered_df = df
@@ -208,7 +208,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Supertrend Morning Sell', color='LG', renderf10sell=True, applyBreakOut=True)
+        rb.render(st, filtered_df, 'Supertrend Morning Sell', color='LG', renderf10sell=True)
     with col3:
         df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
         filtered_df = df
@@ -264,7 +264,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed 2 Day Lows', color='LG', renderf10sell=True, applyBreakOut=True)
+        rb.render(st, filtered_df, 'Crossed 2 Day Lows', color='LG', renderf10sell=True)
     with col4:
         df = rb.getdf('crossed-day-low')
         filtered_df = df
@@ -318,7 +318,7 @@ def main():
                 
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell=True, applyBreakOut=True)
+        rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell=True)
 
 
     col0, col1, col2, col00, col3, col4 = st.columns(6)
@@ -858,37 +858,6 @@ def main():
             pass
         rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell00=True)
 
-    #TO-DO
-    # col3, col6 = st.columns(2)
-    # with col3:
-    #     df = rb.getdf('morning-volume-breakout-buy')
-    #     filtered_df = df
-    #     try:
-    #         filtered_df = df[
-    #             (df['PCT_day_change'] < 2) &
-    #             (df['forecast_day_PCT10_change'] > -9) &
-    #             (df['forecast_day_PCT10_change'] < 6) &
-    #             (df['mlData'].str.contains("0@@")) &
-    #             (df['mlData'].str.contains("0@@CROSSED2Day") | df['mlData'].str.contains("0@@SUPER") | df['mlData'].str.contains("DayH@GT-1"))
-    #         ]
-    #     except KeyError as e:
-    #         print("")
-    #     rb.render(st, filtered_df, 'morning-volume-breakout-buy ##############', color='LG', height=150)
-    # with col6:
-    #     df = rb.getdf('morning-volume-breakout-sell')
-    #     filtered_df = df
-    #     try:
-    #         filtered_df = df[
-    #             (df['PCT_day_change'] > -2) &
-    #             (df['forecast_day_PCT10_change'] < 9) &
-    #             (df['forecast_day_PCT10_change'] > -6) &
-    #             (df['mlData'].str.contains("0@@")) &
-    #             (df['mlData'].str.contains("0@@CROSSED2Day") | df['mlData'].str.contains("0@@SUPER") | df['mlData'].str.contains("DayL@LT1"))
-    #         ]
-    #     except KeyError as e:
-    #         print("")
-    #     rb.render(st, filtered_df, 'morning-volume-breakout-sell ##############', color='LG', height=150)
-
 
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
@@ -1092,6 +1061,17 @@ def main():
 
             filtered_df = df[
                 (
+                    (
+                        (df['filter3'].str.startswith('BreakHighYear', na=False)) |
+                        (df['filter3'].str.startswith('BreakHighMonth6', na=False)) |
+                        (df['filter3'].str.startswith('BreakHighMonth3', na=False)) |
+                        (df['filter3'].str.startswith('NearHighYear', na=False)) |
+                        (df['filter3'].str.startswith('NearHighMonth6', na=False)) |
+                        (df['filter3'].str.startswith('NearHighMonth3', na=False)) |
+                        (df['filter3'].str.startswith('ReversalLowYear', na=False)) |
+                        (df['filter3'].str.startswith('ReversalLowMonth6', na=False)) |
+                        (df['filter3'].str.startswith('ReversalLowMonth3', na=False))
+                    ) &
                     (df['PCT_day_change'] > 0.9) &
                     (df['PCT_day_change'] < 1.7) &
                     ((df['yearHighChange'] < -10) | (df['yearHighChange'] > 0))
@@ -1108,7 +1088,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout-Beey-2 0.9to1.7', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df, 'Breakout-Beey-2 0.9to1.7', color='LG')
     with col1:
         df = rb.getdf('Breakout-Beey-2')
         expected_columns = list(set(df.columns))
@@ -1121,14 +1101,18 @@ def main():
 
             filtered_df = df[
                 (
-                        (df['PCT_day_change'] < 1) &
-                        (df['PCT_day_change'] > -1) &
-                        (
-                                (df['PCT_day_change_pre2'] > 0.1) |
-                                ((df['PCT_day_change'] > 0) & (df['PCT_day_change_pre1'] >= -0.1)) |
-                                (((df['PCT_day_change_pre1'] + df['PCT_day_change_pre2']) < -4) & (
-                                    ~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)))
-                        )
+                    (
+                        (~df['filter3'].str.startswith('BreakLowYear', na=False)) &
+                        (~df['filter3'].str.startswith('BreakLowMonth', na=False))   
+                    ) &
+                    (df['PCT_day_change'] < 1) &
+                    (df['PCT_day_change'] > -1) &
+                    (
+                        (df['PCT_day_change_pre2'] > 0.1) |
+                        ((df['PCT_day_change'] > 0) & (df['PCT_day_change_pre1'] >= -0.1)) |
+                        (((df['PCT_day_change_pre1'] + df['PCT_day_change_pre2']) < -4) & (
+                            ~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)))
+                    )
                 )
                 ]
             filtered_df = filtered_df[
@@ -1142,7 +1126,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout-Beey-2 -1to1', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df, 'Breakout-Beey-2 -1to1', color='LG')
     with col2:
         df = rb.getdf('Breakout-Beey-2')
         expected_columns = list(set(df.columns))
@@ -1160,7 +1144,7 @@ def main():
                 filtered_df = empty_df
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout-Beey-2 after 10', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df, 'Breakout-Beey-2 after 10', color='LG')
     with col3:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))
@@ -1173,9 +1157,20 @@ def main():
 
             filtered_df = df[
                 (
-                        (df['PCT_day_change'] < -0.9) &
-                        (df['PCT_day_change'] > -1.7) &
-                        ((df['yearLowChange'] > 10) | (df['yearLowChange'] < 0))
+                    (
+                        (df['filter3'].str.startswith('BreakLowYear', na=False)) |
+                        (df['filter3'].str.startswith('BreakLowMonth6', na=False)) |
+                        (df['filter3'].str.startswith('BreakLowMonth3', na=False)) |
+                        (df['filter3'].str.startswith('NearLowYear', na=False)) |
+                        (df['filter3'].str.startswith('NearLowMonth6', na=False)) |
+                        (df['filter3'].str.startswith('NearLowMonth3', na=False)) |
+                        (df['filter3'].str.startswith('ReversalHighYear', na=False)) |
+                        (df['filter3'].str.startswith('ReversalHighMonth6', na=False)) |
+                        (df['filter3'].str.startswith('ReversalHighMonth3', na=False))
+                    ) &
+                    (df['PCT_day_change'] < -0.9) &
+                    (df['PCT_day_change'] > -1.7) &
+                    ((df['yearLowChange'] > 10) | (df['yearLowChange'] < 0))
                 )
             ]
             filtered_df = filtered_df[
@@ -1189,7 +1184,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout-Siill-2 -1.7to-0.9', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df, 'Breakout-Siill-2 -1.7to-0.9', color='LG')
     with col4:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))
@@ -1202,14 +1197,18 @@ def main():
 
             filtered_df = df[
                 (
-                        (df['PCT_day_change'] < 1) &
-                        (df['PCT_day_change'] > -1) &
-                        (
-                                (df['PCT_day_change_pre2'] < -0.1) |
-                                ((df['PCT_day_change'] < 0) & (df['PCT_day_change_pre1'] <= 0.1)) |
-                                (((df['PCT_day_change_pre1'] + df['PCT_day_change_pre2']) > 4) & (
-                                    ~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)))
-                        )
+                    (
+                        (~df['filter3'].str.startswith('BreakHighYear', na=False)) &
+                        (~df['filter3'].str.startswith('BreakHighMonth', na=False))  
+                    ) &
+                    (df['PCT_day_change'] < 1) &
+                    (df['PCT_day_change'] > -1) &
+                    (
+                        (df['PCT_day_change_pre2'] < -0.1) |
+                        ((df['PCT_day_change'] < 0) & (df['PCT_day_change_pre1'] <= 0.1)) |
+                        (((df['PCT_day_change_pre1'] + df['PCT_day_change_pre2']) > 4) & (
+                            ~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)))
+                    )
                 )
             ]
             filtered_df = filtered_df[
@@ -1223,7 +1222,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout-Siill-2 -1to1', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df, 'Breakout-Siill-2 -1to1', color='LG')
     with col5:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))
@@ -1241,7 +1240,7 @@ def main():
                 filtered_df = empty_df
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout-Siill-2 after10', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df, 'Breakout-Siill-2 after10', color='LG')
 
 
     col0, col1, col2, col3, col4, col5 = st.columns(6)
@@ -1253,6 +1252,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (df['filter3'].str.startswith('ReversalLow', na=False)) &
                     (df['lowTail'] > 1.5) &
                     (df['highTail'] < 1.3) &
                     (df['PCT_day_change'] < 1) &
@@ -1262,6 +1262,7 @@ def main():
                 (
                     (df['lowTail'] > 1.3) &
                     (df['highTail'] < 1) &
+                    ((df['PCT_day_change_pre1'] > 2) | (df['PCT_day_change_pre2'] > 2)) &
                     (df['PCT_day_change'] < -1)
                 )
                 |
@@ -1279,7 +1280,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df,'Breakout-Beey-2 lowTail GT1.3', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df,'Breakout-Beey-2 lowTail GT1.3', color='LG')
     with col1:
         df = rb.getdf('Breakout-Beey-2')
         expected_columns = list(set(df.columns))
@@ -1287,6 +1288,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['forecast_day_PCT10_change'] > 8) &
+                (df['yearLowChange'] > 15) &
                 (df['PCT_day_change'] > -1) &
                 (df['highTail'] > 1.3) &
                 (df['lowTail'] < 1)
@@ -1296,10 +1299,10 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout-Beey-2 highTail GT1.3', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df, 'Breakout-Beey-2 highTail GT1.3', color='LG')
     with col2:
         df = rb.getdf('Breakout-Beey-2')
-        rb.render(st, df, 'Breakout-Beey-2', color='LG', applyBreakOut=True)
+        rb.render(st, df, 'Breakout-Beey-2', color='LG')
     with col3:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))
@@ -1308,6 +1311,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (df['filter3'].str.startswith('ReversalHigh', na=False)) &
                     (df['highTail'] > 1.5) &
                     (df['lowTail'] < 1.3) &
                     (df['PCT_day_change'] > -1) &
@@ -1317,6 +1321,7 @@ def main():
                 (
                     (df['highTail'] > 1.3) &
                     (df['lowTail'] < 1) &
+                    ((df['PCT_day_change_pre1'] < -2) | (df['PCT_day_change_pre2'] < -2)) &
                     (df['PCT_day_change'] > 1)
                 )
                 |
@@ -1334,7 +1339,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout-Siill-2 highTail GT1.3', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df, 'Breakout-Siill-2 highTail GT1.3', color='LG')
     with col4:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))
@@ -1342,6 +1347,8 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['forecast_day_PCT10_change'] < -8) &
+                (df['yearHighChange'] < -15) &
                 (df['PCT_day_change'] < 1) &
                 (df['lowTail'] > 1.3) &
                 (df['highTail'] < 1)
@@ -1351,13 +1358,32 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Breakout-Siill-2 lowTail GT1.3', color='LG', applyBreakOut=True)
+        rb.render(st, filtered_df, 'Breakout-Siill-2 lowTail GT1.3', color='LG')
     with col5:
         df = rb.getdf('Breakout-Siill-2')
-        rb.render(st, df, 'Breakout-Siill-2', color='LG', applyBreakOut=True)
+        rb.render(st, df, 'Breakout-Siill-2', color='LG')
 
 
-    col1, col2, col3, col4 = st.columns(4)
+    col10, col1, col2, col30, col3, col4 = st.columns(6)
+    with col10:
+        df = rb.getdf('Breakout-Beey-2')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (df['PCT_day_change'] > 0.5) &
+                    (df['PCT_day_change'] < 3) &
+                    (df['forecast_day_PCT10_change'] < -5)
+                )
+            ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'F10LT-5 - Breakout-Beey-2', color='LG')
+        else:
+            rb.render(st, empty_df, 'F10LT-5 - Breakout-Beey-2', color='LG')
     with col1:
         df = rb.getdf('Breakout-Beey-2')
         expected_columns = list(set(df.columns))
@@ -1460,6 +1486,25 @@ def main():
             rb.render(st, filtered_df, 'ReversalBreakLow - Breakout-Beey-2', color='LG')
         else:
             rb.render(st, empty_df, 'ReversalBreakLow - Breakout-Beey-2', color='LG')
+    with col30:
+        df = rb.getdf('Breakout-Siill-2')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (df['PCT_day_change'] < -0.5) &
+                    (df['PCT_day_change'] > -3) &
+                    (df['forecast_day_PCT10_change'] > 5)
+                )
+            ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) < 20:
+            rb.render(st, filtered_df, 'F10GT5 - Breakout-Siill-2', color='LG')
+        else:
+            rb.render(st, empty_df, 'F10GT5 - Breakout-Siill-2', color='LG')
     with col3:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))

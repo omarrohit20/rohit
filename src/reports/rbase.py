@@ -1260,11 +1260,11 @@ def apply_breakout_highlight(row):
 
             if count < 5:
                 # Check if any document exists with specific time patterns
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}, 'yearLowChange': {'$gt': 15}}) and pct_day_change < 3.5 :
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:3'}}) and pct_day_change < 3.5 :
                     styles['scrip'] = 'background-color: #E0FFDE'
                     return styles
             else:
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:2|10:3|10:4|10:50'}, 'yearLowChange': {'$gt': 15}}) and pct_day_change < 3.5:
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:2|10:3|10:4|10:50'}}) and pct_day_change < 3.5:
                     styles['scrip'] = 'background-color: #E0FFDE'
                     return styles
 
@@ -1280,11 +1280,11 @@ def apply_breakout_highlight(row):
 
             if count < 5 and count10 < 5:
                 # Check if any document exists with specific time patterns
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}}) and pct_day_change > -3.5:
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:3'}}) and pct_day_change > -3.5:
                     styles['scrip'] = 'background-color: #FCCFD2'
                     return styles
             elif count < 5:
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:30'}, 'yearLowChange': {'$gt': 50}}) and pct_day_change > -3.5:
+                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:3'}, 'yearLowChange': {'$gt': 50}}) and pct_day_change > -3.5:
                     styles['scrip'] = 'background-color: #FCCFD2'
                     return styles
             else:
@@ -1295,124 +1295,6 @@ def apply_breakout_highlight(row):
         except Exception:
             # fallback to existing style on any DB error
             pass
-
-        
-        try:
-            coll = dbcl['Breakout-Beey-2']
-            count = coll.count_documents({'systemtime': {'$regex': '09:2'}})
-            count_10 = coll.count_documents({'systemtime': {'$regex': '10:'}})
-            if count < 5 and (yearHighChange < -10 or yearHighChange > 0 or week2HighChange > 0):
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex':'09:|10:0|10:1|10:2'}}) and pct_day_change > 0.5:
-                    styles['systemtime'] = 'background-color: #009600'
-                    return styles
-            if count > 12 and (yearHighChange < -10 or yearHighChange > 0 or week2HighChange > 0):
-                if (coll.count_documents({'systemtime': {'$regex': '09:2'}, 'PCT_day_change': {'$gt': 1.8}}) < 4) and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and (pct_day_change) > 1.9 and (pct_day_change) < 4:
-                    styles['systemtime'] = 'background-color: #009600'
-                    return styles
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex':'09:4|09:5|10:0|10:1|10:2'}}) and (pct_day_change) > 1.9 and (pct_day_change) < 4:
-                    styles['systemtime'] = 'background-color: #009600'
-                    return styles
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and (pct_day_change) < -1.9 and (pct_day_change) > -4:
-                    styles['systemtime'] = 'background-color: #009600'
-                    return styles
-            if (yearHighChange < -10 or yearHighChange > 0 or week2HighChange > 0):
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex':'09:|10:0|10:1|10:2'}}) and pct_day_change > -0.3 and pct_day_change < 0.7:
-                    if (pct_day_change_pre2 > 0.1) or ((pct_day_change > 0) and (pct_day_change_pre1 > 0.1)) or (((pct_day_change_pre1 + pct_day_change_pre2) < -4) and ('09:2' not in system_time)):
-                        styles['systemtime'] = 'background-color: #009600'
-                        return styles
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:0|10:1|10:2'}}) and pct_day_change > -0.3 and pct_day_change < 0.7:
-                styles['systemtime'] = 'background-color: #009600'
-                return styles
-            if count_10 < 10 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:0|10:1|10:2|10:3'}}) and pct_day_change < 3.5:
-                styles['systemtime'] = 'background-color: #009600'
-                return styles
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and pct_day_change < -4 and f5ch < -6:
-                styles['systemtime'] = 'background-color: #009600'
-                return styles
-        except Exception:
-            # fallback to existing style on any DB error
-            pass
-
-        try:
-            coll = dbcl['Breakout-Siill-2']
-            count = coll.count_documents({'systemtime': {'$regex': '09:2'}})
-            count_10 = coll.count_documents({'systemtime': {'$regex': '10:'}})
-            if count < 5 and (yearLowChange > 10 or yearLowChange < 0 or week2LowChange < 0):
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex':'09:|10:0|10:1|10:2'}}) and pct_day_change < -0.5:
-                    styles['systemtime'] = 'background-color: #e50e1d'
-                    return styles
-            if count > 12 and (yearLowChange > 10 or yearLowChange < 0 or week2LowChange < 0):
-                if (coll.count_documents({'systemtime': {'$regex': '09:2'}, 'PCT_day_change': {'$lt': -1.8}}) < 4) and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and (pct_day_change) < -1.9 and (pct_day_change) > -4:
-                    styles['systemtime'] = 'background-color: #e50e1d'
-                    return styles
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex':'09:4|09:5|10:0|10:1|10:2'}}) and (pct_day_change) < -1.9 and (pct_day_change) > -4:
-                    styles['systemtime'] = 'background-color: #e50e1d'
-                    return styles
-                if (coll.count_documents({'systemtime': {'$regex': '09:2'}, 'PCT_day_change': {'$gt': 1.8}}) < 5) and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and (pct_day_change) > 1.9 and (pct_day_change) < 4:
-                    styles['systemtime'] = 'background-color: #e50e1d'
-                    return styles
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex':'09:4|09:5|10:0|10:1|10:2'}}) and (pct_day_change) > 1.9 and (pct_day_change) < 4:
-                    styles['systemtime'] = 'background-color: #e50e1d'
-                    return styles
-            if (yearLowChange > 10 or yearLowChange < 0 or week2LowChange < 0):
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex':'09:|10:0|10:1|10:2'}}) and pct_day_change > -0.7 and pct_day_change < 0.3:
-                    if (pct_day_change_pre2 < -0.1) or ((pct_day_change < 0) and (pct_day_change_pre1 < -0.1)) or (((pct_day_change_pre1 + pct_day_change_pre2) > 4) and ('09:2' not in system_time)):
-                        styles['systemtime'] = 'background-color: #e50e1d'
-                        return styles
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:0|10:1|10:2'}}) and pct_day_change > -0.7 and pct_day_change < 0.3:
-                styles['systemtime'] = 'background-color: #e50e1d'
-                return styles
-            if count_10 < 10 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:0|10:1|10:2|10:3'}}) and pct_day_change > -3.5:
-                styles['systemtime'] = 'background-color: #e50e1d'
-                return styles
-            if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:'}}) and pct_day_change > 4 and f5ch > 6:
-                styles['systemtime'] = 'background-color: #e50e1d'
-                return styles
-        except Exception:
-            # fallback to existing style on any DB error
-            pass
-        
-        
-        # try:
-        #     coll = dbcl['Breakout-Buy-after-10']
-        #     count = coll.count_documents({'systemtime': {'$regex': '09:|10:00:00'}})
-        #     if count < 5:
-        #         if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}, 'yearLowChange': {'$gt': 15}}):
-        #             styles['systemtime'] = 'background-color: #009600'
-        #             return styles
-        # except Exception:
-        #     # fallback to existing style on any DB error
-        #     pass
-        #
-        # try:
-        #     coll = dbcl['Breakout-Sell-after-10']
-        #     count = coll.count_documents({'systemtime': {'$regex': '09:|10:00:00'}})
-        #     if count < 5:
-        #         if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}, 'yearHighChange': {'$lt': -15}}):
-        #             styles['systemtime'] = 'background-color: #e50e1d'
-        #             return styles
-        # except Exception:
-        #     # fallback to existing style on any DB error
-        #     pass
-
-
-        # try:
-        #     coll = dbcl['1-Bbuyy-morningUp-downConsolidation']
-        #     if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
-        #         styles['scrip'] = 'background-color: #E0FFDE'
-        #         return styles
-        # except Exception:
-        #     # fallback to existing style on any DB error
-        #     pass
-
-        # try:
-        #     coll = dbcl['1-Sselll-morningDown-upConsolidation']
-        #     if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:4|09:5|10:00:00|10:05|10:1|10:2|10:30'}}):
-        #         styles['scrip'] = 'background-color: #FCCFD2'
-        #         return styles
-        # except Exception:
-        #     # fallback to existing style on any DB error
-        #     pass
 
 
         try:
@@ -1516,6 +1398,61 @@ def apply_breakout_highlight(row):
             pass
 
         styles['mlData'] = existing
+    except Exception:
+        pass
+    return styles
+
+@st.cache_data(ttl=10)
+def apply_breakout_highlight_volume(row):
+    """Return a Series of styles for a row: preserve existing mlData styles
+    but force pink for mlData when systemtime contains '10:' and mlData
+    indicates a 'CROSSED' event.
+    """
+    styles = pd.Series('', index=row.index)
+    try:
+        # # Only apply this special pink highlight for chartlink1 views
+        # if not chartlink1 and not testLearning and not applyBreakOut:
+        #     # preserve existing mlData style
+        #     ml_value = str(row.get('mlData', ''))
+        #     system_time = str(row.get('systemtime'))
+        #     try:
+        #         styles['mlData'] = highlight_category_column(ml_value, system_time) or ''
+        #     except Exception:
+        #         styles['mlData'] = ''
+        #     return styles
+
+        ml_value = str(row.get('mlData', ''))
+        system_time = str(row.get('systemtime'))
+        f10ch = float(row.get('forecast_day_PCT10_change', 0) or 0)
+        f7ch = float(row.get('forecast_day_PCT7_change', 0) or 0)
+        f5ch = float(row.get('forecast_day_PCT5_change', 0) or 0)
+        pct_day_change = float(row.get('PCT_day_change', 0) or 0)
+        pct_day_change_pre1 = float(row.get('PCT_day_change_pre1', 0) or 0)
+        pct_day_change_pre2 = float(row.get('PCT_day_change_pre2', 0) or 0)
+        yearHighChange = float(row.get('yearHighChange', 0) or 0)
+        yearLowChange = float(row.get('yearLowChange', 0) or 0)
+        week2HighChange = float(row.get('week2HighChange', 0) or 0)
+        week2LowChange = float(row.get('week2LowChange', 0) or 0)
+        scrip = row.get('scrip')
+
+        # Default to existing mlData style
+        existing = ''
+        try:
+            existing = highlight_category_column(ml_value, system_time, f10ch) or ''
+        except Exception:
+            existing = ''
+
+        coll = dbcl['Breakout-Beey-2']
+        if coll.find_one({'scrip': scrip}):
+            styles['scrip'] = 'background-color: #009600'
+            return styles
+        
+        coll = dbcl['Breakout-Siill-2']
+        if coll.find_one({'scrip': scrip}):
+            styles['scrip'] = 'background-color: #e50e1d'
+            return styles
+
+        
     except Exception:
         pass
     return styles
@@ -1777,7 +1714,7 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
     if renderml:
         df_styled = highlight_category_row(df, color=color)
         if(zshortTerm) and color =='LG':
-            df_styled = df_styled.apply(apply_breakout_highlight_ml, axis=1)
+            df_styled = df_styled.apply(apply_breakout_highlight_volume, axis=1)
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
     elif (df.empty):
         st.dataframe(df, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
@@ -1796,6 +1733,13 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
             df_styled = df_styled.apply(apply_f10_buy_01, axis=1)
         elif renderf10sell01:
             df_styled = df_styled.apply(apply_f10_sell_01, axis=1)
+
+        if 'Buy' in name:
+            df_styled = df_styled.apply(apply_f10_buy_01, axis=1)
+        if 'Sell' in name:
+            df_styled = df_styled.apply(apply_f10_sell_01, axis=1)
+        
+
         
         if (not df.empty):
             if ((chartlink0) and (color == 'G' or color == 'R')):
@@ -1804,8 +1748,10 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
                 df_styled = df_styled.apply(apply_highlight_column, axis=1)
     
         
-        if(chartlink0 or chartlink1 or chartlink2 or applyBreakOut) and (noColourFilter == False) and color =='LG':
+        if(chartlink0 or chartlink1 or chartlink2 or zshortTerm) and (noColourFilter == False) and color =='LG':
             df_styled = df_styled.apply(apply_breakout_highlight, axis=1)
+        if(chartlink0 or applyBreakOut) and (noColourFilter == False) and color =='LG':
+            df_styled = df_styled.apply(apply_breakout_highlight_volume, axis=1)
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
 
 @st.cache_data(ttl=10)

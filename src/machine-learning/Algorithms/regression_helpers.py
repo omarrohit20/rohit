@@ -93,27 +93,27 @@ def addFeatures(dfsource, dftarget, close, n):
        
 def addFeaturesOpenChange(dfsource, dftarget, open, n):
     return_n = "Open_change" + str(n)
-    dftarget[return_n] = (dfsource[open].pct_change(n))*100  
+    dftarget[return_n] = (dfsource[open].pct_change(n, fill_method=None))*100  
     
 def addFeaturesLowChange(dfsource, dftarget, low, n):
     return_n = "Low_change" + str(n)
-    dftarget[return_n] = (dfsource[low].pct_change(n))*100
+    dftarget[return_n] = (dfsource[low].pct_change(n, fill_method=None))*100
     
 def addFeaturesHighChange(dfsource, dftarget, high, n):
     return_n = "High_change" + str(n)
-    dftarget[return_n] = (dfsource[high].pct_change(n))*100    
+    dftarget[return_n] = dfsource[high].pct_change(n, fill_method=None) * 100  
     
 def addFeaturesVolChange(dfsource, dftarget, volume, n):
     return_n = "VOL_change" + str(n)
-    dftarget[return_n] = (dfsource[volume].pct_change(n))*100  
+    dftarget[return_n] = (dfsource[volume].pct_change(n, fill_method=None))*100  
     
 def addFeaturesEMA9Change(dfsource, dftarget, EMA9, n):
     return_n = "EMA9_change" + str(n)
-    dftarget[return_n] = (dfsource[EMA9].pct_change(n))*100 
+    dftarget[return_n] = (dfsource[EMA9].pct_change(n, fill_method=None))*100 
     
 def addFeaturesEMA21Change(dfsource, dftarget, EMA21, n):
     return_n = "EMA21_change" + str(n)
-    dftarget[return_n] = (dfsource[EMA21].pct_change(n))*100               
+    dftarget[return_n] = (dfsource[EMA21].pct_change(n, fill_method=None))*100               
          
  
         

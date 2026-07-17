@@ -306,9 +306,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=300)
+            rb.render(st, filtered_df, 'MorningDown:ABSLT1-CheckRecommendations', color='G', height=300)
         else:
-            rb.render(st, empty_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=300)
+            rb.render(st, empty_df, 'MorningDown:ABSLT1-CheckRecommendations', color='G', height=300)
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         rb.render(st, df, 'morning-volume-breakout-sell ######################', color='R', height=300)
@@ -329,9 +329,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=300)
+            rb.render(st, filtered_df, 'MorningUp:ABSLT1-CheckRecommendations', color='R', height=300)
         else:
-            rb.render(st, empty_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=300)
+            rb.render(st, empty_df, 'MorningUp:ABSLT1-CheckRecommendations', color='R', height=300)
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
