@@ -1048,7 +1048,7 @@ def main():
         rb.render(st, filtered_df, 'Crossed-2Day-Low + sell-morning-volume-breakout(Trending)', column_order=rb.column_order_p, color='R')
 
 
-    col0, col1, col2, col3, col4, col5 = st.columns(6)
+    col0, col1, col2, col3 = st.columns(4)
     with col0:
         df = rb.getdf('Breakout-Beey-2')
         expected_columns = list(set(df.columns))
@@ -1128,24 +1128,6 @@ def main():
             print("")
         rb.render(st, filtered_df, 'Breakout-Beey-2 -1to1', color='LG')
     with col2:
-        df = rb.getdf('Breakout-Beey-2')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df_2 = df[
-                    (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
-                ]
-            if len(filtered_df_2) < 10:
-                filtered_df = filtered_df[
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
-                ]
-            else:
-                filtered_df = empty_df
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'Breakout-Beey-2 after 10', color='LG')
-    with col3:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -1185,7 +1167,7 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Breakout-Siill-2 -1.7to-0.9', color='LG')
-    with col4:
+    with col3:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -1223,27 +1205,9 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Breakout-Siill-2 -1to1', color='LG')
-    with col5:
-        df = rb.getdf('Breakout-Siill-2')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df_2 = df[
-                    (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
-                ]
-            if len(filtered_df_2) < 10:
-                filtered_df = filtered_df[
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
-                ]
-            else:
-                filtered_df = empty_df
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'Breakout-Siill-2 after10', color='LG')
+    
 
-
-    col0, col1, col2, col3, col4, col5 = st.columns(6)
+    col0, col1, col2, col3 = st.columns(4)
     with col0:
         df = rb.getdf('Breakout-Beey-2')
         expected_columns = list(set(df.columns))
@@ -1301,9 +1265,6 @@ def main():
             print("")
         rb.render(st, filtered_df, 'Breakout-Beey-2 highTail GT1.3', color='LG')
     with col2:
-        df = rb.getdf('Breakout-Beey-2')
-        rb.render(st, df, 'Breakout-Beey-2', color='LG')
-    with col3:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -1340,7 +1301,7 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Breakout-Siill-2 highTail GT1.3', color='LG')
-    with col4:
+    with col3:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -1359,11 +1320,53 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'Breakout-Siill-2 lowTail GT1.3', color='LG')
-    with col5:
+    
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        df = rb.getdf('Breakout-Beey-2')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df_2 = df[
+                    (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
+                ]
+            if len(filtered_df_2) < 10:
+                filtered_df = filtered_df[
+                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                ]
+            else:
+                filtered_df = empty_df
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Breakout-Beey-2 after 10', color='LG')
+    with col2:
+        df = rb.getdf('Breakout-Beey-2')
+        rb.render(st, df, 'Breakout-Beey-2', color='LG')
+    with col3:
+        df = rb.getdf('Breakout-Siill-2')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df_2 = df[
+                    (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
+                ]
+            if len(filtered_df_2) < 10:
+                filtered_df = filtered_df[
+                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                ]
+            else:
+                filtered_df = empty_df
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Breakout-Siill-2 after10', color='LG')
+    with col4:
         df = rb.getdf('Breakout-Siill-2')
         rb.render(st, df, 'Breakout-Siill-2', color='LG')
 
-
+    
     col10, col1, col2, col30, col3, col4 = st.columns(6)
     with col10:
         df = rb.getdf('Breakout-Beey-2')

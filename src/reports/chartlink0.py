@@ -1465,6 +1465,7 @@ def main():
                         (df['filter3'].str.contains('ReversalLowMonth6', case=False, regex=True, na=False)) |
                         (df['filter3'].str.contains('ReversalLowMonth3', case=False, regex=True, na=False))
                 ) &
+                #(df['PCT_day_change_pre1'] > -0.5) &
                 (df['month3HighChange'] < -5) &
                 (df['week2HighChange'] < -2) &
                 (df['weekLowChange'] > 2)
@@ -1502,6 +1503,7 @@ def main():
                     (df['filter3'].str.contains('ReversalHighMonth6', case=False, regex=True, na=False)) |
                     (df['filter3'].str.contains('ReversalHighMonth3', case=False, regex=True, na=False))
                 ) &
+                (df['PCT_day_change_pre1'] < 0.5) &
                 (df['month3LowChange'] > 5) &
                 (df['week2LowChange'] > 2) &
                 (df['weekHighChange'] < -2)

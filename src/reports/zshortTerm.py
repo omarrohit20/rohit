@@ -158,6 +158,29 @@ def main():
         df = rb.getdf_sandlterm('breakoutM2HR')
         rb.render_sandlterm_data(st, df, 'breakoutM2HR', color='LG')
     
+
+    col0, col1, col2, col3, col4, col5 = st.columns(6)
+    with col0:
+        df = rb.getdf_sandlterm('movingavg_crossed_up')
+        rb.render_sandlterm_data(st, df, 'movingavg_crossed_up', color='LG')
+    with col1:
+        df = rb.getdf_sandlterm('movingavg_crossed_up')
+        rb.render_sandlterm_data(st, df, 'movingavg_crossed_up', color='LG')
+    with col2:
+        df = rb.getdf_sandlterm('movingavg_crossed_up')
+        rb.render_sandlterm_data(st, df, 'movingavg_crossed_up', color='LG')
+    with col3:
+        df = rb.getdf_sandlterm('movingavg_crossed_down')
+        rb.render_sandlterm_data(st, df, 'movingavg_crossed_down', color='LG')
+    with col4:
+        df = rb.getdf_sandlterm('movingavg_crossed_down')
+        rb.render_sandlterm_data(st, df, 'movingavg_crossed_down', color='LG')
+    with col5:
+        df = rb.getdf_sandlterm('movingavg_crossed_down')
+        rb.render_sandlterm_data(st, df, 'movingavg_crossed_down', color='LG')
+    
+    
+
     
     col0, col1, col2, col3 = st.columns(4)
     with col0:
