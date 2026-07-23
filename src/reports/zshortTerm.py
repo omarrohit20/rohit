@@ -162,10 +162,26 @@ def main():
     col0, col1, col2, col3, col4, col5 = st.columns(6)
     with col0:
         df = rb.getdf_sandlterm('movingavg_crossed_up')
-        rb.render_sandlterm_data(st, df, 'movingavg_crossed_up', color='LG')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['yearHighChange'] < -30) |
+                (df['month3HighChange'] < -15) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render_sandlterm_data(st, filtered_df, 'movingavg_crossed_up', color='LG')
     with col1:
         df = rb.getdf_sandlterm('movingavg_crossed_up')
-        rb.render_sandlterm_data(st, df, 'movingavg_crossed_up', color='LG')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (abs(df['PCT_day_change']) > 1.5) | 
+                (abs(df['PCT_change']) > 3)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render_sandlterm_data(st, filtered_df, 'movingavg_crossed_up', color='LG')
     with col2:
         df = rb.getdf_sandlterm('movingavg_crossed_up')
         rb.render_sandlterm_data(st, df, 'movingavg_crossed_up', color='LG')
