@@ -1804,4 +1804,9 @@ def getdf_sandlterm(collection_name, chartink=False):
 def render_sandlterm_data(st, df, name, height=200, color='NA', column_order=column_order_sandlterm, column_conf=column_config_sandlterm):
     df_styled = highlight_category_row(df, color=color)
     st.write("********"+ name + "********")
-    st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+    # Prefer configured order for known columns, then append any remaining df columns
+    df_cols = [c for c in df.columns if c != '_id']
+    preferred = [c for c in column_order if c in df_cols]
+    remaining = [c for c in df_cols if c not in preferred]
+    full_column_order = preferred + remaining
+    st.dataframe(df_styled, height=height, column_order=full_column_order, column_config=column_conf, use_container_width=True)

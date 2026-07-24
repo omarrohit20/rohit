@@ -835,10 +835,10 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'morning-volume-breakout-buy : LastUpDown : Stock LT(2)', color='LG', height=300,
+            rb.render(st, filtered_df, 'morning-volume-breakout-buy : LastUpDown : Stock LT(2)', color='LG',
                       renderf10buy01=True)
         else:
-            rb.render(st, empty_df, 'morning-volume-breakout-buy : LastUpDown : Stock LT(2)', color='LG', height=300,
+            rb.render(st, empty_df, 'morning-volume-breakout-buy : LastUpDown : Stock LT(2)', color='LG',
                       renderf10buy01=True)
     with col2:
         df = rb.getintersectdf('morning-volume-bs', 'cash-buuy')
@@ -870,9 +870,9 @@ def main():
         except KeyError as e:
             print("")
         if len(df_at_9) < 3:
-            rb.render(st, filtered_df, 'UP-BUY : Stock LT(2)', color='LG', height=300, renderf10buy01=True)
+            rb.render(st, filtered_df, 'UP-BUY : Stock LT(2)', color='LG', renderf10buy01=True)
         else:
-            rb.render(st, empty_df, 'UP-BUY : Stock LT(2)', color='LG', height=300, renderf10buy01=True)
+            rb.render(st, empty_df, 'UP-BUY : Stock LT(2)', color='LG', renderf10buy01=True)
     with col3:
         df = rb.getintersectdf('morning-volume-breakout-sell', 'cash-seell')
         expected_columns = list(set(df.columns))
@@ -906,11 +906,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) < 20:
-            rb.render(st, filtered_df, 'morning-volume-breakout-sell : LastUpDown : Stock GT(-2)', color='LG',
-                      height=300, renderf10sell01=True)
+            rb.render(st, filtered_df, 'morning-volume-breakout-sell : LastUpDown : Stock GT(-2)', color='LG', renderf10sell01=True)
         else:
-            rb.render(st, empty_df, 'morning-volume-breakout-sell : LastUpDown : Stock GT(-2)', color='LG', height=300,
-                      renderf10sell01=True)
+            rb.render(st, empty_df, 'morning-volume-breakout-sell : LastUpDown : Stock GT(-2)', color='LG', renderf10sell01=True)
     with col4:
         df = rb.getintersectdf('morning-volume-bs', 'cash-seell')
         expected_columns = list(set(df.columns))
@@ -940,9 +938,9 @@ def main():
         except KeyError as e:
             print("")
         if len(df_at_9) < 3:
-            rb.render(st, filtered_df, 'DOWN-SELL : Stock GT(-2)', color='LG', height=300, renderf10sell01=True)
+            rb.render(st, filtered_df, 'DOWN-SELL : Stock GT(-2)', color='LG', renderf10sell01=True)
         else:
-            rb.render(st, empty_df, 'DOWN-SELL : Stock GT(-2)', color='LG', height=300, renderf10sell01=True)
+            rb.render(st, empty_df, 'DOWN-SELL : Stock GT(-2)', color='LG', renderf10sell01=True)
 
     col1, col3, col4, col5, col7, col8 = st.columns(6)
     with col1:
