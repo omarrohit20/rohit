@@ -1802,6 +1802,12 @@ def getdf_sandlterm(collection_name, chartink=False):
     return df
 
 def render_sandlterm_data(st, df, name, height=200, color='NA', column_order=column_order_sandlterm, column_conf=column_config_sandlterm):
+    # Newest signal date first for all sandlterm widgets
+    if df is not None and not df.empty and 'date' in df.columns:
+        df = df.copy()
+        df['_sort_date'] = pd.to_datetime(df['date'], errors='coerce')
+        df = df.sort_values('_sort_date', ascending=False, na_position='last').drop(columns=['_sort_date'])
+        df = df.reset_index(drop=True)
     df_styled = highlight_category_row(df, color=color)
     st.write("********"+ name + "********")
     # Prefer configured order for known columns, then append any remaining df columns
