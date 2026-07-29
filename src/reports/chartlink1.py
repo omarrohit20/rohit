@@ -389,25 +389,20 @@ def main():
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        df = rb.getdf('morning-volume-breakout-buy')
+        df = rb.getintersectdf('morning-volume-breakout-buy', 'movingavg_crossed_up')
         filtered_df = df
         try:
             filtered_df = df[
-                ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
-                (df['forecast_day_PCT10_change'] >-9) &
-                (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
-                (df['PCT_day_change'] > -3) &
-                (df['PCT_day_change'] < 2) &
-                (df['year5HighChange'] < -25) &
-                (df['week2HighChange'] > -2) &
-                (abs(df['week2HighChange']) > 1) &
-                (df['yearLowChange'] > 15) &
-                (df['month3HighChange'] > -15) &
-                (df['PCT_change'] > 0)
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                (
+                    (df['yearHighChange'] < -30) |
+                    (df['month3HighChange'] < -10) |
+                    (df['monthHighChange'] < 0)
+                )
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'year5HighChangeLT-30 : week2High', color='LG')
+        rb.render(st, filtered_df, 'morning-volume-breakout-buy : movingavg_crossed_up', color='LG')
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -425,10 +420,20 @@ def main():
             print("")
         rb.render(st, filtered_df, 'year5HighChangeLT-30 + week2High', color='LG')
     with col3:
-        #df = rb.getdf('morning-volume-breakout-sell')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        rb.render(st, empty_df, 'year5LowChangeGT30 : week2Low', color='LG')
+        df = rb.getintersectdf('morning-volume-breakout-sell', 'movingavg_crossed_down')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                (
+                    (df['yearLowChange'] > 30) |
+                    (df['month3LowChange'] > 10) |
+                    (df['monthLowChange'] > 0)
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'morning-volume-breakout-sell : movingavg_crossed_down', color='LG')
     with col4:
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
