@@ -1548,14 +1548,42 @@ def getdf(collection_name):
         print(f"")
     return df
 
+def _resolve_collection(collection_name):
+    """Resolve a collection from chartlink (preferred) or Nsedata."""
+    if collection_name in dbcl.list_collection_names():
+        return dbcl[collection_name]
+    return dbnse[collection_name]
+
+def _coerce_intersect_columns(df):
+    """Best-effort numeric/time coercion for intersected frames (schemas may differ)."""
+    numeric_cols = [
+        'PCT_day_change', 'PCT_change', 'PCT_day_change_pre1', 'PCT_day_change_pre2',
+        'highTail', 'lowTail', 'year5HighChange', 'yearHighChange', 'yearLowChange',
+        'month3HighChange', 'month3LowChange', 'monthHighChange', 'monthLowChange',
+        'week2HighChange', 'week2LowChange', 'weekHighChange', 'weekLowChange',
+        'forecast_day_PCT10_change', 'forecast_day_PCT7_change', 'forecast_day_PCT5_change',
+        'forecast_day_PCT4_change', 'forecast_day_PCT3_change',
+    ]
+    for col in numeric_cols:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+    for col in ('systemtime', 'systemtime_merged'):
+        if col in df.columns:
+            df[col] = pd.to_datetime(df[col], errors='coerce').dt.time.astype(str)
+    if 'mlData' in df.columns:
+        df['mlData'] = df['mlData'].fillna('').astype(str)
+    return df
+
 @st.cache_data(ttl=10)
 def getintersectdf(collection_name1, collection_name2):
-    collection1 = dbcl[collection_name1]
-    collection2 = dbcl[collection_name2]
+    collection1 = _resolve_collection(collection_name1)
+    collection2 = _resolve_collection(collection_name2)
     df1 = pd.DataFrame(list(collection1.find()))
     df2 = pd.DataFrame(list(collection2.find()))
-    expected_columns = list(set(df1.columns))
+    expected_columns = list(set(df1.columns)) if not df1.empty else []
     df = pd.DataFrame(columns=expected_columns)
+    if df1.empty or df2.empty or 'scrip' not in df1.columns or 'scrip' not in df2.columns:
+        return df
     try:
         df = df1.merge(
             df2,
@@ -1563,32 +1591,9 @@ def getintersectdf(collection_name1, collection_name2):
             how='inner',
             suffixes=('', '_merged')
         )
-        df['PCT_day_change'] = pd.to_numeric(df['PCT_day_change'])
-        df['PCT_change'] = pd.to_numeric(df['PCT_change'], errors='coerce')
-        df['PCT_day_change_pre1'] = pd.to_numeric(df['PCT_day_change_pre1'], errors='coerce')
-        df['PCT_day_change_pre2'] = pd.to_numeric(df['PCT_day_change_pre2'], errors='coerce')
-
-        df['highTail'] = pd.to_numeric(df['highTail'], errors='coerce')
-        df['lowTail'] = pd.to_numeric(df['lowTail'], errors='coerce')
-        df['year5HighChange'] = pd.to_numeric(df['year5HighChange'], errors='coerce')
-        df['yearHighChange'] = pd.to_numeric(df['year5HighChange'], errors='coerce')
-        df['yearLowChange'] = pd.to_numeric(df['yearLowChange'], errors='coerce')
-        df['month3HighChange'] = pd.to_numeric(df['month3HighChange'], errors='coerce')
-        df['month3LowChange'] = pd.to_numeric(df['month3LowChange'], errors='coerce')
-        df['monthHighChange'] = pd.to_numeric(df['monthHighChange'], errors='coerce')
-        df['monthLowChange'] = pd.to_numeric(df['monthLowChange'], errors='coerce')
-        df['week2HighChange'] = pd.to_numeric(df['week2HighChange'], errors='coerce')
-        df['week2LowChange'] = pd.to_numeric(df['week2LowChange'], errors='coerce')
-        df['weekHighChange'] = pd.to_numeric(df['weekHighChange'], errors='coerce')
-        df['weekLowChange'] = pd.to_numeric(df['weekLowChange'], errors='coerce')
-        df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
-        df['forecast_day_PCT7_change'] = pd.to_numeric(df['forecast_day_PCT7_change'], errors='coerce')
-        df['forecast_day_PCT5_change'] = pd.to_numeric(df['forecast_day_PCT5_change'], errors='coerce')
-        df['systemtime'] = pd.to_datetime(df['systemtime']).dt.time.astype(str)
-        df['systemtime_merged'] = pd.to_datetime(df['systemtime_merged']).dt.time.astype(str)
-        df['mlData'] = df['mlData'].fillna('').astype(str)
-    except KeyError as e:
-        print(f"")
+        df = _coerce_intersect_columns(df)
+    except Exception as e:
+        print(f"getintersectdf error: {e}")
 
     return df
 

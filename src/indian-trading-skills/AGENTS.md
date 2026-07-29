@@ -14,20 +14,22 @@ python skills/nsedata-trade-advisor/scripts/query_suggestions.py \
 ```
 
 4. **Use ALL columns** from each scan document (`meta.scan_columns` / `scan_row`) — filters, ml/intradaytech, PCT/Ldchange, forecasts, etc. Do not score from a short fixed field list.
-5. Lead the user report with Sentiment, Conviction, and Prob% on every pick:
+5. **Always show Priority picks in chat (markdown table) AND open a Cursor Canvas** (colours in Canvas). Follow `skills/mongo-trade-agent/references/priority-canvas.md` + the Cursor canvas skill; link the `.canvas.tsx` in chat. Lead columns:
 
 **Single table:**
 
-| Priority | Symbol | Sentiment | Conviction | Prob% | Why |
-|----------|--------|-----------|------------|-------|-----|
-| 1 | … | Bullish | High | 78 | scan tags + tape + news in one sentence |
+| Priority | Symbol | LastDay% | Today% | Sentiment | Conviction | Prob% | Why |
+|----------|--------|----------|--------|-----------|------------|-------|-----|
+| 1 | … | +1.2 | +0.4 | Bullish | High | 78 | scan tags + tape + news in one sentence |
 
 **Multiple tables:** every result must include the table name:
 
-| Priority | Table | Symbol | Sentiment | Conviction | Prob% | Why |
-|----------|-------|--------|-----------|------------|-------|-----|
-| 1 | highBuy | … | Bullish | High | 78 | … |
-| 2 | buy_all_processor | … | Bullish | Med | 65 | … |
+| Priority | Table | Symbol | LastDay% | Today% | Sentiment | Conviction | Prob% | Why |
+|----------|-------|--------|----------|--------|-----------|------------|-------|-----|
+| 1 | highBuy | … | +2.1 | +0.8 | Bullish | High | 78 | … |
+| 2 | buy_all_processor | … | -0.5 | +1.0 | Bullish | Med | 65 | … |
+
+Highlights (Canvas): buy row orange if LastDay%/Today% > 3; sell row orange if LastDay%/Today% < 3; colour **MLBuy** / **MLSell** tokens in Why (green / red), not the scrip.
 
 Example Why style: `Q1 results today + AnchisBuyUp / ReversalLow; already +2% into the print`
 

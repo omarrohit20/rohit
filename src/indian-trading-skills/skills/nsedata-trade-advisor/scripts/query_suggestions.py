@@ -38,6 +38,84 @@ def _safe_float(value: Any, default: float = 0.0) -> float:
         return default
 
 
+def _optional_float(value: Any) -> float | None:
+    """Like _safe_float but returns None when missing/unparseable (keeps 0.0)."""
+    if value is None or value == "":
+        return None
+    try:
+        f = float(value)
+        if math.isnan(f) or math.isinf(f):
+            return None
+        return f
+    except (TypeError, ValueError):
+        return None
+
+
+def scan_last_day_pct(scan: dict) -> float | None:
+    """Prior session %: PCT_day_change_pre1 → Ldchange → ldchange."""
+    for key in ("PCT_day_change_pre1", "Ldchange", "ldchange"):
+        if key in scan and scan[key] is not None and scan[key] != "":
+            return _optional_float(scan[key])
+    return None
+
+
+def scan_today_pct(scan: dict) -> float | None:
+    """Session-so-far / today %: PCT_day_change."""
+    return _optional_float(scan.get("PCT_day_change"))
+
+
+def scan_has_token(scan: dict, token: str) -> bool:
+    """True if any string field on the scan doc contains token (case-insensitive)."""
+    needle = token.lower()
+    for val in scan.values():
+        if isinstance(val, str) and needle in val.lower():
+            return True
+    return False
+
+
+def pct_highlight_meta(scan: dict, sentiment: str | None = None) -> dict:
+    """LastDay%/Today% plus ML and row-orange flags for report rendering."""
+    last_day = scan_last_day_pct(scan)
+    today = scan_today_pct(scan)
+    ml_buy = scan_has_token(scan, "MLBuy")
+    ml_sell = scan_has_token(scan, "MLSell")
+
+    side = "buy"
+    sent = (sentiment or "").lower()
+    if sent == "bearish" or (ml_sell and not ml_buy):
+        side = "sell"
+    # Collection / processor hints when sentiment neutral
+    blob = " ".join(str(v) for v in scan.values() if isinstance(v, str)).lower()
+    if sent not in ("bullish", "bearish"):
+        if any(t in blob for t in ("tosell", "filtersell", "sell-breakout", "mlsell")):
+            side = "sell"
+        elif any(t in blob for t in ("tobuy", "filterbuy", "buy-breakout", "mlbuy")):
+            side = "buy"
+
+    row_orange = False
+    if side == "buy":
+        row_orange = (last_day is not None and last_day > 3) or (
+            today is not None and today > 3
+        )
+    else:
+        # Sell: LastDay% or Today% < 3 (user rule: "less than 3%")
+        row_orange = (last_day is not None and last_day < 3) or (
+            today is not None and today < 3
+        )
+
+    return {
+        "last_day_pct": last_day,
+        "today_pct": today,
+        "ml_buy": ml_buy,
+        "ml_sell": ml_sell,
+        "trade_side": side,
+        "row_highlight_orange": row_orange,
+        "symbol_highlight": (
+            "MLBuy" if ml_buy else ("MLSell" if ml_sell else None)
+        ),
+    }
+
+
 def unpack_ohlcv(doc: dict | None, limit: int | None = None) -> list[dict]:
     """Convert embedded history document to chronological OHLCV rows."""
     if not doc:
@@ -536,6 +614,7 @@ def extract_scan_signals(scan: dict) -> dict[str, Any]:
     for key in (
         "PCT_change",
         "PCT_day_change",
+        "PCT_day_change_pre1",
         "Ldchange",
         "ldchange",
         "volume",
@@ -564,23 +643,28 @@ def extract_scan_signals(scan: dict) -> dict[str, Any]:
             t in val for t in ("Break", "Reversal", "Buy", "Sell", "TOP", "Near", "ML", "Consol")
         ):
             signals[key] = val[:200]
-            for token in ("BreakHighMe", "BreakHighYe", "ReversalLow", "AnchisBuyUp", "MLBuy", "NearHighYe"):
+            for token in (
+                "BreakHighMe",
+                "BreakHighYe",
+                "ReversalLow",
+                "AnchisBuyUp",
+                "MLBuy",
+                "MLSell",
+                "NearHighYe",
+            ):
                 if token in val and token not in tag_parts:
                     tag_parts.append(token)
 
-    pct_day = _safe_float(scan.get("PCT_day_change"))
-    pct = _safe_float(scan.get("PCT_change"))
-    ld = scan.get("Ldchange", scan.get("ldchange"))
+    pct_day = scan_today_pct(scan)
+    pct = _optional_float(scan.get("PCT_change"))
+    last_day = scan_last_day_pct(scan)
     tape_bits: list[str] = []
-    if pct_day:
-        tape_bits.append(f"day {pct_day:+.2f}%")
-    if pct and abs(pct - pct_day) > 0.05:
+    if last_day is not None:
+        tape_bits.append(f"LastDay {last_day:+.2f}%")
+    if pct_day is not None:
+        tape_bits.append(f"Today {pct_day:+.2f}%")
+    if pct is not None and (pct_day is None or abs(pct - pct_day) > 0.05):
         tape_bits.append(f"chg {pct:+.2f}%")
-    if ld is not None and ld != "":
-        try:
-            tape_bits.append(f"Ld {float(ld):+.2f}")
-        except (TypeError, ValueError):
-            pass
 
     why_hint = " + ".join(tag_parts[:4]) if tag_parts else "scan signals thin"
     if tape_bits:
@@ -608,15 +692,21 @@ def analyze_candidate(
     scan_signals = extract_scan_signals(scan)
     # Keep full scan row (minus huge/_id) for agent column awareness
     scan_full = {k: v for k, v in scan.items() if k != "_id"}
+    pct_meta = pct_highlight_meta(scan_full)
     result: dict[str, Any] = {
         "scrip": scrip,
         "industry": scan.get("industry"),
         "date": scan.get("date") or scan.get("eventtime"),
         "scan_pct_change": _safe_float(scan.get("PCT_change")),
         "scan_pct_day_change": _safe_float(scan.get("PCT_day_change")),
+        "last_day_pct": pct_meta["last_day_pct"],
+        "today_pct": pct_meta["today_pct"],
+        "ml_buy": pct_meta["ml_buy"],
+        "ml_sell": pct_meta["ml_sell"],
         "scan_signals": scan_signals,
         "why_hint": scan_signals["why_hint"],
         "scan_row": scan_full,
+        "pct_highlight": pct_meta,
     }
     if "intraday" in horizons:
         result["intraday"] = score_intraday(scan, enrich["daily"], enrich["bars_15m"])
@@ -704,6 +794,10 @@ def rank_horizon(results: list[dict], key: str, top_n: int = 5) -> list[dict]:
             continue
         scrip = r["scrip"]
         meta_fields = derive_conviction_sentiment(block, r.get("scan_signals"))
+        hl = pct_highlight_meta(
+            r.get("scan_row") or {},
+            sentiment=meta_fields.get("sentiment"),
+        )
         # Dedupe repeated scan processor rows; keep first (highest score after sort)
         row = {
             "scrip": scrip,
@@ -711,6 +805,13 @@ def rank_horizon(results: list[dict], key: str, top_n: int = 5) -> list[dict]:
             "date": r.get("date"),
             **block,
             **meta_fields,
+            "last_day_pct": hl["last_day_pct"],
+            "today_pct": hl["today_pct"],
+            "ml_buy": hl["ml_buy"],
+            "ml_sell": hl["ml_sell"],
+            "trade_side": hl["trade_side"],
+            "row_highlight_orange": hl["row_highlight_orange"],
+            "symbol_highlight": hl["symbol_highlight"],
             "why_hint": r.get("why_hint"),
             "scan_signals": r.get("scan_signals"),
             # Agent fills via web search / india-news-tracker
@@ -750,12 +851,19 @@ def build_priority_table(results: list[dict], horizons: set[str], top_n: int = 5
             {
                 "priority": i,
                 "symbol": row["scrip"],
+                "last_day_pct": row.get("last_day_pct"),
+                "today_pct": row.get("today_pct"),
                 "why": row.get("why_hint") or row.get("notes") or "",
                 "score": row.get("score"),
                 "rr": row.get("rr"),
                 "sentiment": row.get("sentiment"),
                 "conviction": row.get("conviction"),
                 "probability_score": row.get("probability_score"),
+                "ml_buy": row.get("ml_buy"),
+                "ml_sell": row.get("ml_sell"),
+                "trade_side": row.get("trade_side"),
+                "row_highlight_orange": row.get("row_highlight_orange"),
+                "symbol_highlight": row.get("symbol_highlight"),
                 "news_catalyst": None,
                 "may_extend": None,
             }
@@ -787,6 +895,8 @@ def build_report(results: list[dict], meta: dict, horizons: set[str], top_n: int
             "priority_shape": [
                 "Priority",
                 "Symbol",
+                "LastDay%",
+                "Today%",
                 "Sentiment",
                 "Conviction",
                 "Prob%",
@@ -796,6 +906,8 @@ def build_report(results: list[dict], meta: dict, horizons: set[str], top_n: int
                 "Priority",
                 "Table",
                 "Symbol",
+                "LastDay%",
+                "Today%",
                 "Sentiment",
                 "Conviction",
                 "Prob%",
@@ -805,10 +917,19 @@ def build_report(results: list[dict], meta: dict, horizons: set[str], top_n: int
             "conviction_values": ["High", "Med", "Low"],
             "probability_score": "integer 0–100 (helper emits 10–95)",
             "may_extend_values": ["Yes", "Possible", "Only if X", "Weak", "No"],
+            "highlight_rules": {
+                "row_orange": "#FFE4C4",
+                "buy_row_when": "LastDay% > 3 OR Today% > 3",
+                "sell_row_when": "LastDay% < 3 OR Today% < 3",
+                "symbol_mlbuy": "#C6F6D5",
+                "symbol_mlsell": "#FEB2B2",
+                "render": "HTML table or Canvas — markdown pipes cannot show colours",
+            },
             "note": (
-                "Lead the user report with priority_table including Sentiment, "
-                "Conviction, and Prob% (probability_score). Use ALL scan_columns. "
-                "Polish why with news; fill news_catalyst and may_extend. "
+                "Lead with Priority|Symbol|LastDay%|Today%|Sentiment|Conviction|Prob%|Why. "
+                "Orange-highlight full row when buy tape >3% or sell tape <-3%. "
+                "Green/red Symbol cell for MLBuy/MLSell in scan data. "
+                "Use ALL scan_columns. Polish why with news; fill news_catalyst and may_extend. "
                 "When multiple tables, add Table column."
             ),
         },

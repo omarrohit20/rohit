@@ -6,6 +6,7 @@ from bson import json_util
 import json
 import time
 import pandas as pd
+
 import base64
 
 pd.options.mode.chained_assignment = None  # default='warn'
@@ -747,7 +748,8 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
 def process_url_volBreakout(url, processor, starttime, endtime, keyIndicator=None, dropDB=False):
     try:
         print(processor)
-        time.sleep(5)
+        #if datetime.now().time() > datetime.time(9, 30):
+        time.sleep(1)
         
         # Store captured responses
         captured_data = []

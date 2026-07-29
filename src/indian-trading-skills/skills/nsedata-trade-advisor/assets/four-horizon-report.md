@@ -11,7 +11,16 @@
 > column (collection name). Use `db.collection` when names collide across DBs.
 >
 > **Scoring rule:** Every Priority and horizon result row **must** include
-> **Sentiment**, **Conviction**, and **Prob%** (`probability_score`).
+> **LastDay%**, **Today%**, **Sentiment**, **Conviction**, and **Prob%**
+> (`probability_score`).
+>
+> **Highlight rule:** Show Priority picks in **chat (markdown table) and a
+> Cursor Canvas** (required). Colours render in Canvas; chat keeps the full
+> table. See `skills/mongo-trade-agent/references/priority-canvas.md`.
+> - Buy + (LastDay% > 3 or Today% > 3) → full row `#FFE4C4`
+> - Sell + (LastDay% < 3 or Today% < 3) → full row `#FFE4C4`
+> - `MLBuy` in scan data → colour the **MLBuy** token `#C6F6D5` (in Why)
+> - `MLSell` in scan data → colour the **MLSell** token `#FEB2B2` (in Why)
 
 ---
 
@@ -21,23 +30,23 @@
 
 Use this exact shape. **Why** must cite real scan-table fields (filters, ML tags, % change, Ldchange, BreakHigh/Reversal, industry) **and** news when present.
 
-| Priority | Symbol | Sentiment | Conviction | Prob% | Why |
-|----------|--------|-----------|------------|-------|-----|
-| 1 | TECHM | Bullish | High | 78 | Q1 results today + AnchisBuyUp / ReversalLow; already +2% into the print |
-| 2 | ABB | Bullish | Med | 68 | MLBuy + NearHighYe; Moneycontrol spotlight buy (zone ~7150–7225 → ~7730) after yesterday’s volume surge |
-| 3 | DIXON | Bullish | Med | 65 | BreakHighMe + Vivo JV still the live story |
-| 4 | SWIGGY | Bullish | High | 72 | MLBuy + strongest tape (+4%+); Indian-ownership / Instamart optionality still in play |
-| 5 | BAJFINANC | Bullish | Med | 62 | BreakHighMe + strong AUM update; results later (30 Jul) so more momentum than news today |
+| Priority | Symbol | LastDay% | Today% | Sentiment | Conviction | Prob% | Why |
+|----------|--------|----------|--------|-----------|------------|-------|-----|
+| 1 | TECHM | +1.8 | +2.1 | Bullish | High | 78 | Q1 results today + AnchisBuyUp / ReversalLow; already +2% into the print |
+| 2 | ABB | +0.4 | +0.9 | Bullish | Med | 68 | MLBuy + NearHighYe; Moneycontrol spotlight buy (zone ~7150–7225 → ~7730) after yesterday’s volume surge |
+| 3 | DIXON | -0.6 | +0.3 | Bullish | Med | 65 | BreakHighMe + Vivo JV still the live story |
+| 4 | SWIGGY | +3.5 | +1.2 | Bullish | High | 72 | MLBuy + strongest tape (+4%+); Indian-ownership / Instamart optionality still in play |
+| 5 | BAJFINANC | +0.2 | -0.4 | Bullish | Med | 62 | BreakHighMe + strong AUM update; results later (30 Jul) so more momentum than news today |
 
 ### Multiple tables (required when 2+ collections)
 
-| Priority | Table | Symbol | Sentiment | Conviction | Prob% | Why |
-|----------|-------|--------|-----------|------------|-------|-----|
-| 1 | highBuy | TECHM | Bullish | High | 78 | Q1 results today + AnchisBuyUp / ReversalLow; already +2% into the print |
-| 2 | buy_all_processor | ABB | Bullish | Med | 68 | MLBuy + NearHighYe; Moneycontrol spotlight buy after volume surge |
-| 3 | highBuy | DIXON | Bullish | Med | 65 | BreakHighMe + Vivo JV still the live story |
+| Priority | Table | Symbol | LastDay% | Today% | Sentiment | Conviction | Prob% | Why |
+|----------|-------|--------|----------|--------|-----------|------------|-------|-----|
+| 1 | highBuy | TECHM | +1.8 | +2.1 | Bullish | High | 78 | Q1 results today + AnchisBuyUp / ReversalLow; already +2% into the print |
+| 2 | buy_all_processor | ABB | +0.4 | +0.9 | Bullish | Med | 68 | MLBuy + NearHighYe; Moneycontrol spotlight buy after volume surge |
+| 3 | highBuy | DIXON | -0.6 | +0.3 | Bullish | Med | 65 | BreakHighMe + Vivo JV still the live story |
 
-**Field values:** Sentiment = Bullish / Bearish / Neutral / Mixed · Conviction = High / Med / Low · Prob% = 0–100 integer.
+**Field values:** LastDay% / Today% = signed % · Sentiment = Bullish / Bearish / Neutral / Mixed · Conviction = High / Med / Low · Prob% = 0–100 integer.
 
 Rules for **Why** (one dense sentence):
 1. Lead with the strongest **scan-table signals** (`intradaytech` / `ml` / `mlData` / `filter*` / `BreakHigh*` / `Reversal*` / `NearHigh*` / `AnchisBuyUp` / TOP buckets).
@@ -79,49 +88,49 @@ List the **actual fields present** on documents in this collection (from `collec
 When multiple tables: use one subsection per table (`### Table: highBuy`).
 
 Example families (use whatever exists on the row):  
-`scrip`, `industry`, `close`, `PCT_change`, `PCT_day_change`, `Ldchange`, `volume`, `filter`…`filter6`, `intradaytech`, `shorttermtech`, `ml`, `mlData`, `forecast_day_PCT*_change`, week/month/year high-low changes, `keyIndicator`, `tobuy`/`tosell`, `processor`, `eventtime`.
+`scrip`, `industry`, `close`, `PCT_change`, `PCT_day_change`, `PCT_day_change_pre1`, `Ldchange`, `volume`, `filter`…`filter6`, `intradaytech`, `shorttermtech`, `ml`, `mlData`, `forecast_day_PCT*_change`, week/month/year high-low changes, `keyIndicator`, `tobuy`/`tosell`, `processor`, `eventtime`.
 
 ---
 
 ## Intraday (Same Session)
 
-| Rank | Table | Symbol | Sentiment | Conviction | Prob% | Score | Close (₹) | Entry | T1 | T2 | Stop | R:R | News catalyst | May extend? | Why / Notes |
-|------|-------|--------|-----------|------------|-------|-------|-----------|-------|----|----|------|-----|---------------|-------------|-------------|
-| 1 | | | | | | | | | | | | | | | |
-| 2 | | | | | | | | | | | | | | | |
-| 3 | | | | | | | | | | | | | | | |
+| Rank | Table | Symbol | LastDay% | Today% | Sentiment | Conviction | Prob% | Score | Close (₹) | Entry | T1 | T2 | Stop | R:R | News catalyst | May extend? | Why / Notes |
+|------|-------|--------|----------|--------|-----------|------------|-------|-------|-----------|-------|----|----|------|-----|---------------|-------------|-------------|
+| 1 | | | | | | | | | | | | | | | | | |
+| 2 | | | | | | | | | | | | | | | | | |
+| 3 | | | | | | | | | | | | | | | | | |
 
-*(Omit Table column only for single-collection reports.)*
+*(Omit Table column only for single-collection reports. Apply same orange / ML symbol highlights as Priority.)*
 
 ---
 
 ## 3–5 Days
 
-| Rank | Table | Symbol | Sentiment | Conviction | Prob% | Score | Close (₹) | Entry | T1 | T2 | Stop | R:R | News catalyst | May extend? | Why / Notes |
-|------|-------|--------|-----------|------------|-------|-------|-----------|-------|----|----|------|-----|---------------|-------------|-------------|
-| 1 | | | | | | | | | | | | | | | |
-| 2 | | | | | | | | | | | | | | | |
-| 3 | | | | | | | | | | | | | | | |
+| Rank | Table | Symbol | LastDay% | Today% | Sentiment | Conviction | Prob% | Score | Close (₹) | Entry | T1 | T2 | Stop | R:R | News catalyst | May extend? | Why / Notes |
+|------|-------|--------|----------|--------|-----------|------------|-------|-------|-----------|-------|----|----|------|-----|---------------|-------------|-------------|
+| 1 | | | | | | | | | | | | | | | | | |
+| 2 | | | | | | | | | | | | | | | | | |
+| 3 | | | | | | | | | | | | | | | | | |
 
 ---
 
 ## Short-Term (1–20 Days)
 
-| Rank | Table | Symbol | Sentiment | Conviction | Prob% | Score | Close (₹) | Entry | T1 | T2 | T3 | Stop | R:R | News catalyst | May extend? | Why / Notes |
-|------|-------|--------|-----------|------------|-------|-------|-----------|-------|----|----|----|------|-----|---------------|-------------|-------------|
-| 1 | | | | | | | | | | | | | | | | |
-| 2 | | | | | | | | | | | | | | | | |
-| 3 | | | | | | | | | | | | | | | | |
+| Rank | Table | Symbol | LastDay% | Today% | Sentiment | Conviction | Prob% | Score | Close (₹) | Entry | T1 | T2 | T3 | Stop | R:R | News catalyst | May extend? | Why / Notes |
+|------|-------|--------|----------|--------|-----------|------------|-------|-------|-----------|-------|----|----|----|------|-----|---------------|-------------|-------------|
+| 1 | | | | | | | | | | | | | | | | | | |
+| 2 | | | | | | | | | | | | | | | | | | |
+| 3 | | | | | | | | | | | | | | | | | | |
 
 ---
 
 ## Long-Term / Investment
 
-| Rank | Table | Symbol | Sentiment | Conviction | Prob% | Score | Close (₹) | Entry zone | T1 | T2 | Invalidation | PE | News catalyst | May extend? | Why / Notes |
-|------|-------|--------|-----------|------------|-------|-------|-----------|------------|----|----|--------------|----|---------------|-------------|-------------|
-| 1 | | | | | | | | | | | | | | | |
-| 2 | | | | | | | | | | | | | | | |
-| 3 | | | | | | | | | | | | | | | |
+| Rank | Table | Symbol | LastDay% | Today% | Sentiment | Conviction | Prob% | Score | Close (₹) | Entry zone | T1 | T2 | Invalidation | PE | News catalyst | May extend? | Why / Notes |
+|------|-------|--------|----------|--------|-----------|------------|-------|-------|-----------|------------|----|----|--------------|----|---------------|-------------|-------------|
+| 1 | | | | | | | | | | | | | | | | | |
+| 2 | | | | | | | | | | | | | | | | | |
+| 3 | | | | | | | | | | | | | | | | | | |
 
 ---
 

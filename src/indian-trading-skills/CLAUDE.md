@@ -12,9 +12,12 @@ For local MongoDB multi-horizon trade/investment suggestions:
 
 **Always:**
 1. Use **all columns** from the given scan collection document(s).
-2. Lead with **Priority | Symbol | Sentiment | Conviction | Prob% | Why** — add **Table** when multiple tables are given.
-3. Include News catalyst and May extend?.
-4. Disclaimer: educational, not SEBI advice.
+2. Lead with **Priority | Symbol | LastDay% | Today% | Sentiment | Conviction | Prob% | Why** — add **Table** when multiple tables are given.
+3. **Always show Priority picks in chat (markdown table) AND open a Cursor Canvas** (`skills/mongo-trade-agent/references/priority-canvas.md`); link the `.canvas.tsx` in the reply. Colours render in Canvas; chat keeps the full table.
+4. Highlights (Canvas): buy row orange if LastDay% or Today% > 3; sell row orange if LastDay% or Today% < 3; colour **MLBuy** / **MLSell** tokens in Why (green / red).
+5. Include News catalyst and May extend?.
+6. Disclaimer: educational, not SEBI advice.
+7. % / colour detail: `skills/mongo-trade-agent/references/pct-highlight.md`
 
 ## Mongo AI Analysis (persist)
 
