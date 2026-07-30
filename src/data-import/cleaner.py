@@ -85,3 +85,9 @@ result = db["breakoutM2HL"].delete_many(query)
 print(f"Deleted {result.deleted_count} documents.")
 result = db["breakoutW2HL"].delete_many(query)
 print(f"Deleted {result.deleted_count} documents.")
+result = db["movingavg_crossed_up"].delete_many(query)
+print(f"Deleted {result.deleted_count} documents.")
+result = db["movingavg_crossed_down"].delete_many(query)
+print(f"Deleted {result.deleted_count} documents.")
+
+
