@@ -30,7 +30,7 @@ For **every** buy/sell / multi-horizon query after scoring:
 | 5 | **Horizon detail table(s)** for the asked horizon(s) | **MUST** |
 | 6 | **Watchlist / Avoid** | **MUST** |
 | 7 | **Disclaimer** | **MUST** |
-| 8 | **Cursor Canvas** (write/update + link) | **MUST — last in the reply** |
+| 8 | **Cursor Canvas** (**new file** + link; never overwrite) | **MUST — last in the reply** |
 
 **Do not** stop after Priority. **Do not** put Canvas before Executive Summary or
 other tables. Thin / missing collections shrink rows — they do **not** allow
@@ -44,20 +44,25 @@ Canvas rules: [references/priority-canvas.md](references/priority-canvas.md).
 Present the same Priority board in **two places**, in this order:
 
 1. **Early in chat** — full markdown Priority table (all columns; readable inline)
-2. **After all other report tables** — write/update Cursor Canvas and link it
-   (colours: orange rows + MLBuy / MLSell tokens)
+2. **After all other report tables** — create a **brand-new** Cursor Canvas and
+   link it (colours: orange rows + MLBuy / MLSell tokens). **Never overwrite**
+   a previous `.canvas.tsx`.
 
 Chat strips HTML styles, so colours appear reliably only in Canvas — but the
 markdown Priority table must still appear early in chat.
 
 1. Read and follow the Cursor **canvas** skill.
 2. Follow [references/priority-canvas.md](references/priority-canvas.md).
-3. Write/update  
-   `~/.cursor/projects/<workspace>/canvases/intraday-priority-picks.canvas.tsx`  
-   (or a horizon-specific name) **before finishing**, but **link it only at the
-   end** of the chat reply.
-4. Chat order: Priority markdown → **must** Executive Summary → News → Scan
-   Columns → horizon tables → Avoid → Disclaimer → **Canvas link last**.
+3. **Create a new file every query** under  
+   `~/.cursor/projects/<workspace>/canvases/`  
+   named `{horizon}-priority-{collection}-{YYYYMMDD-HHmmss}.canvas.tsx`  
+   (see priority-canvas.md). Do **not** reuse `intraday-priority-picks.canvas.tsx`.
+4. **MUST** open the new file via `open_resource`
+   (`file:///C:/Users/.../canvases/<unique>.canvas.tsx`). On Windows, do **not**
+   use markdown `[label](C:/...)` links (known Cursor bug — clicks fail).
+5. Chat order: Priority markdown → **must** Executive Summary → News → Scan
+   Columns → horizon tables → Avoid → Disclaimer → **Canvas basename last**
+   (backticks + “opened beside chat”).
 
 ### Column shapes (chat + Canvas)
 
@@ -114,8 +119,9 @@ Why / column rules: [references/priority-why.md](references/priority-why.md).
 7. **MUST** present Executive Summary, News & Extension Snapshot, Scan Columns
    Used, asked horizon detail table(s), Watchlist/Avoid, and Disclaimer from
    [../nsedata-trade-advisor/assets/four-horizon-report.md](../nsedata-trade-advisor/assets/four-horizon-report.md).
-8. **MUST** write/update Canvas and **end the reply** with the Canvas link
-   ([priority-canvas.md](references/priority-canvas.md)).
+8. **MUST** create a **new** Canvas file (unique timestamped name) and **end
+   the reply** with the Canvas link ([priority-canvas.md](references/priority-canvas.md)).
+   Open it with `open_resource` when possible.
 
 ```bash
 # Single table
@@ -171,7 +177,7 @@ in the report header — and **must** keep LastDay% / Today% / Sentiment / Convi
 5. **Detailed horizon table(s)** for the horizon(s) the user asked — **MUST** — include **LastDay% · Today% · Sentiment · Conviction · Prob%** (and Table if multi). If only intraday was asked, still emit the Intraday detail table; omit other horizon sections only when not requested.
 6. **Watchlist / Avoid** — **MUST** (include Table when multi-source; say “none” if empty)
 7. **Disclaimer** — **MUST**
-8. **Cursor Canvas** — **MUST be last**: write/update `.canvas.tsx`, then end with a markdown link + one-line note that colours are in Canvas
+8. **Cursor Canvas** — **MUST be last**: create a **new** uniquely named `.canvas.tsx` (never overwrite), **always** open via `open_resource` (`file:///...`), then end with the basename in backticks (no `C:` markdown links on Windows) + one-line note that colours are in Canvas
 
 ### Required result fields (every pick)
 
@@ -203,7 +209,7 @@ Task Progress:
 - [ ] Step 7: MUST — Executive Summary (+ horizon bias)
 - [ ] Step 8: MUST — News & Extension Snapshot; Fill News catalyst + May extend?
 - [ ] Step 9: MUST — Scan Columns Used + asked horizon detail table(s) + Watchlist/Avoid + Disclaimer
-- [ ] Step 10: MUST LAST — Write/update Cursor Canvas; link .canvas.tsx at end of reply
+- [ ] Step 10: MUST LAST — Create new timestamped Cursor Canvas (never overwrite); open_resource + link at end of reply
 - [ ] Step 11 (optional/persist): Save High-conviction top-2 for 3–5d / short / long via mongo-ai-analysis
 ```
 

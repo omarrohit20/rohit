@@ -19,7 +19,7 @@ Canonical: [`skills/mongo-trade-agent/SKILL.md`](../../../skills/mongo-trade-age
 2. Use **all** `scan_columns` / `scan_row` fields.
 3. Lead report with **Priority | Symbol | LastDay% | Today% | Sentiment | Conviction | Prob% | Why** — add **Table** when multiple tables.
 4. **MUST** emit Executive Summary, News, Scan Columns, asked horizon tables, Avoid, Disclaimer (template `four-horizon-report.md`). Do not stop at Priority.
-5. **MUST put Cursor Canvas last** (write/update + link). Follow `skills/mongo-trade-agent/references/priority-canvas.md` + the Cursor canvas skill.
+5. **MUST put Cursor Canvas last** — create a **new** uniquely named `.canvas.tsx` every query (never overwrite); **always** open via `open_resource` (`file:///...`). On Windows do not use `[label](C:/...)` chat links. Follow `skills/mongo-trade-agent/references/priority-canvas.md` + the Cursor canvas skill.
 6. Highlights (Canvas): buy row orange if LastDay% or Today% **> 3**; sell row orange if **< 3**; colour the **MLBuy** / **MLSell** tokens in Why (green / red) — not the scrip.
 7. Fill News catalyst + May extend?
 8. To save picks: `skills/mongo-ai-analysis/SKILL.md` + `save_ai_analysis.py`.

@@ -14,7 +14,7 @@ python skills/nsedata-trade-advisor/scripts/query_suggestions.py \
 ```
 
 4. **Use ALL columns** from each scan document (`meta.scan_columns` / `scan_row`) — filters, ml/intradaytech, PCT/Ldchange, forecasts, etc. Do not score from a short fixed field list.
-5. **Always show Priority picks in chat (markdown table early).** Then **MUST** emit Executive Summary, News, Scan Columns, asked horizon tables, Avoid, Disclaimer. **MUST put Cursor Canvas last** (write/update + link). Follow `skills/mongo-trade-agent/references/priority-canvas.md` + the Cursor canvas skill. Lead columns:
+5. **Always show Priority picks in chat (markdown table early).** Then **MUST** emit Executive Summary, News, Scan Columns, asked horizon tables, Avoid, Disclaimer. **MUST put Cursor Canvas last** — create a **new** uniquely named `.canvas.tsx` every query (never overwrite); **always** open via `open_resource` (`file:///...`). On Windows do not use `[label](C:/...)` chat links (broken). Follow `skills/mongo-trade-agent/references/priority-canvas.md` + the Cursor canvas skill. Lead columns:
 
 **Single table:**
 
