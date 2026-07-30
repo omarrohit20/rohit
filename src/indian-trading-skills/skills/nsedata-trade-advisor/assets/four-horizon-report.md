@@ -14,13 +14,20 @@
 > **LastDay%**, **Today%**, **Sentiment**, **Conviction**, and **Prob%**
 > (`probability_score`).
 >
-> **Highlight rule:** Show Priority picks in **chat (markdown table) and a
-> Cursor Canvas** (required). Colours render in Canvas; chat keeps the full
-> table. See `skills/mongo-trade-agent/references/priority-canvas.md`.
+> **Full-report rule (mandatory):** After Priority, **MUST** emit Executive
+> Summary, News & Extension Snapshot, Scan Columns Used, asked horizon detail
+> table(s), Watchlist/Avoid, and Disclaimer. Do not stop at Priority.
+>
+> **Highlight / Canvas rule:** Show Priority picks in **chat (markdown table
+> early)** and a **Cursor Canvas last** (required). Colours render in Canvas;
+> chat keeps the full table. See
+> `skills/mongo-trade-agent/references/priority-canvas.md`.
 > - Buy + (LastDay% > 3 or Today% > 3) → full row `#FFE4C4`
 > - Sell + (LastDay% < 3 or Today% < 3) → full row `#FFE4C4`
 > - `MLBuy` in scan data → colour the **MLBuy** token `#C6F6D5` (in Why)
 > - `MLSell` in scan data → colour the **MLSell** token `#FEB2B2` (in Why)
+> - Put the Canvas markdown link in a final **Coloured Priority Canvas**
+>   section — after Disclaimer, never before Executive Summary / other tables.
 
 ---
 
@@ -60,7 +67,7 @@ Also fill May extend? in the snapshot below for the same symbols.
 
 ## Executive Summary
 
-[2–3 sentences: which horizons align, top Priority pick, main risk]
+**Required on every report.** [2–3 sentences: which horizons align, top Priority pick, main risk]
 
 | Horizon | Table | Top pick | Sentiment | Conviction | Prob% | May extend? |
 |---------|-------|----------|-----------|------------|-------|-------------|
@@ -69,7 +76,7 @@ Also fill May extend? in the snapshot below for the same symbols.
 | Short-term | | | | | | |
 | Long-term | | | | | | |
 
-*(Omit Table column only when a single collection was used.)*
+*(Omit Table column only when a single collection was used. Omit horizon rows the user did not ask for; keep at least the asked horizon(s). Never omit this entire section.)*
 
 ---
 
@@ -145,3 +152,13 @@ Example families (use whatever exists on the row):
 ## Disclaimer
 
 Educational analysis only — not SEBI-registered investment advice. Verify live LTP, circuits, and corporate actions before trading.
+
+---
+
+## Coloured Priority Canvas (required — last)
+
+Write/update the `.canvas.tsx`, then end the reply with a markdown link:
+
+`[Open coloured board](~/.cursor/projects/<workspace>/canvases/intraday-priority-picks.canvas.tsx)`
+
+Colours (orange rows / MLBuy / MLSell) render in Canvas; chat above keeps the full tables.

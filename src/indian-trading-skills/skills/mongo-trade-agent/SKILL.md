@@ -5,36 +5,59 @@ description: >-
   tables using ALL document columns, and return ranked suggestions for
   intraday, 3-5 days, short-term, and long-term with
   Priority|Symbol|LastDay%|Today%|Why (Table when multiple collections) plus
-  Sentiment, Conviction, Prob%, News catalyst, and May extend?. Always show
-  Priority picks in chat AND open them in a Cursor Canvas (colours in Canvas).
-  Orange-row and MLBuy/MLSell token highlights per pct-highlight rules. Use for
-  Mongo trade ideas, chartlink/Nsedata scans, or Claude/Cursor/Copilot Mongo
-  trading agent setup.
+  Sentiment, Conviction, Prob%, News catalyst, and May extend?. MUST emit the
+  full report (Priority, Executive Summary, News, Scan Columns, horizon tables,
+  Avoid, Disclaimer) and MUST place Cursor Canvas last. Orange-row and
+  MLBuy/MLSell token highlights per pct-highlight rules. Use for Mongo trade
+  ideas, chartlink/Nsedata scans, or Claude/Cursor/Copilot Mongo trading agent
+  setup.
 ---
 
 # Mongo Trade Agent
 
 Local MongoDB → **full scan-row columns** → ranked multi-horizon suggestions.
 
-## Priority picks → Chat + Canvas (required)
+## Hard requirements (never skip)
 
-For **every** buy/sell (or multi-horizon) query that produces Priority picks,
-present the board **twice**:
+For **every** buy/sell / multi-horizon query after scoring:
 
-1. **In chat** — full markdown Priority table (all columns; readable inline)
-2. **In Cursor Canvas** — same rows with orange / MLBuy / MLSell colours
+| # | Block | Required? |
+|---|--------|-----------|
+| 1 | **Priority** markdown table in chat | **MUST** |
+| 2 | **Executive Summary** (+ horizon bias table) | **MUST** |
+| 3 | **News & Extension Snapshot** | **MUST** |
+| 4 | **Scan Columns Used** | **MUST** |
+| 5 | **Horizon detail table(s)** for the asked horizon(s) | **MUST** |
+| 6 | **Watchlist / Avoid** | **MUST** |
+| 7 | **Disclaimer** | **MUST** |
+| 8 | **Cursor Canvas** (write/update + link) | **MUST — last in the reply** |
+
+**Do not** stop after Priority. **Do not** put Canvas before Executive Summary or
+other tables. Thin / missing collections shrink rows — they do **not** allow
+omitting these blocks (state “not available / no candidates” in the section).
+
+Template: [../nsedata-trade-advisor/assets/four-horizon-report.md](../nsedata-trade-advisor/assets/four-horizon-report.md).  
+Canvas rules: [references/priority-canvas.md](references/priority-canvas.md).
+
+## Priority picks → Chat (early) + Canvas (last)
+
+Present the same Priority board in **two places**, in this order:
+
+1. **Early in chat** — full markdown Priority table (all columns; readable inline)
+2. **After all other report tables** — write/update Cursor Canvas and link it
+   (colours: orange rows + MLBuy / MLSell tokens)
 
 Chat strips HTML styles, so colours appear reliably only in Canvas — but the
-table itself must still appear in chat.
+markdown Priority table must still appear early in chat.
 
 1. Read and follow the Cursor **canvas** skill.
 2. Follow [references/priority-canvas.md](references/priority-canvas.md).
 3. Write/update  
    `~/.cursor/projects/<workspace>/canvases/intraday-priority-picks.canvas.tsx`  
-   (or a horizon-specific name).
-4. In the chat reply: **Priority markdown table** + **markdown link** to the
-   `.canvas.tsx`.
-5. Continue with executive summary / news / avoid / disclaimer in chat.
+   (or a horizon-specific name) **before finishing**, but **link it only at the
+   end** of the chat reply.
+4. Chat order: Priority markdown → **must** Executive Summary → News → Scan
+   Columns → horizon tables → Avoid → Disclaimer → **Canvas link last**.
 
 ### Column shapes (chat + Canvas)
 
@@ -69,7 +92,7 @@ Also include **News catalyst** and **May extend?** for each pick.
 | Databases | `Nsedata`, `chartlink` |
 | Helper | `skills/nsedata-trade-advisor/scripts/query_suggestions.py` |
 | News | Web search / **india-news-tracker** |
-| Priority UI | **Chat table + Cursor Canvas** ([priority-canvas.md](references/priority-canvas.md)) |
+| Priority UI | **Chat table early + Cursor Canvas last** ([priority-canvas.md](references/priority-canvas.md)) |
 
 Platform setup: [references/platform-setup.md](references/platform-setup.md).  
 Why / column rules: [references/priority-why.md](references/priority-why.md).
@@ -87,11 +110,12 @@ Why / column rules: [references/priority-why.md](references/priority-why.md).
    Tag every ranked row with `db.collection` / table name.
 5. Enrich top symbols with news → fill News catalyst / May extend?; polish
    Sentiment / Conviction / Prob% if news conflicts (see conviction-sentiment.md).
-6. **Show Priority board in chat** (markdown table) **and write Canvas**
-   ([priority-canvas.md](references/priority-canvas.md)); link the `.canvas.tsx`.
-7. Present remaining blocks from
-   [../nsedata-trade-advisor/assets/four-horizon-report.md](../nsedata-trade-advisor/assets/four-horizon-report.md)
-   in chat (exec summary, news, avoid, disclaimer).
+6. **Show Priority board in chat** (markdown table only at this point).
+7. **MUST** present Executive Summary, News & Extension Snapshot, Scan Columns
+   Used, asked horizon detail table(s), Watchlist/Avoid, and Disclaimer from
+   [../nsedata-trade-advisor/assets/four-horizon-report.md](../nsedata-trade-advisor/assets/four-horizon-report.md).
+8. **MUST** write/update Canvas and **end the reply** with the Canvas link
+   ([priority-canvas.md](references/priority-canvas.md)).
 
 ```bash
 # Single table
@@ -105,7 +129,7 @@ python skills/nsedata-trade-advisor/scripts/query_suggestions.py \
   --db chartlink --collection buy_all_processor --limit 25 --horizons all
 ```
 
-Do not dump raw JSON. Summarize into the report template + chat table + Canvas.
+Do not dump raw JSON. Summarize into the full report template; Canvas last.
 
 ## Use ALL Scan Columns
 
@@ -126,7 +150,7 @@ If the user gives **2+ tables/collections**:
 
 1. **Never omit the table name** in any ranked result, Priority pick, horizon
    detail row, News snapshot, or Watchlist/Avoid row.
-2. Lead with **Priority | Table | Symbol | LastDay% | Today% | Sentiment | Conviction | Prob% | Why** (chat + Canvas).
+2. Lead with **Priority | Table | Symbol | LastDay% | Today% | Sentiment | Conviction | Prob% | Why** (chat; Canvas mirrors this at end).
 3. Header must list all sources, e.g.  
    `Collections: Nsedata.highBuy, chartlink.buy_all_processor`
 4. Prefer one merged Priority board across tables; if keeping separate boards,
@@ -138,15 +162,16 @@ If the user gives **2+ tables/collections**:
 Single-table runs may omit the Table column, but still state **Collection: `[name]`**
 in the report header — and **must** keep LastDay% / Today% / Sentiment / Conviction / Prob%.
 
-## Required Report Blocks (in order)
+## Required Report Blocks (in order — mandatory)
 
-1. **Priority board in chat (markdown) + Canvas (link)** — LastDay% · Today% · Sentiment · Conviction · Prob% · Why (+ Table if multi) + Canvas highlights
-2. Executive summary + horizon bias table (**Table** column if multi-source)
-3. News & Extension Snapshot
-4. Scan Columns Used (per table when multi-source)
-5. Detailed horizon tables — include **LastDay% · Today% · Sentiment · Conviction · Prob%** (and Table if multi)
-6. Watchlist / Avoid (include Table when multi-source)
-7. Disclaimer
+1. **Priority board in chat (markdown)** — LastDay% · Today% · Sentiment · Conviction · Prob% · Why (+ Table if multi). Do **not** put the Canvas link here.
+2. **Executive Summary** (+ horizon bias table) — **MUST** (**Table** column if multi-source)
+3. **News & Extension Snapshot** — **MUST**
+4. **Scan Columns Used** — **MUST** (per table when multi-source)
+5. **Detailed horizon table(s)** for the horizon(s) the user asked — **MUST** — include **LastDay% · Today% · Sentiment · Conviction · Prob%** (and Table if multi). If only intraday was asked, still emit the Intraday detail table; omit other horizon sections only when not requested.
+6. **Watchlist / Avoid** — **MUST** (include Table when multi-source; say “none” if empty)
+7. **Disclaimer** — **MUST**
+8. **Cursor Canvas** — **MUST be last**: write/update `.canvas.tsx`, then end with a markdown link + one-line note that colours are in Canvas
 
 ### Required result fields (every pick)
 
@@ -174,10 +199,12 @@ Task Progress:
 - [ ] Step 3: List ALL columns from sample docs (per table)
 - [ ] Step 4: Run query_suggestions.py (once per table) — read sentiment/conviction/probability_score + last_day_pct/today_pct/ml_*/row_highlight_orange
 - [ ] Step 5: News enrich top ranked symbols; polish Sentiment/Conviction/Prob% if needed
-- [ ] Step 6: Priority markdown table in chat + Cursor Canvas (priority-canvas.md); link .canvas.tsx
-- [ ] Step 7: Fill News catalyst + May extend?
-- [ ] Step 8: Chat remainder of report + disclaimer (never omit pct columns / conviction / sentiment / prob%)
-- [ ] Step 9 (optional/persist): Save High-conviction top-2 for 3–5d / short / long via mongo-ai-analysis
+- [ ] Step 6: Priority markdown table in chat (no Canvas link yet)
+- [ ] Step 7: MUST — Executive Summary (+ horizon bias)
+- [ ] Step 8: MUST — News & Extension Snapshot; Fill News catalyst + May extend?
+- [ ] Step 9: MUST — Scan Columns Used + asked horizon detail table(s) + Watchlist/Avoid + Disclaimer
+- [ ] Step 10: MUST LAST — Write/update Cursor Canvas; link .canvas.tsx at end of reply
+- [ ] Step 11 (optional/persist): Save High-conviction top-2 for 3–5d / short / long via mongo-ai-analysis
 ```
 
 ## Persist to `ai-analysis` (optional but preferred for swing+ horizons)
@@ -200,4 +227,4 @@ last 5 trading days (no holidays); skip duplicates.
 - **nsedata-trade-advisor** — scoring helper
 - **mongodb-local-mcp** — MCP setup
 - **india-news-tracker** — catalysts
-- **cursor canvas** — coloured Priority UI (with chat table)
+- **cursor canvas** — coloured Priority UI (**last** in reply; after full chat tables)

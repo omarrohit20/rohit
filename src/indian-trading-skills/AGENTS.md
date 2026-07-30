@@ -14,7 +14,7 @@ python skills/nsedata-trade-advisor/scripts/query_suggestions.py \
 ```
 
 4. **Use ALL columns** from each scan document (`meta.scan_columns` / `scan_row`) — filters, ml/intradaytech, PCT/Ldchange, forecasts, etc. Do not score from a short fixed field list.
-5. **Always show Priority picks in chat (markdown table) AND open a Cursor Canvas** (colours in Canvas). Follow `skills/mongo-trade-agent/references/priority-canvas.md` + the Cursor canvas skill; link the `.canvas.tsx` in chat. Lead columns:
+5. **Always show Priority picks in chat (markdown table early).** Then **MUST** emit Executive Summary, News, Scan Columns, asked horizon tables, Avoid, Disclaimer. **MUST put Cursor Canvas last** (write/update + link). Follow `skills/mongo-trade-agent/references/priority-canvas.md` + the Cursor canvas skill. Lead columns:
 
 **Single table:**
 
@@ -34,8 +34,8 @@ Highlights (Canvas): buy row orange if LastDay%/Today% > 3; sell row orange if L
 Example Why style: `Q1 results today + AnchisBuyUp / ReversalLow; already +2% into the print`
 
 6. Also fill **News catalyst** and **May extend?** (`Yes` / `Possible` / `Only if X` / `Weak` / `No`). Keep **Table** on those rows when multi-source.
-7. Use template `skills/nsedata-trade-advisor/assets/four-horizon-report.md`.
-8. Disclaimer: educational only, not SEBI advice.
+7. Use template `skills/nsedata-trade-advisor/assets/four-horizon-report.md` — do not stop at Priority.
+8. Disclaimer: educational only, not SEBI advice — then Canvas link last.
 
 ## Mongo AI Analysis (persist High-conviction picks)
 

@@ -13,11 +13,12 @@ For local MongoDB multi-horizon trade/investment suggestions:
 **Always:**
 1. Use **all columns** from the given scan collection document(s).
 2. Lead with **Priority | Symbol | LastDay% | Today% | Sentiment | Conviction | Prob% | Why** — add **Table** when multiple tables are given.
-3. **Always show Priority picks in chat (markdown table) AND open a Cursor Canvas** (`skills/mongo-trade-agent/references/priority-canvas.md`); link the `.canvas.tsx` in the reply. Colours render in Canvas; chat keeps the full table.
-4. Highlights (Canvas): buy row orange if LastDay% or Today% > 3; sell row orange if LastDay% or Today% < 3; colour **MLBuy** / **MLSell** tokens in Why (green / red).
-5. Include News catalyst and May extend?.
-6. Disclaimer: educational, not SEBI advice.
-7. % / colour detail: `skills/mongo-trade-agent/references/pct-highlight.md`
+3. **MUST** then emit Executive Summary, News & Extension Snapshot, Scan Columns, asked horizon detail table(s), Watchlist/Avoid, Disclaimer (template `four-horizon-report.md`). Do not stop at Priority.
+4. **MUST put Cursor Canvas last** (`skills/mongo-trade-agent/references/priority-canvas.md`); write/update and link the `.canvas.tsx` after Disclaimer. Colours render in Canvas; chat keeps the full tables.
+5. Highlights (Canvas): buy row orange if LastDay% or Today% > 3; sell row orange if LastDay% or Today% < 3; colour **MLBuy** / **MLSell** tokens in Why (green / red).
+6. Include News catalyst and May extend?.
+7. Disclaimer: educational, not SEBI advice — then Canvas.
+8. % / colour detail: `skills/mongo-trade-agent/references/pct-highlight.md`
 
 ## Mongo AI Analysis (persist)
 

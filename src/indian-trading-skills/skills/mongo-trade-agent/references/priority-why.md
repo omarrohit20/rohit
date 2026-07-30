@@ -8,8 +8,9 @@ Also see [conviction-sentiment.md](conviction-sentiment.md),
 
 ## Format — single table (verbatim shape)
 
-**Always show Priority picks in chat (markdown) and open a Cursor Canvas**
-(colours in Canvas). Column order:
+**Always show Priority picks in chat (markdown early) and open a Cursor Canvas
+last** (colours in Canvas) — after Executive Summary and other report tables.
+Column order:
 
 | Priority | Symbol | LastDay% | Today% | Sentiment | Conviction | Prob% | Why |
 |----------|--------|----------|--------|-----------|------------|-------|-----|

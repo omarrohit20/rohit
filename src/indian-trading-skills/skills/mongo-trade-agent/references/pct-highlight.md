@@ -48,15 +48,19 @@ If both appear, show both coloured tokens in Why.
 
 Row orange and ML-token colour **stack**: orange row + green/red **MLBuy**/**MLSell** text.
 
-## Rendering — Chat table + Cursor Canvas
+## Rendering — Chat table early + Cursor Canvas last
 
 **Required for every buy/sell Priority board:**
 
-1. **Chat** — full markdown Priority table (same columns/rows; colours may not
-   show because chat strips HTML `style`)
-2. **Cursor Canvas** — same data with orange rows + MLBuy/MLSell token colours
+1. **Chat (early)** — full markdown Priority table (same columns/rows; colours
+   may not show because chat strips HTML `style`)
+2. **Full report tables (mandatory)** — Executive Summary, News, Scan Columns,
+   asked horizon detail table(s), Watchlist/Avoid, Disclaimer
+3. **Cursor Canvas (last)** — same Priority data with orange rows + MLBuy/MLSell
+   token colours; link only at the end of the reply
 
-See [priority-canvas.md](priority-canvas.md). Do not omit either surface.
+See [priority-canvas.md](priority-canvas.md). Do not omit chat table, report
+tables, or Canvas.
 
 ## Lead table shapes (chat + Canvas)
 
