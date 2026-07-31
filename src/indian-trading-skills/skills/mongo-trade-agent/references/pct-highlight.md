@@ -30,7 +30,7 @@ Apply **full row** background when:
 | Side | Condition |
 |------|-----------|
 | **Buy** | `LastDay% > 3` **OR** `Today% > 3` → full row background `#FFE4C4` |
-| **Sell** | `LastDay% < 3` **OR** `Today% < 3` → full row background `#FFE4C4` |
+| **Sell** | `LastDay% < -3` **OR** `Today% < -3` → full row background `#FFE4C4` |
 
 ## ML tag highlight — colour the token text (not the scrip)
 
@@ -48,6 +48,20 @@ If both appear, show both coloured tokens in Why.
 
 Row orange and ML-token colour **stack**: orange row + green/red **MLBuy**/**MLSell** text.
 
+## News catalyst highlight — colour the News cell (not the whole Priority row)
+
+Apply on **News catalyst** in News & Extension Snapshot, horizon detail tables,
+and Canvas news boards. Full rules: [news-extension.md](news-extension.md).
+
+| News tone | Cell background |
+|-----------|-----------------|
+| **Positive** | Light green `#C6F6D5` |
+| **Negative** | Light red `#FEB2B2` |
+| **Mixed** | Light yellow `#FEFCBF` |
+| **Neutral** / `No fresh news` | No news colour |
+
+Stacks with orange row and ML tokens when those also apply.
+
 ## Rendering — Chat table early + Cursor Canvas last
 
 **Required for every buy/sell Priority board:**
@@ -57,7 +71,7 @@ Row orange and ML-token colour **stack**: orange row + green/red **MLBuy**/**MLS
 2. **Full report tables (mandatory)** — Executive Summary, News, Scan Columns,
    asked horizon detail table(s), Watchlist/Avoid, Disclaimer
 3. **Cursor Canvas (last)** — same Priority data with orange rows + MLBuy/MLSell
-   token colours; link only at the end of the reply
+   token colours + News catalyst green/red/yellow; link only at the end of the reply
 
 See [priority-canvas.md](priority-canvas.md). Do not omit chat table, report
 tables, or Canvas.

@@ -5,7 +5,7 @@ Always present the **same Priority picks board in both places**:
 1. **Chat (early)** — full markdown Priority table (readable inline; colours may
    not render because chat strips HTML `style`)
 2. **Cursor Canvas (last in the reply)** — same data with orange rows +
-   MLBuy/MLSell token colours
+   MLBuy/MLSell token colours + News catalyst green/red/yellow
 
 Applies to **every** buy and sell / multi-horizon query that produces Priority
 picks (intraday, 3–5 days, short-term, long-term).
@@ -89,22 +89,28 @@ derived from the file (e.g. `IntradayPrioritySellAllProcessor20260730113530`).
    - Multi source: add **Table**
 2. **Canvas only — colours:**
    - Prefer Table `rowTone="warning"` when buy and (`LastDay% > 3` or `Today% > 3`),
-     or sell and (`LastDay% < 3` or `Today% < 3`) (SDK equivalent of orange row)
+     or sell and (`LastDay% < -3` or `Today% < -3`) (SDK equivalent of orange row)
    - In Why: `MLBuy` → light green `#C6F6D5`, `MLSell` → light red `#FEB2B2`
-3. Short legend in Canvas (and optionally one line in chat)
+   - **News catalyst** cell: Positive → `#C6F6D5`, Negative → `#FEB2B2`,
+     Mixed → `#FEFCBF` (see [news-extension.md](news-extension.md)); include a
+     short News snapshot table in Canvas when catalysts exist
+3. Short legend in Canvas (and optionally one line in chat) — include news colours
 4. Embed pick data **inline** in Canvas (no `fetch`, no network)
 5. Import **only** from `cursor/canvas`
 
 Use helper fields: `last_day_pct`, `today_pct`, `ml_buy`, `ml_sell`,
-`row_highlight_orange`, `trade_side`, `probability_score`, `why`.
+`row_highlight_orange`, `trade_side`, `probability_score`, `why`, plus
+`news_catalyst` / `news_sentiment` / `may_extend` when enriching.
 
 ## Chat Priority table (required — early)
 
 Use a normal markdown pipe table with the same rows as Canvas. Optional text
-cues when a row would be orange / has ML tags (chat has no reliable colours):
+cues when a row would be orange / has ML tags / news polarity (chat has no
+reliable colours):
 
 - Append `· orange` in Why when `row_highlight_orange`
 - Keep literal `MLBuy` / `MLSell` in Why when present
+- Append `· +news` / `· −news` / `· mixed news` on News catalyst when coloured in Canvas
 
 Example chat shape:
 
@@ -172,5 +178,6 @@ Windows. Instead:
 ## Reference
 
 Colour rules: [pct-highlight.md](pct-highlight.md).  
+News catalyst colours: [news-extension.md](news-extension.md).  
 Prior fixed name `intraday-priority-picks.canvas.tsx` is **deprecated** — keep
 only as a historical example; do not update it for new queries.

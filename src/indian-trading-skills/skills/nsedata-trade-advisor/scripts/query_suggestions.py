@@ -97,10 +97,10 @@ def pct_highlight_meta(scan: dict, sentiment: str | None = None) -> dict:
         row_orange = (last_day is not None and last_day > 3) or (
             today is not None and today > 3
         )
-    else:
-        # Sell: LastDay% or Today% < 3 (user rule: "less than 3%")
-        row_orange = (last_day is not None and last_day < 3) or (
-            today is not None and today < 3
+    elif side == "sell":
+        # Sell: LastDay% or Today% < -3 (down more than 3%)
+        row_orange = (last_day is not None and last_day < -3) or (
+            today is not None and today < -3
         )
 
     return {
@@ -920,7 +920,7 @@ def build_report(results: list[dict], meta: dict, horizons: set[str], top_n: int
             "highlight_rules": {
                 "row_orange": "#FFE4C4",
                 "buy_row_when": "LastDay% > 3 OR Today% > 3",
-                "sell_row_when": "LastDay% < 3 OR Today% < 3",
+                "sell_row_when": "LastDay% < -3 OR Today% < -3",
                 "symbol_mlbuy": "#C6F6D5",
                 "symbol_mlsell": "#FEB2B2",
                 "render": "HTML table or Canvas — markdown pipes cannot show colours",

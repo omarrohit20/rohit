@@ -25,6 +25,7 @@ Still state **Collection: `[name]`** in the report header.
 Highlight examples from above:
 - SWIGGY row → light orange (LastDay% > 3 on a buy)
 - ABB / SWIGGY Why → colour **MLBuy** light green / **MLSell** light red when those tags are in scan fields
+- News catalyst → light green / light red / light yellow for Positive / Negative / Mixed (see [news-extension.md](news-extension.md))
 
 ## Format — multiple tables (required when 2+ collections)
 
@@ -79,5 +80,5 @@ Prefer helper-emitted values from `query_suggestions.py`; polish with news per
 - Omit the Priority table even if the user asks for a single horizon
 - Omit **Table** when multiple collections were queried
 - Omit **LastDay%**, **Today%**, **Sentiment**, **Conviction**, or **Prob%** from report results
-- Omit orange / MLBuy / MLSell highlights when conditions match
+- Omit orange / MLBuy / MLSell / News catalyst (green·red·yellow) highlights when conditions match
 - Use plain markdown pipes for the Priority board when any row needs colour

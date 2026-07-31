@@ -7,10 +7,10 @@ description: >-
   Priority|Symbol|LastDay%|Today%|Why (Table when multiple collections) plus
   Sentiment, Conviction, Prob%, News catalyst, and May extend?. MUST emit the
   full report (Priority, Executive Summary, News, Scan Columns, horizon tables,
-  Avoid, Disclaimer) and MUST place Cursor Canvas last. Orange-row and
-  MLBuy/MLSell token highlights per pct-highlight rules. Use for Mongo trade
-  ideas, chartlink/Nsedata scans, or Claude/Cursor/Copilot Mongo trading agent
-  setup.
+  Avoid, Disclaimer) and MUST place Cursor Canvas last. Orange-row,
+  MLBuy/MLSell token, and News catalyst sentiment highlights (green/red/yellow)
+  per pct-highlight + news-extension rules. Use for Mongo trade ideas,
+  chartlink/Nsedata scans, or Claude/Cursor/Copilot Mongo trading agent setup.
 ---
 
 # Mongo Trade Agent
@@ -45,8 +45,8 @@ Present the same Priority board in **two places**, in this order:
 
 1. **Early in chat** — full markdown Priority table (all columns; readable inline)
 2. **After all other report tables** — create a **brand-new** Cursor Canvas and
-   link it (colours: orange rows + MLBuy / MLSell tokens). **Never overwrite**
-   a previous `.canvas.tsx`.
+   link it (colours: orange rows + MLBuy / MLSell tokens + News catalyst
+   green/red/yellow). **Never overwrite** a previous `.canvas.tsx`.
 
 Chat strips HTML styles, so colours appear reliably only in Canvas — but the
 markdown Priority table must still appear early in chat.
@@ -71,23 +71,28 @@ markdown Priority table must still appear early in chat.
 
 **Multi-table:** add **Table** after Priority.
 
-### Highlight rules (Canvas; mark in chat Why when useful)
+### Highlight rules (Canvas; mark in chat Why / News when useful)
 
 | Rule | Action |
 |------|--------|
 | Buy + (`LastDay% > 3` **or** `Today% > 3`) | Full row background light orange `#FFE4C4` |
-| Sell + (`LastDay% < 3` **or** `Today% < 3`) | Full row background light orange `#FFE4C4` |
+| Sell + (`LastDay% < -3` **or** `Today% < -3`) | Full row background light orange `#FFE4C4` |
 | DB data contains `MLBuy` | Highlight token **MLBuy** light green `#C6F6D5` (in Why) |
 | DB data contains `MLSell` | Highlight token **MLSell** light red `#FEB2B2` (in Why) |
+| News catalyst **Positive** | News cell light green `#C6F6D5` |
+| News catalyst **Negative** | News cell light red `#FEB2B2` |
+| News catalyst **Mixed** | News cell light yellow `#FEFCBF` |
+| News **Neutral** / `No fresh news` | No news colour |
 
 - **LastDay%** ← `PCT_day_change_pre1` / `Ldchange` / `ldchange`
 - **Today%** ← `PCT_day_change`
 - Helper fields: `last_day_pct`, `today_pct`, `ml_buy`, `ml_sell`, `row_highlight_orange`
 
 Full detail: [references/pct-highlight.md](references/pct-highlight.md).  
+News colours: [references/news-extension.md](references/news-extension.md).  
 Sentiment / Conviction / Prob% rules: [references/conviction-sentiment.md](references/conviction-sentiment.md).
 
-Also include **News catalyst** and **May extend?** for each pick.
+Also include **News catalyst** and **May extend?** for each pick (with news highlight).
 
 ## Prerequisites
 

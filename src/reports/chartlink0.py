@@ -1387,6 +1387,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                 (
                     (df['filter3'].str.contains('ReversalLowYear2', case=False, regex=True, na=False)) |
                         (df['filter3'].str.contains('ReversalLowYear', case=False, regex=True, na=False)) |
@@ -1426,6 +1427,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                 (
                     (df['filter3'].str.contains('ReversalHighYear2', case=False, regex=True, na=False)) |
                     (df['filter3'].str.contains('ReversalHighYear', case=False, regex=True, na=False)) |

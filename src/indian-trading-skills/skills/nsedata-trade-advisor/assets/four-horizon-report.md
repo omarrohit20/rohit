@@ -23,7 +23,7 @@
 > chat keeps the full table. See
 > `skills/mongo-trade-agent/references/priority-canvas.md`.
 > - Buy + (LastDay% > 3 or Today% > 3) → full row `#FFE4C4`
-> - Sell + (LastDay% < 3 or Today% < 3) → full row `#FFE4C4`
+> - Sell + (LastDay% < -3 or Today% < -3) → full row `#FFE4C4`
 > - `MLBuy` in scan data → colour the **MLBuy** token `#C6F6D5` (in Why)
 > - `MLSell` in scan data → colour the **MLSell** token `#FEB2B2` (in Why)
 > - Put the Canvas markdown link in a final **Coloured Priority Canvas**
@@ -81,6 +81,8 @@ Also fill May extend? in the snapshot below for the same symbols.
 ---
 
 ## News & Extension Snapshot
+
+Canvas: colour **News catalyst** Positive `#C6F6D5` · Negative `#FEB2B2` · Mixed `#FEFCBF` (see `news-extension.md`). Neutral / “No fresh news” → no news colour.
 
 | Table | Symbol | Horizon | Sentiment | Conviction | Prob% | News catalyst | May extend? |
 |-------|--------|---------|-----------|------------|-------|---------------|-------------|
