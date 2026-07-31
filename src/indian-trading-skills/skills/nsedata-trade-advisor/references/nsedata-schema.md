@@ -88,7 +88,8 @@ Both `history` and `history15m` store one document per symbol:
 | `reversalY2LLT50`, `reversalY2LLT60`, `reversalY2LLT70` | Reversal from 2y low |
 | `movingavg_crossed_up`, `movingavg_crossed_down` | MA cross events |
 | `regressionhigh`, `regressionlow` | Regression channel extremes |
-| `scrip_futures`, `resultScripFutures` | F&O / results universe |
+| `scrip` (`futures` / `index`) | Universe; F&O when `futures=Yes` or `index=futures` |
+| `resultScripFutures` | Results-day F&O subset |
 
 ### Common scan fields (`highBuy` and peers)
 

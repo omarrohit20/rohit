@@ -362,7 +362,12 @@ def result_data(scrip):
         all_withoutml(regression_data, regressionResult, ws_lowSellStrongBoth)
 
 
-def intraday_tech_data(regression_data):
+def intraday_tech_data(regression_data, daily_only=False):
+    """Compute intradaytech tags.
+
+    daily_only=True skips history15m (used for full-history backfill where
+    current intraday bars must not be applied to past dates).
+    """
     intradaytech = ''
     scrip = regression_data['scrip']
 
@@ -443,25 +448,33 @@ def intraday_tech_data(regression_data):
 
 
 
-    data = db.history15m.find_one({'dataset_code': scrip})
-    if (data is None or (np.array(data['data'])).size < 25):
+    def daily_forecast_tag():
+        tag = ''
         if (regression_data['forecast_day_PCT2_change'] > 4 and abs(regression_data['PCT_day_change']) < 1.5):
-            intradaytech = "ZPre1_uptrend"
+            tag = "ZPre1_uptrend"
         elif (regression_data['forecast_day_PCT3_change'] > 4 and abs(regression_data['PCT_day_change']) < 1.5):
-            intradaytech = "ZPre2_uptrend"
+            tag = "ZPre2_uptrend"
         elif (regression_data['forecast_day_PCT4_change'] > 4 and abs(regression_data['PCT_day_change']) < 1.5):
-            intradaytech = "ZPre3_uptrend"
+            tag = "ZPre3_uptrend"
         elif (regression_data['forecast_day_PCT5_change'] > 4 and abs(regression_data['PCT_day_change']) < 1.5):
-            intradaytech = "ZPre4_uptrend"
+            tag = "ZPre4_uptrend"
         if (regression_data['forecast_day_PCT2_change'] < -4 and abs(regression_data['PCT_day_change']) < 1.5):
-            intradaytech = "ZPre1_downtrend"
+            tag = "ZPre1_downtrend"
         elif (regression_data['forecast_day_PCT3_change'] < -4 and abs(regression_data['PCT_day_change']) < 1.5):
-            intradaytech = "ZPre2_downtrend"
+            tag = "ZPre2_downtrend"
         elif (regression_data['forecast_day_PCT4_change'] < -4 and abs(regression_data['PCT_day_change']) < 1.5):
-            intradaytech = "ZPre3_downtrend"
+            tag = "ZPre3_downtrend"
         elif (regression_data['forecast_day_PCT5_change'] < -4 and abs(regression_data['PCT_day_change']) < 1.5):
-            intradaytech = "ZPre4_downtrend"
-        return intradaytech
+            tag = "ZPre4_downtrend"
+        return tag
+
+    # Historical regression explicitly exits here, before any 15-minute query.
+    if daily_only:
+        return daily_forecast_tag()
+
+    data = db.history15m.find_one({'dataset_code': scrip})
+    if data is None or (np.array(data['data'])).size < 25:
+        return daily_forecast_tag()
 
     hsdate, hsopen, hshigh, hslow, hsclose, hsquantity = historical_data(data)
     df = pd.DataFrame({
@@ -869,11 +882,11 @@ def shortterm_tech_data_sell(regressionhigh, regressionlow):
 
 
 def get_index(scrip):
-    data = db.scrip_futures.find_one({'scrip': scrip})
-    if (data is not None):
+    data = db.scrip.find_one({'scrip': scrip}, {'futures': 1, 'index': 1})
+    if data is not None and (
+            data.get('futures') == 'Yes' or data.get('index') == 'futures'):
         return "futures"
-    else:
-        return ""
+    return ""
 
 def get_fundamental(scrip):
     data = db.fundamental.find_one({'scrip': scrip})

@@ -2,7 +2,11 @@
 Build full-history regression_data (non-ML) for every bar — not only the latest day.
 
 Extends the original OHLCV dataframe with calculated high+low regression fields
-(no ML) and saves ONE document per scrip to MongoDB collection `regressiondata`.
+(no ML), plus filter/filter1-6, series_trend, intradaytech, shorttermtech tags.
+
+Saves ONE numeric dataframe per scrip to MongoDB `regressiondata`, and filter/tech
+string columns to companion collection `regressiondata_filters` (keeps each doc
+under Mongo's 16MB BSON limit). Use load_dataframe(scrip) to merge both.
 
 Usage (from this directory):
   python regression_data_history.py Yes
@@ -24,7 +28,13 @@ import pandas as pd
 pd.options.mode.chained_assignment = None
 import numpy as np
 
-from util.util import historical_data
+from util.util import historical_data, buy_other_indicator, is_filter_risky
+from util.util_base import trend_calculator
+from regression_result import (
+    intraday_tech_data,
+    shortterm_tech_data_buy,
+    shortterm_tech_data_sell,
+)
 from talib.abstract import EMA, SMA
 
 directory = '../../output' + '/regression_data_history/' + time.strftime("%d%m%y-%H%M%S")
@@ -37,9 +47,32 @@ connection = MongoClient('localhost', 27017)
 db = connection.Nsedata
 
 COLLECTION = 'regressiondata'
+COLLECTION_FILTERS = 'regressiondata_filters'
 forecast_out = 1
 dR = 2
 MIN_BARS = 100
+
+FILTER_STR_COLS = (
+    'filter', 'filter1', 'filter2', 'filter3', 'filter4', 'filter5', 'filter6',
+    'series_trend', 'intradaytech', 'shorttermtech',
+)
+_ML_STUB_KEYS = (
+    'mlpValue_reg', 'kNeighboursValue_reg', 'mlpValue_cla', 'kNeighboursValue_cla',
+    'mlpValue_reg_other', 'kNeighboursValue_reg_other',
+    'mlpValue_cla_other', 'kNeighboursValue_cla_other',
+    'forecast_mlpValue_reg', 'forecast_kNeighboursValue_reg',
+    'forecast_mlpValue_cla', 'forecast_kNeighboursValue_cla',
+)
+_FILTER_ACC_KEYS = (
+    'filter_345_avg', 'filter_345_count', 'filter_345_pct',
+    'filter_avg', 'filter_count', 'filter_pct',
+    'filter_pct_change_avg', 'filter_pct_change_count', 'filter_pct_change_pct',
+    'filter_all_avg', 'filter_all_count', 'filter_all_pct',
+    'filter_tech_avg', 'filter_tech_count', 'filter_tech_pct',
+    'filter_tech_all_avg', 'filter_tech_all_count', 'filter_tech_all_pct',
+    'filter_tech_all_pct_change_avg', 'filter_tech_all_pct_change_count',
+    'filter_tech_all_pct_change_pct',
+)
 
 
 def _build_sparse_table(arr, op):
@@ -249,6 +282,78 @@ def build_base_df(data):
     return df
 
 
+def _prepare_row_dict(row):
+    """Build a regression_data-like dict for filter/tech helpers (non-ML stubs)."""
+    data = {}
+    for k, v in row.items():
+        if isinstance(v, (float, np.floating)) and (np.isnan(v) or np.isinf(v)):
+            data[k] = 0.0
+        elif pd.isna(v):
+            data[k] = 0.0 if not isinstance(v, str) else ''
+        else:
+            data[k] = v
+    for k in _ML_STUB_KEYS:
+        data[k] = 0.0
+    data['ml'] = ''
+    for k in ('oi', 'contract', 'oi_next', 'contract_next'):
+        data[k] = -10000.0
+    for k in _FILTER_ACC_KEYS:
+        data[k] = 0
+    for k in ('filterbuy', 'filtersell', 'filter', 'filter1', 'filter2',
+              'filter3', 'filter4', 'filter5', 'filter6'):
+        data[k] = ' '
+    return data
+
+
+def _compute_filters_for_row(row_dict):
+    """Populate filter*, series_trend, intradaytech, shorttermtech for one bar."""
+    row_dict['series_trend'] = trend_calculator(row_dict)
+    buy_other_indicator(row_dict, [], True, None)
+    is_filter_risky(row_dict, [], 'None', None, 'filter_avg', 'filter_count', 'filter_pct', True)
+    buy_tag = shortterm_tech_data_buy(row_dict, row_dict) or ''
+    sell_tag = shortterm_tech_data_sell(row_dict, row_dict) or ''
+    shortterm = buy_tag
+    if sell_tag:
+        shortterm = (buy_tag + '|' + sell_tag) if buy_tag else sell_tag
+    try:
+        intraday = intraday_tech_data(row_dict, daily_only=True) or ''
+    except Exception:
+        intraday = ''
+    return {
+        'filter': row_dict.get('filter', ' ') or ' ',
+        'filter1': row_dict.get('filter1', ' ') or ' ',
+        'filter2': row_dict.get('filter2', ' ') or ' ',
+        'filter3': row_dict.get('filter3', ' ') or ' ',
+        'filter4': row_dict.get('filter4', ' ') or ' ',
+        'filter5': row_dict.get('filter5', ' ') or ' ',
+        'filter6': row_dict.get('filter6', ' ') or ' ',
+        'series_trend': row_dict.get('series_trend', '') or '',
+        'intradaytech': intraday,
+        'shorttermtech': shortterm,
+    }
+
+
+def apply_filter_columns(df):
+    """
+    For every bar with enough history, compute the same non-ML filter tags used
+    by regression_result (filter…filter6, series_trend, intradaytech, shorttermtech).
+    """
+    n = len(df)
+    out = {c: [''] * n for c in FILTER_STR_COLS}
+    # Need SMA / lag columns populated; skip very early bars
+    start = max(MIN_BARS - 1, 0)
+    records = df.to_dict('records')
+    for i in range(start, n):
+        try:
+            row_dict = _prepare_row_dict(records[i])
+            tags = _compute_filters_for_row(row_dict)
+            for c, v in tags.items():
+                out[c][i] = v
+        except Exception as e:
+            log.exception('filter row %s failed: %s', i, e)
+    return pd.DataFrame(out, index=df.index)
+
+
 def extend_dataframe_with_regression(scrip, df):
     """
     Extend the original OHLCV/feature dataframe with high+low non-ML regression fields.
@@ -260,6 +365,20 @@ def extend_dataframe_with_regression(scrip, df):
 
     out['scrip'] = scrip
     out['industry'] = scripinfo.get('industry', '')
+
+    # MA10/MA21 already on base df (ma10c/ma21c + pre5/10/20/40); mark crossovers
+    out['movingavg_crossed_up'] = (
+        (out['ma21c'] < out['ma10c'])
+        & (out['ma21c_pre10'] > out['ma10c_pre10'])
+        & (out['ma21c_pre20'] > out['ma10c_pre20'])
+        & (out['ma21c_pre40'] > out['ma10c_pre40'])
+    )
+    out['movingavg_crossed_down'] = (
+        (out['ma21c'] > out['ma10c'])
+        & (out['ma21c_pre10'] < out['ma10c_pre10'])
+        & (out['ma21c_pre20'] < out['ma10c_pre20'])
+        & (out['ma21c_pre40'] < out['ma10c_pre40'])
+    )
 
     # High pipeline forecasts (High_change*) + low pipeline (Low_change*)
     out['forecast_day_VOL_change'] = out['VOL_change']
@@ -333,37 +452,80 @@ def extend_dataframe_with_regression(scrip, df):
         extra[f'lowTail_pre{lag}'] = np.where((bl - l) == 0, 0, ((bl - l) / bl) * 100)
     out = pd.concat([out, pd.DataFrame(extra, index=out.index)], axis=1)
 
-    skip = {'date', 'scrip', 'industry', 'score', 'trend', 'buyIndia', 'sellIndia', 'patterns'}
+    # Non-ML filter / tech tags for every historical bar
+    filter_df = apply_filter_columns(out)
+    out = pd.concat([out, filter_df], axis=1)
+
+    # Drop intermediate SMA raw series (not needed after pct SMAs are built)
+    out = out.drop(columns=[c for c in out.columns if str(c).endswith('_raw')], errors='ignore')
+
+    skip = {
+        'date', 'scrip', 'industry', 'score', 'trend',
+        'buyIndia', 'sellIndia', 'patterns',
+        'movingavg_crossed_up', 'movingavg_crossed_down',
+        *FILTER_STR_COLS,
+    }
     num_cols = [c for c in out.columns if c not in skip]
     out[num_cols] = out[num_cols].apply(pd.to_numeric, errors='coerce').round(dR)
     out = out.replace([np.inf, -np.inf], np.nan).reset_index(drop=True)
     return out
 
 
-def save_dataframe(scrip, df_out, end_date):
-    """Save one dataframe document per scrip (original + calculated columns)."""
-    # pandas split format: {columns, index, data} — reconstruct with pd.DataFrame(**doc['dataframe'])
+def _dataframe_to_frame(df_out):
+    """Serialize dataframe to pandas split JSON with normalized date strings."""
     frame = json.loads(df_out.to_json(orient='split', date_format='iso'))
-    # Normalize date column values if present as ISO timestamps inside data rows
     if 'date' in frame['columns']:
         di = frame['columns'].index('date')
         for row in frame['data']:
             if isinstance(row[di], str) and 'T' in row[di]:
                 row[di] = row[di][:10]
+    return frame
 
-    doc = {
+
+def save_dataframe(scrip, df_out, end_date):
+    """
+    Save one dataframe document per scrip.
+
+    Filter/tech string columns are stored in companion collection
+    `regressiondata_filters` so the numeric history stays under Mongo's 16MB
+    BSON limit.
+    """
+    industry = str(df_out['industry'].iloc[-1]) if 'industry' in df_out.columns and len(df_out) else ''
+    filter_cols = [c for c in FILTER_STR_COLS if c in df_out.columns]
+    base_df = df_out.drop(columns=filter_cols, errors='ignore')
+    filter_df = df_out[filter_cols] if filter_cols else None
+
+    base_frame = _dataframe_to_frame(base_df)
+    base_doc = {
         'scrip': scrip,
         'end_date': end_date,
-        'industry': str(df_out['industry'].iloc[-1]) if 'industry' in df_out.columns and len(df_out) else '',
-        'rows': int(len(df_out)),
-        'columns': frame['columns'],
-        'dataframe': frame,
+        'industry': industry,
+        'rows': int(len(base_df)),
+        'columns': base_frame['columns'],
+        'dataframe': base_frame,
+        'has_filters': bool(filter_cols),
     }
 
     col = db[COLLECTION]
-    # Remove any old multi-row docs for this scrip, then upsert single dataframe doc
     col.delete_many({'scrip': scrip})
-    col.insert_one(doc)
+    col.insert_one(base_doc)
+
+    fcol = db[COLLECTION_FILTERS]
+    fcol.delete_many({'scrip': scrip})
+    if filter_df is not None and len(filter_cols):
+        # Keep date index alignment for joins when loading
+        if 'date' in df_out.columns:
+            filter_df = filter_df.copy()
+            filter_df.insert(0, 'date', df_out['date'].values)
+        f_frame = _dataframe_to_frame(filter_df)
+        fcol.insert_one({
+            'scrip': scrip,
+            'end_date': end_date,
+            'industry': industry,
+            'rows': int(len(filter_df)),
+            'columns': f_frame['columns'],
+            'dataframe': f_frame,
+        })
     return len(df_out)
 
 
@@ -373,8 +535,23 @@ def regression_data_history(scrip):
         print('Missing or very less Data for', scrip)
         return
 
-    existing = db[COLLECTION].find_one({'scrip': scrip, 'dataframe': {'$exists': True}}, {'end_date': 1})
-    if existing is not None and existing.get('end_date') == data.get('end_date'):
+    existing = db[COLLECTION].find_one(
+        {'scrip': scrip, 'dataframe': {'$exists': True}},
+        {'end_date': 1, 'has_filters': 1, 'columns': 1})
+    filt_ok = db[COLLECTION_FILTERS].find_one({'scrip': scrip}, {'end_date': 1})
+    cols = existing.get('columns') or [] if existing else []
+    has_ma_cross = (
+        'movingavg_crossed_up' in cols
+        and 'movingavg_crossed_down' in cols
+        and 'ma10c' in cols
+        and 'ma21c' in cols
+    )
+    if (existing is not None
+            and existing.get('end_date') == data.get('end_date')
+            and existing.get('has_filters')
+            and has_ma_cross
+            and filt_ok is not None
+            and filt_ok.get('end_date') == data.get('end_date')):
         print('Up to date, skip', scrip)
         return
 
@@ -383,7 +560,8 @@ def regression_data_history(scrip):
         df = build_base_df(data)
         df_out = extend_dataframe_with_regression(scrip, df)
         n = save_dataframe(scrip, df_out, data.get('end_date'))
-        print(f'  saved 1 dataframe ({n} rows x {len(df_out.columns)} cols) -> {COLLECTION}')
+        print(f'  saved 1 dataframe ({n} rows x {len(df_out.columns)} cols) '
+              f'-> {COLLECTION} + {COLLECTION_FILTERS}')
         log.info('%s saved dataframe %s rows', scrip, n)
     except Exception as e:
         print('regression_data_history failed for', scrip, e)
@@ -391,24 +569,40 @@ def regression_data_history(scrip):
 
 
 def ensure_indexes():
-    col = db[COLLECTION]
-    # Drop legacy multi-row index/docs (old one-doc-per-date format)
-    for name in ('scrip_1_date_1', 'date_1'):
-        try:
-            col.drop_index(name)
-        except Exception:
-            pass
-    col.delete_many({'dataframe': {'$exists': False}})
-    col.create_index([('scrip', ASCENDING)], unique=True)
+    for name, cname in ((COLLECTION, 'scrip_1_date_1'), (COLLECTION_FILTERS, 'scrip_1_date_1')):
+        col = db[name]
+        for idx in (cname, 'date_1'):
+            try:
+                col.drop_index(idx)
+            except Exception:
+                pass
+        if name == COLLECTION:
+            col.delete_many({'dataframe': {'$exists': False}})
+        col.create_index([('scrip', ASCENDING)], unique=True)
 
 
-def load_dataframe(scrip):
-    """Helper: load saved dataframe back as pandas DataFrame."""
+def load_dataframe(scrip, include_filters=True):
+    """Helper: load saved dataframe back as pandas DataFrame (merged with filters)."""
     doc = db[COLLECTION].find_one({'scrip': scrip})
     if doc is None or 'dataframe' not in doc:
         return None
     frame = doc['dataframe']
-    return pd.DataFrame(frame['data'], columns=frame['columns'], index=frame.get('index'))
+    df = pd.DataFrame(frame['data'], columns=frame['columns'], index=frame.get('index'))
+    if include_filters:
+        fdoc = db[COLLECTION_FILTERS].find_one({'scrip': scrip})
+        if fdoc is not None and 'dataframe' in fdoc:
+            fframe = fdoc['dataframe']
+            fdf = pd.DataFrame(fframe['data'], columns=fframe['columns'], index=fframe.get('index'))
+            # Align on position; drop duplicate date from filters if present
+            if 'date' in fdf.columns and 'date' in df.columns:
+                fdf = fdf.drop(columns=['date'])
+            if len(fdf) == len(df):
+                df = pd.concat([df.reset_index(drop=True), fdf.reset_index(drop=True)], axis=1)
+            else:
+                df = df.reset_index(drop=True)
+                for c in fdf.columns:
+                    df[c] = fdf[c].reindex(range(len(df))).values
+    return df
 
 
 def calculateParallel(threads=2, futures='Yes', only_scrip=None):
