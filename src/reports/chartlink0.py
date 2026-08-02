@@ -1105,7 +1105,7 @@ def main():
         if len(df_at_9) < 4:
             rb.render(st, df, 'breakout-morning-buy', color='LG')
         else: 
-            rb.render(st, df, 'breakout-morning-buy : enable MACD-slow-RSI', color='LG')
+            rb.render(st, df, 'breakout-morning-buy', color='LG')
     with col3:
         df = rb.getdf('Breakout-Sell-after-10')
         filtered_df = df
@@ -1128,7 +1128,7 @@ def main():
         if len(df_at_9) < 4:
             rb.render(st, df, 'breakout-morning-sell', color='LG')
         else:
-            rb.render(st, df, 'breakout-morning-sell : enable MACD-slow-RSI')
+            rb.render(st, df, 'breakout-morning-sell')
 
     col3, col6 = st.columns(2)
     with col3:
