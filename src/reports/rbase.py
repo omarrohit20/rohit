@@ -781,14 +781,22 @@ def highlight_category_column(value, systemtime, f10ch):
         elif "0@@SUPER" in value and (float(f10ch) < -5) and (float(f10ch) > -11):
             return 'background-color: #d8b2d8'
 
+def _set_cell_style(styles, col, value):
+    """Set a style only when col exists; never expand the styles index."""
+    if col in styles.index:
+        styles[col] = value
+    return styles
+
 def apply_highlight_column(row):
     """Apply highlight_category_column to mlData column with systemtime context."""
     styles = pd.Series('', index=row.index)
     try:
+        if 'mlData' not in row.index:
+            return styles
         ml_value = str(row.get('mlData', ''))
         systime = str(row.get('systemtime', ''))
         f10ch = str(row.get('forecast_day_PCT10_change', ''))
-        styles['mlData'] = highlight_category_column(ml_value, systime, f10ch) or ''
+        _set_cell_style(styles, 'mlData', highlight_category_column(ml_value, systime, f10ch) or '')
     except Exception:
         pass
     return styles
@@ -1321,7 +1329,7 @@ def apply_breakout_highlight(row):
                     try:
                         coll = dbcl['crossed-day-high']
                         if len(coll) < 12 and coll.find_one({'scrip': scrip}):
-                            styles['mlData'] = 'background-color: #fb87ec'
+                            _set_cell_style(styles, 'mlData', 'background-color: #fb87ec')
                             return styles
                     except Exception:
                         # fallback to existing style on any DB error
@@ -1330,7 +1338,7 @@ def apply_breakout_highlight(row):
                 try:
                     coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
                     if len(coll) < 5 and coll.find_one({'scrip': scrip}):
-                        styles['mlData'] = 'background-color: #fb87ec'
+                        _set_cell_style(styles, 'mlData', 'background-color: #fb87ec')
                         return styles
                 except Exception:
                     # fallback to existing style on any DB error
@@ -1339,7 +1347,7 @@ def apply_breakout_highlight(row):
                 try:
                     coll = dbcl['supertrend-morning-buy']
                     if len(coll) < 5 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
-                        styles['mlData'] = 'background-color: #fb87ec'
+                        _set_cell_style(styles, 'mlData', 'background-color: #fb87ec')
                         return styles
                 except Exception:
                     # fallback to existing style on any DB error
@@ -1370,7 +1378,7 @@ def apply_breakout_highlight(row):
                     try:
                         coll = dbcl['crossed-day-low']
                         if len(coll) < 12 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
-                            styles['mlData'] = 'background-color: #fb87ec'
+                            _set_cell_style(styles, 'mlData', 'background-color: #fb87ec')
                             return styles
                     except Exception:
                         # fallback to existing style on any DB error
@@ -1379,7 +1387,7 @@ def apply_breakout_highlight(row):
                 try:
                     coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
                     if len(coll) < 5 and coll.find_one({'scrip': scrip}):
-                        styles['mlData'] = 'background-color: #fb87ec'
+                        _set_cell_style(styles, 'mlData', 'background-color: #fb87ec')
                         return styles
                 except Exception:
                     # fallback to existing style on any DB error
@@ -1388,7 +1396,7 @@ def apply_breakout_highlight(row):
                 try:
                     coll = dbcl['supertrend-morning-sell']
                     if len(coll) < 5 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
-                        styles['mlData'] = 'background-color: #fb87ec'
+                        _set_cell_style(styles, 'mlData', 'background-color: #fb87ec')
                         return styles
                 except Exception:
                     # fallback to existing style on any DB error
@@ -1397,7 +1405,7 @@ def apply_breakout_highlight(row):
             # fallback to existing style on any DB error
             pass
 
-        styles['mlData'] = existing
+        _set_cell_style(styles, 'mlData', existing)
     except Exception:
         pass
     return styles
@@ -1739,9 +1747,10 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
         elif renderf10sell01:
             df_styled = df_styled.apply(apply_f10_sell_01, axis=1)
 
-        if 'Buy' in name:
+        # highBuy/highSell-style frames may lack systemtime; skip f10 row style then
+        if 'Buy' in name and 'systemtime' in df.columns:
             df_styled = df_styled.apply(apply_f10_buy_01, axis=1)
-        if 'Sell' in name:
+        if 'Sell' in name and 'systemtime' in df.columns:
             df_styled = df_styled.apply(apply_f10_sell_01, axis=1)
         
 

@@ -387,7 +387,7 @@ def main():
         rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Sell', color='LG', height=150)
     
 
-    col1, col3 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getintersectdf('morning-volume-breakout-buy', 'movingavg_crossed_up')
         filtered_df = df
@@ -403,6 +403,37 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'morning-volume-breakout-buy : movingavg_crossed_up', color='LG')
+    with col2:
+        df = rb.getintersectdf('highBuy', 'movingavg_crossed_up')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['forecast_day_PCT10_change'] < 10) &
+                ((df['PCT_day_change']) < 1.5) &
+                (
+                    # (
+                    #     (df['forecast_day_PCT10_change'] > 0) &
+                    #     ((df['PCT_day_change_pre1']) < -1.5) &
+                    #     ((df['PCT_day_change']) > -1.5) &  
+                    #     (df['lowTail'] > 1.5) 
+                    # )
+                    # |
+                    (
+                        (df['forecast_day_PCT10_change'] > 0) &
+                        ((df['PCT_day_change']) > 0.9) &
+                        (df['lowTail'] > 1.9) 
+                    )
+                    |
+                    (
+                        (df['forecast_day_PCT10_change'] > 5) &
+                        (df['lowTail'] >= 1.5) &
+                        (df['highTail'] < df['lowTail'])
+                    )
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'highBuy : movingavg_crossed_up', color='LG', renderml=True)
     with col3:
         df = rb.getintersectdf('morning-volume-breakout-sell', 'movingavg_crossed_down')
         filtered_df = df
@@ -418,6 +449,38 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'morning-volume-breakout-sell : movingavg_crossed_down', color='LG')
+    with col4:
+        df = rb.getintersectdf('lowSell', 'movingavg_crossed_down')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['forecast_day_PCT10_change'] > -10) &
+                ((df['PCT_day_change']) > -1.5) &
+                (
+                    # (
+                       
+                    #     (df['forecast_day_PCT10_change'] < 0) &
+                    #     ((df['PCT_day_change_pre1']) > 1.5) &
+                    #     ((df['PCT_day_change']) < 1.5) &  
+                    #     (df['highTail'] > 1.5) 
+                    # )
+                    # |
+                    (
+                        (df['forecast_day_PCT10_change'] < 0) &
+                        ((df['PCT_day_change']) < -0.9) &
+                        (df['highTail'] > 1.9) 
+                    )
+                    |
+                    (
+                        (df['forecast_day_PCT10_change'] < -5) &
+                        (df['highTail'] >= 1.5) &
+                        (df['lowTail'] < df['highTail'])
+                    )
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'lowSell : movingavg_crossed_down', color='LG')
     
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
