@@ -98,10 +98,12 @@ def get_data_frame(df, regressor='None', type='reg'):
         for dele in range(1, 16):
             addFeaturesLowChange(df, dfp, low, dele) 
         
-        if type == 'reg':
-            if regressor != 'mlp':
-                dfp['EMA9'] = df['EMA9']
-                dfp['EMA21'] = df['EMA21']
+        # EMA9/EMA21 come from the indicators block below — do not add here
+        # (duplicate names break LightGBM feature-name validation)
+        # if type == 'reg':
+        #     if regressor != 'mlp':
+        #         dfp['EMA9'] = df['EMA9']
+        #         dfp['EMA21'] = df['EMA21']
         #         if regressor != 'mlp':
         #             for dele in range(1, 2):
         #                 addFeaturesEMA9Change(df, dfp, EMA9, dele)
@@ -278,6 +280,7 @@ def get_data_frame(df, regressor='None', type='reg'):
         # Create DataFrame from all indicators and concat at once
         indicators_df = pd.DataFrame(indicators)
         dfp = pd.concat([dfp, indicators_df], axis=1)
+        dfp = dfp.loc[:, ~dfp.columns.duplicated(keep='first')]
         #if (regressor == 'kn' and (int(np.floor(dfp.shape[0])) > 1300)):
         dfp = dfp.loc[50:] 
         dfp.dropna(inplace=True)  
@@ -355,7 +358,7 @@ def process_regression_low(scrip, dfraw, directory, run_ml_algo, TEST=False):
         # )
         result = performRegression(dfp, split, scrip, directory, forecast_out,
             Pipeline([
-                ('scaler', StandardScaler()),
+                ('scaler', StandardScaler().set_output(transform="pandas")),
                 ('lgbm', LGBMRegressor(
                     n_estimators=1000,
                     learning_rate=0.01,

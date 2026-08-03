@@ -750,19 +750,27 @@ def benchmark_model(model, train, test, test_forecast, features, symbol, output,
 
     symbol, output_dir = output_params
 
-    model.fit(train[features].values, train[output].values, *args, **kwargs)
-    predicted_value = model.predict(test[features].values)
-    
-    accuracy = model.score(test[features].values, test[output].values)
-    forecast_set = model.predict(test_forecast[features].values)
-    
+    # Pass DataFrames (not .values) so estimators fitted with feature names
+    # (e.g. LGBMRegressor in a Pipeline) see the same names at predict time.
+    X_train = train[features]
+    X_test = test[features]
+    X_forecast = test_forecast[features]
+    y_train = train[output]
+    y_test = test[output]
+
+    model.fit(X_train, y_train, *args, **kwargs)
+    predicted_value = model.predict(X_test)
+
+    accuracy = model.score(X_test, y_test)
+    forecast_set = model.predict(X_forecast)
+
     if plotgraph:
-        plt.plot(test[output].values, color='g', ls='--', label='Actual Value')
+        plt.plot(y_test.values, color='g', ls='--', label='Actual Value')
         plt.plot(predicted_value, color='b', ls='--', label='predicted_value Value')
-    
+
         plt.xlabel('Number of Set')
         plt.ylabel('Output Value')
-    
+
         plt.title(model_name)
         plt.legend(loc='best')
         plt.tight_layout()
