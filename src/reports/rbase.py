@@ -1691,7 +1691,7 @@ def getdfResult(collection_name):
         print(f"KeyError: {e}")
     return df
 
-def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False, renderf10buy=False, renderf10sell=False, f10=0, renderf10buy00=False, renderf10sell00=False, renderf10buy01=False, renderf10sell01=False, applyBreakOut=False, noColourFilter=False):
+def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False, renderf10buy=False, renderf10sell=False, f10=0, renderf10buy00=False, renderf10sell00=False, renderf10buy01=False, renderf10sell01=False, applyBreakOut=False, dontapplybreakout=False, noColourFilter=False):
     st.write("********"+ name + "********")
     try:
         df = df[
@@ -1755,7 +1755,7 @@ def render(st, df, name, height=200, color='NA', column_order=column_order_defau
         
         if(chartlink0 or chartlink1 or chartlink2 or zshortTerm) and (noColourFilter == False) and color =='LG':
             df_styled = df_styled.apply(apply_breakout_highlight, axis=1)
-        if(chartlink0 or applyBreakOut) and (noColourFilter == False) and color =='LG':
+        if(chartlink0 or chartlink1 or applyBreakOut) and (dontapplybreakout != True) and (noColourFilter == False) and color =='LG':
             df_styled = df_styled.apply(apply_breakout_highlight_volume, axis=1)
         st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
 

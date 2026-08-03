@@ -1366,9 +1366,213 @@ def main():
         df = rb.getdf('Breakout-Siill-2')
         rb.render(st, df, 'Breakout-Siill-2', color='LG')
 
-    
-    
 
+    col2, col20, col5, col50 = st.columns(4)
+    with col2:
+        df = rb.getintersectdf('week2lh-not-reached', 'crossed-day-high')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['filter3'].str.startswith('ReversalHighYear', na=False)) &
+                (~df['filter3'].str.startswith('ReversalHighMonth6', na=False)) 
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+        else:
+            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+    with col20:
+        df = rb.getintersectdf('week2lh-not-reached',
+                                '09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['filter3'].str.startswith('ReversalHighYear', na=False)) &
+                (~df['filter3'].str.startswith('ReversalHighMonth6', na=False)) 
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed 2Day High', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+        else:
+            rb.render(st, empty_df, 'week2lh-not-reached + Crossed 2Day High', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+    with col5:
+        df = rb.getintersectdf('week2lh-not-reached', 'crossed-day-low')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['filter3'].str.startswith('ReversalLowYear', na=False)) &
+                (~df['filter3'].str.startswith('ReversalLowMonth6', na=False)) 
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+        else:
+            rb.render(st, empty_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+    with col50:
+        df = rb.getintersectdf('week2lh-not-reached',
+                                '09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['filter3'].str.startswith('ReversalLowYear', na=False)) &
+                (~df['filter3'].str.startswith('ReversalLowMonth6', na=False)) 
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'week2lh-not-reached + Crossed 2Day Low', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+        else:
+            rb.render(st, empty_df, 'week2lh-not-reached + Crossed 2Day Low', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+
+    
+    col0, col1, col2, col3 = st.columns(4)
+    with col0:
+        df = rb.getintersectdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)', 'crossed-day-high')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'Crossed 2 Day High + Crossed Day High', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+        else:
+            rb.render(st, empty_df, 'Crossed 2 Day High + Crossed Day High', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+    with col1:
+        df = rb.getintersectdf('supertrend-morning-buy', 'crossed-day-high')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'supertrend-morning-buy + Crossed Day High', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+        else:
+            rb.render(st, empty_df, 'supertrend-morning-buy + Crossed Day High', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+    with col2:
+        df = rb.getintersectdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)', 'crossed-day-low')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'Crossed 2 Day Low + Crossed Day Low', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+        else:
+            rb.render(st, empty_df, 'Crossed 2 Day Low + Crossed Day Low', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+    with col3:
+        df = rb.getintersectdf('supertrend-morning-sell', 'crossed-day-low')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'supertrend-morning-sell + Crossed Day Low', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+        else:
+            rb.render(st, empty_df, 'supertrend-morning-sell + Crossed Day Low', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['forecast_day_PCT10_change'] >-9) &
+                (df['PCT_day_change'] < 2.5) &
+                (df['PCT_day_change'] > -3) &
+                (df['PCT_change'] > 0) &
+                (df['month3HighChange'] > -20) &
+                (df['year5HighChange'] < -25) &
+                (df['yearHighChange'] < -20)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'year5HighChangeLT-30 + week2High', color='LG')
+    with col2:
+            df = rb.getdf('morning-volume-breakout-buy')
+            filtered_df = df
+            try:
+                filtered_df = df[
+                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                    (df['yearLowChange'] > 5) &
+                    (df['week2HighChange'] > -1) &
+                    (df['monthHighChange'] < 5) &
+                    (df['PCT_day_change'] < 3) &
+                    (df['PCT_day_change'] > -1.5) &
+                    (~df['filter5'].str.contains('BothGT2', case=False, regex=True, na=False)) &
+                    (df['lowTail'] < 1.5) &
+                    (df['forecast_day_PCT10_change'] > -1) &
+                    (df['week2LowChange'] > 0) &
+                    (df['PCT_day_change_pre2'] < 2)
+                    ]
+            except KeyError as e:
+                print("")
+            rb.render(st, filtered_df, 'week2HighGT0', color='LG')
+    with col3:
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        rb.render(st, empty_df, 'year5LowChangeGT30 + week2Low', color='LG')
+    with col4:
+            df = rb.getdf('morning-volume-breakout-sell')
+            filtered_df = df
+            try:
+                filtered_df = df[
+                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                    (df['yearHighChange'] < -5) &
+                    (df['week2LowChange'] < 0) &
+                    (df['monthLowChange'] > -5) &
+                    (df['PCT_day_change'] > -3) &
+                    (df['PCT_day_change'] < 1.3) &
+                    (~df['filter5'].str.contains('BothLT-2', case=False, regex=True, na=False)) &
+                    (df['highTail'] < 1.5) &
+                    (df['forecast_day_PCT10_change'] < 1) &
+                    (df['week2HighChange'] < -2) &
+                    (df['highTail'] < 1) &
+                    (df['weekHighChange'] < -1) &
+                    (df['PCT_day_change_pre1'] > -2) &
+                    (df['PCT_day_change_pre2'] > -2)
+                    ]
+            except KeyError as e:
+                print("")
+            rb.render(st, filtered_df, 'week2LowLT0', color='LG')
+    
+    
 
 if __name__ == '__main__':
     main()
