@@ -394,6 +394,7 @@ def main():
         try:
             filtered_df = df[
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                (df['PCT_day_change'] > 0.2) &
                 (
                     (df['yearHighChange'] < -30) |
                     (df['month3HighChange'] < -10) |
@@ -411,13 +412,13 @@ def main():
                 (df['forecast_day_PCT10_change'] < 10) &
                 ((df['PCT_day_change']) < 1.5) &
                 (
-                    # (
-                    #     (df['forecast_day_PCT10_change'] > 0) &
-                    #     ((df['PCT_day_change_pre1']) < -1.5) &
-                    #     ((df['PCT_day_change']) > -1.5) &  
-                    #     (df['lowTail'] > 1.5) 
-                    # )
-                    # |
+                    (
+                        (df['forecast_day_PCT10_change'] > 0) &
+                        ((df['PCT_day_change_pre1']) < -1.5) &
+                        ((df['PCT_day_change']) > -1.5) &  
+                        (df['lowTail'] > 1.5) 
+                    )
+                    |
                     (
                         (df['forecast_day_PCT10_change'] > 0) &
                         ((df['PCT_day_change']) > 0.9) &
@@ -440,6 +441,7 @@ def main():
         try:
             filtered_df = df[
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                (df['PCT_day_change'] < -0.2) &
                 (
                     (df['yearLowChange'] > 30) |
                     (df['month3LowChange'] > 10) |
@@ -457,14 +459,14 @@ def main():
                 (df['forecast_day_PCT10_change'] > -10) &
                 ((df['PCT_day_change']) > -1.5) &
                 (
-                    # (
+                    (
                        
-                    #     (df['forecast_day_PCT10_change'] < 0) &
-                    #     ((df['PCT_day_change_pre1']) > 1.5) &
-                    #     ((df['PCT_day_change']) < 1.5) &  
-                    #     (df['highTail'] > 1.5) 
-                    # )
-                    # |
+                        (df['forecast_day_PCT10_change'] < 0) &
+                        ((df['PCT_day_change_pre1']) > 1.5) &
+                        ((df['PCT_day_change']) < 1.5) &  
+                        (df['highTail'] > 1.5) 
+                    )
+                    |
                     (
                         (df['forecast_day_PCT10_change'] < 0) &
                         ((df['PCT_day_change']) < -0.9) &
