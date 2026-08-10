@@ -14,7 +14,7 @@ python skills/nsedata-trade-advisor/scripts/query_suggestions.py \
 ```
 
 4. **Use ALL columns** from each scan document (`meta.scan_columns` / `scan_row`) — filters, ml/intradaytech, PCT/Ldchange, forecasts, etc. Do not score from a short fixed field list.
-5. **Always show Priority picks in chat (markdown table early).** Then **MUST** emit Executive Summary, News, Scan Columns, asked horizon tables, Avoid, Disclaimer. **MUST put Cursor Canvas last** — create a **new** uniquely named `.canvas.tsx` every query (never overwrite); **always** open via `open_resource` (`file:///...`). On Windows do not use `[label](C:/...)` chat links (broken). Follow `skills/mongo-trade-agent/references/priority-canvas.md` + the Cursor canvas skill. Lead columns:
+5. **Always show Priority picks in chat (markdown table early).** Then **MUST** emit Executive Summary, News, Scan Columns, asked horizon tables, Avoid, Disclaimer. **MUST put Cursor Canvas last** — copy `skills/mongo-trade-agent/assets/priority-canvas-snippet.tsx` into a **new** uniquely named `.canvas.tsx` every query (never overwrite; never use `Pill tone` for colours — use Text + backgroundColor); **always** open via `open_resource` (`file:///...`). On Windows do not use `[label](C:/...)` chat links (broken). Follow `skills/mongo-trade-agent/references/priority-canvas.md` + the Cursor canvas skill. Lead columns:
 
 **Single table:**
 
@@ -29,7 +29,7 @@ python skills/nsedata-trade-advisor/scripts/query_suggestions.py \
 | 1 | highBuy | … | +2.1 | +0.8 | Bullish | High | 78 | … |
 | 2 | buy_all_processor | … | -0.5 | +1.0 | Bullish | Med | 65 | … |
 
-Highlights (Canvas): buy row orange if LastDay%/Today% > 3; sell row orange if LastDay%/Today% < -3; colour **MLBuy** / **MLSell** tokens in Why (green / red), not the scrip; **News catalyst** Positive light green / Negative light red / Mixed light yellow (`news-extension.md`).
+Highlights (Canvas snippet): buy Symbol orange if LastDay%/Today% > 3; sell orange if LastDay%/Today% < -3; colour **MLBuy** / **MLSell** tokens in Why via Text `#C6F6D5` / `#FEB2B2`, not the scrip; **News catalyst** Positive light green / Negative light red / Mixed light yellow (`news-extension.md`).
 
 Example Why style: `Q1 results today + AnchisBuyUp / ReversalLow; already +2% into the print`
 

@@ -8,7 +8,7 @@ import pandas as pd
 # Run the autorefresh approximately every 30000 milliseconds (30 seconds)
 
 def main():
-    st_autorefresh(interval=30000, key="data_refresher")
+    #st_autorefresh(interval=30000, key="data_refresher")
 
     # setting the screen size (ignore if already set by index)
     try:

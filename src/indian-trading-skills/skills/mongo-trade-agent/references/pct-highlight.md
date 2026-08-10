@@ -48,6 +48,12 @@ If both appear, show both coloured tokens in Why.
 
 Row orange and ML-token colour **stack**: orange row + green/red **MLBuy**/**MLSell** text.
 
+### Canvas implementation (mandatory)
+
+Copy [../assets/priority-canvas-snippet.tsx](../assets/priority-canvas-snippet.tsx).
+Colour **only** with `<Text style={{ backgroundColor: "…" }}>`. **Never** use
+`<Pill tone="…">` for MLBuy / MLSell / news — Canvas SDK ignores Pill tones.
+
 ## News catalyst highlight — colour the News cell (not the whole Priority row)
 
 Apply on **News catalyst** in News & Extension Snapshot, horizon detail tables,

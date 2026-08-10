@@ -82,19 +82,43 @@ overwrite.
 Component `export default function` name may be any valid PascalCase identifier
 derived from the file (e.g. `IntradayPrioritySellAllProcessor20260730113530`).
 
+## Fixed snippet (required — copy, do not freestyle)
+
+**MUST** start from the fixed template and only replace data:
+
+[`../assets/priority-canvas-snippet.tsx`](../assets/priority-canvas-snippet.tsx)
+
+Workflow:
+
+1. Copy that file into a **new** timestamped path under `canvases/` (see naming above).
+2. Fill `meta`, `picks`, and `newsRows` only.
+3. Keep `HL`, `MlToken`, `WhyCell`, `NewsCell`, `SymbolCell` unchanged.
+4. When helper `ml_buy` / `ml_sell` is true, put `"mlbuy"` / `"mlsell"` in
+   `whyParts` (use `buildWhyParts` in the snippet). Do **not** paraphrase away
+   the literal **MLBuy** / **MLSell** tokens.
+
+### Colour API — Text + backgroundColor only
+
+| Highlight | Implementation |
+|-----------|----------------|
+| **MLBuy** | `<Text style={{ backgroundColor: "#C6F6D5" }}>MLBuy</Text>` |
+| **MLSell** | `<Text style={{ backgroundColor: "#FEB2B2" }}>MLSell</Text>` |
+| **News Positive** | News cell `backgroundColor: "#C6F6D5"` |
+| **News Negative** | News cell `backgroundColor: "#FEB2B2"` |
+| **News Mixed** | News cell `backgroundColor: "#FEFCBF"` |
+| **Orange row** | Symbol chip `#FFE4C4` + Table `rowTone="warning"` |
+
+**FORBIDDEN:** `<Pill tone="success|deleted|warning|…">` for ML or news colours.
+Canvas SDK **ignores Pill tones** (always neutral) — that is why old boards
+looked unhighlighted.
+
 ## Must include (identical columns in chat + Canvas)
 
 1. **Priority table** with columns:
    - Single source: Priority | Symbol | LastDay% | Today% | Sentiment | Conviction | Prob% | Why
    - Multi source: add **Table**
-2. **Canvas only — colours:**
-   - Prefer Table `rowTone="warning"` when buy and (`LastDay% > 3` or `Today% > 3`),
-     or sell and (`LastDay% < -3` or `Today% < -3`) (SDK equivalent of orange row)
-   - In Why: `MLBuy` → light green `#C6F6D5`, `MLSell` → light red `#FEB2B2`
-   - **News catalyst** cell: Positive → `#C6F6D5`, Negative → `#FEB2B2`,
-     Mixed → `#FEFCBF` (see [news-extension.md](news-extension.md)); include a
-     short News snapshot table in Canvas when catalysts exist
-3. Short legend in Canvas (and optionally one line in chat) — include news colours
+2. **Canvas only — colours** via the fixed snippet helpers above
+3. Short legend in Canvas (snippet includes it) — include news colours
 4. Embed pick data **inline** in Canvas (no `fetch`, no network)
 5. Import **only** from `cursor/canvas`
 
@@ -167,6 +191,9 @@ Windows. Instead:
 
 - Skip the chat Priority table (Canvas-only is not enough)
 - Skip the Canvas (chat-only loses colours)
+- **Freestyle a new Canvas layout** instead of copying `assets/priority-canvas-snippet.tsx`
+- Use `<Pill tone="…">` for MLBuy / MLSell / news (tones ignored — always neutral)
+- Drop `MLBuy` / `MLSell` from Why when `ml_buy` / `ml_sell` is true
 - **Reuse / overwrite** `intraday-priority-picks.canvas.tsx` or any prior canvas
 - Put Canvas **before** Executive Summary / other tables
 - End the reply after Priority without exec summary / other tables / Canvas
@@ -177,6 +204,7 @@ Windows. Instead:
 
 ## Reference
 
+Fixed snippet: [../assets/priority-canvas-snippet.tsx](../assets/priority-canvas-snippet.tsx).  
 Colour rules: [pct-highlight.md](pct-highlight.md).  
 News catalyst colours: [news-extension.md](news-extension.md).  
 Prior fixed name `intraday-priority-picks.canvas.tsx` is **deprecated** — keep

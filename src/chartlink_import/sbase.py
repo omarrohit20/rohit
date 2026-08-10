@@ -42,6 +42,7 @@ def log_filter(log_):
     )
 
 def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndicator=None):
+    print("Process: ", processor)
     response_json = json.loads(rawdata)
     try:
         aggregatedStockList = response_json["aggregatedStockList"]

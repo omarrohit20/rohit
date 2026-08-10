@@ -37,7 +37,8 @@ other tables. Thin / missing collections shrink rows — they do **not** allow
 omitting these blocks (state “not available / no candidates” in the section).
 
 Template: [../nsedata-trade-advisor/assets/four-horizon-report.md](../nsedata-trade-advisor/assets/four-horizon-report.md).  
-Canvas rules: [references/priority-canvas.md](references/priority-canvas.md).
+Canvas rules: [references/priority-canvas.md](references/priority-canvas.md).  
+**Fixed Canvas snippet (copy every query):** [assets/priority-canvas-snippet.tsx](assets/priority-canvas-snippet.tsx).
 
 ## Priority picks → Chat (early) + Canvas (last)
 
@@ -53,10 +54,11 @@ markdown Priority table must still appear early in chat.
 
 1. Read and follow the Cursor **canvas** skill.
 2. Follow [references/priority-canvas.md](references/priority-canvas.md).
-3. **Create a new file every query** under  
-   `~/.cursor/projects/<workspace>/canvases/`  
-   named `{horizon}-priority-{collection}-{YYYYMMDD-HHmmss}.canvas.tsx`  
-   (see priority-canvas.md). Do **not** reuse `intraday-priority-picks.canvas.tsx`.
+3. **MUST copy** [assets/priority-canvas-snippet.tsx](assets/priority-canvas-snippet.tsx)
+   into a **new** file under `~/.cursor/projects/<workspace>/canvases/` named
+   `{horizon}-priority-{collection}-{YYYYMMDD-HHmmss}.canvas.tsx` — fill `meta` /
+   `picks` / `newsRows` only. Do **not** freestyle highlights or use `Pill tone`
+   (SDK ignores tones). Do **not** reuse `intraday-priority-picks.canvas.tsx`.
 4. **MUST** open the new file via `open_resource`
    (`file:///C:/Users/.../canvases/<unique>.canvas.tsx`). On Windows, do **not**
    use markdown `[label](C:/...)` links (known Cursor bug — clicks fail).

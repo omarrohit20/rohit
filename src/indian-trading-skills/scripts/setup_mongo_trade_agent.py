@@ -50,19 +50,22 @@ def ensure_cursor_skill() -> None:
 
 
 def install_personal_skill() -> None:
+    """Deprecated: keep a single canonical skill under indian-trading-skills only.
+
+    A copy in ~/.cursor/skills/mongo-trade-agent drifts from the repo and caused
+    inconsistent MLBuy/news highlights. Prefer ROOT/.cursor/skills + skills/.
+    """
     home = Path.home()
     dest = home / ".cursor" / "skills" / "mongo-trade-agent"
-    dest.mkdir(parents=True, exist_ok=True)
-    for item in SKILL_SRC.rglob("*"):
-        if item.is_file():
-            rel = item.relative_to(SKILL_SRC)
-            out = dest / rel
-            out.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(item, out)
-    # Helper pointer for personal skill (scripts stay in repo)
-    pointer = dest / "REPO_PATH.txt"
-    pointer.write_text(str(ROOT), encoding="utf-8")
-    print(f"Installed personal skill -> {dest}")
+    if dest.exists():
+        shutil.rmtree(dest)
+        print(f"Removed stale personal skill -> {dest}")
+    else:
+        print(f"No personal skill at {dest} (ok — use repo only)")
+    print(
+        "Canonical skill: indian-trading-skills/skills/mongo-trade-agent "
+        "(and .cursor/skills/mongo-trade-agent pointer in this repo)."
+    )
 
 
 def ensure_mcp() -> None:
@@ -102,7 +105,7 @@ def main() -> int:
     parser.add_argument(
         "--personal-skill",
         action="store_true",
-        help="Also copy skill to ~/.cursor/skills/mongo-trade-agent",
+        help="Deprecated: removes ~/.cursor/skills/mongo-trade-agent if present (repo-only)",
     )
     parser.add_argument(
         "--skip-mongo-ping",

@@ -27,6 +27,9 @@ Classify from the catalyst text (and india-news-tracker when used). Prefer the
 news tone over tape Sentiment when they differ only for this cell colour; still
 set row Sentiment / Conviction per [conviction-sentiment.md](conviction-sentiment.md).
 
+**Canvas:** colour the catalyst with `<Text style={{ backgroundColor }}>`, never
+`<Pill tone>`. Copy [../assets/priority-canvas-snippet.tsx](../assets/priority-canvas-snippet.tsx).
+
 Chat has no reliable HTML colours — optional cue: append `· +news` / `· −news` /
 `· mixed news` after the catalyst when coloured in Canvas.
 

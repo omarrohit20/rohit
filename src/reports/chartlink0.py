@@ -997,6 +997,7 @@ def main():
                 )
                 | 
                 (
+                    (df['PCT_day_change'] <= 2.5) &
                     (df['forecast_day_PCT10_change'] > -3) &
                     (df['mlData'].str.contains("MLhighBuy") | df['mlData'].str.contains("MLBuy")) &
                     ((df['PCT_day_change'] < 1.5) | (df['PCT_day_change_pre1'] < 1.5)) & (abs(df['PCT_day_change']) > 0.5) &
@@ -1007,6 +1008,7 @@ def main():
                 |
                 (
                     (df['PCT_day_change'] >= 1.3) &
+                    (df['PCT_day_change'] <= 2.5) &
                     ((df['mlData'].str.contains("MLBuy0")) | (df['mlData'].str.contains("MLBuy1")) | (df['mlData'].str.contains("MLBuy2"))) &
                     (df['lowTail'] < 2)
                 )
@@ -1075,6 +1077,7 @@ def main():
                     |
                     (
                         (df['PCT_day_change'] <= -1.3) &
+                        (df['PCT_day_change'] >= -2.5) &
                         (((df['mlData'].str.contains("MLSell0")) | (df['mlData'].str.contains("MLSell1")) | (df['mlData'].str.contains("MLSell2")))) & 
                         (df['highTail'] < 2)
                     )
