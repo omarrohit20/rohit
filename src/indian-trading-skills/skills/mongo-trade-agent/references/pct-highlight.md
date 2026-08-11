@@ -13,8 +13,9 @@ horizon board. See also [priority-why.md](priority-why.md) and
 
 Format as signed one-decimal (e.g. `+2.4`, `-1.1`). Use `—` if missing.
 
-Helper emits `last_day_pct`, `today_pct`, `ml_buy`, `ml_sell`, `row_highlight_orange`
-on ranked rows from `query_suggestions.py`.
+Helper emits `last_day_pct`, `today_pct`, `ml_buy`, `ml_sell`,
+`row_highlight_orange`, `row_highlight_green` on ranked rows from
+`query_suggestions.py`.
 
 ## Trade side
 
@@ -25,12 +26,25 @@ on ranked rows from `query_suggestions.py`.
 
 ## Row highlight — light orange (`#FFE4C4`)
 
-Apply **full row** background when:
+Apply **full row** / Symbol chip when:
 
 | Side | Condition |
 |------|-----------|
-| **Buy** | `LastDay% > 3` **OR** `Today% > 3` → full row background `#FFE4C4` |
-| **Sell** | `LastDay% < -3` **OR** `Today% < -3` → full row background `#FFE4C4` |
+| **Buy** | `LastDay% > 3` **OR** `Today% > 3` → orange `#FFE4C4` |
+| **Sell** | `LastDay% < -3` **OR** `Today% < -3` → orange `#FFE4C4` |
+
+## Row highlight — light green (`#C6F6D5`)
+
+Apply **Symbol chip** (and Canvas `rowTone="success"`) when **all** of:
+
+1. Scan string fields contain **`BreakHighYear`** or **`BreakHighYear2`**
+2. Scan string fields contain **`ReversalLow`**
+3. **`Today%` between −1.3 and +1.3** inclusive (`-1.3 <= Today% <= 1.3`)
+
+Helper flag: `row_highlight_green`.
+
+If both green and orange apply, **green wins** on the Symbol chip (orange may still
+be noted in Why as `· orange`).
 
 ## ML tag highlight — colour the token text (not the scrip)
 
@@ -46,7 +60,8 @@ render the literal token **`MLBuy` / `MLSell`** in Why with a coloured backgroun
 
 If both appear, show both coloured tokens in Why.
 
-Row orange and ML-token colour **stack**: orange row + green/red **MLBuy**/**MLSell** text.
+Row orange, green setup, and ML-token colour **stack** where applicable:
+green Symbol (setup) beats orange Symbol; MLBuy/MLSell tokens still colour in Why.
 
 ### Canvas implementation (mandatory)
 
@@ -76,7 +91,7 @@ Stacks with orange row and ML tokens when those also apply.
    may not show because chat strips HTML `style`)
 2. **Full report tables (mandatory)** — Executive Summary, News, Scan Columns,
    asked horizon detail table(s), Watchlist/Avoid, Disclaimer
-3. **Cursor Canvas (last)** — same Priority data with orange rows + MLBuy/MLSell
+3. **Cursor Canvas (last)** — same Priority data with orange/green rows + MLBuy/MLSell
    token colours + News catalyst green/red/yellow; link only at the end of the reply
 
 See [priority-canvas.md](priority-canvas.md). Do not omit chat table, report

@@ -96,6 +96,8 @@ Workflow:
 4. When helper `ml_buy` / `ml_sell` is true, put `"mlbuy"` / `"mlsell"` in
    `whyParts` (use `buildWhyParts` in the snippet). Do **not** paraphrase away
    the literal **MLBuy** / **MLSell** tokens.
+5. When helper `row_highlight_green` is true, set `green: true` on the pick.
+   When `row_highlight_orange` is true, set `orange: true`.
 
 ### Colour API — Text + backgroundColor only
 
@@ -106,7 +108,8 @@ Workflow:
 | **News Positive** | News cell `backgroundColor: "#C6F6D5"` |
 | **News Negative** | News cell `backgroundColor: "#FEB2B2"` |
 | **News Mixed** | News cell `backgroundColor: "#FEFCBF"` |
-| **Orange row** | Symbol chip `#FFE4C4` + Table `rowTone="warning"` |
+| **Green row** | Symbol chip `#C6F6D5` + Table `rowTone="success"` when (BreakHighYear\|BreakHighYear2) + ReversalLow + Today% ∈ [−1.3, 1.3] |
+| **Orange row** | Symbol chip `#FFE4C4` + Table `rowTone="warning"` (green Symbol wins if both) |
 
 **FORBIDDEN:** `<Pill tone="success|deleted|warning|…">` for ML or news colours.
 Canvas SDK **ignores Pill tones** (always neutral) — that is why old boards
@@ -123,7 +126,7 @@ looked unhighlighted.
 5. Import **only** from `cursor/canvas`
 
 Use helper fields: `last_day_pct`, `today_pct`, `ml_buy`, `ml_sell`,
-`row_highlight_orange`, `trade_side`, `probability_score`, `why`, plus
+`row_highlight_orange`, `row_highlight_green`, `trade_side`, `probability_score`, `why`, plus
 `news_catalyst` / `news_sentiment` / `may_extend` when enriching.
 
 ## Chat Priority table (required — early)
@@ -133,6 +136,7 @@ cues when a row would be orange / has ML tags / news polarity (chat has no
 reliable colours):
 
 - Append `· orange` in Why when `row_highlight_orange`
+- Append `· green` in Why when `row_highlight_green`
 - Keep literal `MLBuy` / `MLSell` in Why when present
 - Append `· +news` / `· −news` / `· mixed news` on News catalyst when coloured in Canvas
 

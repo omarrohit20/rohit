@@ -74,11 +74,16 @@ def scan_has_token(scan: dict, token: str) -> bool:
 
 
 def pct_highlight_meta(scan: dict, sentiment: str | None = None) -> dict:
-    """LastDay%/Today% plus ML and row-orange flags for report rendering."""
+    """LastDay%/Today% plus ML and row highlight flags for report rendering."""
     last_day = scan_last_day_pct(scan)
     today = scan_today_pct(scan)
     ml_buy = scan_has_token(scan, "MLBuy")
     ml_sell = scan_has_token(scan, "MLSell")
+    # BreakHighYear also matches BreakHighYear2 (substring)
+    break_high_year = scan_has_token(scan, "BreakHighYear") or scan_has_token(
+        scan, "BreakHighYear2"
+    )
+    reversal_low = scan_has_token(scan, "ReversalLow")
 
     side = "buy"
     sent = (sentiment or "").lower()
@@ -103,6 +108,14 @@ def pct_highlight_meta(scan: dict, sentiment: str | None = None) -> dict:
             today is not None and today < -3
         )
 
+    # Green row: BreakHighYear|BreakHighYear2 + ReversalLow + calm Today%
+    row_green = bool(
+        break_high_year
+        and reversal_low
+        and today is not None
+        and -1.3 <= today <= 1.3
+    )
+
     return {
         "last_day_pct": last_day,
         "today_pct": today,
@@ -110,6 +123,7 @@ def pct_highlight_meta(scan: dict, sentiment: str | None = None) -> dict:
         "ml_sell": ml_sell,
         "trade_side": side,
         "row_highlight_orange": row_orange,
+        "row_highlight_green": row_green,
         "symbol_highlight": (
             "MLBuy" if ml_buy else ("MLSell" if ml_sell else None)
         ),
@@ -703,6 +717,8 @@ def analyze_candidate(
         "today_pct": pct_meta["today_pct"],
         "ml_buy": pct_meta["ml_buy"],
         "ml_sell": pct_meta["ml_sell"],
+        "row_highlight_orange": pct_meta["row_highlight_orange"],
+        "row_highlight_green": pct_meta["row_highlight_green"],
         "scan_signals": scan_signals,
         "why_hint": scan_signals["why_hint"],
         "scan_row": scan_full,
@@ -811,6 +827,7 @@ def rank_horizon(results: list[dict], key: str, top_n: int = 5) -> list[dict]:
             "ml_sell": hl["ml_sell"],
             "trade_side": hl["trade_side"],
             "row_highlight_orange": hl["row_highlight_orange"],
+            "row_highlight_green": hl["row_highlight_green"],
             "symbol_highlight": hl["symbol_highlight"],
             "why_hint": r.get("why_hint"),
             "scan_signals": r.get("scan_signals"),
@@ -863,6 +880,7 @@ def build_priority_table(results: list[dict], horizons: set[str], top_n: int = 5
                 "ml_sell": row.get("ml_sell"),
                 "trade_side": row.get("trade_side"),
                 "row_highlight_orange": row.get("row_highlight_orange"),
+                "row_highlight_green": row.get("row_highlight_green"),
                 "symbol_highlight": row.get("symbol_highlight"),
                 "news_catalyst": None,
                 "may_extend": None,
@@ -921,6 +939,11 @@ def build_report(results: list[dict], meta: dict, horizons: set[str], top_n: int
                 "row_orange": "#FFE4C4",
                 "buy_row_when": "LastDay% > 3 OR Today% > 3",
                 "sell_row_when": "LastDay% < -3 OR Today% < -3",
+                "green_row_when": (
+                    "(BreakHighYear OR BreakHighYear2) AND ReversalLow "
+                    "AND Today% between -1.3 and 1.3"
+                ),
+                "row_green": "#C6F6D5",
                 "symbol_mlbuy": "#C6F6D5",
                 "symbol_mlsell": "#FEB2B2",
                 "render": "HTML table or Canvas — markdown pipes cannot show colours",
@@ -928,7 +951,9 @@ def build_report(results: list[dict], meta: dict, horizons: set[str], top_n: int
             "note": (
                 "Lead with Priority|Symbol|LastDay%|Today%|Sentiment|Conviction|Prob%|Why. "
                 "Orange-highlight full row when buy tape >3% or sell tape <-3%. "
-                "Green/red Symbol cell for MLBuy/MLSell in scan data. "
+                "Green-highlight Symbol when BreakHighYear|BreakHighYear2 + ReversalLow "
+                "and Today% in [-1.3, 1.3]. "
+                "Green/red MLBuy/MLSell tokens in Why. "
                 "Use ALL scan_columns. Polish why with news; fill news_catalyst and may_extend. "
                 "When multiple tables, add Table column."
             ),
