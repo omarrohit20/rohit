@@ -28,7 +28,9 @@ news tone over tape Sentiment when they differ only for this cell colour; still
 set row Sentiment / Conviction per [conviction-sentiment.md](conviction-sentiment.md).
 
 **Canvas:** colour the catalyst with `<Text style={{ backgroundColor }}>`, never
-`<Pill tone>`. Copy [../assets/priority-canvas-snippet.tsx](../assets/priority-canvas-snippet.tsx).
+`<Pill tone>`. Also colour **Sentiment** green when Bullish + Positive news, red
+when Bearish + Negative news (`SentimentCell` in the fixed snippet). Copy
+[../assets/priority-canvas-snippet.tsx](../assets/priority-canvas-snippet.tsx).
 
 Chat has no reliable HTML colours — optional cue: append `· +news` / `· −news` /
 `· mixed news` after the catalyst when coloured in Canvas.

@@ -104,10 +104,12 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                 industry = ""
                 if(dbnse['scrip'].find_one({'scrip':scrip}) is None and scrip != 'Largecap' and scrip != 'Midcap' and scrip != 'Smallcap'):
                     if(needToPrint == True):
+                        print("P1: ", processor)
                         #print(scrip)
                         industry = scrip
                         needToPrint = False
                         if((db[processor].find_one({'scrip':tempScrip}) is None) and tempScrip != ''):
+                            print("P2: ", processor)
                             record = {}
                             record['scrip'] = tempScrip
                             record['industry'] = industry
@@ -564,6 +566,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     and eventdateonly == (date.today()).strftime('%Y-%m-%d')
                     and currenttime >= starttime and currenttime <= endtime
                     ):
+                    print("P3: ", processor)
                     #print(scrip)
                     mlData = ''
                     mldatahigh = ''
@@ -731,6 +734,7 @@ def process_backtest_volBreakout(rawdata, processor, starttime, endtime, keyIndi
                     if (processor == 'breakout2-morning-volume' or processor == 'breakout-morning-volume'):
                         needToPrint = True  # do-nothing
                     else:
+                        print("P4: ", processor)
                         print(reportedtime, ':', processor, ' : ', scrip, ' : ', systemtime, ' : ', mldatahigh, ' : ', mldatalow, ' : ', highVol, ' : ', resultDeclared)
 
                     needToPrint = True

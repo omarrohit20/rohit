@@ -77,19 +77,20 @@ markdown Priority table must still appear early in chat.
 
 | Rule | Action |
 |------|--------|
-| Buy + (`LastDay% > 3` **or** `Today% > 3`) | Symbol / row light orange `#FFE4C4` |
-| Sell + (`LastDay% < -3` **or** `Today% < -3`) | Symbol / row light orange `#FFE4C4` |
-| (`BreakHighYear` **or** `BreakHighYear2`) **and** `ReversalLow` **and** Today% in `[−1.3, 1.3]` | Symbol light green `#C6F6D5` (beats orange on Symbol) |
+| Buy + (`LastDay% > 3` **or** `Today% > 3`) | Full row background light orange `#FFE4C4` |
+| Sell + (`LastDay% < -3` **or** `Today% < -3`) | Full row background light orange `#FFE4C4` |
 | DB data contains `MLBuy` | Highlight token **MLBuy** light green `#C6F6D5` (in Why) |
 | DB data contains `MLSell` | Highlight token **MLSell** light red `#FEB2B2` (in Why) |
 | News catalyst **Positive** | News cell light green `#C6F6D5` |
 | News catalyst **Negative** | News cell light red `#FEB2B2` |
 | News catalyst **Mixed** | News cell light yellow `#FEFCBF` |
 | News **Neutral** / `No fresh news` | No news colour |
+| Sentiment **Bullish** + news **Positive** | Sentiment cell light green `#C6F6D5` |
+| Sentiment **Bearish** + news **Negative** | Sentiment cell light red `#FEB2B2` |
 
 - **LastDay%** ← `PCT_day_change_pre1` / `Ldchange` / `ldchange`
 - **Today%** ← `PCT_day_change`
-- Helper fields: `last_day_pct`, `today_pct`, `ml_buy`, `ml_sell`, `row_highlight_orange`, `row_highlight_green`
+- Helper fields: `last_day_pct`, `today_pct`, `ml_buy`, `ml_sell`, `row_highlight_orange`
 
 Full detail: [references/pct-highlight.md](references/pct-highlight.md).  
 News colours: [references/news-extension.md](references/news-extension.md).  
@@ -119,7 +120,7 @@ Why / column rules: [references/priority-why.md](references/priority-why.md).
    helper `scan_columns`) — do not drop columns.
 4. Score horizons with `query_suggestions.py` **once per collection** (keeps full
    scan payload + `why_hint` + **sentiment / conviction / probability_score** +
-   **last_day_pct / today_pct / ml_* / row_highlight_orange / row_highlight_green**).
+   **last_day_pct / today_pct / ml_* / row_highlight_orange**).
    Tag every ranked row with `db.collection` / table name.
 5. Enrich top symbols with news → fill News catalyst / May extend?; polish
    Sentiment / Conviction / Prob% if news conflicts (see conviction-sentiment.md).
@@ -211,7 +212,7 @@ Task Progress:
 - [ ] Step 1: Ping Mongo
 - [ ] Step 2: Resolve db + collection(s) — note if multiple tables
 - [ ] Step 3: List ALL columns from sample docs (per table)
-- [ ] Step 4: Run query_suggestions.py (once per table) — read sentiment/conviction/probability_score + last_day_pct/today_pct/ml_*/row_highlight_orange/row_highlight_green
+- [ ] Step 4: Run query_suggestions.py (once per table) — read sentiment/conviction/probability_score + last_day_pct/today_pct/ml_*/row_highlight_orange
 - [ ] Step 5: News enrich top ranked symbols; polish Sentiment/Conviction/Prob% if needed
 - [ ] Step 6: Priority markdown table in chat (no Canvas link yet)
 - [ ] Step 7: MUST — Executive Summary (+ horizon bias)

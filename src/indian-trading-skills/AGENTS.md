@@ -29,7 +29,7 @@ python skills/nsedata-trade-advisor/scripts/query_suggestions.py \
 | 1 | highBuy | … | +2.1 | +0.8 | Bullish | High | 78 | … |
 | 2 | buy_all_processor | … | -0.5 | +1.0 | Bullish | Med | 65 | … |
 
-Highlights (Canvas snippet): green Symbol if (BreakHighYear|BreakHighYear2) + ReversalLow + Today% in [−1.3, 1.3]; buy Symbol orange if LastDay%/Today% > 3; sell orange if LastDay%/Today% < -3; colour **MLBuy** / **MLSell** tokens in Why via Text `#C6F6D5` / `#FEB2B2`, not the scrip; **News catalyst** Positive light green / Negative light red / Mixed light yellow (`news-extension.md`).
+Highlights (Canvas snippet): buy Symbol orange if LastDay%/Today% > 3; sell orange if LastDay%/Today% < -3; colour **MLBuy** / **MLSell** tokens in Why via Text `#C6F6D5` / `#FEB2B2`, not the scrip; **News catalyst** Positive light green / Negative light red / Mixed light yellow; **Sentiment** green when Bullish + positive news, red when Bearish + negative news (`news-extension.md`).
 
 Example Why style: `Q1 results today + AnchisBuyUp / ReversalLow; already +2% into the print`
 

@@ -26,6 +26,7 @@ Highlight examples from above:
 - SWIGGY row → light orange (LastDay% > 3 on a buy)
 - ABB / SWIGGY Why → colour **MLBuy** light green / **MLSell** light red when those tags are in scan fields
 - News catalyst → light green / light red / light yellow for Positive / Negative / Mixed (see [news-extension.md](news-extension.md))
+- Sentiment → light green when **Bullish + positive news**; light red when **Bearish + negative news** (see [pct-highlight.md](pct-highlight.md))
 
 ## Format — multiple tables (required when 2+ collections)
 

@@ -92,12 +92,12 @@ Workflow:
 
 1. Copy that file into a **new** timestamped path under `canvases/` (see naming above).
 2. Fill `meta`, `picks`, and `newsRows` only.
-3. Keep `HL`, `MlToken`, `WhyCell`, `NewsCell`, `SymbolCell` unchanged.
+3. Keep `HL`, `MlToken`, `WhyCell`, `NewsCell`, `SymbolCell`, `SentimentCell` unchanged.
 4. When helper `ml_buy` / `ml_sell` is true, put `"mlbuy"` / `"mlsell"` in
    `whyParts` (use `buildWhyParts` in the snippet). Do **not** paraphrase away
    the literal **MLBuy** / **MLSell** tokens.
-5. When helper `row_highlight_green` is true, set `green: true` on the pick.
-   When `row_highlight_orange` is true, set `orange: true`.
+5. Set `newsTone` on each pick (or matching `newsRows`) so Sentiment can
+   highlight: **Bullish + positive → green**, **Bearish + negative → red**.
 
 ### Colour API — Text + backgroundColor only
 
@@ -108,8 +108,9 @@ Workflow:
 | **News Positive** | News cell `backgroundColor: "#C6F6D5"` |
 | **News Negative** | News cell `backgroundColor: "#FEB2B2"` |
 | **News Mixed** | News cell `backgroundColor: "#FEFCBF"` |
-| **Green row** | Symbol chip `#C6F6D5` + Table `rowTone="success"` when (BreakHighYear\|BreakHighYear2) + ReversalLow + Today% ∈ [−1.3, 1.3] |
-| **Orange row** | Symbol chip `#FFE4C4` + Table `rowTone="warning"` (green Symbol wins if both) |
+| **Sentiment Bullish + news Positive** | Sentiment cell `backgroundColor: "#C6F6D5"` |
+| **Sentiment Bearish + news Negative** | Sentiment cell `backgroundColor: "#FEB2B2"` |
+| **Orange row** | Symbol chip `#FFE4C4` + Table `rowTone="warning"` |
 
 **FORBIDDEN:** `<Pill tone="success|deleted|warning|…">` for ML or news colours.
 Canvas SDK **ignores Pill tones** (always neutral) — that is why old boards
@@ -126,7 +127,7 @@ looked unhighlighted.
 5. Import **only** from `cursor/canvas`
 
 Use helper fields: `last_day_pct`, `today_pct`, `ml_buy`, `ml_sell`,
-`row_highlight_orange`, `row_highlight_green`, `trade_side`, `probability_score`, `why`, plus
+`row_highlight_orange`, `trade_side`, `probability_score`, `why`, plus
 `news_catalyst` / `news_sentiment` / `may_extend` when enriching.
 
 ## Chat Priority table (required — early)
@@ -136,7 +137,6 @@ cues when a row would be orange / has ML tags / news polarity (chat has no
 reliable colours):
 
 - Append `· orange` in Why when `row_highlight_orange`
-- Append `· green` in Why when `row_highlight_green`
 - Keep literal `MLBuy` / `MLSell` in Why when present
 - Append `· +news` / `· −news` / `· mixed news` on News catalyst when coloured in Canvas
 
