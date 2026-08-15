@@ -341,6 +341,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (df['yearLowChange'] > 15) &
                 (df['month3LowChange'] > 15) &
                 (df['PCT_change'] > 1.8) &
@@ -386,6 +387,7 @@ def main():
             filtered_df = df[
                 #(df['yearHighChange'] < -15) &
                 #(df['month3HighChange'] < -15) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (df['PCT_change'] < -1.8) &
                 (df['PCT_day_change'] < -0.5) &
                 (df['PCT_day_change'] > -3.5) &
@@ -517,6 +519,22 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (
+                    (~df['systemtime'].str.contains('09:1', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+                    (df['PCT_day_change'] < 0.3) &
+                    (df['PCT_change'] < 0.3) &
+                    (df['PCT_day_change_pre1'] < 0.3) &
+                    (df['PCT_day_change_pre2'] < 0.3) &
+                    (   
+                        (df['PCT_day_change'] < -2) | 
+                        (df['PCT_change'] < -2) |
+                        ((df['PCT_day_change_pre1'] + df['PCT_day_change_pre2']) < -2)
+                    )
+                )
+                |
                 ( ((df['weekLowChange'] > -0.3) | (df['weekLowChange'] < -3)) &
                 (df['week2LowChange'] < 5) &
                 (df['week2HighChange'] < -2) &
@@ -562,6 +580,22 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (
+                    (~df['systemtime'].str.contains('09:1', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+                    (df['PCT_day_change'] > -0.3) &
+                    (df['PCT_change'] > -0.3) &
+                    (df['PCT_day_change_pre1'] > -0.3) &
+                    (df['PCT_day_change_pre2'] > -0.3) &
+                    (   
+                        (df['PCT_day_change'] > 2) | 
+                        (df['PCT_change'] > 2) |
+                        ((df['PCT_day_change_pre1'] + df['PCT_day_change_pre2']) > 2)
+                    )
+                )
+                |
                 (
                 ((df['weekHighChange'] < 0) | (df['weekHighChange'] > 3)) &
                 (df['week2LowChange'] > 2) &

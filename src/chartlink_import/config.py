@@ -1,8 +1,10 @@
 from sbase import *
 
 st = nw - zero
+time_00_10 = st + timedelta(seconds=10*60)
 time_00_15 = st + timedelta(seconds=15*60)
 time_09_00 = st + timedelta(seconds=9*3600)
+time_09_10 = st + timedelta(seconds=9*3600+10*60) # this gives 9:10 AM
 time_09_15 = st + timedelta(seconds=9*3600+15*60) # this gives 9:15 AM
 time_09_20 = st + timedelta(seconds=9*3600+20*60) # this gives 9:20 AM
 time_09_22 = st + timedelta(seconds=9*3600+22*60) # this gives 9:22 AM
