@@ -1,4 +1,5 @@
 # Create a streamlit app that shows the mongodb data
+from operator import truediv
 from streamlit_autorefresh import st_autorefresh
 import streamlit as st
 import rbase as rb
@@ -86,7 +87,7 @@ def main():
             print("")
         rb.render_sandlterm_data(st, filtered_df,'breakoutW2HR-80%', color='LG')
     with col3:
-        df = rb.getdf_sandlterm('breakoutW2HR')
+        df = rb.getintersectdf('breakoutW2HR', 'movingavg_crossed_up')
         rb.render_sandlterm_data(st, df,'breakoutW2HR', color='LG')
 
     col0, col1, col2 = st.columns(3)
@@ -116,10 +117,12 @@ def main():
             print("")
         rb.render_sandlterm_data(st, filtered_df,'breakoutMHR-80%', color='LG')
     with col2:
-        df = rb.getdf_sandlterm('breakoutMHR')
+        df = rb.getintersectdf('breakoutMHR', 'movingavg_crossed_up')
         rb.render_sandlterm_data(st, df,'breakoutMHR', color='LG')
 
-    col0, col1, col2 = st.columns(3)
+    
+    
+    col0, col1, col2, col3 = st.columns(4)
     with col0:
         df = rb.getdf_sandlterm('breakoutM2HR')
         filtered_df = df
@@ -147,19 +150,35 @@ def main():
             print("")
         rb.render_sandlterm_data(st, filtered_df, 'breakoutM2HR', color='LG')
     with col2:
-        df = rb.getdf_sandlterm('breakoutM2HR')
-        rb.render_sandlterm_data(st, df, 'breakoutM2HR', color='LG')
+        df = rb.getintersectdf('breakoutM2HR', 'movingavg_crossed_up')
+        filtered_df = None
+        try:
+            filtered_df = df[
+                (
+                    (df['yearHighChange'] < -25) &
+                    (df['month3HighChange'] > -1) &
+                    (df['monthHighChange'] < 9)
+                ) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render_sandlterm_data(st, filtered_df, 'breakoutM2HR', color='LG')
+    with col3:
+        df = rb.getintersectdf('breakoutM2HR', 'movingavg_crossed_up')
+        rb.render_sandlterm_data(st, df,'breakoutM2HR', color='LG')    
     
 
-    col0, col1, col2 = st.columns(3)
+    col0, col1, col2, col3 = st.columns(4)
     with col0:
         df = rb.getdf_sandlterm('breakoutM2HR')
         filtered_df = df
         try:
             filtered_df = df[
+                (df['year2LowChange'] < 80) &
                 (df['year5HighChange'] < -20) &
                 (df['year2HighChange'] < -10) &
                 (df['yearHighChange'] < -10) &
+                (df['yearHighChange'] > -20) &
                 (df['month3HighChange'] > -10) &
                 (df['monthHighChange'] > -2) &
                 (df['monthHighChange'] < 2)
@@ -173,34 +192,54 @@ def main():
         try:
             filtered_df = df[
                 (
-                    (df['yearHighChange'] <-10) &
-                    (df['month3LowChange'] > 50) &
-                    #(df['monthLowChange'] < 20) &
-                    #(df['week2LowChange'] < 20) &
-                    #(df['weekLowChange'] < 10) &
-                    (df['PCT_day_change'] < 4)
+                    (
+                        #(df['yearHighChange'] <-10) &
+                        (df['month3LowChange'] > 30) &
+                        #(df['monthLowChange'] < 20) &
+                        #(df['week2LowChange'] < 20) &
+                        #(df['weekLowChange'] < 10) &
+                        (df['PCT_day_change'] < 4)
 
-                ) |
-                (
-                    ((df['PCT_day_change'] < 1) | (df['PCT_change'] < 1)) &
-                    (df['yearHighChange'] < -10) &
-                    (df['month6HighChange'] < -5) &
-                    (df['weekHighChange'] < 2) &
-                    (df['month3LowChange'] < 20)
-                )
+                    ) |
+                    (
+                        
+                        #(df['yearHighChange'] < -10) &
+                        (df['month6HighChange'] < -5) &
+                        (df['weekHighChange'] < 2) &
+                        (df['month3LowChange'] < 20)
+                    )
+                ) &
+                 
                 #((df['PCT_day_change'] < 1) | (df['PCT_change'] < 1)) &
                 #(df['month6HighChange'] < -5)
-
-                #(df['month3HighChange'] > -3.5) &
                 #((df['month3HighChange'] < -3) | (df['month6HighChange'] < -15))
+                (df['monthLowChange'] < 15) &
+                ((df['PCT_day_change'] < 1) | (df['PCT_change'] < 1)) &
+                (abs(df['month3HighChange']) < 2) &
+                (df['yearHighChange'] > -15)
                 ]
         except KeyError as e:
             print("")
         rb.render_sandlterm_data(st, filtered_df, 'breakoutM2HR', color='LG')
     with col2:
         df = rb.getdf_sandlterm('breakoutM2HR')
-        rb.render_sandlterm_data(st, df, 'breakoutM2HR', color='LG')
-    
+        filtered_df = None
+        try:
+            filtered_df = df[
+                (
+                    (df['scrip'].isin(rb.dbnse.scrip.distinct('scrip', {'futures': 'Yes'}))) &
+                    (df['yearHighChange'] < -25) &
+                    (df['month3HighChange'] > -1) &
+                    (df['monthHighChange'] < 9)
+                ) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render_sandlterm_data(st, filtered_df, 'breakoutM2HR', color='LG')
+    with col3:
+        df = rb.getdf_sandlterm('breakoutM2HR')
+        rb.render_sandlterm_data(st, df,'breakoutM2HR', color='LG')
+
 
     col0, col1, col2 = st.columns(3)
     with col0:
@@ -230,7 +269,7 @@ def main():
             print("")
         rb.render_sandlterm_data(st, filtered_df,'breakoutW2LR-75%', color='LG')
     with col2:
-        df = rb.getdf_sandlterm('breakoutW2LR')
+        df = rb.getintersectdf('breakoutW2LR', 'movingavg_crossed_down')
         rb.render_sandlterm_data(st, df,'breakoutW2LR', color='LG')
 
 
@@ -260,7 +299,7 @@ def main():
             print("")
         rb.render_sandlterm_data(st, filtered_df,'breakoutMLR-75%', color='LG')
     with col2:
-        df = rb.getdf_sandlterm('breakoutMLR')
+        df = rb.getintersectdf('breakoutMLR', 'movingavg_crossed_down')
         rb.render_sandlterm_data(st, df,'breakoutMLR', color='LG')
 
 
@@ -292,7 +331,7 @@ def main():
             print("")
         rb.render_sandlterm_data(st, filtered_df, 'breakoutM2LR-95%', color='LG')
     with col2:
-        df = rb.getdf_sandlterm('breakoutM2LR')
+        df = rb.getintersectdf('breakoutM2LR', 'movingavg_crossed_down')
         rb.render_sandlterm_data(st, df, 'breakoutM2LR', color='LG')
     
 
