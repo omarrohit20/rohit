@@ -73,55 +73,145 @@ def main():
         rb.render_sandlterm_data(st, filtered_df,'breakoutW2HR', color='LG')
     with col2:
         df = rb.getdf_sandlterm('breakoutW2HR')
-        filtered_df = df
+        filtered_df = None
         try:
             filtered_df = df[
-                (df['year2LowChange'] > 10) &
-                (df[['forecast_day_PCT3_change','forecast_day_PCT4_change',
-                    'forecast_day_PCT5_change','forecast_day_PCT7_change',
-                    'forecast_day_PCT10_change']].max(axis=1) > 5) &
-                (df['week2LowChange'] < 5.5) &
-                (df['monthHighChange'] < 5)
+                (
+                    (df['scrip'].isin(rb.dbnse.scrip.distinct('scrip', {'futures': 'Yes'}))) &
+                    (df['yearHighChange'] < -25) &
+                    (df['month3HighChange'] > -1) &
+                    (df['monthHighChange'] < 9)
+                ) 
                 ]
         except KeyError as e:
             print("")
-        rb.render_sandlterm_data(st, filtered_df,'breakoutW2HR-80%', color='LG')
+        rb.render_sandlterm_data(st, filtered_df, 'breakoutW2HR', color='LG')
     with col3:
         df = rb.getintersectdf('breakoutW2HR', 'movingavg_crossed_up')
-        rb.render_sandlterm_data(st, df,'breakoutW2HR', color='LG')
+        rb.render_sandlterm_data(st, df,'breakoutW2HR : movingavg', color='LG')
 
-    col0, col1, col2 = st.columns(3)
+    
+    col0, col1, col2, col3 = st.columns(4)
     with col0:
         df = rb.getdf_sandlterm('breakoutMHR')
         filtered_df = df
         try:
             filtered_df = df[
-                (df['forecast_day_PCT10_change'] > 10) &
-                (df['PCT_day_change'] > 3) &
-                (df['yearHighChange'] < -20)
+                (df['year5HighChange'] < -40) &
+                (df['yearHighChange'] > -10) &
+                (df['weekHighChange'] > 2) &
+                (df['month3LowChange'] > 50)
             ]
         except KeyError as e:
             print("")
-        rb.render_sandlterm_data(st, filtered_df,'breakoutMHR-95%', color='LG')
+        rb.render_sandlterm_data(st, filtered_df, 'breakoutMHR-95%', color='LG')
     with col1:
         df = rb.getdf_sandlterm('breakoutMHR')
         filtered_df = df
         try:
             filtered_df = df[
-                (df['forecast_day_PCT10_change'] > 10) &
-                (df['year5HighChange'] < -30) &
-                (df['yearHighChange'] < -20) &
-                (df['weekHighChange'] > 2)
+                (df['yearHighChange'] > -10) &
+                (df['month2HighChange'] > 1) &
+                (df['weekHighChange'] > 2) &
+                (df['month3LowChange'] > 50)
             ]
         except KeyError as e:
             print("")
-        rb.render_sandlterm_data(st, filtered_df,'breakoutMHR-80%', color='LG')
+        rb.render_sandlterm_data(st, filtered_df, 'breakoutMHR', color='LG')
     with col2:
         df = rb.getintersectdf('breakoutMHR', 'movingavg_crossed_up')
+        filtered_df = None
+        try:
+            filtered_df = df[
+                (
+                    (df['forecast_day_PCT10_change'] < 10) &
+                    (df['yearHighChange'] < -25) &
+                    (df['month3HighChange'] > -1) &
+                    (df['monthHighChange'] < 9)
+                ) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render_sandlterm_data(st, filtered_df, 'breakoutMHR', color='LG')
+    with col3:
+        df = rb.getintersectdf('breakoutMHR', 'movingavg_crossed_up')
+        rb.render_sandlterm_data(st, df,'breakoutMHR  : movingavg', color='LG')    
+    
+    
+    col0, col1, col2, col3 = st.columns(4)
+    with col0:
+        df = rb.getdf_sandlterm('breakoutMHR')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['year2LowChange'] < 80) &
+                (df['year5HighChange'] < -20) &
+                (df['year2HighChange'] < -10) &
+                (df['yearHighChange'] < -10) &
+                (df['yearHighChange'] > -20) &
+                (df['month3HighChange'] > -10) &
+                (df['monthHighChange'] > -2) &
+                (df['monthHighChange'] < 2)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render_sandlterm_data(st, filtered_df, 'breakoutMHR', color='LG')
+    with col1:
+        df = rb.getdf_sandlterm('breakoutMHR')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (
+                        #(df['yearHighChange'] <-10) &
+                        (df['month3LowChange'] > 30) &
+                        #(df['monthLowChange'] < 20) &
+                        #(df['week2LowChange'] < 20) &
+                        #(df['weekLowChange'] < 10) &
+                        (df['PCT_day_change'] < 4)
+
+                    ) |
+                    (
+                        
+                        #(df['yearHighChange'] < -10) &
+                        (df['month6HighChange'] < -5) &
+                        (df['weekHighChange'] < 2) &
+                        (df['month3LowChange'] < 20)
+                    )
+                ) &
+                 
+                #((df['PCT_day_change'] < 1) | (df['PCT_change'] < 1)) &
+                #(df['month6HighChange'] < -5)
+                #((df['month3HighChange'] < -3) | (df['month6HighChange'] < -15))
+                (df['month3LowChange'] > 15) &
+                (df['monthLowChange'] < 15) &
+                ((df['PCT_day_change'] < 1) | (df['PCT_change'] < 1)) &
+                (abs(df['month3HighChange']) < 2) &
+                (df['yearHighChange'] > -15)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render_sandlterm_data(st, filtered_df, 'breakoutMHR', color='LG')
+    with col2:
+        df = rb.getdf_sandlterm('breakoutMHR')
+        filtered_df = None
+        try:
+            filtered_df = df[
+                (
+                    (df['scrip'].isin(rb.dbnse.scrip.distinct('scrip', {'futures': 'Yes'}))) &
+                    (df['yearHighChange'] < -25) &
+                    (df['month3HighChange'] > -1) &
+                    (df['monthHighChange'] < 9)
+                ) 
+                ]
+        except KeyError as e:
+            print("")
+        rb.render_sandlterm_data(st, filtered_df, 'breakoutMHR', color='LG')
+    with col3:
+        df = rb.getdf_sandlterm('breakoutMHR')
         rb.render_sandlterm_data(st, df,'breakoutMHR', color='LG')
 
-    
-    
+
     col0, col1, col2, col3 = st.columns(4)
     with col0:
         df = rb.getdf_sandlterm('breakoutM2HR')
@@ -165,7 +255,7 @@ def main():
         rb.render_sandlterm_data(st, filtered_df, 'breakoutM2HR', color='LG')
     with col3:
         df = rb.getintersectdf('breakoutM2HR', 'movingavg_crossed_up')
-        rb.render_sandlterm_data(st, df,'breakoutM2HR', color='LG')    
+        rb.render_sandlterm_data(st, df,'breakoutM2HR  : movingavg', color='LG')    
     
 
     col0, col1, col2, col3 = st.columns(4)
