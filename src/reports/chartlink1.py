@@ -1149,6 +1149,30 @@ def main():
             rb.render(st, empty_df, 'SellAllProcessor', color='LG')
 
 
+
+    col1, col2 = st.columns(2)
+    with col1:
+        df = rb.getdf('breakout-morning-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:1', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'breakout-morning-buy', height=200, color='LG')
+    with col2:
+        df = rb.getdf('breakout-morning-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:1', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'breakout-morning-sell', height=200, color='LG')
+
 if __name__ == '__main__':
     main()
 
