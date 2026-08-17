@@ -39,6 +39,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['monthLowChange'] < 50) &
                 (df['weekHighChange'] > 0) &
                 ((df['weekHighChange'] > 2) | (df['weekLowChange'] > 5)) &
                 ((df['monthLowChange'] > 1) | (df['monthLowChange'] < -3)) &
@@ -59,6 +60,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['monthLowChange'] < 50) &
                 (df['weekHighChange'] > 0) &
                 ((df['weekHighChange'] > 2) | (df['weekLowChange'] > 5)) &
                 ((df['monthLowChange'] > 1) | (df['monthLowChange'] < -3)) &
@@ -77,6 +79,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (df['monthLowChange'] < 50) &
                     (df['scrip'].isin(rb.dbnse.scrip.distinct('scrip', {'futures': 'Yes'}))) &
                     (df['yearHighChange'] < -25) &
                     (df['month3HighChange'] > -1) &
@@ -97,6 +100,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['monthLowChange'] < 50) &
                 (df['year5HighChange'] < -40) &
                 (df['yearHighChange'] > -10) &
                 (df['weekHighChange'] > 2) &
@@ -110,6 +114,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['monthLowChange'] < 50) &
                 (df['yearHighChange'] > -10) &
                 (df['month2HighChange'] > 1) &
                 (df['weekHighChange'] > 2) &
@@ -124,6 +129,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (df['monthLowChange'] < 50) &
                     (df['forecast_day_PCT10_change'] < 10) &
                     (df['yearHighChange'] < -25) &
                     (df['month3HighChange'] > -1) &
@@ -144,6 +150,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['monthLowChange'] < 50) &
                 (df['year2LowChange'] < 80) &
                 (df['year5HighChange'] < -20) &
                 (df['year2HighChange'] < -10) &
@@ -183,6 +190,7 @@ def main():
                 #((df['PCT_day_change'] < 1) | (df['PCT_change'] < 1)) &
                 #(df['month6HighChange'] < -5)
                 #((df['month3HighChange'] < -3) | (df['month6HighChange'] < -15))
+                (df['monthLowChange'] < 50) &
                 (df['month3LowChange'] > 15) &
                 (df['monthLowChange'] < 15) &
                 ((df['PCT_day_change'] < 1) | (df['PCT_change'] < 1)) &
@@ -198,6 +206,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (df['monthLowChange'] < 50) &
                     (df['scrip'].isin(rb.dbnse.scrip.distinct('scrip', {'futures': 'Yes'}))) &
                     (df['yearHighChange'] < -25) &
                     (df['month3HighChange'] > -1) &
@@ -218,6 +227,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['monthLowChange'] < 50) &
                 (df['year5HighChange'] < -40) &
                 (df['yearHighChange'] > -10) &
                 (df['weekHighChange'] > 2) &
@@ -231,6 +241,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['monthLowChange'] < 50) &
                 (df['yearHighChange'] > -10) &
                 (df['month2HighChange'] > 1) &
                 (df['weekHighChange'] > 2) &
@@ -245,6 +256,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (df['monthLowChange'] < 50) &
                     (df['yearHighChange'] < -25) &
                     (df['month3HighChange'] > -1) &
                     (df['monthHighChange'] < 9)
@@ -264,6 +276,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['monthLowChange'] < 50) &
                 (df['year2LowChange'] < 80) &
                 (df['year5HighChange'] < -20) &
                 (df['year2HighChange'] < -10) &
@@ -317,6 +330,7 @@ def main():
         try:
             filtered_df = df[
                 (
+                    (df['monthLowChange'] < 50) &
                     (df['scrip'].isin(rb.dbnse.scrip.distinct('scrip', {'futures': 'Yes'}))) &
                     (df['yearHighChange'] < -25) &
                     (df['month3HighChange'] > -1) &

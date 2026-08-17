@@ -161,6 +161,7 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
     if ((regression_data['month6HighChange'] < 0 or regression_data['year5HighChange'] < 0)
         and regression_data['yearLowChange'] > 10 and 10 < regression_data['month3LowChange'] and 9 < regression_data['month2LowChange'] and 9 < regression_data['monthLowChange']
         and regression_data['monthHighChange'] > 0
+        and regression_data['monthLowChange'] < 50
         and regression_data['week2HighChange'] > 0
         and regression_data['week2LowChange'] > 5
         and regression_data['weekLowChange'] > 2
@@ -182,6 +183,7 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
         return True
     elif (regression_data['year5HighChange'] < 0
         and regression_data['monthLowChange'] < 0
+        and regression_data['monthHighChange'] > -50
         and regression_data['week2HighChange'] < -5
         and regression_data['week2LowChange'] < 0
         and regression_data['weekHighChange'] < -2
@@ -209,6 +211,7 @@ def insert_year5LowBreakoutMonth2High(regression_data):
         and regression_data['week2HighChange'] > 0
         and regression_data['week2LowChange'] > 5
         and regression_data['weekLowChange'] > 2
+        and regression_data['monthLowChange'] < 50
         and regression_data['month2High'] != regression_data['high']
         and regression_data['weekLow'] < regression_data['month2High']
         and ((regression_data['low'] < regression_data['month2High'] and regression_data['PCT_day_change'] > 1)
@@ -230,6 +233,7 @@ def insert_year5LowBreakoutMonth2High(regression_data):
         and regression_data['week2HighChange'] < -5
         and regression_data['week2LowChange'] < 0
         and regression_data['weekHighChange'] < -2
+        and regression_data['monthHighChange'] > -50
         and regression_data['month2Low'] != regression_data['low']
         and regression_data['weekHigh'] > regression_data['month2Low']
         and ((regression_data['high'] > regression_data['month2Low'] and regression_data['PCT_day_change'] < -1)
