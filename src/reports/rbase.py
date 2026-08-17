@@ -630,6 +630,49 @@ def create_cumulative_data(data, label):
     
     return intervals, cumulative_counts
             
+@st.cache_data(ttl=60)
+def get_futures_scrip_set():
+    """Scrips marked futures=Yes in Nsedata.scrip (F&O universe)."""
+    try:
+        return frozenset(
+            d['scrip']
+            for d in dbnse.scrip.find({'futures': 'Yes'}, {'scrip': 1})
+            if d.get('scrip')
+        )
+    except Exception:
+        return frozenset()
+
+
+def highlight_sandlterm_row(df):
+    """Full-row colour for sandlterm / test.py tables.
+
+    - scrip in futures → grey
+    - else industry not blank → light grey
+    - else white
+    """
+    if df is None:
+        return df
+    if getattr(df, 'empty', True):
+        return df.style.set_properties(**{'background-color': '#FFFFFF', 'color': 'black'})
+    futures = get_futures_scrip_set()
+
+    def _style_row(row):
+        scrip = row['scrip'] if 'scrip' in row.index else None
+        if scrip in futures:
+            bg = '#A1A1A1'  # grey
+        else:
+            industry = row['industry'] if 'industry' in row.index else ''
+            if industry is None or (isinstance(industry, float) and pd.isna(industry)):
+                industry = ''
+            if str(industry).strip():
+                bg = '#D3D3D3'  # light grey
+            else:
+                bg = '#FFFFFF'  # white
+        return [f'background-color: {bg}; color: black'] * len(row)
+
+    return df.style.apply(_style_row, axis=1)
+
+
 def highlight_category_row(df, color='NA'):
     """Highlights the entire row based on the 'Category' column value."""
     styled_df = ''
@@ -1822,7 +1865,11 @@ def render_sandlterm_data(st, df, name, height=200, color='NA', column_order=col
         df['_sort_date'] = pd.to_datetime(df['date'], errors='coerce')
         df = df.sort_values('_sort_date', ascending=False, na_position='last').drop(columns=['_sort_date'])
         df = df.reset_index(drop=True)
-    df_styled = highlight_category_row(df, color=color)
+    # test.py / sandlterm LG: futures=grey, industry set=light grey, else white
+    if color == 'LG':
+        df_styled = highlight_sandlterm_row(df)
+    else:
+        df_styled = highlight_category_row(df, color=color)
     st.write("********"+ name + "********")
     # Prefer configured order for known columns, then append any remaining df columns
     df_cols = [c for c in df.columns if c != '_id']
