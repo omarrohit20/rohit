@@ -1699,7 +1699,7 @@ def getdfResult(collection_name):
         print(f"KeyError: {e}")
     return df
 
-def render(st, df, name, height=200, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False, renderf10buy=False, renderf10sell=False, f10=0, renderf10buy00=False, renderf10sell00=False, renderf10buy01=False, renderf10sell01=False, applyBreakOut=False, dontapplybreakout=False, noColourFilter=False):
+def render(st, df, name, height=110, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False, renderf10buy=False, renderf10sell=False, f10=0, renderf10buy00=False, renderf10sell00=False, renderf10buy01=False, renderf10sell01=False, applyBreakOut=False, dontapplybreakout=False, noColourFilter=False):
     st.write("********"+ name + "********")
     try:
         df = df[

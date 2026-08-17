@@ -889,7 +889,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'ReversalLow - Crossed 2 Day Highs', color='LG', renderf10buy00=True)
+        rb.render(st, filtered_df, 'ReversalLow - Crossed 2 Day Highs', height=200, color='LG', renderf10buy00=True)
     with col2:
         df = rb.getdf('crossed-day-high')
         expected_columns = list(set(df.columns))
@@ -926,7 +926,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'ReversalLow - Crossed Day Highs', color='LG', renderf10buy00=True)
+        rb.render(st, filtered_df, 'ReversalLow - Crossed Day Highs', height=200, color='LG', renderf10buy00=True)
     with col3:
         df = rb.getdf('supertrend-morning-sell')
         expected_columns = list(set(df.columns))
@@ -963,7 +963,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'ReversalHigh - Supertrend Morning Sell', color='LG', renderf10sell00=True)
+        rb.render(st, filtered_df, 'ReversalHigh - Supertrend Morning Sell', height=200, color='LG', renderf10sell00=True)
     with col4:
         df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
         expected_columns = list(set(df.columns))
@@ -1000,7 +1000,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'ReversalHigh - Crossed 2 Day Lows', color='LG', renderf10sell00=True)
+        rb.render(st, filtered_df, 'ReversalHigh - Crossed 2 Day Lows', height=200, color='LG', renderf10sell00=True)
     with col5:
         df = rb.getdf('crossed-day-low')
         expected_columns = list(set(df.columns))
@@ -1037,11 +1037,12 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'ReversalHigh - Crossed Day Lows', color='LG', renderf10sell00=True)
+        rb.render(st, filtered_df, 'ReversalHigh - Crossed Day Lows', height=200, color='LG', renderf10sell00=True)
 
     
         
-    
+    st.divider()
+    st.divider()
 
     
     col0, col1, col2, col3 = st.columns(4)
@@ -1063,7 +1064,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakHighYear2', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'BreakHighYear2', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col1:
         df = rb.getdfResult('highBuy')
         filtered_df = df
@@ -1074,7 +1075,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakHighYear2', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'BreakHighYear2', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col2:
         df = rb.getdfResult('highBuy')
         filtered_df = df
@@ -1092,7 +1093,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakLowYear2', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'BreakLowYear2', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col3:
         df = rb.getdfResult('highBuy')
         filtered_df = df
@@ -1103,7 +1104,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakLowYear2', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'BreakLowYear2', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     
     col0, col1, col2, col3 = st.columns(4)
     with col0:
@@ -1125,7 +1126,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakHighYear', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'BreakHighYear', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col1:
         df = rb.getdfResult('highBuy')
         filtered_df = df
@@ -1137,7 +1138,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakHighYear', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'BreakHighYear', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col2:
         df = rb.getdfResult('highBuy')
         filtered_df = df
@@ -1156,7 +1157,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakLowYear', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'BreakLowYear', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col3:
         df = rb.getdfResult('highBuy')
         filtered_df = df
@@ -1168,7 +1169,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakLowYear', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'BreakLowYear', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     
     col0, col1, col2, col3 = st.columns(4)
     with col0:
@@ -1188,7 +1189,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakHighMonth6', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')  
+        rb.render(st, filtered_df, 'BreakHighMonth6', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')  
     with col1:
         df = rb.getdfResult('highBuy')
         filtered_df = df
@@ -1198,7 +1199,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakHighMonth6', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')  
+        rb.render(st, filtered_df, 'BreakHighMonth6', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')  
     with col2:
         df = rb.getdfResult('highBuy')
         filtered_df = df
@@ -1215,7 +1216,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakLowMonth6', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'BreakLowMonth6', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col3:
         df = rb.getdfResult('highBuy')
         filtered_df = df
@@ -1225,7 +1226,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakLowMonth6', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'BreakLowMonth6', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     
     col0, col1, col2, col3 = st.columns(4)
     with col0:
@@ -1237,7 +1238,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakHighMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')  
+        rb.render(st, filtered_df, 'BreakHighMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')  
     with col1:
         df = rb.getdfResult('highBuy')
         filtered_df = df
@@ -1247,7 +1248,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakHighMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')  
+        rb.render(st, filtered_df, 'BreakHighMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')  
     with col2:
         df = rb.getdfResult('highBuy')
         filtered_df = df
@@ -1257,7 +1258,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakLowMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'BreakLowMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col3:
         df = rb.getdfResult('highBuy')
         filtered_df = df
@@ -1267,7 +1268,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BreakLowMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, renderml=True, color='LG')
+        rb.render(st, filtered_df, 'BreakLowMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     
 
     

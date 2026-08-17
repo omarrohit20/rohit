@@ -8,6 +8,8 @@ import pandas as pd
 
 def main():
     st_autorefresh(interval=30000, key="data_refresher")
+    # page-specific flag
+    rb.chartlink1 = True
 
     # setting the screen size (ignore if already set by index)
     try:
@@ -18,34 +20,31 @@ def main():
         pass
 
     # main title
-    st.title('9:30 - 10:00 Last day trend : No Reversal: chartlink-1')
+    st.title('chartlink-1')
 
-    # Global collection selector at top
+    # # Global collection selector at top
+    # st.divider()
+    # st.subheader("📊 Collection Filter")
+    # col_filter1, col_filter2 = st.columns(2)
+    
+    # with col_filter1:
+    #     collections = ["All"] + rb.get_chartlink_collections()
+    #     selected_coll = st.selectbox(
+    #         "Select DB Collection for Scrip Filtering:",
+    #         collections,
+    #         help="Select a collection to filter scrips. Only scrips in that collection will be shown in all widgets."
+    #     )
+    #     rb.set_selected_collection(selected_coll)
+    
+    # with col_filter2:
+    #     if selected_coll != "All":
+    #         scrips = rb.get_collection_scrips(selected_coll)
+    #         st.info(f"✓ {len(scrips)} scrips in '{selected_coll}' collection")
+    #     else:
+    #         st.info("✓ Showing all scrips (no filter applied)")
+    
     st.divider()
-    st.subheader("📊 Collection Filter")
-    col_filter1, col_filter2 = st.columns(2)
-    
-    with col_filter1:
-        collections = ["All"] + rb.get_chartlink_collections()
-        selected_coll = st.selectbox(
-            "Select DB Collection for Scrip Filtering:",
-            collections,
-            help="Select a collection to filter scrips. Only scrips in that collection will be shown in all widgets."
-        )
-        rb.set_selected_collection(selected_coll)
-    
-    with col_filter2:
-        if selected_coll != "All":
-            scrips = rb.get_collection_scrips(selected_coll)
-            st.info(f"✓ {len(scrips)} scrips in '{selected_coll}' collection")
-        else:
-            st.info("✓ Showing all scrips (no filter applied)")
-    
-    st.divider()
-
-    # page-specific flag
-    rb.chartlink1 = True
-    
+    st.subheader("Market Reversals Only")
 
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
@@ -119,6 +118,9 @@ def main():
             print("")
         rb.render(st, filtered_df, 'Sell Check Morning Up Breakdown 02s', color='LG')
 
+
+    st.divider()
+    st.subheader("Recommendations Only")
     
     col2, col4 = st.columns(2)
     with col2:
@@ -176,7 +178,6 @@ def main():
         else:
             rb.render(st, empty_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=200)
   
-
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
@@ -268,7 +269,9 @@ def main():
             print("")
         rb.render(st, filtered_df, 'SQROFFAt10:LastDayDownTodayLT-0.3:Consolidation-CheckRecommendations', dontapplybreakout=True, color='LG')
 
-
+    st.divider()
+    st.subheader("Others")
+    
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
@@ -286,7 +289,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'DOJI Breakout Buy - Pre2LT0', color='LG', height=150)
+        rb.render(st, filtered_df, 'DOJI Breakout Buy - Pre2LT0', color='LG')
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -308,7 +311,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'DOJI Breakout Buy', color='LG', height=150)
+        rb.render(st, filtered_df, 'DOJI Breakout Buy', color='LG')
     with col3:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -327,7 +330,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Buy', color='LG', height=150)
+        rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Buy', color='LG')
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -344,7 +347,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'DOJI Breakout Sell - Pre2GT0', color='LG', height=150)
+        rb.render(st, filtered_df, 'DOJI Breakout Sell - Pre2GT0', color='LG')
     with col5:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -366,7 +369,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'DOJI Breakout Sell', color='LG', height=150)
+        rb.render(st, filtered_df, 'DOJI Breakout Sell', color='LG')
     with col6:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -384,7 +387,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Sell', color='LG', height=150)
+        rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Sell', color='LG')
     
 
     col1, col2, col3, col4 = st.columns(4)
@@ -403,7 +406,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-buy : movingavg_crossed_up', color='LG')
+        rb.render(st, filtered_df, 'morning-volume-breakout-buy : movingavg_crossed_up', height=150, color='LG')
     with col2:
         df = rb.getintersectdf('highBuy', 'movingavg_crossed_up')
         filtered_df = df
@@ -434,7 +437,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'highBuy : movingavg_crossed_up', color='LG', renderml=True)
+        rb.render(st, filtered_df, 'highBuy : movingavg_crossed_up', height=150, color='LG', renderml=True)
     with col3:
         df = rb.getintersectdf('morning-volume-breakout-sell', 'movingavg_crossed_down')
         filtered_df = df
@@ -450,7 +453,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-sell : movingavg_crossed_down', color='LG')
+        rb.render(st, filtered_df, 'morning-volume-breakout-sell : movingavg_crossed_down', height=150, color='LG')
     with col4:
         df = rb.getintersectdf('lowSell', 'movingavg_crossed_down')
         filtered_df = df
@@ -482,7 +485,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'lowSell : movingavg_crossed_down', color='LG')
+        rb.render(st, filtered_df, 'lowSell : movingavg_crossed_down', height=150, color='LG')
     
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
@@ -507,7 +510,7 @@ def main():
                     ]
             except KeyError as e:
                 print("")
-            rb.render(st, filtered_df, 'week2HighGT0 + crossed-day-high', color='LG')
+            rb.render(st, filtered_df, 'week2HighGT0 + crossed-day-high', height=200, color='LG')
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -533,7 +536,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'week2HighGT0 : Avoid-GT2-And-Top5', color='LG', height=150)
+        rb.render(st, filtered_df, 'week2HighGT0 : Avoid-GT2-And-Top5', height=200, color='LG')
     with col3:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -560,7 +563,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'week2HighGT0-1 : Avoid-GT2-And-Top5', color='LG', height=150)
+        rb.render(st, filtered_df, 'week2HighGT0-1 : Avoid-GT2-And-Top5', height=200, color='LG')
     with col4:
             df = rb.getintersectdf('morning-volume-breakout-sell', 'crossed-day-low')
             filtered_df = df
@@ -586,7 +589,7 @@ def main():
                     ]
             except KeyError as e:
                 print("")
-            rb.render(st, filtered_df, 'week2LowLT0 + crossed-day-low', color='LG')
+            rb.render(st, filtered_df, 'week2LowLT0 + crossed-day-low', height=200, color='LG')
     with col5:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -612,7 +615,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'week2LowLT0 : Avoid-LT(-2)-And-Top5', color='LG', height=150)
+        rb.render(st, filtered_df, 'week2LowLT0 : Avoid-LT(-2)-And-Top5', height=200, color='LG')
     with col6:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -639,7 +642,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'week2LowLT0-1 : Avoid-LT(-2)-And-Top5', color='LG', height=150)
+        rb.render(st, filtered_df, 'week2LowLT0-1 : Avoid-LT(-2)-And-Top5', height=200, color='LG')
 
     col1, col3 = st.columns(2)
     
@@ -773,9 +776,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) <= 3:
-            rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutMH', color='LG', height=150)
+            rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutMH', color='LG')
         else:
-            rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutMH', color='LG', height=150)
+            rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutMH', color='LG')
     with col2:
         df = rb.getintersectdf('morning-volume-breakout-buy', 'breakoutM2H')
         expected_columns = list(set(df.columns))
@@ -793,9 +796,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) <= 3:
-            rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutM2H', color='LG', height=150)
+            rb.render(st, filtered_df, 'morning-volume-breakout-buy + breakoutM2H', color='LG')
         else:
-            rb.render(st, empty_df, 'morning-volume-breakout-buy + breakoutM2H', color='LG', height=150)
+            rb.render(st, empty_df, 'morning-volume-breakout-buy + breakoutM2H', color='LG')
     with col00:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -836,9 +839,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) <= 3:
-            rb.render(st, filtered_df, 'morning-volume-breakout-sell + breakoutML', color='LG', height=150)
+            rb.render(st, filtered_df, 'morning-volume-breakout-sell + breakoutML', color='LG')
         else:
-            rb.render(st, empty_df, 'morning-volume-breakout-sell + breakoutML', color='LG', height=150)
+            rb.render(st, empty_df, 'morning-volume-breakout-sell + breakoutML', color='LG')
     with col4:
         df = rb.getintersectdf('morning-volume-breakout-sell', 'breakoutM2L')
         expected_columns = list(set(df.columns))
@@ -857,9 +860,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) <= 3:
-            rb.render(st, filtered_df, 'morning-volume-breakout-sell + breakoutM2L', color='LG', height=150)
+            rb.render(st, filtered_df, 'morning-volume-breakout-sell + breakoutM2L', color='LG')
         else:
-            rb.render(st, empty_df, 'morning-volume-breakout-sell + breakoutM2L', color='LG', height=150)
+            rb.render(st, empty_df, 'morning-volume-breakout-sell + breakoutM2L', color='LG')
 
     col0, col00 = st.columns(2)
     with col0:

@@ -99,7 +99,7 @@ if 'page_processes' not in st.session_state:
 
 if selected:
     sel_path = base / selected
-    st.subheader(f"{selected}")
+    # st.subheader(f"{selected}")
 
     if in_process:
         # Attempt to import and call main() from the module
