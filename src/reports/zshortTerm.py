@@ -38,7 +38,8 @@ def main():
                     (
                         (
                             (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                            (~df['systemtime'].str.contains('11:', case=False, na=False))
+                            (~df['systemtime'].str.contains('11:', case=False, na=False)) &
+                            (df['weekHighChange'] > 0)
                             # (df['yearHighChange'] < 0) &
                             # ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
                             # ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
@@ -140,7 +141,8 @@ def main():
                     (
                         (
                             (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                            (~df['systemtime'].str.contains('11:', case=False, na=False)) 
+                            (~df['systemtime'].str.contains('11:', case=False, na=False)) &
+                            (df['weekLowChange'] < 0)
                             # (df['yearLowChange'] > 0) &
                             # ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
                             # ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
@@ -306,6 +308,7 @@ def main():
                     (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) &
+                    (df['monthLowChange'] > 10) &
                     (
                         (
                             (df['yearLowChange'] > 0) &
@@ -427,6 +430,7 @@ def main():
                     (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) &
+                    (df['monthHighChange'] < -10) &
                     (
                         (
                             (df['yearHighChange'] < 0) &

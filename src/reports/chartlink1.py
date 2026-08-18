@@ -390,104 +390,7 @@ def main():
         rb.render(st, filtered_df, 'PctDayChangePre2 - Doji Sell', color='LG')
     
 
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        df = rb.getintersectdf('morning-volume-breakout-buy', 'movingavg_crossed_up')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (df['PCT_day_change'] > 0.2) &
-                (
-                    (df['yearHighChange'] < -30) |
-                    (df['month3HighChange'] < -10) |
-                    (df['monthHighChange'] < 0)
-                )
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-buy : movingavg_crossed_up', height=150, color='LG')
-    with col2:
-        df = rb.getintersectdf('highBuy', 'movingavg_crossed_up')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['forecast_day_PCT10_change'] < 10) &
-                ((df['PCT_day_change']) < 1.5) &
-                (
-                    (
-                        (df['forecast_day_PCT10_change'] > 0) &
-                        ((df['PCT_day_change_pre1']) < -1.5) &
-                        ((df['PCT_day_change']) > -1.5) &  
-                        (df['lowTail'] > 1.5) 
-                    )
-                    |
-                    (
-                        (df['forecast_day_PCT10_change'] > 0) &
-                        ((df['PCT_day_change']) > 0.9) &
-                        (df['lowTail'] > 1.9) 
-                    )
-                    |
-                    (
-                        (df['forecast_day_PCT10_change'] > 5) &
-                        (df['lowTail'] >= 1.5) &
-                        (df['highTail'] < df['lowTail'])
-                    )
-                )
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'highBuy : movingavg_crossed_up', height=150, color='LG', renderml=True)
-    with col3:
-        df = rb.getintersectdf('morning-volume-breakout-sell', 'movingavg_crossed_down')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (df['PCT_day_change'] < -0.2) &
-                (
-                    (df['yearLowChange'] > 30) |
-                    (df['month3LowChange'] > 10) |
-                    (df['monthLowChange'] > 0)
-                )
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-sell : movingavg_crossed_down', height=150, color='LG')
-    with col4:
-        df = rb.getintersectdf('lowSell', 'movingavg_crossed_down')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['forecast_day_PCT10_change'] > -10) &
-                ((df['PCT_day_change']) > -1.5) &
-                (
-                    (
-                       
-                        (df['forecast_day_PCT10_change'] < 0) &
-                        ((df['PCT_day_change_pre1']) > 1.5) &
-                        ((df['PCT_day_change']) < 1.5) &  
-                        (df['highTail'] > 1.5) 
-                    )
-                    |
-                    (
-                        (df['forecast_day_PCT10_change'] < 0) &
-                        ((df['PCT_day_change']) < -0.9) &
-                        (df['highTail'] > 1.9) 
-                    )
-                    |
-                    (
-                        (df['forecast_day_PCT10_change'] < -5) &
-                        (df['highTail'] >= 1.5) &
-                        (df['lowTail'] < df['highTail'])
-                    )
-                )
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'lowSell : movingavg_crossed_down', height=150, color='LG')
-    
-    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    col1, col2, col3, col30, col4, col5, col6, col60 = st.columns(8)
     with col1:
             df = rb.getintersectdf('morning-volume-breakout-buy', 'crossed-day-high')
             filtered_df = df
@@ -564,6 +467,22 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'week2HighGT0-1 : Avoid-GT2-And-Top5', height=200, color='LG')
+    with col30:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['forecast_day_PCT10_change'] >-9) &
+                (df['PCT_day_change'] < 2.5) &
+                (df['PCT_day_change'] > -3) &
+                (df['PCT_change'] > 0) &
+                (df['month3HighChange'] > -20) &
+                (df['year5HighChange'] < -25) &
+                (df['yearHighChange'] < -20)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'year5HighChangeLT-30 + week2High', height=200, color='LG')
     with col4:
             df = rb.getintersectdf('morning-volume-breakout-sell', 'crossed-day-low')
             filtered_df = df
@@ -643,6 +562,10 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'week2LowLT0-1 : Avoid-LT(-2)-And-Top5', height=200, color='LG')
+    with col60:
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        rb.render(st, empty_df, 'year5LowChangeGT30 + week2Low', height=200, color='LG')
 
     col1, col3 = st.columns(2)
     
@@ -733,6 +656,245 @@ def main():
             print("")
         rb.render(st, filtered_df, 'MorningVolumeBreakoutSells + NearMonthHigh', dontapplybreakout=True, color='LG', height=150)
 
+    col1, col3 = st.columns(2)
+    with col1:
+        df = rb.getintersectdf('buy_all_processor', 'week2lh-not-reached')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['filter3'].str.startswith('ReversalHighYear', na=False)) &
+                (~df['filter3'].str.startswith('ReversalHighMonth6', na=False)) &
+                # ((df['forecast_day_PCT10_change'] >=2) | (df['forecast_day_PCT10_change'] <= -6)) &
+                (~df['processor'].str.contains('cash-buy-morning-volume')) &
+                (~df['processor'].str.contains('Check-News')) &
+                (~df['processor'].str.contains('supertrend')) &
+                (~df['processor'].str.contains('09_30:checkChartBuy')) &
+                (~df['processor'].str.contains('Sell-morningDown')) &
+                (~df['processor'].str.contains('buy-breakout')) &
+                (~df['processor'].str.contains('Breakout-Buy-after-10')) &
+                #(~df['processor'].str.contains('1-Bbuyy-morningUp-downConsolidation')) &
+                # (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                # (~df['systemtime'].str.contains('10:00', case=False, regex=True, na=False)) &
+                # (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'BuyAllProcessor + week2lh-not-reached', color='LG')
+        else:
+            rb.render(st, empty_df, 'BuyAllProcessor + week2lh-not-reached', color='LG')
+    with col3:
+        df = rb.getintersectdf('sell_all_processor', 'week2lh-not-reached')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['filter3'].str.startswith('ReversalLowYear', na=False)) &
+                (~df['filter3'].str.startswith('ReversalLowMonth6', na=False)) &
+                # ((df['forecast_day_PCT10_change'] <= -2) | (df['forecast_day_PCT10_change'] > 6)) &
+                (~df['processor'].str.contains('cash-sell-morning-volume')) &
+                (~df['processor'].str.contains('Check-News')) &
+                (~df['processor'].str.contains('supertrend')) &
+                (~df['processor'].str.contains('09_30:checkChartSell')) &
+                (~df['processor'].str.contains('Buy-morningup')) &
+                (~df['processor'].str.contains('sell-breakout')) &
+                (~df['processor'].str.contains('Breakout-Sell-after-10')) &
+                #(~df['processor'].str.contains('1-Sselll-morningDown')) &
+                # (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                # (~df['systemtime'].str.contains('10:00', case=False, regex=True, na=False)) &
+                # (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'SellAllProcessor + week2lh-not-reached', color='LG')
+        else:
+            rb.render(st, empty_df, 'SellAllProcessor + week2lh-not-reached', color='LG')
+
+
+    col10, col1, col2, col30, col3, col4 = st.columns(6)
+    with col10:
+        df = rb.getdf('buy_all_processor')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['filter3'].str.startswith('ReversalHighYear', na=False)) &
+                (~df['filter3'].str.startswith('ReversalHighMonth6', na=False)) &
+                (~df['processor'].str.contains('cash-buy-morning-volume')) &
+                (~df['processor'].str.contains('crossed-day-high')) &
+                (~df['processor'].str.contains('09_30:checkChartBuy')) &
+                (~df['processor'].str.contains('buy-breakout')) &
+                (df['filter'].str.contains('MLBuy', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'BuyAllProcessor-MLBuy', color='LG')
+        else:
+            rb.render(st, empty_df, 'BuyAllProcessor-MLBuy', color='LG')
+    with col1:
+        df = rb.getdf('buy_all_processor')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['filter3'].str.startswith('ReversalHighYear', na=False)) &
+                (~df['filter3'].str.startswith('ReversalHighMonth6', na=False)) &
+                (df['PCT_change'] > (df['PCT_day_change'] + 0.2)) &
+                (abs(df['PCT_day_change']) >= 0.35) &
+                (abs(df['yearHighChange']) >= 10) &
+                (abs(df['month3HighChange']) >= 5) &
+                (abs(df['monthHighChange']) >= 2.5) &
+                (abs(df['yearLowChange']) >= 5) &
+                (~df['processor'].str.contains('cash-buy-morning-volume')) &
+                (~df['processor'].str.contains('Check-News')) &
+                (~df['processor'].str.contains('supertrend')) &
+                (~df['processor'].str.contains('09_30:checkChartBuy')) &
+                (~df['processor'].str.contains('Sell-morningDown')) &
+                (~df['processor'].str.contains('buy-breakout')) &
+                ((df['PCT_day_change_pre1'] > 0.1) | (df['PCT_day_change_pre2'] > 0.1) | (~df['processor'].str.contains('buy-breakout'))) &
+                (~df['processor'].str.contains('Breakout-Buy-after-10')) &
+                (~df['processor'].str.contains('1-Bbuyy-morningUp')) &
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 2:
+            rb.render(st, filtered_df, 'BuyAllProcessor', color='LG')
+        else:
+            rb.render(st, empty_df, 'BuyAllProcessor', color='LG')
+    with col2:
+        df = rb.getdf('buy_all_processor')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['filter3'].str.startswith('ReversalHighYear', na=False)) &
+                (~df['filter3'].str.startswith('ReversalHighMonth6', na=False)) &
+                (abs(df['monthHighChange']) >= 2.5) &
+                (abs(df['yearLowChange']) >= 5) &
+                (~df['processor'].str.contains('cash-buy-morning-volume')) &
+                (~df['processor'].str.contains('Check-News')) &
+                (~df['processor'].str.contains('supertrend')) &
+                (~df['processor'].str.contains('09_30:checkChartBuy')) &
+                (~df['processor'].str.contains('Sell-morningDown')) &
+                (~df['processor'].str.contains('buy-breakout')) &
+                (~df['processor'].str.contains('Breakout-Buy-after-10')) &
+                (~df['processor'].str.contains('1-Bbuyy-morningUp')) &
+                (~df['processor'].str.contains('buy-breakout')) &
+                (df['processor'].str.contains('buy-dayconsolidation')) &
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'BuyAllProcessor', color='LG')
+        else:
+            rb.render(st, empty_df, 'BuyAllProcessor', color='LG')
+    with col30:
+        df = rb.getdf('sell_all_processor')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['filter3'].str.startswith('ReversalLowYear', na=False)) &
+                (~df['filter3'].str.startswith('ReversalLowMonth6', na=False)) &
+                (~df['processor'].str.contains('cash-sell-morning-volume')) &
+                (~df['processor'].str.contains('crossed-day-low')) &
+                (~df['processor'].str.contains('09_30:checkChartSell')) &
+                (~df['processor'].str.contains('sell-breakout')) &
+                (df['filter'].str.contains('MLSell', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'SellAllProcessor-MLSell', color='LG')
+        else:
+            rb.render(st, empty_df, 'SellAllProcessor-MLSell', color='LG')
+    with col3:
+        df = rb.getdf('sell_all_processor')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['filter3'].str.startswith('ReversalLowYear', na=False)) &
+                (~df['filter3'].str.startswith('ReversalLowMonth6', na=False)) &
+                (df['PCT_change'] < (df['PCT_day_change'] - 0.2)) &
+                (abs(df['PCT_day_change']) >= 0.35) &
+                (abs(df['yearLowChange']) >= 10) &
+                (abs(df['month3LowChange']) >= 5) &
+                (abs(df['monthLowChange']) >= 2.5) &
+                (abs(df['yearHighChange']) >= 5) &
+                (~df['processor'].str.contains('cash-sell-morning-volume')) &
+                (~df['processor'].str.contains('Check-News')) &
+                (~df['processor'].str.contains('supertrend')) &
+                (~df['processor'].str.contains('09_30:checkChartSell')) &
+                (~df['processor'].str.contains('Buy-morningup')) &
+                (~df['processor'].str.contains('sell-breakout')) &
+                ((df['PCT_day_change_pre1'] < -0.1) | (df['PCT_day_change_pre2'] < -0.1) | (~df['processor'].str.contains('sell-breakout'))) &
+                (~df['processor'].str.contains('Breakout-Sell-after-10')) &
+                (~df['processor'].str.contains('1-Sselll-morningDown')) &
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 2:
+            rb.render(st, filtered_df, 'SellAllProcessor', color='LG')
+        else:
+            rb.render(st, empty_df, 'SellAllProcessor', color='LG')
+    with col4:
+        df = rb.getdf('sell_all_processor')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['filter3'].str.startswith('ReversalLowYear', na=False)) &
+                (~df['filter3'].str.startswith('ReversalLowMonth6', na=False)) &
+                (abs(df['monthLowChange']) >= 2.5) &
+                (abs(df['yearHighChange']) >= 5) &
+
+                (~df['processor'].str.contains('cash-sell-morning-volume')) &
+                (~df['processor'].str.contains('Check-News')) &
+                (~df['processor'].str.contains('supertrend')) &
+                (~df['processor'].str.contains('09_30:checkChartSell')) &
+                (~df['processor'].str.contains('Buy-morningup')) &
+                (~df['processor'].str.contains('sell-breakout')) &
+                (~df['processor'].str.contains('Breakout-Sell-after-10')) &
+                (~df['processor'].str.contains('1-Sselll-morningDown')) &
+                (~df['processor'].str.contains('sell-breakout')) &
+                (df['processor'].str.contains('sell-dayconsolidation')) &
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        if len(filtered_df) >= 1:
+            rb.render(st, filtered_df, 'SellAllProcessor', color='LG')
+        else:
+            rb.render(st, empty_df, 'SellAllProcessor', color='LG')
 
     col0, col1, col2, col00, col3, col4 = st.columns(6)
     with col0:
@@ -911,244 +1073,214 @@ def main():
         rb.render(st, filtered_df, 'SLLWEEK2LOW<LT0', color='LG')
 
 
-    col1, col3 = st.columns(2)
-    with col1:
-        df = rb.getintersectdf('buy_all_processor', 'week2lh-not-reached')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['filter3'].str.startswith('ReversalHighYear', na=False)) &
-                (~df['filter3'].str.startswith('ReversalHighMonth6', na=False)) &
-                # ((df['forecast_day_PCT10_change'] >=2) | (df['forecast_day_PCT10_change'] <= -6)) &
-                (~df['processor'].str.contains('cash-buy-morning-volume')) &
-                (~df['processor'].str.contains('Check-News')) &
-                (~df['processor'].str.contains('supertrend')) &
-                (~df['processor'].str.contains('09_30:checkChartBuy')) &
-                (~df['processor'].str.contains('Sell-morningDown')) &
-                (~df['processor'].str.contains('buy-breakout')) &
-                (~df['processor'].str.contains('Breakout-Buy-after-10')) &
-                #(~df['processor'].str.contains('1-Bbuyy-morningUp-downConsolidation')) &
-                # (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                # (~df['systemtime'].str.contains('10:00', case=False, regex=True, na=False)) &
-                # (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'BuyAllProcessor + week2lh-not-reached', color='LG')
-        else:
-            rb.render(st, empty_df, 'BuyAllProcessor + week2lh-not-reached', color='LG')
-    with col3:
-        df = rb.getintersectdf('sell_all_processor', 'week2lh-not-reached')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['filter3'].str.startswith('ReversalLowYear', na=False)) &
-                (~df['filter3'].str.startswith('ReversalLowMonth6', na=False)) &
-                # ((df['forecast_day_PCT10_change'] <= -2) | (df['forecast_day_PCT10_change'] > 6)) &
-                (~df['processor'].str.contains('cash-sell-morning-volume')) &
-                (~df['processor'].str.contains('Check-News')) &
-                (~df['processor'].str.contains('supertrend')) &
-                (~df['processor'].str.contains('09_30:checkChartSell')) &
-                (~df['processor'].str.contains('Buy-morningup')) &
-                (~df['processor'].str.contains('sell-breakout')) &
-                (~df['processor'].str.contains('Breakout-Sell-after-10')) &
-                #(~df['processor'].str.contains('1-Sselll-morningDown')) &
-                # (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                # (~df['systemtime'].str.contains('10:00', case=False, regex=True, na=False)) &
-                # (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'SellAllProcessor + week2lh-not-reached', color='LG')
-        else:
-            rb.render(st, empty_df, 'SellAllProcessor + week2lh-not-reached', color='LG')
 
+    
+    st.divider()
+    st.divider()
 
-    col10, col1, col2, col30, col3, col4 = st.columns(6)
-    with col10:
-        df = rb.getdf('buy_all_processor')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['filter3'].str.startswith('ReversalHighYear', na=False)) &
-                (~df['filter3'].str.startswith('ReversalHighMonth6', na=False)) &
-                (~df['processor'].str.contains('cash-buy-morning-volume')) &
-                (~df['processor'].str.contains('crossed-day-high')) &
-                (~df['processor'].str.contains('09_30:checkChartBuy')) &
-                (~df['processor'].str.contains('buy-breakout')) &
-                (df['filter'].str.contains('MLBuy', case=False, regex=True, na=False))
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'BuyAllProcessor-MLBuy', color='LG')
-        else:
-            rb.render(st, empty_df, 'BuyAllProcessor-MLBuy', color='LG')
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
-        df = rb.getdf('buy_all_processor')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
+        df = rb.getintersectdf('morning-volume-breakout-buy', 'movingavg_crossed_up')
         filtered_df = df
         try:
             filtered_df = df[
-                (~df['filter3'].str.startswith('ReversalHighYear', na=False)) &
-                (~df['filter3'].str.startswith('ReversalHighMonth6', na=False)) &
-                (df['PCT_change'] > (df['PCT_day_change'] + 0.2)) &
-                (abs(df['PCT_day_change']) >= 0.35) &
-                (abs(df['yearHighChange']) >= 10) &
-                (abs(df['month3HighChange']) >= 5) &
-                (abs(df['monthHighChange']) >= 2.5) &
-                (abs(df['yearLowChange']) >= 5) &
-                (~df['processor'].str.contains('cash-buy-morning-volume')) &
-                (~df['processor'].str.contains('Check-News')) &
-                (~df['processor'].str.contains('supertrend')) &
-                (~df['processor'].str.contains('09_30:checkChartBuy')) &
-                (~df['processor'].str.contains('Sell-morningDown')) &
-                (~df['processor'].str.contains('buy-breakout')) &
-                ((df['PCT_day_change_pre1'] > 0.1) | (df['PCT_day_change_pre2'] > 0.1) | (~df['processor'].str.contains('buy-breakout'))) &
-                (~df['processor'].str.contains('Breakout-Buy-after-10')) &
-                (~df['processor'].str.contains('1-Bbuyy-morningUp')) &
-                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                (df['PCT_day_change'] > 0.2) &
+                (
+                    (df['yearHighChange'] < -30) |
+                    (df['month3HighChange'] < -10) |
+                    (df['monthHighChange'] < 0)
+                )
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'BuyAllProcessor', color='LG')
-        else:
-            rb.render(st, empty_df, 'BuyAllProcessor', color='LG')
+        rb.render(st, filtered_df, 'morning-volume-breakout-buy : movingavg_crossed_up', height=150, color='LG')
     with col2:
-        df = rb.getdf('buy_all_processor')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
+        df = rb.getintersectdf('highBuy', 'movingavg_crossed_up')
         filtered_df = df
         try:
             filtered_df = df[
-                (~df['filter3'].str.startswith('ReversalHighYear', na=False)) &
-                (~df['filter3'].str.startswith('ReversalHighMonth6', na=False)) &
-                (abs(df['monthHighChange']) >= 2.5) &
-                (abs(df['yearLowChange']) >= 5) &
-                (~df['processor'].str.contains('cash-buy-morning-volume')) &
-                (~df['processor'].str.contains('Check-News')) &
-                (~df['processor'].str.contains('supertrend')) &
-                (~df['processor'].str.contains('09_30:checkChartBuy')) &
-                (~df['processor'].str.contains('Sell-morningDown')) &
-                (~df['processor'].str.contains('buy-breakout')) &
-                (~df['processor'].str.contains('Breakout-Buy-after-10')) &
-                (~df['processor'].str.contains('1-Bbuyy-morningUp')) &
-                (~df['processor'].str.contains('buy-breakout')) &
-                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                (df['forecast_day_PCT10_change'] < 10) &
+                ((df['PCT_day_change']) < 1.5) &
+                (
+                    (
+                        (df['forecast_day_PCT10_change'] > 0) &
+                        ((df['PCT_day_change_pre1']) < -1.5) &
+                        ((df['PCT_day_change']) > -1.5) &  
+                        (df['lowTail'] > 1.5) 
+                    )
+                    |
+                    (
+                        (df['forecast_day_PCT10_change'] > 0) &
+                        ((df['PCT_day_change']) > 0.9) &
+                        (df['lowTail'] > 1.9) 
+                    )
+                    |
+                    (
+                        (df['forecast_day_PCT10_change'] > 5) &
+                        (df['lowTail'] >= 1.5) &
+                        (df['highTail'] < df['lowTail'])
+                    )
+                )
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'BuyAllProcessor', color='LG')
-        else:
-            rb.render(st, empty_df, 'BuyAllProcessor', color='LG')
-    with col30:
-        df = rb.getdf('sell_all_processor')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['filter3'].str.startswith('ReversalLowYear', na=False)) &
-                (~df['filter3'].str.startswith('ReversalLowMonth6', na=False)) &
-                (~df['processor'].str.contains('cash-sell-morning-volume')) &
-                (~df['processor'].str.contains('crossed-day-low')) &
-                (~df['processor'].str.contains('09_30:checkChartSell')) &
-                (~df['processor'].str.contains('sell-breakout')) &
-                (df['filter'].str.contains('MLSell', case=False, regex=True, na=False))
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'SellAllProcessor-MLSell', color='LG')
-        else:
-            rb.render(st, empty_df, 'SellAllProcessor-MLSell', color='LG')
+        rb.render(st, filtered_df, 'highBuy : movingavg_crossed_up', height=150, color='LG', renderml=True)
     with col3:
-        df = rb.getdf('sell_all_processor')
+        df = rb.getintersectdf('morning-volume-breakout-sell', 'movingavg_crossed_down')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
             filtered_df = df[
-                (~df['filter3'].str.startswith('ReversalLowYear', na=False)) &
-                (~df['filter3'].str.startswith('ReversalLowMonth6', na=False)) &
-                (df['PCT_change'] < (df['PCT_day_change'] - 0.2)) &
-                (abs(df['PCT_day_change']) >= 0.35) &
-                (abs(df['yearLowChange']) >= 10) &
-                (abs(df['month3LowChange']) >= 5) &
-                (abs(df['monthLowChange']) >= 2.5) &
-                (abs(df['yearHighChange']) >= 5) &
-                (~df['processor'].str.contains('cash-sell-morning-volume')) &
-                (~df['processor'].str.contains('Check-News')) &
-                (~df['processor'].str.contains('supertrend')) &
-                (~df['processor'].str.contains('09_30:checkChartSell')) &
-                (~df['processor'].str.contains('Buy-morningup')) &
-                (~df['processor'].str.contains('sell-breakout')) &
-                ((df['PCT_day_change_pre1'] < -0.1) | (df['PCT_day_change_pre2'] < -0.1) | (~df['processor'].str.contains('sell-breakout'))) &
-                (~df['processor'].str.contains('Breakout-Sell-after-10')) &
-                (~df['processor'].str.contains('1-Sselll-morningDown')) &
-                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                (df['PCT_day_change'] < -0.2) &
+                (
+                    (df['yearLowChange'] > 30) |
+                    (df['month3LowChange'] > 10) |
+                    (df['monthLowChange'] > 0)
+                )
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'SellAllProcessor', color='LG')
-        else:
-            rb.render(st, empty_df, 'SellAllProcessor', color='LG')
+        rb.render(st, empty_df, 'morning-volume-breakout-sell : movingavg_crossed_down', height=150, color='LG')
     with col4:
-        df = rb.getdf('sell_all_processor')
+        df = rb.getintersectdf('lowSell', 'movingavg_crossed_down')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
             filtered_df = df[
-                (~df['filter3'].str.startswith('ReversalLowYear', na=False)) &
-                (~df['filter3'].str.startswith('ReversalLowMonth6', na=False)) &
-                (abs(df['monthLowChange']) >= 2.5) &
-                (abs(df['yearHighChange']) >= 5) &
-                (~df['processor'].str.contains('cash-sell-morning-volume')) &
-                (~df['processor'].str.contains('Check-News')) &
-                (~df['processor'].str.contains('supertrend')) &
-                (~df['processor'].str.contains('09_30:checkChartSell')) &
-                (~df['processor'].str.contains('Buy-morningup')) &
-                (~df['processor'].str.contains('sell-breakout')) &
-                (~df['processor'].str.contains('Breakout-Sell-after-10')) &
-                (~df['processor'].str.contains('1-Sselll-morningDown')) &
-                (~df['processor'].str.contains('sell-breakout')) &
-                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                (df['forecast_day_PCT10_change'] > -10) &
+                ((df['PCT_day_change']) > -1.5) &
+                (
+                    (
+                       
+                        (df['forecast_day_PCT10_change'] < 0) &
+                        ((df['PCT_day_change_pre1']) > 1.5) &
+                        ((df['PCT_day_change']) < 1.5) &  
+                        (df['highTail'] > 1.5) 
+                    )
+                    |
+                    (
+                        (df['forecast_day_PCT10_change'] < 0) &
+                        ((df['PCT_day_change']) < -0.9) &
+                        (df['highTail'] > 1.9) 
+                    )
+                    |
+                    (
+                        (df['forecast_day_PCT10_change'] < -5) &
+                        (df['highTail'] >= 1.5) &
+                        (df['lowTail'] < df['highTail'])
+                    )
+                )
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'SellAllProcessor', color='LG')
+        rb.render(st, empty_df, 'lowSell : movingavg_crossed_down', height=150, color='LG')
+    
+    
+    col0, col1, col2, col3, col4, col5 = st.columns(6)
+    with col0:
+        df = rb.getdf('supertrend-morning-buy')
+        dfch = rb.getdf('crossed-day-high')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change']) > 5) &
+                (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                ]    
+        except KeyError as e:
+            pass
+        if len(dfch) <= 10:
+            rb.render(st, filtered_df, 'Supertrend Morning Buy', color='LG', renderf10buy00=True)
         else:
-            rb.render(st, empty_df, 'SellAllProcessor', color='LG')
-
-
+            rb.render(st, empty_df, 'Supertrend Morning Buy', color='LG', renderf10buy00=True)
+    with col1:
+        df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
+        dfch = rb.getdf('crossed-day-high')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change']) > 5) &
+                (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                ]    
+        except KeyError as e:
+            pass
+        if len(dfch) <= 10:
+            rb.render(st, filtered_df, 'Crossed 2 Day Highs', color='LG', renderf10buy00=True)
+        else:
+            rb.render(st, empty_df, 'Crossed 2 Day Highs', color='LG', renderf10buy00=True)
+    with col2:
+        df = rb.getdf('crossed-day-high')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change']) > 5) &
+                (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                ]    
+        except KeyError as e:
+            pass
+        if len(df) <= 10:
+            rb.render(st, filtered_df, 'Crossed Day Highs', color='LG', renderf10buy00=True)
+        else:
+            rb.render(st, empty_df, 'Crossed Day Highs', color='LG', renderf10buy00=True)
+    with col3:
+        df = rb.getdf('supertrend-morning-sell')
+        dfch = rb.getdf('crossed-day-low')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change']) < -5) &
+                (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                ]    
+        except KeyError as e:
+            pass
+        if len(dfch) <= 10:
+            rb.render(st, filtered_df, 'Supertrend Morning Sell', color='LG', renderf10sell00=True)
+        else:
+            rb.render(st, empty_df, 'Supertrend Morning Sell', color='LG', renderf10sell00=True)
+    with col4:
+        df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
+        dfch = rb.getdf('crossed-day-low')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change']) < -5) &
+                (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                ]    
+        except KeyError as e:
+            pass
+        if len(dfch) <= 10:
+            rb.render(st, filtered_df, 'Crossed 2 Day Lows', color='LG', renderf10sell00=True)
+        else:
+            rb.render(st, empty_df, 'Crossed 2 Day Lows', color='LG', renderf10sell00=True)
+    with col5:
+        df = rb.getdf('crossed-day-low')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change']) < -5) &
+                (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                ]    
+        except KeyError as e:
+            pass
+        if len(df) <= 10:
+            rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell00=True)
+        else:
+            rb.render(st, empty_df, 'Crossed Day Lows', color='LG', renderf10sell00=True)
 
     col1, col2 = st.columns(2)
     with col1:
@@ -1166,7 +1298,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                # (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('09:1', case=False, regex=True, na=False))
                 ]
         except KeyError as e:
