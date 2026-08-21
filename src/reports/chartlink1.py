@@ -1085,7 +1085,14 @@ def main():
         try:
             filtered_df = df[
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (df['PCT_day_change'] > 0.2) &
+                (df['PCT_day_change'] > 0.2) 
+                &
+                (
+                    (df['week2HighChange'] > 0) |
+                    (df['forecast_day_PCT10_change'] > 0) |
+                    (((df['PCT_day_change_pre1']) < -1.5) & ((df['PCT_day_change_pre2']) < -1.5))
+                )
+                &
                 (
                     (df['yearHighChange'] < -30) |
                     (df['month3HighChange'] < -10) |
@@ -1134,7 +1141,14 @@ def main():
         try:
             filtered_df = df[
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (df['PCT_day_change'] < -0.2) &
+                (df['PCT_day_change'] < -0.2) 
+                &
+                (
+                    (df['week2LowChange'] < 0) |
+                    (df['forecast_day_PCT10_change'] < 0) |
+                    (((df['PCT_day_change_pre1']) > 1.5) & ((df['PCT_day_change_pre2']) > 1.5))
+                )
+                &
                 (
                     (df['yearLowChange'] > 30) |
                     (df['month3LowChange'] > 10) |
@@ -1188,10 +1202,13 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change']) > 5) &
-                (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
-                ]    
+            if len(dfch) <= 10:
+                filtered_df = df
+                # filtered_df = df[
+                #     ((df['forecast_day_PCT10_change']) > 5) &
+                #     (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                #     ]
+                    
         except KeyError as e:
             pass
         if len(dfch) <= 10:
@@ -1238,10 +1255,12 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change']) < -5) &
-                (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
-                ]    
+            if len(dfch) <= 10:
+                filtered_df = df
+                # filtered_df = df[
+                #     ((df['forecast_day_PCT10_change']) < -5) &
+                #     (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                #     ]     
         except KeyError as e:
             pass
         if len(dfch) <= 10:
