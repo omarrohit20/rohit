@@ -1457,6 +1457,8 @@ def main():
         rb.render(st, filtered_df, 'ReversalLow-BelowWeek2High', color='LG')
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
             filtered_df = df[
@@ -1474,7 +1476,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'year5HighChangeGT30 + BreakLowMonth3', color='LG')
+        rb.render(st, empty_df, 'year5HighChangeGT30 + BreakLowMonth3', color='LG')
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
