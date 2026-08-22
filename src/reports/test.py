@@ -79,11 +79,26 @@ def main():
         try:
             filtered_df = df[
                 (
-                    (df['monthLowChange'] < 50) &
-                    (df['scrip'].isin(rb.dbnse.scrip.distinct('scrip', {'futures': 'Yes'}))) &
-                    (df['yearHighChange'] < -25) &
-                    (df['month3HighChange'] > -1) &
-                    (df['monthHighChange'] < 9)
+                    (
+                        (df['monthLowChange'] < 50) &
+                        (df['scrip'].isin(rb.dbnse.scrip.distinct('scrip', {'futures': 'Yes'}))) &
+                        (df['yearHighChange'] < -25) &
+                        (df['month3HighChange'] > -1) &
+                        (df['monthHighChange'] < 9)
+                    ) |
+                    (
+                        (df['yearHighChange'] == df['month3HighChange']) &
+                        (df['yearLowChange'] > 50) &
+                        #(df['year5HighChange'] > -30) &
+                        (df['year5HighChange'] < -10) &
+                        (df['year2HighChange'] > -30) &
+                        (df['year2HighChange'] < -10) &
+                        (df['yearHighChange'] > -30) &
+                        (df['yearHighChange'] < -10) &
+                        (df['monthHighChange'] < 0) &
+                        (df['month3HighChange'] > -30) &
+                        (df['month3HighChange'] < -10)
+                    )   
                 ) 
                 ]
         except KeyError as e:
