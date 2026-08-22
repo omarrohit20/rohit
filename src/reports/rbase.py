@@ -5,6 +5,7 @@ import numpy as np
 import pymongo
 import streamlit as st
 from pymongo import MongoClient
+import chart_preview as _chart_preview
 
 connection = MongoClient('localhost', 27017)
 dbcl = connection.chartlink
@@ -1742,7 +1743,19 @@ def getdfResult(collection_name):
         print(f"KeyError: {e}")
     return df
 
+def _ensure_chart_preview_sidebar():
+    """Standalone report pages (not via index) still get the left-bar chart settings."""
+    if 'selected_page' in st.session_state:
+        return
+    try:
+        _chart_preview.render_sidebar_controls()
+    except Exception as e:
+        if 'duplicate' not in type(e).__name__.lower() and 'duplicate' not in str(e).lower():
+            raise
+
+
 def render(st, df, name, height=110, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False, renderf10buy=False, renderf10sell=False, f10=0, renderf10buy00=False, renderf10sell00=False, renderf10buy01=False, renderf10sell01=False, applyBreakOut=False, dontapplybreakout=False, noColourFilter=False):
+    _ensure_chart_preview_sidebar()
     st.write("********"+ name + "********")
     try:
         df = df[
@@ -1771,9 +1784,9 @@ def render(st, df, name, height=110, color='NA', column_order=column_order_defau
         df_styled = highlight_category_row(df, color=color)
         if(zshortTerm) and color =='LG':
             df_styled = df_styled.apply(apply_breakout_highlight_volume, axis=1)
-        st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+        _chart_preview.display_dataframe(st, df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
     elif (df.empty):
-        st.dataframe(df, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+        _chart_preview.display_dataframe(st, df, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
     else:
         df_styled = highlight_category_row(df, color=color)
         
@@ -1809,7 +1822,7 @@ def render(st, df, name, height=110, color='NA', column_order=column_order_defau
             df_styled = df_styled.apply(apply_breakout_highlight, axis=1)
         if(chartlink0 or chartlink1 or applyBreakOut) and (dontapplybreakout != True) and (noColourFilter == False) and color =='LG':
             df_styled = df_styled.apply(apply_breakout_highlight_volume, axis=1)
-        st.dataframe(df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+        _chart_preview.display_dataframe(st, df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
 
 @st.cache_data(ttl=10)
 def getdf_sandlterm(collection_name, chartink=False):
@@ -1859,6 +1872,7 @@ def getdf_sandlterm(collection_name, chartink=False):
     return df
 
 def render_sandlterm_data(st, df, name, height=200, color='NA', column_order=column_order_sandlterm, column_conf=column_config_sandlterm):
+    _ensure_chart_preview_sidebar()
     # Newest signal date first for all sandlterm widgets
     if df is not None and not df.empty and 'date' in df.columns:
         df = df.copy()
@@ -1876,4 +1890,4 @@ def render_sandlterm_data(st, df, name, height=200, color='NA', column_order=col
     preferred = [c for c in column_order if c in df_cols]
     remaining = [c for c in df_cols if c not in preferred]
     full_column_order = preferred + remaining
-    st.dataframe(df_styled, height=height, column_order=full_column_order, column_config=column_conf, use_container_width=True)
+    _chart_preview.display_dataframe(st, df_styled, height=height, column_order=full_column_order, column_config=column_conf, use_container_width=True)

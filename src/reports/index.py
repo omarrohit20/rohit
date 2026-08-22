@@ -8,7 +8,7 @@ st.set_page_config(layout="wide", page_title="Reports Index", initial_sidebar_st
 
 # Discover python files in the same folder
 base = Path(__file__).parent
-exclude = {Path(__file__).name, "__init__.py", "rbase.py", "temp.py"}
+exclude = {Path(__file__).name, "__init__.py", "rbase.py", "temp.py", "chart_preview.py", "index.py", "create_indexs.py"}
 py_files = [p.name for p in base.glob("*.py") if p.name not in exclude]
 py_files.sort()
 
@@ -78,6 +78,12 @@ except Exception:
 
 st.sidebar.markdown("---")
 st.sidebar.write("Select a page above to start it. In-process mode imports the module and calls `main()` (recommended). Otherwise it will start a separate Streamlit process.")
+
+try:
+    import chart_preview as _chart_preview
+    _chart_preview.render_sidebar_controls()
+except Exception:
+    pass
 
 import subprocess
 import sys
