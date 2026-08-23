@@ -220,6 +220,17 @@ python3 skills/india-news-tracker/scripts/news_fetcher.py --format json --output
 
 **Auto-feeds other skills:** Headlines → Scenario Analyzer, Earnings → Stock Analysis, FII activity → Flow Tracker, Sector signals → Market Breadth.
 
+### Scan News Conviction (`scan-news-conviction`)
+
+Last **5 days** of scrips from `breakoutM2HR`, `breakoutMHR`, `breakoutW2HR`, `movingavg_crossed_up`, `breakoutY2H`, `breakoutYH`. Scrapes company news, sectoral news, and analyst calls; scores **sentiment** and **conviction**; keeps **high-impact** items from the last **7 days** (duplicates removed). Upserts `Nsedata.scrip_news` (`insertion_date`; **overwrite** if the record is older than **30 days**).
+
+```bash
+python skills/scan-news-conviction/scripts/ingest_scan_news.py
+python skills/scan-news-conviction/scripts/ingest_scan_news.py --days 5 --news-days 7
+```
+
+Reports UI: enable **Show news on scrip hover** (table colours are unchanged).
+
 ### 10. Weekly F&O Trade Planner
 Complete weekly F&O trading workflow — from macro thesis to position management. Combines news analysis, sector screening, technical confirmation, OI data, and FII/DII flows to generate a single high-conviction directional trade idea each week, then manages it with structured stop-loss tightening and partial profit booking.
 
@@ -287,6 +298,10 @@ indian-trading-skills/
     │   ├── references/{news_source_guide, sector_mapping, sentiment_patterns}.md
     │   ├── scripts/news_fetcher.py
     │   └── assets/daily_briefing_template.md
+    ├── scan-news-conviction/
+    │   ├── SKILL.md
+    │   ├── references/scoring.md
+    │   └── scripts/ingest_scan_news.py
     └── weekly-fno-trade-planner/
         └── SKILL.md
 ```

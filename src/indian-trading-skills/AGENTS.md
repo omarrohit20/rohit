@@ -37,6 +37,19 @@ Example Why style: `Q1 results today + AnchisBuyUp / ReversalLow; already +2% in
 7. Use template `skills/nsedata-trade-advisor/assets/four-horizon-report.md` — do not stop at Priority.
 8. Disclaimer: educational only, not SEBI advice — then Canvas link last.
 
+## Scan News Conviction
+
+When the user asks to scrape/save **news, sectoral news, analyst calls, sentiment, or conviction** for breakout scan tables (`breakoutM2HR`, `breakoutMHR`, `breakoutW2HR`, `movingavg_crossed_up`, `breakoutY2H`, `breakoutYH`):
+
+1. Follow `skills/scan-news-conviction/SKILL.md`.
+2. Run:
+
+```bash
+python skills/scan-news-conviction/scripts/ingest_scan_news.py
+```
+
+Target: `Nsedata.scrip_news`. High-impact, ≤7 days, deduped; upsert; overwrite if older than 30 days.
+
 ## Mongo AI Analysis (persist High-conviction picks)
 
 When the user asks to **save / persist / store** suggestions into Mongo (or after a swing+ report):

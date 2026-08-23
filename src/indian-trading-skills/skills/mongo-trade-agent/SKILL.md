@@ -124,6 +124,8 @@ Why / column rules: [references/priority-why.md](references/priority-why.md).
    Tag every ranked row with `db.collection` / table name.
 5. Enrich top symbols with news → fill News catalyst / May extend?; polish
    Sentiment / Conviction / Prob% if news conflicts (see conviction-sentiment.md).
+   Prefer **persisted** copy in `Nsedata.scrip_news` (see ingest below) before
+   live web search.
 6. **Show Priority board in chat** (markdown table only at this point).
 7. **MUST** present Executive Summary, News & Extension Snapshot, Scan Columns
    Used, asked horizon detail table(s), Watchlist/Avoid, and Disclaimer from
@@ -145,6 +147,18 @@ python skills/nsedata-trade-advisor/scripts/query_suggestions.py \
 ```
 
 Do not dump raw JSON. Summarize into the full report template; Canvas last.
+
+## Persist scan news (last 5 days)
+
+Use skill **`scan-news-conviction`** (not this folder’s scripts):
+
+```bash
+python skills/scan-news-conviction/scripts/ingest_scan_news.py
+```
+
+High-impact, ≤7-day, deduped news + sentiment + conviction → `Nsedata.scrip_news`.
+Overwrite the scrip document if it is older than 30 days. See
+[../scan-news-conviction/SKILL.md](../scan-news-conviction/SKILL.md).
 
 ## Use ALL Scan Columns
 
@@ -213,7 +227,7 @@ Task Progress:
 - [ ] Step 2: Resolve db + collection(s) — note if multiple tables
 - [ ] Step 3: List ALL columns from sample docs (per table)
 - [ ] Step 4: Run query_suggestions.py (once per table) — read sentiment/conviction/probability_score + last_day_pct/today_pct/ml_*/row_highlight_orange
-- [ ] Step 5: News enrich top ranked symbols; polish Sentiment/Conviction/Prob% if needed
+- [ ] Step 5: News enrich top ranked symbols (`Nsedata.scrip_news` then live search); polish Sentiment/Conviction/Prob% if needed
 - [ ] Step 6: Priority markdown table in chat (no Canvas link yet)
 - [ ] Step 7: MUST — Executive Summary (+ horizon bias)
 - [ ] Step 8: MUST — News & Extension Snapshot; Fill News catalyst + May extend?

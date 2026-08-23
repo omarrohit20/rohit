@@ -6,6 +6,7 @@ import pymongo
 import streamlit as st
 from pymongo import MongoClient
 import chart_preview as _chart_preview
+import news_preview as _news_preview
 
 connection = MongoClient('localhost', 27017)
 dbcl = connection.chartlink
@@ -1749,6 +1750,7 @@ def _ensure_chart_preview_sidebar():
         return
     try:
         _chart_preview.render_sidebar_controls()
+        _news_preview.render_sidebar_controls()
     except Exception as e:
         if 'duplicate' not in type(e).__name__.lower() and 'duplicate' not in str(e).lower():
             raise
@@ -1784,9 +1786,9 @@ def render(st, df, name, height=110, color='NA', column_order=column_order_defau
         df_styled = highlight_category_row(df, color=color)
         if(zshortTerm) and color =='LG':
             df_styled = df_styled.apply(apply_breakout_highlight_volume, axis=1)
-        _chart_preview.display_dataframe(st, df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+        _news_preview.display_dataframe(st, df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
     elif (df.empty):
-        _chart_preview.display_dataframe(st, df, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+        _news_preview.display_dataframe(st, df, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
     else:
         df_styled = highlight_category_row(df, color=color)
         
@@ -1822,7 +1824,7 @@ def render(st, df, name, height=110, color='NA', column_order=column_order_defau
             df_styled = df_styled.apply(apply_breakout_highlight, axis=1)
         if(chartlink0 or chartlink1 or applyBreakOut) and (dontapplybreakout != True) and (noColourFilter == False) and color =='LG':
             df_styled = df_styled.apply(apply_breakout_highlight_volume, axis=1)
-        _chart_preview.display_dataframe(st, df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+        _news_preview.display_dataframe(st, df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
 
 @st.cache_data(ttl=10)
 def getdf_sandlterm(collection_name, chartink=False):
@@ -1890,4 +1892,4 @@ def render_sandlterm_data(st, df, name, height=200, color='NA', column_order=col
     preferred = [c for c in column_order if c in df_cols]
     remaining = [c for c in df_cols if c not in preferred]
     full_column_order = preferred + remaining
-    _chart_preview.display_dataframe(st, df_styled, height=height, column_order=full_column_order, column_config=column_conf, use_container_width=True)
+    _news_preview.display_dataframe(st, df_styled, height=height, column_order=full_column_order, column_config=column_conf, use_container_width=True)

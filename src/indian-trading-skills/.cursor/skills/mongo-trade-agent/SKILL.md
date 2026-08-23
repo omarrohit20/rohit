@@ -24,3 +24,5 @@ Canonical: [`skills/mongo-trade-agent/SKILL.md`](../../../skills/mongo-trade-age
 6. Highlights (Canvas snippet): buy Symbol orange if LastDay% or Today% **> 3**; sell orange if **< -3**; colour the **MLBuy** / **MLSell** tokens in Why via Text `#C6F6D5` / `#FEB2B2` — not the scrip; **News catalyst** Positive `#C6F6D5` / Negative `#FEB2B2` / Mixed `#FEFCBF`; **Sentiment** green when Bullish + positive news, red when Bearish + negative news (`news-extension.md`).
 7. Fill News catalyst + May extend?
 8. To save picks: `skills/mongo-ai-analysis/SKILL.md` + `save_ai_analysis.py`.
+9. To persist scan news/conviction: skill **`scan-news-conviction`**  
+   `python skills/scan-news-conviction/scripts/ingest_scan_news.py`
