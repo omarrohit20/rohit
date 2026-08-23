@@ -27,7 +27,7 @@ def render_sidebar_controls():
         "Show news info icons",
         value=st.session_state.get(_SESSION_ENABLED, False),
         key=_SESSION_ENABLED,
-        help="ℹ sits to the left of the table. Hover or click for conviction, sentiment, and news.",
+        help="ℹ sits to the left of the table. Hover for conviction, sentiment, and news. Leave to close; stay on the preview to keep it open.",
     )
     st.sidebar.caption("From skill scan-news-conviction → Nsedata.scrip_news")
 
@@ -153,8 +153,6 @@ def _icon_strip_page(scrips, news_map, height):
       + 'background:#0f172a;color:#e2e8f0;border-radius:8px;box-shadow:0 12px 40px rgba(0,0,0,.45);'
       + 'padding:12px 14px;font:13px/1.4 sans-serif;';
     P.body.appendChild(pop);
-    pop.addEventListener('mouseenter', function() {{ pop.dataset.over = '1'; }});
-    pop.addEventListener('mouseleave', function() {{ pop.dataset.over = '0'; hideSoon(); }});
   }}
   function esc(s) {{
     return String(s||'').replace(/[&<>"]/g, function(c) {{
@@ -192,10 +190,10 @@ def _icon_strip_page(scrips, news_map, height):
   function place(el) {{
     const frame = window.frameElement;
     const r = el.getBoundingClientRect();
-    let left = r.right + 10, top = r.top;
+    let left = r.right - 2, top = r.top;
     if (frame) {{
       const fr = frame.getBoundingClientRect();
-      left = fr.left + r.right + 10;
+      left = fr.left + r.right - 2;
       top = fr.top + r.top;
     }}
     const vw = window.parent.innerWidth, vh = window.parent.innerHeight;
@@ -205,36 +203,39 @@ def _icon_strip_page(scrips, news_map, height):
     pop.style.top = top + 'px';
     pop.style.display = 'block';
   }}
-  let hideT = null, pinned = null;
+  let hideT = null;
+  function hideNow() {{
+    if (pop.dataset.over === '1') return;
+    pop.style.display = 'none';
+  }}
   function hideSoon() {{
     clearTimeout(hideT);
-    hideT = setTimeout(function() {{
-      if (pop.dataset.over === '1' || pinned) return;
-      pop.style.display = 'none';
-    }}, 220);
+    hideT = setTimeout(hideNow, 400);
   }}
-  function show(el, pin) {{
+  function show(el) {{
     const scrip = el.getAttribute('data-scrip');
     if (!scrip) return;
     clearTimeout(hideT);
     render(scrip);
     place(el);
-    pinned = pin ? scrip : pinned;
   }}
+  pop.onmouseenter = function() {{
+    pop.dataset.over = '1';
+    clearTimeout(hideT);
+  }};
+  pop.onmouseleave = function() {{
+    pop.dataset.over = '0';
+    hideSoon();
+  }};
   document.querySelectorAll('.nws-ico').forEach(function(el) {{
-    el.addEventListener('mouseenter', function() {{ show(el, false); }});
+    el.addEventListener('mouseenter', function() {{ show(el); }});
     el.addEventListener('mouseleave', hideSoon);
-    el.addEventListener('click', function(ev) {{
-      ev.preventDefault();
-      pinned = el.getAttribute('data-scrip');
-      show(el, true);
-    }});
   }});
   if (!P._scripNewsDocClick) {{
     P._scripNewsDocClick = true;
     P.addEventListener('click', function(e) {{
       if (pop.contains(e.target)) return;
-      pinned = null;
+      pop.dataset.over = '0';
       pop.style.display = 'none';
     }});
   }}
