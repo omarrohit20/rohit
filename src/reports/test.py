@@ -587,10 +587,94 @@ def main():
     with col5:
         df = rb.getdf_sandlterm('movingavg_crossed_down')
         rb.render_sandlterm_data(st, df, 'movingavg_crossed_down', color='LG')
-        
+
+    news_col_order = [
+        "scrip",
+        "insertion_date",
+        "overall_sentiment",
+        "conviction",
+        "industry",
+        "scan_tables",
+        "article_count",
+    ] + [c for c in rb.column_order_sandlterm if c not in {"scrip", "date", "industry"}]
+
+    col0, col1 = st.columns(2)
+    with col0:
+        df = _high_conviction_news_df("Bullish")
+        rb.render_sandlterm_data(
+            st, df, "Bullish · High conviction", color="LG", column_order=news_col_order
+        )
+    with col1:
+        df = _high_conviction_news_df("Bearish")
+        rb.render_sandlterm_data(
+            st, df, "Bearish · High conviction", color="LG", column_order=news_col_order
+        )
 
 
+def _high_conviction_news_df(sentiment):
+    """scrip_news rows: High conviction + Bullish/Bearish, newest insertion_date first."""
+    query = {
+        "conviction": {"$regex": "^high$", "$options": "i"},
+        "overall_sentiment": {"$regex": f"^{sentiment}$", "$options": "i"},
+    }
+    proj = {
+        "_id": 0,
+        "news": 0,
+        "sectoral_news": 0,
+        "analyst_calls": 0,
+        "articles": 0,
+    }
+    try:
+        docs = list(rb.dbnse.scrip_news.find(query, proj))
+    except Exception:
+        docs = []
+    df = pd.DataFrame(docs)
+    if df.empty:
+        return pd.DataFrame(
+            columns=["scrip", "insertion_date", "overall_sentiment", "conviction", "industry"]
+        )
 
+    if "scrip" in df.columns:
+        df["scrip"] = df["scrip"].astype(str).str.strip().str.upper()
+
+    scan_frames = []
+    for coll in (
+        "breakoutYH",
+        "breakoutY2H",
+        "breakoutW2HR",
+        "breakoutMHR",
+        "movingavg_crossed_up",
+        "movingavg_crossed_down",
+    ):
+        try:
+            sdf = rb.getdf_sandlterm(coll)
+            if sdf is not None and not sdf.empty:
+                scan_frames.append(sdf)
+        except Exception:
+            pass
+    if scan_frames:
+        scans = pd.concat(scan_frames, ignore_index=True)
+        if "scrip" in scans.columns:
+            scans = scans.copy()
+            scans["scrip"] = scans["scrip"].astype(str).str.strip().str.upper()
+            if "date" in scans.columns:
+                scans = scans.rename(columns={"date": "scan_date"})
+            scans = scans.drop_duplicates(subset=["scrip"], keep="first")
+            overlap = [c for c in scans.columns if c in df.columns and c != "scrip"]
+            scans = scans.drop(columns=overlap, errors="ignore")
+            df = df.merge(scans, on="scrip", how="left")
+
+    if "scan_tables" in df.columns:
+        df["scan_tables"] = df["scan_tables"].apply(
+            lambda v: ", ".join(str(x) for x in v) if isinstance(v, list) else v
+        )
+
+    if "insertion_date" in df.columns:
+        df["_ins"] = pd.to_datetime(df["insertion_date"], errors="coerce")
+        df = df.sort_values("_ins", ascending=False, na_position="last").drop(columns=["_ins"])
+        df["insertion_date"] = pd.to_datetime(df["insertion_date"], errors="coerce")
+
+    return df.reset_index(drop=True)
 
 
 if __name__ == '__main__':
