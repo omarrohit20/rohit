@@ -12,16 +12,23 @@ exclude = {Path(__file__).name, "__init__.py", "rbase.py", "temp.py", "chart_pre
 py_files = [p.name for p in base.glob("*.py") if p.name not in exclude]
 py_files.sort()
 
-# Respect query params for initial page selection
-try:
-    params = st.query_params
-except Exception:
-    params = {}
+def _query_get(name, default=None):
+    """Read one query param as a string (Streamlit may return str or list)."""
+    v = None
+    try:
+        v = st.query_params.get(name)
+    except Exception:
+        try:
+            v = st.experimental_get_query_params().get(name)
+        except Exception:
+            v = None
+    if v is None:
+        return default
+    if isinstance(v, (list, tuple)):
+        return v[0] if v else default
+    return str(v)
 
-path_param = params.get('path', [None])[0]
-fullpath_param = params.get('fullpath', [None])[0]
 
-# Determine default index from query params (try filename first, then basename of path)
 def _find_index_from_param(p):
     if not p:
         return None
@@ -37,44 +44,85 @@ def _find_index_from_param(p):
     return None
 
 
-def _set_query_params(path, fullpath):
-    """Set query params using available Streamlit API (prefers stable `set_query_params`)."""
+def _as_bool(value, default=False):
+    if value is None:
+        return default
+    return str(value).strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _seed_from_query():
+    """Restore sidebar widgets from the URL on a fresh browser load."""
+    if st.session_state.get("_ui_restored"):
+        return
+    st.session_state["_ui_restored"] = True
+
+    idx = _find_index_from_param(_query_get("path"))
+    if idx is None:
+        idx = _find_index_from_param(_query_get("fullpath"))
+    if idx is None:
+        idx = 0
+    if py_files:
+        st.session_state["selected_page"] = py_files[idx]
+
+    if "in_process" not in st.session_state:
+        st.session_state["in_process"] = _as_bool(_query_get("in_process"), True)
+
+    if "chart_preview_enabled" not in st.session_state:
+        st.session_state["chart_preview_enabled"] = _as_bool(_query_get("chart"), True)
+    provider = _query_get("provider")
+    _providers = {"TradingView", "Chartink", "Moneycontrol", "Groww", "Trendlyne", "Custom"}
+    if provider in _providers and "chart_preview_provider" not in st.session_state:
+        st.session_state["chart_preview_provider"] = provider
+    custom = _query_get("custom")
+    if custom and "chart_preview_custom_url" not in st.session_state:
+        st.session_state["chart_preview_custom_url"] = custom
+
+    if "news_preview_enabled" not in st.session_state:
+        st.session_state["news_preview_enabled"] = _as_bool(_query_get("news"), True)
+
+
+def _desired_query():
+    out = {
+        "path": str(st.session_state.get("selected_page") or ""),
+        "in_process": "1" if st.session_state.get("in_process", True) else "0",
+        "chart": "1" if st.session_state.get("chart_preview_enabled", True) else "0",
+        "news": "1" if st.session_state.get("news_preview_enabled", True) else "0",
+        "provider": str(st.session_state.get("chart_preview_provider") or "TradingView"),
+    }
+    custom = st.session_state.get("chart_preview_custom_url")
+    if custom:
+        out["custom"] = str(custom)
+    return out
+
+
+def _sync_query_params():
+    """Keep the URL in sync so a refresh restores page + sidebar settings."""
+    desired = _desired_query()
+    current = {k: _query_get(k) for k in desired}
+    extra_fullpath = _query_get("fullpath")
+    if current == desired and not extra_fullpath:
+        return
+    try:
+        qp = st.query_params
+        qp.from_dict(desired)
+        return
+    except Exception:
+        pass
     try:
         setter = getattr(st, "set_query_params", None) or getattr(st, "experimental_set_query_params", None)
         if setter:
-            setter(path=path, fullpath=fullpath)
+            setter(**desired)
     except Exception:
         pass
 
-default_index = None
-if path_param:
-    default_index = _find_index_from_param(path_param)
-if default_index is None and fullpath_param:
-    default_index = _find_index_from_param(fullpath_param)
-if default_index is None:
-    default_index = 0
 
-# Initialize selected page from query params once (don't override user changes later)
-if 'initialized_from_query' not in st.session_state:
-    if path_param or fullpath_param:
-        try:
-            st.session_state['selected_page'] = py_files[default_index]
-        except Exception:
-            pass
-    st.session_state['initialized_from_query'] = True
+_seed_from_query()
 
-in_process = st.sidebar.checkbox("Load pages in-process (single Streamlit app)", value=True)
-selected = st.sidebar.selectbox("Open page", py_files, index=default_index, key="selected_page")
+if st.session_state.get("selected_page") not in py_files and py_files:
+    st.session_state["selected_page"] = py_files[0]
 
-# Ensure the browser URL shows the selected page (set once per change to avoid rerun loops)
-try:
-    cur_path = selected
-    cur_full = str(base / selected)
-    if st.session_state.get('_last_query_path') != cur_path:
-        _set_query_params(cur_path, cur_full)
-        st.session_state['_last_query_path'] = cur_path
-except Exception:
-    pass
+in_process = st.sidebar.checkbox("Load pages in-process (single Streamlit app)", key="in_process")
+selected = st.sidebar.selectbox("Open page", py_files, key="selected_page")
 
 st.sidebar.markdown("---")
 st.sidebar.write("Select a page above to start it. In-process mode imports the module and calls `main()` (recommended). Otherwise it will start a separate Streamlit process.")
@@ -89,6 +137,8 @@ try:
     _news_preview.render_sidebar_controls()
 except Exception:
     pass
+
+_sync_query_params()
 
 import subprocess
 import sys

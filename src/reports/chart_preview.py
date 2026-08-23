@@ -32,7 +32,7 @@ _INDEX_COL = "_idx"
 
 
 def is_enabled():
-    return bool(st.session_state.get(_SESSION_ENABLED, False))
+    return bool(st.session_state.get(_SESSION_ENABLED, True))
 
 
 def current_template():
@@ -48,7 +48,7 @@ def render_sidebar_controls():
     st.sidebar.subheader("Chart page")
     st.sidebar.checkbox(
         "Open chart from row index",
-        value=st.session_state.get(_SESSION_ENABLED, False),
+        value=st.session_state.get(_SESSION_ENABLED, True),
         key=_SESSION_ENABLED,
         help="Click 0, 1, 2, … to open the full chart page in a new tab.",
     )

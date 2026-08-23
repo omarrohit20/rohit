@@ -17,7 +17,7 @@ _HEADER_H = 36
 
 
 def is_enabled():
-    return bool(st.session_state.get(_SESSION_ENABLED, False))
+    return bool(st.session_state.get(_SESSION_ENABLED, True))
 
 
 def render_sidebar_controls():
@@ -25,7 +25,7 @@ def render_sidebar_controls():
     st.sidebar.subheader("News & sentiment")
     st.sidebar.checkbox(
         "Show news info icons",
-        value=st.session_state.get(_SESSION_ENABLED, False),
+        value=st.session_state.get(_SESSION_ENABLED, True),
         key=_SESSION_ENABLED,
         help="ℹ sits to the left of the table. Hover for conviction, sentiment, and news. Leave to close; stay on the preview to keep it open.",
     )
