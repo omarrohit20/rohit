@@ -396,6 +396,7 @@ def main():
             filtered_df = df
             try:
                 filtered_df = df[
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (df['yearLowChange'] > 5) &
                     (df['week2HighChange'] > -1) &
@@ -488,6 +489,7 @@ def main():
             filtered_df = df
             try:
                 filtered_df = df[
+                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (df['yearHighChange'] < -5) &
                     (df['week2LowChange'] < 0) &
