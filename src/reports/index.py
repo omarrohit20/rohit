@@ -128,12 +128,16 @@ st.sidebar.markdown("---")
 st.sidebar.write("Select a page above to start it. In-process mode imports the module and calls `main()` (recommended). Otherwise it will start a separate Streamlit process.")
 
 try:
+    import importlib
     import chart_preview as _chart_preview
+    importlib.reload(_chart_preview)
     _chart_preview.render_sidebar_controls()
 except Exception:
     pass
 try:
+    import importlib
     import news_preview as _news_preview
+    importlib.reload(_news_preview)
     _news_preview.render_sidebar_controls()
 except Exception:
     pass
@@ -166,7 +170,9 @@ if selected:
         # Attempt to import and call main() from the module
         import importlib.util
         try:
+            import importlib
             import rbase as rb
+            importlib.reload(rb)
             rb.chartlink0 = False
             rb.chartlink1 = False
             rb.testLearning = False

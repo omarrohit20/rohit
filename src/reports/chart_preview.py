@@ -29,6 +29,7 @@ _SESSION_CUSTOM = "chart_preview_custom_url"
 
 # Internal col; header is blank so it looks like the default index
 _INDEX_COL = "_idx"
+_NEON_BG = "#39FF14"
 
 
 def is_enabled():
@@ -113,6 +114,49 @@ def _index_urls(df):
     return urls
 
 
+def _scrip_key(value):
+    if value is None:
+        return ""
+    try:
+        if isinstance(value, float) and pd.isna(value):
+            return ""
+    except Exception:
+        pass
+    s = str(value).strip().upper()
+    return "" if (not s or s in {"NAN", "NONE"}) else s
+
+
+def _apply_neon_index(view, neon_scrips):
+    """Neon background on the preview index cell for recent-news scrips."""
+    if not neon_scrips or view is None:
+        return view
+    neon_upper = {str(s).strip().upper() for s in neon_scrips if s}
+    if not neon_upper:
+        return view
+
+    def _row_style(row):
+        styles = [""] * len(row)
+        if _INDEX_COL not in row.index:
+            return styles
+        if _scrip_key(row["scrip"] if "scrip" in row.index else None) in neon_upper:
+            loc = row.index.get_loc(_INDEX_COL)
+            if isinstance(loc, int):
+                styles[loc] = f"background-color: {_NEON_BG}; color: #111111; font-weight: 700;"
+        return styles
+
+    try:
+        if hasattr(view, "apply") and hasattr(view, "data"):
+            return view.apply(_row_style, axis=1)
+        df = _underlying_df(view)
+        if df is None or getattr(df, "empty", True):
+            return view
+        if _INDEX_COL not in df.columns:
+            return view
+        return df.style.apply(_row_style, axis=1)
+    except Exception:
+        return view
+
+
 def _with_clickable_index(data):
     df = _underlying_df(data)
     if df is None or len(df) == 0:
@@ -148,6 +192,7 @@ def display_dataframe(
     column_order=None,
     column_config=None,
     use_container_width=True,
+    neon_scrips=None,
 ):
     kwargs = {"height": height, "use_container_width": use_container_width}
     order = list(column_order) if column_order is not None else None
@@ -161,6 +206,7 @@ def display_dataframe(
             empty = False
         if not empty:
             view = _with_clickable_index(data)
+            view = _apply_neon_index(view, neon_scrips)
             kwargs["hide_index"] = True
             try:
                 conf[_INDEX_COL] = st.column_config.LinkColumn(

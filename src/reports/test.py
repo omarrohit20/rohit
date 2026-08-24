@@ -24,6 +24,29 @@ def main():
 
     rb.testLearning = True
 
+    news_col_order = [
+        "scrip",
+        "insertion_date",
+        "overall_sentiment",
+        "conviction",
+        "industry",
+        "scan_tables",
+        "article_count",
+    ] + [c for c in rb.column_order_sandlterm if c not in {"scrip", "date", "industry"}]
+
+    col0, col1 = st.columns(2)
+    with col0:
+        df = _high_conviction_news_df("Bullish")
+        rb.render_sandlterm_data(
+            st, df, "Bullish · High conviction", color="LG", column_order=news_col_order
+        )
+    with col1:
+        df = _high_conviction_news_df("Bearish")
+        rb.render_sandlterm_data(
+            st, df, "Bearish · High conviction", color="LG", column_order=news_col_order
+        )
+
+
     col0, col1 = st.columns(2)
     with col0:
         df = rb.getdf_sandlterm('breakoutYH')
@@ -588,28 +611,7 @@ def main():
         df = rb.getdf_sandlterm('movingavg_crossed_down')
         rb.render_sandlterm_data(st, df, 'movingavg_crossed_down', color='LG')
 
-    news_col_order = [
-        "scrip",
-        "insertion_date",
-        "overall_sentiment",
-        "conviction",
-        "industry",
-        "scan_tables",
-        "article_count",
-    ] + [c for c in rb.column_order_sandlterm if c not in {"scrip", "date", "industry"}]
-
-    col0, col1 = st.columns(2)
-    with col0:
-        df = _high_conviction_news_df("Bullish")
-        rb.render_sandlterm_data(
-            st, df, "Bullish · High conviction", color="LG", column_order=news_col_order
-        )
-    with col1:
-        df = _high_conviction_news_df("Bearish")
-        rb.render_sandlterm_data(
-            st, df, "Bearish · High conviction", color="LG", column_order=news_col_order
-        )
-
+    
 
 def _high_conviction_news_df(sentiment):
     """scrip_news rows: High conviction + Bullish/Bearish, newest insertion_date first."""

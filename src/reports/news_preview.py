@@ -5,11 +5,14 @@ The dataframe is unchanged — same chart_preview / Styler path as before.
 from __future__ import annotations
 
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
+
+NEON_BG = "#39FF14"
+_RECENT_WEEKDAYS = 10
 
 _SESSION_ENABLED = "news_preview_enabled"
 _ROW_H = 35
@@ -29,7 +32,11 @@ def render_sidebar_controls():
         key=_SESSION_ENABLED,
         help="ℹ sits to the left of the table. Hover for conviction, sentiment, and news. Leave to close; stay on the preview to keep it open.",
     )
-    st.sidebar.caption("From skill scan-news-conviction → Nsedata.scrip_news")
+    st.sidebar.caption(
+        "From skill scan-news-conviction → Nsedata.scrip_news. "
+        "Neon ℹ / preview index = High conviction and "
+        "insertion_date or updated_at in the last 10 working days (Mon–Fri)."
+    )
 
 
 def _scrip_key(value):
@@ -85,6 +92,68 @@ def _fmt_dt(value):
     return str(value or "")
 
 
+def _to_date(value):
+    ts = pd.to_datetime(value, errors="coerce")
+    if ts is None or pd.isna(ts):
+        return None
+    try:
+        return ts.date()
+    except Exception:
+        return None
+
+
+def last_n_weekday_cutoff(n=_RECENT_WEEKDAYS, today=None):
+    """Earliest date among the last n working days (Mon–Fri).
+
+    Sat/Sun do not count toward n, but a weekend date still qualifies
+    if it is on/after this cutoff.
+    """
+    cur = today or datetime.now().date()
+    days = []
+    while len(days) < max(n, 1):
+        if cur.weekday() < 5:
+            days.append(cur)
+        cur -= timedelta(days=1)
+    return min(days)
+
+
+def is_recent_insertion(value, n=_RECENT_WEEKDAYS, today=None):
+    """True when a scan-news date is on/after the last n working-day cutoff."""
+    ins = _to_date(value)
+    if ins is None:
+        return False
+    return ins >= last_n_weekday_cutoff(n, today=today)
+
+
+def is_high_conviction(value):
+    return str(value or "").strip().lower() == "high"
+
+
+def should_neon_highlight(
+    doc=None,
+    insertion_date=None,
+    updated_at=None,
+    conviction=None,
+    today=None,
+):
+    """Neon when High conviction and insertion_date or updated_at is recent."""
+    doc = doc or {}
+    ins = insertion_date if insertion_date is not None else doc.get("insertion_date")
+    upd = updated_at if updated_at is not None else doc.get("updated_at")
+    conv = conviction if conviction is not None else doc.get("conviction")
+    recent = is_recent_insertion(ins, today=today) or is_recent_insertion(upd, today=today)
+    return recent and is_high_conviction(conv)
+
+
+def recent_scrip_keys(news_map=None):
+    news_map = load_news_map() if news_map is None else news_map
+    return {
+        key
+        for key, doc in (news_map or {}).items()
+        if should_neon_highlight(doc)
+    }
+
+
 def _trim_articles(items, n=10):
     out = []
     for it in (items or [])[:n]:
@@ -124,7 +193,10 @@ def _icon_strip_page(scrips, news_map, height):
             .replace("<", "&lt;")
             .replace('"', "&quot;")
         )
-        icons.append(f'<div class="nws-ico" data-scrip="{esc}" title="{esc} news">ℹ</div>')
+        recent = should_neon_highlight(news_map.get(scrip))
+        cls = "nws-ico neon" if recent else "nws-ico"
+        title = f"{esc} news · High conviction · last {_RECENT_WEEKDAYS} working days" if recent else f"{esc} news"
+        icons.append(f'<div class="{cls}" data-scrip="{esc}" title="{title}">ℹ</div>')
     icons_html = "".join(icons)
     payload = json.dumps({"news": news_map})
     h = int(height)
@@ -137,6 +209,9 @@ def _icon_strip_page(scrips, news_map, height):
   .nws-ico{{height:{_ROW_H}px;line-height:{_ROW_H}px;text-align:center;cursor:pointer;
     font-size:16px;color:#1d4ed8;user-select:none;}}
   .nws-ico:hover{{background:#dbeafe;border-radius:4px;}}
+  .nws-ico.neon{{background:{NEON_BG};color:#111;border-radius:4px;font-weight:700;
+    box-shadow:inset 0 0 0 2px #111, 0 0 10px {NEON_BG};}}
+  .nws-ico.neon:hover{{background:#7CFF4B;}}
 </style></head>
 <body>
 <div class="pad"></div>
@@ -325,6 +400,9 @@ def display_dataframe(
 ):
     import chart_preview as chart_preview
 
+    news_map = load_news_map()
+    neon_scrips = recent_scrip_keys(news_map)
+
     if not is_enabled():
         chart_preview.display_dataframe(
             st_mod,
@@ -333,6 +411,7 @@ def display_dataframe(
             column_order=column_order,
             column_config=column_config,
             use_container_width=use_container_width,
+            neon_scrips=neon_scrips,
         )
         return
 
@@ -340,7 +419,7 @@ def display_dataframe(
     left, right = st_mod.columns([0.05, 0.95])
     with left:
         if scrips:
-            page = _icon_strip_page(scrips, load_news_map(), height)
+            page = _icon_strip_page(scrips, news_map, height)
             components.html(page, height=int(height) + 8, scrolling=False)
     with right:
         chart_preview.display_dataframe(
@@ -350,4 +429,5 @@ def display_dataframe(
             column_order=column_order,
             column_config=column_config,
             use_container_width=use_container_width,
+            neon_scrips=neon_scrips,
         )
