@@ -1,9 +1,77 @@
 # Create a streamlit app that shows the mongodb data
 from operator import truediv
+from datetime import datetime, timedelta
 from streamlit_autorefresh import st_autorefresh
 import streamlit as st
 import rbase as rb
 import pandas as pd
+
+_DATE_NEON = "#FFF59D"
+_DATE_WORKING_DAYS = 3
+
+
+def _to_date(value):
+    ts = pd.to_datetime(value, errors="coerce")
+    if ts is None or pd.isna(ts):
+        return None
+    try:
+        return ts.date()
+    except Exception:
+        return None
+
+
+def _last_n_working_day_cutoff(n=_DATE_WORKING_DAYS, today=None):
+    cur = today or datetime.now().date()
+    days = []
+    while len(days) < max(n, 1):
+        if cur.weekday() < 5:
+            days.append(cur)
+        cur -= timedelta(days=1)
+    return min(days)
+
+
+def _is_last_3_working_days(value):
+    d = _to_date(value)
+    if d is None:
+        return False
+    return d >= _last_n_working_day_cutoff()
+
+
+def _patch_highlight_recent_date():
+    """On this page only: neon the date cell if it is in the last 3 working days."""
+    if getattr(rb.highlight_sandlterm_row, "_recent_date_patched", False):
+        return
+    orig = rb.highlight_sandlterm_row
+
+    def _highlight(df):
+        styled = orig(df)
+        if df is None or getattr(df, "empty", True):
+            return styled
+        if "date" not in getattr(df, "columns", []):
+            return styled
+        if styled is None or not hasattr(styled, "apply"):
+            return styled
+
+        def _style_date(row):
+            styles = [""] * len(row)
+            if "date" not in row.index:
+                return styles
+            if not _is_last_3_working_days(row["date"]):
+                return styles
+            loc = row.index.get_loc("date")
+            if isinstance(loc, int):
+                styles[loc] = (
+                    f"background-color: {_DATE_NEON}; color: #111111; font-weight: bold"
+                )
+            return styles
+
+        try:
+            return styled.apply(_style_date, axis=1)
+        except Exception:
+            return styled
+
+    _highlight._recent_date_patched = True
+    rb.highlight_sandlterm_row = _highlight
 
 
 # Run the autorefresh approximately every 30000 milliseconds (30 seconds)
@@ -23,6 +91,7 @@ def main():
     st.title('ShortTerm')
 
     rb.testLearning = True
+    _patch_highlight_recent_date()
 
     news_col_order = [
         "scrip",

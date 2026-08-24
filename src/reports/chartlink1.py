@@ -1303,9 +1303,9 @@ def main():
         else:
             rb.render(st, empty_df, 'Crossed Day Lows', color='LG', renderf10sell00=True)
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
-        df = rb.getdf('breakout-morning-buy')
+        df = rb.getdf('breakout-morning-buy-01')
         filtered_df = df
         try:
             filtered_df = df[
@@ -1313,9 +1313,12 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'breakout-morning-buy', height=200, color='LG')
+        rb.render(st, filtered_df, 'breakout-morning-buy-01', height=200, color='LG')
     with col2:
-        df = rb.getdf('breakout-morning-sell')
+        df = rb.getdf('breakout-morning-buy-02')
+        rb.render(st, df, 'breakout-morning-buy-02', color='LG')
+    with col3:
+        df = rb.getdf('breakout-morning-sell-01')
         filtered_df = df
         try:
             filtered_df = df[
@@ -1324,7 +1327,15 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'breakout-morning-sell', height=200, color='LG')
+        rb.render(st, filtered_df, 'breakout-morning-sell-01', height=200, color='LG')
+    with col4:
+        df = rb.getdf('breakout-morning-sell-02')
+        rb.render(st, df, 'breakout-morning-sell-02', color='LG')
+
+
+    
+    
+
 
 if __name__ == '__main__':
     main()
