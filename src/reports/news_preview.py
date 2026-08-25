@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import json
 from datetime import datetime, timedelta
+import time
 
 import pandas as pd
 import streamlit as st
@@ -67,22 +68,55 @@ def _scrip_list(data):
 
 
 @st.cache_data(ttl=40)
-def load_news_map():
+def _fetch_news_docs():
     try:
         from pymongo import MongoClient
     except Exception:
-        return {}
+        return []
     try:
         client = MongoClient("mongodb://localhost:27017", serverSelectionTimeoutMS=2500)
-        docs = list(client.Nsedata.scrip_news.find({}, {"_id": 0}))
+        docs = list(
+            client.Nsedata.scrip_news.find(
+                {},
+                {
+                    "_id": 0,
+                    "scrip": 1,
+                    "industry": 1,
+                    "overall_sentiment": 1,
+                    "conviction": 1,
+                    "scan_tables": 1,
+                    "insertion_date": 1,
+                    "updated_at": 1,
+                    "news": 1,
+                    "sectoral_news": 1,
+                    "analyst_calls": 1,
+                },
+            )
+        )
         client.close()
+        return docs
     except Exception:
-        return {}
+        return []
+
+
+_NEWS_CACHE = {"t": 0.0, "map": {}, "neon": frozenset()}
+_NEWS_TTL = 40.0
+
+
+def load_news_map():
+    now = time.time()
+    if _NEWS_CACHE["map"] and (now - _NEWS_CACHE["t"]) < _NEWS_TTL:
+        return _NEWS_CACHE["map"]
     out = {}
-    for doc in docs:
+    for doc in _fetch_news_docs():
         key = _scrip_key(doc.get("scrip"))
         if key:
             out[key] = _public_doc(doc)
+    _NEWS_CACHE["t"] = now
+    _NEWS_CACHE["map"] = out
+    _NEWS_CACHE["neon"] = frozenset(
+        key for key, doc in out.items() if should_neon_highlight(doc)
+    )
     return out
 
 
@@ -146,6 +180,10 @@ def should_neon_highlight(
 
 
 def recent_scrip_keys(news_map=None):
+    if news_map is None or news_map is _NEWS_CACHE["map"]:
+        if _NEWS_CACHE["map"]:
+            load_news_map()
+            return set(_NEWS_CACHE["neon"])
     news_map = load_news_map() if news_map is None else news_map
     return {
         key
@@ -401,9 +439,11 @@ def display_dataframe(
     import chart_preview as chart_preview
 
     news_map = load_news_map()
+    scrips = _scrip_list(data) if is_enabled() else []
+    table_news = {s: news_map[s] for s in scrips if s in news_map} if scrips else {}
     neon_scrips = recent_scrip_keys(news_map)
 
-    if not is_enabled():
+    if not is_enabled() or not scrips:
         chart_preview.display_dataframe(
             st_mod,
             data,
@@ -415,11 +455,10 @@ def display_dataframe(
         )
         return
 
-    scrips = _scrip_list(data)
     left, right = st_mod.columns([0.05, 0.95])
     with left:
         if scrips:
-            page = _icon_strip_page(scrips, news_map, height)
+            page = _icon_strip_page(scrips, table_news, height)
             components.html(page, height=int(height) + 8, scrolling=False)
     with right:
         chart_preview.display_dataframe(

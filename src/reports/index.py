@@ -128,16 +128,12 @@ st.sidebar.markdown("---")
 st.sidebar.write("Select a page above to start it. In-process mode imports the module and calls `main()` (recommended). Otherwise it will start a separate Streamlit process.")
 
 try:
-    import importlib
     import chart_preview as _chart_preview
-    importlib.reload(_chart_preview)
     _chart_preview.render_sidebar_controls()
 except Exception:
     pass
 try:
-    import importlib
     import news_preview as _news_preview
-    importlib.reload(_news_preview)
     _news_preview.render_sidebar_controls()
 except Exception:
     pass
@@ -149,6 +145,7 @@ import sys
 import socket
 import os
 import urllib.parse
+import importlib.util
 
 
 def _find_free_port(start=8501, end=8600):
@@ -162,17 +159,31 @@ def _find_free_port(start=8501, end=8600):
 if 'page_processes' not in st.session_state:
     st.session_state['page_processes'] = {}
 
+
+def _load_page_module(sel_path):
+    import rbase as rb
+    path = str(sel_path)
+    try:
+        mtime = sel_path.stat().st_mtime
+    except OSError:
+        mtime = 0
+    hit = rb.PAGE_MODULE_CACHE.get(path)
+    if hit and hit[0] == mtime:
+        return hit[1]
+    spec = importlib.util.spec_from_file_location(sel_path.stem, sel_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    rb.PAGE_MODULE_CACHE[path] = (mtime, module)
+    return module
+
 if selected:
     sel_path = base / selected
     # st.subheader(f"{selected}")
 
     if in_process:
         # Attempt to import and call main() from the module
-        import importlib.util
         try:
-            import importlib
             import rbase as rb
-            importlib.reload(rb)
             rb.chartlink0 = False
             rb.chartlink1 = False
             rb.testLearning = False
@@ -180,9 +191,7 @@ if selected:
             pass
 
         try:
-            spec = importlib.util.spec_from_file_location(selected[:-3], sel_path)
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
+            module = _load_page_module(sel_path)
             if hasattr(module, 'main'):
                 try:
                     module.main()

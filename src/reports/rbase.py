@@ -1,5 +1,6 @@
 # Create a streamlit app that shows the mongodb data
 from datetime import datetime, timedelta
+import time
 import pandas as pd
 import numpy as np
 import pymongo
@@ -8,9 +9,104 @@ from pymongo import MongoClient
 import chart_preview as _chart_preview
 import news_preview as _news_preview
 
-connection = MongoClient('localhost', 27017)
+connection = MongoClient(
+    'localhost',
+    27017,
+    serverSelectionTimeoutMS=2500,
+    maxPoolSize=16,
+)
 dbcl = connection.chartlink
 dbnse = connection.Nsedata
+
+# In-process TTL cache for Mongo counts / scrip sets (avoids per-row DB hits
+# and Streamlit cache hashing of entire dataframe rows).
+_LOOKUP_TTL = 15.0
+_LOOKUPS = {}
+
+
+def _lookup(key, builder):
+    now = time.time()
+    hit = _LOOKUPS.get(key)
+    if hit and (now - hit[0]) < _LOOKUP_TTL:
+        return hit[1]
+    val = builder()
+    _LOOKUPS[key] = (now, val)
+    return val
+
+
+def _cnt(coll_name, regex):
+    def _b():
+        try:
+            return dbcl[coll_name].count_documents({'systemtime': {'$regex': regex}})
+        except Exception:
+            return 0
+    return _lookup(('c', coll_name, regex), _b)
+
+
+def _estimated_len(coll_name):
+    def _b():
+        try:
+            return dbcl[coll_name].estimated_document_count()
+        except Exception:
+            return 0
+    return _lookup(('n', coll_name), _b)
+
+
+def _scrips(coll_name, regex=None, extra=None):
+    def _b():
+        q = {}
+        if regex:
+            q['systemtime'] = {'$regex': regex}
+        if extra:
+            q.update(extra)
+        try:
+            return frozenset(
+                d['scrip']
+                for d in dbcl[coll_name].find(q, {'scrip': 1, '_id': 0})
+                if d.get('scrip')
+            )
+        except Exception:
+            return frozenset()
+    extra_key = None
+    if extra:
+        extra_key = tuple(sorted((k, str(v)) for k, v in extra.items()))
+    return _lookup(('s', coll_name, regex, extra_key), _b)
+
+
+def _has_scrip(coll_name, scrip, regex=None, extra=None):
+    if not scrip:
+        return False
+    return scrip in _scrips(coll_name, regex, extra)
+
+
+def _mvb_filtered_lens(kind):
+    """Cached row counts for morning-volume-breakout buy/sell subsets."""
+    def _b():
+        df = getdf(f'morning-volume-breakout-{kind}')
+        if df is None or getattr(df, 'empty', True) or 'systemtime' not in df.columns:
+            n = 0 if df is None else len(df)
+            return n, n
+        st = df['systemtime'].astype(str)
+        buy_df = df[
+            (~st.str.contains('09:2', case=False, regex=True, na=False)) &
+            (~st.str.contains('09:5', case=False, regex=True, na=False)) &
+            (~st.str.contains('10:', case=False, regex=True, na=False)) &
+            (~st.str.contains('11:', case=False, regex=True, na=False))
+        ]
+        buy_df_2 = df[~st.str.contains('09:2', case=False, regex=True, na=False)]
+        return len(buy_df), len(buy_df_2)
+    return _lookup(('mvb_lens', kind), _b)
+
+
+def _chartlink_names():
+    def _b():
+        try:
+            return set(dbcl.list_collection_names())
+        except Exception:
+            return set()
+    return _lookup('cl_names', _b)
+
+PAGE_MODULE_CACHE = {}
 
 # Global collection filter
 selected_collection = None
@@ -687,7 +783,6 @@ def highlight_category_row(df, color='NA'):
 
     return styled_df
 
-@st.cache_data(ttl=10)
 def highlight_category_column(value, systemtime, f10ch):
     """Highlights the entire row based on the 'Category' column value."""
 
@@ -697,52 +792,27 @@ def highlight_category_column(value, systemtime, f10ch):
     #     return 'background-color: #fff4cf'
     
     
-    count_9_2 = 0
-    try:
-        coll = dbcl['morning-volume-breakout-buy']
-        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
-    except Exception:
-        pass
+    count_9_2 = _cnt('morning-volume-breakout-buy', '09:2')
 
     if (count_9_2 > 10 and "H@" in value and ("09:2" in systemtime or "09:1" in systemtime)):
         return
     
-    count_9_2 = 0
-    try:
-        coll = dbcl['morning-volume-breakout-sell']
-        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
-    except Exception:
-        pass
+    count_9_2 = _cnt('morning-volume-breakout-sell', '09:2')
 
     if (count_9_2 > 10 and "L@" in value and ("09:2" in systemtime or "09:1" in systemtime)):
         return
 
-    count_9_3 = 0
-    try:
-        coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
-        count_9_3 = coll.count_documents({'systemtime': {'$regex': '9:3'}})
-    except Exception:
-        pass
+    count_9_3 = _cnt('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)', '9:3')
 
     if (count_9_3 > 6 and "H@" in value and "09:" in systemtime and (float(f10ch) < 6)):
         return 
 
-    count_9_3 = 0
-    try:
-        coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
-        count_9_3 = coll.count_documents({'systemtime': {'$regex': '9:3'}})
-    except Exception:
-        pass
+    count_9_3 = _cnt('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)', '9:3')
 
     if (count_9_3 > 6 and "L@" in value and "09:" in systemtime and (float(f10ch) > -6)):
         return 
 
-    count_9_3_s = 0
-    try:
-        coll = dbcl['supertrend-morning-buy']
-        count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
-    except Exception:
-        pass
+    count_9_3_s = _cnt('supertrend-morning-buy', '09:')
 
     if (count_9_3_s > 6 and "H@" in value and ("09:" in systemtime) and (float(f10ch) < 6)):
         return
@@ -750,12 +820,7 @@ def highlight_category_column(value, systemtime, f10ch):
     if (count_9_3_s > 6 and "H@" in value and "CROSSED2" not in value and (float(f10ch) < 6)):
         return
 
-    count_9_3_s = 0
-    try:
-        coll = dbcl['supertrend-morning-sell']
-        count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
-    except Exception:
-        pass
+    count_9_3_s = _cnt('supertrend-morning-sell', '09:')
 
     if (count_9_3_s > 6 and "L@" in value and ("09:" in systemtime) and (float(f10ch) > -6)):
         return
@@ -875,33 +940,13 @@ def apply_f10_sell(row):
 @st.cache_data(ttl=10)
 def highlight_category_column_f10_buy(value10, value7, value5, systemtime):
     """Highlights the entire row based on the 'Category' column value."""
-    count_9_2 = 0
-    try:
-        coll = dbcl['morning-volume-breakout-buy']
-        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
-    except Exception:
-        pass
+    count_9_2 = _cnt('morning-volume-breakout-buy', '09:2')
     
-    count_9_3 = 0
-    try:
-        coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
-        count_9_3 = coll.count_documents({'systemtime': {'$regex': '9:3|9:4'}})
-    except Exception:
-        pass
+    count_9_3 = _cnt('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)', '9:3|9:4')
 
-    count_9_3_s = 0
-    try:
-        coll = dbcl['supertrend-morning-buy']
-        count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
-    except Exception:
-        pass
+    count_9_3_s = _cnt('supertrend-morning-buy', '09:')
 
-    count_9_3_c = 0
-    try:
-        coll = dbcl['buy-morning-volume-breakout(Check-News)']
-        count_9_3_c = coll.count_documents({'systemtime': {'$regex': '09:'}})
-    except Exception:
-        pass
+    count_9_3_c = _cnt('buy-morning-volume-breakout(Check-News)', '09:')
 
     if (count_9_2 > 10) and ("9:1" in systemtime or "09:2" in systemtime):
         return 'background-color: #A1A1A1'
@@ -935,33 +980,13 @@ def highlight_category_column_f10_buy(value10, value7, value5, systemtime):
         
 @st.cache_data(ttl=10)
 def highlight_category_column_f10_sell(value10, value7, value5, systemtime):
-    count_9_2 = 0
-    try:
-        coll = dbcl['morning-volume-breakout-sell']
-        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
-    except Exception:
-        pass
+    count_9_2 = _cnt('morning-volume-breakout-sell', '09:2')
     
-    count_9_3 = 0
-    try:
-        coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
-        count_9_3 = coll.count_documents({'systemtime': {'$regex': '9:3|9:4'}})
-    except Exception:
-        pass
+    count_9_3 = _cnt('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)', '9:3|9:4')
 
-    count_9_3_s = 0
-    try:
-        coll = dbcl['supertrend-morning-sell']
-        count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
-    except Exception:
-        pass
+    count_9_3_s = _cnt('supertrend-morning-sell', '09:')
 
-    count_9_3_c = 0
-    try:
-        coll = dbcl['sell-morning-volume-breakout(Check-News)']
-        count_9_3_c = coll.count_documents({'systemtime': {'$regex': '09:'}})
-    except Exception:
-        pass
+    count_9_3_c = _cnt('sell-morning-volume-breakout(Check-News)', '09:')
 
     if (count_9_2 > 10) and ("9:1" in systemtime or "09:2" in systemtime):
         return 'background-color: #A1A1A1'
@@ -1016,33 +1041,13 @@ def apply_f10_sell_00(row):
 
 @st.cache_data(ttl=10)
 def highlight_category_column_f10_buy_00(value10, value7, value5, systemtime):
-    count_9_2 = 0
-    try:
-        coll = dbcl['morning-volume-breakout-buy']
-        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
-    except Exception:
-        pass
+    count_9_2 = _cnt('morning-volume-breakout-buy', '09:2')
     
-    count_9_3 = 0
-    try:
-        coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
-        count_9_3 = coll.count_documents({'systemtime': {'$regex': '9:3|9:4'}})
-    except Exception:
-        pass
+    count_9_3 = _cnt('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)', '9:3|9:4')
 
-    count_9_3_s = 0
-    try:
-        coll = dbcl['supertrend-morning-buy']
-        count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
-    except Exception:
-        pass
+    count_9_3_s = _cnt('supertrend-morning-buy', '09:')
 
-    count_9_3_c = 0
-    try:
-        coll = dbcl['buy-morning-volume-breakout(Check-News)']
-        count_9_3_c = coll.count_documents({'systemtime': {'$regex': '09:'}})
-    except Exception:
-        pass
+    count_9_3_c = _cnt('buy-morning-volume-breakout(Check-News)', '09:')
 
     if (count_9_2 > 10) and ("9:1" in systemtime or "09:2" in systemtime):
         return 'background-color: #A1A1A1'
@@ -1072,33 +1077,13 @@ def highlight_category_column_f10_buy_00(value10, value7, value5, systemtime):
         
 @st.cache_data(ttl=10)
 def highlight_category_column_f10_sell_00(value10, value7, value5, systemtime):
-    count_9_2 = 0
-    try:
-        coll = dbcl['morning-volume-breakout-sell']
-        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
-    except Exception:
-        pass
+    count_9_2 = _cnt('morning-volume-breakout-sell', '09:2')
     
-    count_9_3 = 0
-    try:
-        coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
-        count_9_3 = coll.count_documents({'systemtime': {'$regex': '9:3|9:4'}})
-    except Exception:
-        pass
+    count_9_3 = _cnt('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)', '9:3|9:4')
 
-    count_9_3_s = 0
-    try:
-        coll = dbcl['supertrend-morning-sell']
-        count_9_3_s = coll.count_documents({'systemtime': {'$regex': '09:'}})
-    except Exception:
-        pass
+    count_9_3_s = _cnt('supertrend-morning-sell', '09:')
 
-    count_9_3_c = 0
-    try:
-        coll = dbcl['sell-morning-volume-breakout(Check-News)']
-        count_9_3_c = coll.count_documents({'systemtime': {'$regex': '09:'}})
-    except Exception:
-        pass
+    count_9_3_c = _cnt('sell-morning-volume-breakout(Check-News)', '09:')
 
     if (count_9_2 > 10) and ("9:1" in systemtime or "09:2" in systemtime):
         return 'background-color: #A1A1A1'
@@ -1148,12 +1133,7 @@ def apply_f10_sell_01(row):
 
 @st.cache_data(ttl=10)
 def highlight_category_column_f10_buy_01(value10, value7, value5, systemtime):
-    count_9_2 = 0
-    try:
-        coll = dbcl['morning-volume-breakout-buy']
-        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
-    except Exception:
-        pass
+    count_9_2 = _cnt('morning-volume-breakout-buy', '09:2')
     
     # count_9_3 = 0
     # try:
@@ -1205,12 +1185,7 @@ def highlight_category_column_f10_buy_01(value10, value7, value5, systemtime):
         
 @st.cache_data(ttl=10)
 def highlight_category_column_f10_sell_01(value10, value7, value5, systemtime):
-    count_9_2 = 0
-    try:
-        coll = dbcl['morning-volume-breakout-sell']
-        count_9_2 = coll.count_documents({'systemtime': {'$regex': '09:2'}})
-    except Exception:
-        pass
+    count_9_2 = _cnt('morning-volume-breakout-sell', '09:2')
     
     # count_9_3 = 0
     # try:
@@ -1264,7 +1239,6 @@ def highlight_category_column_super(value):
     if "0@@SUPER" in value:
         return 'background-color: #CBC3E3'
 
-@st.cache_data(ttl=10)
 def apply_breakout_highlight(row):
     """Return a Series of styles for a row: preserve existing mlData styles
     but force pink for mlData when systemtime contains '10:' and mlData
@@ -1308,16 +1282,15 @@ def apply_breakout_highlight(row):
         # If systemtime contains '10:' and the scrip is present in the
         # 'crossed-day-high' collection, set mlData cell to pink.
         try:
-            coll = dbcl['buy-morning-volume-breakout(Check-News)']
-            count = coll.count_documents({'systemtime': {'$regex': '09:|10:00:00'}})
+            BUY_NEWS = 'buy-morning-volume-breakout(Check-News)'
+            count = _cnt(BUY_NEWS, '09:|10:00:00')
 
             if count < 5:
-                # Check if any document exists with specific time patterns
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:3'}}) and pct_day_change < 3.5 :
+                if _has_scrip(BUY_NEWS, scrip, '09:|10:00:00|10:05|10:1|10:2|10:3') and pct_day_change < 3.5:
                     styles['scrip'] = 'background-color: #E0FFDE'
                     return styles
             else:
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:2|10:3|10:4|10:50'}}) and pct_day_change < 3.5:
+                if _has_scrip(BUY_NEWS, scrip, '10:2|10:3|10:4|10:50') and pct_day_change < 3.5:
                     styles['scrip'] = 'background-color: #E0FFDE'
                     return styles
 
@@ -1327,22 +1300,20 @@ def apply_breakout_highlight(row):
             pass
 
         try:
-            coll = dbcl['sell-morning-volume-breakout(Check-News)']
-            count = coll.count_documents({'systemtime': {'$regex': '09:|10:00:00'}})
-            count10 = coll.count_documents({'systemtime': {'$regex': '10:0|10:1'}})
+            SELL_NEWS = 'sell-morning-volume-breakout(Check-News)'
+            count = _cnt(SELL_NEWS, '09:|10:00:00')
+            count10 = _cnt(SELL_NEWS, '10:0|10:1')
 
             if count < 5 and count10 < 5:
-                # Check if any document exists with specific time patterns
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:3'}}) and pct_day_change > -3.5:
+                if _has_scrip(SELL_NEWS, scrip, '09:|10:00:00|10:05|10:1|10:2|10:3') and pct_day_change > -3.5:
                     styles['scrip'] = 'background-color: #FCCFD2'
                     return styles
             elif count < 5:
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:|10:00:00|10:05|10:1|10:2|10:3'}, 'yearLowChange': {'$gt': 50}}) and pct_day_change > -3.5:
+                if _has_scrip(SELL_NEWS, scrip, '09:|10:00:00|10:05|10:1|10:2|10:3', extra={'yearLowChange': {'$gt': 50}}) and pct_day_change > -3.5:
                     styles['scrip'] = 'background-color: #FCCFD2'
                     return styles
             else:
-                # Check if any document exists with systemtime starting with '10:' or '11:'
-                if coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '10:2|10:3|10:4|10:50'}}) and pct_day_change > -3.5:
+                if _has_scrip(SELL_NEWS, scrip, '10:2|10:3|10:4|10:50') and pct_day_change > -3.5:
                     styles['scrip'] = 'background-color: #FCCFD2'
                     return styles
         except Exception:
@@ -1351,100 +1322,55 @@ def apply_breakout_highlight(row):
 
 
         try:
-            df = getdf('morning-volume-breakout-buy')
-            buy_df = df
-            buy_df_2 = df
-            try:
-                buy_df = df[
-                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                    (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) &
-                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                    (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
-                    ]
-                
-                buy_df_2 = df[
-                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) 
-                    ]
-            except KeyError as e:
-                pass
-
-
-            if ('10:' in system_time and '10:4' not in system_time and '10:5' not in system_time) and scrip and len(buy_df) < 8:
-                if len(buy_df_2) < 15:
+            buy_n, buy_n2 = _mvb_filtered_lens('buy')
+            if ('10:' in system_time and '10:4' not in system_time and '10:5' not in system_time) and scrip and buy_n < 8:
+                if buy_n2 < 15:
                     try:
-                        coll = dbcl['crossed-day-high']
-                        if len(coll) < 12 and coll.find_one({'scrip': scrip}):
+                        if _estimated_len('crossed-day-high') < 12 and _has_scrip('crossed-day-high', scrip):
                             _set_cell_style(styles, 'mlData', 'background-color: #fb87ec')
                             return styles
                     except Exception:
-                        # fallback to existing style on any DB error
                         pass
                 
                 try:
-                    coll = dbcl['09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)']
-                    if len(coll) < 5 and coll.find_one({'scrip': scrip}):
+                    CHART_BUY = '09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)'
+                    if _estimated_len(CHART_BUY) < 5 and _has_scrip(CHART_BUY, scrip):
                         _set_cell_style(styles, 'mlData', 'background-color: #fb87ec')
                         return styles
                 except Exception:
-                    # fallback to existing style on any DB error
                     pass
 
                 try:
-                    coll = dbcl['supertrend-morning-buy']
-                    if len(coll) < 5 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
+                    if _estimated_len('supertrend-morning-buy') < 5 and _has_scrip('supertrend-morning-buy', scrip, '09:5|10:'):
                         _set_cell_style(styles, 'mlData', 'background-color: #fb87ec')
                         return styles
                 except Exception:
-                    # fallback to existing style on any DB error
                     pass
 
 
-            df = getdf('morning-volume-breakout-sell')
-            sell_df = df
-            sell_df_2 = df
-            try:
-                sell_df = df[
-                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                    (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) &
-                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                    (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) 
-                ]
-
-                sell_df_2 = df[
-                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) 
-                    ]
-
-            except KeyError as e:
-                pass
-
-            
-            if ('10:' in system_time and '10:4' not in system_time and '10:5' not in system_time) and scrip and len(sell_df) < 8:
-                if len(sell_df_2) < 15:
+            sell_n, sell_n2 = _mvb_filtered_lens('sell')
+            if ('10:' in system_time and '10:4' not in system_time and '10:5' not in system_time) and scrip and sell_n < 8:
+                if sell_n2 < 15:
                     try:
-                        coll = dbcl['crossed-day-low']
-                        if len(coll) < 12 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
+                        if _estimated_len('crossed-day-low') < 12 and _has_scrip('crossed-day-low', scrip, '09:5|10:'):
                             _set_cell_style(styles, 'mlData', 'background-color: #fb87ec')
                             return styles
                     except Exception:
-                        # fallback to existing style on any DB error
                         pass
 
                 try:
-                    coll = dbcl['09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)']
-                    if len(coll) < 5 and coll.find_one({'scrip': scrip}):
+                    CHART_SELL = '09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)'
+                    if _estimated_len(CHART_SELL) < 5 and _has_scrip(CHART_SELL, scrip):
                         _set_cell_style(styles, 'mlData', 'background-color: #fb87ec')
                         return styles
                 except Exception:
-                    # fallback to existing style on any DB error
                     pass
 
                 try:
-                    coll = dbcl['supertrend-morning-sell']
-                    if len(coll) < 5 and coll.find_one({'scrip': scrip, 'systemtime': {'$regex': '09:5|10:'}}):
+                    if _estimated_len('supertrend-morning-sell') < 5 and _has_scrip('supertrend-morning-sell', scrip, '09:5|10:'):
                         _set_cell_style(styles, 'mlData', 'background-color: #fb87ec')
                         return styles
                 except Exception:
-                    # fallback to existing style on any DB error
                     pass
         except Exception:
             # fallback to existing style on any DB error
@@ -1455,7 +1381,6 @@ def apply_breakout_highlight(row):
         pass
     return styles
 
-@st.cache_data(ttl=10)
 def apply_breakout_highlight_volume(row):
     """Return a Series of styles for a row: preserve existing mlData styles
     but force pink for mlData when systemtime contains '10:' and mlData
@@ -1495,13 +1420,11 @@ def apply_breakout_highlight_volume(row):
         except Exception:
             existing = ''
 
-        coll = dbcl['Breakout-Beey-2']
-        if coll.find_one({'scrip': scrip}):
+        if _has_scrip('Breakout-Beey-2', scrip):
             styles['scrip'] = 'background-color: #009600'
             return styles
         
-        coll = dbcl['Breakout-Siill-2']
-        if coll.find_one({'scrip': scrip}):
+        if _has_scrip('Breakout-Siill-2', scrip):
             styles['scrip'] = 'background-color: #e50e1d'
             return styles
 
@@ -1510,7 +1433,6 @@ def apply_breakout_highlight_volume(row):
         pass
     return styles
 
-@st.cache_data(ttl=10)
 def apply_breakout_highlight_ml(row):
     """Return a Series of styles for a row: preserve existing mlData styles
     but force pink for mlData when systemtime contains '10:' and mlData
@@ -1522,13 +1444,10 @@ def apply_breakout_highlight_ml(row):
         scrip = row.get('scrip')
 
         if zshortTerm:
-            coll = dbcl['Breakout-Beey-2']
-            if coll.find_one({'scrip': scrip}):
+            if _has_scrip('Breakout-Beey-2', scrip):
                 styles['scrip'] = 'background-color: #009600'
                 return styles
-            
-            coll = dbcl['Breakout-Siill-2']
-            if coll.find_one({'scrip': scrip}):
+            if _has_scrip('Breakout-Siill-2', scrip):
                 styles['scrip'] = 'background-color: #e50e1d'
                 return styles
 
@@ -1537,10 +1456,9 @@ def apply_breakout_highlight_ml(row):
     return styles
 
 
-@st.cache_data(ttl=10)
 def get_chartlink_collections():
     """Get list of collection names in chartlink database"""
-    return sorted(dbcl.list_collection_names())
+    return sorted(_chartlink_names())
 
 def get_collection_scrips(collection_name):
     """Get unique scrips from a collection"""
@@ -1561,7 +1479,7 @@ def get_selected_collection():
 @st.cache_data(ttl=10)
 def getdf(collection_name):
     collection = dbcl[collection_name]
-    df = pd.DataFrame(list(collection.find()))
+    df = pd.DataFrame(list(collection.find({}, {'_id': 0})))
     
     # Filter by selected collection scrips if set
     selected_coll = get_selected_collection()
@@ -1603,7 +1521,7 @@ def getdf(collection_name):
 
 def _resolve_collection(collection_name):
     """Resolve a collection from chartlink (preferred) or Nsedata."""
-    if collection_name in dbcl.list_collection_names():
+    if collection_name in _chartlink_names():
         return dbcl[collection_name]
     return dbnse[collection_name]
 
@@ -1631,8 +1549,8 @@ def _coerce_intersect_columns(df):
 def getintersectdf(collection_name1, collection_name2):
     collection1 = _resolve_collection(collection_name1)
     collection2 = _resolve_collection(collection_name2)
-    df1 = pd.DataFrame(list(collection1.find()))
-    df2 = pd.DataFrame(list(collection2.find()))
+    df1 = pd.DataFrame(list(collection1.find({}, {'_id': 0})))
+    df2 = pd.DataFrame(list(collection2.find({}, {'_id': 0})))
     expected_columns = list(set(df1.columns)) if not df1.empty else []
     df = pd.DataFrame(columns=expected_columns)
     if df1.empty or df2.empty or 'scrip' not in df1.columns or 'scrip' not in df2.columns:
@@ -1654,8 +1572,8 @@ def getintersectdf(collection_name1, collection_name2):
 def getintersectdf_ml(collection_name1, collection_name2):
     collection1 = dbnse[collection_name1]
     collection2 = dbnse[collection_name2]
-    df1 = pd.DataFrame(list(collection1.find()))
-    df2 = pd.DataFrame(list(collection2.find()))
+    df1 = pd.DataFrame(list(collection1.find({}, {'_id': 0})))
+    df2 = pd.DataFrame(list(collection2.find({}, {'_id': 0})))
     expected_columns = list(set(df1.columns))
     df = pd.DataFrame(columns=expected_columns)
     try:
@@ -1698,7 +1616,7 @@ def getintersectdf_ml(collection_name1, collection_name2):
 @st.cache_data(ttl=10)
 def getdfResult(collection_name):
     collection = dbcl[collection_name]
-    df = pd.DataFrame(list(collection.find()))
+    df = pd.DataFrame(list(collection.find({}, {'_id': 0})))
     
     # Filter by selected collection scrips if set
     selected_coll = get_selected_collection()
@@ -1833,7 +1751,7 @@ def getdf_sandlterm(collection_name, chartink=False):
         collection = dbcl[collection_name]
     else:
         collection = dbnse[collection_name]
-    df = pd.DataFrame(list(collection.find()))
+    df = pd.DataFrame(list(collection.find({}, {'_id': 0})))
     
     # Filter by selected collection scrips if set
     selected_coll = get_selected_collection()
