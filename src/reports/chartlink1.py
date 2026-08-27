@@ -1316,7 +1316,17 @@ def main():
         rb.render(st, filtered_df, 'breakout-morning-buy-01', height=200, color='LG')
     with col2:
         df = rb.getdf('breakout-morning-buy-02')
-        rb.render(st, df, 'breakout-morning-buy-02', color='LG')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) 
+                |
+                (df['PCT_day_change'] < 1.5)
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'breakout-morning-buy-02', height=200, color='LG')
     with col3:
         df = rb.getdf('breakout-morning-sell-01')
         filtered_df = df
@@ -1330,7 +1340,17 @@ def main():
         rb.render(st, filtered_df, 'breakout-morning-sell-01', height=200, color='LG')
     with col4:
         df = rb.getdf('breakout-morning-sell-02')
-        rb.render(st, df, 'breakout-morning-sell-02', color='LG')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) 
+                |
+                (df['PCT_day_change'] > -1.5)
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'breakout-morning-sell-02', height=200, color='LG')
 
 
     

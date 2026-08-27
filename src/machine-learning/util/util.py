@@ -205,7 +205,7 @@ def insert_year5LowBreakoutMonthHigh(regression_data):
         return True
 
 def insert_year5LowBreakoutMonth2High(regression_data):
-    if ((regression_data['month6HighChange'] < 0 or regression_data['year5HighChange'] < 0)
+    if ((regression_data['month6HighChange'] < 0 or regression_data['year5HighChange'] < 0 or regression_data['year2HighChange'] < 0 or regression_data['yearHighChange'] < 0)
         and regression_data['yearLowChange'] > 10 and 10 < regression_data['month3LowChange'] and 9 < regression_data['month2LowChange'] and 9 < regression_data['monthLowChange']
         and regression_data['month2HighChange'] > 0
         and regression_data['week2HighChange'] > 0

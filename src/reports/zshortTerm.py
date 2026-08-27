@@ -856,7 +856,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'ReversalLow - Supertrend Morning Buy', color='LG', renderf10buy00=True)
+        rb.render(st, filtered_df, 'ReversalLow - Supertrend Morning Buy', height=200, color='LG', renderf10buy00=True)
     with col1:
         df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
         expected_columns = list(set(df.columns))

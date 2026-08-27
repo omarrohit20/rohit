@@ -34,7 +34,7 @@ def render_sidebar_controls():
         help="ℹ sits to the left of the table. Hover for conviction, sentiment, and news. Leave to close; stay on the preview to keep it open.",
     )
     st.sidebar.caption(
-        "From skill scan-news-conviction → Nsedata.scrip_news. "
+        "ℹ appears only when Nsedata.scrip_news has sentiment and news items. "
         "Neon ℹ / preview index = High conviction and "
         "insertion_date or updated_at in the last 10 working days (Mon–Fri)."
     )
@@ -67,7 +67,7 @@ def _scrip_list(data):
     return [_scrip_key(v) for v in df["scrip"].tolist()]
 
 
-@st.cache_data(ttl=40)
+@st.cache_data(ttl=3600)
 def _fetch_news_docs():
     try:
         from pymongo import MongoClient
@@ -100,7 +100,7 @@ def _fetch_news_docs():
 
 
 _NEWS_CACHE = {"t": 0.0, "map": {}, "neon": frozenset()}
-_NEWS_TTL = 40.0
+_NEWS_TTL = 3600.0
 
 
 def load_news_map():
@@ -163,6 +163,34 @@ def is_high_conviction(value):
     return str(value or "").strip().lower() == "high"
 
 
+def _nonempty_articles(items):
+    if not items:
+        return False
+    if not isinstance(items, list):
+        return bool(str(items).strip())
+    for it in items:
+        if isinstance(it, dict):
+            if str(it.get("title") or it.get("link") or "").strip():
+                return True
+        elif str(it or "").strip():
+            return True
+    return False
+
+
+def has_news_and_sentiment(doc):
+    """True when scrip_news has sentiment and at least one news/sector/analyst item."""
+    if not doc:
+        return False
+    sentiment = str(doc.get("overall_sentiment") or "").strip()
+    if not sentiment:
+        return False
+    return (
+        _nonempty_articles(doc.get("news"))
+        or _nonempty_articles(doc.get("sectoral_news"))
+        or _nonempty_articles(doc.get("analyst_calls"))
+    )
+
+
 def should_neon_highlight(
     doc=None,
     insertion_date=None,
@@ -170,8 +198,10 @@ def should_neon_highlight(
     conviction=None,
     today=None,
 ):
-    """Neon when High conviction and insertion_date or updated_at is recent."""
+    """Neon when High conviction, recent insert/update, and news+sentiment exist."""
     doc = doc or {}
+    if not has_news_and_sentiment(doc):
+        return False
     ins = insertion_date if insertion_date is not None else doc.get("insertion_date")
     upd = updated_at if updated_at is not None else doc.get("updated_at")
     conv = conviction if conviction is not None else doc.get("conviction")
@@ -225,13 +255,17 @@ def _public_doc(doc: dict) -> dict:
 def _icon_strip_page(scrips, news_map, height):
     icons = []
     for scrip in scrips:
+        doc = news_map.get(scrip)
+        if not has_news_and_sentiment(doc):
+            icons.append('<div class="nws-ico empty"></div>')
+            continue
         esc = (
             str(scrip)
             .replace("&", "&amp;")
             .replace("<", "&lt;")
             .replace('"', "&quot;")
         )
-        recent = should_neon_highlight(news_map.get(scrip))
+        recent = should_neon_highlight(doc)
         cls = "nws-ico neon" if recent else "nws-ico"
         title = f"{esc} news · High conviction · last {_RECENT_WEEKDAYS} working days" if recent else f"{esc} news"
         icons.append(f'<div class="{cls}" data-scrip="{esc}" title="{title}">ℹ</div>')
@@ -246,7 +280,9 @@ def _icon_strip_page(scrips, news_map, height):
   .list{{height:{max(h - _HEADER_H, 40)}px;overflow:hidden;}}
   .nws-ico{{height:{_ROW_H}px;line-height:{_ROW_H}px;text-align:center;cursor:pointer;
     font-size:16px;color:#1d4ed8;user-select:none;}}
+  .nws-ico.empty{{cursor:default;}}
   .nws-ico:hover{{background:#dbeafe;border-radius:4px;}}
+  .nws-ico.empty:hover{{background:transparent;}}
   .nws-ico.neon{{background:{NEON_BG};color:#111;border-radius:4px;font-weight:700;
     box-shadow:inset 0 0 0 2px #111, 0 0 10px {NEON_BG};}}
   .nws-ico.neon:hover{{background:#7CFF4B;}}
@@ -340,7 +376,7 @@ def _icon_strip_page(scrips, news_map, height):
     pop.dataset.over = '0';
     hideSoon();
   }};
-  document.querySelectorAll('.nws-ico').forEach(function(el) {{
+  document.querySelectorAll('.nws-ico[data-scrip]').forEach(function(el) {{
     el.addEventListener('mouseenter', function() {{ show(el); }});
     el.addEventListener('mouseleave', hideSoon);
   }});
@@ -440,7 +476,11 @@ def display_dataframe(
 
     news_map = load_news_map()
     scrips = _scrip_list(data) if is_enabled() else []
-    table_news = {s: news_map[s] for s in scrips if s in news_map} if scrips else {}
+    table_news = {
+        s: news_map[s]
+        for s in scrips
+        if s in news_map and has_news_and_sentiment(news_map[s])
+    } if scrips else {}
     neon_scrips = recent_scrip_keys(news_map)
 
     if not is_enabled() or not scrips:
