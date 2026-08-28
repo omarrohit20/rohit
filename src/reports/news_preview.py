@@ -266,7 +266,9 @@ def _icon_strip_page(scrips, news_map, height):
             .replace('"', "&quot;")
         )
         recent = should_neon_highlight(doc)
-        cls = "nws-ico neon" if recent else "nws-ico"
+        sent = str((doc or {}).get("overall_sentiment") or "").strip().lower()
+        sent_cls = " bull" if sent == "bullish" else (" bear" if sent == "bearish" else "")
+        cls = ("nws-ico neon" if recent else "nws-ico") + sent_cls
         title = f"{esc} news · High conviction · last {_RECENT_WEEKDAYS} working days" if recent else f"{esc} news"
         icons.append(f'<div class="{cls}" data-scrip="{esc}" title="{title}">ℹ</div>')
     icons_html = "".join(icons)
@@ -275,21 +277,27 @@ def _icon_strip_page(scrips, news_map, height):
     return f"""<!DOCTYPE html>
 <html><head><meta charset="utf-8">
 <style>
-  html,body{{margin:0;padding:0;background:transparent;overflow:hidden;}}
-  .pad{{height:{_HEADER_H}px;}}
-  .list{{height:{max(h - _HEADER_H, 40)}px;overflow:hidden;}}
+  html,body{{margin:0;padding:0;background:transparent;overflow:clip;height:100%;width:100%;
+    overscroll-behavior:none;touch-action:none;}}
+  .pad{{height:{_HEADER_H}px;flex:0 0 {_HEADER_H}px;}}
+  .list{{height:{max(h - _HEADER_H, 40)}px;overflow:clip;overscroll-behavior:none;touch-action:none;}}
+  .track{{will-change:transform;}}
   .nws-ico{{height:{_ROW_H}px;line-height:{_ROW_H}px;text-align:center;cursor:pointer;
     font-size:16px;color:#1d4ed8;user-select:none;}}
   .nws-ico.empty{{cursor:default;}}
+  .nws-ico.bull{{color:#39FF14;font-weight:700;text-shadow:0 0 6px #39FF14;}}
+  .nws-ico.bear{{color:#FF073A;font-weight:700;text-shadow:0 0 6px #FF073A;}}
   .nws-ico:hover{{background:#dbeafe;border-radius:4px;}}
   .nws-ico.empty:hover{{background:transparent;}}
-  .nws-ico.neon{{background:{NEON_BG};color:#111;border-radius:4px;font-weight:700;
+  .nws-ico.neon{{background:{NEON_BG};border-radius:4px;font-weight:700;
     box-shadow:inset 0 0 0 2px #111, 0 0 10px {NEON_BG};}}
+  .nws-ico.neon.bull{{color:#39FF14;}}
+  .nws-ico.neon.bear{{color:#FF073A;}}
   .nws-ico.neon:hover{{background:#7CFF4B;}}
 </style></head>
 <body>
 <div class="pad"></div>
-<div class="list">{icons_html}</div>
+<div class="list"><div class="track">{icons_html}</div></div>
 <script>
 (function() {{
   const cfg = {payload};
@@ -389,75 +397,89 @@ def _icon_strip_page(scrips, news_map, height):
     }});
   }}
 
+  const track = document.querySelector('.track');
   const list = document.querySelector('.list');
-  function findScroller(root) {{
-    if (!root) return null;
-    const nodes = root.querySelectorAll('div,canvas');
-    let best = null, bestDelta = 0;
-    for (let i = 0; i < nodes.length; i++) {{
-      const n = nodes[i];
-      if (n.tagName === 'CANVAS') continue;
-      const delta = n.scrollHeight - n.clientHeight;
-      if (delta < 8 || n.clientHeight < 40) continue;
-      const st = P.defaultView.getComputedStyle(n);
-      const oy = st.overflowY;
-      const score = delta + ((oy === 'auto' || oy === 'scroll' || oy === 'overlay') ? 10000 : 0);
-      if (score > bestDelta) {{ best = n; bestDelta = score; }}
+  let scroller = null;
+  let df = null;
+  function applyY(y) {{
+    if (track) track.style.transform = 'translateY(' + (-(y || 0)) + 'px)';
+  }}
+  function pinLocal() {{
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    if (list) list.scrollTop = 0;
+  }}
+  function locateGrid() {{
+    const frame = window.frameElement;
+    if (!frame) return null;
+    let col = frame.parentElement;
+    for (let i = 0; i < 20 && col; i++) {{
+      const tid = col.getAttribute && col.getAttribute('data-testid');
+      if (tid === 'stColumn') {{
+        const row = col.parentElement;
+        const inRow = row && row.querySelector('[data-testid="stDataFrame"]');
+        if (inRow) return inRow;
+        break;
+      }}
+      col = col.parentElement;
+    }}
+    const fr = frame.getBoundingClientRect();
+    const dfs = P.querySelectorAll('[data-testid="stDataFrame"]');
+    let best = null, bestScore = 1e12;
+    for (let i = 0; i < dfs.length; i++) {{
+      const r = dfs[i].getBoundingClientRect();
+      if (r.height < 20) continue;
+      const dy = Math.abs(r.top - fr.top);
+      const dx = r.left - fr.right;
+      const score = dy * 8 + (dx < -20 ? 2000 + Math.abs(dx) : Math.abs(dx));
+      if (score < bestScore) {{ best = dfs[i]; bestScore = score; }}
     }}
     return best;
   }}
-  function bindScroll() {{
-    const frame = window.frameElement;
-    if (!frame) return false;
-    let host = frame.parentElement;
-    for (let i = 0; i < 8 && host; i++) {{
-      if (host.getAttribute && host.getAttribute('data-testid') === 'stHorizontalBlock') break;
-      host = host.parentElement;
+  function findScroller(root) {{
+    if (!root) return null;
+    const named = root.querySelector('.dvn-scroller') || root.querySelector('[class*="dvn-scroller"]');
+    if (named) return named;
+    const nodes = root.querySelectorAll('div');
+    let best = null, bestDelta = 0;
+    for (let i = 0; i < nodes.length; i++) {{
+      const n = nodes[i];
+      const delta = n.scrollHeight - n.clientHeight;
+      if (delta < 8 || n.clientHeight < 24) continue;
+      const oy = P.defaultView.getComputedStyle(n).overflowY;
+      if (oy !== 'auto' && oy !== 'scroll' && oy !== 'overlay') continue;
+      if (delta > bestDelta) {{ best = n; bestDelta = delta; }}
     }}
-    if (!host) return false;
-    const df = host.querySelector('[data-testid="stDataFrame"]');
-    const scroller = findScroller(df);
-    if (!scroller || !list) return false;
-    if (scroller._nwsBound) return true;
-    scroller._nwsBound = true;
-    const sync = function() {{ list.scrollTop = scroller.scrollTop; }};
-    scroller.addEventListener('scroll', sync, {{passive: true}});
+    return best;
+  }}
+  function resolve() {{
+    if (scroller && scroller.isConnected && df && df.isConnected) return scroller;
+    df = locateGrid();
+    scroller = findScroller(df);
+    if (scroller && !scroller._nwsListen) {{
+      scroller._nwsListen = true;
+      scroller.addEventListener('scroll', function() {{ applyY(scroller.scrollTop); }}, {{passive: true}});
+    }}
+    return scroller;
+  }}
+  function sync() {{
+    pinLocal();
+    const s = resolve();
+    if (s) applyY(s.scrollTop);
+  }}
+  document.addEventListener('wheel', function(e) {{
+    e.preventDefault();
+    e.stopPropagation();
+    pinLocal();
+    const s = resolve();
+    if (!s) return;
+    s.scrollTop += e.deltaY;
+    applyY(s.scrollTop);
+  }}, {{passive: false}});
+  document.addEventListener('touchmove', function(e) {{ e.preventDefault(); }}, {{passive: false}});
+  (function tick() {{
     sync();
-    document.addEventListener('wheel', function(e) {{
-      scroller.scrollTop += e.deltaY;
-      list.scrollTop = scroller.scrollTop;
-      e.preventDefault();
-    }}, {{passive: false}});
-    df.addEventListener('wheel', function(e) {{
-      list.scrollTop = scroller.scrollTop + e.deltaY;
-    }}, {{passive: true}});
-    return true;
-  }}
-  function bindWheelOnly() {{
-    const frame = window.frameElement;
-    if (!frame) return false;
-    let host = frame.parentElement;
-    for (let i = 0; i < 8 && host; i++) {{
-      if (host.getAttribute && host.getAttribute('data-testid') === 'stHorizontalBlock') break;
-      host = host.parentElement;
-    }}
-    const df = host && host.querySelector('[data-testid="stDataFrame"]');
-    if (!df || !list) return false;
-    if (df._nwsWheel) return true;
-    df._nwsWheel = true;
-    df.addEventListener('wheel', function(e) {{ list.scrollTop += e.deltaY; }}, {{passive: true}});
-    document.addEventListener('wheel', function(e) {{
-      list.scrollTop += e.deltaY;
-      df.dispatchEvent(new WheelEvent('wheel', {{deltaY: e.deltaY, bubbles: true}}));
-      e.preventDefault();
-    }}, {{passive: false}});
-    return true;
-  }}
-  let tries = 0;
-  (function retry() {{
-    if (bindScroll() || bindWheelOnly() || tries > 25) return;
-    tries += 1;
-    setTimeout(retry, 120);
+    requestAnimationFrame(tick);
   }})();
 }})();
 </script>

@@ -133,7 +133,13 @@ try:
 except Exception:
     pass
 try:
+    import importlib
     import news_preview as _news_preview
+    _mt = Path(_news_preview.__file__).stat().st_mtime
+    _prev = st.session_state.get("_news_preview_mtime")
+    st.session_state["_news_preview_mtime"] = _mt
+    if _prev is None or _prev != _mt:
+        importlib.reload(_news_preview)
     _news_preview.render_sidebar_controls()
 except Exception:
     pass

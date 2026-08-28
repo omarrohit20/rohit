@@ -48,27 +48,27 @@ with open('nselist/ind_nifty500list.csv') as csvfile:
             pass
 print(count)
 
-# count = 0
-# with open('nselist/ind_niftycash.csv') as csvfile:
-#     readCSV = csv.reader(csvfile, delimiter=',')
-#     for row in readCSV:
-#         try:
-#             if count != 0:
-#                 print(row[0])
-#                 scrip = row[1]
-#                 data = db.scrip.find_one({'scrip': scrip})
-#                 if data is None:
-#                     db.scrip.insert_one({
-#                         "company": row[0],
-#                         "industry": "",
-#                         "scrip": scrip,
-#                         "futures": "No",
-#                         "index": "cash",
-#                     })
-#             count = count + 1
-#         except Exception:
-#             pass
-# print(count)
+count = 0
+with open('nselist/ind_niftycash.csv') as csvfile:
+    readCSV = csv.reader(csvfile, delimiter=',')
+    for row in readCSV:
+        try:
+            if count != 0:
+                print(row[0])
+                scrip = row[1]
+                data = db.scrip.find_one({'scrip': scrip})
+                if data is None:
+                    db.scrip.insert_one({
+                        "company": row[0],
+                        "industry": "",
+                        "scrip": scrip,
+                        "futures": "No",
+                        "index": "cash",
+                    })
+            count = count + 1
+        except Exception:
+            pass
+print(count)
 
 # Futures names not in nifty500/cash still belong in scrip with futures=Yes
 for scrip, company in futures_scrips.items():
