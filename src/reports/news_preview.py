@@ -33,11 +33,7 @@ def render_sidebar_controls():
         key=_SESSION_ENABLED,
         help="ℹ sits to the left of the table. Hover for conviction, sentiment, and news. Leave to close; stay on the preview to keep it open.",
     )
-    st.sidebar.caption(
-        "ℹ appears only when Nsedata.scrip_news has sentiment and news items. "
-        "Neon ℹ / preview index = High conviction and "
-        "insertion_date or updated_at in the last 10 working days (Mon–Fri)."
-    )
+    
 
 
 def _scrip_key(value):

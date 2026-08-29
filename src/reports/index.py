@@ -129,9 +129,6 @@ if st.session_state.get("selected_page") not in py_files and py_files:
 in_process = st.sidebar.checkbox("Load pages in-process (single Streamlit app)", key="in_process")
 selected = st.sidebar.selectbox("Open page", py_files, key="selected_page")
 
-st.sidebar.markdown("---")
-st.sidebar.write("Select a page above to start it. In-process mode imports the module and calls `main()` (recommended). Otherwise it will start a separate Streamlit process.")
-
 try:
     import chart_preview as _chart_preview
     _chart_preview.render_sidebar_controls()

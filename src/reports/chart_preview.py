@@ -71,7 +71,6 @@ def render_sidebar_controls():
             key=_SESSION_CUSTOM,
             help="Use {scrip}, {scrip_lower}, and {interval} placeholders.",
         )
-    st.sidebar.caption("Click the row number. TradingView uses 5-minute.")
 
 
 def _scrip_full_page_url(value):
