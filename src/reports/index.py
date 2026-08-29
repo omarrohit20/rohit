@@ -80,6 +80,10 @@ def _seed_from_query():
     if "news_preview_enabled" not in st.session_state:
         st.session_state["news_preview_enabled"] = _as_bool(_query_get("news"), True)
 
+    scrip_index = _query_get("scrip_index")
+    if scrip_index in {"All", "futures", "nifty500", "cash"} and "scrip_index_filter" not in st.session_state:
+        st.session_state["scrip_index_filter"] = scrip_index
+
 
 def _desired_query():
     out = {
@@ -88,6 +92,7 @@ def _desired_query():
         "chart": "1" if st.session_state.get("chart_preview_enabled", True) else "0",
         "news": "1" if st.session_state.get("news_preview_enabled", True) else "0",
         "provider": str(st.session_state.get("chart_preview_provider") or "TradingView"),
+        "scrip_index": str(st.session_state.get("scrip_index_filter") or "All"),
     }
     custom = st.session_state.get("chart_preview_custom_url")
     if custom:
@@ -141,6 +146,11 @@ try:
     if _prev is None or _prev != _mt:
         importlib.reload(_news_preview)
     _news_preview.render_sidebar_controls()
+except Exception:
+    pass
+try:
+    import rbase as _rb_sidebar
+    _rb_sidebar.render_scrip_index_sidebar()
 except Exception:
     pass
 

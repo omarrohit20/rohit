@@ -5,6 +5,26 @@ import rbase as rb
 import pandas as pd
 
 
+def _futures_df(df):
+    """Keep F&O rows only: Nsedata.scrip futures=Yes, or index tagged futures."""
+    if df is None or getattr(df, 'empty', True):
+        return df
+    mask = None
+    try:
+        scrips = rb.get_futures_scrip_set()
+        if 'scrip' in df.columns and scrips:
+            mask = df['scrip'].isin(scrips)
+    except Exception:
+        pass
+    try:
+        if 'index' in df.columns:
+            tagged = df['index'].astype(str).str.contains('futures', case=False, na=False)
+            mask = tagged if mask is None else (mask | tagged)
+    except Exception:
+        pass
+    return df if mask is None else df[mask]
+
+
 # Run the autorefresh approximately every 30000 milliseconds (30 seconds)
 
 def main():
@@ -1051,7 +1071,7 @@ def main():
     
     col0, col1, col2, col3 = st.columns(4)
     with col0:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('highBuy'))
         filtered_df = df
         try:
             filtered_df = df[
@@ -1070,7 +1090,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'BreakHighYear2', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col1:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('highBuy'))
         filtered_df = df
         try:
             filtered_df = df[
@@ -1081,7 +1101,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'BreakHighYear2', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col2:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('lowSell'))
         filtered_df = df
         try:
             filtered_df = df[
@@ -1099,7 +1119,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'BreakLowYear2', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col3:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('lowSell'))
         filtered_df = df
         try:
             filtered_df = df[
@@ -1112,7 +1132,7 @@ def main():
     
     col0, col1, col2, col3 = st.columns(4)
     with col0:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('highBuy'))
         filtered_df = df
         try:
             filtered_df = df[
@@ -1132,7 +1152,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'BreakHighYear', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col1:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('highBuy'))
         filtered_df = df
         try:
             filtered_df = df[
@@ -1144,7 +1164,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'BreakHighYear', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col2:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('lowSell'))
         filtered_df = df
         try:
             filtered_df = df[
@@ -1163,7 +1183,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'BreakLowYear', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col3:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('lowSell'))
         filtered_df = df
         try:
             filtered_df = df[
@@ -1177,7 +1197,7 @@ def main():
     
     col0, col1, col2, col3 = st.columns(4)
     with col0:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('highBuy'))
         filtered_df = df
         try:
             filtered_df = df[
@@ -1195,7 +1215,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'BreakHighMonth6', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')  
     with col1:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('highBuy'))
         filtered_df = df
         try:
             filtered_df = df[
@@ -1205,7 +1225,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'BreakHighMonth6', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')  
     with col2:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('lowSell'))
         filtered_df = df
         try:
             filtered_df = df[
@@ -1222,7 +1242,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'BreakLowMonth6', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col3:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('lowSell'))
         filtered_df = df
         try:
             filtered_df = df[
@@ -1234,7 +1254,7 @@ def main():
     
     col0, col1, col2, col3 = st.columns(4)
     with col0:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('highBuy'))
         filtered_df = df
         try:
             filtered_df = df[
@@ -1244,7 +1264,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'BreakHighMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')  
     with col1:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('highBuy'))
         filtered_df = df
         try:
             filtered_df = df[
@@ -1254,7 +1274,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'BreakHighMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')  
     with col2:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('lowSell'))
         filtered_df = df
         try:
             filtered_df = df[
@@ -1264,7 +1284,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'BreakLowMonth3', column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True, color='LG')
     with col3:
-        df = rb.getdfResult('highBuy')
+        df = _futures_df(rb.getdfResult('lowSell'))
         filtered_df = df
         try:
             filtered_df = df[

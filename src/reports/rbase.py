@@ -741,6 +741,69 @@ def get_futures_scrip_set():
         return frozenset()
 
 
+@st.cache_data(ttl=60)
+def get_scrips_by_index(index_name):
+    """Scrips whose Nsedata.scrip.index is futures, nifty500, or cash."""
+    name = str(index_name or "").strip().lower()
+    if name not in {"futures", "nifty500", "cash"}:
+        return frozenset()
+    try:
+        if name == "futures":
+            query = {"$or": [{"index": "futures"}, {"futures": "Yes"}]}
+        else:
+            query = {"index": name}
+        return frozenset(
+            str(d["scrip"]).strip().upper()
+            for d in dbnse.scrip.find(query, {"scrip": 1})
+            if d.get("scrip")
+        )
+    except Exception:
+        return frozenset()
+
+
+SCRIP_INDEX_CHOICES = ("All", "futures", "nifty500", "cash")
+_SCRIP_INDEX_KEY = "scrip_index_filter"
+
+
+def current_scrip_index():
+    try:
+        choice = str(st.session_state.get(_SCRIP_INDEX_KEY) or "All")
+    except Exception:
+        choice = "All"
+    return choice if choice in SCRIP_INDEX_CHOICES else "All"
+
+
+def filter_df_by_scrip_index(df):
+    """Keep rows whose scrip is in the selected Nsedata.scrip index."""
+    choice = current_scrip_index()
+    if choice == "All" or df is None or getattr(df, "empty", True):
+        return df
+    if "scrip" not in getattr(df, "columns", []):
+        return df
+    allowed = get_scrips_by_index(choice)
+    if not allowed:
+        return df.iloc[0:0]
+    keys = df["scrip"].astype(str).str.strip().str.upper()
+    return df[keys.isin(allowed)]
+
+
+def render_scrip_index_sidebar():
+    """Sidebar control used by the reports index and standalone pages."""
+    try:
+        st.sidebar.selectbox(
+            "Scrip index",
+            list(SCRIP_INDEX_CHOICES),
+            key=_SCRIP_INDEX_KEY,
+            help="Filter every table by Nsedata.scrip index: F&O (futures), Nifty 500, or cash.",
+        )
+        choice = current_scrip_index()
+        if choice != "All":
+            st.sidebar.caption(f"{len(get_scrips_by_index(choice))} scrips in {choice}")
+    except Exception as e:
+        if "duplicate" not in type(e).__name__.lower() and "duplicate" not in str(e).lower():
+            raise
+
+
 def highlight_sandlterm_row(df):
     """Full-row colour for sandlterm / test.py tables.
 
@@ -1477,7 +1540,7 @@ def get_selected_collection():
     return selected_collection
 
 @st.cache_data(ttl=10)
-def getdf(collection_name):
+def _getdf_cached(collection_name):
     collection = dbcl[collection_name]
     df = pd.DataFrame(list(collection.find({}, {'_id': 0})))
     
@@ -1519,6 +1582,9 @@ def getdf(collection_name):
         print(f"")
     return df
 
+def getdf(collection_name):
+    return filter_df_by_scrip_index(_getdf_cached(collection_name))
+
 def _resolve_collection(collection_name):
     """Resolve a collection from chartlink (preferred) or Nsedata."""
     if collection_name in _chartlink_names():
@@ -1546,7 +1612,7 @@ def _coerce_intersect_columns(df):
     return df
 
 @st.cache_data(ttl=10)
-def getintersectdf(collection_name1, collection_name2):
+def _getintersectdf_cached(collection_name1, collection_name2):
     collection1 = _resolve_collection(collection_name1)
     collection2 = _resolve_collection(collection_name2)
     df1 = pd.DataFrame(list(collection1.find({}, {'_id': 0})))
@@ -1568,8 +1634,11 @@ def getintersectdf(collection_name1, collection_name2):
 
     return df
 
+def getintersectdf(collection_name1, collection_name2):
+    return filter_df_by_scrip_index(_getintersectdf_cached(collection_name1, collection_name2))
+
 @st.cache_data(ttl=10)
-def getintersectdf_ml(collection_name1, collection_name2):
+def _getintersectdf_ml_cached(collection_name1, collection_name2):
     collection1 = dbnse[collection_name1]
     collection2 = dbnse[collection_name2]
     df1 = pd.DataFrame(list(collection1.find({}, {'_id': 0})))
@@ -1613,8 +1682,11 @@ def getintersectdf_ml(collection_name1, collection_name2):
 
     return df
 
+def getintersectdf_ml(collection_name1, collection_name2):
+    return filter_df_by_scrip_index(_getintersectdf_ml_cached(collection_name1, collection_name2))
+
 @st.cache_data(ttl=10)
-def getdfResult(collection_name):
+def _getdfResult_cached(collection_name):
     collection = dbcl[collection_name]
     df = pd.DataFrame(list(collection.find({}, {'_id': 0})))
     
@@ -1662,11 +1734,15 @@ def getdfResult(collection_name):
         print(f"KeyError: {e}")
     return df
 
+def getdfResult(collection_name):
+    return filter_df_by_scrip_index(_getdfResult_cached(collection_name))
+
 def _ensure_chart_preview_sidebar():
     """Standalone report pages (not via index) still get the left-bar chart settings."""
     if 'selected_page' in st.session_state:
         return
     try:
+        render_scrip_index_sidebar()
         _chart_preview.render_sidebar_controls()
         _news_preview.render_sidebar_controls()
     except Exception as e:
@@ -1676,6 +1752,7 @@ def _ensure_chart_preview_sidebar():
 
 def render(st, df, name, height=110, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False, renderf10buy=False, renderf10sell=False, f10=0, renderf10buy00=False, renderf10sell00=False, renderf10buy01=False, renderf10sell01=False, applyBreakOut=False, dontapplybreakout=False, noColourFilter=False):
     _ensure_chart_preview_sidebar()
+    df = filter_df_by_scrip_index(df)
     st.write("********"+ name + "********")
     try:
         df = df[
@@ -1745,7 +1822,7 @@ def render(st, df, name, height=110, color='NA', column_order=column_order_defau
         _news_preview.display_dataframe(st, df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
 
 @st.cache_data(ttl=10)
-def getdf_sandlterm(collection_name, chartink=False):
+def _getdf_sandlterm_cached(collection_name, chartink=False):
     collection = None
     if chartink:
         collection = dbcl[collection_name]
@@ -1791,8 +1868,12 @@ def getdf_sandlterm(collection_name, chartink=False):
     #     print(f"")
     return df
 
+def getdf_sandlterm(collection_name, chartink=False):
+    return filter_df_by_scrip_index(_getdf_sandlterm_cached(collection_name, chartink=chartink))
+
 def render_sandlterm_data(st, df, name, height=200, color='NA', column_order=column_order_sandlterm, column_conf=column_config_sandlterm):
     _ensure_chart_preview_sidebar()
+    df = filter_df_by_scrip_index(df)
     # Newest signal date first for all sandlterm widgets
     if df is not None and not df.empty and 'date' in df.columns:
         df = df.copy()
