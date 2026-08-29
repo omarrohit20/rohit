@@ -1,182 +1,156 @@
 #!/usr/bin/env python
 """
-MongoDB Index Creation Script
-Creates all necessary indexes for optimal query performance in the reports application.
+Rebuild MongoDB indexes used by reports queries (rbase / chartlink / news).
+
+Targets:
+  chartlink.*  — systemtime regex counts, scrip lookups, yearLowChange filters
+  Nsedata.scrip — futures=Yes lookups
+  Nsedata.scrip_news — scrip, conviction, sentiment, insertion_date
 """
 
 from pymongo import MongoClient, ASCENDING
+from pymongo.errors import OperationFailure
 import sys
 from datetime import datetime
 
-def create_indexes():
-    """Create all necessary indexes for the reports application"""
-    
+CHARTLINK_INDEXES = [
+    [("systemtime", ASCENDING)],
+    [("scrip", ASCENDING)],
+    [("systemtime", ASCENDING), ("scrip", ASCENDING)],
+    [("scrip", ASCENDING), ("yearLowChange", ASCENDING)],
+]
+
+NSEDATA_INDEXES = {
+    "scrip": [
+        [("scrip", ASCENDING)],
+        [("futures", ASCENDING), ("scrip", ASCENDING)],
+    ],
+    "scrip_news": [
+        [("scrip", ASCENDING)],
+        [("insertion_date", ASCENDING)],
+        [("updated_at", ASCENDING)],
+        [("conviction", ASCENDING), ("overall_sentiment", ASCENDING), ("insertion_date", ASCENDING)],
+    ],
+}
+
+SKIP_COLLECTIONS = {"system.profile"}
+
+
+def _field_str(index_fields):
+    return ", ".join(f"{name}" for name, _ in index_fields)
+
+
+def _ensure_indexes(collection, index_list, rebuild):
+    created = 0
+    skipped = 0
+    rebuilt = 0
+    existing = {tuple(idx["key"].items()): idx for idx in collection.list_indexes()}
+
+    for index_fields in index_list:
+        key = tuple(index_fields)
+        idx = existing.get(key)
+        kwargs = {"background": True}
+        if idx and idx.get("unique"):
+            kwargs["unique"] = True
+        try:
+            if idx and rebuild and idx["name"] != "_id_":
+                collection.drop_index(idx["name"])
+                collection.create_index(index_fields, **kwargs)
+                rebuilt += 1
+                print(f"   Rebuilt: {_field_str(index_fields)}")
+            else:
+                collection.create_index(index_fields, **kwargs)
+                if idx:
+                    skipped += 1
+                    print(f"   Exists:  {_field_str(index_fields)}")
+                else:
+                    created += 1
+                    print(f"   Created: {_field_str(index_fields)}")
+        except OperationFailure as e:
+            msg = str(e).lower()
+            if "already exists" in msg or "equivalent index" in msg:
+                skipped += 1
+                print(f"   Exists:  {_field_str(index_fields)}")
+            else:
+                print(f"   Failed:  {_field_str(index_fields)}: {e}")
+                raise
+    return created, skipped, rebuilt
+
+
+def create_indexes(rebuild=True):
     try:
-        # Connect to MongoDB
-        print("🔗 Connecting to MongoDB at localhost:27017...")
-        connection = MongoClient('localhost', 27017, serverSelectionTimeoutMS=5000)
-        dbcl = connection.chartlink
-        
-        # Test connection
+        print("Connecting to MongoDB at localhost:27017...")
+        connection = MongoClient("localhost", 27017, serverSelectionTimeoutMS=5000)
         connection.server_info()
-        print("✅ Connected successfully!\n")
-        
+        print("Connected.\n")
     except Exception as e:
-        print(f"❌ Failed to connect to MongoDB: {e}")
-        print("   Make sure MongoDB is running on localhost:27017")
+        print(f"Failed to connect to MongoDB: {e}")
+        print("Make sure MongoDB is running on localhost:27017")
         sys.exit(1)
-    
-    # Define indexes: (collection_name, [(field, direction), ...])
-    indexes = [
-        # buy-morning-volume-breakout collections
-        ('buy-morning-volume-breakout(Check-News)', [
-            [('systemtime', ASCENDING)],
-            [('scrip', ASCENDING)],
-            [('scrip', ASCENDING), ('yearLowChange', ASCENDING)],
-            [('systemtime', ASCENDING), ('scrip', ASCENDING)],
-        ]),
-        
-        # sell-morning-volume-breakout collections
-        ('sell-morning-volume-breakout(Check-News)', [
-            [('systemtime', ASCENDING)],
-            [('scrip', ASCENDING)],
-            [('scrip', ASCENDING), ('yearLowChange', ASCENDING)],
-            [('systemtime', ASCENDING), ('scrip', ASCENDING)],
-        ]),
-        
-        # Breakout collections
-        ('Breakout-Buy-after-10', [
-            [('systemtime', ASCENDING)],
-            [('scrip', ASCENDING)],
-        ]),
-        
-        ('Breakout-Sell-after-10', [
-            [('systemtime', ASCENDING)],
-            [('scrip', ASCENDING)],
-        ]),
-        
-        # Morning pattern collections
-        ('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)', [
-            [('systemtime', ASCENDING)],
-            [('scrip', ASCENDING)],
-        ]),
-        
-        ('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)', [
-            [('systemtime', ASCENDING)],
-            [('scrip', ASCENDING)],
-        ]),
-        
-        # Supertrend collections
-        ('supertrend-morning-buy', [
-            [('systemtime', ASCENDING)],
-            [('scrip', ASCENDING)],
-        ]),
-        
-        ('supertrend-morning-sell', [
-            [('systemtime', ASCENDING)],
-            [('scrip', ASCENDING)],
-        ]),
-        
-        # Day high/low crossovers
-        ('crossed-day-high', [
-            [('scrip', ASCENDING)],
-        ]),
-        
-        ('crossed-day-low', [
-            [('scrip', ASCENDING)],
-        ]),
-        
-        # Volume breakout
-        ('morning-volume-breakout-buy', [
-            [('systemtime', ASCENDING)],
-        ]),
-        
-        ('morning-volume-breakout-sell', [
-            [('systemtime', ASCENDING)],
-        ]),
-    ]
-    
+
+    dbcl = connection.chartlink
+    dbnse = connection.Nsedata
+
     total_created = 0
     total_skipped = 0
-    failed_collections = []
-    
-    print("📊 Creating indexes...\n")
-    print("-" * 80)
-    
-    for collection_name, index_list in indexes:
-        try:
-            collection = dbcl[collection_name]
-            print(f"\n📦 Collection: {collection_name}")
-            
-            # Check if collection exists
-            if collection_name not in dbcl.list_collection_names():
-                print(f"   ⚠️  Collection does not exist yet (will be created when data is inserted)")
-                continue
-            
-            for index_fields in index_list:
-                try:
-                    # Create the index
-                    index_name = collection.create_index(index_fields)
-                    total_created += 1
-                    
-                    # Format field names for display
-                    field_str = ", ".join([f"{field[0]} ({['DESC', 'ASC'][field[1]][:3]})" for field in index_fields])
-                    print(f"   ✅ Created: {field_str}")
-                    
-                except Exception as e:
-                    if "already exists" in str(e).lower():
-                        total_skipped += 1
-                        field_str = ", ".join([f"{field[0]}" for field in index_fields])
-                        print(f"   ⏭️  Skipped: {field_str} (already exists)")
-                    else:
-                        raise
-        
-        except Exception as e:
-            print(f"   ❌ Error: {e}")
-            failed_collections.append((collection_name, str(e)))
-    
-    print("\n" + "-" * 80)
-    print("\n📈 Index Creation Summary:")
-    print(f"   ✅ New indexes created: {total_created}")
-    print(f"   ⏭️  Existing indexes skipped: {total_skipped}")
-    print(f"   ❌ Collections with errors: {len(failed_collections)}")
-    
-    if failed_collections:
-        print("\n⚠️  Failed Collections:")
-        for coll_name, error in failed_collections:
-            print(f"   - {coll_name}: {error}")
-    
-    print("\n" + "=" * 80)
-    print("📋 Verifying Index Creation")
-    print("=" * 80)
-    
-    # Verify indexes were created
-    for collection_name, _ in indexes:
-        try:
-            collection = dbcl[collection_name]
-            if collection_name not in dbcl.list_collection_names():
-                continue
-            
-            # Get all indexes
-            indexes_info = collection.list_indexes()
-            print(f"\n📦 {collection_name}:")
-            
-            for idx in indexes_info:
-                if idx['name'] != '_id_':  # Skip default id index
-                    key_str = ", ".join([f"{k[0]}" for k in idx['key']])
-                    print(f"   • {idx['name']}: {key_str}")
-        
-        except Exception as e:
-            print(f"   Error listing indexes: {e}")
-    
-    print("\n" + "=" * 80)
-    print("✅ Index creation completed successfully!")
-    print("=" * 80)
-    print(f"\n⏰ Completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    
-    connection.close()
-    return len(failed_collections) == 0
+    total_rebuilt = 0
+    failed = []
 
-if __name__ == '__main__':
-    success = create_indexes()
+    print("=" * 80)
+    print("chartlink - reports query indexes")
+    print("=" * 80)
+
+    collections = [n for n in sorted(dbcl.list_collection_names()) if n not in SKIP_COLLECTIONS]
+    if not collections:
+        print("No collections found in chartlink.")
+    for collection_name in collections:
+        collection = dbcl[collection_name]
+        print(f"\n[{collection_name}]  ({collection.estimated_document_count()} docs)")
+        try:
+            created, skipped, rebuilt = _ensure_indexes(collection, CHARTLINK_INDEXES, rebuild)
+            total_created += created
+            total_skipped += skipped
+            total_rebuilt += rebuilt
+        except Exception as e:
+            print(f"   Error: {e}")
+            failed.append((f"chartlink.{collection_name}", str(e)))
+
+    print("\n" + "=" * 80)
+    print("Nsedata - reports query indexes")
+    print("=" * 80)
+
+    nse_names = set(dbnse.list_collection_names())
+    for collection_name, index_list in NSEDATA_INDEXES.items():
+        if collection_name not in nse_names:
+            print(f"\n[{collection_name}]  (missing - skipped)")
+            continue
+        collection = dbnse[collection_name]
+        print(f"\n[{collection_name}]  ({collection.estimated_document_count()} docs)")
+        try:
+            created, skipped, rebuilt = _ensure_indexes(collection, index_list, rebuild)
+            total_created += created
+            total_skipped += skipped
+            total_rebuilt += rebuilt
+        except Exception as e:
+            print(f"   Error: {e}")
+            failed.append((f"Nsedata.{collection_name}", str(e)))
+
+    print("\n" + "-" * 80)
+    print("Summary")
+    print(f"   Created: {total_created}")
+    print(f"   Rebuilt: {total_rebuilt}")
+    print(f"   Already present: {total_skipped}")
+    print(f"   Errors: {len(failed)}")
+    if failed:
+        for name, error in failed:
+            print(f"   - {name}: {error}")
+
+    print(f"\nCompleted at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    connection.close()
+    return len(failed) == 0
+
+
+if __name__ == "__main__":
+    rebuild = "--no-rebuild" not in sys.argv
+    success = create_indexes(rebuild=rebuild)
     sys.exit(0 if success else 1)
