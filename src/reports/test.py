@@ -207,6 +207,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['year2LowChange'] > 60) &
+                (df['year2HighChange'] != df['yearHighChange']) &
+                ((df['year5LowChange'] > 100) | (df['year2LowChange'] > 100) | (df['yearLowChange'] > 100)) &
                 (df['monthLowChange'] < 50) &
                 (df['year5HighChange'] < -40) &
                 (df['yearHighChange'] > -10) &
@@ -221,6 +224,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['year2LowChange'] > 60) &
+                (df['year2HighChange'] != df['yearHighChange']) &
+                ((df['year5LowChange'] > 100) | (df['year2LowChange'] > 100) | (df['yearLowChange'] > 100)) &
                 (df['monthLowChange'] < 50) &
                 (df['yearHighChange'] > -10) &
                 (df['month2HighChange'] > 1) &
@@ -334,6 +340,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['year2LowChange'] > 60) &
+                (df['year2HighChange'] != df['yearHighChange']) &
+                ((df['year5LowChange'] > 100) | (df['year2LowChange'] > 100) | (df['yearLowChange'] > 100)) &
                 (df['monthLowChange'] < 50) &
                 (df['year5HighChange'] < -40) &
                 (df['yearHighChange'] > -10) &
@@ -348,6 +357,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['year2LowChange'] > 60) &
+                (df['year2HighChange'] != df['yearHighChange']) &
+                ((df['year5LowChange'] > 100) | (df['year2LowChange'] > 100) | (df['yearLowChange'] > 100)) &
                 (df['monthLowChange'] < 50) &
                 (df['yearHighChange'] > -10) &
                 (df['month2HighChange'] > 1) &
