@@ -48,14 +48,14 @@ def main():
 
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
-        df = rb.getdf('supertrend-morningdown-buy')
+        df = rb.getdf('buy-check-morning-down-breakup-00')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         if len(df) >= 1:
-            rb.render(st, filtered_df, 'UpNow Supertrend MorningDown Buys', color='LG')
+            rb.render(st, filtered_df, 'buy-check-morning-down-breakup-00', color='LG')
         else:
-            rb.render(st, empty_df, 'UpNow Supertrend MorningDown Buys', color='LG')
+            rb.render(st, empty_df, 'buy-check-morning-down-breakup-00', color='LG')
     with col2:
         df = rb.getdf('buy-check-morning-down-breakup-01')
         filtered_df = df
@@ -83,14 +83,14 @@ def main():
             print("")
         rb.render(st, filtered_df, 'Buy Check Morning Down Breakup 02s', color='LG')
     with col4:
-        df = rb.getdf('supertrend-morningup-sell')
+        df = rb.getdf('sell-check-morning-up-breakdown-01')
         filtered_df = df
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         if len(df) >= 1:
-            rb.render(st, filtered_df, 'DownNow Supertrend  Morningup Sells', color='LG')
+            rb.render(st, filtered_df, 'sell-check-morning-up-breakdown-01', color='LG')
         else:
-            rb.render(st, empty_df, 'DownNow Supertrend Morningup Sells', color='LG')
+            rb.render(st, empty_df, 'sell-check-morning-up-breakdown-01', color='LG')
     with col5:
         df = rb.getdf('sell-check-morning-up-breakdown-01')
         filtered_df = df
