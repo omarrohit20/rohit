@@ -768,8 +768,15 @@ def process_url_volBreakout(url, processor, starttime, endtime, keyIndicator=Non
                 except:
                     pass
         
+        # Stop leftover network from the previous page before navigating
+        try:
+            if driver.url and not str(driver.url).startswith("about:"):
+                driver.evaluate("() => window.stop()")
+        except Exception:
+            pass
+
         driver.on("response", handle_response)
-        
+
         # Navigate to the URL
         driver.goto(url, wait_until="networkidle")
         
@@ -785,8 +792,6 @@ def process_url_volBreakout(url, processor, starttime, endtime, keyIndicator=Non
         for data in captured_data:
             process_backtest_volBreakout(data, processor, starttime, endtime, keyIndicator)
 
-        # #flush all the network requests
-        # driver.execute_script("window.location.reload(true);")
             
     except Exception as e:
         print(f'driver failed: {str(e)}')
