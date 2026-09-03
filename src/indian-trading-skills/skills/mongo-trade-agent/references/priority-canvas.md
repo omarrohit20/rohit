@@ -92,7 +92,8 @@ Workflow:
 
 1. Copy that file into a **new** timestamped path under `canvases/` (see naming above).
 2. Fill `meta`, `picks`, and `newsRows` only.
-3. Keep `HL`, `MlToken`, `WhyCell`, `NewsCell`, `SymbolCell`, `SentimentCell` unchanged.
+3. Keep `HL`, `MlToken`, `WhyCell`, `MomentumWhyText`, `NewsCell`, `SymbolCell`,
+   `SentimentCell` unchanged.
 4. When helper `ml_buy` / `ml_sell` is true, put `"mlbuy"` / `"mlsell"` in
    `whyParts` (use `buildWhyParts` in the snippet). Do **not** paraphrase away
    the literal **MLBuy** / **MLSell** tokens.
@@ -111,6 +112,8 @@ Workflow:
 | **Sentiment Bullish + news Positive** | Sentiment cell `backgroundColor: "#C6F6D5"` |
 | **Sentiment Bearish + news Negative** | Sentiment cell `backgroundColor: "#FEB2B2"` |
 | **Orange row** | Symbol chip `#FFE4C4` + Table `rowTone="warning"` |
+| **Momentum up keyword** | Green chip `#C6F6D5` on **UpStairs** / **UpPostLunchConsolidation** in Why when Today% threshold met |
+| **Momentum down keyword** | Red chip `#FEB2B2` on **DownStairs** / **DownPostLunchConsolidation** in Why when Today% threshold met |
 
 **FORBIDDEN:** `<Pill tone="success|deleted|warning|…">` for ML or news colours.
 Canvas SDK **ignores Pill tones** (always neutral) — that is why old boards

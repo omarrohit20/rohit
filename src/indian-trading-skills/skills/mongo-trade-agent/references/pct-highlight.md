@@ -54,6 +54,23 @@ Copy [../assets/priority-canvas-snippet.tsx](../assets/priority-canvas-snippet.t
 Colour **only** with `<Text style={{ backgroundColor: "…" }}>`. **Never** use
 `<Pill tone="…">` for MLBuy / MLSell / news — Canvas SDK ignores Pill tones.
 
+## Momentum keyword highlight — light green / light red in Why column
+
+Colour **only the keyword token** in the Why column (same pattern as MLBuy /
+MLSell chips — not the Symbol cell, not the full row).
+
+| Keyword in Why | Today% threshold | Token background |
+|----------------|------------------|------------------|
+| `UpStairs` or `#UpStairs` | `> 2` | Light green `#C6F6D5` |
+| `UpPostLunchConsolidation` (optional `:suffix`) | `> 3` | Light green `#C6F6D5` |
+| `DownStairs` or `#DownStairs` | `< -2` | Light red `#FEB2B2` |
+| `DownPostLunchConsolidation` (optional `:suffix`) | `< -3` | Light red `#FEB2B2` |
+
+Keywords must appear literally in Why text (or `whyText` parts). `MomentumWhyText`
+in `priority-canvas-snippet.tsx` parses and chips only matching tokens when the
+Today% threshold is met. Other highlights (orange Symbol, MLBuy/MLSell, news,
+Sentiment) are unchanged.
+
 ## News catalyst highlight — colour the News cell (not the whole Priority row)
 
 Apply on **News catalyst** in News & Extension Snapshot, horizon detail tables,

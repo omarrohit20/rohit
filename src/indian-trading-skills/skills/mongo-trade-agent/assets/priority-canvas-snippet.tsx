@@ -32,6 +32,10 @@ const HL = {
   newsPos: "#C6F6D5",
   newsNeg: "#FEB2B2",
   newsMix: "#FEFCBF",
+  /** #UpStairs / UpPostLunchConsolidation momentum highlight */
+  upMomentum: "#C6F6D5",
+  /** #DownStairs / DownPostLunchConsolidation breakdown highlight */
+  downMomentum: "#FEB2B2",
 } as const;
 
 type NewsTone = "positive" | "negative" | "mixed" | "neutral";
@@ -47,6 +51,11 @@ type PickRow = {
   sentiment: string;
   conviction: string;
   prob: number;
+  /**
+   * Raw scan tags/filter strings joined — used to detect #UpStairs,
+   * UpPostLunchConsolidation, #DownStairs, DownPostLunchConsolidation.
+   */
+  scanTags?: string;
   /** Parallel to whyText: "mlbuy" | "mlsell" | "text" */
   whyParts: WhyKind[];
   whyText: string[];
@@ -127,19 +136,85 @@ function MlToken({ kind }: { kind: "mlbuy" | "mlsell" }) {
   );
 }
 
-function WhyCell({ parts, texts }: { parts: WhyKind[]; texts: string[] }) {
+function WhyCell({
+  parts,
+  texts,
+  today,
+}: {
+  parts: WhyKind[];
+  texts: string[];
+  today: string;
+}) {
+  const todayNum = parseFloat(today ?? "0");
   return (
     <Row gap={4} style={{ flexWrap: "wrap", alignItems: "center" }}>
       {parts.map((p, i) => {
         if (p === "mlbuy") return <MlToken key={i} kind="mlbuy" />;
         if (p === "mlsell") return <MlToken key={i} kind="mlsell" />;
-        return (
-          <Text key={i} as="span" size="small">
-            {texts[i] ?? ""}
-          </Text>
-        );
+        return <MomentumWhyText key={i} text={texts[i] ?? ""} today={todayNum} />;
       })}
     </Row>
+  );
+}
+
+/** Momentum keyword chip colour when Today% threshold is met; otherwise plain. */
+function momentumKeywordBg(keyword: string, today: number): string | null {
+  const k = keyword.toLowerCase();
+  if (k.includes("uppostlunchconsolidation") && today > 3) return HL.upMomentum;
+  if (k.includes("upstairs") && today > 2) return HL.upMomentum;
+  if (k.includes("downpostlunchconsolidation") && today < -3) return HL.downMomentum;
+  if (k.includes("downstairs") && today < -2) return HL.downMomentum;
+  return null;
+}
+
+const MOMENTUM_KEYWORD_RE =
+  /(UpPostLunchConsolidation(?::[\w-]+)?|#?UpStairs\b|DownPostLunchConsolidation(?::[\w-]+)?|#?DownStairs\b)/gi;
+
+/** Colour only momentum keywords in Why text — not the whole row or scrip. */
+function MomentumWhyText({ text, today }: { text: string; today: number }) {
+  const segments: Array<{ text: string; bg?: string }> = [];
+  let lastIndex = 0;
+  const re = new RegExp(MOMENTUM_KEYWORD_RE.source, MOMENTUM_KEYWORD_RE.flags);
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      segments.push({ text: text.slice(lastIndex, match.index) });
+    }
+    const kw = match[0];
+    const bg = momentumKeywordBg(kw, today);
+    segments.push({ text: kw, bg: bg ?? undefined });
+    lastIndex = re.lastIndex;
+  }
+  if (lastIndex < text.length) {
+    segments.push({ text: text.slice(lastIndex) });
+  }
+  if (segments.length === 0) {
+    return (
+      <Text as="span" size="small">
+        {text}
+      </Text>
+    );
+  }
+  return (
+    <>
+      {segments.map((seg, i) =>
+        seg.bg ? (
+          <Text
+            key={i}
+            as="span"
+            size="small"
+            weight="semibold"
+            style={chipStyle(seg.bg)}
+          >
+            {seg.text}
+          </Text>
+        ) : (
+          <Text key={i} as="span" size="small">
+            {seg.text}
+          </Text>
+        )
+      )}
+    </>
   );
 }
 
@@ -233,7 +308,7 @@ export default function PriorityCanvasSnippet() {
     : ["#", "Symbol", "LastDay%", "Today%", "Sent", "Conv", "Prob%", "Why"];
 
   const rows = picks.map((p) => {
-    const why = <WhyCell parts={p.whyParts} texts={p.whyText} />;
+    const why = <WhyCell parts={p.whyParts} texts={p.whyText} today={p.today} />;
     const sym = <SymbolCell symbol={p.symbol} orange={p.orange} />;
     const sent = (
       <SentimentCell sentiment={p.sentiment} newsTone={resolveNewsTone(p)} />
@@ -285,8 +360,11 @@ export default function PriorityCanvasSnippet() {
         Legend: orange Symbol chip / warning row-dot = buy &amp; (LastDay% or Today%
         &gt; 3) or sell &amp; (&lt; −3). MLBuy = green chip, MLSell = red chip. News
         catalyst: green / red / yellow by tone. Sentiment green when Bullish +
-        positive news; Sentiment red when Bearish + negative news. Colours use
-        Text backgroundColor — never Pill tone.
+        positive news; Sentiment red when Bearish + negative news. Momentum
+        keywords in Why: green chip on UpStairs (Today% &gt; 2) or
+        UpPostLunchConsolidation (Today% &gt; 3); red chip on DownStairs
+        (Today% &lt; −2) or DownPostLunchConsolidation (Today% &lt; −3).
+        Colours use Text backgroundColor — never Pill tone.
       </Callout>
 
       <H2>Priority board</H2>

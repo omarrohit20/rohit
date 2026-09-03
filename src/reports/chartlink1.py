@@ -184,8 +184,11 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['highTail'] < 1) &
+                ((df['PCT_day_change_pre1'] < 0.3) | (df['PCT_day_change_pre2'] < 0.3)) &
                 (df['PCT_day_change'] < 3.3) &
                 (df['PCT_change'] < 3.3) &
+                (df['PCT_day_change'] > 1.5 ) &
                 (
                     df['mlData'].str.contains("#UpStairs") | 
                     df['mlData'].str.contains("UpPostLunchConsolidation")
@@ -194,7 +197,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'LastDayUpTodayOpenedGT0.3:PreUpstairs-CheckRecommendations(+)', dontapplybreakout=True,color='LG')
+        rb.render(st, filtered_df, 'LastDayUpTodayOpenedGT0.3:PreUpstairs-CheckRecommendations(+)', height=200, dontapplybreakout=True,color='LG')
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
@@ -232,16 +235,17 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'SQROFFAt10:LastDayUpTodayGT0.3:Consolidation-CheckRecommendations', dontapplybreakout=True, color='LG')
+        rb.render(st, filtered_df, 'SQROFFAt10:LastDayUpTodayGT0.3:Consolidation-CheckRecommendations', height=200, dontapplybreakout=True, color='LG')
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
         try:
             filtered_df = df[
-                (df['PCT_day_change'] < -1.3) &
-                (df['PCT_day_change'] > -3) &
-                (df['PCT_change'] < -1.3) &
-                (df['PCT_change'] > -3) &
+                (df['lowTail'] < 1) &
+                ((df['PCT_day_change_pre1'] > -0.3) | (df['PCT_day_change_pre2'] > 0.3)) &
+                (df['PCT_day_change'] > -3.3) &
+                (df['PCT_change'] > -3.3) &
+                (df['PCT_day_change'] < -1.5 ) &
                 (df['PCT_day_change_pre1'] < 1) &
                 (df['PCT_day_change_pre2'] < 1) &
                 (
@@ -252,7 +256,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'LastDayDownTodayOpenedLT-0.3:PreDownstairs-CheckRecommendations(-)', dontapplybreakout=True, color='LG')
+        rb.render(st, filtered_df, 'LastDayDownTodayOpenedLT-0.3:PreDownstairs-CheckRecommendations(-)', height=200, dontapplybreakout=True, color='LG')
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
@@ -267,7 +271,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'SQROFFAt10:LastDayDownTodayLT-0.3:Consolidation-CheckRecommendations', dontapplybreakout=True, color='LG')
+        rb.render(st, filtered_df, 'SQROFFAt10:LastDayDownTodayLT-0.3:Consolidation-CheckRecommendations', height=200, dontapplybreakout=True, color='LG')
 
     st.divider()
     st.subheader("Others")
