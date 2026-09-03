@@ -784,6 +784,9 @@ def process_url_volBreakout(url, processor, starttime, endtime, keyIndicator=Non
         # Process captured data
         for data in captured_data:
             process_backtest_volBreakout(data, processor, starttime, endtime, keyIndicator)
+
+        # #flush all the network requests
+        # driver.execute_script("window.location.reload(true);")
             
     except Exception as e:
         print(f'driver failed: {str(e)}')

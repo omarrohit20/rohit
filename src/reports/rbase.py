@@ -1576,6 +1576,12 @@ def _getdf_cached(collection_name):
         df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
         df['forecast_day_PCT7_change'] = pd.to_numeric(df['forecast_day_PCT7_change'], errors='coerce')
         df['forecast_day_PCT5_change'] = pd.to_numeric(df['forecast_day_PCT5_change'], errors='coerce')
+        if 'year5LowChange' in df.columns:
+            df['year5LowChange'] = pd.to_numeric(df['year5LowChange'], errors='coerce')
+        if 'year2HighChange' in df.columns:
+            df['year2HighChange'] = pd.to_numeric(df['year2HighChange'], errors='coerce')
+        if 'year2LowChange' in df.columns:
+            df['year2LowChange'] = pd.to_numeric(df['year2LowChange'], errors='coerce')
         df['systemtime'] = pd.to_datetime(df['systemtime']).dt.time.astype(str)
         df['mlData'] = df['mlData'].fillna('').astype(str)
     except KeyError as e:
@@ -1595,7 +1601,8 @@ def _coerce_intersect_columns(df):
     """Best-effort numeric/time coercion for intersected frames (schemas may differ)."""
     numeric_cols = [
         'PCT_day_change', 'PCT_change', 'PCT_day_change_pre1', 'PCT_day_change_pre2',
-        'highTail', 'lowTail', 'year5HighChange', 'yearHighChange', 'yearLowChange',
+        'highTail', 'lowTail', 'year5HighChange', 'year5LowChange',
+        'year2HighChange', 'year2LowChange', 'yearHighChange', 'yearLowChange',
         'month3HighChange', 'month3LowChange', 'monthHighChange', 'monthLowChange',
         'week2HighChange', 'week2LowChange', 'weekHighChange', 'weekLowChange',
         'forecast_day_PCT10_change', 'forecast_day_PCT7_change', 'forecast_day_PCT5_change',
@@ -1673,6 +1680,12 @@ def _getintersectdf_ml_cached(collection_name1, collection_name2):
         df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
         df['forecast_day_PCT7_change'] = pd.to_numeric(df['forecast_day_PCT7_change'], errors='coerce')
         df['forecast_day_PCT5_change'] = pd.to_numeric(df['forecast_day_PCT5_change'], errors='coerce')
+        if 'year5LowChange' in df.columns:
+            df['year5LowChange'] = pd.to_numeric(df['year5LowChange'], errors='coerce')
+        if 'year2HighChange' in df.columns:
+            df['year2HighChange'] = pd.to_numeric(df['year2HighChange'], errors='coerce')
+        if 'year2LowChange' in df.columns:
+            df['year2LowChange'] = pd.to_numeric(df['year2LowChange'], errors='coerce')
         df['kNeighboursValue_reg'] = pd.to_numeric(df['kNeighboursValue_reg'], errors='coerce')
         df['mlpValue_reg'] = pd.to_numeric(df['mlpValue_reg'], errors='coerce')
         df['kNeighboursValue_reg_merged'] = pd.to_numeric(df['kNeighboursValue_reg_merged'], errors='coerce')
@@ -1722,6 +1735,12 @@ def _getdfResult_cached(collection_name):
         df['forecast_day_PCT10_change'] = pd.to_numeric(df['forecast_day_PCT10_change'], errors='coerce')
         df['forecast_day_PCT7_change'] = pd.to_numeric(df['forecast_day_PCT7_change'], errors='coerce')
         df['forecast_day_PCT5_change'] = pd.to_numeric(df['forecast_day_PCT5_change'], errors='coerce')
+        if 'year5LowChange' in df.columns:
+            df['year5LowChange'] = pd.to_numeric(df['year5LowChange'], errors='coerce')
+        if 'year2HighChange' in df.columns:
+            df['year2HighChange'] = pd.to_numeric(df['year2HighChange'], errors='coerce')
+        if 'year2LowChange' in df.columns:
+            df['year2LowChange'] = pd.to_numeric(df['year2LowChange'], errors='coerce')
         df['systemtime'] = pd.to_datetime(df['systemtime']).dt.time.astype(str)
         df['kNeighboursValue_reg'] = pd.to_numeric(df['kNeighboursValue_reg'], errors='coerce')
         df['mlpValue_reg'] = pd.to_numeric(df['mlpValue_reg'], errors='coerce')
