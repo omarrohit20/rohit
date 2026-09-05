@@ -178,6 +178,107 @@ def main():
         else:
             rb.render(st, empty_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=200)
   
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    with col1:
+        df = rb.getdf('buy-breakout')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['highTail'] < 1) &
+                ((df['PCT_day_change_pre1'] < 0.3) | (df['PCT_day_change_pre2'] < 0.3)) &
+                (df['PCT_day_change'] < 3.5) &
+                (df['PCT_change'] < 3.5) &
+                (df['PCT_day_change'] > 1.5 ) &
+                (
+                    (df['mlData'].str.contains("#UpStairs") & (df['PCT_day_change'] > 2)) | 
+                    (df['mlData'].str.contains("UpPostLunchConsolidation") & (df['PCT_day_change'] > 2.5))
+                ) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'LastDayUpTodayOpenedGT0.3:PreUpstairs-CheckRecommendations(+)', height=200, dontapplybreakout=True,color='LG')
+    with col2:
+        df = rb.getdf('buy-breakout')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] > 3.5) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
+                (df['yearLowChange'] > 10) &
+                (df['yearHighChange'] >= -70) &
+                #(df['month3HighChange'] > -15) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                ((df['mlData'].str.contains("Z&&&") & (df['yearHighChange'] <= -10)) |
+                    (
+                        (df['week2HighChange'] > -1) &
+                        (df['monthHighChange'] < 5) &
+                        (df['yearHighChange'] > -35) &
+                        (df['PCT_day_change'] > -0.7) &
+                        (df['PCT_day_change'] < 0.7) &
+                        (~df['filter5'].str.contains('BothGT2', case=False, regex=True, na=False)) &
+                        (df['lowTail'] < 1.5) &
+                        (df['forecast_day_PCT10_change'] > -1) &
+                        (df['week2LowChange'] > 0) &
+                        ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
+                        (df['PCT_day_change_pre2'] < 3.5) &
+                        (df['mlData'].str.contains("TOP"))
+                    ) |
+                    (
+                        (df['PCT_day_change'] < 2.5) &
+                        (df['PCT_day_change'] > -3) &
+                        (df['PCT_change'] > 0) &
+                        (df['month3HighChange'] > -20) &
+                        (df['year5HighChange'] < -25) &
+                        (df['yearHighChange'] < -20)
+                    )
+                )
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'SQROFFAt10:LastDayUpTodayGT0.3:Consolidation-CheckRecommendations', height=200, dontapplybreakout=True, color='LG')
+    with col3:
+        df = rb.getdf('buy-breakout')
+        rb.render(st, df, 'buy-breakout', height=200, dontapplybreakout=True, color='LG')
+    with col4:
+        df = rb.getdf('sell-breakout')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['lowTail'] < 1) &
+                ((df['PCT_day_change_pre1'] > -0.3) | (df['PCT_day_change_pre2'] > 0.3)) &
+                (df['PCT_day_change'] > -3.5) &
+                (df['PCT_change'] > -3.5) &
+                (df['PCT_day_change'] < -1.5 ) &
+                (df['PCT_day_change_pre1'] < 1) &
+                (df['PCT_day_change_pre2'] < 1) &
+                (
+                    (df['mlData'].str.contains("#DownStairs") & (df['PCT_day_change'] < -2)) | 
+                    (df['mlData'].str.contains("DownPostLunchConsolidation") & (df['PCT_day_change'] < -2.5))
+                ) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'LastDayDownTodayOpenedLT-0.3:PreDownstairs-CheckRecommendations(-)', height=200, dontapplybreakout=True, color='LG')
+    with col5:
+        df = rb.getdf('sell-breakout')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                ((df['forecast_day_PCT10_change'] < -3.5) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
+                (df['yearHighChange'] < -10) &
+                (df['yearLowChange'] < 70) &
+                (df['month3LowChange'] < 15) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                (df['mlData'].str.contains("Z&&&") & (df['yearLowChange'] > 10)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'SQROFFAt10:LastDayDownTodayLT-0.3:Consolidation-CheckRecommendations', height=200, dontapplybreakout=True, color='LG')
+    with col6:
+        df = rb.getdf('sell-breakout')
+        rb.render(st, df, 'sell-breakout', height=200, dontapplybreakout=True, color='LG')
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
@@ -190,8 +291,8 @@ def main():
                 (df['PCT_change'] < 3.3) &
                 (df['PCT_day_change'] > 1.5 ) &
                 (
-                    df['mlData'].str.contains("#UpStairs") | 
-                    df['mlData'].str.contains("UpPostLunchConsolidation")
+                    (df['mlData'].str.contains("#UpStairs") & (df['PCT_day_change'] > 2)) | 
+                    (df['mlData'].str.contains("UpPostLunchConsolidation") & (df['PCT_day_change'] > 2.5))
                 ) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
                 ]
@@ -249,8 +350,8 @@ def main():
                 (df['PCT_day_change_pre1'] < 1) &
                 (df['PCT_day_change_pre2'] < 1) &
                 (
-                    df['mlData'].str.contains("#DownStairs") | 
-                    df['mlData'].str.contains("DownPostLunchConsolidation")
+                    (df['mlData'].str.contains("#DownStairs") & (df['PCT_day_change'] < -2)) | 
+                    (df['mlData'].str.contains("DownPostLunchConsolidation") & (df['PCT_day_change'] < -2.5))
                 ) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
                 ]
