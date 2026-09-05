@@ -423,6 +423,7 @@ def _icon_strip_page(scrips, news_map, height):
 
   const track = document.querySelector('.track');
   const list = document.querySelector('.list');
+  const pad = document.querySelector('.pad');
   let scroller = null;
   let df = null;
   function applyY(y) {{
@@ -433,37 +434,53 @@ def _icon_strip_page(scrips, news_map, height):
     document.body.scrollTop = 0;
     if (list) list.scrollTop = 0;
   }}
+  function isVisible(el) {{
+    if (!el || !el.isConnected) return false;
+    const cs = P.defaultView.getComputedStyle(el);
+    if (cs.display === 'none' || cs.visibility === 'hidden' || el.offsetHeight < 20) return false;
+    const r = el.getBoundingClientRect();
+    return r.height >= 20 && r.width >= 20;
+  }}
+  function pickRightOf(frame, grids) {{
+    const fr = frame.getBoundingClientRect();
+    let best = null, bestScore = 1e12;
+    for (let i = 0; i < grids.length; i++) {{
+      const el = grids[i];
+      if (!isVisible(el)) continue;
+      const r = el.getBoundingClientRect();
+      const dy = r.top - fr.top;
+      if (dy > 48 || dy < -80) continue;
+      let dx = r.left - fr.right;
+      if (dx < -12) continue;
+      const score = Math.abs(dy) * 12 + dx;
+      if (score < bestScore) {{ best = el; bestScore = score; }}
+    }}
+    return best;
+  }}
   function locateGrid() {{
     const frame = window.frameElement;
     if (!frame) return null;
     let col = frame.parentElement;
-    for (let i = 0; i < 20 && col; i++) {{
+    for (let i = 0; i < 24 && col; i++) {{
       const tid = col.getAttribute && col.getAttribute('data-testid');
       if (tid === 'stColumn') {{
         const row = col.parentElement;
-        const inRow = row && row.querySelector('[data-testid="stDataFrame"]');
-        if (inRow) return inRow;
+        if (row) {{
+          const hit = pickRightOf(frame, row.querySelectorAll('[data-testid="stDataFrame"]'));
+          if (hit) return hit;
+        }}
         break;
       }}
       col = col.parentElement;
     }}
-    const fr = frame.getBoundingClientRect();
-    const dfs = P.querySelectorAll('[data-testid="stDataFrame"]');
-    let best = null, bestScore = 1e12;
-    for (let i = 0; i < dfs.length; i++) {{
-      const r = dfs[i].getBoundingClientRect();
-      if (r.height < 20) continue;
-      const dy = Math.abs(r.top - fr.top);
-      const dx = r.left - fr.right;
-      const score = dy * 8 + (dx < -20 ? 2000 + Math.abs(dx) : Math.abs(dx));
-      if (score < bestScore) {{ best = dfs[i]; bestScore = score; }}
-    }}
-    return best;
+    return pickRightOf(frame, P.querySelectorAll('[data-testid="stDataFrame"]'));
   }}
   function findScroller(root) {{
     if (!root) return null;
-    const named = root.querySelector('.dvn-scroller') || root.querySelector('[class*="dvn-scroller"]');
-    if (named) return named;
+    const named = root.querySelector('.dvn-scroller')
+      || root.querySelector('[class*="dvn-scroller"]')
+      || root.querySelector('[class*="gdg-"][class*="scroll"]');
+    if (named && named.scrollHeight - named.clientHeight >= 0) return named;
     const nodes = root.querySelectorAll('div');
     let best = null, bestDelta = 0;
     for (let i = 0; i < nodes.length; i++) {{
@@ -476,20 +493,50 @@ def _icon_strip_page(scrips, news_map, height):
     }}
     return best;
   }}
+  function syncMetrics(root, s) {{
+    if (!root || !s || !pad) return;
+    const headerH = Math.round(s.getBoundingClientRect().top - root.getBoundingClientRect().top);
+    if (headerH >= 20 && headerH <= 120 && pad._h !== headerH) {{
+      pad._h = headerH;
+      pad.style.height = headerH + 'px';
+      pad.style.flexBasis = headerH + 'px';
+      if (list) list.style.height = Math.max({h} - headerH, 40) + 'px';
+    }}
+    const cell = s.querySelector('[role="gridcell"]');
+    let rowH = { _ROW_H };
+    if (cell) {{
+      const ch = cell.getBoundingClientRect().height;
+      if (ch >= 20 && ch <= 64) rowH = Math.round(ch);
+    }}
+    if (track && track._rh !== rowH) {{
+      track._rh = rowH;
+      document.querySelectorAll('.nws-ico').forEach(function(el) {{
+        el.style.height = rowH + 'px';
+        el.style.lineHeight = rowH + 'px';
+      }});
+    }}
+  }}
   function resolve() {{
-    if (scroller && scroller.isConnected && df && df.isConnected) return scroller;
-    df = locateGrid();
-    scroller = findScroller(df);
-    if (scroller && !scroller._nwsListen) {{
-      scroller._nwsListen = true;
-      scroller.addEventListener('scroll', function() {{ applyY(scroller.scrollTop); }}, {{passive: true}});
+    const next = locateGrid();
+    if (next !== df) {{
+      df = next;
+      scroller = findScroller(df);
+      if (scroller && !scroller._nwsListen) {{
+        scroller._nwsListen = true;
+        scroller.addEventListener('scroll', function() {{ applyY(scroller.scrollTop); }}, {{passive: true}});
+      }}
+    }} else if (df && (!scroller || !scroller.isConnected)) {{
+      scroller = findScroller(df);
     }}
     return scroller;
   }}
   function sync() {{
     pinLocal();
     const s = resolve();
-    if (s) applyY(s.scrollTop);
+    if (s) {{
+      syncMetrics(df, s);
+      applyY(s.scrollTop);
+    }}
   }}
   document.addEventListener('wheel', function(e) {{
     e.preventDefault();
@@ -529,7 +576,7 @@ def display_dataframe(
     } if scrips else {}
     neon_scrips = recent_scrip_keys(news_map)
 
-    if not is_enabled() or not scrips:
+    if not is_enabled():
         chart_preview.display_dataframe(
             st_mod,
             data,
@@ -543,9 +590,8 @@ def display_dataframe(
 
     left, right = st_mod.columns([0.05, 0.95])
     with left:
-        if scrips:
-            page = _icon_strip_page(scrips, table_news, height)
-            components.html(page, height=int(height) + 8, scrolling=False)
+        page = _icon_strip_page(scrips, table_news, height)
+        components.html(page, height=int(height), scrolling=False)
     with right:
         chart_preview.display_dataframe(
             st_mod,
