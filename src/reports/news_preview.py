@@ -16,12 +16,24 @@ NEON_BG = "#39FF14"
 _RECENT_WEEKDAYS = 10
 
 _SESSION_ENABLED = "news_preview_enabled"
+_NEWS_SENTIMENT_KEY = "news_sentiment_filter"
+NEWS_SENTIMENT_CHOICES = ("All", "Bullish", "Bearish", "Bullish or Bearish")
 _ROW_H = 35
 _HEADER_H = 36
 
 
 def is_enabled():
     return bool(st.session_state.get(_SESSION_ENABLED, True))
+
+
+def current_news_sentiment():
+    try:
+        choice = str(st.session_state.get(_NEWS_SENTIMENT_KEY) or "")
+    except Exception:
+        choice = ""
+    if choice in NEWS_SENTIMENT_CHOICES:
+        return choice
+    return "All"
 
 
 def render_sidebar_controls():
@@ -33,7 +45,23 @@ def render_sidebar_controls():
         key=_SESSION_ENABLED,
         help="ℹ sits to the left of the table. Hover for conviction, sentiment, and news. Leave to close; stay on the preview to keep it open.",
     )
-    
+    if _NEWS_SENTIMENT_KEY not in st.session_state:
+        st.session_state[_NEWS_SENTIMENT_KEY] = "All"
+    st.sidebar.selectbox(
+        "News sentiment",
+        list(NEWS_SENTIMENT_CHOICES),
+        key=_NEWS_SENTIMENT_KEY,
+        help="Keep table rows whose scrip_news overall_sentiment is Bullish, Bearish, or either.",
+    )
+    choice = current_news_sentiment()
+    if choice != "All":
+        try:
+            import rbase as _rb
+            n = len(_rb.news_sentiment_scrips(choice))
+            st.sidebar.caption(f"{n} scrips with {choice.lower()} news")
+        except Exception:
+            pass
+
 
 
 def _scrip_key(value):

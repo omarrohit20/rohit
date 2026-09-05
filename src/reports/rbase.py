@@ -773,18 +773,81 @@ def current_scrip_index():
     return choice if choice in SCRIP_INDEX_CHOICES else "All"
 
 
+_BULL_BEAR_SENTIMENTS = frozenset({"bullish", "bearish"})
+_scrip_sentiments = None
+
+
+def _scrip_sentiment_map():
+    """scrip → lowercase overall_sentiment (scrip + sentiment only, no articles)."""
+    global _scrip_sentiments
+    if _scrip_sentiments is not None:
+        return _scrip_sentiments
+    try:
+        docs = dbnse.scrip_news.find(
+            {},
+            {"_id": 0, "scrip": 1, "overall_sentiment": 1},
+        )
+        _scrip_sentiments = {
+            str(d.get("scrip") or "").strip().upper(): str(d.get("overall_sentiment") or "").strip().lower()
+            for d in docs
+            if d.get("scrip")
+        }
+    except Exception:
+        _scrip_sentiments = {}
+    return _scrip_sentiments
+
+
+def _wanted_news_sentiments(choice=None):
+    if choice is None:
+        try:
+            choice = _news_preview.current_news_sentiment()
+        except Exception:
+            choice = "All"
+    if choice == "All":
+        return None
+    if choice == "Bullish or Bearish":
+        return _BULL_BEAR_SENTIMENTS
+    return frozenset({str(choice).strip().lower()})
+
+
+def news_sentiment_scrips(choice=None):
+    wanted = _wanted_news_sentiments(choice)
+    if wanted is None:
+        return None
+    return frozenset(
+        scrip for scrip, sent in _scrip_sentiment_map().items() if sent in wanted
+    )
+
+
+def filter_df_by_news_sentiment(df):
+    """Keep rows matching the sidebar News sentiment choice."""
+    wanted = _wanted_news_sentiments()
+    if wanted is None or df is None or getattr(df, "empty", True):
+        return df
+    if "overall_sentiment" in getattr(df, "columns", []):
+        sent = df["overall_sentiment"].astype(str).str.strip().str.lower()
+        return df[sent.isin(wanted)].reset_index(drop=True)
+    if "scrip" not in getattr(df, "columns", []):
+        return df
+    allowed = news_sentiment_scrips()
+    if not allowed:
+        return df
+    keys = df["scrip"].astype(str).str.strip().str.upper()
+    return df[keys.isin(allowed)].reset_index(drop=True)
+
+
 def filter_df_by_scrip_index(df):
     """Keep rows whose scrip is in the selected Nsedata.scrip index."""
     choice = current_scrip_index()
-    if choice == "All" or df is None or getattr(df, "empty", True):
-        return df
-    if "scrip" not in getattr(df, "columns", []):
-        return df
-    allowed = get_scrips_by_index(choice)
-    if not allowed:
-        return df.iloc[0:0]
-    keys = df["scrip"].astype(str).str.strip().str.upper()
-    return df[keys.isin(allowed)]
+    if choice != "All" and df is not None and not getattr(df, "empty", True):
+        if "scrip" not in getattr(df, "columns", []):
+            return filter_df_by_news_sentiment(df)
+        allowed = get_scrips_by_index(choice)
+        if not allowed:
+            return filter_df_by_news_sentiment(df.iloc[0:0])
+        keys = df["scrip"].astype(str).str.strip().str.upper()
+        df = df[keys.isin(allowed)]
+    return filter_df_by_news_sentiment(df)
 
 
 def render_scrip_index_sidebar():
