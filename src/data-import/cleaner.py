@@ -79,15 +79,20 @@ result = db["breakoutM2HR"].delete_many(query)
 print(f"Deleted {result.deleted_count} documents.")
 result = db["breakoutW2HR"].delete_many(query)
 print(f"Deleted {result.deleted_count} documents.")
-result = db["breakoutMHL"].delete_many(query)
+result = db["breakoutMLR"].delete_many(query)
 print(f"Deleted {result.deleted_count} documents.")
-result = db["breakoutM2HL"].delete_many(query)
+result = db["breakoutM2LR"].delete_many(query)
 print(f"Deleted {result.deleted_count} documents.")
-result = db["breakoutW2HL"].delete_many(query)
+result = db["breakoutW2LR"].delete_many(query)
 print(f"Deleted {result.deleted_count} documents.")
 result = db["movingavg_crossed_up"].delete_many(query)
 print(f"Deleted {result.deleted_count} documents.")
 result = db["movingavg_crossed_down"].delete_many(query)
 print(f"Deleted {result.deleted_count} documents.")
+
+scrip_news_cutoff = datetime.now() - timedelta(days=20)
+result = db["scrip_news"].delete_many({"updated_at": {"$lt": scrip_news_cutoff}})
+print(f"Deleted {result.deleted_count} scrip_news documents older than 20 days.")
+
 
 
