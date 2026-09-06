@@ -103,16 +103,27 @@ def main():
         "article_count",
     ] + [c for c in rb.column_order_sandlterm if c not in {"scrip", "date", "industry"}]
 
-    col0, col1 = st.columns(2)
+
+    col0, col1, col2, col3 = st.columns(4)
     with col0:
         df = _high_conviction_news_df("Bullish")
         rb.render_sandlterm_data(
             st, df, "Bullish · High conviction", color="LG", column_order=news_col_order
         )
     with col1:
+        df = _scan_bull_bear_news_df("movingavg_crossed_up")
+        rb.render_sandlterm_data(
+            st, df, "movingavg_crossed_up · news B/B", color="LG", column_order=news_col_order
+        )
+    with col2:
         df = _high_conviction_news_df("Bearish")
         rb.render_sandlterm_data(
             st, df, "Bearish · High conviction", color="LG", column_order=news_col_order
+        )
+    with col3:
+        df = _scan_bull_bear_news_df("movingavg_crossed_down")
+        rb.render_sandlterm_data(
+            st, df, "movingavg_crossed_down · news B/B", color="LG", column_order=news_col_order
         )
 
 
@@ -559,7 +570,6 @@ def main():
     with col2:
         df = rb.getintersectdf('breakoutM2LR', 'movingavg_crossed_down')
         rb.render_sandlterm_data(st, df, 'breakoutM2LR', color='LG')
-    
 
     col0, col1, col2, col3, col4, col5 = st.columns(6)
     with col0:
@@ -693,6 +703,59 @@ def main():
         rb.render_sandlterm_data(st, df, 'movingavg_crossed_down', color='LG')
 
     
+
+def _scan_bull_bear_news_df(collection_name):
+    """Scan rows with Bullish or Bearish scrip_news, newest insertion_date first."""
+    empty = pd.DataFrame(
+        columns=["scrip", "insertion_date", "overall_sentiment", "conviction", "industry"]
+    )
+    try:
+        scan = rb.getdf_sandlterm(collection_name)
+    except Exception:
+        scan = None
+    if scan is None or getattr(scan, "empty", True) or "scrip" not in getattr(scan, "columns", []):
+        return empty
+
+    scan = scan.copy()
+    scan["scrip"] = scan["scrip"].astype(str).str.strip().str.upper()
+    if "date" in scan.columns:
+        scan = scan.rename(columns={"date": "scan_date"})
+
+    query = {"overall_sentiment": {"$regex": "^(bullish|bearish)$", "$options": "i"}}
+    proj = {
+        "_id": 0,
+        "scrip": 1,
+        "insertion_date": 1,
+        "overall_sentiment": 1,
+        "conviction": 1,
+        "industry": 1,
+        "scan_tables": 1,
+        "article_count": 1,
+    }
+    try:
+        docs = list(rb.dbnse.scrip_news.find(query, proj))
+    except Exception:
+        docs = []
+    news = pd.DataFrame(docs)
+    if news.empty or "scrip" not in news.columns:
+        return empty
+    news["scrip"] = news["scrip"].astype(str).str.strip().str.upper()
+    if "scan_tables" in news.columns:
+        news["scan_tables"] = news["scan_tables"].apply(
+            lambda v: ", ".join(str(x) for x in v) if isinstance(v, list) else v
+        )
+    overlap = [c for c in news.columns if c in scan.columns and c != "scrip"]
+    news = news.drop(columns=overlap, errors="ignore")
+    df = scan.merge(news, on="scrip", how="inner")
+    if df.empty:
+        return df
+
+    if "insertion_date" in df.columns:
+        df["_ins"] = pd.to_datetime(df["insertion_date"], errors="coerce")
+        df = df.sort_values("_ins", ascending=False, na_position="last").drop(columns=["_ins"])
+        df["insertion_date"] = pd.to_datetime(df["insertion_date"], errors="coerce")
+    return df.reset_index(drop=True)
+
 
 def _high_conviction_news_df(sentiment):
     """scrip_news rows: High conviction + Bullish/Bearish, newest insertion_date first."""
