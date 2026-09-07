@@ -49,6 +49,9 @@ ANALYST_RE = re.compile(
     re.I,
 )
 OVERWRITE_DAYS = 30
+# Sectoral headlines only count toward overall sentiment / conviction
+# when there are at least this many. Company news and analyst calls always count.
+MIN_SECTORAL_FOR_SENTIMENT = 3
 
 
 def _norm_scrip(value: Any) -> str | None:
@@ -311,9 +314,36 @@ def select_high_impact(articles: list[dict], min_impact: int) -> list[dict]:
     return uniq
 
 
+def articles_for_overall_sentiment(articles: list[dict]) -> list[dict]:
+    """Company news and analyst calls always count; sectoral only if count >= 3."""
+    sectoral = [a for a in articles if a.get("kind") == "sectoral"]
+    if len(sectoral) >= MIN_SECTORAL_FOR_SENTIMENT:
+        return list(articles)
+    return [a for a in articles if a.get("kind") != "sectoral"]
+
+
+def articles_from_doc(doc: dict) -> list[dict]:
+    """Rebuild a kind-tagged article list from a stored scrip_news document."""
+    stored = list(doc.get("articles") or [])
+    if stored and any(a.get("kind") for a in stored):
+        return stored
+    rebuilt: list[dict] = []
+    for kind, key in (
+        ("news", "news"),
+        ("sectoral", "sectoral_news"),
+        ("analyst", "analyst_calls"),
+    ):
+        for item in doc.get(key) or []:
+            row = dict(item)
+            row["kind"] = row.get("kind") or kind
+            rebuilt.append(row)
+    return rebuilt or stored
+
+
 def overall_sentiment(articles: list[dict]) -> str:
-    bull = sum(1 for a in articles if a.get("sentiment") == "Bullish")
-    bear = sum(1 for a in articles if a.get("sentiment") == "Bearish")
+    scored = articles_for_overall_sentiment(articles)
+    bull = sum(1 for a in scored if a.get("sentiment") == "Bullish")
+    bear = sum(1 for a in scored if a.get("sentiment") == "Bearish")
     if bull > bear and bull:
         return "Bullish"
     if bear > bull and bear:
@@ -324,6 +354,7 @@ def overall_sentiment(articles: list[dict]) -> str:
 
 
 def conviction_for(articles: list[dict], sentiment: str) -> str:
+    articles = articles_for_overall_sentiment(articles)
     if not articles:
         return "Low"
     hi = [a for a in articles if int(a.get("impact_score") or 0) >= 6]
@@ -348,13 +379,19 @@ def _as_naive(dt: datetime | None) -> datetime | None:
     return dt
 
 
-def upsert_scrip(coll, scrip: str, industry: str, tables: list[str], articles: list[dict]) -> str:
-    now = datetime.now()
-    sentiment = overall_sentiment(articles)
-    conviction = conviction_for(articles, sentiment)
+def split_article_kinds(articles: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
     news = [a for a in articles if a.get("kind") == "news"]
     sectoral = [a for a in articles if a.get("kind") == "sectoral"]
     analyst = [a for a in articles if a.get("kind") == "analyst"]
+    return news, sectoral, analyst
+
+
+def upsert_scrip(coll, scrip: str, industry: str, tables: list[str], articles: list[dict]) -> str:
+    now = datetime.now()
+    articles = articles_for_overall_sentiment(articles)
+    sentiment = overall_sentiment(articles)
+    conviction = conviction_for(articles, sentiment)
+    news, sectoral, analyst = split_article_kinds(articles)
     payload = {
         "scrip": scrip,
         "industry": industry,
@@ -388,6 +425,48 @@ def setup_indexes(coll) -> None:
     coll.create_index([("updated_at", ASCENDING)])
 
 
+def recompute_scrip_news(coll) -> dict[str, int]:
+    """Recalculate overall_sentiment / conviction and drop thin sectoral news."""
+    counts = {"checked": 0, "updated": 0, "unchanged": 0}
+    now = datetime.now()
+    for doc in coll.find({}):
+        counts["checked"] += 1
+        articles = articles_for_overall_sentiment(articles_from_doc(doc))
+        sentiment = overall_sentiment(articles)
+        conviction = conviction_for(articles, sentiment)
+        news, sectoral, analyst = split_article_kinds(articles)
+        prev_sent = doc.get("overall_sentiment")
+        prev_conv = doc.get("conviction")
+        prev_sectoral = len(doc.get("sectoral_news") or [])
+        same_score = prev_sent == sentiment and prev_conv == conviction
+        same_sectoral = prev_sectoral == len(sectoral)
+        if same_score and same_sectoral and len(doc.get("articles") or []) == len(articles):
+            counts["unchanged"] += 1
+            continue
+        coll.update_one(
+            {"_id": doc["_id"]},
+            {
+                "$set": {
+                    "articles": articles,
+                    "news": news,
+                    "sectoral_news": sectoral,
+                    "analyst_calls": analyst,
+                    "article_count": len(articles),
+                    "overall_sentiment": sentiment,
+                    "conviction": conviction,
+                    "updated_at": now,
+                }
+            },
+        )
+        counts["updated"] += 1
+        scrip = doc.get("scrip") or doc.get("_id")
+        print(
+            f"    {scrip}: {prev_sent}/{prev_conv} -> {sentiment}/{conviction} "
+            f"sectoral {prev_sectoral}->{len(sectoral)}"
+        )
+    return counts
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="scan-news-conviction ingest")
     parser.add_argument("--uri", default=DEFAULT_URI)
@@ -397,6 +476,11 @@ def main() -> None:
     parser.add_argument("--sleep", type=float, default=0.35)
     parser.add_argument("--scrips", default="")
     parser.add_argument("--limit", type=int, default=0)
+    parser.add_argument(
+        "--recompute-only",
+        action="store_true",
+        help="Recalculate overall_sentiment/conviction on existing scrip_news; do not scrape",
+    )
     args = parser.parse_args()
 
     now = datetime.now()
@@ -404,6 +488,20 @@ def main() -> None:
     client.admin.command("ping")
     coll = client[SCAN_DB][TARGET_COLLECTION]
     setup_indexes(coll)
+
+    if args.recompute_only:
+        print("Skill: scan-news-conviction (recompute existing scrip_news)")
+        print(
+            f"Sectoral news counts toward sentiment only if "
+            f"count >= {MIN_SECTORAL_FOR_SENTIMENT}; company news and analyst calls always count"
+        )
+        counts = recompute_scrip_news(coll)
+        print(
+            f"\nDone. checked={counts['checked']} updated={counts['updated']} "
+            f"unchanged={counts['unchanged']} collection={SCAN_DB}.{TARGET_COLLECTION}"
+        )
+        client.close()
+        return
 
     universe = collect_scrips(client, args.days)
     if args.scrips:

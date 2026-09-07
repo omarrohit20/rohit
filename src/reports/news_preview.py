@@ -14,6 +14,8 @@ import streamlit.components.v1 as components
 
 NEON_BG = "#39FF14"
 _RECENT_WEEKDAYS = 10
+# Match scan-news-conviction: sectoral headlines count only when there are >= 3.
+MIN_SECTORAL_FOR_SENTIMENT = 3
 
 _SESSION_ENABLED = "news_preview_enabled"
 _NEWS_SENTIMENT_KEY = "news_sentiment_filter"
@@ -92,7 +94,8 @@ def _scrip_list(data):
 
 
 @st.cache_data(ttl=3600)
-def _fetch_news_docs():
+def _fetch_news_docs(cache_ver=2):
+    del cache_ver
     try:
         from pymongo import MongoClient
     except Exception:
@@ -123,20 +126,26 @@ def _fetch_news_docs():
         return []
 
 
-_NEWS_CACHE = {"t": 0.0, "map": {}, "neon": frozenset()}
+_NEWS_CACHE = {"t": 0.0, "map": {}, "neon": frozenset(), "ver": 0}
+_NEWS_CACHE_VER = 2
 _NEWS_TTL = 3600.0
 
 
 def load_news_map():
     now = time.time()
-    if _NEWS_CACHE["map"] and (now - _NEWS_CACHE["t"]) < _NEWS_TTL:
+    if (
+        _NEWS_CACHE["map"]
+        and _NEWS_CACHE.get("ver") == _NEWS_CACHE_VER
+        and (now - _NEWS_CACHE["t"]) < _NEWS_TTL
+    ):
         return _NEWS_CACHE["map"]
     out = {}
-    for doc in _fetch_news_docs():
+    for doc in _fetch_news_docs(cache_ver=2):
         key = _scrip_key(doc.get("scrip"))
         if key:
             out[key] = _public_doc(doc)
     _NEWS_CACHE["t"] = now
+    _NEWS_CACHE["ver"] = _NEWS_CACHE_VER
     _NEWS_CACHE["map"] = out
     _NEWS_CACHE["neon"] = frozenset(
         key for key, doc in out.items() if should_neon_highlight(doc)
@@ -201,8 +210,16 @@ def _nonempty_articles(items):
     return False
 
 
+def _sectoral_for_sentiment(items):
+    """Sectoral headlines are ignored unless there are at least 3."""
+    items = items or []
+    if not isinstance(items, list) or len(items) < MIN_SECTORAL_FOR_SENTIMENT:
+        return []
+    return items
+
+
 def has_news_and_sentiment(doc):
-    """True when scrip_news has sentiment and at least one news/sector/analyst item."""
+    """True when scrip_news has sentiment and at least one scoring news item."""
     if not doc:
         return False
     sentiment = str(doc.get("overall_sentiment") or "").strip()
@@ -210,7 +227,7 @@ def has_news_and_sentiment(doc):
         return False
     return (
         _nonempty_articles(doc.get("news"))
-        or _nonempty_articles(doc.get("sectoral_news"))
+        or _nonempty_articles(_sectoral_for_sentiment(doc.get("sectoral_news")))
         or _nonempty_articles(doc.get("analyst_calls"))
     )
 
@@ -262,17 +279,25 @@ def _trim_articles(items, n=10):
 
 
 def _public_doc(doc: dict) -> dict:
+    news = _trim_articles(doc.get("news"), 10)
+    sectoral_raw = doc.get("sectoral_news") or []
+    sectoral = _trim_articles(_sectoral_for_sentiment(sectoral_raw), 6)
+    analyst = _trim_articles(doc.get("analyst_calls"), 6)
+    sentiment = doc.get("overall_sentiment") or "Neutral"
+    # Thin sectoral-only rows must not stay Bullish/Bearish in the preview.
+    if not news and not analyst and len(sectoral_raw) < MIN_SECTORAL_FOR_SENTIMENT:
+        sentiment = "Neutral"
     return {
         "scrip": doc.get("scrip"),
         "industry": doc.get("industry") or "",
-        "overall_sentiment": doc.get("overall_sentiment") or "Neutral",
+        "overall_sentiment": sentiment,
         "conviction": doc.get("conviction") or "Low",
         "scan_tables": doc.get("scan_tables") or [],
         "insertion_date": _fmt_dt(doc.get("insertion_date")),
         "updated_at": _fmt_dt(doc.get("updated_at")),
-        "news": _trim_articles(doc.get("news"), 10),
-        "sectoral_news": _trim_articles(doc.get("sectoral_news"), 6),
-        "analyst_calls": _trim_articles(doc.get("analyst_calls"), 6),
+        "news": news,
+        "sectoral_news": sectoral,
+        "analyst_calls": analyst,
     }
 
 

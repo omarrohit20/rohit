@@ -36,6 +36,7 @@ python indian-trading-skills/skills/scan-news-conviction/scripts/ingest_scan_new
 | `--sleep` | `0.35` | Pause between Google News requests |
 | `--limit` | `0` | Max scrips (`0` = all) |
 | `--scrips` | | Comma-separated filter, e.g. `RELIANCE,TCS` |
+| `--recompute-only` | | Recalculate `overall_sentiment` / `conviction` on existing `scrip_news` (no scrape) |
 
 ## Scan sources
 
@@ -69,6 +70,7 @@ One document per `scrip` (upsert):
 2. **Duplicates** — same normalized title (and near-duplicate first-8-words) kept once.
 3. **Impact** — rank by india-news-tracker impact score; keep top high-impact items (`--min-impact`, default 4) plus a small top-N fallback so a scrip is not empty.
 4. **Conviction** — High if sentiment is directional with several high-impact aligned headlines; Med if mixed/fewer catalysts; else Low. See [references/scoring.md](references/scoring.md).
+5. **Sectoral threshold** — sectoral headlines count toward `overall_sentiment` only when there are **≥ 3** of them; fewer than 3 are dropped from `sectoral_news` / `articles`. Company news and analyst calls always count, regardless of how few there are.
 
 ## Prerequisites
 

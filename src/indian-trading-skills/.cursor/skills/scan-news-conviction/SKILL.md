@@ -15,4 +15,7 @@ Skill name: **`scan-news-conviction`**
 ```bash
 python skills/scan-news-conviction/scripts/ingest_scan_news.py
 python skills/scan-news-conviction/scripts/ingest_scan_news.py --days 5 --news-days 7
+python skills/scan-news-conviction/scripts/ingest_scan_news.py --recompute-only
 ```
+
+Sectoral headlines count toward `overall_sentiment` only when there are **≥ 3**. Company news and analyst calls always count.

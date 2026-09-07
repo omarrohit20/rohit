@@ -775,25 +775,42 @@ def current_scrip_index():
 
 _BULL_BEAR_SENTIMENTS = frozenset({"bullish", "bearish"})
 _scrip_sentiments = None
+_scrip_sentiments_t = 0.0
+_SCRIP_SENT_TTL = 30.0
+_MIN_SECTORAL_FOR_SENTIMENT = 3
+
+
+def _scrip_sentiment_value(doc):
+    """overall_sentiment, ignoring sectoral headlines unless there are at least 3."""
+    sent = str(doc.get("overall_sentiment") or "").strip().lower()
+    news = doc.get("news") or []
+    analyst = doc.get("analyst_calls") or []
+    sectoral = doc.get("sectoral_news") or []
+    if len(sectoral) < _MIN_SECTORAL_FOR_SENTIMENT and not news and not analyst:
+        return "neutral"
+    return sent
 
 
 def _scrip_sentiment_map():
     """scrip → lowercase overall_sentiment (scrip + sentiment only, no articles)."""
-    global _scrip_sentiments
-    if _scrip_sentiments is not None:
+    global _scrip_sentiments, _scrip_sentiments_t
+    now = time.time()
+    if _scrip_sentiments is not None and (now - _scrip_sentiments_t) < _SCRIP_SENT_TTL:
         return _scrip_sentiments
     try:
         docs = dbnse.scrip_news.find(
             {},
-            {"_id": 0, "scrip": 1, "overall_sentiment": 1},
+            {"_id": 0, "scrip": 1, "overall_sentiment": 1, "news": 1, "sectoral_news": 1, "analyst_calls": 1},
         )
         _scrip_sentiments = {
-            str(d.get("scrip") or "").strip().upper(): str(d.get("overall_sentiment") or "").strip().lower()
+            str(d.get("scrip") or "").strip().upper(): _scrip_sentiment_value(d)
             for d in docs
             if d.get("scrip")
         }
+        _scrip_sentiments_t = now
     except Exception:
         _scrip_sentiments = {}
+        _scrip_sentiments_t = now
     return _scrip_sentiments
 
 

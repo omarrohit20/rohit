@@ -7,6 +7,10 @@
         "MDB_MCP_CONNECTION_STRING": "mongodb://localhost:27017",
         "MDB_MCP_READ_ONLY": "true"
       }
+    },
+    "Upstox MCP": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.upstox.com/mcp"]
     }
   }
 }

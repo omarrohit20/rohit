@@ -4,7 +4,11 @@ Used by `ingest_scan_news.py` after scrape + 7-day / dedupe / impact filters.
 
 ## Sentiment (`overall_sentiment`)
 
-Count Bullish vs Bearish among kept articles:
+Count Bullish vs Bearish among **scoring** articles:
+
+- **Company news** (`kind=news`) — always included, even if only 1–2 items.
+- **Analyst calls** (`kind=analyst`) — always included, even if only 1–2 items.
+- **Sectoral news** (`kind=sectoral`) — included **only if sectoral count ≥ 3**. One or two sector headlines are ignored for overall sentiment (and for conviction, which uses the same pool) and are **not stored** on `scrip_news`.
 
 | Condition | Value |
 |-----------|--------|
