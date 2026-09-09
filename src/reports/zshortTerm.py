@@ -285,7 +285,8 @@ def main():
                             ((df['PCT_day_change'] < 1)) &
                             (df['mlData'].str.contains('#ZPre', case=False, regex=True, na=False))  
                              
-                        )
+                        ) |
+                        (df['weekHighChange'] > 0)
                     )
                 ) &
                 (
@@ -407,7 +408,8 @@ def main():
                             ((df['PCT_day_change'] > -1)) &
                             (df['mlData'].str.contains('#ZPre', case=False, regex=True, na=False))  
                              
-                        )
+                        ) |
+                        (df['weekLowChange'] < 0)
                     )
                 ) &
                 (
