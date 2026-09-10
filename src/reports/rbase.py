@@ -1853,28 +1853,28 @@ def render(st, df, name, height=110, color='NA', column_order=column_order_defau
     _ensure_chart_preview_sidebar()
     df = filter_df_by_scrip_index(df)
     st.write("********"+ name + "********")
-    try:
-        df = df[
-                ((abs(df['monthLowChange']) > 3) | (abs(df['monthHighChange']) > 3)) | ((abs(df['month3LowChange']) > 10) | (abs(df['month3HighChange']) > 10))
-                ]
-    except KeyError as e:
-        print("")
+    # try:
+    #     df = df[
+    #             ((abs(df['monthLowChange']) > 3) | (abs(df['monthHighChange']) > 3)) | ((abs(df['month3LowChange']) > 10) | (abs(df['month3HighChange']) > 10))
+    #             ]
+    # except KeyError as e:
+    #     print("")
     
-    try:
-        df = df[
-                ((abs(df['PCT_change']) - abs(df['PCT_day_change'])) < 4) 
-                ]
-    except KeyError as e:
-        print("")
+    # try:
+    #     df = df[
+    #             ((abs(df['PCT_change']) - abs(df['PCT_day_change'])) < 4) 
+    #             ]
+    # except KeyError as e:
+    #     print("")
 
-    try:
-        df = df[
-                (df['highTail'] < 3.3) & (df['lowTail'] < 3.3)
-                ]
-    except KeyError as e:
-        print("")
-    #
-    # Main Code Execution
+    # try:
+    #     df = df[
+    #             (df['highTail'] < 3.3) & (df['lowTail'] < 3.3)
+    #             ]
+    # except KeyError as e:
+    #     print("")
+    # #
+    # # Main Code Execution
 
     if renderml:
         df_styled = highlight_category_row(df, color=color)

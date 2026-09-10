@@ -39,7 +39,7 @@ Example Why style: `Q1 results today + AnchisBuyUp / ReversalLow; already +2% in
 
 ## Scan News Conviction
 
-When the user asks to scrape/save **news, sectoral news, analyst calls, sentiment, or conviction** for breakout scan tables (`breakoutM2HR`, `breakoutMHR`, `breakoutW2HR`, `movingavg_crossed_up`, `breakoutY2H`, `breakoutYH`):
+When the user asks to scrape/save **news, sectoral news, analyst calls, sentiment, or conviction** for breakout scan tables (`breakoutM2HR`, `breakoutM2LR`, `breakoutMHR`, `breakoutMLR`, `breakoutW2HR`, `breakoutW2LR`, `movingavg_crossed_up`, `movingavg_crossed_down`, `breakoutY2H`, `breakoutYH`):
 
 1. Follow `skills/scan-news-conviction/SKILL.md`.
 2. Run:

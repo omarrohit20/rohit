@@ -350,42 +350,112 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['PCT_day_change'] < 1) | (df['PCT_day_change_pre1'] < 0.5)) &
                 (df['PCT_day_change'] > -1)
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-buy : scan-news Bullish', color='G', height=200)
+        rb.render(st, filtered_df, 'morning-volume-breakout-buy : scan-news Bullish', color='LG', height=200)
     with col2:
         df = _filter_scan_news(rb.getdf('morning-volume-breakout-buy'), 'Bearish')
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (df['PCT_day_change'] > 0)
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-buy : scan-news Bearish', color='G', height=200)
+        rb.render(st, filtered_df, 'morning-volume-breakout-buy : scan-news Bearish', color='LG', height=200)
     with col3:
         df = _filter_scan_news(rb.getdf('morning-volume-breakout-sell'), 'Bearish')
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['PCT_day_change'] > -1) | (df['PCT_day_change_pre1'] > -0.5)) &
                 (df['PCT_day_change'] < 1)
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-sell : scan-news Bearish', color='R', height=200)
+        rb.render(st, filtered_df, 'morning-volume-breakout-sell : scan-news Bearish', color='LG', height=200)
     with col4:
         df = _filter_scan_news(rb.getdf('morning-volume-breakout-sell'), 'Bullish')
         filtered_df = df
         try:
             filtered_df = df[
+                (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (df['PCT_day_change'] < 0)
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-sell : scan-news Bullish', color='R', height=200)
+        rb.render(st, filtered_df, 'morning-volume-breakout-sell : scan-news Bullish', color='LG', height=200)
     
+    col0, col1, col2, col3, col4, col5 = st.columns(6)
+    with col0:
+        df = rb.getintersectdf('supertrend-morning-buy', 'buy-breakout')
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'buy-breakout+supertrend', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+    with col1:
+        df = rb.getintersectdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)', 'buy-breakout')
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'buy-breakout+Crossed2DayHigh', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+    with col2:
+        df = rb.getintersectdf('crossed-day-high', 'buy-breakout')
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'buy-breakout+CrossedDayHigh', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+    with col3:
+        df = rb.getintersectdf('supertrend-morning-sell', 'sell-breakout')
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'sell-breakout+supertrend', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+    with col4:
+        df = rb.getintersectdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)', 'sell-breakout')
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'sell-breakout+Crossed2DayLow', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+    with col5:
+        df = rb.getintersectdf('crossed-day-low', 'sell-breakout')
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'sell-breakout+CrossedDayLow', column_conf=rb.column_config_merged,
+                        column_order=rb.column_order_p, color='LG')
+
+
+
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
         df = rb.getdf('buy-breakout')
@@ -405,7 +475,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'LastDayUpTodayOpenedGT0.3:PreUpstairs-CheckRecommendations(+)', height=200, dontapplybreakout=True,color='G')
+        rb.render(st, filtered_df, 'buy-breakout:PreUpstairs-CheckRecommendations(+)', height=200, dontapplybreakout=True,color='LG')
     with col2:
         df = rb.getdf('buy-breakout')
         filtered_df = df
@@ -443,10 +513,10 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'SQROFFAt10:LastDayUpTodayGT0.3:Consolidation-CheckRecommendations', height=200, dontapplybreakout=True, color='G')
+        rb.render(st, filtered_df, 'buy-breakout:Consolidation-CheckRecommendations', height=200, dontapplybreakout=True, color='LG')
     with col3:
         df = rb.getdf('buy-breakout')
-        rb.render(st, df, 'buy-breakout', height=200, dontapplybreakout=True, color='G')
+        rb.render(st, df, '############## buy-breakout ################', height=200, dontapplybreakout=True, color='LG')
     with col4:
         df = rb.getdf('sell-breakout')
         filtered_df = df
@@ -467,7 +537,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'LastDayDownTodayOpenedLT-0.3:PreDownstairs-CheckRecommendations(-)', height=200, dontapplybreakout=True, color='R')
+        rb.render(st, filtered_df, 'sell-breakout:PreDownstairs-CheckRecommendations(-)', height=200, dontapplybreakout=True, color='LG')
     with col5:
         df = rb.getdf('sell-breakout')
         filtered_df = df
@@ -482,10 +552,10 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'SQROFFAt10:LastDayDownTodayLT-0.3:Consolidation-CheckRecommendations', height=200, dontapplybreakout=True, color='R')
+        rb.render(st, filtered_df, 'sell-breakout:Consolidation-CheckRecommendations', height=200, dontapplybreakout=True, color='LG')
     with col6:
         df = rb.getdf('sell-breakout')
-        rb.render(st, df, 'sell-breakout', height=200, dontapplybreakout=True, color='R')
+        rb.render(st, df, '############## sell-breakout ################', height=200, dontapplybreakout=True, color='LG')
 
     st.divider()
 

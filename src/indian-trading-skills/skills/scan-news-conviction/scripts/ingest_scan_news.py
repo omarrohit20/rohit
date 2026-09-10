@@ -37,9 +37,13 @@ SCAN_DB = "Nsedata"
 TARGET_COLLECTION = "scrip_news"
 SCAN_TABLES = [
     "breakoutM2HR",
+    "breakoutM2LR",
     "breakoutMHR",
+    "breakoutMLR",
     "breakoutW2HR",
+    "breakoutW2LR",
     "movingavg_crossed_up",
+    "movingavg_crossed_down",
     "breakoutY2H",
     "breakoutYH",
 ]

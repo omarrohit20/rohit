@@ -1,8 +1,9 @@
 ---
 name: scan-news-conviction
 description: >-
-  Ingest last-5-day scrips from Nsedata breakoutM2HR, breakoutMHR, breakoutW2HR,
-  movingavg_crossed_up, breakoutY2H, and breakoutYH. Scrape company news,
+  Ingest last-5-day scrips from Nsedata breakoutM2HR, breakoutM2LR, breakoutMHR,
+  breakoutMLR, breakoutW2HR, breakoutW2LR, movingavg_crossed_up,
+  movingavg_crossed_down, breakoutY2H, and breakoutYH. Scrape company news,
   sectoral news, and analyst calls; score sentiment and conviction; keep only
   high-impact items from the last 7 days with duplicates removed. Upsert
   Nsedata.scrip_news (insertion_date; overwrite if the record is older than
@@ -42,7 +43,7 @@ python indian-trading-skills/skills/scan-news-conviction/scripts/ingest_scan_new
 
 | DB | Collections |
 |----|-------------|
-| `Nsedata` | `breakoutM2HR`, `breakoutMHR`, `breakoutW2HR`, `movingavg_crossed_up`, `breakoutY2H`, `breakoutYH` |
+| `Nsedata` | `breakoutM2HR`, `breakoutM2LR`, `breakoutMHR`, `breakoutMLR`, `breakoutW2HR`, `breakoutW2LR`, `movingavg_crossed_up`, `movingavg_crossed_down`, `breakoutY2H`, `breakoutYH` |
 
 If no rows match the 5-day date filter, the live snapshot of that collection is used.
 
