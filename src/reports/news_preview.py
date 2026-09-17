@@ -12,8 +12,8 @@ import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
 
-NEON_BG = "#39FF14"
-_RECENT_WEEKDAYS = 10
+PURPLE_BG = "#E9D5FF"
+YELLOW_BG = "#FFF59D"
 # Match scan-news-conviction: sectoral headlines count only when there are >= 3.
 MIN_SECTORAL_FOR_SENTIMENT = 3
 
@@ -94,7 +94,7 @@ def _scrip_list(data):
 
 
 @st.cache_data(ttl=3600)
-def _fetch_news_docs(cache_ver=2):
+def _fetch_news_docs(cache_ver=5):
     del cache_ver
     try:
         from pymongo import MongoClient
@@ -126,8 +126,8 @@ def _fetch_news_docs(cache_ver=2):
         return []
 
 
-_NEWS_CACHE = {"t": 0.0, "map": {}, "neon": frozenset(), "ver": 0}
-_NEWS_CACHE_VER = 2
+_NEWS_CACHE = {"t": 0.0, "map": {}, "ver": 0}
+_NEWS_CACHE_VER = 5
 _NEWS_TTL = 3600.0
 
 
@@ -140,16 +140,13 @@ def load_news_map():
     ):
         return _NEWS_CACHE["map"]
     out = {}
-    for doc in _fetch_news_docs(cache_ver=2):
+    for doc in _fetch_news_docs(cache_ver=5):
         key = _scrip_key(doc.get("scrip"))
         if key:
             out[key] = _public_doc(doc)
     _NEWS_CACHE["t"] = now
     _NEWS_CACHE["ver"] = _NEWS_CACHE_VER
     _NEWS_CACHE["map"] = out
-    _NEWS_CACHE["neon"] = frozenset(
-        key for key, doc in out.items() if should_neon_highlight(doc)
-    )
     return out
 
 
@@ -169,31 +166,106 @@ def _to_date(value):
         return None
 
 
-def last_n_weekday_cutoff(n=_RECENT_WEEKDAYS, today=None):
-    """Earliest date among the last n working days (Mon–Fri).
-
-    Sat/Sun do not count toward n, but a weekend date still qualifies
-    if it is on/after this cutoff.
-    """
-    cur = today or datetime.now().date()
-    days = []
-    while len(days) < max(n, 1):
-        if cur.weekday() < 5:
-            days.append(cur)
-        cur -= timedelta(days=1)
-    return min(days)
-
-
-def is_recent_insertion(value, n=_RECENT_WEEKDAYS, today=None):
-    """True when a scan-news date is on/after the last n working-day cutoff."""
-    ins = _to_date(value)
-    if ins is None:
+def is_today_or_yesterday(value, today=None):
+    """True when a scan-news date is today or yesterday (calendar days)."""
+    d = _published_on_date(value)
+    if d is None:
         return False
-    return ins >= last_n_weekday_cutoff(n, today=today)
+    cur = today or datetime.now().date()
+    return d in (cur, cur - timedelta(days=1))
 
 
-def is_high_conviction(value):
-    return str(value or "").strip().lower() == "high"
+def _published_on_date(value):
+    """Parse an article published timestamp to a calendar date."""
+    if value is None or value == "":
+        return None
+    d = _to_date(value)
+    if d is not None:
+        return d
+    text = str(value).strip()
+    if not text:
+        return None
+    try:
+        from email.utils import parsedate_to_datetime
+
+        dt = parsedate_to_datetime(text)
+        if dt is not None:
+            if getattr(dt, "tzinfo", None) is not None:
+                dt = dt.astimezone().replace(tzinfo=None)
+            return dt.date()
+    except Exception:
+        pass
+    return None
+
+
+def _fmt_published(value):
+    d = _published_on_date(value)
+    if d is not None:
+        return d.strftime("%Y-%m-%d")
+    text = str(value or "").strip()
+    return text[:16] if text else ""
+
+
+def _published_recency(value, today=None):
+    d = _published_on_date(value)
+    if d is None:
+        return ""
+    cur = today or datetime.now().date()
+    if d == cur:
+        return "today"
+    if d == cur - timedelta(days=1):
+        return "yesterday"
+    return ""
+
+
+def _company_news_items(doc):
+    items = (doc or {}).get("news") or []
+    if not isinstance(items, list):
+        return []
+    out = []
+    for it in items:
+        if not isinstance(it, dict):
+            continue
+        kind = str(it.get("kind") or "news").strip().lower()
+        if kind and kind != "news":
+            continue
+        if str(it.get("title") or it.get("link") or "").strip():
+            out.append(it)
+    return out
+
+
+def _company_news_published_dates(doc=None, today=None):
+    cur = today or datetime.now().date()
+    dates = set()
+    for it in _company_news_items(doc):
+        d = _published_on_date(it.get("published"))
+        if d in (cur, cur - timedelta(days=1)):
+            dates.add(d)
+    return dates
+
+
+def has_company_news_today(doc=None, today=None):
+    cur = today or datetime.now().date()
+    return cur in _company_news_published_dates(doc, today=today)
+
+
+def has_company_news_yesterday(doc=None, today=None):
+    cur = today or datetime.now().date()
+    return (cur - timedelta(days=1)) in _company_news_published_dates(doc, today=today)
+
+
+def has_company_news_today_or_yesterday(doc=None, today=None):
+    """True when any company news headline was published today or yesterday."""
+    return bool(_company_news_published_dates(doc, today=today))
+
+
+def company_news_recency(doc=None, today=None):
+    """Return 'today', 'yesterday', or '' for company-news icon highlight."""
+    if has_company_news_today(doc, today=today):
+        return "today"
+    if has_company_news_yesterday(doc, today=today):
+        return "yesterday"
+    return ""
 
 
 def _nonempty_articles(items):
@@ -232,40 +304,15 @@ def has_news_and_sentiment(doc):
     )
 
 
-def should_neon_highlight(
-    doc=None,
-    insertion_date=None,
-    updated_at=None,
-    conviction=None,
-    today=None,
-):
-    """Neon when High conviction, recent insert/update, and news+sentiment exist."""
-    doc = doc or {}
-    if not has_news_and_sentiment(doc):
-        return False
-    ins = insertion_date if insertion_date is not None else doc.get("insertion_date")
-    upd = updated_at if updated_at is not None else doc.get("updated_at")
-    conv = conviction if conviction is not None else doc.get("conviction")
-    recent = is_recent_insertion(ins, today=today) or is_recent_insertion(upd, today=today)
-    return recent and is_high_conviction(conv)
-
-
-def recent_scrip_keys(news_map=None):
-    if news_map is None or news_map is _NEWS_CACHE["map"]:
-        if _NEWS_CACHE["map"]:
-            load_news_map()
-            return set(_NEWS_CACHE["neon"])
-    news_map = load_news_map() if news_map is None else news_map
-    return {
-        key
-        for key, doc in (news_map or {}).items()
-        if should_neon_highlight(doc)
-    }
+def should_yellow_highlight(doc=None, today=None):
+    """Yellow when company news was published today or yesterday."""
+    return has_company_news_today_or_yesterday(doc, today=today)
 
 
 def _trim_articles(items, n=10):
     out = []
     for it in (items or [])[:n]:
+        published = it.get("published") or ""
         out.append(
             {
                 "title": it.get("title") or "",
@@ -273,6 +320,9 @@ def _trim_articles(items, n=10):
                 "sentiment": it.get("sentiment") or "",
                 "source": it.get("source") or "",
                 "impact_score": it.get("impact_score"),
+                "published": published,
+                "published_date": _fmt_published(published),
+                "published_recency": _published_recency(published),
             }
         )
     return out
@@ -305,7 +355,7 @@ def _icon_strip_page(scrips, news_map, height):
     icons = []
     for scrip in scrips:
         doc = news_map.get(scrip)
-        if not has_news_and_sentiment(doc):
+        if not doc or (not has_news_and_sentiment(doc) and not should_yellow_highlight(doc)):
             icons.append('<div class="nws-ico empty"></div>')
             continue
         esc = (
@@ -314,11 +364,18 @@ def _icon_strip_page(scrips, news_map, height):
             .replace("<", "&lt;")
             .replace('"', "&quot;")
         )
-        recent = should_neon_highlight(doc)
+        recency = company_news_recency(doc)
         sent = str((doc or {}).get("overall_sentiment") or "").strip().lower()
         sent_cls = " bull" if sent == "bullish" else (" bear" if sent == "bearish" else "")
-        cls = ("nws-ico neon" if recent else "nws-ico") + sent_cls
-        title = f"{esc} news · High conviction · last {_RECENT_WEEKDAYS} working days" if recent else f"{esc} news"
+        if recency == "today":
+            cls = "nws-ico recent-today" + sent_cls
+            title = f"{esc} news · company news today"
+        elif recency == "yesterday":
+            cls = "nws-ico recent-yesterday" + sent_cls
+            title = f"{esc} news · company news yesterday"
+        else:
+            cls = "nws-ico" + sent_cls
+            title = f"{esc} news"
         icons.append(f'<div class="{cls}" data-scrip="{esc}" title="{title}">ℹ</div>')
     icons_html = "".join(icons)
     payload = json.dumps({"news": news_map})
@@ -338,11 +395,12 @@ def _icon_strip_page(scrips, news_map, height):
   .nws-ico.bear{{color:#FF073A;font-weight:700;text-shadow:0 0 6px #FF073A;}}
   .nws-ico:hover{{background:#dbeafe;border-radius:4px;}}
   .nws-ico.empty:hover{{background:transparent;}}
-  .nws-ico.neon{{background:{NEON_BG};border-radius:4px;font-weight:700;
-    box-shadow:inset 0 0 0 2px #111, 0 0 10px {NEON_BG};}}
-  .nws-ico.neon.bull{{color:#39FF14;}}
-  .nws-ico.neon.bear{{color:#FF073A;}}
-  .nws-ico.neon:hover{{background:#7CFF4B;}}
+  .nws-ico.recent-today{{background:{PURPLE_BG};border-radius:4px;font-weight:700;
+    box-shadow:inset 0 0 0 1px #a855f7;}}
+  .nws-ico.recent-today:hover{{background:#d8b4fe;}}
+  .nws-ico.recent-yesterday{{background:{YELLOW_BG};border-radius:4px;font-weight:700;
+    box-shadow:inset 0 0 0 1px #ca8a04;}}
+  .nws-ico.recent-yesterday:hover{{background:#ffe566;}}
 </style></head>
 <body>
 <div class="pad"></div>
@@ -365,13 +423,20 @@ def _icon_strip_page(scrips, news_map, height):
       return {{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}}[c];
     }});
   }}
-  function listHtml(items, emptyText) {{
+  function listHtml(items, emptyText, highlightDates) {{
     if (!items || !items.length) return '<p style="color:#94a3b8">' + emptyText + '</p>';
-    return '<ul style="margin:4px 0 12px;padding-left:18px">' + items.map(function(it) {{
+    return '<ul style="margin:4px 0 12px;padding-left:0;list-style:none">' + items.map(function(it) {{
       const t = esc(it.title);
       const href = it.link ? '<a href="' + esc(it.link) + '" target="_blank" rel="noopener" style="color:#93c5fd">' + t + '</a>' : t;
       const imp = it.impact_score != null ? ' · impact ' + it.impact_score : '';
-      return '<li style="margin:4px 0">' + href + ' <span style="color:#94a3b8">(' + esc(it.sentiment) + ' · ' + esc(it.source) + imp + ')</span></li>';
+      const dt = esc(it.published_date || '');
+      const datePart = dt ? '<span style="color:#64748b;margin-right:6px;font-weight:600">' + dt + '</span>' : '';
+      let rowStyle = 'margin:4px 0;padding:6px 8px;border-radius:4px;';
+      if (highlightDates) {{
+        if (it.published_recency === 'today') rowStyle += 'background:{PURPLE_BG};';
+        else if (it.published_recency === 'yesterday') rowStyle += 'background:{YELLOW_BG};';
+      }}
+      return '<li style="' + rowStyle + '">' + datePart + href + ' <span style="color:#94a3b8">(' + esc(it.sentiment) + ' · ' + esc(it.source) + imp + ')</span></li>';
     }}).join('') + '</ul>';
   }}
   function render(scrip) {{
@@ -389,9 +454,9 @@ def _icon_strip_page(scrips, news_map, height):
       + '<div style="color:#94a3b8;margin-bottom:8px">' + esc(d.industry)
       + (d.scan_tables && d.scan_tables.length ? ' · ' + esc(d.scan_tables.join(', ')) : '')
       + '<br>Inserted ' + esc(d.insertion_date) + ' · Updated ' + esc(d.updated_at) + '</div>'
-      + '<strong>News</strong>' + listHtml(d.news, 'No company news')
-      + '<strong>Sectoral</strong>' + listHtml(d.sectoral_news, 'No sector news')
-      + '<strong>Analyst calls</strong>' + listHtml(d.analyst_calls, 'No analyst items');
+      + '<strong>News</strong>' + listHtml(d.news, 'No company news', true)
+      + '<strong>Sectoral</strong>' + listHtml(d.sectoral_news, 'No sector news', false)
+      + '<strong>Analyst calls</strong>' + listHtml(d.analyst_calls, 'No analyst items', true);
   }}
   function place(el) {{
     const frame = window.frameElement;
@@ -597,10 +662,12 @@ def display_dataframe(
     table_news = {
         s: news_map[s]
         for s in scrips
-        if s in news_map and has_news_and_sentiment(news_map[s])
+        if s in news_map
+        and (
+            has_news_and_sentiment(news_map[s])
+            or should_yellow_highlight(news_map[s])
+        )
     } if scrips else {}
-    neon_scrips = recent_scrip_keys(news_map)
-
     if not is_enabled():
         chart_preview.display_dataframe(
             st_mod,
@@ -609,7 +676,6 @@ def display_dataframe(
             column_order=column_order,
             column_config=column_config,
             use_container_width=use_container_width,
-            neon_scrips=neon_scrips,
         )
         return
 
@@ -625,5 +691,4 @@ def display_dataframe(
             column_order=column_order,
             column_config=column_config,
             use_container_width=use_container_width,
-            neon_scrips=neon_scrips,
         )
