@@ -231,6 +231,15 @@ python skills/scan-news-conviction/scripts/ingest_scan_news.py --days 5 --news-d
 
 Reports UI: enable **Show news on scrip hover** (table colours are unchanged).
 
+### Scan News Conviction Futures (`scan-news-conviction-futures`)
+
+All scrips with `Nsedata.scrip.futures=Yes`. Scrapes company / sectoral / analyst news and scores sentiment + conviction if `Nsedata.scrip_news` was not created or updated in the last **3 days**, **or if company news is published today**. Writes **`scrip_news` only**. Prints a run summary.
+
+```bash
+python skills/scan-news-conviction-futures/scripts/ingest_futures_news.py
+python skills/scan-news-conviction-futures/scripts/ingest_futures_news.py --stale-days 3 --news-days 7
+```
+
 ### 10. Weekly F&O Trade Planner
 Complete weekly F&O trading workflow — from macro thesis to position management. Combines news analysis, sector screening, technical confirmation, OI data, and FII/DII flows to generate a single high-conviction directional trade idea each week, then manages it with structured stop-loss tightening and partial profit booking.
 
@@ -302,6 +311,9 @@ indian-trading-skills/
     │   ├── SKILL.md
     │   ├── references/scoring.md
     │   └── scripts/ingest_scan_news.py
+    ├── scan-news-conviction-futures/
+    │   ├── SKILL.md
+    │   └── scripts/ingest_futures_news.py
     └── weekly-fno-trade-planner/
         └── SKILL.md
 ```

@@ -350,8 +350,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['PCT_day_change'] > 0) | ((df['PCT_day_change_pre1'] > 2) | (df['PCT_day_change_pre2'] > 2))) &
                 ((df['PCT_day_change'] < 1) | (df['PCT_day_change_pre1'] < 0.5)) &
-                (df['PCT_day_change'] > -1)
+                (df['PCT_day_change'] > -1.3)
                 ]
         except KeyError as e:
             print("")
@@ -373,8 +374,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['PCT_day_change'] < 0) | ((df['PCT_day_change_pre1'] < -2) | (df['PCT_day_change_pre2'] < -2))) &
                 ((df['PCT_day_change'] > -1) | (df['PCT_day_change_pre1'] > -0.5)) &
-                (df['PCT_day_change'] < 1)
+                (df['PCT_day_change'] < 1.3)
                 ]
         except KeyError as e:
             print("")
@@ -398,7 +400,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
-            filtered_df = df
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) 
+                ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'buy-breakout+supertrend', column_conf=rb.column_config_merged,
@@ -408,7 +413,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
-            filtered_df = df
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) 
+                ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'buy-breakout+Crossed2DayHigh', column_conf=rb.column_config_merged,
@@ -418,7 +426,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
-            filtered_df = df
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) 
+                ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'buy-breakout+CrossedDayHigh', column_conf=rb.column_config_merged,
@@ -428,7 +439,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
-            filtered_df = df
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) 
+                ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'sell-breakout+supertrend', column_conf=rb.column_config_merged,
@@ -438,7 +452,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
-            filtered_df = df
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) 
+                ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'sell-breakout+Crossed2DayLow', column_conf=rb.column_config_merged,
@@ -448,7 +465,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
-            filtered_df = df
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) 
+                ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'sell-breakout+CrossedDayLow', column_conf=rb.column_config_merged,

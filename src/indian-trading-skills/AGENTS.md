@@ -48,7 +48,22 @@ When the user asks to scrape/save **news, sectoral news, analyst calls, sentimen
 python skills/scan-news-conviction/scripts/ingest_scan_news.py
 ```
 
-Target: `Nsedata.scrip_news`. High-impact, ≤7 days, deduped; upsert; overwrite if older than 30 days.
+Target: `Nsedata.scrip_news`. High-impact, ≤7 days, deduped; upsert; overwrite if older than 30 days. After the run, print **SUMMARY NEWS DIGEST** (company news + high-conviction sectoral news).
+
+## Scan News Conviction Futures
+
+When the user asks to scrape/save **news, sentiment, or conviction** for **all futures stocks** (`Nsedata.scrip` `futures=Yes`):
+
+1. Follow `skills/scan-news-conviction-futures/SKILL.md`.
+2. Process a scrip if `Nsedata.scrip_news` was **not created or updated in the last 3 days**, **or if company news is published today** (3-day skip does not apply).
+3. Create/update **`Nsedata.scrip_news` only**.
+4. Run:
+
+```bash
+python skills/scan-news-conviction-futures/scripts/ingest_futures_news.py
+```
+
+5. After the run, report the script SUMMARY and the shared **SUMMARY NEWS DIGEST** (company news + high-conviction sectoral news).
 
 ## Mongo AI Analysis (persist High-conviction picks)
 

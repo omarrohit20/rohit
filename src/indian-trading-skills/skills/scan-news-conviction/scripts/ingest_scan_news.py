@@ -273,6 +273,59 @@ def scrape_scrip(scrip: str, industry: str, days: int, sleep_s: float) -> list[d
     return merged
 
 
+def is_published_today(published: Any, now: datetime) -> bool:
+    dt = parse_published(published)
+    if dt is None:
+        return False
+    return dt.date() == now.date()
+
+
+def stored_company_news_today(doc: dict | None, now: datetime) -> bool:
+    if not doc:
+        return False
+    items = list(doc.get("news") or [])
+    for a in doc.get("articles") or []:
+        if a.get("kind") == "news":
+            items.append(a)
+    return any(is_published_today(a.get("published"), now) for a in items)
+
+
+def fetch_company_news(scrip: str, sleep_s: float) -> list[dict]:
+    """Company headlines only (no sectoral / analyst Google queries)."""
+    merged: list[dict] = []
+    try:
+        for it in nf.fetch_rss_feeds(days_back=2, stock_filter=scrip):
+            kind = "news"
+            if ANALYST_RE.search(it.title) or it.event_type == "Rating":
+                kind = "analyst"
+            elif it.sectors and it.event_type in ("Macro", "Global", "Uncategorized", "General"):
+                kind = "sectoral"
+            if kind != "news":
+                continue
+            merged.append(
+                _as_article(it.title, it.summary, it.link, it.source, it.published, "news")
+            )
+    except SystemExit:
+        pass
+    except Exception as exc:
+        print(f"  warn: RSS company {scrip}: {exc}", file=sys.stderr)
+    merged.extend(_parse_feed(_google_rss(f"{scrip} NSE OR BSE stock"), "Google News", "news"))
+    if sleep_s:
+        time.sleep(sleep_s)
+    return [a for a in merged if a.get("kind") == "news"]
+
+
+def has_company_news_today(
+    scrip: str,
+    now: datetime,
+    sleep_s: float,
+    stored_doc: dict | None = None,
+) -> bool:
+    if stored_company_news_today(stored_doc, now):
+        return True
+    return any(is_published_today(a.get("published"), now) for a in fetch_company_news(scrip, sleep_s))
+
+
 def dedupe_fresh(articles: list[dict], news_days: int, now: datetime) -> list[dict]:
     out = []
     seen_title = set()
@@ -388,6 +441,84 @@ def split_article_kinds(articles: list[dict]) -> tuple[list[dict], list[dict], l
     sectoral = [a for a in articles if a.get("kind") == "sectoral"]
     analyst = [a for a in articles if a.get("kind") == "analyst"]
     return news, sectoral, analyst
+
+
+def summary_row(scrip: str, industry: str, tables: list[str], articles: list[dict], action: str) -> dict[str, Any]:
+    scoring = articles_for_overall_sentiment(articles)
+    sentiment = overall_sentiment(scoring)
+    conviction = conviction_for(scoring, sentiment)
+    news, sectoral, analyst = split_article_kinds(scoring)
+    return {
+        "scrip": scrip,
+        "industry": industry or "",
+        "scan_tables": tables,
+        "action": action,
+        "sentiment": sentiment,
+        "conviction": conviction,
+        "items": len(scoring),
+        "news": news,
+        "sectoral": sectoral,
+        "analyst": analyst,
+    }
+
+
+def _headline_line(scrip: str, industry: str, article: dict) -> str:
+    title = (article.get("title") or "").replace("\n", " ").strip()
+    if len(title) > 140:
+        title = title[:137] + "..."
+    impact = article.get("impact_score") or 0
+    sent = article.get("sentiment") or ""
+    pub = (article.get("published") or "")[:16]
+    extra = f"  {industry}" if industry else ""
+    when = f"  {pub}" if pub else ""
+    return f"  {scrip:12} [{sent:8} i={impact}]{when}{extra}\n    {title}"
+
+
+def print_news_digest(rows: list[dict[str, Any]], skill_name: str = "") -> None:
+    """End-of-run list of company news and high-conviction sectoral headlines."""
+    header = f"SUMMARY NEWS DIGEST - {skill_name}" if skill_name else "SUMMARY NEWS DIGEST"
+    print("\n" + "=" * 72)
+    print(header)
+    print("=" * 72)
+
+    company: list[tuple[int, str, str, dict]] = []
+    for row in rows:
+        for a in row.get("news") or []:
+            company.append((int(a.get("impact_score") or 0), row["scrip"], row.get("industry") or "", a))
+    company.sort(key=lambda t: (-t[0], t[1]))
+
+    print(f"\nCOMPANY NEWS ({len(company)})")
+    if not company:
+        print("  (none)")
+    else:
+        for _impact, scrip, industry, article in company:
+            print(_headline_line(scrip, industry, article))
+
+    sectoral_lines: list[tuple[int, str, str, dict]] = []
+    seen = set()
+    high_rows = [r for r in rows if r.get("conviction") == "High"]
+    for row in high_rows:
+        for a in row.get("sectoral") or []:
+            key = _title_key(a.get("title") or "")
+            if not key or key in seen:
+                continue
+            seen.add(key)
+            sectoral_lines.append(
+                (int(a.get("impact_score") or 0), row["scrip"], row.get("industry") or "", a)
+            )
+    sectoral_lines.sort(key=lambda t: (-t[0], t[1]))
+
+    print(f"\nHIGH CONVICTION SECTORAL NEWS ({len(sectoral_lines)})")
+    print(f"  High-conviction scrips this run: {len(high_rows)}")
+    if not sectoral_lines:
+        print("  (none stored — High conviction needs >= 3 sectoral items, or none High this run)")
+        for row in high_rows:
+            n_sec = len(row.get("sectoral") or [])
+            print(f"  {row['scrip']:12} {row['sentiment']:8} sectoral={n_sec}  {row.get('industry') or ''}")
+    else:
+        for _impact, scrip, industry, article in sectoral_lines:
+            print(_headline_line(scrip, industry, article))
+    print("=" * 72)
 
 
 def upsert_scrip(coll, scrip: str, industry: str, tables: list[str], articles: list[dict]) -> str:
@@ -519,6 +650,7 @@ def main() -> None:
     print(f"Scan tables: {', '.join(SCAN_TABLES)}")
     print(f"Scrips (last {args.days}d): {len(scrips)}")
     counts = {"insert": 0, "update": 0, "overwrite": 0}
+    processed: list[dict[str, Any]] = []
 
     for i, scrip in enumerate(scrips, 1):
         meta = universe[scrip]
@@ -529,14 +661,18 @@ def main() -> None:
         cleaned = select_high_impact(dedupe_fresh(raw, args.news_days, now), args.min_impact)
         action = upsert_scrip(coll, scrip, industry, tables, cleaned)
         counts[action] = counts.get(action, 0) + 1
-        sent = overall_sentiment(cleaned)
-        conv = conviction_for(cleaned, sent)
-        print(f"    {action}  items={len(cleaned)}  sentiment={sent}  conviction={conv}")
+        row = summary_row(scrip, industry, tables, cleaned, action)
+        processed.append(row)
+        print(
+            f"    {action}  items={row['items']}  sentiment={row['sentiment']}  "
+            f"conviction={row['conviction']}"
+        )
 
     print(
         f"\nDone. insert={counts['insert']} update={counts['update']} "
         f"overwrite={counts['overwrite']} collection={SCAN_DB}.{TARGET_COLLECTION}"
     )
+    print_news_digest(processed, skill_name="scan-news-conviction")
     client.close()
 
 

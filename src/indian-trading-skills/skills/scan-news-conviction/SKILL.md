@@ -79,3 +79,10 @@ One document per `scrip` (upsert):
 - `pip install pymongo feedparser`
 
 Reuse RSS classification from **india-news-tracker** (`news_fetcher.py`).
+
+## After the run
+
+Print a **SUMMARY NEWS DIGEST** (shared with `scan-news-conviction-futures`):
+
+1. **Company news** — every stored `kind=news` headline from scrips processed this run (scrip, sentiment, impact, title).
+2. **High conviction sectoral news** — stored sectoral headlines for scrips whose `conviction` is **High** (deduped by title).

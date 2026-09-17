@@ -23,6 +23,78 @@ def main():
 
     rb.testLearning = True
 
+    col1, col2 = st.columns(2)
+    with col1:
+        df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] > -1.3) &
+                (df['PCT_day_change'] > -1.3) &
+                (df['PCT_day_change'] < 0.5) &
+                ((df['PCT_day_change_pre1'] > 2 ) | (df['PCT_day_change_pre2'] > 2 )) &
+                ((df['PCT_day_change_pre1'] < 1 ) | (df['PCT_day_change_pre2'] < 1 )) &
+                (df['forecast_day_PCT10_change'] > 8) &
+                #(df['forecast_day_PCT10_change'] < 15) &
+                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BuyAtOpening:SellIfNiftyLT(-0.5)OrOpenedDown', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+    with col2:
+        df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] > 0.5) &
+                (df['PCT_day_change'] < 1.5) &
+                ((df['lowTail'] > 0.9) | (df['PCT_day_change'] > 0.9)) &
+                ((df['PCT_day_change_pre1'] > -2 ) & (df['PCT_day_change_pre2'] > -2 )) &
+                ((df['PCT_day_change_pre1'] < -1.3 ) & (df['PCT_day_change_pre2'] < -1.3 )) &
+                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BuyAfter10:00-IfLT(-1.5)|SellAfter09:30-IfGT(1)', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+    
+    col3, col4 = st.columns(2)
+    with col3:
+        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] < 1.3) &
+                (df['PCT_day_change'] < 1.3) &
+                (df['PCT_day_change'] > 0.5) &
+                ((df['PCT_day_change_pre1'] < -2 ) | (df['PCT_day_change_pre2'] < -2 )) &
+                ((df['PCT_day_change_pre1'] > -1 ) | (df['PCT_day_change_pre2'] > -1 )) &
+                (df['forecast_day_PCT10_change'] < -8) &
+                #(df['forecast_day_PCT10_change'] > -15) &
+                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'SellAtOpening:BuyIfNiftyGT(0.5)OrOpenedUp', column_conf=rb.column_config_ml, column_order=rb.column_order_ml,
+                  renderml=True, color='LG')
+    with col4:
+        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] < -0.5) &
+                (df['PCT_day_change'] > -1.5) &
+                ((df['highTail'] > 0.9) | (df['PCT_day_change'] < -0.9)) &
+                ((df['PCT_day_change_pre1'] < 2 ) & (df['PCT_day_change_pre2'] < 2 )) &
+                ((df['PCT_day_change_pre1'] > 1.3 ) & (df['PCT_day_change_pre2'] > 1.3 )) &
+                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Sell-After-10:00-IfGT(1.5)|BuyAfter09:30-IfLT(-1)', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+
+
+    st.divider()
+
     
     col01, col1, col02, col2, col3 = st.columns(5)
     with col01:
@@ -736,9 +808,8 @@ def main():
             print("")
         rb.render(st, filtered_df, 'DownTrendMaySell', column_conf=rb.column_config_ml, column_order=rb.column_order_ml,
                   renderml=True, color='LG')
-        
 
-    
+
     col11, col1, col2, col44, col4, col5 = st.columns(6)
     with col11:
         df = rb.getdf('morning-volume-breakout-sell')

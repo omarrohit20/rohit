@@ -19,3 +19,5 @@ python skills/scan-news-conviction/scripts/ingest_scan_news.py --recompute-only
 ```
 
 Sectoral headlines count toward `overall_sentiment` only when there are **≥ 3**. Company news and analyst calls always count.
+
+End of run prints **SUMMARY NEWS DIGEST**: company news list + high-conviction sectoral news.

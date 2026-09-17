@@ -29,4 +29,12 @@ For local MongoDB multi-horizon trade/investment suggestions:
 - Save entry, targets, stoploss, R:R, sentiment/conviction/Prob%, last 5 trading days
 - Do not re-insert when `dedupe_key` exists
 
+## Scan News Conviction Futures
+
+- Skill: `skills/scan-news-conviction-futures/SKILL.md`
+- Helper: `skills/scan-news-conviction-futures/scripts/ingest_futures_news.py`
+- Universe: `Nsedata.scrip` `futures=Yes`
+- Skip if `scrip_news` created or updated in last 3 days, unless company news is published today
+- Write **only** `Nsedata.scrip_news`; print SUMMARY after run
+
 Default URI: `mongodb://localhost:27017` (`Nsedata`, `chartlink`).

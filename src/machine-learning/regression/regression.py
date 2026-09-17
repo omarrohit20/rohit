@@ -114,7 +114,7 @@ def regression_ta_data(scrip):
         print('regression failed for', scrip) 
         pass    
 
-def calculateParallel(threads=2, futures='Yes', ml_algo='Yes'):
+def calculateParallel(threads=3, futures='Yes', ml_algo='Yes'):
     #time.sleep(120)
     global run_ml_algo
     if(ml_algo != 'Yes'):
@@ -129,5 +129,9 @@ def calculateParallel(threads=2, futures='Yes', ml_algo='Yes'):
 if __name__ == "__main__":
     if not os.path.exists(directory):
         os.makedirs(directory)
-    calculateParallel(1, sys.argv[1], sys.argv[2])
+    if(sys.argv[1] == 'Yes'):
+        threads = 1
+    else:
+        threads = 4
+    calculateParallel(threads, sys.argv[1], sys.argv[2])
     connection.close()
