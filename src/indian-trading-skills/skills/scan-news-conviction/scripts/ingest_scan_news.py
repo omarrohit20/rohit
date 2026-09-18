@@ -56,6 +56,59 @@ OVERWRITE_DAYS = 30
 # Sectoral headlines only count toward overall sentiment / conviction
 # when there are at least this many. Company news and analyst calls always count.
 MIN_SECTORAL_FOR_SENTIMENT = 3
+FUTURES_SKILL_TAG = "futures"
+DEFAULT_FUTURES_RETAIN_DAYS = 2
+DEFAULT_FUTURES_COMPANY_NEWS_DAYS = 2
+GENERIC_MARKET_NEWS_RE = re.compile(
+    r"\b("
+    r"nifty\s*50?|nifty\s+bank|sensex|bank\s+nifty|"
+    r"market\s+(?:today|wrap|close|open|update|outlook|mood|pulse|watch|live)|"
+    r"stock\s+market\s+(?:today|update|wrap)|"
+    r"stocks?\s+to\s+watch|top\s+(?:gainers|losers|picks|movers)|"
+    r"sector(?:al)?\s+(?:outlook|rally|view|update|performance)|"
+    r"investors?\s+(?:watch|await|should)|"
+    r"pre[\s-]?market|post[\s-]?market|opening\s+bell|closing\s+bell|"
+    r"weekly\s+wrap|market\s+recap|market\s+live|hot\s+stocks|"
+    r"why\s+(?:the\s+)?(?:market|nifty|sensex)\b|"
+    r"fii\s+(?:flow|activity|selling|buying)|dii\s+(?:flow|activity)|"
+    r"global\s+(?:cues|markets)|wall\s+street|"
+    r"crude\s+oil\s+(?:prices?|falls?|rises?)|rupee\s+(?:vs|against)"
+    r")\b",
+    re.I,
+)
+WEAK_PRICE_HEADLINE_RE = re.compile(
+    r"\b(share price|stock price|in focus|technical view|trading at|"
+    r"hits?\s+52[\s-]?week|approaches?\s+52[\s-]?week)\b",
+    re.I,
+)
+COMPANY_CATALYST_RE = re.compile(
+    r"\b(results|earnings|profit|revenue|dividend|split|bonus|buyback|"
+    r"order|contract|deal|stake|merger|acquisition|upgrade|downgrade|"
+    r"target|guidance|board|ceo|md|cfo|sebi|rbi|penalty|fine|"
+    r"block deal|bulk deal|promoter|filing|announcement|outlook)\b",
+    re.I,
+)
+BROAD_MARKET_EVENT_TYPES = frozenset({"Macro", "Global"})
+COMPANY_SPECIFIC_EVENT_TYPES = frozenset(
+    {
+        "Earnings",
+        "Corporate Action",
+        "M&A",
+        "Management",
+        "Regulatory",
+        "Institutional",
+        "IPO",
+        "Rating",
+    }
+)
+COMPANY_SUFFIX_RE = re.compile(
+    r"\b(ltd\.?|limited|inc\.?|corp\.?|corporation|plc|co\.?)\b",
+    re.I,
+)
+SCRIP_COLLECTION = "scrip"
+# Weekly 2H/2L scans: drop cash names; keep futures. Other tables keep everyone.
+FUTURES_ONLY_TABLES = frozenset({"breakoutW2HR", "breakoutW2LR"})
+MAX_SCRIPS = 499  # hard cap: less than 500; futures are never dropped to meet it
 
 
 def _norm_scrip(value: Any) -> str | None:
@@ -72,6 +125,132 @@ def _title_key(title: str) -> str:
 def _near_dup_key(title: str) -> str:
     words = re.findall(r"[a-z0-9]+", (title or "").lower())[:8]
     return " ".join(words)
+
+
+def _company_match_tokens(company: str) -> list[str]:
+    if not company:
+        return []
+    cleaned = COMPANY_SUFFIX_RE.sub("", company)
+    cleaned = re.sub(r"[^a-z0-9\s&]", " ", cleaned.lower())
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    tokens = [t for t in cleaned.split() if len(t) >= 4]
+    if cleaned:
+        tokens.append(cleaned)
+    seen: set[str] = set()
+    out: list[str] = []
+    for token in tokens:
+        if token and token not in seen:
+            seen.add(token)
+            out.append(token)
+    return out
+
+
+def _mentions_scrip_or_company(text: str, scrip: str, company: str = "") -> bool:
+    if not text:
+        return False
+    text_l = text.lower()
+    if re.search(rf"\b{re.escape(scrip.lower())}\b", text_l):
+        return True
+    for token in _company_match_tokens(company):
+        if token in text_l:
+            return True
+    return False
+
+
+def _is_multi_stock_roundup(title: str, summary: str, scrip: str) -> bool:
+    mentioned = nf.detect_stocks(title, summary)
+    symbols = {str(s).upper() for s in mentioned}
+    return len(symbols) >= 3 and scrip.upper() in symbols
+
+
+def is_company_specific_news(article: dict, scrip: str, company: str = "") -> bool:
+    """True when kind=news is about this company, not a generic market/sector headline."""
+    if article.get("kind") != "news":
+        return True
+
+    title = (article.get("title") or "").strip()
+    summary = (article.get("summary") or "").strip()
+    text = f"{title} {summary}".strip()
+    if not text or not _mentions_scrip_or_company(text, scrip, company):
+        return False
+
+    if GENERIC_MARKET_NEWS_RE.search(title):
+        return False
+    if _is_multi_stock_roundup(title, summary, scrip):
+        return False
+
+    event_type = article.get("event_type") or "General"
+    title_mentions = _mentions_scrip_or_company(title, scrip, company)
+
+    if event_type in BROAD_MARKET_EVENT_TYPES and not title_mentions:
+        return False
+
+    if event_type in ("Uncategorized", "General"):
+        if not title_mentions:
+            return False
+        if WEAK_PRICE_HEADLINE_RE.search(title) and not COMPANY_CATALYST_RE.search(title):
+            return False
+
+    if event_type in COMPANY_SPECIFIC_EVENT_TYPES:
+        return True
+
+    return title_mentions
+
+
+def filter_company_specific_news(
+    articles: list[dict], scrip: str, company: str = ""
+) -> list[dict]:
+    return [a for a in articles if is_company_specific_news(a, scrip, company)]
+
+
+def stored_company_news_title_keys(doc: dict | None) -> set[str]:
+    if not doc:
+        return set()
+    keys: set[str] = set()
+    for a in list(doc.get("news") or []):
+        key = _title_key(a.get("title") or "")
+        if key:
+            keys.add(key)
+    for a in doc.get("articles") or []:
+        if a.get("kind") == "news":
+            key = _title_key(a.get("title") or "")
+            if key:
+                keys.add(key)
+    return keys
+
+
+def is_new_company_news(article: dict, stored_doc: dict | None) -> bool:
+    """False when this company headline is already stored on scrip_news."""
+    if article.get("kind") != "news":
+        return True
+    key = _title_key(article.get("title") or "")
+    if not key:
+        return True
+    return key not in stored_company_news_title_keys(stored_doc)
+
+
+def filter_futures_company_news(
+    articles: list[dict],
+    scrip: str,
+    company: str,
+    stored_doc: dict | None,
+    now: datetime,
+    company_news_days: int = DEFAULT_FUTURES_COMPANY_NEWS_DAYS,
+) -> list[dict]:
+    """Futures skill: company news only, last N days, not generic, not already stored."""
+    out: list[dict] = []
+    for a in articles:
+        if a.get("kind") != "news":
+            out.append(a)
+            continue
+        if not is_fresh(a.get("published"), company_news_days, now):
+            continue
+        if not is_company_specific_news(a, scrip, company):
+            continue
+        if not is_new_company_news(a, stored_doc):
+            continue
+        out.append(a)
+    return out
 
 
 def parse_published(value: Any) -> datetime | None:
@@ -120,9 +299,27 @@ def _date_cutoff_query(days: int) -> dict:
     }
 
 
-def collect_scrips(client: MongoClient, days: int) -> dict[str, dict]:
+def futures_scrip_set(client: MongoClient) -> set[str]:
+    found: set[str] = set()
+    for doc in client[SCAN_DB][SCRIP_COLLECTION].find({"futures": "Yes"}, {"scrip": 1}):
+        scrip = _norm_scrip(doc.get("scrip"))
+        if scrip:
+            found.add(scrip)
+    return found
+
+
+def collect_scrips(
+    client: MongoClient, days: int, futures: set[str] | None = None
+) -> tuple[dict[str, dict], dict[str, int]]:
+    """Scan-table universe. Non-futures are excluded only from breakoutW2HR / breakoutW2LR.
+
+    Every futures scrip is merged in so the futures list is never excluded.
+    """
+    if futures is None:
+        futures = futures_scrip_set(client)
     db = client[SCAN_DB]
     found: dict[str, dict] = {}
+    stats = {"w2_non_futures_skipped": 0}
     query = _date_cutoff_query(days)
     for table in SCAN_TABLES:
         coll = db[table]
@@ -133,12 +330,52 @@ def collect_scrips(client: MongoClient, days: int) -> dict[str, dict]:
             scrip = _norm_scrip(doc.get("scrip"))
             if not scrip:
                 continue
+            if table in FUTURES_ONLY_TABLES and scrip not in futures:
+                stats["w2_non_futures_skipped"] += 1
+                continue
             rec = found.setdefault(scrip, {"industry": "", "scan_tables": set()})
             rec["scan_tables"].add(table)
             ind = doc.get("industry")
             if ind and not rec["industry"]:
                 rec["industry"] = str(ind).strip()
-    return found
+    for doc in db[SCRIP_COLLECTION].find({"futures": "Yes"}, {"scrip": 1, "industry": 1}):
+        scrip = _norm_scrip(doc.get("scrip"))
+        if not scrip:
+            continue
+        rec = found.setdefault(scrip, {"industry": "", "scan_tables": set()})
+        rec["scan_tables"].add(FUTURES_SKILL_TAG)
+        ind = doc.get("industry")
+        if ind and not rec["industry"]:
+            rec["industry"] = str(ind).strip()
+    return found, stats
+
+
+def cap_universe(
+    universe: dict[str, dict],
+    futures: set[str],
+    max_scrips: int = MAX_SCRIPS,
+) -> tuple[dict[str, dict], int]:
+    """Keep every futures scrip; fill remaining slots with non-futures (most scan tables first)."""
+    if max_scrips <= 0 or len(universe) <= max_scrips:
+        return universe, 0
+    fut_keys = sorted(k for k in universe if k in futures)
+    non_keys = sorted(
+        (k for k in universe if k not in futures),
+        key=lambda k: (-len(universe[k].get("scan_tables") or []), k),
+    )
+    keep = list(fut_keys)
+    if len(keep) >= max_scrips:
+        print(
+            f"  warn: futures count {len(keep)} >= cap {max_scrips}; "
+            "keeping all futures, dropping all non-futures",
+            file=sys.stderr,
+        )
+        kept = {k: universe[k] for k in keep}
+        return kept, len(universe) - len(kept)
+    room = max_scrips - len(keep)
+    keep.extend(non_keys[:room])
+    kept = {k: universe[k] for k in keep}
+    return kept, len(universe) - len(kept)
 
 
 def _google_rss(query: str) -> str:
@@ -324,6 +561,57 @@ def has_company_news_today(
     if stored_company_news_today(stored_doc, now):
         return True
     return any(is_published_today(a.get("published"), now) for a in fetch_company_news(scrip, sleep_s))
+
+
+def stored_company_specific_news_today(
+    doc: dict | None, now: datetime, scrip: str, company: str = ""
+) -> bool:
+    if not doc:
+        return False
+    items = list(doc.get("news") or [])
+    for a in doc.get("articles") or []:
+        if a.get("kind") == "news":
+            items.append(a)
+    return any(
+        is_published_today(a.get("published"), now)
+        and is_company_specific_news(a, scrip, company)
+        for a in items
+    )
+
+
+def has_company_specific_news_today(
+    scrip: str,
+    now: datetime,
+    sleep_s: float,
+    stored_doc: dict | None = None,
+    company: str = "",
+) -> bool:
+    if stored_company_specific_news_today(stored_doc, now, scrip, company):
+        return True
+    articles = fetch_company_news(scrip, sleep_s)
+    return any(
+        is_published_today(a.get("published"), now)
+        and is_company_specific_news(a, scrip, company)
+        for a in articles
+    )
+
+
+def has_new_company_specific_news(
+    scrip: str,
+    now: datetime,
+    sleep_s: float,
+    stored_doc: dict | None = None,
+    company: str = "",
+    company_news_days: int = DEFAULT_FUTURES_COMPANY_NEWS_DAYS,
+) -> bool:
+    """True when there is fresh company-specific news not already stored on scrip_news."""
+    articles = fetch_company_news(scrip, sleep_s)
+    return any(
+        is_fresh(a.get("published"), company_news_days, now)
+        and is_company_specific_news(a, scrip, company)
+        and is_new_company_news(a, stored_doc)
+        for a in articles
+    )
 
 
 def dedupe_fresh(articles: list[dict], news_days: int, now: datetime) -> list[dict]:
@@ -560,6 +848,71 @@ def setup_indexes(coll) -> None:
     coll.create_index([("updated_at", ASCENDING)])
 
 
+def doc_last_touch(doc: dict | None) -> datetime | None:
+    if not doc:
+        return None
+    dates = [
+        _as_naive(doc.get("insertion_date")),
+        _as_naive(doc.get("updated_at")),
+    ]
+    dates = [d for d in dates if d]
+    return max(dates) if dates else None
+
+
+def is_from_breakout_scan_table(doc: dict) -> bool:
+    return any(str(t) in SCAN_TABLES for t in (doc.get("scan_tables") or []) if t)
+
+
+def is_futures_skill_only(doc: dict) -> bool:
+    tables = {str(t) for t in (doc.get("scan_tables") or []) if t}
+    return bool(tables) and tables <= {FUTURES_SKILL_TAG}
+
+
+def purge_stale_futures_skill_rows(
+    coll, now: datetime, retain_days: int = DEFAULT_FUTURES_RETAIN_DAYS
+) -> tuple[int, list[str]]:
+    """Drop scrip_news rows written only by scan-news-conviction-futures."""
+    cutoff = now - timedelta(days=retain_days)
+    deleted: list[str] = []
+    for doc in coll.find(
+        {"scan_tables": FUTURES_SKILL_TAG},
+        {"scrip": 1, "scan_tables": 1, "insertion_date": 1, "updated_at": 1},
+    ):
+        if is_from_breakout_scan_table(doc) or not is_futures_skill_only(doc):
+            continue
+        stamp = doc_last_touch(doc)
+        if stamp is None or stamp >= cutoff:
+            continue
+        scrip = _norm_scrip(doc.get("scrip"))
+        if not scrip:
+            continue
+        coll.delete_one({"_id": doc["_id"]})
+        deleted.append(scrip)
+    return len(deleted), sorted(deleted)
+
+
+def print_futures_skill_purge(
+    purge_count: int, purge_scrips: list[str], retain_days: int
+) -> None:
+    if purge_count:
+        print(
+            f"Purged {purge_count} expired futures-skill-only {TARGET_COLLECTION} rows "
+            f"(>{retain_days} days; breakout-tagged rows ignored)"
+        )
+    else:
+        print(
+            f"No expired futures-skill-only {TARGET_COLLECTION} rows to purge "
+            f"(>{retain_days} days)"
+        )
+    if purge_scrips and len(purge_scrips) <= 40:
+        print("Purged scrips: " + ", ".join(purge_scrips))
+    elif purge_scrips:
+        print(
+            f"Purged sample ({min(20, len(purge_scrips))} of {len(purge_scrips)}): "
+            + ", ".join(purge_scrips[:20])
+        )
+
+
 def recompute_scrip_news(coll) -> dict[str, int]:
     """Recalculate overall_sentiment / conviction and drop thin sectoral news."""
     counts = {"checked": 0, "updated": 0, "unchanged": 0}
@@ -610,11 +963,22 @@ def main() -> None:
     parser.add_argument("--min-impact", type=int, default=4)
     parser.add_argument("--sleep", type=float, default=0.35)
     parser.add_argument("--scrips", default="")
-    parser.add_argument("--limit", type=int, default=0)
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=MAX_SCRIPS,
+        help=f"Max scrips (default {MAX_SCRIPS}, always < 500). Futures are never dropped.",
+    )
     parser.add_argument(
         "--recompute-only",
         action="store_true",
         help="Recalculate overall_sentiment/conviction on existing scrip_news; do not scrape",
+    )
+    parser.add_argument(
+        "--retain-futures-days",
+        type=int,
+        default=DEFAULT_FUTURES_RETAIN_DAYS,
+        help="Delete futures-skill-only scrip_news rows older than this (breakout-tagged rows kept)",
     )
     args = parser.parse_args()
 
@@ -623,6 +987,11 @@ def main() -> None:
     client.admin.command("ping")
     coll = client[SCAN_DB][TARGET_COLLECTION]
     setup_indexes(coll)
+
+    purge_count, purge_scrips = purge_stale_futures_skill_rows(
+        coll, now, args.retain_futures_days
+    )
+    print_futures_skill_purge(purge_count, purge_scrips, args.retain_futures_days)
 
     if args.recompute_only:
         print("Skill: scan-news-conviction (recompute existing scrip_news)")
@@ -633,22 +1002,35 @@ def main() -> None:
         counts = recompute_scrip_news(coll)
         print(
             f"\nDone. checked={counts['checked']} updated={counts['updated']} "
-            f"unchanged={counts['unchanged']} collection={SCAN_DB}.{TARGET_COLLECTION}"
+            f"unchanged={counts['unchanged']} purged_futures_skill={purge_count} "
+            f"collection={SCAN_DB}.{TARGET_COLLECTION}"
         )
         client.close()
         return
 
-    universe = collect_scrips(client, args.days)
+    futures = futures_scrip_set(client)
+    universe, collect_stats = collect_scrips(client, args.days, futures)
     if args.scrips:
         want = {_norm_scrip(s) for s in args.scrips.split(",") if _norm_scrip(s)}
         universe = {k: v for k, v in universe.items() if k in want}
+    cap = args.limit if args.limit > 0 else MAX_SCRIPS
+    cap = min(cap, MAX_SCRIPS)
+    raw_count = len(universe)
+    universe, trimmed = cap_universe(universe, futures, cap)
     scrips = sorted(universe.keys())
-    if args.limit:
-        scrips = scrips[: args.limit]
+    n_fut = sum(1 for s in scrips if s in futures)
 
-    print(f"Skill: scan-news-conviction")
+    print("Skill: scan-news-conviction")
     print(f"Scan tables: {', '.join(SCAN_TABLES)}")
-    print(f"Scrips (last {args.days}d): {len(scrips)}")
+    print(
+        f"W2HR/W2LR: futures only (skipped non-futures rows: "
+        f"{collect_stats['w2_non_futures_skipped']})"
+    )
+    print(f"Cap: {cap} (<500); futures list never excluded")
+    print(
+        f"Scrips (last {args.days}d): {len(scrips)} "
+        f"(raw={raw_count} trimmed_non_futures={trimmed} futures={n_fut})"
+    )
     counts = {"insert": 0, "update": 0, "overwrite": 0}
     processed: list[dict[str, Any]] = []
 
@@ -670,7 +1052,8 @@ def main() -> None:
 
     print(
         f"\nDone. insert={counts['insert']} update={counts['update']} "
-        f"overwrite={counts['overwrite']} collection={SCAN_DB}.{TARGET_COLLECTION}"
+        f"overwrite={counts['overwrite']} purged_futures_skill={purge_count} "
+        f"collection={SCAN_DB}.{TARGET_COLLECTION}"
     )
     print_news_digest(processed, skill_name="scan-news-conviction")
     client.close()

@@ -14,6 +14,19 @@ import streamlit.components.v1 as components
 
 PURPLE_BG = "#E9D5FF"
 YELLOW_BG = "#FFF59D"
+# Match scan-news-conviction SCAN_TABLES in ingest_scan_news.py
+BREAKOUT_SCAN_TABLES = frozenset({
+    "breakoutM2HR",
+    "breakoutM2LR",
+    "breakoutMHR",
+    "breakoutMLR",
+    "breakoutW2HR",
+    "breakoutW2LR",
+    "movingavg_crossed_up",
+    "movingavg_crossed_down",
+    "breakoutY2H",
+    "breakoutYH",
+})
 # Match scan-news-conviction: sectoral headlines count only when there are >= 3.
 MIN_SECTORAL_FOR_SENTIMENT = 3
 
@@ -268,6 +281,19 @@ def company_news_recency(doc=None, today=None):
     return ""
 
 
+def is_from_breakout_scan_table(doc=None):
+    """True when scrip_news scan_tables includes a breakout scan table."""
+    tables = (doc or {}).get("scan_tables") or []
+    if not isinstance(tables, list):
+        tables = [tables] if tables else []
+    return any(str(t).strip() in BREAKOUT_SCAN_TABLES for t in tables)
+
+
+def news_icon_glyph(doc=None):
+    """ℹ for breakout scan scrips; F for futures / other non-breakout sources."""
+    return "ℹ" if is_from_breakout_scan_table(doc) else "F"
+
+
 def _nonempty_articles(items):
     if not items:
         return False
@@ -365,18 +391,21 @@ def _icon_strip_page(scrips, news_map, height):
             .replace('"', "&quot;")
         )
         recency = company_news_recency(doc)
+        glyph = news_icon_glyph(doc)
+        from_breakout = glyph == "ℹ"
         sent = str((doc or {}).get("overall_sentiment") or "").strip().lower()
         sent_cls = " bull" if sent == "bullish" else (" bear" if sent == "bearish" else "")
+        source = "breakout scan" if from_breakout else "futures / non-breakout"
         if recency == "today":
             cls = "nws-ico recent-today" + sent_cls
-            title = f"{esc} news · company news today"
+            title = f"{esc} news · {source} · company news today"
         elif recency == "yesterday":
             cls = "nws-ico recent-yesterday" + sent_cls
-            title = f"{esc} news · company news yesterday"
+            title = f"{esc} news · {source} · company news yesterday"
         else:
             cls = "nws-ico" + sent_cls
-            title = f"{esc} news"
-        icons.append(f'<div class="{cls}" data-scrip="{esc}" title="{title}">ℹ</div>')
+            title = f"{esc} news · {source}"
+        icons.append(f'<div class="{cls}" data-scrip="{esc}" title="{title}">{glyph}</div>')
     icons_html = "".join(icons)
     payload = json.dumps({"news": news_map})
     h = int(height)

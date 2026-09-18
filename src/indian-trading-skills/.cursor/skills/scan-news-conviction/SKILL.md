@@ -3,7 +3,7 @@ name: scan-news-conviction
 description: >-
   Ingest last-5-day Nsedata breakout/moving-average scan scrips, scrape
   news/sector/analyst items, score sentiment and conviction, upsert
-  Nsedata.scrip_news (7-day high-impact, deduped; overwrite if older than 30 days).
+  Nsedata.scrip_news (max 499; never drop futures; W2HR/W2LR exclude non-futures only).
 ---
 
 # Scan News Conviction (Cursor)

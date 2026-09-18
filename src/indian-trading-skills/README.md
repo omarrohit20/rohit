@@ -222,7 +222,7 @@ python3 skills/india-news-tracker/scripts/news_fetcher.py --format json --output
 
 ### Scan News Conviction (`scan-news-conviction`)
 
-Last **5 days** of scrips from `breakoutM2HR`, `breakoutM2LR`, `breakoutMHR`, `breakoutMLR`, `breakoutW2HR`, `breakoutW2LR`, `movingavg_crossed_up`, `movingavg_crossed_down`, `breakoutY2H`, `breakoutYH`. Scrapes company news, sectoral news, and analyst calls; scores **sentiment** and **conviction**; keeps **high-impact** items from the last **7 days** (duplicates removed). Upserts `Nsedata.scrip_news` (`insertion_date`; **overwrite** if the record is older than **30 days**).
+Last **5 days** of scrips from `breakoutM2HR`, `breakoutM2LR`, `breakoutMHR`, `breakoutMLR`, `breakoutW2HR`, `breakoutW2LR`, `movingavg_crossed_up`, `movingavg_crossed_down`, `breakoutY2H`, `breakoutYH` (**max 499**; never drop futures; **W2HR/W2LR exclude non-futures only**). Scrapes company news, sectoral news, and analyst calls; scores **sentiment** and **conviction**; keeps **high-impact** items from the last **7 days** (duplicates removed). Upserts `Nsedata.scrip_news` (`insertion_date`; **overwrite** if the record is older than **30 days**).
 
 ```bash
 python skills/scan-news-conviction/scripts/ingest_scan_news.py

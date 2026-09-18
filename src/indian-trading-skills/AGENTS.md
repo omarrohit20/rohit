@@ -48,7 +48,7 @@ When the user asks to scrape/save **news, sectoral news, analyst calls, sentimen
 python skills/scan-news-conviction/scripts/ingest_scan_news.py
 ```
 
-Target: `Nsedata.scrip_news`. High-impact, ≤7 days, deduped; upsert; overwrite if older than 30 days. After the run, print **SUMMARY NEWS DIGEST** (company news + high-conviction sectoral news).
+Target: `Nsedata.scrip_news`. Cap **< 500** names; never drop futures; from `breakoutW2HR`/`breakoutW2LR` exclude non-futures only. High-impact, ≤7 days, deduped; upsert; overwrite if older than 30 days. After the run, print **SUMMARY NEWS DIGEST** (company news + high-conviction sectoral news).
 
 ## Scan News Conviction Futures
 

@@ -3,9 +3,10 @@ name: scan-news-conviction
 description: >-
   Ingest last-5-day scrips from Nsedata breakoutM2HR, breakoutM2LR, breakoutMHR,
   breakoutMLR, breakoutW2HR, breakoutW2LR, movingavg_crossed_up,
-  movingavg_crossed_down, breakoutY2H, and breakoutYH. Scrape company news,
-  sectoral news, and analyst calls; score sentiment and conviction; keep only
-  high-impact items from the last 7 days with duplicates removed. Upsert
+  movingavg_crossed_down, breakoutY2H, and breakoutYH (max 499 names; never drop
+  the futures list; from breakoutW2HR/breakoutW2LR exclude non-futures only). Scrape
+  company news, sectoral news, and analyst calls; score sentiment and conviction;
+  keep only high-impact items from the last 7 days with duplicates removed. Upsert
   Nsedata.scrip_news (insertion_date; overwrite if the record is older than
   30 days). Use when asked to refresh scan news, conviction, or scrip news DB.
 ---
@@ -35,9 +36,10 @@ python indian-trading-skills/skills/scan-news-conviction/scripts/ingest_scan_new
 | `--news-days` | `7` | Drop headlines older than this |
 | `--min-impact` | `4` | Keep high-impact items (1–10); still keep a short top list if few pass |
 | `--sleep` | `0.35` | Pause between Google News requests |
-| `--limit` | `0` | Max scrips (`0` = all) |
+| `--limit` | `499` | Max scrips (always **< 500**). Futures names are never dropped to meet the cap. |
 | `--scrips` | | Comma-separated filter, e.g. `RELIANCE,TCS` |
 | `--recompute-only` | | Recalculate `overall_sentiment` / `conviction` on existing `scrip_news` (no scrape) |
+| `--retain-futures-days` | `2` | Delete **futures-skill-only** `scrip_news` rows older than this (breakout-tagged rows kept) |
 
 ## Scan sources
 
@@ -46,6 +48,12 @@ python indian-trading-skills/skills/scan-news-conviction/scripts/ingest_scan_new
 | `Nsedata` | `breakoutM2HR`, `breakoutM2LR`, `breakoutMHR`, `breakoutMLR`, `breakoutW2HR`, `breakoutW2LR`, `movingavg_crossed_up`, `movingavg_crossed_down`, `breakoutY2H`, `breakoutYH` |
 
 If no rows match the 5-day date filter, the live snapshot of that collection is used.
+
+**Universe filters**
+
+- Hard cap: **fewer than 500** scrips (`--limit` default 499).
+- **Never drop the futures list** (`Nsedata.scrip` `futures=Yes`). Every futures scrip is in the universe even if it is not on a scan table. Non-futures are trimmed first if the cap is exceeded.
+- From **`breakoutW2HR`** and **`breakoutW2LR` only**: exclude non-futures. Futures on those tables stay. Other scan tables keep cash and futures.
 
 ## What is stored (`Nsedata.scrip_news`)
 
@@ -64,6 +72,15 @@ One document per `scrip` (upsert):
 | `updated_at` | Every successful scrape |
 
 **30-day overwrite:** if `insertion_date` (else `updated_at`) is **≥ 30 days** old, replace the whole document and set a **new** `insertion_date`.
+
+## Futures-skill retention purge
+
+At the **start of every run** (including `--recompute-only`), before scrape/upsert:
+
+| Condition | Action |
+|-----------|--------|
+| `scan_tables` is **only** `futures` (written by `scan-news-conviction-futures`) and `max(insertion_date, updated_at)` is **older than 2 days** | **Delete** the `scrip_news` row |
+| Row has any breakout scan-table tag | **Ignore** — never deleted |
 
 ## Quality rules
 
