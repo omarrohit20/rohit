@@ -38,8 +38,8 @@ python indian-trading-skills/skills/scan-news-conviction-futures/scripts/ingest_
 |------|---------|---------|
 | `--stale-days` | `3` | Skip scrip if `scrip_news` `insertion_date` or `updated_at` is within this window, **unless new company-specific news in last 2 days** |
 | `--retain-days` | `2` | Delete **futures-only** `scrip_news` rows older than this (rows with breakout scan-table tags are kept) |
-| `--company-news-days` | `2` | Company news window for sentiment/skip exception; ignores already-stored headlines |
-| `--news-days` | `7` | Max headline age for sectoral/analyst items |
+| `--company-news-days` | `2` | Company news calendar window (2 = today + yesterday); ignores already-stored headlines |
+| `--news-days` | `7` | Unused (company news only) |
 | `--min-impact` | `4` | Keep high-impact items (1–10) |
 | `--sleep` | `0.35` | Pause between Google News requests |
 | `--limit` | `0` | Max due scrips (`0` = all due) |
@@ -64,11 +64,13 @@ For each futures scrip, read `Nsedata.scrip_news` by `scrip`.
 | Created or updated **within the last 3 days**, **and new company-specific news in the last 2 days** not already on `scrip_news` | **Do not skip** — scrape + upsert |
 | Created or updated **within the last 3 days**, and **no** such new company news | **Skip** |
 
-## Company news filter (futures skill)
+## Company news only (futures skill)
 
-Before scoring/sentiment, company headlines (`kind=news`) must pass **all** checks:
+**Does not scrape or score sectoral or analyst headlines.** Only `kind=news` company headlines are fetched, stored, and used for sentiment/conviction.
 
-- Published within the **last 2 days** only (`--company-news-days`, default `2`)
+Before scoring/sentiment, each company headline must pass **all** checks:
+
+- Published within **today and yesterday** only (`--company-news-days` default `2` = 2 calendar dates)
 - Must mention the **scrip** or `Nsedata.scrip.company` name
 - Drop market/sector roundups (Nifty/Sensex wrap, top gainers/losers, FII flows, etc.)
 - Drop macro/global headlines unless the company is the clear subject in the title
@@ -76,7 +78,7 @@ Before scoring/sentiment, company headlines (`kind=news`) must pass **all** chec
 - Drop multi-stock listicles naming 3+ symbols
 - **Ignore already-stored headlines** — if the same title is already on `scrip_news`, it was factored in earlier (e.g. yesterday) and is not treated as a new catalyst
 
-Analyst calls and sectoral news keep the normal `--news-days` window (default 7). The **fresh-skip exception** uses the same company-news rules and only fires on **new** headlines.
+The **fresh-skip exception** uses the same rules and only fires on **new** company headlines.
 
 ## Retention purge (futures-only rows)
 
@@ -106,10 +108,7 @@ Always print the script **SUMMARY** block: futures count, purged (expired future
 skipped (fresh), insert/update/overwrite, errors, sentiment/conviction tallies, High conviction
 list, directional High/Med list.
 
-Then print the shared **SUMMARY NEWS DIGEST** (same as `scan-news-conviction`):
-
-1. **Company news** — every stored `kind=news` headline from scrips processed this run.
-2. **High conviction sectoral news** — stored sectoral headlines for **High** conviction scrips (deduped by title).
+Then print **SUMMARY NEWS DIGEST** — **company news only** from scrips processed this run (no sectoral section).
 
 ## Prerequisites
 

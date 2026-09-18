@@ -237,13 +237,12 @@ def filter_futures_company_news(
     now: datetime,
     company_news_days: int = DEFAULT_FUTURES_COMPANY_NEWS_DAYS,
 ) -> list[dict]:
-    """Futures skill: company news only, last N days, not generic, not already stored."""
+    """Futures skill: company news only; today/yesterday; company-specific; not already stored."""
     out: list[dict] = []
     for a in articles:
         if a.get("kind") != "news":
-            out.append(a)
             continue
-        if not is_fresh(a.get("published"), company_news_days, now):
+        if not is_published_within_calendar_days(a.get("published"), now, company_news_days):
             continue
         if not is_company_specific_news(a, scrip, company):
             continue
@@ -284,6 +283,21 @@ def is_fresh(published: Any, news_days: int, now: datetime) -> bool:
     if dt is None:
         return True
     return dt >= now - timedelta(days=news_days)
+
+
+def is_published_within_calendar_days(
+    published: Any, now: datetime, window_days: int
+) -> bool:
+    """Calendar-date window. window_days=2 -> today and yesterday only."""
+    if window_days <= 0:
+        return False
+    dt = parse_published(published)
+    if dt is None:
+        return False
+    pub_date = dt.date()
+    cur = now.date()
+    oldest = cur - timedelta(days=window_days - 1)
+    return oldest <= pub_date <= cur
 
 
 def _date_cutoff_query(days: int) -> dict:
@@ -607,7 +621,7 @@ def has_new_company_specific_news(
     """True when there is fresh company-specific news not already stored on scrip_news."""
     articles = fetch_company_news(scrip, sleep_s)
     return any(
-        is_fresh(a.get("published"), company_news_days, now)
+        is_published_within_calendar_days(a.get("published"), now, company_news_days)
         and is_company_specific_news(a, scrip, company)
         and is_new_company_news(a, stored_doc)
         for a in articles
@@ -620,6 +634,27 @@ def dedupe_fresh(articles: list[dict], news_days: int, now: datetime) -> list[di
     seen_near = set()
     for a in articles:
         if not is_fresh(a.get("published"), news_days, now):
+            continue
+        tk = _title_key(a.get("title") or "")
+        nk = _near_dup_key(a.get("title") or "")
+        if not tk or tk in seen_title or (nk and nk in seen_near):
+            continue
+        seen_title.add(tk)
+        if nk:
+            seen_near.add(nk)
+        out.append(a)
+    return out
+
+
+def dedupe_fresh_calendar(
+    articles: list[dict], window_days: int, now: datetime
+) -> list[dict]:
+    """Dedupe with calendar today/yesterday window; drop unparseable dates."""
+    out = []
+    seen_title = set()
+    seen_near = set()
+    for a in articles:
+        if not is_published_within_calendar_days(a.get("published"), now, window_days):
             continue
         tk = _title_key(a.get("title") or "")
         nk = _near_dup_key(a.get("title") or "")
@@ -651,6 +686,29 @@ def select_high_impact(articles: list[dict], min_impact: int) -> list[dict]:
     seen = set()
     uniq = []
     for a in combined:
+        k = _title_key(a.get("title") or "")
+        if k in seen:
+            continue
+        seen.add(k)
+        uniq.append(a)
+    return uniq
+
+
+def select_futures_company_news(articles: list[dict], min_impact: int) -> list[dict]:
+    """Futures skill: high-impact company headlines only (no sectoral/analyst)."""
+    ranked = sorted(
+        [a for a in articles if a.get("kind") == "news"],
+        key=lambda a: int(a.get("impact_score") or 0),
+        reverse=True,
+    )
+    strong = [a for a in ranked if int(a.get("impact_score") or 0) >= min_impact]
+    if len(strong) >= 3:
+        pool = strong[:10]
+    else:
+        pool = (strong + [a for a in ranked if a not in strong])[:10]
+    seen = set()
+    uniq = []
+    for a in pool:
         k = _title_key(a.get("title") or "")
         if k in seen:
             continue

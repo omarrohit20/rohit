@@ -189,7 +189,7 @@ def main() -> None:
         "--news-days",
         type=int,
         default=7,
-        help="Max headline age for sectoral/analyst",
+        help="Unused (futures skill uses company news only via --company-news-days)",
     )
     parser.add_argument("--min-impact", type=int, default=4)
     parser.add_argument("--sleep", type=float, default=0.35)
@@ -247,7 +247,8 @@ def main() -> None:
         f"Exception: scrape if new company-specific news in last {args.company_news_days} days (not already stored)"
     )
     print(
-        f"Company news: last {args.company_news_days} days only; drop generic/stale/already-stored"
+        f"Company news only: today/yesterday ({args.company_news_days} calendar days); "
+        "no sectoral/analyst; drop generic/already-stored"
     )
     print(f"Fresh window candidates: {len(fresh_list)} (checking new company news)")
 
@@ -296,8 +297,8 @@ def main() -> None:
         company = meta.get("company") or ""
         print(f"[{i}/{len(due)}] {scrip}")
         try:
-            raw = ingest.scrape_scrip(scrip, industry, args.news_days, args.sleep)
-            fresh_arts = ingest.dedupe_fresh(raw, args.news_days, now)
+            raw = ingest.fetch_company_news(scrip, args.sleep)
+            fresh_arts = ingest.dedupe_fresh_calendar(raw, args.company_news_days, now)
             before = len(fresh_arts)
             filtered = ingest.filter_futures_company_news(
                 fresh_arts,
@@ -310,9 +311,9 @@ def main() -> None:
             dropped = before - len(filtered)
             if dropped:
                 print(
-                    f"    dropped {dropped} company headline(s) (generic/stale/>{args.company_news_days}d/already stored)"
+                    f"    dropped {dropped} headline(s) (not company-specific/new/in window)"
                 )
-            cleaned = ingest.select_high_impact(filtered, args.min_impact)
+            cleaned = ingest.select_futures_company_news(filtered, args.min_impact)
             action = ingest.upsert_scrip(coll, scrip, industry, tables, cleaned)
             counts[action] = counts.get(action, 0) + 1
             row = ingest.summary_row(scrip, industry, tables, cleaned, action)

@@ -350,6 +350,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['PCT_day_change'] < 1) | ((df['PCT_day_change'] > 2.3) & (df['PCT_day_change'] < 3))) &
                 ((df['PCT_day_change'] > 0) | ((df['PCT_day_change_pre1'] > 2) | (df['PCT_day_change_pre2'] > 2))) &
                 ((df['PCT_day_change'] < 1) | (df['PCT_day_change_pre1'] < 0.5)) &
                 (df['PCT_day_change'] > -1.3)
@@ -374,6 +375,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['PCT_day_change'] > -1) | ((df['PCT_day_change'] < -2.3) & (df['PCT_day_change'] > -3))) &
                 ((df['PCT_day_change'] < 0) | ((df['PCT_day_change_pre1'] < -2) | (df['PCT_day_change_pre2'] < -2))) &
                 ((df['PCT_day_change'] > -1) | (df['PCT_day_change_pre1'] > -0.5)) &
                 (df['PCT_day_change'] < 1.3)
