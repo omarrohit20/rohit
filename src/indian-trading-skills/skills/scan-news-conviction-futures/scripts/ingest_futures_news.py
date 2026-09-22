@@ -165,6 +165,7 @@ def print_summary(
 
 
 def main() -> None:
+    ingest._configure_stdio()
     parser = argparse.ArgumentParser(description="scan-news-conviction-futures ingest")
     parser.add_argument("--uri", default=DEFAULT_URI)
     parser.add_argument(

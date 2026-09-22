@@ -1,18 +1,28 @@
+@echo off
+setlocal EnableExtensions
+cd /d "%~dp0"
 
-ECHO Starting multiple Python scripts in parallel...
+REM Stop console click-select (Quick Edit) from freezing the run,
+REM and never wait for a keypress.
+call :disable_quickedit
 
-REM Save the current directory to restore later
-SET SCRIPT_DIR=%~dp0
-
-REM Change directory to machine-learning/regression and start regression script
-CD /D "%SCRIPT_DIR%machine-learning\regression"
+echo Starting regression scripts...
+cd /d "%~dp0machine-learning\regression"
 echo Now in directory: %CD%
-start "" /B cmd /c regression_run_futures.bat
-if errorlevel 1 echo Error launching regression_run_futures.bat
 
-REM Restore original directory
-CD /D "%SCRIPT_DIR%"
+REM Run inline (not start /B) so this window stays alive until work is done,
+REM with stdin detached so Python cannot wait for Enter.
+cmd /c "regression_run_futures.bat <nul"
+set ERR=%ERRORLEVEL%
+if %ERR% neq 0 echo Error running regression_run_futures.bat (exit %ERR%)
 
-ECHO All scripts have been launched.
+cd /d "%~dp0"
+echo All scripts have finished.
+exit /b %ERR%
 
-PAUSE
+:disable_quickedit
+powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+  "Add-Type -Name QE -Namespace Win32 -MemberDefinition '[DllImport(\"kernel32.dll\")] public static extern IntPtr GetStdHandle(int n); [DllImport(\"kernel32.dll\")] public static extern bool GetConsoleMode(IntPtr h, out uint m); [DllImport(\"kernel32.dll\")] public static extern bool SetConsoleMode(IntPtr h, uint m);' | Out-Null;" ^
+  "$h=[Win32.QE]::GetStdHandle(-10); $m=0;" ^
+  "if([Win32.QE]::GetConsoleMode($h,[ref]$m)){ [void][Win32.QE]::SetConsoleMode($h, (($m -band (-bnot 64)) -bor 128)) }" >nul 2>&1
+exit /b 0

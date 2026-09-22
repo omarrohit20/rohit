@@ -1013,7 +1013,20 @@ def recompute_scrip_news(coll) -> dict[str, int]:
     return counts
 
 
+def _configure_stdio() -> None:
+    """Avoid Windows cp1252 crashes on rupee/en-dash in headline digest."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if not reconfigure:
+            continue
+        try:
+            reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+
+
 def main() -> None:
+    _configure_stdio()
     parser = argparse.ArgumentParser(description="scan-news-conviction ingest")
     parser.add_argument("--uri", default=DEFAULT_URI)
     parser.add_argument("--days", type=int, default=5, help="Scan-table lookback")
