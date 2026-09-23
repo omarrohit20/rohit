@@ -59,6 +59,7 @@ MIN_SECTORAL_FOR_SENTIMENT = 3
 FUTURES_SKILL_TAG = "futures"
 DEFAULT_FUTURES_RETAIN_DAYS = 2
 DEFAULT_FUTURES_COMPANY_NEWS_DAYS = 2
+FUTURES_SCORING_KINDS = frozenset({"news", "analyst"})
 GENERIC_MARKET_NEWS_RE = re.compile(
     r"\b("
     r"nifty\s*50?|nifty\s+bank|sensex|bank\s+nifty|"
@@ -157,6 +158,11 @@ def _mentions_scrip_or_company(text: str, scrip: str, company: str = "") -> bool
     return False
 
 
+def headline_primarily_mentions_company(title: str, scrip: str, company: str = "") -> bool:
+    """Headline must name the scrip or company; summary-only matches do not count."""
+    return _mentions_scrip_or_company((title or "").strip(), scrip, company)
+
+
 def _is_multi_stock_roundup(title: str, summary: str, scrip: str) -> bool:
     mentioned = nf.detect_stocks(title, summary)
     symbols = {str(s).upper() for s in mentioned}
@@ -197,6 +203,33 @@ def is_company_specific_news(article: dict, scrip: str, company: str = "") -> bo
     return title_mentions
 
 
+def is_futures_headline_news(article: dict, scrip: str, company: str = "") -> bool:
+    """Futures skill: company or analyst headline with company name primarily in title."""
+    kind = article.get("kind")
+    if kind not in FUTURES_SCORING_KINDS:
+        return False
+
+    title = (article.get("title") or "").strip()
+    summary = (article.get("summary") or "").strip()
+    if not headline_primarily_mentions_company(title, scrip, company):
+        return False
+    if GENERIC_MARKET_NEWS_RE.search(title):
+        return False
+    if _is_multi_stock_roundup(title, summary, scrip):
+        return False
+
+    if kind == "analyst":
+        return bool(ANALYST_RE.search(title) or article.get("event_type") == "Rating")
+
+    event_type = article.get("event_type") or "General"
+    if event_type in BROAD_MARKET_EVENT_TYPES:
+        return False
+    if event_type in ("Uncategorized", "General"):
+        if WEAK_PRICE_HEADLINE_RE.search(title) and not COMPANY_CATALYST_RE.search(title):
+            return False
+    return True
+
+
 def filter_company_specific_news(
     articles: list[dict], scrip: str, company: str = ""
 ) -> list[dict]:
@@ -219,6 +252,22 @@ def stored_company_news_title_keys(doc: dict | None) -> set[str]:
     return keys
 
 
+def stored_futures_headline_title_keys(doc: dict | None) -> set[str]:
+    if not doc:
+        return set()
+    keys: set[str] = set()
+    for a in list(doc.get("news") or []) + list(doc.get("analyst_calls") or []):
+        key = _title_key(a.get("title") or "")
+        if key:
+            keys.add(key)
+    for a in doc.get("articles") or []:
+        if a.get("kind") in FUTURES_SCORING_KINDS:
+            key = _title_key(a.get("title") or "")
+            if key:
+                keys.add(key)
+    return keys
+
+
 def is_new_company_news(article: dict, stored_doc: dict | None) -> bool:
     """False when this company headline is already stored on scrip_news."""
     if article.get("kind") != "news":
@@ -229,6 +278,16 @@ def is_new_company_news(article: dict, stored_doc: dict | None) -> bool:
     return key not in stored_company_news_title_keys(stored_doc)
 
 
+def is_new_futures_headline(article: dict, stored_doc: dict | None) -> bool:
+    """False when this company/analyst headline is already stored on scrip_news."""
+    if article.get("kind") not in FUTURES_SCORING_KINDS:
+        return True
+    key = _title_key(article.get("title") or "")
+    if not key:
+        return True
+    return key not in stored_futures_headline_title_keys(stored_doc)
+
+
 def filter_futures_company_news(
     articles: list[dict],
     scrip: str,
@@ -237,16 +296,16 @@ def filter_futures_company_news(
     now: datetime,
     company_news_days: int = DEFAULT_FUTURES_COMPANY_NEWS_DAYS,
 ) -> list[dict]:
-    """Futures skill: company news only; today/yesterday; company-specific; not already stored."""
+    """Futures skill: company + analyst headlines with company name in title."""
     out: list[dict] = []
     for a in articles:
-        if a.get("kind") != "news":
+        if a.get("kind") not in FUTURES_SCORING_KINDS:
             continue
         if not is_published_within_calendar_days(a.get("published"), now, company_news_days):
             continue
-        if not is_company_specific_news(a, scrip, company):
+        if not is_futures_headline_news(a, scrip, company):
             continue
-        if not is_new_company_news(a, stored_doc):
+        if not is_new_futures_headline(a, stored_doc):
             continue
         out.append(a)
     return out
@@ -566,6 +625,41 @@ def fetch_company_news(scrip: str, sleep_s: float) -> list[dict]:
     return [a for a in merged if a.get("kind") == "news"]
 
 
+def fetch_futures_company_analyst_news(scrip: str, sleep_s: float) -> list[dict]:
+    """Company + analyst headlines only; no sectoral feeds."""
+    merged: list[dict] = []
+    try:
+        for it in nf.fetch_rss_feeds(days_back=2, stock_filter=scrip):
+            kind = "news"
+            if ANALYST_RE.search(it.title) or it.event_type == "Rating":
+                kind = "analyst"
+            elif it.sectors and it.event_type in ("Macro", "Global", "Uncategorized", "General"):
+                kind = "sectoral"
+            if kind not in FUTURES_SCORING_KINDS:
+                continue
+            merged.append(
+                _as_article(it.title, it.summary, it.link, it.source, it.published, kind)
+            )
+    except SystemExit:
+        pass
+    except Exception as exc:
+        print(f"  warn: RSS futures {scrip}: {exc}", file=sys.stderr)
+
+    queries = [
+        (_google_rss(f"{scrip} NSE OR BSE stock"), "Google News", "news"),
+        (
+            _google_rss(f'{scrip} analyst OR upgrade OR downgrade OR "target price"'),
+            "Google News Analyst",
+            "analyst",
+        ),
+    ]
+    for url, source, kind in queries:
+        merged.extend(_parse_feed(url, source, kind))
+        if sleep_s:
+            time.sleep(sleep_s)
+    return [a for a in merged if a.get("kind") in FUTURES_SCORING_KINDS]
+
+
 def has_company_news_today(
     scrip: str,
     now: datetime,
@@ -618,12 +712,12 @@ def has_new_company_specific_news(
     company: str = "",
     company_news_days: int = DEFAULT_FUTURES_COMPANY_NEWS_DAYS,
 ) -> bool:
-    """True when there is fresh company-specific news not already stored on scrip_news."""
-    articles = fetch_company_news(scrip, sleep_s)
+    """True when there is fresh company/analyst headline news not already stored."""
+    articles = fetch_futures_company_analyst_news(scrip, sleep_s)
     return any(
         is_published_within_calendar_days(a.get("published"), now, company_news_days)
-        and is_company_specific_news(a, scrip, company)
-        and is_new_company_news(a, stored_doc)
+        and is_futures_headline_news(a, scrip, company)
+        and is_new_futures_headline(a, stored_doc)
         for a in articles
     )
 
@@ -695,20 +789,24 @@ def select_high_impact(articles: list[dict], min_impact: int) -> list[dict]:
 
 
 def select_futures_company_news(articles: list[dict], min_impact: int) -> list[dict]:
-    """Futures skill: high-impact company headlines only (no sectoral/analyst)."""
+    """Futures skill: high-impact company + analyst headlines (no sectoral)."""
     ranked = sorted(
-        [a for a in articles if a.get("kind") == "news"],
+        [a for a in articles if a.get("kind") in FUTURES_SCORING_KINDS],
         key=lambda a: int(a.get("impact_score") or 0),
         reverse=True,
     )
-    strong = [a for a in ranked if int(a.get("impact_score") or 0) >= min_impact]
-    if len(strong) >= 3:
-        pool = strong[:10]
-    else:
-        pool = (strong + [a for a in ranked if a not in strong])[:10]
+
+    def take(kind: str, n: int) -> list[dict]:
+        pool = [a for a in ranked if a.get("kind") == kind]
+        strong = [a for a in pool if int(a.get("impact_score") or 0) >= min_impact]
+        if len(strong) >= 3:
+            return strong[:n]
+        return (strong + [a for a in pool if a not in strong])[:n]
+
+    combined = take("news", 10) + take("analyst", 6)
     seen = set()
     uniq = []
-    for a in pool:
+    for a in combined:
         k = _title_key(a.get("title") or "")
         if k in seen:
             continue
@@ -723,6 +821,26 @@ def articles_for_overall_sentiment(articles: list[dict]) -> list[dict]:
     if len(sectoral) >= MIN_SECTORAL_FOR_SENTIMENT:
         return list(articles)
     return [a for a in articles if a.get("kind") != "sectoral"]
+
+
+def merge_stored_and_new_articles(
+    existing: dict | None, new_articles: list[dict]
+) -> list[dict]:
+    """Append new headlines to stored scrip_news articles; dedupe by title."""
+    if not new_articles:
+        return articles_from_doc(existing) if existing else []
+    if not existing:
+        return list(new_articles)
+    merged = articles_from_doc(existing)
+    seen = {_title_key(a.get("title") or "") for a in merged if _title_key(a.get("title") or "")}
+    for article in new_articles:
+        key = _title_key(article.get("title") or "")
+        if key and key in seen:
+            continue
+        merged.append(article)
+        if key:
+            seen.add(key)
+    return merged
 
 
 def articles_from_doc(doc: dict) -> list[dict]:

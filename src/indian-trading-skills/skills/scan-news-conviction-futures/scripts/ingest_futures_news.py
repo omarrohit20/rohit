@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""All futures scrips → scrape if scrip_news stale (>3d) unless company news today.
+"""All futures scrips → upsert only when new company/analyst headline today/yesterday.
 
 Skill: scan-news-conviction-futures
 Writes: Nsedata.scrip_news only
@@ -9,7 +9,7 @@ from __future__ import annotations
 import argparse
 import sys
 from collections import Counter
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -24,7 +24,6 @@ SCAN_DB = ingest.SCAN_DB
 TARGET_COLLECTION = ingest.TARGET_COLLECTION
 SCRIP_COLLECTION = "scrip"
 UNIVERSE_TAG = ingest.FUTURES_SKILL_TAG
-DEFAULT_STALE_DAYS = 3
 DEFAULT_RETAIN_DAYS = ingest.DEFAULT_FUTURES_RETAIN_DAYS
 DEFAULT_COMPANY_NEWS_DAYS = ingest.DEFAULT_FUTURES_COMPANY_NEWS_DAYS
 
@@ -52,17 +51,6 @@ def collect_futures_scrips(client: MongoClient) -> dict[str, dict]:
     return found
 
 
-def last_touch(doc: dict | None) -> datetime | None:
-    return ingest.doc_last_touch(doc)
-
-
-def is_recently_touched(doc: dict | None, now: datetime, stale_days: int) -> bool:
-    stamp = last_touch(doc)
-    if stamp is None:
-        return False
-    return stamp >= now - timedelta(days=stale_days)
-
-
 def merge_scan_tables(existing: dict | None, extra: list[str]) -> list[str]:
     tables = set(extra)
     if existing:
@@ -75,16 +63,15 @@ def merge_scan_tables(existing: dict | None, extra: list[str]) -> list[str]:
 def print_summary(
     *,
     now: datetime,
-    stale_days: int,
     futures_count: int,
     skipped: list[str],
-    due_today_news: list[str],
     processed: list[dict[str, Any]],
     errors: list[tuple[str, str]],
     counts: dict[str, int],
     purge_count: int,
     purge_scrips: list[str],
     retain_days: int,
+    company_news_days: int,
 ) -> None:
     sent = Counter(p["sentiment"] for p in processed)
     conv = Counter(p["conviction"] for p in processed)
@@ -101,16 +88,16 @@ def print_summary(
     print(f"Ran at:              {now.strftime('%Y-%m-%d %H:%M:%S')}")
     print("Universe:            Nsedata.scrip where futures=Yes")
     print(f"Target (only):       {SCAN_DB}.{TARGET_COLLECTION}")
-    print(f"Stale window:        scrip_news not created/updated in last {stale_days} days")
+    print(
+        f"Update rule:         only when new company/analyst headline in last "
+        f"{company_news_days} calendar days (today/yesterday) not already stored"
+    )
     print(
         f"Retention purge:     delete futures-only rows older than {retain_days} days (breakout-tagged rows kept)"
     )
-    print("Exception:           stale skip ignored for new company-specific news (last 2 days)")
     print(f"Purged (expired):    {purge_count}")
     print(f"Futures scrips:      {futures_count}")
-    print(f"Skipped (fresh):     {len(skipped)}")
-    print(f"Due (today news):    {len(due_today_news)}")
-    print(f"Due for scrape:      {len(processed) + len(errors)}")
+    print(f"Skipped (no new):    {len(skipped)}")
     print(f"Written insert:      {counts.get('insert', 0)}")
     print(f"Written update:      {counts.get('update', 0)}")
     print(f"Written overwrite:   {counts.get('overwrite', 0)}")
@@ -153,7 +140,7 @@ def print_summary(
         )
 
     if skipped and len(skipped) <= 40:
-        print("\nSkipped (updated within window): " + ", ".join(skipped))
+        print("\nSkipped (no new today/yesterday headline): " + ", ".join(skipped))
     elif skipped:
         print(
             f"\nSkipped sample ({min(20, len(skipped))} of {len(skipped)}): "
@@ -171,8 +158,8 @@ def main() -> None:
     parser.add_argument(
         "--stale-days",
         type=int,
-        default=DEFAULT_STALE_DAYS,
-        help="Skip scrip if scrip_news created/updated within this many days, unless company news today",
+        default=3,
+        help="Unused (updates only on new today/yesterday headlines not already stored)",
     )
     parser.add_argument(
         "--retain-days",
@@ -184,13 +171,13 @@ def main() -> None:
         "--company-news-days",
         type=int,
         default=DEFAULT_COMPANY_NEWS_DAYS,
-        help="Use company-specific news from only the last N days; ignore already-stored headlines",
+        help="Only write when company/analyst headlines from these calendar days are new (2 = today + yesterday)",
     )
     parser.add_argument(
         "--news-days",
         type=int,
         default=7,
-        help="Unused (futures skill uses company news only via --company-news-days)",
+        help="Unused (futures skill uses --company-news-days for headline window)",
     )
     parser.add_argument("--min-impact", type=int, default=4)
     parser.add_argument("--sleep", type=float, default=0.35)
@@ -225,69 +212,32 @@ def main() -> None:
                 "updated_at": 1,
                 "scan_tables": 1,
                 "news": 1,
+                "analyst_calls": 1,
                 "articles": 1,
             },
         )
         if ingest._norm_scrip(d.get("scrip"))
     }
 
-    skipped: list[str] = []
-    due_today_news: list[str] = []
-    fresh = {
-        scrip
-        for scrip in all_scrips
-        if is_recently_touched(existing_by_scrip.get(scrip), now, args.stale_days)
-    }
-    due_stale = [scrip for scrip in all_scrips if scrip not in fresh]
-    fresh_list = [scrip for scrip in all_scrips if scrip in fresh]
-
-    print("Skill: scan-news-conviction-futures")
-    print(f"Futures scrips: {len(all_scrips)}")
-    print(f"Skip if scrip_news created/updated in last {args.stale_days} days")
-    print(
-        f"Exception: scrape if new company-specific news in last {args.company_news_days} days (not already stored)"
-    )
-    print(
-        f"Company news only: today/yesterday ({args.company_news_days} calendar days); "
-        "no sectoral/analyst; drop generic/already-stored"
-    )
-    print(f"Fresh window candidates: {len(fresh_list)} (checking new company news)")
-
-    for i, scrip in enumerate(fresh_list, 1):
-        existing = existing_by_scrip.get(scrip)
-        meta = universe[scrip]
-        print(f"  today-news check [{i}/{len(fresh_list)}] {scrip}")
-        try:
-            company = meta.get("company") or ""
-            if ingest.has_new_company_specific_news(
-                scrip,
-                now,
-                args.sleep,
-                existing,
-                company,
-                args.company_news_days,
-            ):
-                due_today_news.append(scrip)
-                print("    new company-specific news -> scrape")
-            else:
-                skipped.append(scrip)
-                print("    no new company-specific news -> skip")
-        except Exception as exc:
-            skipped.append(scrip)
-            print(f"    today-news check failed, skip: {exc}", file=sys.stderr)
-
-    due = due_stale + due_today_news
+    due = all_scrips
     if args.limit:
         due = due[: args.limit]
 
-    print(f"Due (stale/missing): {len(due_stale)}")
-    print(f"Due (company news today): {len(due_today_news)}")
-    print(f"Skipped (fresh, no today news): {len(skipped)}")
-    print(f"Due total: {len(due)}")
+    print("Skill: scan-news-conviction-futures")
+    print(f"Futures scrips: {len(all_scrips)}")
+    print(
+        f"Write only when new company/analyst headline in last {args.company_news_days} calendar days "
+        "(today/yesterday; company name in title; not already stored)"
+    )
+    print(
+        f"Headlines: company + analyst only; title must primarily name scrip/company; no sectoral"
+    )
+    print(f"Candidates: {len(due)}")
     print(f"Writes only: {SCAN_DB}.{TARGET_COLLECTION}")
 
     counts = {"insert": 0, "update": 0, "overwrite": 0}
     processed: list[dict[str, Any]] = []
+    skipped: list[str] = []
     errors: list[tuple[str, str]] = []
 
     for i, scrip in enumerate(due, 1):
@@ -298,7 +248,7 @@ def main() -> None:
         company = meta.get("company") or ""
         print(f"[{i}/{len(due)}] {scrip}")
         try:
-            raw = ingest.fetch_company_news(scrip, args.sleep)
+            raw = ingest.fetch_futures_company_analyst_news(scrip, args.sleep)
             fresh_arts = ingest.dedupe_fresh_calendar(raw, args.company_news_days, now)
             before = len(fresh_arts)
             filtered = ingest.filter_futures_company_news(
@@ -310,17 +260,29 @@ def main() -> None:
                 args.company_news_days,
             )
             dropped = before - len(filtered)
+            if not filtered:
+                skipped.append(scrip)
+                if dropped:
+                    print(
+                        f"    skip: no new today/yesterday headline "
+                        f"({dropped} dropped: not in title/already stored/generic)"
+                    )
+                else:
+                    print("    skip: no new today/yesterday headline")
+                continue
             if dropped:
                 print(
-                    f"    dropped {dropped} headline(s) (not company-specific/new/in window)"
+                    f"    dropped {dropped} headline(s) (no title company name/already stored/generic)"
                 )
             cleaned = ingest.select_futures_company_news(filtered, args.min_impact)
-            action = ingest.upsert_scrip(coll, scrip, industry, tables, cleaned)
+            merged = ingest.merge_stored_and_new_articles(existing, cleaned)
+            action = ingest.upsert_scrip(coll, scrip, industry, tables, merged)
             counts[action] = counts.get(action, 0) + 1
-            row = ingest.summary_row(scrip, industry, tables, cleaned, action)
+            row = ingest.summary_row(scrip, industry, tables, merged, action)
             processed.append(row)
             print(
-                f"    {action}  items={row['items']}  sentiment={row['sentiment']}  conviction={row['conviction']}"
+                f"    {action}  new={len(cleaned)} total={row['items']}  "
+                f"sentiment={row['sentiment']}  conviction={row['conviction']}"
             )
         except Exception as exc:
             errors.append((scrip, str(exc)))
@@ -328,16 +290,15 @@ def main() -> None:
 
     print_summary(
         now=now,
-        stale_days=args.stale_days,
         futures_count=len(all_scrips),
         skipped=skipped,
-        due_today_news=due_today_news,
         processed=processed,
         errors=errors,
         counts=counts,
         purge_count=purge_count,
         purge_scrips=purge_scrips,
         retain_days=args.retain_days,
+        company_news_days=args.company_news_days,
     )
     client.close()
 

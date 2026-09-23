@@ -353,7 +353,7 @@ def main():
                 ((df['PCT_day_change'] < 1) | ((df['PCT_day_change'] > 2.3) & (df['PCT_day_change'] < 3))) &
                 ((df['PCT_day_change'] > 0) | ((df['PCT_day_change_pre1'] > 2) | (df['PCT_day_change_pre2'] > 2))) &
                 ((df['PCT_day_change'] < 1) | (df['PCT_day_change_pre1'] < 0.5)) &
-                (df['PCT_day_change'] > -1.3)
+                (df['PCT_day_change'] > -0.7)
                 ]
         except KeyError as e:
             print("")
@@ -378,7 +378,7 @@ def main():
                 ((df['PCT_day_change'] > -1) | ((df['PCT_day_change'] < -2.3) & (df['PCT_day_change'] > -3))) &
                 ((df['PCT_day_change'] < 0) | ((df['PCT_day_change_pre1'] < -2) | (df['PCT_day_change_pre2'] < -2))) &
                 ((df['PCT_day_change'] > -1) | (df['PCT_day_change_pre1'] > -0.5)) &
-                (df['PCT_day_change'] < 1.3)
+                (df['PCT_day_change'] < 0.7)
                 ]
         except KeyError as e:
             print("")
@@ -486,7 +486,7 @@ def main():
                 ((df['PCT_day_change'] < 1) | ((df['PCT_day_change'] > 2.3) & (df['PCT_day_change'] < 3))) &
                 ((df['PCT_day_change'] > 0) | ((df['PCT_day_change_pre1'] > 2) | (df['PCT_day_change_pre2'] > 2))) &
                 ((df['PCT_day_change'] < 1) | (df['PCT_day_change_pre1'] < 0.5)) &
-                (df['PCT_day_change'] > -1.3)
+                (df['PCT_day_change'] > -0.7)
                 ]
         except KeyError as e:
             print("")
@@ -511,7 +511,7 @@ def main():
                 ((df['PCT_day_change'] > -1) | ((df['PCT_day_change'] < -2.3) & (df['PCT_day_change'] > -3))) &
                 ((df['PCT_day_change'] < 0) | ((df['PCT_day_change_pre1'] < -2) | (df['PCT_day_change_pre2'] < -2))) &
                 ((df['PCT_day_change'] > -1) | (df['PCT_day_change_pre1'] > -0.5)) &
-                (df['PCT_day_change'] < 1.3)
+                (df['PCT_day_change'] < 0.7)
                 ]
         except KeyError as e:
             print("")
@@ -661,6 +661,7 @@ def main():
                     (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (df['PCT_day_change'] < 0) &
                     (df['PCT_change'] < 0) &
                     (df['PCT_day_change_pre1'] < 0) &
@@ -726,6 +727,7 @@ def main():
                     (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (df['PCT_day_change'] > 0) &
                     (df['PCT_change'] > 0) &
                     (df['PCT_day_change_pre1'] > 0) &

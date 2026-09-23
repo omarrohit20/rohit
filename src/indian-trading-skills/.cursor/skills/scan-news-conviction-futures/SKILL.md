@@ -1,9 +1,8 @@
 ---
 name: scan-news-conviction-futures
 description: >-
-  All Nsedata.scrip futures=Yes names: scrape news if scrip_news was not
-  created/updated in the last 3 days, or if new company-specific news is in the
-  last 2 days; upsert Nsedata.scrip_news only; print summary.
+  All Nsedata.scrip futures=Yes names: upsert scrip_news only when a new
+  company/analyst headline is in today or yesterday and not already stored.
 ---
 
 # Scan News Conviction Futures (Cursor)
@@ -14,9 +13,9 @@ Skill name: **`scan-news-conviction-futures`**
 
 ```bash
 python skills/scan-news-conviction-futures/scripts/ingest_futures_news.py
-python skills/scan-news-conviction-futures/scripts/ingest_futures_news.py --stale-days 3 --news-days 7
+python skills/scan-news-conviction-futures/scripts/ingest_futures_news.py --company-news-days 2
 ```
 
-Writes **only** `Nsedata.scrip_news`. Skip scrips whose `scrip_news` was created or updated in the last three days **unless new company-specific news is in the last 2 days**.
+Writes **only** `Nsedata.scrip_news`. **Skip** unless a new company/analyst headline from today/yesterday is not already stored (company name must appear in the title).
 
-End of run prints **SUMMARY NEWS DIGEST**: company news list + high-conviction sectoral news.
+End of run prints **SUMMARY NEWS DIGEST**: company news + analyst headlines (no sectoral).

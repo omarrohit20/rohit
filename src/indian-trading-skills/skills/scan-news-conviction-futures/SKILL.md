@@ -1,20 +1,19 @@
 ---
 name: scan-news-conviction-futures
 description: >-
-  Ingest news, sectoral news, and analyst calls for ALL Nsedata.scrip rows with
-  futures=Yes. Process a scrip when Nsedata.scrip_news was not created or
-  updated in the last three days, or when new company-specific news appears in
-  the last two days (3-day skip does not apply). Score sentiment and conviction;
-  upsert scrip_news only. Print a run summary. Use when asked to refresh futures
-  scrip news, F&O news conviction, or scan-news-conviction-futures.
+  Ingest company news and analyst headlines for ALL Nsedata.scrip rows with
+  futures=Yes. Upsert scrip_news only when a new company/analyst headline appears
+  in today or yesterday and is not already stored. Score sentiment and conviction;
+  print a run summary. Use when asked to refresh futures scrip news, F&O news
+  conviction, or scan-news-conviction-futures.
 ---
 
 # Scan News Conviction — Futures
 
-All **futures** scrips (`Nsedata.scrip` `futures=Yes`) → scrape if `scrip_news`
-is missing or stale (**> 3 days** since create/update), **unless there is
-new company-specific news in the last 2 days** (then scrape anyway) → **sentiment +
-conviction** → **`Nsedata.scrip_news` only**.
+All **futures** scrips (`Nsedata.scrip` `futures=Yes`) → scrape and **write only when
+there is a new company/analyst headline from today or yesterday that is not already
+on `scrip_news`** → merge new headlines → recompute **sentiment + conviction** →
+**`Nsedata.scrip_news` only**.
 
 Scoring, dedupe, and high-impact rules match
 [`scan-news-conviction`](../scan-news-conviction/SKILL.md). See
@@ -36,13 +35,13 @@ python indian-trading-skills/skills/scan-news-conviction-futures/scripts/ingest_
 
 | Flag | Default | Meaning |
 |------|---------|---------|
-| `--stale-days` | `3` | Skip scrip if `scrip_news` `insertion_date` or `updated_at` is within this window, **unless new company-specific news in last 2 days** |
 | `--retain-days` | `2` | Delete **futures-only** `scrip_news` rows older than this (rows with breakout scan-table tags are kept) |
-| `--company-news-days` | `2` | Company news calendar window (2 = today + yesterday); ignores already-stored headlines |
-| `--news-days` | `7` | Unused (company news only) |
+| `--company-news-days` | `2` | Headline calendar window (2 = today + yesterday); write only if title not already stored |
+| `--news-days` | `7` | Unused (headline window uses `--company-news-days`) |
+| `--stale-days` | `3` | Unused (no stale-age trigger) |
 | `--min-impact` | `4` | Keep high-impact items (1–10) |
 | `--sleep` | `0.35` | Pause between Google News requests |
-| `--limit` | `0` | Max due scrips (`0` = all due) |
+| `--limit` | `0` | Max scrips to check (`0` = all) |
 | `--scrips` | | Comma-separated filter, e.g. `RELIANCE,TCS` |
 
 ## Universe
@@ -53,32 +52,30 @@ python indian-trading-skills/skills/scan-news-conviction-futures/scripts/ingest_
 
 Do **not** use breakout scan tables. Include every futures scrip.
 
-## Freshness (last three days)
+## Write rule
 
-For each futures scrip, read `Nsedata.scrip_news` by `scrip`.
+For each futures scrip, read `Nsedata.scrip_news` by `scrip` and fetch company/analyst headlines.
 
 | Condition | Action |
 |-----------|--------|
-| No `scrip_news` row | **Create** (scrape + insert) |
-| `max(insertion_date, updated_at)` **older than 3 days**, or both missing | **Update** (scrape + upsert) |
-| Created or updated **within the last 3 days**, **and new company-specific news in the last 2 days** not already on `scrip_news` | **Do not skip** — scrape + upsert |
-| Created or updated **within the last 3 days**, and **no** such new company news | **Skip** |
+| At least one headline passes all filters below **and** is **not** already stored | **Insert** or **update** — merge new headlines into existing articles, recompute sentiment/conviction |
+| No such new headline | **Skip** — do not write |
 
-## Company news only (futures skill)
+There is **no** automatic update based on document age alone.
 
-**Does not scrape or score sectoral or analyst headlines.** Only `kind=news` company headlines are fetched, stored, and used for sentiment/conviction.
+## Company + analyst headlines (futures skill)
 
-Before scoring/sentiment, each company headline must pass **all** checks:
+**Does not scrape or score sectoral headlines.** Uses `kind=news` and `kind=analyst` only.
+
+Before a write, each **new** headline must pass **all** checks:
 
 - Published within **today and yesterday** only (`--company-news-days` default `2` = 2 calendar dates)
-- Must mention the **scrip** or `Nsedata.scrip.company` name
+- **Company name primarily in the title** — scrip or `Nsedata.scrip.company` must appear in the headline; summary-only matches are ignored
 - Drop market/sector roundups (Nifty/Sensex wrap, top gainers/losers, FII flows, etc.)
-- Drop macro/global headlines unless the company is the clear subject in the title
 - Drop weak price-only headlines (`share price`, `in focus`) without a company catalyst
 - Drop multi-stock listicles naming 3+ symbols
-- **Ignore already-stored headlines** — if the same title is already on `scrip_news`, it was factored in earlier (e.g. yesterday) and is not treated as a new catalyst
-
-The **fresh-skip exception** uses the same rules and only fires on **new** company headlines.
+- Analyst items must also match upgrade/downgrade/target/rating patterns in the title
+- **Ignore already-stored headlines** — if the same title is already on `scrip_news`, skip it (no write unless another new headline exists)
 
 ## Retention purge (futures-only rows)
 
@@ -97,7 +94,7 @@ Fresh futures-only rows (≤ 2 days) are kept until they expire or are refreshed
 
 One document per `scrip` (upsert). Same fields as `scan-news-conviction`.
 Merge `scan_tables` with existing tags and add `futures` (do not wipe prior
-breakout table tags).
+breakout table tags). New headlines are **appended** to stored articles (deduped by title).
 
 **30-day overwrite:** if `insertion_date` (else `updated_at`) is **≥ 30 days**
 old, replace the whole document and set a **new** `insertion_date`.
@@ -105,10 +102,10 @@ old, replace the whole document and set a **new** `insertion_date`.
 ## After the run
 
 Always print the script **SUMMARY** block: futures count, purged (expired futures-only),
-skipped (fresh), insert/update/overwrite, errors, sentiment/conviction tallies, High conviction
+skipped (no new headline), insert/update/overwrite, errors, sentiment/conviction tallies, High conviction
 list, directional High/Med list.
 
-Then print **SUMMARY NEWS DIGEST** — **company news only** from scrips processed this run (no sectoral section).
+Then print **SUMMARY NEWS DIGEST** — **company news + analyst headlines** from scrips processed this run (no sectoral section).
 
 ## Prerequisites
 
