@@ -8,6 +8,7 @@ Count Bullish vs Bearish among **scoring** articles:
 
 - **Company news** (`kind=news`) — always included, even if only 1–2 items.
 - **Analyst calls** (`kind=analyst`) — always included, even if only 1–2 items.
+- **Regulatory sector news** (`kind=regulatory`) — always included when stored. Applies only to **high-exposure scrips** for IRDAI/RBI/SEBI themes with `impact_score >= 6` and **High conviction** (see `references/regulatory_exposure.md`).
 - **Sectoral news** (`kind=sectoral`) — included **only if sectoral count ≥ 3**. One or two sector headlines are ignored for overall sentiment (and for conviction, which uses the same pool) and are **not stored** on `scrip_news`.
 
 | Condition | Value |
@@ -23,7 +24,7 @@ Let `hi` = items with `impact_score >= 6`, `aligned` = items whose sentiment mat
 
 | Conviction | When |
 |------------|------|
-| **High** | Overall is Bullish or Bearish, **and** `aligned >= 3`, **and** (`hi >= 2` or average impact ≥ 6) |
+| **High** | Overall is Bullish or Bearish, **and** `aligned >= 3`, **and** (`hi >= 2` or average impact ≥ 6) — **or** at least one aligned **regulatory** headline with impact ≥ 6 |
 | **Med** | Overall is Mixed with `hi >= 1`, **or** directional with `aligned >= 2`, **or** average impact ≥ 5 |
 | **Low** | Everything else (thin news, Neutral, weak impact) |
 

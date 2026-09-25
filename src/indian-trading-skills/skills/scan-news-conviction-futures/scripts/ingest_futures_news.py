@@ -89,8 +89,8 @@ def print_summary(
     print("Universe:            Nsedata.scrip where futures=Yes")
     print(f"Target (only):       {SCAN_DB}.{TARGET_COLLECTION}")
     print(
-        f"Update rule:         only when new company/analyst headline in last "
-        f"{company_news_days} calendar days (today/yesterday) not already stored"
+        f"Update rule:         only when new company/analyst/regulatory headline in last "
+        f"{company_news_days} calendar days (regulatory: high-exposure + High conviction)"
     )
     print(
         f"Retention purge:     delete futures-only rows older than {retain_days} days (breakout-tagged rows kept)"
@@ -213,6 +213,7 @@ def main() -> None:
                 "scan_tables": 1,
                 "news": 1,
                 "analyst_calls": 1,
+                "regulatory_news": 1,
                 "articles": 1,
             },
         )
@@ -226,14 +227,25 @@ def main() -> None:
     print("Skill: scan-news-conviction-futures")
     print(f"Futures scrips: {len(all_scrips)}")
     print(
-        f"Write only when new company/analyst headline in last {args.company_news_days} calendar days "
-        "(today/yesterday; company name in title; not already stored)"
+        f"Write only when new company/analyst/regulatory headline in last {args.company_news_days} calendar days "
+        "(today/yesterday; regulatory = high-exposure scrips + High conviction)"
     )
     print(
-        f"Headlines: company + analyst only; title must primarily name scrip/company; no sectoral"
+        f"Headlines: company + analyst + regulatory (high exposure); "
+        "company name in title for news/analyst; no generic sectoral"
     )
     print(f"Candidates: {len(due)}")
     print(f"Writes only: {SCAN_DB}.{TARGET_COLLECTION}")
+
+    regulatory_pool = ingest.dedupe_fresh_calendar(
+        ingest.fetch_regulatory_sector_news(args.sleep),
+        args.company_news_days,
+        now,
+    )
+    print(
+        f"Regulatory pool: {len(regulatory_pool)} headlines "
+        f"(impact>={ingest.REGULATORY_SECTOR_MIN_IMPACT}, stored if High conviction)"
+    )
 
     counts = {"insert": 0, "update": 0, "overwrite": 0}
     processed: list[dict[str, Any]] = []
@@ -249,6 +261,9 @@ def main() -> None:
         print(f"[{i}/{len(due)}] {scrip}")
         try:
             raw = ingest.fetch_futures_company_analyst_news(scrip, args.sleep)
+            raw.extend(
+                ingest.apply_regulatory_news_for_scrip(regulatory_pool, scrip, company)
+            )
             fresh_arts = ingest.dedupe_fresh_calendar(raw, args.company_news_days, now)
             before = len(fresh_arts)
             filtered = ingest.filter_futures_company_news(
@@ -260,28 +275,36 @@ def main() -> None:
                 args.company_news_days,
             )
             dropped = before - len(filtered)
-            if not filtered:
+            cleaned = ingest.select_futures_company_news(filtered, args.min_impact)
+            merged = ingest.merge_stored_and_new_articles(existing, cleaned)
+            merged = ingest.drop_regulatory_unless_high_conviction(merged)
+            before_keys = ingest.stored_futures_headline_title_keys(existing)
+            new_items = [
+                a
+                for a in merged
+                if ingest._title_key(a.get("title") or "") not in before_keys
+            ]
+            if not new_items:
                 skipped.append(scrip)
                 if dropped:
                     print(
-                        f"    skip: no new today/yesterday headline "
-                        f"({dropped} dropped: not in title/already stored/generic)"
+                        f"    skip: no new storable headline "
+                        f"({dropped} dropped: filter/conviction/already stored)"
                     )
                 else:
-                    print("    skip: no new today/yesterday headline")
+                    print("    skip: no new storable headline")
                 continue
             if dropped:
                 print(
-                    f"    dropped {dropped} headline(s) (no title company name/already stored/generic)"
+                    f"    dropped {dropped} headline(s) (filter/already stored/generic)"
                 )
-            cleaned = ingest.select_futures_company_news(filtered, args.min_impact)
-            merged = ingest.merge_stored_and_new_articles(existing, cleaned)
             action = ingest.upsert_scrip(coll, scrip, industry, tables, merged)
             counts[action] = counts.get(action, 0) + 1
             row = ingest.summary_row(scrip, industry, tables, merged, action)
             processed.append(row)
+            n_reg = sum(1 for a in new_items if a.get("kind") == ingest.REGULATORY_KIND)
             print(
-                f"    {action}  new={len(cleaned)} total={row['items']}  "
+                f"    {action}  new={len(new_items)} (reg={n_reg}) total={row['items']}  "
                 f"sentiment={row['sentiment']}  conviction={row['conviction']}"
             )
         except Exception as exc:

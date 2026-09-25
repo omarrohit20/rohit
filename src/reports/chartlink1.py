@@ -1211,6 +1211,18 @@ def main():
         rb.render(st, filtered_df, 'morning-volume-breakout-buy : movingavg_crossed_up', height=150, color='LG')
     with col2:
         df = rb.getintersectdf('highBuy', 'movingavg_crossed_up')
+        try:
+            futures = rb.get_futures_scrip_set()
+            mask = None
+            if 'scrip' in df.columns and futures:
+                mask = df['scrip'].isin(futures)
+            if 'index' in df.columns:
+                tagged = df['index'].astype(str).str.contains('futures', case=False, na=False)
+                mask = tagged if mask is None else (mask | tagged)
+            if mask is not None:
+                df = df[mask]
+        except Exception:
+            pass
         filtered_df = df
         try:
             filtered_df = df[
@@ -1408,6 +1420,88 @@ def main():
         else:
             rb.render(st, empty_df, 'Crossed Day Lows', color='LG', renderf10sell00=True)
 
+    
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        df = rb.getdf('breakout-morning-buy-01')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (df['forecast_day_PCT10_change'] < 0) &
+                    (df['PCT_day_change'] < 0.7) &
+                    (df['PCT_day_change_pre1'] < 1) &
+                    (df['PCT_day_change_pre2'] < 1) 
+
+                ) |
+                (df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) |
+                (df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) |
+                (df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'breakout-morning-buy-01', height=200, color='LG')
+    with col2:
+        df = rb.getdf('breakout-morning-buy-02')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (df['forecast_day_PCT10_change'] < 0) &
+                    (df['PCT_day_change'] < 0.7) &
+                    (df['PCT_day_change_pre1'] < 1) &
+                    (df['PCT_day_change_pre2'] < 1) 
+
+                ) |
+                (df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) |
+                (df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) |
+                (df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'breakout-morning-buy-02', height=200, color='LG')
+    with col3:
+        df = rb.getdf('breakout-morning-sell-01')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (df['forecast_day_PCT10_change'] > 0) &
+                    (df['PCT_day_change'] > -0.7) &
+                    (df['PCT_day_change_pre1'] > -1) &
+                    (df['PCT_day_change_pre2'] > -1) 
+
+                ) |
+                (df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) |
+                (df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) |
+                (df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'breakout-morning-sell-01', height=200, color='LG')
+    with col4:
+        df = rb.getdf('breakout-morning-sell-02')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (
+                    (df['forecast_day_PCT10_change'] > 0) &
+                    (df['PCT_day_change'] > -0.7) &
+                    (df['PCT_day_change_pre1'] > -1) &
+                    (df['PCT_day_change_pre2'] > -1) 
+
+                ) |
+                (df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) |
+                (df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) |
+                (df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'breakout-morning-sell-02', height=200, color='LG')
+
+
+    
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('breakout-morning-buy-01')

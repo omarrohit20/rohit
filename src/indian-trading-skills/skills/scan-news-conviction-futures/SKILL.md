@@ -77,6 +77,17 @@ Before a write, each **new** headline must pass **all** checks:
 - Analyst items must also match upgrade/downgrade/target/rating patterns in the title
 - **Ignore already-stored headlines** — if the same title is already on `scrip_news`, skip it (no write unless another new headline exists)
 
+## Regulatory sector news (high exposure + High conviction)
+
+**IRDAI / RBI / SEBI** sector headlines (no company name required in title) apply when:
+
+- Scrip is on the theme **high-exposure list** (see `references/regulatory_exposure.md`), or headline explicitly flags the scrip as *most exposed* / *hit hardest*
+- `impact_score >= 6`
+- Recomputed **conviction is High** after scoring (single aligned regulatory headline qualifies)
+- Published today/yesterday and not already stored
+
+Stored on `regulatory_news`. Generic sectoral headlines still require ≥3 count.
+
 ## Retention purge (futures-only rows)
 
 At the **start of every run**, before scrape/upsert:

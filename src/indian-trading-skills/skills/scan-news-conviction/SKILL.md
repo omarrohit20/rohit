@@ -73,6 +73,19 @@ One document per `scrip` (upsert):
 
 **30-day overwrite:** if `insertion_date` (else `updated_at`) is **≥ 30 days** old, replace the whole document and set a **new** `insertion_date`.
 
+## Regulatory sector news (high exposure + High conviction)
+
+Sector-wide **IRDAI / RBI / SEBI** headlines (e.g. IRDAI distribution reform) are attached only to **high-exposure scrips** listed in [`references/regulatory_exposure.md`](references/regulatory_exposure.md).
+
+| Gate | Rule |
+|------|------|
+| Theme match | IRDAI distribution, RBI banking, or SEBI market patterns |
+| Exposure | Scrip on theme high-exposure list **or** headline flags scrip as *most exposed* / *hit hardest* |
+| Impact | `impact_score >= 6` |
+| Conviction | **High** only — otherwise regulatory headline is dropped |
+
+Stored on `regulatory_news` with `kind=regulatory`. Regular sectoral rules (≥3 count) still apply to generic sector headlines.
+
 ## Futures-skill retention purge
 
 At the **start of every run** (including `--recompute-only`), before scrape/upsert:

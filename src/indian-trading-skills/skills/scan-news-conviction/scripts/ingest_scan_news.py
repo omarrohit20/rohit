@@ -59,7 +59,72 @@ MIN_SECTORAL_FOR_SENTIMENT = 3
 FUTURES_SKILL_TAG = "futures"
 DEFAULT_FUTURES_RETAIN_DAYS = 2
 DEFAULT_FUTURES_COMPANY_NEWS_DAYS = 2
-FUTURES_SCORING_KINDS = frozenset({"news", "analyst"})
+FUTURES_SCORING_KINDS = frozenset({"news", "analyst", "regulatory"})
+REGULATORY_KIND = "regulatory"
+REGULATORY_SECTOR_MIN_IMPACT = 6
+REGULATORY_STORAGE_CONVICTION = "High"
+EXPOSURE_LANGUAGE_RE = re.compile(
+    r"\b("
+    r"most exposed|higher exposure|greater exposure|hit hardest|worst hit|"
+    r"most impacted|high(?:er)? exposure|material(?:ly)? impacted|"
+    r"unit economics.*?unravels|earnings.*?(?:fall|drop|cut)"
+    r")\b",
+    re.I,
+)
+REGULATORY_THEMES: dict[str, dict[str, Any]] = {
+    "irdai_distribution": {
+        "pattern": re.compile(
+            r"\b("
+            r"irdai|insurance regulator|distribution reform|commission cap|"
+            r"bancassurance|expense of management|\beom\b|credit[\s-]?protect|"
+            r"loan[\s-]?linked insurance|insurance bundling"
+            r")\b",
+            re.I,
+        ),
+        "high_exposure_scrips": frozenset(
+            {
+                "POLICYBZR",
+                "HDFCLIFE",
+                "MAXFIN",
+                "IDFCFIRSTB",
+                "INDUSINDBK",
+                "AXISBANK",
+                "HDFCBANK",
+                "STARHEALTH",
+                "ICICIGI",
+            }
+        ),
+    },
+    "rbi_banking": {
+        "pattern": re.compile(
+            r"\b("
+            r"\brbi\b|reserve bank|monetary policy|repo rate|crr|slr|"
+            r"nbfc regulation|digital lending|npa norm|asset classification"
+            r")\b",
+            re.I,
+        ),
+        "high_exposure_scrips": frozenset(
+            {
+                "IDFCFIRSTB",
+                "INDUSINDBK",
+                "AXISBANK",
+                "HDFCBANK",
+                "RBLBANK",
+                "AUBANK",
+            }
+        ),
+    },
+    "sebi_market": {
+        "pattern": re.compile(
+            r"\b("
+            r"\bsebi\b|securities and exchange board|fno ban|derivatives rule|"
+            r"margin norm|insider trading norm|takeover code"
+            r")\b",
+            re.I,
+        ),
+        "high_exposure_scrips": frozenset({"POLICYBZR", "BSE", "MCX"}),
+    },
+}
 GENERIC_MARKET_NEWS_RE = re.compile(
     r"\b("
     r"nifty\s*50?|nifty\s+bank|sensex|bank\s+nifty|"
@@ -230,6 +295,125 @@ def is_futures_headline_news(article: dict, scrip: str, company: str = "") -> bo
     return True
 
 
+def match_regulatory_theme(article: dict) -> str | None:
+    title = (article.get("title") or "").strip()
+    summary = (article.get("summary") or "").strip()
+    text = f"{title} {summary}".strip()
+    if not text:
+        return None
+    for theme_id, meta in REGULATORY_THEMES.items():
+        if meta["pattern"].search(text):
+            return theme_id
+    return None
+
+
+def is_regulatory_sector_headline(article: dict) -> bool:
+    return match_regulatory_theme(article) is not None
+
+
+def _headline_flags_scrip_exposure(article: dict, scrip: str, company: str = "") -> bool:
+    title = (article.get("title") or "").strip()
+    summary = (article.get("summary") or "").strip()
+    text = f"{title} {summary}".strip()
+    if not EXPOSURE_LANGUAGE_RE.search(text):
+        return False
+    return _mentions_scrip_or_company(text, scrip, company)
+
+
+def is_high_exposure_regulatory_scrip(
+    scrip: str, theme_id: str, article: dict, company: str = ""
+) -> bool:
+    scrip_u = _norm_scrip(scrip) or ""
+    if not scrip_u:
+        return False
+    theme = REGULATORY_THEMES.get(theme_id) or {}
+    if scrip_u in theme.get("high_exposure_scrips", frozenset()):
+        return True
+    return _headline_flags_scrip_exposure(article, scrip_u, company)
+
+
+def tag_regulatory_article(article: dict, theme_id: str, scrip: str) -> dict:
+    row = dict(article)
+    row["kind"] = REGULATORY_KIND
+    row["regulatory_theme"] = theme_id
+    row["applies_to_scrip"] = _norm_scrip(scrip)
+    impact = int(row.get("impact_score") or 0)
+    if impact < REGULATORY_SECTOR_MIN_IMPACT:
+        row["impact_score"] = REGULATORY_SECTOR_MIN_IMPACT
+    return row
+
+
+def apply_regulatory_news_for_scrip(
+    candidates: list[dict], scrip: str, company: str = ""
+) -> list[dict]:
+    """Attach high-impact regulatory headlines to high-exposure scrips only."""
+    out: list[dict] = []
+    for article in candidates:
+        theme_id = match_regulatory_theme(article)
+        if not theme_id:
+            continue
+        if int(article.get("impact_score") or 0) < REGULATORY_SECTOR_MIN_IMPACT:
+            continue
+        if GENERIC_MARKET_NEWS_RE.search(article.get("title") or ""):
+            continue
+        if not is_high_exposure_regulatory_scrip(scrip, theme_id, article, company):
+            continue
+        out.append(tag_regulatory_article(article, theme_id, scrip))
+    return out
+
+
+def fetch_regulatory_sector_news(sleep_s: float) -> list[dict]:
+    """Shared regulatory headline pool (IRDAI / RBI / SEBI sector reforms)."""
+    merged: list[dict] = []
+    try:
+        for it in nf.fetch_rss_feeds(days_back=3):
+            article = _as_article(
+                it.title, it.summary, it.link, it.source, it.published, "sectoral"
+            )
+            if is_regulatory_sector_headline(article):
+                merged.append(article)
+    except SystemExit:
+        pass
+    except Exception as exc:
+        print(f"  warn: RSS regulatory: {exc}", file=sys.stderr)
+
+    queries = [
+        ("IRDAI insurance distribution commission reform India", "Google IRDAI"),
+        ("IRDAI bancassurance bank commission India stocks", "Google IRDAI Banks"),
+        ("RBI banking regulation circular India stocks", "Google RBI"),
+        ("SEBI regulation circular India listed companies", "Google SEBI"),
+    ]
+    for query, source in queries:
+        merged.extend(_parse_feed(_google_rss(query), source, "sectoral"))
+        if sleep_s:
+            time.sleep(sleep_s)
+    return merged
+
+
+def is_futures_regulatory_news(
+    article: dict, scrip: str, company: str = ""
+) -> bool:
+    if article.get("kind") != REGULATORY_KIND:
+        return False
+    theme_id = article.get("regulatory_theme") or match_regulatory_theme(article)
+    if not theme_id:
+        return False
+    if int(article.get("impact_score") or 0) < REGULATORY_SECTOR_MIN_IMPACT:
+        return False
+    if GENERIC_MARKET_NEWS_RE.search(article.get("title") or ""):
+        return False
+    return is_high_exposure_regulatory_scrip(scrip, theme_id, article, company)
+
+
+def is_futures_scoring_news(article: dict, scrip: str, company: str = "") -> bool:
+    kind = article.get("kind")
+    if kind == REGULATORY_KIND:
+        return is_futures_regulatory_news(article, scrip, company)
+    if kind not in {"news", "analyst"}:
+        return False
+    return is_futures_headline_news(article, scrip, company)
+
+
 def filter_company_specific_news(
     articles: list[dict], scrip: str, company: str = ""
 ) -> list[dict]:
@@ -257,6 +441,10 @@ def stored_futures_headline_title_keys(doc: dict | None) -> set[str]:
         return set()
     keys: set[str] = set()
     for a in list(doc.get("news") or []) + list(doc.get("analyst_calls") or []):
+        key = _title_key(a.get("title") or "")
+        if key:
+            keys.add(key)
+    for a in list(doc.get("regulatory_news") or []):
         key = _title_key(a.get("title") or "")
         if key:
             keys.add(key)
@@ -296,19 +484,41 @@ def filter_futures_company_news(
     now: datetime,
     company_news_days: int = DEFAULT_FUTURES_COMPANY_NEWS_DAYS,
 ) -> list[dict]:
-    """Futures skill: company + analyst headlines with company name in title."""
+    """Futures skill: company, analyst, or high-exposure regulatory headlines."""
     out: list[dict] = []
     for a in articles:
         if a.get("kind") not in FUTURES_SCORING_KINDS:
             continue
         if not is_published_within_calendar_days(a.get("published"), now, company_news_days):
             continue
-        if not is_futures_headline_news(a, scrip, company):
+        if not is_futures_scoring_news(a, scrip, company):
             continue
         if not is_new_futures_headline(a, stored_doc):
             continue
         out.append(a)
     return out
+
+
+def has_new_futures_scoring_news(
+    scrip: str,
+    now: datetime,
+    sleep_s: float,
+    stored_doc: dict | None = None,
+    company: str = "",
+    company_news_days: int = DEFAULT_FUTURES_COMPANY_NEWS_DAYS,
+    regulatory_pool: list[dict] | None = None,
+) -> bool:
+    """True when fresh company/analyst/regulatory headline not already stored."""
+    raw = fetch_futures_company_analyst_news(scrip, sleep_s)
+    if regulatory_pool is None:
+        regulatory_pool = fetch_regulatory_sector_news(sleep_s)
+    raw.extend(apply_regulatory_news_for_scrip(regulatory_pool, scrip, company))
+    return any(
+        is_published_within_calendar_days(a.get("published"), now, company_news_days)
+        and is_futures_scoring_news(a, scrip, company)
+        and is_new_futures_headline(a, stored_doc)
+        for a in raw
+    )
 
 
 def parse_published(value: Any) -> datetime | None:
@@ -406,21 +616,41 @@ def collect_scrips(
             if table in FUTURES_ONLY_TABLES and scrip not in futures:
                 stats["w2_non_futures_skipped"] += 1
                 continue
-            rec = found.setdefault(scrip, {"industry": "", "scan_tables": set()})
+            rec = found.setdefault(scrip, {"industry": "", "company": "", "scan_tables": set()})
             rec["scan_tables"].add(table)
             ind = doc.get("industry")
             if ind and not rec["industry"]:
                 rec["industry"] = str(ind).strip()
-    for doc in db[SCRIP_COLLECTION].find({"futures": "Yes"}, {"scrip": 1, "industry": 1}):
+    for doc in db[SCRIP_COLLECTION].find(
+        {"futures": "Yes"}, {"scrip": 1, "industry": 1, "company": 1}
+    ):
         scrip = _norm_scrip(doc.get("scrip"))
         if not scrip:
             continue
-        rec = found.setdefault(scrip, {"industry": "", "scan_tables": set()})
+        rec = found.setdefault(scrip, {"industry": "", "company": "", "scan_tables": set()})
         rec["scan_tables"].add(FUTURES_SKILL_TAG)
         ind = doc.get("industry")
         if ind and not rec["industry"]:
             rec["industry"] = str(ind).strip()
+        comp = doc.get("company")
+        if comp and not rec["company"]:
+            rec["company"] = str(comp).strip()
+    _enrich_company_names(client, found)
     return found, stats
+
+
+def _enrich_company_names(client: MongoClient, found: dict[str, dict]) -> None:
+    """Fill company names from Nsedata.scrip for exposure matching."""
+    missing = [s for s, rec in found.items() if not rec.get("company")]
+    if not missing:
+        return
+    for doc in client[SCAN_DB][SCRIP_COLLECTION].find(
+        {"scrip": {"$in": missing}}, {"scrip": 1, "company": 1}
+    ):
+        scrip = _norm_scrip(doc.get("scrip"))
+        comp = doc.get("company")
+        if scrip and scrip in found and comp and not found[scrip].get("company"):
+            found[scrip]["company"] = str(comp).strip()
 
 
 def cap_universe(
@@ -711,14 +941,17 @@ def has_new_company_specific_news(
     stored_doc: dict | None = None,
     company: str = "",
     company_news_days: int = DEFAULT_FUTURES_COMPANY_NEWS_DAYS,
+    regulatory_pool: list[dict] | None = None,
 ) -> bool:
-    """True when there is fresh company/analyst headline news not already stored."""
-    articles = fetch_futures_company_analyst_news(scrip, sleep_s)
-    return any(
-        is_published_within_calendar_days(a.get("published"), now, company_news_days)
-        and is_futures_headline_news(a, scrip, company)
-        and is_new_futures_headline(a, stored_doc)
-        for a in articles
+    """True when there is fresh company/analyst/regulatory headline not already stored."""
+    return has_new_futures_scoring_news(
+        scrip,
+        now,
+        sleep_s,
+        stored_doc,
+        company,
+        company_news_days,
+        regulatory_pool,
     )
 
 
@@ -774,8 +1007,13 @@ def select_high_impact(articles: list[dict], min_impact: int) -> list[dict]:
     news = take("news", 10)
     sectoral = take("sectoral", 6)
     analyst = take("analyst", 6)
-    other = [a for a in ranked if a.get("kind") not in {"news", "sectoral", "analyst"}][:4]
-    combined = news + sectoral + analyst + other
+    regulatory = take(REGULATORY_KIND, 4)
+    other = [
+        a
+        for a in ranked
+        if a.get("kind") not in {"news", "sectoral", "analyst", REGULATORY_KIND}
+    ][:4]
+    combined = news + sectoral + analyst + regulatory + other
     # stable unique by title key
     seen = set()
     uniq = []
@@ -803,7 +1041,7 @@ def select_futures_company_news(articles: list[dict], min_impact: int) -> list[d
             return strong[:n]
         return (strong + [a for a in pool if a not in strong])[:n]
 
-    combined = take("news", 10) + take("analyst", 6)
+    combined = take("news", 10) + take("analyst", 6) + take(REGULATORY_KIND, 4)
     seen = set()
     uniq = []
     for a in combined:
@@ -816,11 +1054,41 @@ def select_futures_company_news(articles: list[dict], min_impact: int) -> list[d
 
 
 def articles_for_overall_sentiment(articles: list[dict]) -> list[dict]:
-    """Company news and analyst calls always count; sectoral only if count >= 3."""
+    """Company, analyst, and regulatory always count; sectoral only if count >= 3."""
     sectoral = [a for a in articles if a.get("kind") == "sectoral"]
     if len(sectoral) >= MIN_SECTORAL_FOR_SENTIMENT:
         return list(articles)
     return [a for a in articles if a.get("kind") != "sectoral"]
+
+
+def conviction_from_articles(articles: list[dict]) -> tuple[str, str]:
+    scoring = articles_for_overall_sentiment(articles)
+    sentiment = overall_sentiment(scoring)
+    conviction = conviction_for(scoring, sentiment)
+    return sentiment, conviction
+
+
+def drop_regulatory_unless_high_conviction(articles: list[dict]) -> list[dict]:
+    """Keep regulatory headlines only when recomputed conviction is High."""
+    if not any(a.get("kind") == REGULATORY_KIND for a in articles):
+        return articles
+    _, conviction = conviction_from_articles(articles)
+    if conviction == REGULATORY_STORAGE_CONVICTION:
+        return articles
+    return [a for a in articles if a.get("kind") != REGULATORY_KIND]
+
+
+def futures_should_write(
+    new_articles: list[dict], merged_articles: list[dict]
+) -> bool:
+    """Write when new company/analyst headlines exist, or new regulatory with High conviction."""
+    if not new_articles:
+        return False
+    non_reg = [a for a in new_articles if a.get("kind") != REGULATORY_KIND]
+    if non_reg:
+        return True
+    _, conviction = conviction_from_articles(merged_articles)
+    return conviction == REGULATORY_STORAGE_CONVICTION
 
 
 def merge_stored_and_new_articles(
@@ -853,6 +1121,7 @@ def articles_from_doc(doc: dict) -> list[dict]:
         ("news", "news"),
         ("sectoral", "sectoral_news"),
         ("analyst", "analyst_calls"),
+        (REGULATORY_KIND, "regulatory_news"),
     ):
         for item in doc.get(key) or []:
             row = dict(item)
@@ -878,6 +1147,16 @@ def conviction_for(articles: list[dict], sentiment: str) -> str:
     articles = articles_for_overall_sentiment(articles)
     if not articles:
         return "Low"
+    regulatory = [a for a in articles if a.get("kind") == REGULATORY_KIND]
+    if regulatory and sentiment in ("Bullish", "Bearish"):
+        aligned_reg = [
+            a
+            for a in regulatory
+            if a.get("sentiment") == sentiment
+            and int(a.get("impact_score") or 0) >= REGULATORY_SECTOR_MIN_IMPACT
+        ]
+        if aligned_reg:
+            return REGULATORY_STORAGE_CONVICTION
     hi = [a for a in articles if int(a.get("impact_score") or 0) >= 6]
     aligned = [
         a
@@ -900,18 +1179,21 @@ def _as_naive(dt: datetime | None) -> datetime | None:
     return dt
 
 
-def split_article_kinds(articles: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
+def split_article_kinds(
+    articles: list[dict],
+) -> tuple[list[dict], list[dict], list[dict], list[dict]]:
     news = [a for a in articles if a.get("kind") == "news"]
     sectoral = [a for a in articles if a.get("kind") == "sectoral"]
     analyst = [a for a in articles if a.get("kind") == "analyst"]
-    return news, sectoral, analyst
+    regulatory = [a for a in articles if a.get("kind") == REGULATORY_KIND]
+    return news, sectoral, analyst, regulatory
 
 
 def summary_row(scrip: str, industry: str, tables: list[str], articles: list[dict], action: str) -> dict[str, Any]:
     scoring = articles_for_overall_sentiment(articles)
     sentiment = overall_sentiment(scoring)
     conviction = conviction_for(scoring, sentiment)
-    news, sectoral, analyst = split_article_kinds(scoring)
+    news, sectoral, analyst, regulatory = split_article_kinds(scoring)
     return {
         "scrip": scrip,
         "industry": industry or "",
@@ -923,6 +1205,7 @@ def summary_row(scrip: str, industry: str, tables: list[str], articles: list[dic
         "news": news,
         "sectoral": sectoral,
         "analyst": analyst,
+        "regulatory": regulatory,
     }
 
 
@@ -982,15 +1265,34 @@ def print_news_digest(rows: list[dict[str, Any]], skill_name: str = "") -> None:
     else:
         for _impact, scrip, industry, article in sectoral_lines:
             print(_headline_line(scrip, industry, article))
+
+    regulatory_lines: list[tuple[int, str, str, dict]] = []
+    for row in high_rows:
+        for a in row.get("regulatory") or []:
+            regulatory_lines.append(
+                (int(a.get("impact_score") or 0), row["scrip"], row.get("industry") or "", a)
+            )
+    regulatory_lines.sort(key=lambda t: (-t[0], t[1]))
+    print(f"\nHIGH CONVICTION REGULATORY NEWS ({len(regulatory_lines)})")
+    if not regulatory_lines:
+        print("  (none — regulatory headlines require High conviction + impact >= 6)")
+    else:
+        for _impact, scrip, industry, article in regulatory_lines:
+            theme = article.get("regulatory_theme") or ""
+            line = _headline_line(scrip, industry, article)
+            if theme:
+                line = line.replace("\n    ", f"\n    [{theme}] ", 1)
+            print(line)
     print("=" * 72)
 
 
 def upsert_scrip(coll, scrip: str, industry: str, tables: list[str], articles: list[dict]) -> str:
     now = datetime.now()
+    articles = drop_regulatory_unless_high_conviction(articles)
     articles = articles_for_overall_sentiment(articles)
     sentiment = overall_sentiment(articles)
     conviction = conviction_for(articles, sentiment)
-    news, sectoral, analyst = split_article_kinds(articles)
+    news, sectoral, analyst, regulatory = split_article_kinds(articles)
     payload = {
         "scrip": scrip,
         "industry": industry,
@@ -999,6 +1301,7 @@ def upsert_scrip(coll, scrip: str, industry: str, tables: list[str], articles: l
         "news": news,
         "sectoral_news": sectoral,
         "analyst_calls": analyst,
+        "regulatory_news": regulatory,
         "overall_sentiment": sentiment,
         "conviction": conviction,
         "article_count": len(articles),
@@ -1090,21 +1393,29 @@ def print_futures_skill_purge(
 
 
 def recompute_scrip_news(coll) -> dict[str, int]:
-    """Recalculate overall_sentiment / conviction and drop thin sectoral news."""
+    """Recalculate overall_sentiment / conviction; apply regulatory + sectoral rules."""
     counts = {"checked": 0, "updated": 0, "unchanged": 0}
     now = datetime.now()
     for doc in coll.find({}):
         counts["checked"] += 1
-        articles = articles_for_overall_sentiment(articles_from_doc(doc))
+        full = drop_regulatory_unless_high_conviction(articles_from_doc(doc))
+        articles = articles_for_overall_sentiment(full)
         sentiment = overall_sentiment(articles)
         conviction = conviction_for(articles, sentiment)
-        news, sectoral, analyst = split_article_kinds(articles)
+        news, sectoral, analyst, regulatory = split_article_kinds(articles)
         prev_sent = doc.get("overall_sentiment")
         prev_conv = doc.get("conviction")
         prev_sectoral = len(doc.get("sectoral_news") or [])
+        prev_regulatory = len(doc.get("regulatory_news") or [])
         same_score = prev_sent == sentiment and prev_conv == conviction
         same_sectoral = prev_sectoral == len(sectoral)
-        if same_score and same_sectoral and len(doc.get("articles") or []) == len(articles):
+        same_regulatory = prev_regulatory == len(regulatory)
+        if (
+            same_score
+            and same_sectoral
+            and same_regulatory
+            and len(doc.get("articles") or []) == len(articles)
+        ):
             counts["unchanged"] += 1
             continue
         coll.update_one(
@@ -1115,6 +1426,7 @@ def recompute_scrip_news(coll) -> dict[str, int]:
                     "news": news,
                     "sectoral_news": sectoral,
                     "analyst_calls": analyst,
+                    "regulatory_news": regulatory,
                     "article_count": len(articles),
                     "overall_sentiment": sentiment,
                     "conviction": conviction,
@@ -1126,7 +1438,8 @@ def recompute_scrip_news(coll) -> dict[str, int]:
         scrip = doc.get("scrip") or doc.get("_id")
         print(
             f"    {scrip}: {prev_sent}/{prev_conv} -> {sentiment}/{conviction} "
-            f"sectoral {prev_sectoral}->{len(sectoral)}"
+            f"sectoral {prev_sectoral}->{len(sectoral)} "
+            f"regulatory {prev_regulatory}->{len(regulatory)}"
         )
     return counts
 
@@ -1186,7 +1499,8 @@ def main() -> None:
         print("Skill: scan-news-conviction (recompute existing scrip_news)")
         print(
             f"Sectoral news counts toward sentiment only if "
-            f"count >= {MIN_SECTORAL_FOR_SENTIMENT}; company news and analyst calls always count"
+            f"count >= {MIN_SECTORAL_FOR_SENTIMENT}; company, analyst, and regulatory "
+            f"(High conviction, impact >= {REGULATORY_SECTOR_MIN_IMPACT}) always count"
         )
         counts = recompute_scrip_news(coll)
         print(
@@ -1223,16 +1537,34 @@ def main() -> None:
     counts = {"insert": 0, "update": 0, "overwrite": 0}
     processed: list[dict[str, Any]] = []
 
+    regulatory_pool = dedupe_fresh(
+        fetch_regulatory_sector_news(args.sleep), args.news_days, now
+    )
+    print(
+        f"Regulatory pool: {len(regulatory_pool)} headlines "
+        f"(high-exposure scrips only; stored if conviction=High, impact>={REGULATORY_SECTOR_MIN_IMPACT})"
+    )
+
     for i, scrip in enumerate(scrips, 1):
         meta = universe[scrip]
         tables = sorted(meta["scan_tables"])
         industry = meta.get("industry") or ""
+        company = meta.get("company") or ""
         print(f"[{i}/{len(scrips)}] {scrip} ({', '.join(tables)})")
         raw = scrape_scrip(scrip, industry, args.days, args.sleep)
+        raw.extend(apply_regulatory_news_for_scrip(regulatory_pool, scrip, company))
         cleaned = select_high_impact(dedupe_fresh(raw, args.news_days, now), args.min_impact)
         action = upsert_scrip(coll, scrip, industry, tables, cleaned)
         counts[action] = counts.get(action, 0) + 1
-        row = summary_row(scrip, industry, tables, cleaned, action)
+        row = summary_row(
+            scrip,
+            industry,
+            tables,
+            articles_for_overall_sentiment(
+                drop_regulatory_unless_high_conviction(cleaned)
+            ),
+            action,
+        )
         processed.append(row)
         print(
             f"    {action}  items={row['items']}  sentiment={row['sentiment']}  "

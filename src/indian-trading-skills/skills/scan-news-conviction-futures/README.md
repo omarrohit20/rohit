@@ -10,7 +10,8 @@ Agent instructions: [SKILL.md](SKILL.md). Shared scrape/score/upsert: [../scan-n
 
 | Condition | Action |
 |-----------|--------|
-| New company/analyst headline in **today or yesterday**, not already on `scrip_news` | **Insert** or **update** (merge new headlines into stored doc) |
+| New company/analyst headline in **today or yesterday**, not already on `scrip_news` | **Insert** or **update** |
+| New **regulatory** headline for **high-exposure** scrip, impact ≥ 6, **High conviction** | **Insert** or **update** |
 | No such new headline | **Skip** (no write) |
 
 There is **no** stale-age trigger. A scrip is not updated just because `scrip_news` is old.
@@ -27,7 +28,18 @@ Each `kind=news` or `kind=analyst` headline must:
 - For analyst items: title must also look like an upgrade/downgrade/target/rating headline
 - Not already be stored on `scrip_news`
 
-Sectoral news is never fetched or scored.
+Sectoral news is never fetched or scored for sentiment on its own.
+
+## Regulatory sector news (high exposure + High conviction)
+
+IRDAI / RBI / SEBI sector headlines apply to **high-exposure scrips only** (see [`../scan-news-conviction/references/regulatory_exposure.md`](../scan-news-conviction/references/regulatory_exposure.md)):
+
+- `impact_score >= 6`
+- Scrip on theme exposure list, or headline names scrip as *most exposed*
+- Stored only when recomputed **conviction is High**
+- Published **today or yesterday**, not already on `scrip_news`
+
+Example: IRDAI commission-cap draft → **IDFCFIRSTB, INDUSINDBK, POLICYBZR, HDFCLIFE** (not **SBIN**).
 
 ## Retention purge
 
