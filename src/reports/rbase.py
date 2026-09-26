@@ -775,6 +775,7 @@ def current_scrip_index():
 
 _BULL_BEAR_SENTIMENTS = frozenset({"bullish", "bearish"})
 _scrip_sentiments = None
+_scrip_news_nonblank = None
 _scrip_sentiments_t = 0.0
 _SCRIP_SENT_TTL = 30.0
 _MIN_SECTORAL_FOR_SENTIMENT = 3
@@ -791,9 +792,23 @@ def _scrip_sentiment_value(doc):
     return sent
 
 
+def _news_is_nonblank(doc):
+    """Company news, analyst calls, or at least 3 sectoral headlines."""
+    news = doc.get("news") or []
+    analyst = doc.get("analyst_calls") or []
+    sectoral = doc.get("sectoral_news") or []
+    if not isinstance(news, list):
+        news = [news] if str(news).strip() else []
+    if not isinstance(analyst, list):
+        analyst = [analyst] if str(analyst).strip() else []
+    return bool(news) or bool(analyst) or (
+        isinstance(sectoral, list) and len(sectoral) >= _MIN_SECTORAL_FOR_SENTIMENT
+    )
+
+
 def _scrip_sentiment_map():
     """scrip → lowercase overall_sentiment (scrip + sentiment only, no articles)."""
-    global _scrip_sentiments, _scrip_sentiments_t
+    global _scrip_sentiments, _scrip_news_nonblank, _scrip_sentiments_t
     now = time.time()
     if _scrip_sentiments is not None and (now - _scrip_sentiments_t) < _SCRIP_SENT_TTL:
         return _scrip_sentiments
@@ -802,16 +817,29 @@ def _scrip_sentiment_map():
             {},
             {"_id": 0, "scrip": 1, "overall_sentiment": 1, "news": 1, "sectoral_news": 1, "analyst_calls": 1},
         )
-        _scrip_sentiments = {
-            str(d.get("scrip") or "").strip().upper(): _scrip_sentiment_value(d)
-            for d in docs
-            if d.get("scrip")
-        }
+        sentiments = {}
+        nonblank = set()
+        for d in docs:
+            scrip = str(d.get("scrip") or "").strip().upper()
+            if not scrip:
+                continue
+            sentiments[scrip] = _scrip_sentiment_value(d)
+            if _news_is_nonblank(d):
+                nonblank.add(scrip)
+        _scrip_sentiments = sentiments
+        _scrip_news_nonblank = frozenset(nonblank)
         _scrip_sentiments_t = now
     except Exception:
         _scrip_sentiments = {}
+        _scrip_news_nonblank = frozenset()
         _scrip_sentiments_t = now
     return _scrip_sentiments
+
+
+def news_nonblank_scrips():
+    """Scrips whose scrip_news scan has headlines, not an empty record."""
+    _scrip_sentiment_map()
+    return _scrip_news_nonblank or frozenset()
 
 
 def _wanted_news_sentiments(choice=None):
@@ -923,6 +951,8 @@ def highlight_category_row(df, color='NA'):
         styled_df = df.style.set_properties(**{'background-color': '#FCCFD2', 'color': 'black'})
     elif color == 'LG':
         styled_df = df.style.set_properties(**{'background-color': '#A1A1A1', 'color': 'black'})
+    else:
+        styled_df = df.style.set_properties(**{'background-color': '#FFFFFF', 'color': 'black'})
 
     return styled_df
 

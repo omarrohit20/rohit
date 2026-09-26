@@ -611,7 +611,7 @@ def main():
         rb.render(st, filtered_df, 'buy-breakout:Consolidation-CheckRecommendations', height=200, dontapplybreakout=True, color='LG')
     with col3:
         df = rb.getdf('buy-breakout')
-        rb.render(st, df, '############## buy-breakout ################', height=200, dontapplybreakout=True, color='LG')
+        rb.render(st, df, '############## buy-breakout ################', height=200, dontapplybreakout=True)
     with col4:
         df = rb.getdf('sell-breakout')
         filtered_df = df
@@ -650,7 +650,7 @@ def main():
         rb.render(st, filtered_df, 'sell-breakout:Consolidation-CheckRecommendations', height=200, dontapplybreakout=True, color='LG')
     with col6:
         df = rb.getdf('sell-breakout')
-        rb.render(st, df, '############## sell-breakout ################', height=200, dontapplybreakout=True, color='LG')
+        rb.render(st, df, '############## sell-breakout ################', height=200, dontapplybreakout=True)
 
     st.divider()
 
