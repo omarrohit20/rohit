@@ -1,0 +1,16 @@
+---
+description: Never auto-trigger Upstox OAuth; ask before any live Upstox MCP call
+alwaysApply: true
+---
+
+# Upstox login is opt-in
+
+Cursor starts MCP servers from `mcp.json` on load. `mcp-remote` then opens the Upstox browser login even if the agent never called a tool. **Do not put Upstox back in live mcp.json unless the user asked to log in this turn.**
+
+- Live configs must not include `Upstox MCP`: `~/.cursor/mcp.json` and `src/indian-trading-skills/.cursor/mcp.json`.
+- Saved recipe only: `~/.cursor/mcp-upstox.disabled.json`.
+- Never call `mcp_auth` or any Upstox MCP tool unless the user explicitly asked for live data or a live order.
+- If they later say log in / pull live holdings: copy the disabled recipe into `~/.cursor/mcp.json`, tell them to toggle **Upstox MCP** on in Settings → Tools and MCP, then wait. After the session, remove it from live mcp.json again so the next Cursor start does not pop a browser.
+- Do not run `upstox-python-sdk` unless they asked.
+
+If a browser login still appears, the live mcp.json still has Upstox, or the Tools and MCP toggle is still on.
