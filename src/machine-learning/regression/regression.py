@@ -28,8 +28,22 @@ db = connection.Nsedata
 forecast_out = 1
 run_ml_algo = True
 
+def _fill_uncalculated(df):
+    """Short history leaves lookback fields unset. Numbers become 0, text becomes 'NA'."""
+    numeric_cols = df.select_dtypes(include=[np.number]).columns
+    df[numeric_cols] = df[numeric_cols].replace([np.inf, -np.inf], np.nan).fillna(0)
+    text_cols = [c for c in df.columns if c not in numeric_cols and c != 'date']
+    if text_cols:
+        df[text_cols] = df[text_cols].fillna('NA')
+    return df
+
 def regression_ta_data(scrip):
     data = db.history.find_one({'dataset_code':scrip})
+    if data is None:
+        print(data)
+        print('Missing Data for ', scrip)
+        return
+
     regression_data_db = db.regressionlow.find_one({'scrip':scrip})
     if(regression_data_db is not None):
         if(regression_data_db['date'] != data['end_date']):
@@ -37,10 +51,9 @@ def regression_ta_data(scrip):
             db.regressionlow.delete_many({'scrip':scrip})
         else:
             return
-    
-    if(data is None or (np.array(data['data'])).size < 100):
-        print(data)
-        print('Missing or very less Data for ', scrip)
+
+    if np.array(data.get('data') or []).size == 0:
+        print('Missing Data for ', scrip)
         return
         
     hsdate, hsopen, hshigh, hslow, hsclose, hsquantity = historical_data(data)   
@@ -103,6 +116,7 @@ def regression_ta_data(scrip):
     df['EMA100'] = EMA(df,100)
     df['EMA200'] = EMA(df,200)
     df = df.round(2)
+    df = _fill_uncalculated(df)
     try:
         ta_lib_data_df(scrip, df, True, False) 
         process_regression_high(scrip, df, directory, run_ml_algo)
