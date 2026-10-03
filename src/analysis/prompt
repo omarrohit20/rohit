@@ -1,0 +1,10 @@
+Update the given CSV file with  BSE that have a market capitalization greater than 1000 crore and all currently listed stocks from NSE. 
+- Exclude any stocks that are delisted, suspended, or not actively trading. 
+- Remove entries for cash stocks that are no longer trading or have been delisted. 
+- Ensure only actively traded equities remain in the updated CSV.
+
+
+Update the given CSV file with NSE 500 list and top 750 company from market cap. 
+- Exclude any stocks that are delisted, suspended, or not actively trading. 
+- Remove entries for cash stocks that are no longer trading or have been delisted. 
+- Ensure only actively traded equities remain in the updated CSV.
