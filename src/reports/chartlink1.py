@@ -134,20 +134,39 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (
-                    keys.isin(bullish) &
-                    ((df['PCT_day_change'] < -2.3) | (df['PCT_day_change_pre1'] < -2.3)) &
-                    (df['PCT_day_change'] < -1.1)
-                )
-                |
-                (
-                    keys.isin(bearish) &
-                    (df['PCT_day_change'] < -2.3)
+                    (
+                        keys.isin(bullish) &
+                        ((df['PCT_day_change'] < -2.3) | (df['PCT_day_change_pre1'] < -2.3)) &
+                        (df['PCT_day_change'] < -1.1)
+                    )
+                    |
+                    (
+                        keys.isin(bearish) &
+                        (df['PCT_day_change'] < -2.3)
+                    )
+                    |
+                    (
+                        ((df['forecast_day_PCT10_change'] < 0) & (df['forecast_day_PCT7_change'] < 0) & (df['forecast_day_PCT5_change'] < 0)) &
+                        keys.isin(bearish) &
+                        ((df['PCT_day_change'] > 2.5) | (df['PCT_day_change_pre1'] > 2.5)) &
+                        (df['PCT_day_change'] > 1.1)
+                    )
+                    |
+                    (
+                        ((df['forecast_day_PCT10_change'] < 0) & (df['forecast_day_PCT7_change'] < 0) & (df['forecast_day_PCT5_change'] < 0)) &
+                        keys.isin(bullish) &
+                        (df['PCT_day_change'] > 2.3)
+                    )
                 )
                 ]
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=200)
     with col3:
+        df = rb.getdf('morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
         try:
             bullish = rb.news_sentiment_scrips('Bullish', f_icon_only=True)
             bearish = rb.news_sentiment_scrips('Bearish', f_icon_only=True)
@@ -162,6 +181,19 @@ def main():
                 (
                     keys.isin(bullish) &
                     (df['PCT_day_change'] > 2.3)
+                )
+                |
+                (
+                    ((df['forecast_day_PCT10_change'] > 0) & (df['forecast_day_PCT7_change'] > 0) & (df['forecast_day_PCT5_change'] > 0)) &
+                    keys.isin(bullish) &
+                    ((df['PCT_day_change'] < -2.3) | (df['PCT_day_change_pre1'] < -2.3)) &
+                    (df['PCT_day_change'] < -1.1)
+                )
+                |
+                (
+                    ((df['forecast_day_PCT10_change'] > 0) & (df['forecast_day_PCT7_change'] > 0) & (df['forecast_day_PCT5_change'] > 0)) &
+                    keys.isin(bearish) &
+                    (df['PCT_day_change'] < -2.3)
                 )
                 ]
         except KeyError as e:
