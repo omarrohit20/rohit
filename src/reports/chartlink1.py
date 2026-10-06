@@ -122,6 +122,54 @@ def main():
     st.divider()
     st.subheader("Recommendations Only")
     
+    col1, col3 = st.columns(2)
+    with col1:
+        df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            bullish = rb.news_sentiment_scrips('Bullish', f_icon_only=True)
+            bearish = rb.news_sentiment_scrips('Bearish', f_icon_only=True)
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (
+                    keys.isin(bullish) &
+                    ((df['PCT_day_change'] < -2.3) | (df['PCT_day_change_pre1'] < -2.3)) &
+                    (df['PCT_day_change'] < -1.1)
+                )
+                |
+                (
+                    keys.isin(bearish) &
+                    (df['PCT_day_change'] < -2.3)
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=200)
+    with col3:
+        try:
+            bullish = rb.news_sentiment_scrips('Bullish', f_icon_only=True)
+            bearish = rb.news_sentiment_scrips('Bearish', f_icon_only=True)
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (
+                    keys.isin(bearish) &
+                    ((df['PCT_day_change'] > 2.5) | (df['PCT_day_change_pre1'] > 2.5)) &
+                    (df['PCT_day_change'] > 1.1)
+                )
+                |
+                (
+                    keys.isin(bullish) &
+                    (df['PCT_day_change'] > 2.3)
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=200)
+  
+    
+    
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
@@ -1397,12 +1445,13 @@ def main():
         filtered_df = df
         try:
             if len(dfch) <= 10:
-                filtered_df = df
-                # filtered_df = df[
-                #     ((df['forecast_day_PCT10_change']) > 5) &
-                #     (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
-                #     ]
-                    
+                allowed = rb.news_sentiment_scrips('Bullish')
+                keys = df['scrip'].astype(str).str.strip().str.upper()
+                filtered_df = df[
+                    keys.isin(allowed) &
+                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                    ]
         except KeyError as e:
             pass
         if len(dfch) <= 10:
@@ -1450,11 +1499,13 @@ def main():
         filtered_df = df
         try:
             if len(dfch) <= 10:
-                filtered_df = df
-                # filtered_df = df[
-                #     ((df['forecast_day_PCT10_change']) < -5) &
-                #     (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
-                #     ]     
+                allowed = rb.news_sentiment_scrips('Bearish')
+                keys = df['scrip'].astype(str).str.strip().str.upper()
+                filtered_df = df[
+                    keys.isin(allowed) &
+                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
+                    ]   
         except KeyError as e:
             pass
         if len(dfch) <= 10:

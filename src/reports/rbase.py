@@ -776,6 +776,7 @@ def current_scrip_index():
 _BULL_BEAR_SENTIMENTS = frozenset({"bullish", "bearish"})
 _scrip_sentiments = None
 _scrip_news_nonblank = None
+_scrip_news_f_icon = None
 _scrip_sentiments_t = 0.0
 _SCRIP_SENT_TTL = 30.0
 _MIN_SECTORAL_FOR_SENTIMENT = 3
@@ -808,17 +809,26 @@ def _news_is_nonblank(doc):
 
 def _scrip_sentiment_map():
     """scrip → lowercase overall_sentiment (scrip + sentiment only, no articles)."""
-    global _scrip_sentiments, _scrip_news_nonblank, _scrip_sentiments_t
+    global _scrip_sentiments, _scrip_news_nonblank, _scrip_news_f_icon, _scrip_sentiments_t
     now = time.time()
     if _scrip_sentiments is not None and (now - _scrip_sentiments_t) < _SCRIP_SENT_TTL:
         return _scrip_sentiments
     try:
         docs = dbnse.scrip_news.find(
             {},
-            {"_id": 0, "scrip": 1, "overall_sentiment": 1, "news": 1, "sectoral_news": 1, "analyst_calls": 1},
+            {
+                "_id": 0,
+                "scrip": 1,
+                "overall_sentiment": 1,
+                "news": 1,
+                "sectoral_news": 1,
+                "analyst_calls": 1,
+                "scan_tables": 1,
+            },
         )
         sentiments = {}
         nonblank = set()
+        f_icon = set()
         for d in docs:
             scrip = str(d.get("scrip") or "").strip().upper()
             if not scrip:
@@ -826,12 +836,16 @@ def _scrip_sentiment_map():
             sentiments[scrip] = _scrip_sentiment_value(d)
             if _news_is_nonblank(d):
                 nonblank.add(scrip)
+            if not _news_preview.is_from_breakout_scan_table(d):
+                f_icon.add(scrip)
         _scrip_sentiments = sentiments
         _scrip_news_nonblank = frozenset(nonblank)
+        _scrip_news_f_icon = frozenset(f_icon)
         _scrip_sentiments_t = now
     except Exception:
         _scrip_sentiments = {}
         _scrip_news_nonblank = frozenset()
+        _scrip_news_f_icon = frozenset()
         _scrip_sentiments_t = now
     return _scrip_sentiments
 
@@ -855,13 +869,22 @@ def _wanted_news_sentiments(choice=None):
     return frozenset({str(choice).strip().lower()})
 
 
-def news_sentiment_scrips(choice=None):
+def news_sentiment_scrips(choice=None, f_icon_only=False):
+    """When f_icon_only, keep scrips whose news strip shows F (not breakout-scan ℹ)."""
     wanted = _wanted_news_sentiments(choice)
     if wanted is None:
-        return None
-    return frozenset(
-        scrip for scrip, sent in _scrip_sentiment_map().items() if sent in wanted
-    )
+        allowed = None
+    else:
+        allowed = frozenset(
+            scrip for scrip, sent in _scrip_sentiment_map().items() if sent in wanted
+        )
+    if not f_icon_only:
+        return allowed
+    _scrip_sentiment_map()
+    f_scrips = _scrip_news_f_icon or frozenset()
+    if allowed is None:
+        return f_scrips
+    return allowed & f_scrips
 
 
 def filter_df_by_news_sentiment(df):
