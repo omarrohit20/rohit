@@ -29,6 +29,28 @@ _SESSION_CUSTOM = "chart_preview_custom_url"
 
 # Internal col; header is blank so it looks like the default index
 _INDEX_COL = "_idx"
+# Pixel width for 0–99 row labels (Streamlit "small" is 75px and too wide here).
+_INDEX_COL_WIDTH_PX = 36
+
+
+def _index_link_column_config():
+    """Narrow first column: show only the row number from ?_i=N in the chart URL."""
+    base = {
+        "label": " ",
+        "help": "Open full chart page in a new tab",
+        "display_text": r"_i=(\d+)",
+        "pinned": True,
+    }
+    try:
+        return st.column_config.LinkColumn(**base, width=_INDEX_COL_WIDTH_PX)
+    except TypeError:
+        try:
+            return st.column_config.LinkColumn(**base, width="small")
+        except TypeError:
+            return st.column_config.LinkColumn(
+                " ",
+                display_text=r"_i=(\d+)",
+            )
 
 
 def is_enabled():
@@ -161,21 +183,7 @@ def display_dataframe(
         if not empty:
             view = _with_clickable_index(data)
             kwargs["hide_index"] = True
-            try:
-                conf[_INDEX_COL] = st.column_config.LinkColumn(
-                    " ",
-                    help="Open full chart page in a new tab",
-                    display_text=r"_i=(\d+)",
-                    width="small",
-                )
-            except TypeError:
-                try:
-                    conf[_INDEX_COL] = st.column_config.LinkColumn(
-                        " ",
-                        display_text=r"_i=(\d+)",
-                    )
-                except TypeError:
-                    conf[_INDEX_COL] = st.column_config.LinkColumn(" ")
+            conf[_INDEX_COL] = _index_link_column_config()
             if order is not None:
                 order = [c for c in order if c != _INDEX_COL]
                 order = [_INDEX_COL] + order
