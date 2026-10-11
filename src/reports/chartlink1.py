@@ -1266,9 +1266,6 @@ def main():
             rb.render(st, empty_df, 'SellAllProcessor')
 
 
-    
-    col1, col3 = st.columns(2)
-    
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
