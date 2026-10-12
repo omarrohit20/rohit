@@ -275,6 +275,120 @@ def main():
     
     col1, col2, col3, col4 = st.columns(4)
     with col1:
+        df = rb.getdf('buy-breakout')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (~df['systemtime'].str.contains('10', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11', case=False, regex=True, na=False)) &
+                (
+                    (
+                        #((df['forecast_day_PCT10_change'] < 0) & (df['forecast_day_PCT7_change'] < 0) & (df['forecast_day_PCT5_change'] < 0)) &
+                        keys.isin(bullish) &
+                        ((df['PCT_day_change'] < -1.5) | (df['PCT_day_change_pre1'] < -1.5)) &
+                        (df['PCT_day_change'] < -1.1)
+                    )
+                    |
+                    (
+                        #((df['forecast_day_PCT10_change'] < 0) & (df['forecast_day_PCT7_change'] < 0) & (df['forecast_day_PCT5_change'] < 0)) &
+                        keys.isin(bearish) &
+                        (df['PCT_day_change'] < -2.3)
+                    )
+                
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'buy-breakout:ABSGT2', color='LG', height=200)
+    with col2:
+        df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (~df['systemtime'].str.contains('10', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11', case=False, regex=True, na=False)) &
+                (
+                    (
+                        #((df['forecast_day_PCT10_change'] < 0) & (df['forecast_day_PCT7_change'] < 0) & (df['forecast_day_PCT5_change'] < 0)) &
+                        keys.isin(bullish) &
+                        ((df['PCT_day_change'] < -1.5) | (df['PCT_day_change_pre1'] < -1.5)) &
+                        (df['PCT_day_change'] < -1.1)
+                    )
+                    |
+                    (
+                        #((df['forecast_day_PCT10_change'] < 0) & (df['forecast_day_PCT7_change'] < 0) & (df['forecast_day_PCT5_change'] < 0)) &
+                        keys.isin(bearish) &
+                        (df['PCT_day_change'] < -2.3)
+                    )
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'morning-volume-breakout-buy:ABSGT2', color='LG', height=200)
+    with col3:
+        df = rb.getdf('sell-breakout')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (~df['systemtime'].str.contains('10', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11', case=False, regex=True, na=False)) &
+                (
+                    (
+                        keys.isin(bullish) 
+                    )
+                    |
+                    (
+                        keys.isin(bearish) 
+                    )
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'sell-breakout:ABSGT2', color='LG', height=200)
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            bullish = rb.news_sentiment_scrips('Bullish', f_icon_only=True)
+            bearish = rb.news_sentiment_scrips('Bearish', f_icon_only=True)
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (~df['systemtime'].str.contains('10', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11', case=False, regex=True, na=False)) &
+                (
+                    (
+                        keys.isin(bullish) 
+                    )
+                    |
+                    (
+                        keys.isin(bearish) 
+                    )
+                )
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'morning-volume-breakout-sell:ABSGT2', color='LG', height=200)
+  
+    
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -385,6 +499,8 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 keys.isin(allowed) &
+                (df['PCT_day_change'] < 3) &
+                (df['PCT_day_change_pre1'] > -2) &
                 (df['PCT_day_change_pre1'] < -0.3) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &
@@ -420,6 +536,7 @@ def main():
             filtered_df = df[
                 (df['PCT_day_change'] > -1) &
                 (df['PCT_day_change'] < 1.5) &
+                (df['PCT_day_change_pre1'] > -2) &
                 (df['PCT_day_change_pre1'] < -0.3) &
                 #((df['PCT_day_change_pre1'] > 0) | (df['PCT_day_change_pre2'] > 0)) &
                 (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &
@@ -455,6 +572,8 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 keys.isin(allowed) &
+                (df['PCT_day_change'] > -3) &
+                (df['PCT_day_change_pre1'] < 2) &
                 (df['PCT_day_change_pre1'] > 0.3) &
                 (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:1', case=False, regex=True, na=False)) &
@@ -488,8 +607,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (df['PCT_day_change'] > -1.5) &
                 (df['PCT_day_change'] < 1) &
+                (df['PCT_day_change'] > -1.5) &
+                (df['PCT_day_change_pre1'] < 2) &
                 (df['PCT_day_change_pre1'] > 0.3) &
                 #((df['PCT_day_change_pre1'] < 0) | (df['PCT_day_change_pre2'] < 0)) &
                 (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &

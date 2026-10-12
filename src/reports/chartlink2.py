@@ -1316,7 +1316,15 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
-            filtered_df = df
+            filtered_df = df[
+                (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:3', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, na=False)) &
+                (~df['systemtime'].str.contains('12:', case=False, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, na=False)) 
+            ]
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
@@ -1346,7 +1354,15 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
-            filtered_df = df
+            filtered_df = df[
+                (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:3', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, na=False)) &
+                (~df['systemtime'].str.contains('12:', case=False, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, na=False)) 
+            ]
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
