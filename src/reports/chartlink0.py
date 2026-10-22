@@ -544,92 +544,143 @@ def main():
             print("")
         rb.render(st, filtered_df, 'morning-volume-breakout-sell : scan-news Bullish', color='LG', height=200)
     
-
-    col0, col1, col2, col3, col4, col5 = st.columns(6)
-    with col0:
-        df = rb.getintersectdf('supertrend-morning-buy', 'buy-breakout')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) 
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'buy-breakout+supertrend', column_conf=rb.column_config_merged,
-                        column_order=rb.column_order_p, color='LG')
-    with col1:
-        df = rb.getintersectdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)', 'buy-breakout')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) 
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'buy-breakout+Crossed2DayHigh', column_conf=rb.column_config_merged,
-                        column_order=rb.column_order_p, color='LG')
-    with col2:
-        df = rb.getintersectdf('crossed-day-high', 'buy-breakout')
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) 
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'buy-breakout+CrossedDayHigh', column_conf=rb.column_config_merged,
-                        column_order=rb.column_order_p, color='LG')
+    col3, col4, col7, col8 = st.columns(4)
     with col3:
-        df = rb.getintersectdf('supertrend-morning-sell', 'sell-breakout')
+        df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
             filtered_df = df[
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) 
+                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+                (df['PCT_day_change'] < 1.3) &
+                ((df['mlData'].str.contains("MLBuy0")) | (df['mlData'].str.contains("MLBuy1")) | (df['mlData'].str.contains("MLBuy2"))) &
+                (df['lowTail'] < 2)
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'sell-breakout+supertrend', column_conf=rb.column_config_merged,
-                        column_order=rb.column_order_p, color='LG')
+        if len(df) > 5:
+            rb.render(st, filtered_df, 'MLBuy', color='G')
+        else:
+            rb.render(st, empty_df, 'MLBuy', color='G')
     with col4:
-        df = rb.getintersectdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)', 'sell-breakout')
+        df = rb.getdf('morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
             filtered_df = df[
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) 
+                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+                (
+                (
+                    (df['forecast_day_PCT10_change'] > -3) & 
+                    (df['filter'].str.contains("MLBuy")) &
+                    (abs(df['PCT_day_change']) < 2) & (abs(df['PCT_day_change']) > 0.5) &
+                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) 
+                )
+                | 
+                (
+                    (df['PCT_day_change'] <= 2.5) &
+                    (df['forecast_day_PCT10_change'] > -3) &
+                    (df['mlData'].str.contains("MLhighBuy") | df['mlData'].str.contains("MLBuy")) &
+                    ((df['PCT_day_change'] < 1.5) | (df['PCT_day_change_pre1'] < 1.5)) & (abs(df['PCT_day_change']) > 0.5) &
+                    ~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False) &
+                    ~df['systemtime'].str.contains('10:', case=False, regex=True, na=False) &
+                    (df['lowTail'] < 2)
+                )
+                |
+                (
+                    (df['PCT_day_change'] >= 1.3) &
+                    (df['PCT_day_change'] <= 2.5) &
+                    ((df['mlData'].str.contains("MLBuy0")) | (df['mlData'].str.contains("MLBuy1")) | (df['mlData'].str.contains("MLBuy2"))) &
+                    (df['lowTail'] < 2)
+                )
+                )
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'sell-breakout+Crossed2DayLow', column_conf=rb.column_config_merged,
-                        column_order=rb.column_order_p, color='LG')
-    with col5:
-        df = rb.getintersectdf('crossed-day-low', 'sell-breakout')
+        if len(df) > 5:
+            rb.render(st, filtered_df, 'MLBuy', color='LG')
+        else:
+            rb.render(st, empty_df, 'MLBuy', color='LG')
+    with col7:
+        df = rb.getdf('morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
             filtered_df = df[
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('09:30', case=False, regex=True, na=False)) 
+                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+                (df['PCT_day_change'] > -1.3) &
+                (((df['mlData'].str.contains("MLSell0")) | (df['mlData'].str.contains("MLSell1")) | (df['mlData'].str.contains("MLSell2")))) & 
+                (df['highTail'] < 2)
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'sell-breakout+CrossedDayLow', column_conf=rb.column_config_merged,
-                        column_order=rb.column_order_p, color='LG')
-
+        if len(df) > 5:
+            rb.render(st, filtered_df, 'MLSell', color='R')
+        else:
+            rb.render(st, empty_df, 'MLSell', color='R')
+    with col8:
+        df = rb.getdf('morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+                (
+                    (
+                        (df['forecast_day_PCT10_change'] < 3) &
+                        (df['filter'].str.contains("MLSell")) &
+                        (abs(df['PCT_day_change']) < 2) & (abs(df['PCT_day_change']) > 0.5) &
+                        (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                    )
+                    | 
+                    (
+                        (df['forecast_day_PCT10_change'] < 3) &
+                        (df['mlData'].str.contains("MLlowSell") | df['mlData'].str.contains("MLSell")) &
+                        ((df['PCT_day_change'] > -1.5) | (df['PCT_day_change_pre1'] > -1.5)) & (abs(df['PCT_day_change']) > 0.5) & 
+                        ~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False) &
+                        ~df['systemtime'].str.contains('10:', case=False, regex=True, na=False) &
+                        (df['highTail'] < 2)
+                    )
+                    |
+                    (
+                        (df['PCT_day_change'] <= -1.3) &
+                        (df['PCT_day_change'] >= -2.5) &
+                        (((df['mlData'].str.contains("MLSell0")) | (df['mlData'].str.contains("MLSell1")) | (df['mlData'].str.contains("MLSell2")))) & 
+                        (df['highTail'] < 2)
+                    )
+                )
+            ]
+        except KeyError as e:
+            print("")
+        if len(df) > 5:
+            rb.render(st, filtered_df, 'MLSell', color='LG')
+        else:
+            rb.render(st, empty_df, 'MLSell', color='LG')
 
     
     st.divider()
+
+
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -846,6 +897,57 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'LastDayMarketGT1 : todayDownLT-0.5(+)', color='LG')
+
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        df = rb.getdf('buy-breakout')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] > -2.9) &
+                (df['PCT_change'] < 0.5) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'LastDayMarketLT-1 : todayOpenedLT(-1)', color='LG')
+    with col2:
+        df = rb.getdf('morning-volume-breakout-buy')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] > -2.9) &
+                (df['PCT_change'] < 0.5) &
+                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'LastDayMarketLT-1 : todayOpenedLT(-1)', color='LG')
+    with col3:
+        df = rb.getdf('sell-breakout')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] > -0.5) &
+                (df['PCT_change'] < 2.5) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'LastDayMarketGT1 : todayOpenedGT(1)', color='LG')
+    with col4:
+        df = rb.getdf('morning-volume-breakout-sell')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] > -0.5) &
+                (df['PCT_change'] < 2.5) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'LastDayMarketGT1 : todayOpenedGT(1)', color='LG')
 
 
     col1, col2, col3, col4 = st.columns(4)
@@ -1308,135 +1410,7 @@ def main():
 
         rb.render(st, filtered_df, 'month3LowChangeGT-1', color='LG')
 
-    col3, col4, col7, col8 = st.columns(4)
-    with col3:
-        df = rb.getdf('morning-volume-breakout-buy')
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
-                (df['PCT_day_change'] < 1.3) &
-                ((df['mlData'].str.contains("MLBuy0")) | (df['mlData'].str.contains("MLBuy1")) | (df['mlData'].str.contains("MLBuy2"))) &
-                (df['lowTail'] < 2)
-                ]
-        except KeyError as e:
-            print("")
-        if len(df) > 5:
-            rb.render(st, filtered_df, 'MLBuy', color='G')
-        else:
-            rb.render(st, empty_df, 'MLBuy', color='G')
-    with col4:
-        df = rb.getdf('morning-volume-breakout-buy')
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
-                (
-                (
-                    (df['forecast_day_PCT10_change'] > -3) & 
-                    (df['filter'].str.contains("MLBuy")) &
-                    (abs(df['PCT_day_change']) < 2) & (abs(df['PCT_day_change']) > 0.5) &
-                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) 
-                )
-                | 
-                (
-                    (df['PCT_day_change'] <= 2.5) &
-                    (df['forecast_day_PCT10_change'] > -3) &
-                    (df['mlData'].str.contains("MLhighBuy") | df['mlData'].str.contains("MLBuy")) &
-                    ((df['PCT_day_change'] < 1.5) | (df['PCT_day_change_pre1'] < 1.5)) & (abs(df['PCT_day_change']) > 0.5) &
-                    ~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False) &
-                    ~df['systemtime'].str.contains('10:', case=False, regex=True, na=False) &
-                    (df['lowTail'] < 2)
-                )
-                |
-                (
-                    (df['PCT_day_change'] >= 1.3) &
-                    (df['PCT_day_change'] <= 2.5) &
-                    ((df['mlData'].str.contains("MLBuy0")) | (df['mlData'].str.contains("MLBuy1")) | (df['mlData'].str.contains("MLBuy2"))) &
-                    (df['lowTail'] < 2)
-                )
-                )
-                ]
-        except KeyError as e:
-            print("")
-        if len(df) > 5:
-            rb.render(st, filtered_df, 'MLBuy', color='LG')
-        else:
-            rb.render(st, empty_df, 'MLBuy', color='LG')
-    with col7:
-        df = rb.getdf('morning-volume-breakout-sell')
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
-                (df['PCT_day_change'] > -1.3) &
-                (((df['mlData'].str.contains("MLSell0")) | (df['mlData'].str.contains("MLSell1")) | (df['mlData'].str.contains("MLSell2")))) & 
-                (df['highTail'] < 2)
-                ]
-        except KeyError as e:
-            print("")
-        if len(df) > 5:
-            rb.render(st, filtered_df, 'MLSell', color='R')
-        else:
-            rb.render(st, empty_df, 'MLSell', color='R')
-    with col8:
-        df = rb.getdf('morning-volume-breakout-sell')
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
-                (
-                    (
-                        (df['forecast_day_PCT10_change'] < 3) &
-                        (df['filter'].str.contains("MLSell")) &
-                        (abs(df['PCT_day_change']) < 2) & (abs(df['PCT_day_change']) > 0.5) &
-                        (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False))
-                    )
-                    | 
-                    (
-                        (df['forecast_day_PCT10_change'] < 3) &
-                        (df['mlData'].str.contains("MLlowSell") | df['mlData'].str.contains("MLSell")) &
-                        ((df['PCT_day_change'] > -1.5) | (df['PCT_day_change_pre1'] > -1.5)) & (abs(df['PCT_day_change']) > 0.5) & 
-                        ~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False) &
-                        ~df['systemtime'].str.contains('10:', case=False, regex=True, na=False) &
-                        (df['highTail'] < 2)
-                    )
-                    |
-                    (
-                        (df['PCT_day_change'] <= -1.3) &
-                        (df['PCT_day_change'] >= -2.5) &
-                        (((df['mlData'].str.contains("MLSell0")) | (df['mlData'].str.contains("MLSell1")) | (df['mlData'].str.contains("MLSell2")))) & 
-                        (df['highTail'] < 2)
-                    )
-                )
-            ]
-        except KeyError as e:
-            print("")
-        if len(df) > 5:
-            rb.render(st, filtered_df, 'MLSell', color='LG')
-        else:
-            rb.render(st, empty_df, 'MLSell', color='LG')
-
+    
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
