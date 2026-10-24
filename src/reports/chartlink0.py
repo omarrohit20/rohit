@@ -311,6 +311,18 @@ def main():
         rb.render(st, df, 'morning-volume-breakout-sell ############', color='R', height=300)
 
 
+    col1, col3 = st.columns(2)
+    with col1:
+        df = _filter_scan_news(rb.getdf('buy-breakout'), 'Bullish')
+        filtered_df = df
+        rb.render(st, filtered_df, 'buy-breakout : scan-news Bullish', color='LG')
+    with col3:
+        df = _filter_scan_news(rb.getdf('sell-breakout'), 'Bearish')
+        filtered_df = df
+        rb.render(st, filtered_df, 'sell-breakout : scan-news Bearish', color='LG')
+
+
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = _filter_scan_news(rb.getdf('buy-breakout'), 'Bullish')
