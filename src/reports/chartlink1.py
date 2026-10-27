@@ -110,7 +110,7 @@ def main():
 
 
     st.divider()
-    st.subheader("Recommendations Only")
+    st.subheader("Last2DayUp\Down And LastDayUp\DownGT(1) Today Suppose to Reversal")
     
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -445,6 +445,7 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 keys.isin(allowed) &
+                ((df['PCT_day_change_pre1'] < -2) | (df['PCT_day_change_pre2'] > 0)) &
                 (df['forecast_day_PCT10_change'] > 1) &
                 (df['forecast_day_PCT7_change'] < 10) &
                 (df['forecast_day_PCT5_change'] < 10) &
@@ -482,7 +483,7 @@ def main():
                 (df['PCT_day_change'] > -1) &
                 (df['PCT_day_change'] < 1.5) &
                 (df['PCT_day_change_pre1'] < 2) &
-                #((df['PCT_day_change_pre1'] > 0) | (df['PCT_day_change_pre2'] > 0)) &
+                ((df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 0)) &
                 (~df['systemtime'].str.contains('10:15', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
@@ -512,6 +513,7 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 keys.isin(allowed) &
+                ((df['PCT_day_change_pre1'] > 2) | (df['PCT_day_change_pre2'] < 0)) &
                 (df['forecast_day_PCT10_change'] < -1) &
                 (df['forecast_day_PCT7_change'] > -10) &
                 (df['forecast_day_PCT5_change'] > -10) &
@@ -549,7 +551,7 @@ def main():
                 (df['PCT_day_change'] > -1.5) &
                 (df['PCT_day_change'] < 1) &
                 (df['PCT_day_change_pre1'] > -2) &
-                #((df['PCT_day_change_pre1'] < 0) | (df['PCT_day_change_pre2'] < 0)) &
+                ((df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < 0)) &
                 (~df['systemtime'].str.contains('10:15', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
@@ -1375,9 +1377,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'BuyAllProcessor')
+            rb.render(st, filtered_df, 'BuyAllProcessor', height=100)
         else:
-            rb.render(st, empty_df, 'BuyAllProcessor')
+            rb.render(st, empty_df, 'BuyAllProcessor', height=100)
     with col30:
         df = rb.getdf('sell_all_processor')
         expected_columns = list(set(df.columns))
@@ -1464,9 +1466,9 @@ def main():
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'SellAllProcessor')
+            rb.render(st, filtered_df, 'SellAllProcessor', height=100)
         else:
-            rb.render(st, empty_df, 'SellAllProcessor')
+            rb.render(st, empty_df, 'SellAllProcessor', height=100)
 
 
     col1, col2, col3, col4 = st.columns(4)
@@ -1699,6 +1701,7 @@ def main():
 
     
     st.divider()
+    st.subheader("Buy - Last day not down LT-0.5, Sell - Last day not up GT0.5")
     st.divider()
 
     col1, col2, col3, col4 = st.columns(4)
@@ -2096,7 +2099,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'breakout-morning-buy-01', height=200, color='LG')
+        rb.render(st, filtered_df, 'breakout-morning-buy-01', height=200)
     with col2:
         df = rb.getdf('breakout-morning-buy-02')
         filtered_df = df
@@ -2109,7 +2112,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'breakout-morning-buy-02', height=200, color='LG')
+        rb.render(st, filtered_df, 'breakout-morning-buy-02', height=200)
     with col3:
         df = rb.getdf('breakout-morning-sell-01')
         filtered_df = df
@@ -2120,7 +2123,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'breakout-morning-sell-01', height=200, color='LG')
+        rb.render(st, filtered_df, 'breakout-morning-sell-01', height=200)
     with col4:
         df = rb.getdf('breakout-morning-sell-02')
         filtered_df = df
@@ -2133,7 +2136,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'breakout-morning-sell-02', height=200, color='LG')
+        rb.render(st, filtered_df, 'breakout-morning-sell-02', height=200)
 
 
     
