@@ -2044,3 +2044,71 @@ def render_sandlterm_data(st, df, name, height=200, color='NA', column_order=col
     remaining = [c for c in df_cols if c not in preferred]
     full_column_order = preferred + remaining
     _news_preview.display_dataframe(st, df_styled, height=height, column_order=full_column_order, column_config=column_conf, use_container_width=True)
+
+def _filter_scan_news(df, sentiment):
+    """Keep rows whose scrip_news overall_sentiment is Bullish or Bearish."""
+    if df is None or getattr(df, "empty", True) or "scrip" not in getattr(df, "columns", []):
+        return df if df is not None else pd.DataFrame()
+    allowed = news_sentiment_scrips(sentiment)
+    if not allowed:
+        return df.iloc[0:0]
+    keys = df["scrip"].astype(str).str.strip().str.upper()
+    return df[keys.isin(allowed)]
+
+
+def _scrip_news_by_sentiment(sentiment, scan_df):
+    """Join recent medium/high conviction scrip news to the matching scan rows."""
+    today = datetime.now().date()
+    recent_dates = {today, today - timedelta(days=1)}
+    query = {
+        "overall_sentiment": {"$regex": f"^{sentiment}$", "$options": "i"},
+        "conviction": {"$regex": "^(med|medium|high)$", "$options": "i"},
+    }
+    projection = {"_id": 0, "sectoral_news": 0, "analyst_calls": 0, "articles": 0}
+    try:
+        df = pd.DataFrame(list(dbnse.scrip_news.find(query, projection)))
+    except Exception:
+        return pd.DataFrame(columns=["scrip", "overall_sentiment", "conviction"])
+    if df.empty or scan_df is None or getattr(scan_df, "empty", True):
+        return pd.DataFrame()
+
+    def is_recent(value):
+        parsed = pd.to_datetime(value, errors="coerce", utc=True)
+        return not pd.isna(parsed) and parsed.date() in recent_dates
+
+    def latest_news_date(news_items):
+        if not isinstance(news_items, list):
+            return None
+        dates = []
+        for item in news_items:
+            if isinstance(item, dict) and item.get("published"):
+                parsed = pd.to_datetime(item["published"], errors="coerce", utc=True)
+                if not pd.isna(parsed):
+                    dates.append(parsed.date())
+        return max(dates) if dates else None
+
+    insert_update_recent = pd.Series(False, index=df.index)
+    for column in ("insertion_date", "updated_at"):
+        if column in df.columns:
+            insert_update_recent |= df[column].apply(is_recent)
+    latest_dates = df.get("news", pd.Series(None, index=df.index)).apply(latest_news_date)
+    latest_news_recent = latest_dates.isin(recent_dates)
+    df = df[insert_update_recent & latest_news_recent].copy()
+    df["latest_news_date"] = latest_dates.loc[df.index]
+    if "insertion_date" in df.columns:
+        df["insertion_date"] = pd.to_datetime(df["insertion_date"], errors="coerce")
+        df = df.sort_values("insertion_date", ascending=False, na_position="last")
+
+    if "scrip" not in scan_df.columns or "scrip" not in df.columns:
+        return pd.DataFrame()
+    scans = scan_df.copy()
+    scans["scrip"] = scans["scrip"].astype(str).str.strip().str.upper()
+    df["scrip"] = df["scrip"].astype(str).str.strip().str.upper()
+    df = df.drop_duplicates(subset=["scrip"], keep="first")
+    news_columns = [
+        column for column in (
+            "scrip", "insertion_date", "updated_at", "overall_sentiment",
+            "conviction", "industry", "scan_tables", "article_count", "latest_news_date",
+        ) if column in df.columns
+    ]
+    return scans.merge(df[news_columns], on="scrip", how="inner").reset_index(drop=True)

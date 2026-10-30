@@ -9,73 +9,6 @@ from datetime import datetime, timedelta
 
 # Run the autorefresh approximately every 30000 milliseconds (30 seconds)
 
-def _filter_scan_news(df, sentiment):
-    """Keep rows whose scrip_news overall_sentiment is Bullish or Bearish."""
-    if df is None or getattr(df, "empty", True) or "scrip" not in getattr(df, "columns", []):
-        return df if df is not None else pd.DataFrame()
-    allowed = rb.news_sentiment_scrips(sentiment)
-    if not allowed:
-        return df.iloc[0:0]
-    keys = df["scrip"].astype(str).str.strip().str.upper()
-    return df[keys.isin(allowed)]
-
-
-def _scrip_news_by_sentiment(sentiment, scan_df):
-    """Join recent medium/high conviction scrip news to the matching scan rows."""
-    today = datetime.now().date()
-    recent_dates = {today, today - timedelta(days=1)}
-    query = {
-        "overall_sentiment": {"$regex": f"^{sentiment}$", "$options": "i"},
-        "conviction": {"$regex": "^(med|medium|high)$", "$options": "i"},
-    }
-    projection = {"_id": 0, "sectoral_news": 0, "analyst_calls": 0, "articles": 0}
-    try:
-        df = pd.DataFrame(list(rb.dbnse.scrip_news.find(query, projection)))
-    except Exception:
-        return pd.DataFrame(columns=["scrip", "overall_sentiment", "conviction"])
-    if df.empty or scan_df is None or getattr(scan_df, "empty", True):
-        return pd.DataFrame()
-
-    def is_recent(value):
-        parsed = pd.to_datetime(value, errors="coerce", utc=True)
-        return not pd.isna(parsed) and parsed.date() in recent_dates
-
-    def latest_news_date(news_items):
-        if not isinstance(news_items, list):
-            return None
-        dates = []
-        for item in news_items:
-            if isinstance(item, dict) and item.get("published"):
-                parsed = pd.to_datetime(item["published"], errors="coerce", utc=True)
-                if not pd.isna(parsed):
-                    dates.append(parsed.date())
-        return max(dates) if dates else None
-
-    insert_update_recent = pd.Series(False, index=df.index)
-    for column in ("insertion_date", "updated_at"):
-        if column in df.columns:
-            insert_update_recent |= df[column].apply(is_recent)
-    latest_dates = df.get("news", pd.Series(None, index=df.index)).apply(latest_news_date)
-    latest_news_recent = latest_dates.isin(recent_dates)
-    df = df[insert_update_recent & latest_news_recent].copy()
-    df["latest_news_date"] = latest_dates.loc[df.index]
-    if "insertion_date" in df.columns:
-        df["insertion_date"] = pd.to_datetime(df["insertion_date"], errors="coerce")
-        df = df.sort_values("insertion_date", ascending=False, na_position="last")
-
-    if "scrip" not in scan_df.columns or "scrip" not in df.columns:
-        return pd.DataFrame()
-    scans = scan_df.copy()
-    scans["scrip"] = scans["scrip"].astype(str).str.strip().str.upper()
-    df["scrip"] = df["scrip"].astype(str).str.strip().str.upper()
-    df = df.drop_duplicates(subset=["scrip"], keep="first")
-    news_columns = [
-        column for column in (
-            "scrip", "insertion_date", "updated_at", "overall_sentiment",
-            "conviction", "industry", "scan_tables", "article_count", "latest_news_date",
-        ) if column in df.columns
-    ]
-    return scans.merge(df[news_columns], on="scrip", how="inner").reset_index(drop=True)
 
 
 def main():
@@ -371,13 +304,13 @@ def main():
 
     col1, col2 = st.columns(2)
     with col1:
-        df = _scrip_news_by_sentiment('Bullish', rb.getdfResult('highBuy'))
+        df = rb._scrip_news_by_sentiment('Bullish', rb.getdfResult('highBuy'))
         rb.render(
             st, df, 'highBuy · Bullish Scrip News · Medium/High conviction', color='LG',
             column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True,
         )
     with col2:
-        df = _scrip_news_by_sentiment('Bearish', rb.getdfResult('lowSell'))
+        df = rb._scrip_news_by_sentiment('Bearish', rb.getdfResult('lowSell'))
         rb.render(
             st, df, 'lowSell · Bearish Scrip News · Medium/High conviction', color='LG',
             column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True,
@@ -389,18 +322,18 @@ def main():
 
     col1, col3 = st.columns(2)
     with col1:
-        df = _filter_scan_news(rb.getdf('buy-breakout'), 'Bullish')
+        df = rb._filter_scan_news(rb.getdf('buy-breakout'), 'Bullish')
         filtered_df = df
         rb.render(st, filtered_df, 'buy-breakout : scan-news Bullish', color='LG')
     with col3:
-        df = _filter_scan_news(rb.getdf('sell-breakout'), 'Bearish')
+        df = rb._filter_scan_news(rb.getdf('sell-breakout'), 'Bearish')
         filtered_df = df
         rb.render(st, filtered_df, 'sell-breakout : scan-news Bearish', color='LG')
 
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        df = _filter_scan_news(rb.getdf('buy-breakout'), 'Bullish')
+        df = rb._filter_scan_news(rb.getdf('buy-breakout'), 'Bullish')
         filtered_df = df
         try:
             filtered_df = df[
@@ -413,7 +346,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'buy-breakout : scan-news Bullish', color='LG')
     with col2:
-        df = _filter_scan_news(rb.getdf('buy-breakout'), 'Bearish')
+        df = rb._filter_scan_news(rb.getdf('buy-breakout'), 'Bearish')
         filtered_df = df
         try:
             filtered_df = df[
@@ -425,7 +358,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'buy-breakout : scan-news Bearish', color='LG')
     with col3:
-        df = _filter_scan_news(rb.getdf('sell-breakout'), 'Bearish')
+        df = rb._filter_scan_news(rb.getdf('sell-breakout'), 'Bearish')
         filtered_df = df
         try:
             filtered_df = df[
@@ -438,7 +371,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'sell-breakout : scan-news Bearish', color='LG')
     with col4:
-        df = _filter_scan_news(rb.getdf('sell-breakout'), 'Bullish')
+        df = rb._filter_scan_news(rb.getdf('sell-breakout'), 'Bullish')
         filtered_df = df
         try:
             filtered_df = df[
@@ -549,7 +482,7 @@ def main():
     
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        df = _filter_scan_news(rb.getdf('morning-volume-breakout-buy'), 'Bullish')
+        df = rb._filter_scan_news(rb.getdf('morning-volume-breakout-buy'), 'Bullish')
         filtered_df = df
         try:
             filtered_df = df[
@@ -576,7 +509,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'morning-volume-breakout-buy : scan-news Bullish', color='LG', height=200)
     with col2:
-        df = _filter_scan_news(rb.getdf('morning-volume-breakout-buy'), 'Bearish')
+        df = rb._filter_scan_news(rb.getdf('morning-volume-breakout-buy'), 'Bearish')
         filtered_df = df
         try:
             filtered_df = df[
@@ -590,7 +523,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'morning-volume-breakout-buy : scan-news Bearish', color='LG', height=200)
     with col3:
-        df = _filter_scan_news(rb.getdf('morning-volume-breakout-sell'), 'Bearish')
+        df = rb._filter_scan_news(rb.getdf('morning-volume-breakout-sell'), 'Bearish')
         filtered_df = df
         try:
             filtered_df = df[
@@ -617,7 +550,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'morning-volume-breakout-sell : scan-news Bearish', color='LG', height=200)
     with col4:
-        df = _filter_scan_news(rb.getdf('morning-volume-breakout-sell'), 'Bullish')
+        df = rb._filter_scan_news(rb.getdf('morning-volume-breakout-sell'), 'Bullish')
         filtered_df = df
         try:
             filtered_df = df[
