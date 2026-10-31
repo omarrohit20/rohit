@@ -299,7 +299,8 @@ def news_icon_glyph(doc=None):
     if strength is None or sentiment not in {"bullish", "bearish"}:
         return marker
     score = strength if sentiment == "bullish" else -strength
-    return f"{marker}{score:+d}"
+    sign = "+" if score > 0 else "-"
+    return f"{abs(score)}{sign}{marker}"
 
 
 def _nonempty_articles(items):
