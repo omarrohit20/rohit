@@ -290,8 +290,16 @@ def is_from_breakout_scan_table(doc=None):
 
 
 def news_icon_glyph(doc=None):
-    """ℹ for breakout scan scrips; F for futures / other non-breakout sources."""
-    return "ℹ" if is_from_breakout_scan_table(doc) else "F"
+    """Return the source marker and signed sentiment/conviction score."""
+    marker = "ℹ" if is_from_breakout_scan_table(doc) else "F"
+    sentiment = str((doc or {}).get("overall_sentiment") or "").strip().lower()
+    conviction = str((doc or {}).get("conviction") or "").strip().lower()
+    conviction = {"med": "medium"}.get(conviction, conviction)
+    strength = {"low": 1, "medium": 2, "high": 3}.get(conviction)
+    if strength is None or sentiment not in {"bullish", "bearish"}:
+        return marker
+    score = strength if sentiment == "bullish" else -strength
+    return f"{marker}{score:+d}"
 
 
 def _nonempty_articles(items):
@@ -392,19 +400,22 @@ def _icon_strip_page(scrips, news_map, height):
         )
         recency = company_news_recency(doc)
         glyph = news_icon_glyph(doc)
-        from_breakout = glyph == "ℹ"
+        from_breakout = is_from_breakout_scan_table(doc)
         sent = str((doc or {}).get("overall_sentiment") or "").strip().lower()
         sent_cls = " bull" if sent == "bullish" else (" bear" if sent == "bearish" else "")
         source = "breakout scan" if from_breakout else "futures / non-breakout"
+        sentiment = str((doc or {}).get("overall_sentiment") or "").strip().title()
+        conviction = str((doc or {}).get("conviction") or "").strip().title()
+        score_detail = f" · {sentiment} {conviction} conviction" if sentiment and conviction else ""
         if recency == "today":
             cls = "nws-ico recent-today" + sent_cls
-            title = f"{esc} news · {source} · company news today"
+            title = f"{esc} news · {source}{score_detail} · company news today"
         elif recency == "yesterday":
             cls = "nws-ico recent-yesterday" + sent_cls
-            title = f"{esc} news · {source} · company news yesterday"
+            title = f"{esc} news · {source}{score_detail} · company news yesterday"
         else:
             cls = "nws-ico" + sent_cls
-            title = f"{esc} news · {source}"
+            title = f"{esc} news · {source}{score_detail}"
         icons.append(f'<div class="{cls}" data-scrip="{esc}" title="{title}">{glyph}</div>')
     icons_html = "".join(icons)
     payload = json.dumps({"news": news_map})
@@ -418,7 +429,7 @@ def _icon_strip_page(scrips, news_map, height):
   .list{{height:{max(h - _HEADER_H, 40)}px;overflow:clip;overscroll-behavior:none;touch-action:none;}}
   .track{{will-change:transform;}}
   .nws-ico{{height:{_ROW_H}px;line-height:{_ROW_H}px;text-align:center;cursor:pointer;
-    font-size:16px;color:#1d4ed8;user-select:none;}}
+    font-size:11px;color:#1d4ed8;user-select:none;white-space:nowrap;}}
   .nws-ico.empty{{cursor:default;}}
   .nws-ico.bull{{color:#39FF14;font-weight:700;text-shadow:0 0 6px #39FF14;}}
   .nws-ico.bear{{color:#FF073A;font-weight:700;text-shadow:0 0 6px #FF073A;}}
@@ -553,6 +564,25 @@ def _icon_strip_page(scrips, news_map, height):
     document.body.scrollTop = 0;
     if (list) list.scrollTop = 0;
   }}
+  function fitIconColumn() {{
+    const frame = window.frameElement;
+    const iconCol = frame && frame.closest('[data-testid="stColumn"]');
+    const row = iconCol && iconCol.parentElement;
+    if (!row || row.getAttribute('data-testid') !== 'stHorizontalBlock') return;
+    const cols = Array.from(row.children).filter(function(el) {{
+      return el.getAttribute('data-testid') === 'stColumn';
+    }});
+    const iconIndex = cols.indexOf(iconCol);
+    const tableCol = cols[iconIndex + 1];
+    if (!tableCol) return;
+    // A fixed compact strip avoids a large blank gutter in wide 1–2 column
+    // reports, while keeping the signed marker readable in 4+ column reports.
+    iconCol.style.flex = '0 0 28px';
+    iconCol.style.width = '28px';
+    iconCol.style.minWidth = '28px';
+    tableCol.style.flex = '1 1 0%';
+    tableCol.style.minWidth = '0';
+  }}
   function isVisible(el) {{
     if (!el || !el.isConnected) return false;
     const cs = P.defaultView.getComputedStyle(el);
@@ -651,6 +681,7 @@ def _icon_strip_page(scrips, news_map, height):
   }}
   function sync() {{
     pinLocal();
+    fitIconColumn();
     const s = resolve();
     if (s) {{
       syncMetrics(df, s);
@@ -686,6 +717,18 @@ def display_dataframe(
 ):
     import chart_preview as chart_preview
 
+    # Report tables are frequently placed in 3–4 side-by-side columns. Keep
+    # enough gutter between those widgets for the table and its news strip.
+    style_key = "news_preview_report_column_spacing"
+    if not st_mod.session_state.get(style_key, False):
+        st_mod.markdown(
+            """<style>
+            div[data-testid="stHorizontalBlock"] { column-gap: 0.5rem; }
+            </style>""",
+            unsafe_allow_html=True,
+        )
+        st_mod.session_state[style_key] = True
+
     news_map = load_news_map()
     scrips = _scrip_list(data) if is_enabled() else []
     table_news = {
@@ -708,7 +751,9 @@ def display_dataframe(
         )
         return
 
-    left, right = st_mod.columns([0.05, 0.95])
+    # The previous 5% allocation clipped the new signed glyphs (e.g. ℹ+3)
+    # inside narrow report columns. Reserve a readable strip in every widget.
+    left, right = st_mod.columns([0.14, 0.86], gap="small")
     with left:
         page = _icon_strip_page(scrips, table_news, height)
         components.html(page, height=int(height), scrolling=False)

@@ -8,3 +8,22 @@ Update the given CSV file with NSE 500 list and top 750 company from market cap.
 - Exclude any stocks that are delisted, suspended, or not actively trading. 
 - Remove entries for cash stocks that are no longer trading or have been delisted. 
 - Ensure only actively traded equities remain in the updated CSV.
+
+
+
+
+
+
+
+
+
+
+
+
+update scan news icon i and F for all the reports
+Bullish high conviction as i+3, F+3
+Bullish medium conviction as i+2, F+2
+Bullish low conviction as i+1, F+1
+Bearish low conviction as i-1, F-1
+Bearish medium conviction as i-2, F-2
+Bearish high conviction as i-3, F-3
