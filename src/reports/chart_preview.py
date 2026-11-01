@@ -36,8 +36,8 @@ _INDEX_COL_WIDTH_PX = 36
 def _index_link_column_config():
     """Narrow first column: show only the row number from ?_i=N in the chart URL."""
     base = {
-        "label": " ",
-        "help": "Open full chart page in a new tab",
+        "label": "News",
+        "help": "Click this column header to sort by news conviction. Click an index to open its chart.",
         "display_text": r"_i=(\d+)",
         "pinned": True,
     }

@@ -1,5 +1,6 @@
 # Create a streamlit app that shows the mongodb data
 from datetime import datetime, timedelta
+import inspect
 import time
 import pandas as pd
 import numpy as np
@@ -1904,7 +1905,10 @@ def _ensure_chart_preview_sidebar():
 
 def render(st, df, name, height=110, color='NA', column_order=column_order_default, column_conf=column_config_default, renderml=False, renderf10buy=False, renderf10sell=False, f10=0, renderf10buy00=False, renderf10sell00=False, renderf10buy01=False, renderf10sell01=False, applyBreakOut=False, dontapplybreakout=False, noColourFilter=False):
     _ensure_chart_preview_sidebar()
+    caller = inspect.currentframe().f_back
+    news_widget_id = f"{caller.f_code.co_filename}:{caller.f_lineno}:{name}"
     df = filter_df_by_scrip_index(df)
+    df = _news_preview.sort_dataframe_by_news(st, df, news_widget_id)
     st.write("********"+ name + "********")
     # try:
     #     df = df[
@@ -1933,9 +1937,9 @@ def render(st, df, name, height=110, color='NA', column_order=column_order_defau
         df_styled = highlight_category_row(df, color=color)
         if(zshortTerm) and color =='LG':
             df_styled = df_styled.apply(apply_breakout_highlight_volume, axis=1)
-        _news_preview.display_dataframe(st, df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+        _news_preview.display_dataframe(st, df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True, news_widget_id=news_widget_id)
     elif (df.empty):
-        _news_preview.display_dataframe(st, df, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+        _news_preview.display_dataframe(st, df, height=height, column_order=column_order, column_config=column_conf, use_container_width=True, news_widget_id=news_widget_id)
     else:
         df_styled = highlight_category_row(df, color=color)
         
@@ -1971,7 +1975,7 @@ def render(st, df, name, height=110, color='NA', column_order=column_order_defau
             df_styled = df_styled.apply(apply_breakout_highlight, axis=1)
         if(chartlink0 or chartlink1 or applyBreakOut) and (dontapplybreakout != True) and (noColourFilter == False) and color =='LG':
             df_styled = df_styled.apply(apply_breakout_highlight_volume, axis=1)
-        _news_preview.display_dataframe(st, df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True)
+        _news_preview.display_dataframe(st, df_styled, height=height, column_order=column_order, column_config=column_conf, use_container_width=True, news_widget_id=news_widget_id)
 
 @st.cache_data(ttl=10)
 def _getdf_sandlterm_cached(collection_name, chartink=False):
@@ -2025,6 +2029,8 @@ def getdf_sandlterm(collection_name, chartink=False):
 
 def render_sandlterm_data(st, df, name, height=200, color='NA', column_order=column_order_sandlterm, column_conf=column_config_sandlterm):
     _ensure_chart_preview_sidebar()
+    caller = inspect.currentframe().f_back
+    news_widget_id = f"{caller.f_code.co_filename}:{caller.f_lineno}:{name}"
     df = filter_df_by_scrip_index(df)
     # Newest signal date first for all sandlterm widgets
     if df is not None and not df.empty and 'date' in df.columns:
@@ -2032,6 +2038,7 @@ def render_sandlterm_data(st, df, name, height=200, color='NA', column_order=col
         df['_sort_date'] = pd.to_datetime(df['date'], errors='coerce')
         df = df.sort_values('_sort_date', ascending=False, na_position='last').drop(columns=['_sort_date'])
         df = df.reset_index(drop=True)
+    df = _news_preview.sort_dataframe_by_news(st, df, news_widget_id)
     # test.py / sandlterm LG: futures=grey, industry set=light grey, else white
     if color == 'LG':
         df_styled = highlight_sandlterm_row(df)
@@ -2043,7 +2050,7 @@ def render_sandlterm_data(st, df, name, height=200, color='NA', column_order=col
     preferred = [c for c in column_order if c in df_cols]
     remaining = [c for c in df_cols if c not in preferred]
     full_column_order = preferred + remaining
-    _news_preview.display_dataframe(st, df_styled, height=height, column_order=full_column_order, column_config=column_conf, use_container_width=True)
+    _news_preview.display_dataframe(st, df_styled, height=height, column_order=full_column_order, column_config=column_conf, use_container_width=True, news_widget_id=news_widget_id)
 
 def _filter_scan_news(df, sentiment):
     """Keep rows whose scrip_news overall_sentiment is Bullish or Bearish."""
