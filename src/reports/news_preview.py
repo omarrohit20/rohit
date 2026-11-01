@@ -5,6 +5,7 @@ The dataframe is unchanged — same chart_preview / Styler path as before.
 from __future__ import annotations
 
 import json
+import hashlib
 from datetime import datetime, timedelta
 import time
 
@@ -35,6 +36,54 @@ _NEWS_SENTIMENT_KEY = "news_sentiment_filter"
 NEWS_SENTIMENT_CHOICES = ("All", "Bullish", "Bearish", "Bullish or Bearish")
 _ROW_H = 35
 _HEADER_H = 36
+
+
+def _news_sort_keys(widget_id):
+    token = hashlib.sha1(str(widget_id).encode("utf-8")).hexdigest()[:12]
+    return (
+        f"news_sort_{token}",
+        f"news_sort_toggle_{token}",
+        f"news-sort-control-{token}",
+    )
+
+
+def sort_dataframe_by_news(st_mod, data, widget_id):
+    """Sort a report dataframe by signed news conviction when toggled on."""
+    if not widget_id or data is None or getattr(data, "empty", True):
+        return data
+    state_key, _, _ = _news_sort_keys(widget_id)
+    direction = st_mod.session_state.get(state_key)
+    if direction not in {"asc", "desc"} or "scrip" not in getattr(data, "columns", []):
+        return data
+
+    news_map = load_news_map()
+    conviction_order = {
+        ("bullish", "high"): 0,
+        ("bullish", "medium"): 1,
+        ("bullish", "low"): 2,
+        ("bearish", "low"): 3,
+        ("bearish", "medium"): 4,
+        ("bearish", "high"): 5,
+    }
+
+    def score_for_scrip(value):
+        scrip = _scrip_key(value)
+        doc = news_map.get(scrip) or {}
+        sentiment = str(doc.get("overall_sentiment") or "").strip().lower()
+        conviction = str(doc.get("conviction") or "").strip().lower()
+        conviction = conviction.removesuffix(" conviction").strip()
+        conviction = {"med": "medium"}.get(conviction, conviction)
+        return conviction_order.get((sentiment, conviction))
+
+    sorted_df = data.copy()
+    sorted_df["_news_sort_rank"] = sorted_df["scrip"].map(score_for_scrip)
+    sorted_df["_news_sort_unknown"] = sorted_df["_news_sort_rank"].isna()
+    sorted_df = sorted_df.sort_values(
+        ["_news_sort_unknown", "_news_sort_rank"],
+        ascending=[True, direction == "asc"],
+        kind="stable",
+    ).drop(columns=["_news_sort_unknown", "_news_sort_rank"])
+    return sorted_df.reset_index(drop=True)
 
 
 def is_enabled():
@@ -386,19 +435,19 @@ def _public_doc(doc: dict) -> dict:
     }
 
 
-def _icon_strip_page(scrips, news_map, height):
+def _icon_strip_page(scrips, news_map, height, sort_button_container=None):
     icons = []
     for scrip in scrips:
-        doc = news_map.get(scrip)
-        if not doc or (not has_news_and_sentiment(doc) and not should_yellow_highlight(doc)):
-            icons.append('<div class="nws-ico empty"></div>')
-            continue
         esc = (
             str(scrip)
             .replace("&", "&amp;")
             .replace("<", "&lt;")
             .replace('"', "&quot;")
         )
+        doc = news_map.get(scrip)
+        if not doc or (not has_news_and_sentiment(doc) and not should_yellow_highlight(doc)):
+            icons.append(f'<div class="nws-ico empty" data-scrip="{esc}"></div>')
+            continue
         recency = company_news_recency(doc)
         glyph = news_icon_glyph(doc)
         from_breakout = is_from_breakout_scan_table(doc)
@@ -449,6 +498,7 @@ def _icon_strip_page(scrips, news_map, height):
 <script>
 (function() {{
   const cfg = {payload};
+  const sortButtonContainer = {json.dumps(sort_button_container or "")};
   const P = window.parent.document;
   let pop = P.getElementById('scrip-news-pop');
   if (!pop) {{
@@ -559,6 +609,49 @@ def _icon_strip_page(scrips, news_map, height):
   let df = null;
   function applyY(y) {{
     if (track) track.style.transform = 'translateY(' + (-(y || 0)) + 'px)';
+  }}
+  function syncIconOrder(root) {{
+    if (!track || !root) return;
+    const now = Date.now();
+    if (track._lastSortSync && now - track._lastSortSync < 120) return;
+    track._lastSortSync = now;
+    const grid = root.querySelector('[role="grid"]');
+    if (!grid) return;
+    const headers = Array.from(grid.querySelectorAll('[role="columnheader"]'));
+    const scripHeader = headers.find(function(cell) {{
+      return cell.textContent.trim().toLowerCase() === 'scrip';
+    }});
+    if (!scripHeader) return;
+    const scripColumn = scripHeader.getAttribute('aria-colindex');
+    const rows = Array.from(grid.querySelectorAll('[role="row"][aria-rowindex]'));
+    const rowScrips = rows.map(function(row) {{
+      const cell = row.querySelector('[role="gridcell"][aria-colindex="' + scripColumn + '"]');
+      return [Number(row.getAttribute('aria-rowindex')) - 2, cell && cell.textContent.trim().toUpperCase()];
+    }});
+    const signature = JSON.stringify(rowScrips);
+    if (track._gridSortSignature === signature) return;
+    track._gridSortSignature = signature;
+    const icons = Array.from(track.children);
+    const iconByScrip = new Map(icons.map(function(icon) {{
+      return [(icon.getAttribute('data-scrip') || '').trim().toUpperCase(), icon];
+    }}));
+    const slots = new Array(icons.length);
+    const assigned = new Set();
+    rowScrips.forEach(function(item) {{
+      const displayIndex = item[0];
+      if (displayIndex < 0 || displayIndex >= slots.length) return;
+      const scrip = item[1];
+      const icon = scrip && iconByScrip.get(scrip);
+      if (!icon) return;
+      slots[displayIndex] = icon;
+      assigned.add(icon);
+    }});
+    if (!assigned.size) return;
+    const remaining = icons.filter(function(icon) {{ return !assigned.has(icon); }});
+    for (let i = 0, next = 0; i < slots.length; i++) {{
+      if (!slots[i]) slots[i] = remaining[next++];
+    }}
+    slots.forEach(function(icon) {{ if (icon) track.appendChild(icon); }});
   }}
   function pinLocal() {{
     document.documentElement.scrollTop = 0;
@@ -671,6 +764,10 @@ def _icon_strip_page(scrips, news_map, height):
     if (next !== df) {{
       df = next;
       scroller = findScroller(df);
+      if (df && sortButtonContainer && !df._newsSortHeaderBound) {{
+        df._newsSortHeaderBound = true;
+        df.addEventListener('click', sortFromIndexHeader, true);
+      }}
       if (scroller && !scroller._nwsListen) {{
         scroller._nwsListen = true;
         scroller.addEventListener('scroll', function() {{ applyY(scroller.scrollTop); }}, {{passive: true}});
@@ -686,8 +783,26 @@ def _icon_strip_page(scrips, news_map, height):
     const s = resolve();
     if (s) {{
       syncMetrics(df, s);
+      syncIconOrder(df);
       applyY(s.scrollTop);
     }}
+  }}
+  function sortFromIndexHeader(e) {{
+    if (!sortButtonContainer) return;
+    const root = e.currentTarget;
+    if (!root || !root.contains(e.target)) return;
+    const canvas = root.querySelector('canvas');
+    const rect = (canvas || root).getBoundingClientRect();
+    // The first column is the chart index. Its header click controls the
+    // Python sort so the dataframe and the adjacent news strip move together.
+    if (e.clientX < rect.left || e.clientX > rect.left + 48 ||
+        e.clientY < rect.top || e.clientY > rect.top + 42) return;
+    const host = P.querySelector('[class~="' + sortButtonContainer + '"]');
+    const button = host && host.querySelector('button');
+    if (!button) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    button.click();
   }}
   document.addEventListener('wheel', function(e) {{
     e.preventDefault();
@@ -715,6 +830,7 @@ def display_dataframe(
     column_order=None,
     column_config=None,
     use_container_width=True,
+    news_widget_id=None,
 ):
     import chart_preview as chart_preview
 
@@ -725,10 +841,27 @@ def display_dataframe(
         st_mod.markdown(
             """<style>
             div[data-testid="stHorizontalBlock"] { column-gap: 0.5rem; }
+            div[class*="st-key-news-sort-control-"] {
+                position: absolute !important; left: -10000px !important;
+                width: 1px !important; height: 1px !important; overflow: hidden !important;
+            }
             </style>""",
             unsafe_allow_html=True,
         )
         st_mod.session_state[style_key] = True
+
+    if news_widget_id and is_enabled():
+        state_key, button_key, container_key = _news_sort_keys(news_widget_id)
+        direction = st_mod.session_state.get(state_key)
+        with st_mod.container(key=container_key):
+            if st_mod.button(
+                " ",
+                key=button_key,
+                type="tertiary",
+                help="Sort by news conviction",
+            ):
+                st_mod.session_state[state_key] = "asc" if direction in {None, "desc"} else "desc"
+                st_mod.rerun()
 
     news_map = load_news_map()
     scrips = _scrip_list(data) if is_enabled() else []
@@ -756,7 +889,9 @@ def display_dataframe(
     # inside narrow report columns. Reserve a readable strip in every widget.
     left, right = st_mod.columns([0.14, 0.86], gap="small")
     with left:
-        page = _icon_strip_page(scrips, table_news, height)
+        _, _, container_key = _news_sort_keys(news_widget_id) if news_widget_id else (None, None, None)
+        sort_button_container = f"st-key-{container_key}" if container_key else None
+        page = _icon_strip_page(scrips, table_news, height, sort_button_container=sort_button_container)
         components.html(page, height=int(height), scrolling=False)
     with right:
         chart_preview.display_dataframe(

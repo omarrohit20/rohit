@@ -1,6 +1,7 @@
 # Create a streamlit app that shows the mongodb data
 from datetime import datetime, timedelta
 import inspect
+import re
 import time
 import pandas as pd
 import numpy as np
@@ -886,6 +887,23 @@ def news_sentiment_scrips(choice=None, f_icon_only=False):
     if allowed is None:
         return f_scrips
     return allowed & f_scrips
+
+
+def news_scrips_by_sentiment_conviction(sentiment, conviction, scan_news_only=True):
+    """Return normalized scrips matching news sentiment and conviction."""
+    sentiment_pattern = f"^{re.escape(str(sentiment).strip())}$"
+    conviction_pattern = f"^{re.escape(str(conviction).strip())}$"
+    query = {
+        "overall_sentiment": {"$regex": sentiment_pattern, "$options": "i"},
+        "conviction": {"$regex": conviction_pattern, "$options": "i"},
+    }
+    if scan_news_only:
+        query["scan_tables"] = {"$exists": True, "$ne": []}
+    return {
+        str(scrip).strip().upper()
+        for scrip in dbnse.scrip_news.distinct("scrip", query)
+        if scrip
+    }
 
 
 def filter_df_by_news_sentiment(df):

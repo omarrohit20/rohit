@@ -276,9 +276,11 @@ def main():
         try:
             bullish = rb.news_sentiment_scrips('Bullish')
             bearish = rb.news_sentiment_scrips('Bearish')
+            bearish_high_scan_news = rb.news_scrips_by_sentiment_conviction('Bearish', 'High')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bullish) | keys.isin(bearish)) &
+                 (~keys.isin(bearish_high_scan_news)) &
                 (df['forecast_day_PCT10_change'] > -10) &
                 (df['PCT_day_change'] <= 5) &
                 (~df['systemtime'].str.contains('10:', case=False, na=False)) 
@@ -294,9 +296,11 @@ def main():
         try:
             bullish = rb.news_sentiment_scrips('Bullish')
             bearish = rb.news_sentiment_scrips('Bearish')
+            bullish_high_scan_news = rb.news_scrips_by_sentiment_conviction('Bullish', 'High')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bullish) | keys.isin(bearish)) &
+                (~keys.isin(bullish_high_scan_news)) &
                 (df['forecast_day_PCT10_change'] < 10) &
                 (df['PCT_day_change'] >= -5) &
                 (~df['systemtime'].str.contains('10:', case=False, na=False)) 
@@ -315,9 +319,11 @@ def main():
         try:
             bullish = rb.news_sentiment_scrips('Bullish')
             bearish = rb.news_sentiment_scrips('Bearish')
+            bearish_high_scan_news = rb.news_scrips_by_sentiment_conviction('Bearish', 'High')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bullish) | keys.isin(bearish)) &
+                (~keys.isin(bearish_high_scan_news)) &
                 (df['forecast_day_PCT10_change'] > -10) &
                 (df['PCT_day_change'] <= 5) &
                 (~df['systemtime'].str.contains('10:', case=False, na=False)) 
@@ -333,9 +339,11 @@ def main():
         try:
             bullish = rb.news_sentiment_scrips('Bullish')
             bearish = rb.news_sentiment_scrips('Bearish')
+            bullish_high_scan_news = rb.news_scrips_by_sentiment_conviction('Bullish', 'High')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bullish) | keys.isin(bearish)) &
+                (~keys.isin(bullish_high_scan_news)) &
                 (df['forecast_day_PCT10_change'] < 10) &
                 (df['PCT_day_change'] >= -5) &
                 (~df['systemtime'].str.contains('10:', case=False, na=False)) 
