@@ -597,6 +597,11 @@ def main():
                 (df['PCT_day_change'] < 2) &
                 (df['PCT_day_change_pre1'] < 2) &
                 (df['PCT_day_change_pre2'] < 2) &
+                (~df['systemtime'].str.contains('10:15', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
@@ -658,6 +663,11 @@ def main():
                 (df['PCT_day_change'] > -2) &
                 (df['PCT_day_change_pre1'] > -2) &
                 (df['PCT_day_change_pre2'] > -2) &
+                (~df['systemtime'].str.contains('10:15', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
@@ -1059,7 +1069,10 @@ def main():
         df = rb.getintersectdf('buy-morning-volume-breakout(Check-News)', 'morning-volume-breakout-buy')
         filtered_df = df
         try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bullish)) &
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
                 (df['yearLowChange'] > 15) &
                 (df['forecast_day_PCT10_change'] > -8) &
@@ -1073,7 +1086,10 @@ def main():
         df = rb.getintersectdf('buy-morning-volume-breakout(Check-News)', 'morning-volume-breakout-buy')
         filtered_df = df
         try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bullish)) &
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
                 (df['yearLowChange'] > 15) &
                 (df['PCT_day_change'] < 3) &
@@ -1096,7 +1112,10 @@ def main():
         df = rb.getintersectdf('sell-morning-volume-breakout(Check-News)', 'morning-volume-breakout-sell')
         filtered_df = df
         try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bearish)) &
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
                 (df['forecast_day_PCT10_change'] < 8) &
                 (df['PCT_day_change_pre2'] < 0.5) &
@@ -1109,7 +1128,10 @@ def main():
         df = rb.getintersectdf('sell-morning-volume-breakout(Check-News)', 'morning-volume-breakout-sell')
         filtered_df = df
         try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bearish)) &
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
                 (df['PCT_day_change'] > -3) &
                 (df['PCT_day_change'] < 1.5) &
@@ -1134,7 +1156,10 @@ def main():
         df = rb.getintersectdf('buy-morning-volume-breakout(Check-News)', 'morning-volume-breakout-buy')
         filtered_df = df
         try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bullish)) &
                 ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT7_change'] > 2) | (df['forecast_day_PCT5_change'] > 2)) &
                 ((df['PCT_day_change_pre2'] > -1) | (df['PCT_day_change_pre1'] < 0)) &
                 (df['PCT_day_change'] > -1.5) &
@@ -1155,7 +1180,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bullish)) &
                 #((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
                 (df['PCT_day_change'] > -1.5) &
                 (df['forecast_day_PCT10_change'] > -2) &
@@ -1184,7 +1212,10 @@ def main():
         df = rb.getintersectdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)', 'buy-morning-volume-breakout(Check-News)')
         filtered_df = df
         try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bullish)) &
                 ((df['PCT_day_change_pre2'] > 1) | (df['PCT_day_change_pre1'] > 1)) &
                 (df['yearLowChange'] > 15)
                 ]
@@ -1195,7 +1226,10 @@ def main():
         df = rb.getintersectdf('sell-morning-volume-breakout(Check-News)', 'morning-volume-breakout-sell')
         filtered_df = df
         try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bearish)) &
                 ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT7_change'] < -2) | (df['forecast_day_PCT5_change'] < -2)) &
                 ((df['PCT_day_change_pre2'] < 1) | (df['PCT_day_change_pre1'] > 0)) &
                 (df['PCT_day_change'] < 1.5) &
@@ -1215,7 +1249,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bearish)) &
                 (df['PCT_day_change'] < 1.5) &
                 (df['forecast_day_PCT10_change'] < 2) &
                 (df['forecast_day_PCT10_change'] > -10) &
@@ -1242,6 +1279,16 @@ def main():
     with col6:
         df = rb.getintersectdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)', 'sell-morning-volume-breakout(Check-News)')
         filtered_df = df
+        try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (keys.isin(bearish)) &
+                ((df['PCT_day_change_pre2'] < -1) | (df['PCT_day_change_pre1'] < -1)) &
+                (df['yearHighChange'] < -15)
+                ]
+        except KeyError as e:
+            print("")
         rb.render(st, filtered_df, 'Crossed-2Day-Low + sell-morning-volume-breakout(Trending)', column_order=rb.column_order_p, color='LG')
 
     st.divider()

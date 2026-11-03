@@ -500,6 +500,19 @@ def _icon_strip_page(scrips, news_map, height, sort_button_container=None):
   const cfg = {payload};
   const sortButtonContainer = {json.dumps(sort_button_container or "")};
   const P = window.parent.document;
+  if (!P.getElementById('news-preview-layout-style')) {{
+    const style = P.createElement('style');
+    style.id = 'news-preview-layout-style';
+    style.textContent = `
+      div[data-testid="stHorizontalBlock"] {{ column-gap: 0.5rem; }}
+      div[data-testid="stElementContainer"]:has([class*="st-key-news-sort-control-"]) {{ display:none !important; }}
+      div[class*="st-key-news-sort-control-"] {{
+        position:absolute !important; left:-10000px !important; width:0 !important;
+        height:0 !important; overflow:hidden !important; margin:0 !important; padding:0 !important;
+      }}
+    `;
+    P.head.appendChild(style);
+  }}
   let pop = P.getElementById('scrip-news-pop');
   if (!pop) {{
     pop = P.createElement('div');
@@ -833,22 +846,6 @@ def display_dataframe(
     news_widget_id=None,
 ):
     import chart_preview as chart_preview
-
-    # Report tables are frequently placed in 3–4 side-by-side columns. Keep
-    # enough gutter between those widgets for the table and its news strip.
-    style_key = "news_preview_report_column_spacing"
-    if not st_mod.session_state.get(style_key, False):
-        st_mod.markdown(
-            """<style>
-            div[data-testid="stHorizontalBlock"] { column-gap: 0.5rem; }
-            div[class*="st-key-news-sort-control-"] {
-                position: absolute !important; left: -10000px !important;
-                width: 1px !important; height: 1px !important; overflow: hidden !important;
-            }
-            </style>""",
-            unsafe_allow_html=True,
-        )
-        st_mod.session_state[style_key] = True
 
     if news_widget_id and is_enabled():
         state_key, button_key, container_key = _news_sort_keys(news_widget_id)

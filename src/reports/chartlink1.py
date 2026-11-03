@@ -149,7 +149,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'buy-breakout:ABSGT2', color='LG', height=200)
+        rb.render(st, filtered_df, 'buy-breakout:ABSGT2', color='LG', height=150)
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
@@ -179,7 +179,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-buy:ABSGT2', color='LG', height=200)
+        rb.render(st, filtered_df, 'morning-volume-breakout-buy:ABSGT2', color='LG', height=150)
     with col3:
         df = rb.getdf('sell-breakout')
         expected_columns = list(set(df.columns))
@@ -216,7 +216,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'sell-breakout:ABSGT2', color='LG', height=200)
+        rb.render(st, filtered_df, 'sell-breakout:ABSGT2', color='LG', height=150)
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
@@ -246,7 +246,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-sell:ABSGT2', color='LG', height=200)
+        rb.render(st, filtered_df, 'morning-volume-breakout-sell:ABSGT2', color='LG', height=150)
   
     
     col1, col2, col3, col4 = st.columns(4)
@@ -268,7 +268,7 @@ def main():
                 )&
                 (
                     (
-                        #((df['forecast_day_PCT10_change'] < 0) & (df['forecast_day_PCT7_change'] < 0) & (df['forecast_day_PCT5_change'] < 0)) &
+                        ((df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT7_change'] < 0) & (df['forecast_day_PCT5_change'] > 0)) &
                         keys.isin(bullish) &
                         (
                             (df['PCT_day_change_pre1'] < 0) |
@@ -296,7 +296,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'buy-breakout:ABSGT2', color='LG', height=200)
+        rb.render(st, filtered_df, 'buy-breakout:ABSGT2', color='LG', height=150)
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
@@ -315,7 +315,7 @@ def main():
                 )&
                 (
                     (
-                        #((df['forecast_day_PCT10_change'] < 0) & (df['forecast_day_PCT7_change'] < 0) & (df['forecast_day_PCT5_change'] < 0)) &
+                        ((df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT7_change'] < 0) & (df['forecast_day_PCT5_change'] > 0)) &
                         keys.isin(bullish) &
                         (
                             (df['PCT_day_change_pre1'] < 0) |
@@ -343,7 +343,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-buy:ABSGT2', color='LG', height=200)
+        rb.render(st, filtered_df, 'morning-volume-breakout-buy:ABSGT2', color='LG', height=150)
     with col3:
         df = rb.getdf('sell-breakout')
         expected_columns = list(set(df.columns))
@@ -362,6 +362,7 @@ def main():
                 )&
                 (
                     (
+                        ((df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT7_change'] > 0) & (df['forecast_day_PCT5_change'] < 0)) &
                         keys.isin(bearish) &
                         (
                             (df['PCT_day_change_pre1'] > 0) |
@@ -388,7 +389,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'sell-breakout:ABSGT2', color='LG', height=200)
+        rb.render(st, filtered_df, 'sell-breakout:ABSGT2', color='LG', height=150)
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
@@ -407,6 +408,7 @@ def main():
                 )&
                 (
                     (
+                        ((df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT7_change'] > 0) & (df['forecast_day_PCT5_change'] < 0)) &
                         keys.isin(bearish) &
                         (
                             (df['PCT_day_change_pre1'] > 0) |
@@ -433,7 +435,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'morning-volume-breakout-sell:ABSGT2', color='LG', height=200)
+        rb.render(st, filtered_df, 'morning-volume-breakout-sell:ABSGT2', color='LG', height=150)
   
 
     col1, col2, col3, col4 = st.columns(4)
@@ -610,7 +612,10 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=200)
+        if len(filtered_9) < 5:
+            rb.render(st, filtered_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG')
+        else:
+            rb.render(st, empty_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG')
     with col2:
         df = rb.getdf('morning-volume-breakout-buy')
         expected_columns = list(set(df.columns))
@@ -643,7 +648,10 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG', height=200)
+        if len(filtered_9) < 5:
+            rb.render(st, filtered_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG')
+        else:
+            rb.render(st, empty_df, 'MorningDown:ABSLT1-CheckRecommendations', color='LG')
     with col3:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
@@ -678,7 +686,10 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=200)
+        if len(filtered_9) < 5:
+            rb.render(st, filtered_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG')
+        else:
+            rb.render(st, empty_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG')
     with col4:
         df = rb.getdf('morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
@@ -711,7 +722,10 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG', height=200)
+        if len(filtered_9) < 5:
+            rb.render(st, filtered_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG')
+        else:
+            rb.render(st, empty_df, 'MorningUp:ABSLT1-CheckRecommendations', color='LG')
   
     
     col1, col2, col3, col4 = st.columns(4)
@@ -2022,7 +2036,7 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
-            if len(dfch) <= 10:
+            if len(dfch) <= 5:
                 allowed = rb.news_sentiment_scrips('Bullish')
                 keys = df['scrip'].astype(str).str.strip().str.upper()
                 filtered_df = df[
@@ -2032,7 +2046,7 @@ def main():
                     ]
         except KeyError as e:
             pass
-        if len(dfch) <= 10:
+        if len(dfch) <= 5:
             rb.render(st, filtered_df, 'Supertrend Morning Buy', color='LG', renderf10buy00=True)
         else:
             rb.render(st, empty_df, 'Supertrend Morning Buy', color='LG', renderf10buy00=True)
@@ -2049,7 +2063,7 @@ def main():
                 ]    
         except KeyError as e:
             pass
-        if len(dfch) <= 10:
+        if len(dfch) <= 5:
             rb.render(st, filtered_df, 'Crossed 2 Day Highs', color='LG', renderf10buy00=True)
         else:
             rb.render(st, empty_df, 'Crossed 2 Day Highs', color='LG', renderf10buy00=True)
@@ -2065,7 +2079,7 @@ def main():
                 ]    
         except KeyError as e:
             pass
-        if len(df) <= 10:
+        if len(df) <= 5:
             rb.render(st, filtered_df, 'Crossed Day Highs', color='LG', renderf10buy00=True)
         else:
             rb.render(st, empty_df, 'Crossed Day Highs', color='LG', renderf10buy00=True)
@@ -2076,7 +2090,7 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
-            if len(dfch) <= 10:
+            if len(dfch) <= 5:
                 allowed = rb.news_sentiment_scrips('Bearish')
                 keys = df['scrip'].astype(str).str.strip().str.upper()
                 filtered_df = df[
@@ -2086,7 +2100,7 @@ def main():
                     ]   
         except KeyError as e:
             pass
-        if len(dfch) <= 10:
+        if len(dfch) <= 5:
             rb.render(st, filtered_df, 'Supertrend Morning Sell', color='LG', renderf10sell00=True)
         else:
             rb.render(st, empty_df, 'Supertrend Morning Sell', color='LG', renderf10sell00=True)
@@ -2103,7 +2117,7 @@ def main():
                 ]    
         except KeyError as e:
             pass
-        if len(dfch) <= 10:
+        if len(dfch) <= 5:
             rb.render(st, filtered_df, 'Crossed 2 Day Lows', color='LG', renderf10sell00=True)
         else:
             rb.render(st, empty_df, 'Crossed 2 Day Lows', color='LG', renderf10sell00=True)
@@ -2119,7 +2133,7 @@ def main():
                 ]    
         except KeyError as e:
             pass
-        if len(df) <= 10:
+        if len(df) <= 5:
             rb.render(st, filtered_df, 'Crossed Day Lows', color='LG', renderf10sell00=True)
         else:
             rb.render(st, empty_df, 'Crossed Day Lows', color='LG', renderf10sell00=True)

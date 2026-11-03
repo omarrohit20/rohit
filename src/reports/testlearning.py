@@ -459,5 +459,26 @@ def main():
         rb.render(st, df, 'breakout-morning-sell', color='LG', height=500)
 
 
+    st.divider()
+    st.divider()
+
+    col1, col2 = st.columns(2)
+    with col1:
+        df = rb._scrip_news_by_sentiment('Bullish', rb.getdfResult('highBuy'))
+        rb.render(
+            st, df, 'highBuy · Bullish Scrip News · Medium/High conviction', color='LG',
+            column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True,
+        )
+    with col2:
+        df = rb._scrip_news_by_sentiment('Bearish', rb.getdfResult('lowSell'))
+        rb.render(
+            st, df, 'lowSell · Bearish Scrip News · Medium/High conviction', color='LG',
+            column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True,
+        )
+
+
+
+
+
 if __name__ == '__main__':
     main()

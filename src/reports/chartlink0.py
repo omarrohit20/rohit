@@ -302,33 +302,50 @@ def main():
         rb.render(st, df, 'morning-volume-breakout-sell ############', color='R', height=300)
 
 
-    col1, col2 = st.columns(2)
-    with col1:
-        df = rb._scrip_news_by_sentiment('Bullish', rb.getdfResult('highBuy'))
-        rb.render(
-            st, df, 'highBuy · Bullish Scrip News · Medium/High conviction', color='LG',
-            column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True,
-        )
-    with col2:
-        df = rb._scrip_news_by_sentiment('Bearish', rb.getdfResult('lowSell'))
-        rb.render(
-            st, df, 'lowSell · Bearish Scrip News · Medium/High conviction', color='LG',
-            column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True,
-        )
-
-
-
+    
     
 
-    col1, col3 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb._filter_scan_news(rb.getdf('buy-breakout'), 'Bullish')
         filtered_df = df
-        rb.render(st, filtered_df, 'buy-breakout : scan-news Bullish', color='LG')
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] <= -0.5)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'buy-breakout : scan-news Bullish', color='LG', height=200)
+    with col2:
+        df = rb._filter_scan_news(rb.getdf('buy-breakout'), 'Bullish')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] > -0.5)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'buy-breakout : scan-news Bullish', color='LG', height=200)
     with col3:
         df = rb._filter_scan_news(rb.getdf('sell-breakout'), 'Bearish')
         filtered_df = df
-        rb.render(st, filtered_df, 'sell-breakout : scan-news Bearish', color='LG')
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] >= 0.5)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'sell-breakout : scan-news Bearish', color='LG', height=200)
+    with col4:
+        df = rb._filter_scan_news(rb.getdf('sell-breakout'), 'Bearish')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] < 0.5)
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'sell-breakout : scan-news Bearish', color='LG', height=200)
 
 
     col1, col2, col3, col4 = st.columns(4)
