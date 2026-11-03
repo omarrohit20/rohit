@@ -530,6 +530,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['PCT_day_change'] > 1.7) | (df['PCT_day_change_pre1'] < 2)) &
                 ((df['PCT_day_change'] > 1) | (df['PCT_day_change_pre1'] > 1) | (df['PCT_day_change_pre2'] > 1)) &
                 (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
@@ -571,6 +572,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['PCT_day_change'] < -1.7) | (df['PCT_day_change_pre1'] > -2)) &
                 ((df['PCT_day_change'] < -1) | (df['PCT_day_change_pre1'] < -1) | (df['PCT_day_change_pre2'] < -1)) &
                 (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &

@@ -180,6 +180,7 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             df = df[
+                (df['PCT_day_change'] < 1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
@@ -195,6 +196,7 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             df = df[
+                (df['PCT_day_change'] < 1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
@@ -210,6 +212,7 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             df = df[
+                (df['PCT_day_change'] < 1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
@@ -225,6 +228,7 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             df = df[
+                (df['PCT_day_change'] > -1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
@@ -240,6 +244,7 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             df = df[
+                (df['PCT_day_change'] > -1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
@@ -255,6 +260,7 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             df = df[
+                (df['PCT_day_change'] > -1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &

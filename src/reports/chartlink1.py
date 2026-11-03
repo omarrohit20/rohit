@@ -1096,7 +1096,7 @@ def main():
     st.divider()
     st.subheader("Others")
 
-    col1, col2, col3, col30, col4, col5, col6, col60 = st.columns(8)
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
             df = rb.getintersectdf('morning-volume-breakout-buy', 'crossed-day-high')
             filtered_df = df
@@ -1126,6 +1126,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['PCT_day_change'] < 1) | (df['PCT_day_change_pre1'] < 1) | (df['PCT_day_change_pre2'] < 1)) &
                 ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
                 (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
                 (df['yearLowChange'] > 5) &
@@ -1174,22 +1175,6 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'week2HighGT0-1 : Avoid-GT2-And-Top5', height=200, color='LG')
-    with col30:
-        df = rb.getdf('morning-volume-breakout-buy')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['forecast_day_PCT10_change'] >-9) &
-                (df['PCT_day_change'] < 2.5) &
-                (df['PCT_day_change'] > -3) &
-                (df['PCT_change'] > 0) &
-                (df['month3HighChange'] > -20) &
-                (df['year5HighChange'] < -25) &
-                (df['yearHighChange'] < -20)
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'year5HighChangeLT-30 + week2High', height=200)
     with col4:
             df = rb.getintersectdf('morning-volume-breakout-sell', 'crossed-day-low')
             filtered_df = df
@@ -1222,6 +1207,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((df['PCT_day_change'] > -1) | (df['PCT_day_change_pre1'] > -1) | (df['PCT_day_change_pre2'] > -1)) &
                 ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
                 (~df['systemtime'].str.contains('09:20', case=False, na=False)) &
                 (df['yearHighChange'] < -5) &
@@ -1270,12 +1256,8 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'week2LowLT0-1 : Avoid-LT(-2)-And-Top5', height=200, color='LG')
-    with col60:
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        rb.render(st, empty_df, 'year5LowChangeGT30 + week2Low', height=200)
-
     
+
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
         df = rb.getdf('morning-volume-breakout-buy')
@@ -1867,7 +1849,7 @@ def main():
     st.subheader("Buy - Last day not down LT-0.5, Sell - Last day not up GT0.5")
     st.divider()
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col3 = st.columns(2)
     with col1:
         df = rb.getintersectdf('morning-volume-breakout-buy', 'movingavg_crossed_up')
         notallowed = rb.news_sentiment_scrips('Bearish')
@@ -1895,58 +1877,6 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'morning-volume-breakout-buy : movingavg_crossed_up', height=150, color='LG')
-    with col2:
-        df = rb.getintersectdf('highBuy', 'movingavg_crossed_up')
-        try:
-            futures = rb.get_futures_scrip_set()
-            mask = None
-            if 'scrip' in df.columns and futures:
-                mask = df['scrip'].isin(futures)
-            if 'index' in df.columns:
-                tagged = df['index'].astype(str).str.contains('futures', case=False, na=False)
-                mask = tagged if mask is None else (mask | tagged)
-            if mask is not None:
-                df = df[mask]
-        except Exception:
-            pass
-        filtered_df = df
-        try:
-            allowed = rb.news_sentiment_scrips('Bullish')
-            notallowed = rb.news_sentiment_scrips('Bearish')
-            keys = df['scrip'].astype(str).str.strip().str.upper()
-            filtered_df = df[
-                (~keys.isin(notallowed)) &
-                (df['forecast_day_PCT10_change'] < 10) &
-                (df['forecast_day_PCT5_change'] > 3) &
-                ((df['PCT_day_change']) < 1.5) &
-                (
-                    (
-                        keys.isin(allowed)
-                    ) 
-                    |
-                    (
-                        (df['forecast_day_PCT10_change'] > 0) &
-                        ((df['PCT_day_change_pre1']) < -1.5) &
-                        ((df['PCT_day_change']) > -1.5) &  
-                        (df['lowTail'] > 1.5) 
-                    )
-                    |
-                    (
-                        (df['forecast_day_PCT10_change'] > 0) &
-                        ((df['PCT_day_change']) > 0.9) &
-                        (df['lowTail'] > 1.9) 
-                    )
-                    |
-                    (
-                        (df['forecast_day_PCT10_change'] > 5) &
-                        (df['lowTail'] >= 1.5) &
-                        (df['highTail'] < df['lowTail'])
-                    )
-                )
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'highBuy : movingavg_crossed_up', height=150, color='LG', renderml=True)
     with col3:
         df = rb.getintersectdf('morning-volume-breakout-sell', 'movingavg_crossed_down')
         notallowed = rb.news_sentiment_scrips('Bullish')
@@ -1974,58 +1904,6 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'morning-volume-breakout-sell : movingavg_crossed_down', height=150, color='LG')
-    with col4:
-        df = rb.getintersectdf('lowSell', 'movingavg_crossed_down')
-        try:
-            futures = rb.get_futures_scrip_set()
-            mask = None
-            if 'scrip' in df.columns and futures:
-                mask = df['scrip'].isin(futures)
-            if 'index' in df.columns:
-                tagged = df['index'].astype(str).str.contains('futures', case=False, na=False)
-                mask = tagged if mask is None else (mask | tagged)
-            if mask is not None:
-                df = df[mask]
-        except Exception:
-            pass
-        notallowed = rb.news_sentiment_scrips('Bullish')
-        filtered_df = df
-        try:
-            allowed = rb.news_sentiment_scrips('Bearish')
-            keys = df['scrip'].astype(str).str.strip().str.upper()
-            filtered_df = df[
-                (~keys.isin(notallowed)) &
-                (df['forecast_day_PCT10_change'] > -10) &
-                (df['forecast_day_PCT5_change'] < -3) &
-                ((df['PCT_day_change']) > -1.5) &
-                (
-                    (
-                        keys.isin(allowed)
-                    ) 
-                    |
-                    (
-                        (df['forecast_day_PCT10_change'] < 0) &
-                        ((df['PCT_day_change_pre1']) > 1.5) &
-                        ((df['PCT_day_change']) < 1.5) &  
-                        (df['highTail'] > 1.5) 
-                    )
-                    |
-                    (
-                        (df['forecast_day_PCT10_change'] < 0) &
-                        ((df['PCT_day_change']) < -0.9) &
-                        (df['highTail'] > 1.9) 
-                    )
-                    |
-                    (
-                        (df['forecast_day_PCT10_change'] < -5) &
-                        (df['highTail'] >= 1.5) &
-                        (df['lowTail'] < df['highTail'])
-                    )
-                )
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'lowSell : movingavg_crossed_down', height=150, color='LG')
     
     
     col0, col1, col2, col3, col4, col5 = st.columns(6)
@@ -2154,15 +2032,26 @@ def main():
                 (
                     (~keys.isin(notallowed)) &
                     (df['forecast_day_PCT10_change'] < 0) &
+                    (df['PCT_day_change'] > -2) &
                     (df['PCT_day_change'] < 0.7) &
                     (df['PCT_day_change_pre1'] < 1) &
                     (df['PCT_day_change_pre2'] < 1) 
 
                 ) |
-                #(df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) |
-                (df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) |
-                (df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) |
-                (df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                (
+                    (df['PCT_day_change'] > -2) &
+                    (
+                        #(df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) |
+                        (df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) |
+                        (df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) |
+                        (df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                    )
+                ) |
+                (
+                    (df['PCT_day_change'] < -2) &
+                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                )
                 ]
         except KeyError as e:
             print("")
@@ -2181,15 +2070,26 @@ def main():
                 (
                     (~keys.isin(notallowed)) &
                     (df['forecast_day_PCT10_change'] < 0) &
+                    (df['PCT_day_change'] > -2) &
                     (df['PCT_day_change'] < 0.7) &
                     (df['PCT_day_change_pre1'] < 1) &
                     (df['PCT_day_change_pre2'] < 1) 
 
                 ) |
-                #(df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) |
-                (df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) |
-                (df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) |
-                (df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                (
+                    (df['PCT_day_change'] > -2) &
+                    (
+                        #(df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) |
+                        (df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) |
+                        (df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) |
+                        (df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                    )
+                ) |
+                (
+                    (df['PCT_day_change'] < -2) &
+                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                )
                 ]
         except KeyError as e:
             print("")
@@ -2208,16 +2108,26 @@ def main():
                 (
                     (~keys.isin(notallowed)) &
                     (df['forecast_day_PCT10_change'] > 0) &
+                    (df['PCT_day_change'] < 2) &
                     (df['PCT_day_change'] > -0.7) &
                     (df['PCT_day_change_pre1'] > -1) &
                     (df['PCT_day_change_pre2'] > -1) 
 
                 ) |
-                #(df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) |
-                (df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) |
-                (df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) |
-                (df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
-                
+                (
+                    (df['PCT_day_change'] < 2) &
+                    (
+                        #(df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) |
+                        (df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) |
+                        (df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) |
+                        (df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                    )
+                ) |
+                (
+                    (df['PCT_day_change'] > 2) &
+                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                )
                 ]
         except KeyError as e:
             print("")
@@ -2235,16 +2145,27 @@ def main():
                 ) |
                 (
                     (~keys.isin(notallowed)) &
+                    (df['PCT_day_change'] < 2) &
                     (df['forecast_day_PCT10_change'] > 0) &
                     (df['PCT_day_change'] > -0.7) &
                     (df['PCT_day_change_pre1'] > -1) &
                     (df['PCT_day_change_pre2'] > -1) 
 
                 ) |
-                #(df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) |
-                (df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) |
-                (df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) |
-                (df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                (
+                    (df['PCT_day_change'] < 2) &
+                    (
+                        #(df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) |
+                        (df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) |
+                        (df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) |
+                        (df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                    )
+                ) |
+                (
+                    (df['PCT_day_change'] > 2) &
+                    (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
+                )
                 ]
         except KeyError as e:
             print("")
