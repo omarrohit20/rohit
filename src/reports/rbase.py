@@ -765,6 +765,19 @@ def get_scrips_by_index(index_name):
 
 SCRIP_INDEX_CHOICES = ("All", "futures", "nifty500", "cash")
 _SCRIP_INDEX_KEY = "scrip_index_filter"
+_EXCLUDED_INDUSTRIES_KEY = "excluded_industries_filter"
+_DCH_BAND_KEY = "pct_day_change_keep_bands"
+DCH_BAND_CHOICES = (
+    "Between -1 and 1",
+    "|Dch| > 1",
+    "|Dch| > 2",
+    "|Dch| > 3",
+)
+_DCH_ABS_BAND_THRESHOLDS = (
+    ("|Dch| > 1", 1),
+    ("|Dch| > 2", 2),
+    ("|Dch| > 3", 3),
+)
 
 
 def current_scrip_index():
@@ -773,6 +786,160 @@ def current_scrip_index():
     except Exception:
         choice = "All"
     return choice if choice in SCRIP_INDEX_CHOICES else "All"
+
+
+@st.cache_data(ttl=300)
+def get_industry_choices():
+    """Distinct industry labels from Nsedata.scrip (sidebar exclude filter)."""
+    try:
+        raw = dbnse.scrip.distinct("industry")
+    except Exception:
+        return []
+    out = sorted({str(v).strip() for v in raw if v is not None and str(v).strip()})
+    return out
+
+
+def _industry_key(value):
+    if value is None:
+        return ""
+    try:
+        if isinstance(value, float) and pd.isna(value):
+            return ""
+    except Exception:
+        pass
+    return str(value).strip().casefold()
+
+
+def current_excluded_industries():
+    try:
+        picked = st.session_state.get(_EXCLUDED_INDUSTRIES_KEY) or []
+    except Exception:
+        picked = []
+    if not isinstance(picked, (list, tuple)):
+        picked = [picked]
+    return frozenset(_industry_key(v) for v in picked if _industry_key(v))
+
+
+# Chartlink rows often use short sector labels; Nsedata.scrip uses full names.
+_CHARTLINK_INDUSTRY_ALIASES = {
+    "i.t": "information technology",
+    "auto": "automobile and auto components",
+    "bank": "financial services",
+    "consumer discretionary": "consumer durables",
+    "fmcg": "fast moving consumer goods",
+    "financials": "financial services",
+    "power & utilities": "power",
+    "transportation": "services",
+}
+
+
+def _expanded_excluded_industry_keys(excluded):
+    keys = set(excluded)
+    for alias, canonical in _CHARTLINK_INDUSTRY_ALIASES.items():
+        if canonical in excluded:
+            keys.add(alias)
+    return frozenset(keys)
+
+
+@st.cache_data(ttl=300)
+def _scrips_for_excluded_industry_keys(excluded_keys):
+    """Nsedata scrips belonging to any excluded master industry (casefold keys)."""
+    keys = frozenset(excluded_keys or ())
+    if not keys:
+        return frozenset()
+    try:
+        out = set()
+        for d in dbnse.scrip.find({}, {"_id": 0, "scrip": 1, "industry": 1}):
+            if _industry_key(d.get("industry")) not in keys:
+                continue
+            scrip = str(d.get("scrip") or "").strip().upper()
+            if scrip:
+                out.add(scrip)
+        return frozenset(out)
+    except Exception:
+        return frozenset()
+
+
+def _underlying_table(df):
+    if df is None:
+        return None
+    if hasattr(df, "data") and hasattr(df, "to_html"):
+        return df.data
+    return df
+
+
+def filter_df_by_excluded_industries(df):
+    """Drop rows for excluded industries (master scrip map + chartlink industry labels)."""
+    excluded = current_excluded_industries()
+    if not excluded or df is None:
+        return df
+    work = _underlying_table(df)
+    if work is None or getattr(work, "empty", True):
+        return df
+    expanded = _expanded_excluded_industry_keys(excluded)
+    excluded_scrips = _scrips_for_excluded_industry_keys(tuple(sorted(excluded)))
+    keep = pd.Series(True, index=work.index)
+    if "scrip" in work.columns and excluded_scrips:
+        scrip_keys = work["scrip"].astype(str).str.strip().str.upper()
+        keep &= ~scrip_keys.isin(excluded_scrips)
+    if "industry" in work.columns:
+        industry_keys = work["industry"].map(_industry_key)
+        keep &= ~industry_keys.isin(expanded)
+    filtered = work.loc[keep].reset_index(drop=True)
+    if work is not df and hasattr(df, "copy"):
+        try:
+            out = df.copy()
+            out.data = filtered
+            out.columns = filtered.columns
+            return out
+        except Exception:
+            pass
+    return filtered
+
+
+def current_pct_day_change_bands():
+    try:
+        picked = st.session_state.get(_DCH_BAND_KEY) or []
+    except Exception:
+        picked = []
+    if not isinstance(picked, (list, tuple)):
+        picked = [picked]
+    return frozenset(b for b in picked if b in DCH_BAND_CHOICES)
+
+
+def filter_df_by_pct_day_change(df):
+    """Keep rows in any selected PCT_day_change band (OR across bands)."""
+    bands = current_pct_day_change_bands()
+    if not bands or df is None:
+        return df
+    work = _underlying_table(df)
+    if work is None or getattr(work, "empty", True):
+        return df
+    if "PCT_day_change" not in getattr(work, "columns", []):
+        return df
+    pct = pd.to_numeric(work["PCT_day_change"], errors="coerce")
+    keep = pd.Series(False, index=work.index)
+    if "Between -1 and 1" in bands:
+        keep |= pct.between(-1, 1, inclusive="both")
+    for label, threshold in _DCH_ABS_BAND_THRESHOLDS:
+        if label in bands:
+            keep |= pct.abs() > threshold
+    filtered = work.loc[keep.fillna(False)].reset_index(drop=True)
+    if work is not df and hasattr(df, "copy"):
+        try:
+            out = df.copy()
+            out.data = filtered
+            out.columns = filtered.columns
+            return out
+        except Exception:
+            pass
+    return filtered
+
+
+def _apply_global_table_filters(df):
+    df = filter_df_by_news_sentiment(df)
+    df = filter_df_by_excluded_industries(df)
+    return filter_df_by_pct_day_change(df)
 
 
 _BULL_BEAR_SENTIMENTS = frozenset({"bullish", "bearish"})
@@ -928,13 +1095,13 @@ def filter_df_by_scrip_index(df):
     choice = current_scrip_index()
     if choice != "All" and df is not None and not getattr(df, "empty", True):
         if "scrip" not in getattr(df, "columns", []):
-            return filter_df_by_news_sentiment(df)
+            return _apply_global_table_filters(df)
         allowed = get_scrips_by_index(choice)
         if not allowed:
-            return filter_df_by_news_sentiment(df.iloc[0:0])
+            return _apply_global_table_filters(df.iloc[0:0])
         keys = df["scrip"].astype(str).str.strip().str.upper()
         df = df[keys.isin(allowed)]
-    return filter_df_by_news_sentiment(df)
+    return _apply_global_table_filters(df)
 
 
 def render_scrip_index_sidebar():
@@ -949,6 +1116,23 @@ def render_scrip_index_sidebar():
         choice = current_scrip_index()
         if choice != "All":
             st.sidebar.caption(f"{len(get_scrips_by_index(choice))} scrips in {choice}")
+        industries = get_industry_choices()
+        st.sidebar.multiselect(
+            "Exclude industries",
+            options=industries,
+            key=_EXCLUDED_INDUSTRIES_KEY,
+            help="Hide rows by Nsedata industry and by scrip (matches Chartlink labels like I.T → Information Technology).",
+        )
+        excluded = current_excluded_industries()
+        if excluded:
+            n = len(excluded)
+            st.sidebar.caption(f"Excluding {n} industr{'y' if n == 1 else 'ies'}")
+        st.sidebar.multiselect(
+            "Dch band (PCT_day_change)",
+            options=list(DCH_BAND_CHOICES),
+            key=_DCH_BAND_KEY,
+            help="Keep rows in any selected band (-1 to 1, |Dch| > 1/2/3). Empty = show all.",
+        )
     except Exception as e:
         if "duplicate" not in type(e).__name__.lower() and "duplicate" not in str(e).lower():
             raise

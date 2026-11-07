@@ -331,9 +331,10 @@ def main():
     with col0:
         df = rb.getdf('supertrend-morning-buy')
         filtered_df = df
-        notallowed = rb.news_sentiment_scrips('Bearish')
-        keys = df['scrip'].astype(str).str.strip().str.upper()
+        
         try:
+            notallowed = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (~keys.isin(notallowed)) &
                 (abs(df['week2LowChange']) > 1) &
@@ -756,6 +757,9 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 ((keys.isin(bullish)) | (keys.isin(bearish)) | (df['PCT_day_change'] < 1) ) &
+                (df['PCT_day_change'] < 3) &
+                (df['PCT_change'] < 3) &
+                ((abs(df['PCT_day_change_pre1']) > 1) | (abs(df['PCT_day_change']) > 1) | (abs(df['PCT_change']) > 1)) &
                 (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
@@ -776,6 +780,7 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 ((df['PCT_day_change'] < 1) ) &
+                ((df['PCT_day_change_pre1'] < 0.5) | (df['PCT_day_change_pre2'] < 0.5) | ((df['PCT_day_change_pre1'] < 1) & (df['PCT_day_change_pre2'] < 1)) ) &
                 (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
@@ -813,6 +818,9 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 ((keys.isin(bullish)) | (keys.isin(bearish)) | (df['PCT_day_change'] > -1) ) &
+                (df['PCT_day_change'] < 3) &
+                (df['PCT_change'] < 3) &
+                ((abs(df['PCT_day_change_pre1']) > 1) | (abs(df['PCT_day_change']) > 1) | (abs(df['PCT_change']) > 1)) &
                 (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
@@ -834,6 +842,7 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 ((df['PCT_day_change'] > -1) ) &
+                ((df['PCT_day_change_pre1'] > -0.5) | (df['PCT_day_change_pre2'] > -0.5) | ((df['PCT_day_change_pre1'] > -1) & (df['PCT_day_change_pre2'] > -1))) &
                 (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
@@ -871,6 +880,9 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 ((keys.isin(bullish)) | (keys.isin(bearish)) | (df['PCT_day_change'] < 1) ) &
+                (df['PCT_day_change'] < 3) &
+                (df['PCT_change'] < 3) &
+                ((abs(df['PCT_day_change_pre1']) > 1) | (abs(df['PCT_day_change']) > 1) | (abs(df['PCT_change']) > 1)) &
                 ( (abs(df['forecast_day_PCT10_change']) > 2) | (df['monthLowChange'] < 15) | (df['monthHighChange'] < -4) | df['systemtime'].str.contains('10:', case=False, regex=True, na=False))   
                 ]
         except KeyError as e:
@@ -884,6 +896,8 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 ((df['PCT_day_change'] < 1) ) &
+                ((df['PCT_day_change_pre1'] < 0.5) | (df['PCT_day_change_pre2'] < 0.5) | ((df['PCT_day_change_pre1'] < 1) & (df['PCT_day_change_pre2'] < 1)) ) &
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False)) &
@@ -913,6 +927,9 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 ((keys.isin(bullish)) | (keys.isin(bearish)) | (df['PCT_day_change'] > -1) ) &
+                (df['PCT_day_change'] < 3) &
+                (df['PCT_change'] < 3) &
+                ((abs(df['PCT_day_change_pre1']) > 1) | (abs(df['PCT_day_change']) > 1) | (abs(df['PCT_change']) > 1)) &
                 ( (abs(df['forecast_day_PCT10_change']) > 2) | (df['monthLowChange'] > 4) | (df['monthHighChange'] > -15) | df['systemtime'].str.contains('10:', case=False, regex=True, na=False))   
                 ]
         except KeyError as e:
@@ -927,6 +944,8 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 ((df['PCT_day_change'] > -1) ) &
+                ((df['PCT_day_change_pre1'] > -0.5) | (df['PCT_day_change_pre2'] > -0.5) | ((df['PCT_day_change_pre1'] > -1) & (df['PCT_day_change_pre2'] > -1))) &
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False)) &
@@ -948,7 +967,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bullish)) &
                 (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, na=False)) &
@@ -974,7 +996,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bullish)) &
                 (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, na=False)) &
@@ -999,7 +1024,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bearish)) &
                 (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, na=False)) &
@@ -1025,7 +1053,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bearish)) &
                 (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, na=False)) &
@@ -1172,6 +1203,14 @@ def main():
     with col3:
         df = rb.getdf('buy-morning-volume-breakout(Check-News)')
         filtered_df = df
+        try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (keys.isin(bullish))
+                ]
+        except KeyError as e:
+            print("")
         rb.render(st, filtered_df, 'buy-morning-volume-breakout(Trending)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True)
     with col4:
         df = rb.getintersectdf('sell-morning-volume-breakout(Check-News)', 'morning-volume-breakout-sell')
@@ -1213,6 +1252,14 @@ def main():
     with col6:
         df = rb.getdf('sell-morning-volume-breakout(Check-News)')
         filtered_df = df
+        try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (keys.isin(bearish))
+            ]
+        except KeyError as e:
+            print("")
         rb.render(st, filtered_df, 'sell-morning-volume-breakout(Trending)', column_conf=rb.column_config_default, column_order=rb.column_order_default, renderml=True)
 
 
@@ -1367,6 +1414,8 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df_2 = df[
                     (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
                 ]
@@ -1374,6 +1423,7 @@ def main():
             filtered_df = df[
                 (
                     (
+                        (keys.isin(bullish)) &
                         (df['filter3'].str.startswith('BreakHighYear', na=False)) |
                         (df['filter3'].str.startswith('BreakHighMonth6', na=False)) |
                         (df['filter3'].str.startswith('BreakHighMonth3', na=False)) |
@@ -1407,6 +1457,8 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df_2 = df[
                     (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
                 ]
@@ -1414,6 +1466,7 @@ def main():
             filtered_df = df[
                 (
                     (
+                        (keys.isin(bullish)) &
                         (~df['filter3'].str.startswith('BreakLowYear', na=False)) &
                         (~df['filter3'].str.startswith('BreakLowMonth', na=False))   
                     ) &
@@ -1445,12 +1498,15 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df_2 = df[
                     (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
                 ]
 
             filtered_df = df[
                 (
+                    (keys.isin(bearish)) &
                     (
                         (df['filter3'].str.startswith('BreakLowYear', na=False)) |
                         (df['filter3'].str.startswith('BreakLowMonth6', na=False)) |
@@ -1485,12 +1541,15 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df_2 = df[
                     (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
                 ]
 
             filtered_df = df[
                 (
+                    (keys.isin(bearish)) &
                     (
                         (~df['filter3'].str.startswith('BreakHighYear', na=False)) &
                         (~df['filter3'].str.startswith('BreakHighMonth', na=False))  
@@ -1526,8 +1585,11 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (
+                    (keys.isin(bullish)) &
                     (df['filter3'].str.startswith('ReversalLow', na=False)) &
                     (df['lowTail'] > 1.5) &
                     (df['highTail'] < 1.3) &
@@ -1536,6 +1598,7 @@ def main():
                 )
                 |
                 (
+                    (keys.isin(bullish)) &
                     (df['lowTail'] > 1.3) &
                     (df['highTail'] < 1) &
                     ((df['PCT_day_change_pre1'] > 2) | (df['PCT_day_change_pre2'] > 2)) &
@@ -1543,6 +1606,7 @@ def main():
                 )
                 |
                 (
+                    (keys.isin(bullish)) &
                     ( 1.5 < df['PCT_day_change']) &
                     (df['PCT_day_change'] < 2.5) &
                     (-1.5 < df['PCT_day_change_pre1']) &
@@ -1563,7 +1627,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bullish)) &
                 (df['forecast_day_PCT10_change'] > 8) &
                 (df['yearLowChange'] > 15) &
                 (df['PCT_day_change'] > -1) &
@@ -1582,8 +1649,11 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (
+                    (keys.isin(bearish)) &
                     (df['filter3'].str.startswith('ReversalHigh', na=False)) &
                     (df['highTail'] > 1.5) &
                     (df['lowTail'] < 1.3) &
@@ -1592,6 +1662,7 @@ def main():
                 )
                 |
                 (
+                    (keys.isin(bearish)) &
                     (df['highTail'] > 1.3) &
                     (df['lowTail'] < 1) &
                     ((df['PCT_day_change_pre1'] < -2) | (df['PCT_day_change_pre2'] < -2)) &
@@ -1599,6 +1670,7 @@ def main():
                 )
                 |
                 (
+                    (keys.isin(bearish)) &
                     (-2.5 < df['PCT_day_change']) &
                     (df['PCT_day_change'] < -1.5) &
                     (0.5 < df['PCT_day_change_pre1']) &
@@ -1619,7 +1691,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bearish)) &
                 (df['forecast_day_PCT10_change'] < -8) &
                 (df['yearHighChange'] < -15) &
                 (df['PCT_day_change'] < 1) &
@@ -1641,11 +1716,14 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df_2 = df[
                     (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
                 ]
             if len(filtered_df_2) < 10:
                 filtered_df = filtered_df[
+                    (keys.isin(bullish)) &
                     (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
                 ]
             else:
@@ -1655,18 +1733,30 @@ def main():
         rb.render(st, filtered_df, 'Breakout-Beey-2 after 10', color='LG')
     with col2:
         df = rb.getdf('Breakout-Beey-2')
-        rb.render(st, df, 'Breakout-Beey-2')
+        filtered_df = df
+        try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (keys.isin(bullish)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Breakout-Beey-2')
     with col3:
         df = rb.getdf('Breakout-Siill-2')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df_2 = df[
                     (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
                 ]
             if len(filtered_df_2) < 10:
                 filtered_df = filtered_df[
+                    (keys.isin(bearish)) &
                     (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
                 ]
             else:
@@ -1676,7 +1766,16 @@ def main():
         rb.render(st, filtered_df, 'Breakout-Siill-2 after10', color='LG')
     with col4:
         df = rb.getdf('Breakout-Siill-2')
-        rb.render(st, df, 'Breakout-Siill-2')
+        filtered_df = df
+        try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (keys.isin(bearish)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Breakout-Siill-2')
 
     
     st.divider()

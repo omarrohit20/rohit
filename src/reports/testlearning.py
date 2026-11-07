@@ -182,6 +182,7 @@ def main():
             df = df[
                 (df['PCT_day_change'] < 1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
@@ -198,6 +199,7 @@ def main():
             df = df[
                 (df['PCT_day_change'] < 1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
@@ -214,6 +216,7 @@ def main():
             df = df[
                 (df['PCT_day_change'] < 1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
@@ -230,6 +233,7 @@ def main():
             df = df[
                 (df['PCT_day_change'] > -1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
@@ -246,6 +250,7 @@ def main():
             df = df[
                 (df['PCT_day_change'] > -1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
@@ -262,6 +267,7 @@ def main():
             df = df[
                 (df['PCT_day_change'] > -1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
+                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
@@ -286,9 +292,11 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bullish) | keys.isin(bearish)) &
+                ((df['PCT_change'] >= 1.4) | (df['PCT_day_change_pre1'] >= 1.4) | keys.isin(bearish)) &
                  (~keys.isin(bearish_high_scan_news)) &
                 (df['forecast_day_PCT10_change'] > -10) &
                 (df['PCT_day_change'] <= 5) &
+                (df['PCT_change'] <= 4) &
                 (~df['systemtime'].str.contains('10:', case=False, na=False)) 
             ]
         except KeyError as e:
@@ -309,6 +317,7 @@ def main():
                 (~keys.isin(bullish_high_scan_news)) &
                 (df['forecast_day_PCT10_change'] < 10) &
                 (df['PCT_day_change'] >= -5) &
+                (df['PCT_change'] >= -4) &
                 (~df['systemtime'].str.contains('10:', case=False, na=False)) 
             ]
         except KeyError as e:
@@ -329,9 +338,11 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bullish) | keys.isin(bearish)) &
+                ((df['PCT_change'] >= 1.4) | (df['PCT_day_change_pre1'] >= 1.4) | keys.isin(bearish)) &
                 (~keys.isin(bearish_high_scan_news)) &
                 (df['forecast_day_PCT10_change'] > -10) &
                 (df['PCT_day_change'] <= 5) &
+                (df['PCT_change'] <= 4) &
                 (~df['systemtime'].str.contains('10:', case=False, na=False)) 
             ]
         except KeyError as e:
@@ -352,6 +363,7 @@ def main():
                 (~keys.isin(bullish_high_scan_news)) &
                 (df['forecast_day_PCT10_change'] < 10) &
                 (df['PCT_day_change'] >= -5) &
+                (df['PCT_change'] >= -4) &
                 (~df['systemtime'].str.contains('10:', case=False, na=False)) 
             ]
         except KeyError as e:

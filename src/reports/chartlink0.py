@@ -409,8 +409,8 @@ def main():
             filtered_df = df[
                 (df['highTail'] < 1) &
                 ((df['PCT_day_change_pre1'] < 0.3) | (df['PCT_day_change_pre2'] < 0.3)) &
-                (df['PCT_day_change'] < 3.5) &
-                (df['PCT_change'] < 3.5) &
+                (df['PCT_day_change'] < 3) &
+                (df['PCT_change'] < 3) &
                 (df['PCT_day_change'] > 1.5 ) &
                 (
                     (df['mlData'].str.contains("#UpStairs") & (df['PCT_day_change'] > 2)) | 
@@ -466,8 +466,8 @@ def main():
             filtered_df = df[
                 (df['lowTail'] < 1) &
                 ((df['PCT_day_change_pre1'] > -0.3) | (df['PCT_day_change_pre2'] > 0.3)) &
-                (df['PCT_day_change'] > -3.5) &
-                (df['PCT_change'] > -3.5) &
+                (df['PCT_day_change'] > -3) &
+                (df['PCT_change'] > -3) &
                 (df['PCT_day_change'] < -1.5 ) &
                 (df['PCT_day_change_pre1'] < 1) &
                 (df['PCT_day_change_pre2'] < 1) &

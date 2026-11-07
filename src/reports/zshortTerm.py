@@ -886,8 +886,10 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['PCT_change'] < 3) &
+                (df['PCT_day_change'] < 3) &
                 (
-                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) 
@@ -923,8 +925,10 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['PCT_change'] < 3) &
+                (df['PCT_day_change'] < 3) &
                 (
-                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) 
@@ -997,8 +1001,10 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['PCT_change'] > -3) &
+                (df['PCT_day_change'] > -3) &
                 (
-                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) 
@@ -1034,8 +1040,10 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['PCT_change'] > -3) &
+                (df['PCT_day_change'] > -3) &
                 (
-                    (~df['systemtime'].str.contains('09:20', case=False, regex=True, na=False)) &
+                    (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('09:55', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                     (~df['systemtime'].str.contains('11:', case=False, na=False)) 
