@@ -279,6 +279,112 @@ def main():
     st.divider()
     st.divider()
 
+    col0, col1, col2, col3, col4, col5 = st.columns(6)
+    with col0:
+        df = rb.getintersectdf('morning-volume-bs', 'cash-buuy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+
+        filtered_df = df
+        try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (keys.isin(bullish) | keys.isin(bearish)) &
+                (df['PCT_day_change'] >= 0) &
+                (df['PCT_day_change'] <= 1.5) &
+                ((df['PCT_day_change'] >=1) | (df['PCT_day_change_pre1'] >=1) | (df['PCT_day_change_pre2'] >=1)) &
+                ((df['PCT_change'] >=1) & (df['PCT_day_change_pre1'] >=0) & (df['PCT_day_change_pre2'] >=0)) &
+                (~df['systemtime'].str.contains('09:15', case=False, na=False)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'UP: morning-volume-bs', color='LG', renderf10buy01=True, height=300)
+    with col1:
+        df = rb.getintersectdf('morning-volume-bs', 'buy-breakout')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:35', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:5', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, na=False)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'UP: morning-volume-bs', color='LG', renderf10buy01=True, height=300) 
+    with col2:
+        df = rb.getintersectdf('morning-volume-bs', 'morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:35', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:5', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, na=False)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'UP: morning-volume-bs', color='LG', renderf10buy01=True, height=300)   
+    with col3:
+        df = rb.getintersectdf('morning-volume-bs', 'cash-seell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (keys.isin(bullish) | keys.isin(bearish)) &
+                (df['PCT_day_change'] <= 0) &
+                (df['PCT_day_change'] >= -1.5) &
+                ((df['PCT_day_change'] <=-1) | (df['PCT_day_change_pre1'] <=-1) | (df['PCT_day_change_pre2'] <=-1)) &
+                ((df['PCT_change'] <=-1) & (df['PCT_day_change_pre1'] <=0) & (df['PCT_day_change_pre2'] <=0)) &
+                (~df['systemtime'].str.contains('10:', case=False, na=False)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DOWN: morning-volume-bs', color='LG', renderf10sell01=True, height=300)
+    with col4:
+        df = rb.getintersectdf('morning-volume-bs', 'sell-breakout')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:35', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:5', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, na=False)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DOWN: morning-volume-bs', color='LG', renderf10sell01=True, height=300)
+    with col5:
+        df = rb.getintersectdf('morning-volume-bs', 'morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (~df['systemtime'].str.contains('09:35', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:5', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, na=False)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DOWN: morning-volume-bs', color='LG', renderf10sell01=True, height=300)
+    
+
     col1, col3 = st.columns(2)
     with col1:
         df = rb.getintersectdf('morning-volume-bs', 'cash-buuy')
