@@ -10,7 +10,7 @@ import argparse
 import re
 import sys
 import time
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 from typing import Any
@@ -53,6 +53,7 @@ ANALYST_RE = re.compile(
     re.I,
 )
 OVERWRITE_DAYS = 30
+DEFAULT_NEWS_DAYS = 7
 # Sectoral headlines only count toward overall sentiment / conviction
 # when there are at least this many. Company news and analyst calls always count.
 MIN_SECTORAL_FOR_SENTIMENT = 3
@@ -151,8 +152,84 @@ COMPANY_CATALYST_RE = re.compile(
     r"\b(results|earnings|profit|revenue|dividend|split|bonus|buyback|"
     r"order|contract|deal|stake|merger|acquisition|upgrade|downgrade|"
     r"target|guidance|board|ceo|md|cfo|sebi|rbi|penalty|fine|"
-    r"block deal|bulk deal|promoter|filing|announcement|outlook)\b",
+    r"block deal|bulk deal|promoter|filing|announcement|outlook|"
+    r"concall|conference call|earnings call)\b",
     re.I,
+)
+GENERIC_COMPANY_SHORT_TOKENS = frozenset(
+    {
+        "india",
+        "indian",
+        "bank",
+        "power",
+        "steel",
+        "energy",
+        "finance",
+        "financial",
+        "industries",
+        "industry",
+        "services",
+        "holdings",
+        "group",
+        "global",
+        "international",
+        "national",
+        "general",
+        "united",
+        "enterprises",
+        "products",
+        "limited",
+        "company",
+        "corporation",
+        "the",
+        "and",
+    }
+)
+GUIDANCE_GOOGLE_TERMS = (
+    'results OR earnings OR guidance OR concall OR "earnings call" '
+    'OR "conference call" OR outlook OR "board meeting" OR "board meet" '
+    'OR "interim dividend" OR dividend OR "quarterly results"'
+)
+CORPORATE_EVENT_RE = re.compile(
+    r"\b("
+    r"board meeting|board meet|"
+    r"interim dividend|final dividend|"
+    r"quarterly results|unaudited financial results|"
+    r"to consider.{0,60}(?:results|dividend)|"
+    r"results on|dividend on"
+    r")\b",
+    re.I,
+)
+_MONTH_NUM = {
+    "jan": 1,
+    "january": 1,
+    "feb": 2,
+    "february": 2,
+    "mar": 3,
+    "march": 3,
+    "apr": 4,
+    "april": 4,
+    "may": 5,
+    "jun": 6,
+    "june": 6,
+    "jul": 7,
+    "july": 7,
+    "aug": 8,
+    "august": 8,
+    "sep": 9,
+    "sept": 9,
+    "september": 9,
+    "oct": 10,
+    "october": 10,
+    "nov": 11,
+    "november": 11,
+    "dec": 12,
+    "december": 12,
+}
+_MONTH_NAME_RE = (
+    r"Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|"
+    r"Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|"
+    r"Nov(?:ember)?|Dec(?:ember)?"
 )
 BROAD_MARKET_EVENT_TYPES = frozenset({"Macro", "Global"})
 COMPANY_SPECIFIC_EVENT_TYPES = frozenset(
@@ -209,6 +286,129 @@ def _company_match_tokens(company: str) -> list[str]:
             seen.add(token)
             out.append(token)
     return out
+
+
+def company_short_name(company: str) -> str:
+    """Search form used in Google/RSS, e.g. Data Patterns (India) Ltd. → Data Patterns."""
+    if not company:
+        return ""
+    cleaned = COMPANY_SUFFIX_RE.sub("", company)
+    cleaned = re.sub(r"\([^)]*\)", " ", cleaned)
+    cleaned = re.sub(r"[^a-zA-Z0-9\s&]", " ", cleaned)
+    drop = {"india", "indian", "of", "the", "and", "&"}
+    tokens = [t for t in cleaned.split() if t.lower() not in drop]
+    keep: list[str] = []
+    for token in tokens:
+        if len(token) >= 3:
+            keep.append(token)
+        if len(keep) >= 3:
+            break
+    if not keep:
+        return ""
+    if all(t.lower() in GENERIC_COMPANY_SHORT_TOKENS for t in keep):
+        return ""
+    if len(keep) >= 2:
+        return " ".join(keep[:2])
+    if keep[0].lower() in GENERIC_COMPANY_SHORT_TOKENS or len(keep[0]) < 4:
+        return ""
+    return keep[0]
+
+
+def company_search_aliases(scrip: str, company: str = "") -> list[str]:
+    """Ticker plus company short/full names for RSS matching."""
+    aliases: list[str] = []
+    seen: set[str] = set()
+    scrip_l = (scrip or "").strip().lower()
+    if scrip_l:
+        seen.add(scrip_l)
+
+    def _add(value: str) -> None:
+        text = (value or "").strip()
+        if not text:
+            return
+        key = text.lower()
+        if key in seen:
+            return
+        seen.add(key)
+        aliases.append(text)
+
+    _add(company_short_name(company))
+    _add(company)
+    return aliases
+
+
+def _google_or_clause(scrip: str, company: str = "") -> str:
+    short = company_short_name(company)
+    if short and short.upper() != (scrip or "").upper():
+        return f'{scrip} OR "{short}"'
+    return scrip
+
+
+def google_news_queries(
+    scrip: str,
+    company: str = "",
+    *,
+    include_analyst: bool = True,
+    include_guidance: bool = True,
+    industry: str = "",
+) -> list[tuple[str, str, str]]:
+    """Google News RSS (url, source, kind) using ticker and company short name."""
+    clause = _google_or_clause(scrip, company)
+    queries = [
+        (_google_rss(f"{clause} (NSE OR BSE OR stock)"), "Google News", "news"),
+    ]
+    if include_guidance:
+        queries.append(
+            (
+                _google_rss(f"{clause} ({GUIDANCE_GOOGLE_TERMS})"),
+                "Google News Guidance",
+                "news",
+            )
+        )
+    if include_analyst:
+        queries.append(
+            (
+                _google_rss(
+                    f'{clause} (analyst OR upgrade OR downgrade OR "target price")'
+                ),
+                "Google News Analyst",
+                "analyst",
+            )
+        )
+    if industry:
+        queries.append(
+            (
+                _google_rss(f"{industry} sector India stocks news"),
+                "Google News Sector",
+                "sectoral",
+            )
+        )
+    return queries
+
+
+def _fetch_india_rss_for_scrip(
+    scrip: str,
+    company: str,
+    days_back: int,
+    allowed_kinds: set[str] | None = None,
+) -> list[dict]:
+    merged: list[dict] = []
+    for it in nf.fetch_rss_feeds(
+        days_back=days_back,
+        stock_filter=scrip,
+        stock_aliases=company_search_aliases(scrip, company),
+    ):
+        kind = "news"
+        if ANALYST_RE.search(it.title) or it.event_type == "Rating":
+            kind = "analyst"
+        elif it.sectors and it.event_type in ("Macro", "Global", "Uncategorized", "General"):
+            kind = "sectoral"
+        if allowed_kinds is not None and kind not in allowed_kinds:
+            continue
+        merged.append(
+            _as_article(it.title, it.summary, it.link, it.source, it.published, kind)
+        )
+    return merged
 
 
 def _mentions_scrip_or_company(text: str, scrip: str, company: str = "") -> bool:
@@ -365,6 +565,8 @@ def apply_regulatory_news_for_scrip(
 def fetch_regulatory_sector_news(sleep_s: float) -> list[dict]:
     """Shared regulatory headline pool (IRDAI / RBI / SEBI sector reforms)."""
     merged: list[dict] = []
+    successful_sources = 0
+    failures = []
     try:
         for it in nf.fetch_rss_feeds(days_back=3):
             article = _as_article(
@@ -372,9 +574,11 @@ def fetch_regulatory_sector_news(sleep_s: float) -> list[dict]:
             )
             if is_regulatory_sector_headline(article):
                 merged.append(article)
+        successful_sources += 1
     except SystemExit:
         pass
     except Exception as exc:
+        failures.append(f"India news RSS: {exc}")
         print(f"  warn: RSS regulatory: {exc}", file=sys.stderr)
 
     queries = [
@@ -384,9 +588,17 @@ def fetch_regulatory_sector_news(sleep_s: float) -> list[dict]:
         ("SEBI regulation circular India listed companies", "Google SEBI"),
     ]
     for query, source in queries:
-        merged.extend(_parse_feed(_google_rss(query), source, "sectoral"))
+        try:
+            merged.extend(_parse_feed(_google_rss(query), source, "sectoral"))
+            successful_sources += 1
+        except nf.FeedFetchError as exc:
+            failures.append(f"{source}: {exc}")
+            print(f"  warn: RSS {source}: {exc}", file=sys.stderr)
         if sleep_s:
             time.sleep(sleep_s)
+    if successful_sources == 0:
+        detail = "; ".join(failures[:3]) or "no feed source was reachable"
+        raise nf.FeedFetchError(f"Regulatory news fetch failed for every source. {detail}")
     return merged
 
 
@@ -489,7 +701,7 @@ def filter_futures_company_news(
     for a in articles:
         if a.get("kind") not in FUTURES_SCORING_KINDS:
             continue
-        if not is_published_within_calendar_days(a.get("published"), now, company_news_days):
+        if not article_in_company_news_window(a, now, company_news_days):
             continue
         if not is_futures_scoring_news(a, scrip, company):
             continue
@@ -509,12 +721,12 @@ def has_new_futures_scoring_news(
     regulatory_pool: list[dict] | None = None,
 ) -> bool:
     """True when fresh company/analyst/regulatory headline not already stored."""
-    raw = fetch_futures_company_analyst_news(scrip, sleep_s)
+    raw = fetch_futures_company_analyst_news(scrip, sleep_s, company=company)
     if regulatory_pool is None:
         regulatory_pool = fetch_regulatory_sector_news(sleep_s)
     raw.extend(apply_regulatory_news_for_scrip(regulatory_pool, scrip, company))
     return any(
-        is_published_within_calendar_days(a.get("published"), now, company_news_days)
+        article_in_company_news_window(a, now, company_news_days)
         and is_futures_scoring_news(a, scrip, company)
         and is_new_futures_headline(a, stored_doc)
         for a in raw
@@ -555,18 +767,141 @@ def is_fresh(published: Any, news_days: int, now: datetime) -> bool:
 
 
 def is_published_within_calendar_days(
-    published: Any, now: datetime, window_days: int
+    published: Any, now: datetime, window_days: int, title: str = ""
 ) -> bool:
-    """Calendar-date window. window_days=2 -> today and yesterday only."""
+    """Calendar-date window. window_days=2 -> today and yesterday only.
+
+    Undated items with a company catalyst in the title (results, guidance,
+    concall) count as published today so TV/RSS blurbs are not dropped.
+    """
     if window_days <= 0:
         return False
     dt = parse_published(published)
     if dt is None:
-        return False
+        return bool(title and COMPANY_CATALYST_RE.search(title))
     pub_date = dt.date()
     cur = now.date()
     oldest = cur - timedelta(days=window_days - 1)
     return oldest <= pub_date <= cur
+
+
+def _safe_date(year: int, month: int, day: int) -> date | None:
+    try:
+        return date(year, month, day)
+    except ValueError:
+        return None
+
+
+def _month_from_name(name: str) -> int:
+    key = name.lower()
+    if key.startswith("sept"):
+        return 9
+    return _MONTH_NUM[key[:3]]
+
+
+def _headline_date_candidates(text: str, now: datetime) -> list[date]:
+    """Parse calendar dates from a headline (India-first numeric order)."""
+    if not text:
+        return []
+    today = now.date()
+    found: list[date] = []
+    seen: set[date] = set()
+
+    def _add(d: date | None) -> None:
+        if d is None or d in seen:
+            return
+        seen.add(d)
+        found.append(d)
+
+    def _with_years(month: int, day: int, year: int | None) -> None:
+        if year:
+            _add(_safe_date(year, month, day))
+            return
+        for y in (today.year - 1, today.year, today.year + 1):
+            _add(_safe_date(y, month, day))
+
+    for m in re.finditer(
+        rf"\b(\d{{1,2}})\s+({_MONTH_NAME_RE})\.?,?\s*(\d{{4}})?\b",
+        text,
+        re.I,
+    ):
+        _with_years(
+            _month_from_name(m.group(2)),
+            int(m.group(1)),
+            int(m.group(3)) if m.group(3) else None,
+        )
+
+    for m in re.finditer(
+        rf"\b({_MONTH_NAME_RE})\s+(\d{{1,2}})(?:st|nd|rd|th)?,?\s*(\d{{4}})?\b",
+        text,
+        re.I,
+    ):
+        _with_years(
+            _month_from_name(m.group(1)),
+            int(m.group(2)),
+            int(m.group(3)) if m.group(3) else None,
+        )
+
+    for m in re.finditer(r"\b(\d{4})-(\d{1,2})-(\d{1,2})\b", text):
+        _add(_safe_date(int(m.group(1)), int(m.group(2)), int(m.group(3))))
+
+    for m in re.finditer(r"\b(\d{1,2})[/-](\d{1,2})[/-](\d{2,4})\b", text):
+        a, b, yraw = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        year = yraw + 2000 if yraw < 100 else yraw
+        if a > 12:
+            _add(_safe_date(year, b, a))
+        elif b > 12:
+            _add(_safe_date(year, a, b))
+        else:
+            _add(_safe_date(year, b, a))  # DMY
+
+    return found
+
+
+def headline_event_date_today_or_tomorrow(text: str, now: datetime) -> date | None:
+    """Event date in the headline if it is today or tomorrow; else None."""
+    if not text:
+        return None
+    today = now.date()
+    tomorrow = today + timedelta(days=1)
+    wanted = {today, tomorrow}
+    for d in _headline_date_candidates(text, now):
+        if d in wanted:
+            return d
+    text_l = text.lower()
+    if re.search(r"\btomorrow\b", text_l):
+        return tomorrow
+    if re.search(r"\btoday\b", text_l):
+        return today
+    return None
+
+
+def is_upcoming_corporate_event(article: dict, now: datetime) -> bool:
+    """True when a board/results/dividend headline is for today or tomorrow only."""
+    title = (article.get("title") or "").strip()
+    summary = (article.get("summary") or "").strip()
+    blob = f"{title} {summary}".strip()
+    if not blob or not CORPORATE_EVENT_RE.search(blob):
+        return False
+    event_date = headline_event_date_today_or_tomorrow(blob, now)
+    if event_date is None:
+        return False
+    article["event_date"] = event_date.isoformat()
+    return True
+
+
+def article_in_company_news_window(
+    article: dict, now: datetime, window_days: int
+) -> bool:
+    """Published today/yesterday, or a corporate event dated today or tomorrow."""
+    if is_upcoming_corporate_event(article, now):
+        return True
+    return is_published_within_calendar_days(
+        article.get("published"),
+        now,
+        window_days,
+        title=article.get("title") or "",
+    )
 
 
 def _date_cutoff_query(days: int) -> dict:
@@ -731,12 +1066,14 @@ def _as_article(title, summary, link, source, published, kind_hint: str) -> dict
 
 
 def _parse_feed(url: str, source: str, kind_hint: str) -> list[dict]:
-    items = []
     try:
-        feed = feedparser.parse(url)
+        feed = feedparser.parse(url, request_headers=nf.RSS_REQUEST_HEADERS)
     except Exception as exc:
-        print(f"  warn: feed failed {source}: {exc}", file=sys.stderr)
-        return items
+        raise nf.FeedFetchError(str(exc)) from exc
+    failure = nf.feed_fetch_error(feed)
+    if failure:
+        raise nf.FeedFetchError(failure)
+    items = []
     for entry in getattr(feed, "entries", [])[:18]:
         title = str(entry.get("title") or "").strip()
         if not title:
@@ -755,43 +1092,54 @@ def _parse_feed(url: str, source: str, kind_hint: str) -> list[dict]:
     return items
 
 
-def scrape_scrip(scrip: str, industry: str, days: int, sleep_s: float) -> list[dict]:
-    merged: list[dict] = []
+def check_news_source_connectivity() -> None:
+    """Fail before database writes when neither configured RSS path is reachable."""
+    available = []
+    failures = []
     try:
-        for it in nf.fetch_rss_feeds(days_back=max(days, 7), stock_filter=scrip):
-            kind = "news"
-            if ANALYST_RE.search(it.title) or it.event_type == "Rating":
-                kind = "analyst"
-            elif it.sectors and it.event_type in ("Macro", "Global", "Uncategorized", "General"):
-                kind = "sectoral"
-            merged.append(
-                _as_article(
-                    it.title, it.summary, it.link, it.source, it.published, kind
-                )
-            )
+        nf.fetch_rss_feeds(days_back=1)
+        available.append("India news tracker RSS")
+    except Exception as exc:
+        failures.append(f"India news tracker RSS: {exc}")
+    try:
+        _parse_feed(_google_rss("India stock market news"), "Google News preflight", "news")
+        available.append("Google News RSS")
+    except nf.FeedFetchError as exc:
+        failures.append(f"Google News RSS: {exc}")
+    if not available:
+        detail = "; ".join(failures)
+        raise nf.FeedFetchError(
+            "News preflight failed: no RSS source is reachable. "
+            f"Check network access before retrying. {detail}"
+        )
+    print("Feed preflight: reachable: " + ", ".join(available))
+
+
+def scrape_scrip(
+    scrip: str, industry: str, days: int, sleep_s: float, company: str = ""
+) -> list[dict]:
+    merged: list[dict] = []
+    successful_sources = 0
+    failures = []
+    try:
+        merged.extend(_fetch_india_rss_for_scrip(scrip, company, max(days, 7)))
+        successful_sources += 1
     except SystemExit:
         pass
     except Exception as exc:
+        failures.append(f"India news RSS: {exc}")
         print(f"  warn: RSS {scrip}: {exc}", file=sys.stderr)
 
-    queries = [
-        (_google_rss(f"{scrip} NSE OR BSE stock"), "Google News", "news"),
-        (
-            _google_rss(f'{scrip} analyst OR upgrade OR downgrade OR "target price"'),
-            "Google News Analyst",
-            "analyst",
-        ),
-    ]
-    if industry:
-        queries.append(
-            (
-                _google_rss(f"{industry} sector India stocks news"),
-                "Google News Sector",
-                "sectoral",
-            )
-        )
+    queries = google_news_queries(
+        scrip, company, include_analyst=True, include_guidance=True, industry=industry
+    )
     for url, source, kind in queries:
-        merged.extend(_parse_feed(url, source, kind))
+        try:
+            merged.extend(_parse_feed(url, source, kind))
+            successful_sources += 1
+        except nf.FeedFetchError as exc:
+            failures.append(f"{source}: {exc}")
+            print(f"  warn: RSS {scrip} {source}: {exc}", file=sys.stderr)
         if sleep_s:
             time.sleep(sleep_s)
 
@@ -808,15 +1156,20 @@ def scrape_scrip(scrip: str, industry: str, days: int, sleep_s: float) -> list[d
                         "sectoral",
                     )
                 )
-        except Exception:
-            pass
+            successful_sources += 1
+        except Exception as exc:
+            failures.append(f"Industry RSS: {exc}")
+            print(f"  warn: RSS sector {industry}: {exc}", file=sys.stderr)
+    if successful_sources == 0:
+        detail = "; ".join(failures[:3]) or "no feed source was reachable"
+        raise nf.FeedFetchError(f"All news sources failed for {scrip}. {detail}")
     return merged
 
 
-def is_published_today(published: Any, now: datetime) -> bool:
+def is_published_today(published: Any, now: datetime, title: str = "") -> bool:
     dt = parse_published(published)
     if dt is None:
-        return False
+        return bool(title and COMPANY_CATALYST_RE.search(title))
     return dt.date() == now.date()
 
 
@@ -827,66 +1180,76 @@ def stored_company_news_today(doc: dict | None, now: datetime) -> bool:
     for a in doc.get("articles") or []:
         if a.get("kind") == "news":
             items.append(a)
-    return any(is_published_today(a.get("published"), now) for a in items)
+    return any(
+        is_published_today(a.get("published"), now, title=a.get("title") or "")
+        for a in items
+    )
 
 
-def fetch_company_news(scrip: str, sleep_s: float) -> list[dict]:
+def fetch_company_news(scrip: str, sleep_s: float, company: str = "") -> list[dict]:
     """Company headlines only (no sectoral / analyst Google queries)."""
     merged: list[dict] = []
+    successful_sources = 0
+    failures = []
     try:
-        for it in nf.fetch_rss_feeds(days_back=2, stock_filter=scrip):
-            kind = "news"
-            if ANALYST_RE.search(it.title) or it.event_type == "Rating":
-                kind = "analyst"
-            elif it.sectors and it.event_type in ("Macro", "Global", "Uncategorized", "General"):
-                kind = "sectoral"
-            if kind != "news":
-                continue
-            merged.append(
-                _as_article(it.title, it.summary, it.link, it.source, it.published, "news")
-            )
-    except SystemExit:
-        pass
+        merged.extend(
+            _fetch_india_rss_for_scrip(scrip, company, 2, allowed_kinds={"news"})
+        )
+        successful_sources += 1
     except Exception as exc:
+        failures.append(f"India news RSS: {exc}")
         print(f"  warn: RSS company {scrip}: {exc}", file=sys.stderr)
-    merged.extend(_parse_feed(_google_rss(f"{scrip} NSE OR BSE stock"), "Google News", "news"))
-    if sleep_s:
-        time.sleep(sleep_s)
+    queries = google_news_queries(
+        scrip, company, include_analyst=False, include_guidance=True
+    )
+    for url, source, kind in queries:
+        try:
+            merged.extend(_parse_feed(url, source, kind))
+            successful_sources += 1
+        except nf.FeedFetchError as exc:
+            failures.append(f"{source}: {exc}")
+            print(f"  warn: RSS company {scrip} {source}: {exc}", file=sys.stderr)
+        if sleep_s:
+            time.sleep(sleep_s)
+    if successful_sources == 0:
+        detail = "; ".join(failures[:3]) or "no feed source was reachable"
+        raise nf.FeedFetchError(f"Company news fetch failed for {scrip}. {detail}")
     return [a for a in merged if a.get("kind") == "news"]
 
 
-def fetch_futures_company_analyst_news(scrip: str, sleep_s: float) -> list[dict]:
+def fetch_futures_company_analyst_news(
+    scrip: str, sleep_s: float, company: str = ""
+) -> list[dict]:
     """Company + analyst headlines only; no sectoral feeds."""
     merged: list[dict] = []
+    successful_sources = 0
+    failures = []
     try:
-        for it in nf.fetch_rss_feeds(days_back=2, stock_filter=scrip):
-            kind = "news"
-            if ANALYST_RE.search(it.title) or it.event_type == "Rating":
-                kind = "analyst"
-            elif it.sectors and it.event_type in ("Macro", "Global", "Uncategorized", "General"):
-                kind = "sectoral"
-            if kind not in FUTURES_SCORING_KINDS:
-                continue
-            merged.append(
-                _as_article(it.title, it.summary, it.link, it.source, it.published, kind)
+        merged.extend(
+            _fetch_india_rss_for_scrip(
+                scrip, company, 2, allowed_kinds=set(FUTURES_SCORING_KINDS)
             )
-    except SystemExit:
-        pass
+        )
+        successful_sources += 1
     except Exception as exc:
+        failures.append(f"India news RSS: {exc}")
         print(f"  warn: RSS futures {scrip}: {exc}", file=sys.stderr)
 
-    queries = [
-        (_google_rss(f"{scrip} NSE OR BSE stock"), "Google News", "news"),
-        (
-            _google_rss(f'{scrip} analyst OR upgrade OR downgrade OR "target price"'),
-            "Google News Analyst",
-            "analyst",
-        ),
-    ]
+    queries = google_news_queries(
+        scrip, company, include_analyst=True, include_guidance=True
+    )
     for url, source, kind in queries:
-        merged.extend(_parse_feed(url, source, kind))
+        try:
+            merged.extend(_parse_feed(url, source, kind))
+            successful_sources += 1
+        except nf.FeedFetchError as exc:
+            failures.append(f"{source}: {exc}")
+            print(f"  warn: RSS futures {scrip} {source}: {exc}", file=sys.stderr)
         if sleep_s:
             time.sleep(sleep_s)
+    if successful_sources == 0:
+        detail = "; ".join(failures[:3]) or "no feed source was reachable"
+        raise nf.FeedFetchError(f"Company/analyst news fetch failed for {scrip}. {detail}")
     return [a for a in merged if a.get("kind") in FUTURES_SCORING_KINDS]
 
 
@@ -895,10 +1258,14 @@ def has_company_news_today(
     now: datetime,
     sleep_s: float,
     stored_doc: dict | None = None,
+    company: str = "",
 ) -> bool:
     if stored_company_news_today(stored_doc, now):
         return True
-    return any(is_published_today(a.get("published"), now) for a in fetch_company_news(scrip, sleep_s))
+    return any(
+        is_published_today(a.get("published"), now, title=a.get("title") or "")
+        for a in fetch_company_news(scrip, sleep_s, company=company)
+    )
 
 
 def stored_company_specific_news_today(
@@ -911,7 +1278,7 @@ def stored_company_specific_news_today(
         if a.get("kind") == "news":
             items.append(a)
     return any(
-        is_published_today(a.get("published"), now)
+        is_published_today(a.get("published"), now, title=a.get("title") or "")
         and is_company_specific_news(a, scrip, company)
         for a in items
     )
@@ -926,9 +1293,9 @@ def has_company_specific_news_today(
 ) -> bool:
     if stored_company_specific_news_today(stored_doc, now, scrip, company):
         return True
-    articles = fetch_company_news(scrip, sleep_s)
+    articles = fetch_company_news(scrip, sleep_s, company=company)
     return any(
-        is_published_today(a.get("published"), now)
+        is_published_today(a.get("published"), now, title=a.get("title") or "")
         and is_company_specific_news(a, scrip, company)
         for a in articles
     )
@@ -976,12 +1343,12 @@ def dedupe_fresh(articles: list[dict], news_days: int, now: datetime) -> list[di
 def dedupe_fresh_calendar(
     articles: list[dict], window_days: int, now: datetime
 ) -> list[dict]:
-    """Dedupe with calendar today/yesterday window; drop unparseable dates."""
+    """Dedupe with today/yesterday published window, or event dated today/tomorrow."""
     out = []
     seen_title = set()
     seen_near = set()
     for a in articles:
-        if not is_published_within_calendar_days(a.get("published"), now, window_days):
+        if not article_in_company_news_window(a, now, window_days):
             continue
         tk = _title_key(a.get("title") or "")
         nk = _near_dup_key(a.get("title") or "")
@@ -1026,20 +1393,33 @@ def select_high_impact(articles: list[dict], min_impact: int) -> list[dict]:
     return uniq
 
 
-def select_futures_company_news(articles: list[dict], min_impact: int) -> list[dict]:
-    """Futures skill: high-impact company + analyst headlines (no sectoral)."""
+def select_futures_company_news(
+    articles: list[dict], min_impact: int, now: datetime | None = None
+) -> list[dict]:
+    """Futures skill: high-impact company + analyst headlines (no sectoral).
+
+    Board/results/dividend items dated today or tomorrow always qualify as a write.
+    """
+    now = now or datetime.now()
     ranked = sorted(
         [a for a in articles if a.get("kind") in FUTURES_SCORING_KINDS],
         key=lambda a: int(a.get("impact_score") or 0),
         reverse=True,
     )
+    for a in ranked:
+        if is_upcoming_corporate_event(a, now):
+            a["impact_score"] = max(int(a.get("impact_score") or 0), min_impact)
 
     def take(kind: str, n: int) -> list[dict]:
         pool = [a for a in ranked if a.get("kind") == kind]
+        events = [a for a in pool if is_upcoming_corporate_event(a, now)]
         strong = [a for a in pool if int(a.get("impact_score") or 0) >= min_impact]
         if len(strong) >= 3:
-            return strong[:n]
-        return (strong + [a for a in pool if a not in strong])[:n]
+            picked = events + [a for a in strong[:n] if a not in events]
+            return picked[: n + len(events)]
+        fallback = strong + [a for a in pool if a not in strong]
+        picked = events + [a for a in fallback if a not in events]
+        return picked[:n]
 
     combined = take("news", 10) + take("analyst", 6) + take(REGULATORY_KIND, 4)
     seen = set()
@@ -1078,12 +1458,29 @@ def drop_regulatory_unless_high_conviction(articles: list[dict]) -> list[dict]:
     return [a for a in articles if a.get("kind") != REGULATORY_KIND]
 
 
+def retain_recent_stored_articles(
+    existing: dict | None,
+    articles: list[dict],
+    news_days: int,
+    now: datetime,
+) -> list[dict]:
+    """Keep still-fresh stored headlines when the current scrape found none."""
+    if articles or not existing:
+        return articles
+    return dedupe_fresh(articles_from_doc(existing), news_days, now)
+
+
 def futures_should_write(
-    new_articles: list[dict], merged_articles: list[dict]
+    new_articles: list[dict],
+    merged_articles: list[dict],
+    now: datetime | None = None,
 ) -> bool:
-    """Write when new company/analyst headlines exist, or new regulatory with High conviction."""
+    """Write on new company/analyst news, T-1/today board-results-dividend, or High-conviction regulatory."""
     if not new_articles:
         return False
+    now = now or datetime.now()
+    if any(is_upcoming_corporate_event(a, now) for a in new_articles):
+        return True
     non_reg = [a for a in new_articles if a.get("kind") != REGULATORY_KIND]
     if non_reg:
         return True
@@ -1286,10 +1683,25 @@ def print_news_digest(rows: list[dict[str, Any]], skill_name: str = "") -> None:
     print("=" * 72)
 
 
-def upsert_scrip(coll, scrip: str, industry: str, tables: list[str], articles: list[dict]) -> str:
+def upsert_scrip(
+    coll,
+    scrip: str,
+    industry: str,
+    tables: list[str],
+    articles: list[dict],
+    news_days: int = DEFAULT_NEWS_DAYS,
+) -> str:
     now = datetime.now()
+    existing = coll.find_one({"scrip": scrip})
     articles = drop_regulatory_unless_high_conviction(articles)
     articles = articles_for_overall_sentiment(articles)
+    if not articles:
+        retained = retain_recent_stored_articles(existing, [], news_days, now)
+        articles = articles_for_overall_sentiment(
+            drop_regulatory_unless_high_conviction(retained)
+        )
+    if not articles and not existing:
+        return "skip_empty"
     sentiment = overall_sentiment(articles)
     conviction = conviction_for(articles, sentiment)
     news, sectoral, analyst, regulatory = split_article_kinds(articles)
@@ -1307,7 +1719,6 @@ def upsert_scrip(coll, scrip: str, industry: str, tables: list[str], articles: l
         "article_count": len(articles),
         "updated_at": now,
     }
-    existing = coll.find_one({"scrip": scrip})
     if existing:
         stamp = _as_naive(existing.get("insertion_date") or existing.get("updated_at"))
         if stamp and (now - stamp).days >= OVERWRITE_DAYS:
@@ -1485,6 +1896,15 @@ def main() -> None:
     args = parser.parse_args()
 
     now = datetime.now()
+    regulatory_pool = None
+    if not args.recompute_only:
+        try:
+            check_news_source_connectivity()
+            regulatory_pool = dedupe_fresh(
+                fetch_regulatory_sector_news(args.sleep), args.news_days, now
+            )
+        except nf.FeedFetchError as exc:
+            parser.error(str(exc))
     client = MongoClient(args.uri, serverSelectionTimeoutMS=8000)
     client.admin.command("ping")
     coll = client[SCAN_DB][TARGET_COLLECTION]
@@ -1534,12 +1954,9 @@ def main() -> None:
         f"Scrips (last {args.days}d): {len(scrips)} "
         f"(raw={raw_count} trimmed_non_futures={trimmed} futures={n_fut})"
     )
-    counts = {"insert": 0, "update": 0, "overwrite": 0}
+    counts = {"insert": 0, "update": 0, "overwrite": 0, "skip_empty": 0}
     processed: list[dict[str, Any]] = []
 
-    regulatory_pool = dedupe_fresh(
-        fetch_regulatory_sector_news(args.sleep), args.news_days, now
-    )
     print(
         f"Regulatory pool: {len(regulatory_pool)} headlines "
         f"(high-exposure scrips only; stored if conviction=High, impact>={REGULATORY_SECTOR_MIN_IMPACT})"
@@ -1551,10 +1968,24 @@ def main() -> None:
         industry = meta.get("industry") or ""
         company = meta.get("company") or ""
         print(f"[{i}/{len(scrips)}] {scrip} ({', '.join(tables)})")
-        raw = scrape_scrip(scrip, industry, args.days, args.sleep)
+        raw = scrape_scrip(scrip, industry, args.days, args.sleep, company=company)
         raw.extend(apply_regulatory_news_for_scrip(regulatory_pool, scrip, company))
         cleaned = select_high_impact(dedupe_fresh(raw, args.news_days, now), args.min_impact)
-        action = upsert_scrip(coll, scrip, industry, tables, cleaned)
+        scoring_cleaned = articles_for_overall_sentiment(
+            drop_regulatory_unless_high_conviction(cleaned)
+        )
+        if not scoring_cleaned:
+            existing = coll.find_one({"scrip": scrip})
+            retained = retain_recent_stored_articles(existing, [], args.news_days, now)
+            if retained:
+                cleaned = retained
+                print(
+                    f"    no fresh headlines; preserving {len(cleaned)} stored item(s) "
+                    f"within {args.news_days} days"
+                )
+        action = upsert_scrip(
+            coll, scrip, industry, tables, cleaned, news_days=args.news_days
+        )
         counts[action] = counts.get(action, 0) + 1
         row = summary_row(
             scrip,
@@ -1573,7 +2004,8 @@ def main() -> None:
 
     print(
         f"\nDone. insert={counts['insert']} update={counts['update']} "
-        f"overwrite={counts['overwrite']} purged_futures_skill={purge_count} "
+        f"overwrite={counts['overwrite']} skip_empty={counts['skip_empty']} "
+        f"purged_futures_skill={purge_count} "
         f"collection={SCAN_DB}.{TARGET_COLLECTION}"
     )
     print_news_digest(processed, skill_name="scan-news-conviction")

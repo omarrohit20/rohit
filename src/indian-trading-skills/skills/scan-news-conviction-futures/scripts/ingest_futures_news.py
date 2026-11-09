@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""All futures scrips → upsert only when new company/analyst headline today/yesterday.
+"""All futures scrips → upsert on new company/analyst headline today/yesterday
+or a board/results/dividend event dated today or tomorrow.
 
 Skill: scan-news-conviction-futures
 Writes: Nsedata.scrip_news only
@@ -140,7 +141,10 @@ def print_summary(
         )
 
     if skipped and len(skipped) <= 40:
-        print("\nSkipped (no new today/yesterday headline): " + ", ".join(skipped))
+        print(
+            "\nSkipped (no new today/yesterday headline or today/tomorrow board-results-dividend): "
+            + ", ".join(skipped)
+        )
     elif skipped:
         print(
             f"\nSkipped sample ({min(20, len(skipped))} of {len(skipped)}): "
@@ -159,7 +163,7 @@ def main() -> None:
         "--stale-days",
         type=int,
         default=3,
-        help="Unused (updates only on new today/yesterday headlines not already stored)",
+        help="Unused (writes on new today/yesterday headlines or today/tomorrow board-results-dividend)",
     )
     parser.add_argument(
         "--retain-days",
@@ -171,7 +175,7 @@ def main() -> None:
         "--company-news-days",
         type=int,
         default=DEFAULT_COMPANY_NEWS_DAYS,
-        help="Only write when company/analyst headlines from these calendar days are new (2 = today + yesterday)",
+        help="Write when published headlines from these days are new (2 = today + yesterday); also write for board/results/dividend dated today or tomorrow",
     )
     parser.add_argument(
         "--news-days",
@@ -186,6 +190,16 @@ def main() -> None:
     args = parser.parse_args()
 
     now = datetime.now()
+    try:
+        ingest.check_news_source_connectivity()
+        regulatory_pool = ingest.dedupe_fresh_calendar(
+            ingest.fetch_regulatory_sector_news(args.sleep),
+            args.company_news_days,
+            now,
+        )
+    except ingest.nf.FeedFetchError as exc:
+        parser.error(str(exc))
+
     client = MongoClient(args.uri, serverSelectionTimeoutMS=8000)
     client.admin.command("ping")
     coll = client[SCAN_DB][TARGET_COLLECTION]
@@ -227,21 +241,18 @@ def main() -> None:
     print("Skill: scan-news-conviction-futures")
     print(f"Futures scrips: {len(all_scrips)}")
     print(
-        f"Write only when new company/analyst/regulatory headline in last {args.company_news_days} calendar days "
-        "(today/yesterday; regulatory = high-exposure scrips + High conviction)"
+        f"Write when new company/analyst/regulatory headline in last {args.company_news_days} calendar days "
+        "(today/yesterday) or board/results/dividend event dated today or tomorrow "
+        "(regulatory = high-exposure scrips + High conviction)"
     )
     print(
         f"Headlines: company + analyst + regulatory (high exposure); "
+        "ticker + company short name search; guidance/concall/board/dividend query; "
         "company name in title for news/analyst; no generic sectoral"
     )
     print(f"Candidates: {len(due)}")
     print(f"Writes only: {SCAN_DB}.{TARGET_COLLECTION}")
 
-    regulatory_pool = ingest.dedupe_fresh_calendar(
-        ingest.fetch_regulatory_sector_news(args.sleep),
-        args.company_news_days,
-        now,
-    )
     print(
         f"Regulatory pool: {len(regulatory_pool)} headlines "
         f"(impact>={ingest.REGULATORY_SECTOR_MIN_IMPACT}, stored if High conviction)"
@@ -260,7 +271,9 @@ def main() -> None:
         company = meta.get("company") or ""
         print(f"[{i}/{len(due)}] {scrip}")
         try:
-            raw = ingest.fetch_futures_company_analyst_news(scrip, args.sleep)
+            raw = ingest.fetch_futures_company_analyst_news(
+                scrip, args.sleep, company=company
+            )
             raw.extend(
                 ingest.apply_regulatory_news_for_scrip(regulatory_pool, scrip, company)
             )
@@ -275,7 +288,9 @@ def main() -> None:
                 args.company_news_days,
             )
             dropped = before - len(filtered)
-            cleaned = ingest.select_futures_company_news(filtered, args.min_impact)
+            cleaned = ingest.select_futures_company_news(
+                filtered, args.min_impact, now
+            )
             merged = ingest.merge_stored_and_new_articles(existing, cleaned)
             merged = ingest.drop_regulatory_unless_high_conviction(merged)
             before_keys = ingest.stored_futures_headline_title_keys(existing)
@@ -284,7 +299,7 @@ def main() -> None:
                 for a in merged
                 if ingest._title_key(a.get("title") or "") not in before_keys
             ]
-            if not new_items:
+            if not ingest.futures_should_write(new_items, merged, now):
                 skipped.append(scrip)
                 if dropped:
                     print(

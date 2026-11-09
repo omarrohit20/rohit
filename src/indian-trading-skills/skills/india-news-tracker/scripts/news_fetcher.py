@@ -111,6 +111,16 @@ RSS_FEEDS = {
     },
 }
 
+# Business Standard (and some CDNs) return HTTP 403 to feedparser's default UA.
+RSS_REQUEST_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/120.0.0.0 Safari/537.36"
+    ),
+    "Accept": "application/rss+xml, application/xml, text/xml, */*",
+}
+
 # ──────────────────────────────────────────────
 # Event Classification Keywords
 # ──────────────────────────────────────────────
@@ -120,6 +130,7 @@ EVENT_KEYWORDS = {
         "quarterly results", "Q1", "Q2", "Q3", "Q4", "earnings", "profit",
         "revenue", "net income", "PAT", "EBITDA", "results declared",
         "topline", "bottomline", "YoY growth", "QoQ", "guidance",
+        "concall", "conference call", "earnings call", "outlook",
     ],
     "Corporate Action": [
         "dividend", "bonus", "stock split", "buyback", "rights issue",
@@ -218,6 +229,7 @@ STOCK_NAME_TO_SYMBOL = {
     "hindalco": "HINDALCO", "coal india": "COALINDIA", "ongc": "ONGC",
     "bpcl": "BPCL", "ioc": "IOC", "gail": "GAIL", "dlf": "DLF",
     "hal": "HAL", "bel": "BEL",
+    "data patterns": "DATAPATTNS",
 }
 
 
@@ -235,6 +247,27 @@ class NewsItem:
     sectors: list = field(default_factory=list)
     stocks_mentioned: list = field(default_factory=list)
     summary: str = ""
+
+
+class FeedFetchError(RuntimeError):
+    """Raised when no configured RSS endpoint could be fetched successfully."""
+
+
+def feed_fetch_error(feed) -> Optional[str]:
+    """Return a transport/status error from a feedparser result, if present."""
+    status = getattr(feed, "status", None)
+    try:
+        status = int(status) if status is not None else None
+    except (TypeError, ValueError):
+        status = None
+    if status is not None and status >= 400:
+        return f"HTTP {status}"
+
+    entries = getattr(feed, "entries", [])
+    if getattr(feed, "bozo", False) and not entries:
+        detail = getattr(feed, "bozo_exception", None)
+        return str(detail or "feed could not be parsed or reached")
+    return None
 
 
 def classify_event(title: str, summary: str = "") -> str:
@@ -321,10 +354,31 @@ def score_impact(item: NewsItem) -> int:
     return min(10, max(1, score))
 
 
+def item_matches_stock_filter(
+    item: NewsItem,
+    stock_filter: str,
+    stock_aliases: Optional[list[str]] = None,
+) -> bool:
+    """True if ticker, detected symbol, or company short/full name appears."""
+    stock_upper = stock_filter.upper()
+    stock_lower = stock_filter.lower()
+    if stock_upper in item.stocks_mentioned:
+        return True
+    text = f"{item.title} {item.summary}".lower()
+    if stock_lower in text:
+        return True
+    for alias in stock_aliases or []:
+        alias_l = (alias or "").strip().lower()
+        if alias_l and alias_l in text:
+            return True
+    return False
+
+
 def fetch_rss_feeds(
     days_back: int = 1,
     stock_filter: Optional[str] = None,
     sector_filter: Optional[str] = None,
+    stock_aliases: Optional[list[str]] = None,
 ) -> list[NewsItem]:
     """Fetch news from RSS feeds."""
     if not HAS_FEEDPARSER:
@@ -333,10 +387,23 @@ def fetch_rss_feeds(
 
     cutoff = datetime.now() - timedelta(days=days_back)
     all_items = []
+    successful_feeds = 0
+    feed_failures = []
 
     for feed_name, feed_info in RSS_FEEDS.items():
         try:
-            feed = feedparser.parse(feed_info["url"])
+            feed = feedparser.parse(
+                feed_info["url"], request_headers=RSS_REQUEST_HEADERS
+            )
+            failure = feed_fetch_error(feed)
+            if failure:
+                feed_failures.append((feed_name, failure))
+                print(
+                    f"Warning: Failed to fetch {feed_name}: {failure}",
+                    file=sys.stderr,
+                )
+                continue
+            successful_feeds += 1
             for entry in feed.entries[:20]:  # limit per feed
                 # Parse published date
                 published = ""
@@ -371,15 +438,10 @@ def fetch_rss_feeds(
                 item.impact_score = score_impact(item)
 
                 # Apply filters
-                if stock_filter:
-                    stock_upper = stock_filter.upper()
-                    stock_lower = stock_filter.lower()
-                    if (
-                        stock_upper not in item.stocks_mentioned
-                        and stock_lower not in title.lower()
-                        and stock_lower not in summary.lower()
-                    ):
-                        continue
+                if stock_filter and not item_matches_stock_filter(
+                    item, stock_filter, stock_aliases
+                ):
+                    continue
 
                 if sector_filter:
                     sector_lower = sector_filter.lower()
@@ -391,7 +453,15 @@ def fetch_rss_feeds(
                 all_items.append(item)
 
         except Exception as e:
+            feed_failures.append((feed_name, str(e)))
             print(f"Warning: Failed to fetch {feed_name}: {e}", file=sys.stderr)
+
+    if successful_feeds == 0:
+        detail = "; ".join(f"{name}: {error}" for name, error in feed_failures[:3])
+        raise FeedFetchError(
+            f"All {len(RSS_FEEDS)} configured RSS feeds failed. "
+            f"Check network access and feed availability. {detail}"
+        )
 
     # Sort by impact score (descending), then by source tier
     all_items.sort(key=lambda x: (-x.impact_score, x.source))

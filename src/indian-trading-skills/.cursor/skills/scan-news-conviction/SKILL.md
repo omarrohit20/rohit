@@ -18,6 +18,6 @@ python skills/scan-news-conviction/scripts/ingest_scan_news.py --days 5 --news-d
 python skills/scan-news-conviction/scripts/ingest_scan_news.py --recompute-only
 ```
 
-Sectoral headlines count toward `overall_sentiment` only when there are **≥ 3**. Company news and analyst calls always count.
+Sectoral headlines count toward `overall_sentiment` only when there are **≥ 3**. Company news and analyst calls always count. Search ticker **and** company short form; guidance/concall queries included.
 
 End of run prints **SUMMARY NEWS DIGEST**: company news list + high-conviction sectoral news.

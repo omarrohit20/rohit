@@ -107,8 +107,12 @@ At the **start of every run** (including `--recompute-only`), before scrape/upse
 
 - MongoDB `mongodb://localhost:27017`
 - `pip install pymongo feedparser`
+- Outbound access to at least one configured RSS source. The script checks feed access before database writes and stops if all sources are unreachable.
+- A successful scrape with no fresh headlines skips new empty records and retains any stored headlines that are still inside `--news-days`.
 
 Reuse RSS classification from **india-news-tracker** (`news_fetcher.py`).
+
+Company Google/RSS search uses **ticker + company short form** from `Nsedata.scrip.company` (e.g. `DATAPATTNS` and `"Data Patterns"`), plus a **results/guidance/concall/board meeting/interim dividend** query. India RSS matches ticker or company short/full name. Undated catalyst headlines count as today. Board/results/dividend items also count when the **event date in the headline is today or tomorrow**.
 
 ## After the run
 

@@ -11,6 +11,7 @@ Agent instructions: [SKILL.md](SKILL.md). Shared scrape/score/upsert: [../scan-n
 | Condition | Action |
 |-----------|--------|
 | New company/analyst headline in **today or yesterday**, not already on `scrip_news` | **Insert** or **update** |
+| New **board / results / dividend** headline with **event date today or tomorrow**, not already stored | **Insert** or **update** |
 | New **regulatory** headline for **high-exposure** scrip, impact ≥ 6, **High conviction** | **Insert** or **update** |
 | No such new headline | **Skip** (no write) |
 
@@ -20,9 +21,11 @@ There is **no** stale-age trigger. A scrip is not updated just because `scrip_ne
 
 ## Headline filter (company + analyst)
 
+Fetch searches **ticker and company short form** (`DATAPATTNS` and `"Data Patterns"`) and a **guidance/concall/results/board meeting/interim dividend** Google query. India RSS matches ticker or company name.
+
 Each `kind=news` or `kind=analyst` headline must:
 
-- Be published **today or yesterday**
+- Be published **today or yesterday** (undated catalyst titles count as today), **or** be a board/results/dividend item whose **event date is today or tomorrow**
 - **Primarily name the company in the title** — scrip or `Nsedata.scrip.company` must appear in the headline (summary-only matches are ignored)
 - Not be a market/sector roundup, multi-stock listicle, or weak price-only headline
 - For analyst items: title must also look like an upgrade/downgrade/target/rating headline
@@ -71,7 +74,7 @@ python indian-trading-skills/skills/scan-news-conviction-futures/scripts/ingest_
 | Flag | Default | Meaning |
 |------|---------|---------|
 | `--retain-days` | `2` | Purge futures-only rows older than this |
-| `--company-news-days` | `2` | Headline window (today + yesterday); write only if new vs stored |
+| `--company-news-days` | `2` | Published window (today + yesterday); also write for board/results/dividend dated today or tomorrow if new |
 | `--min-impact` | `4` | Keep high-impact items (1–10) |
 | `--sleep` | `0.35` | Pause between Google News requests |
 | `--limit` | `0` | Max scrips to check (`0` = all) |

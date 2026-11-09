@@ -2,16 +2,18 @@
 name: scan-news-conviction-futures
 description: >-
   Ingest company news and analyst headlines for ALL Nsedata.scrip rows with
-  futures=Yes. Upsert scrip_news only when a new company/analyst headline appears
-  in today or yesterday and is not already stored. Score sentiment and conviction;
-  print a run summary. Use when asked to refresh futures scrip news, F&O news
+  futures=Yes. Upsert scrip_news when a new company/analyst headline is from
+  today or yesterday, or a board/results/dividend event is today or tomorrow,
+  and the title is not already stored. Score sentiment and conviction; print a
+  run summary. Use when asked to refresh futures scrip news, F&O news
   conviction, or scan-news-conviction-futures.
 ---
 
 # Scan News Conviction — Futures
 
-All **futures** scrips (`Nsedata.scrip` `futures=Yes`) → scrape and **write only when
-there is a new company/analyst headline from today or yesterday that is not already
+All **futures** scrips (`Nsedata.scrip` `futures=Yes`) → scrape and **write when
+there is a new company/analyst headline from today or yesterday, or a
+board/results/dividend event dated today or tomorrow, that is not already
 on `scrip_news`** → merge new headlines → recompute **sentiment + conviction** →
 **`Nsedata.scrip_news` only**.
 
@@ -36,7 +38,7 @@ python indian-trading-skills/skills/scan-news-conviction-futures/scripts/ingest_
 | Flag | Default | Meaning |
 |------|---------|---------|
 | `--retain-days` | `2` | Delete **futures-only** `scrip_news` rows older than this (rows with breakout scan-table tags are kept) |
-| `--company-news-days` | `2` | Headline calendar window (2 = today + yesterday); write only if title not already stored |
+| `--company-news-days` | `2` | Published-headline window (2 = today + yesterday). Also writes for board/results/dividend dated **today or tomorrow** if the title is new |
 | `--news-days` | `7` | Unused (headline window uses `--company-news-days`) |
 | `--stale-days` | `3` | Unused (no stale-age trigger) |
 | `--min-impact` | `4` | Keep high-impact items (1–10) |
@@ -58,8 +60,10 @@ For each futures scrip, read `Nsedata.scrip_news` by `scrip` and fetch company/a
 
 | Condition | Action |
 |-----------|--------|
-| At least one headline passes all filters below **and** is **not** already stored | **Insert** or **update** — merge new headlines into existing articles, recompute sentiment/conviction |
-| No such new headline | **Skip** — do not write |
+| New company/analyst headline **published today or yesterday**, not already stored | **Insert** or **update** |
+| New **board / results / dividend** headline whose **event date is today or tomorrow**, not already stored | **Insert** or **update** (T−1/today calendar; filing may be older) |
+| New **regulatory** headline for a high-exposure scrip, impact ≥ 6, **High conviction** | **Insert** or **update** |
+| None of the above | **Skip** — do not write |
 
 There is **no** automatic update based on document age alone.
 
@@ -67,9 +71,12 @@ There is **no** automatic update based on document age alone.
 
 **Does not scrape or score sectoral headlines.** Uses `kind=news` and `kind=analyst` only.
 
+Search uses **ticker and company short form** from `Nsedata.scrip.company` (example: `DATAPATTNS` and `"Data Patterns"`). Google News also runs a **guidance/concall/results/board meeting/interim dividend** query so TV-style chatter and T−1 event positioning are fetched. India RSS keeps items that mention the ticker **or** the short/full company name.
+
 Before a write, each **new** headline must pass **all** checks:
 
-- Published within **today and yesterday** only (`--company-news-days` default `2` = 2 calendar dates)
+- Published within **today and yesterday** only (`--company-news-days` default `2` = 2 calendar dates). **Undated** RSS items still count as today when the title has a company catalyst (results, guidance, concall, outlook, order, etc.)
+- **Board / results / dividend calendar items** also count when the **event date in the headline is today or tomorrow** (not later). A 4 Nov filing for a 10 Nov board is stored on 9 Nov or 10 Nov only. Generic “stocks to watch” wraps are still dropped.
 - **Company name primarily in the title** — scrip or `Nsedata.scrip.company` must appear in the headline; summary-only matches are ignored
 - Drop market/sector roundups (Nifty/Sensex wrap, top gainers/losers, FII flows, etc.)
 - Drop weak price-only headlines (`share price`, `in focus`) without a company catalyst
@@ -122,6 +129,7 @@ Then print **SUMMARY NEWS DIGEST** — **company news + analyst headlines** from
 
 - MongoDB `mongodb://localhost:27017`
 - `pip install pymongo feedparser`
+- Outbound access to at least one configured RSS source. The script checks feed access before database writes and stops if all sources are unreachable.
 
 Reuse scrape/score/upsert from **scan-news-conviction**
 (`ingest_scan_news.py`) and RSS classification from **india-news-tracker**.

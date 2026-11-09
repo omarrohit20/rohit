@@ -123,17 +123,6 @@ def _sync_query_params():
 
 _seed_from_query()
 
-if st.session_state.get("selected_page") not in py_files and py_files:
-    st.session_state["selected_page"] = py_files[0]
-
-in_process = st.sidebar.checkbox("Load pages in-process (single Streamlit app)", key="in_process")
-selected = st.sidebar.selectbox("Open page", py_files, key="selected_page")
-
-try:
-    import chart_preview as _chart_preview
-    _chart_preview.render_sidebar_controls()
-except Exception:
-    pass
 try:
     import importlib
     import news_preview as _news_preview
@@ -145,11 +134,27 @@ try:
     _news_preview.render_sidebar_controls()
 except Exception:
     pass
+
 try:
     import rbase as _rb_sidebar
     _rb_sidebar.render_scrip_index_sidebar()
 except Exception:
     pass
+
+if st.session_state.get("selected_page") not in py_files and py_files:
+    st.session_state["selected_page"] = py_files[0]
+
+in_process = st.sidebar.checkbox("Load pages in-process (single Streamlit app)", key="in_process")
+selected = st.sidebar.selectbox("Open page", py_files, key="selected_page")
+
+
+try:
+    import chart_preview as _chart_preview
+    _chart_preview.render_sidebar_controls()
+except Exception:
+    pass
+
+
 
 _sync_query_params()
 
