@@ -61,7 +61,11 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Buy Check Morning Down Breakup 01s', color='LG')
+        if len(filtered_df) > 3:
+            rb.render(st, filtered_df, 'Buy Check Morning Down Breakup 01s', color='LG')
+        else:
+            empty_df = pd.DataFrame(columns=df.columns)
+            rb.render(st, empty_df, 'Buy Check Morning Down Breakup 01s', color='LG')
     with col3:
         df = rb.getdf('buy-check-morning-down-breakup-02')
         filtered_df = df
@@ -91,7 +95,11 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'Sell Check Morning Up Breakdown 01s', color='LG')
+        if len(filtered_df) > 3:
+            rb.render(st, filtered_df, 'Sell Check Morning Up Breakdown 01s', color='LG')
+        else:
+            empty_df = pd.DataFrame(columns=df.columns)
+            rb.render(st, empty_df, 'Sell Check Morning Up Breakdown 01s', color='LG')
     with col6:
         df = rb.getdf('sell-check-morning-up-breakdown-02')
         filtered_df = df

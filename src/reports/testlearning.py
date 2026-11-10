@@ -675,9 +675,5 @@ def main():
             column_conf=rb.column_config_result, column_order=rb.column_order_result, height=200, renderml=True,
         )
 
-
-
-
-
 if __name__ == '__main__':
     main()
