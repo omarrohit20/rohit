@@ -29,6 +29,16 @@ For local MongoDB multi-horizon trade/investment suggestions:
 - Save entry, targets, stoploss, R:R, sentiment/conviction/Prob%, last 5 trading days
 - Do not re-insert when `dedupe_key` exists
 
+## Investment ideas
+
+- Skill: `skills/investment-ideas/SKILL.md`
+- Helper: `skills/investment-ideas/scripts/run_investment_ideas.py`
+- Investors: `skills/investment-ideas/references/investors.md`
+- Collections: `Nsedata.investment-long-term` (kept), `investment-medium-term` (3 months), `investment-short-term` (20 days)
+- Save High conviction and Bullish only, with `why`, `buy_price`, and `target_price`
+- After the run, report inserted / updated / deleted / skipped per collection, then a symbol, buy, target, conviction, why table
+- Do not place live orders. Educational only, not SEBI advice
+
 ## Scan News Conviction Futures
 
 - Skill: `skills/scan-news-conviction-futures/SKILL.md`

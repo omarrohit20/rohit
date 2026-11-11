@@ -65,6 +65,21 @@ python skills/scan-news-conviction-futures/scripts/ingest_futures_news.py
 
 5. After the run, report the script SUMMARY and the shared **SUMMARY NEWS DIGEST** (company news + high-conviction sectoral news).
 
+## Investment ideas
+
+When the user asks for **investment ideas**, order-book multibaggers, celebrity small/midcap buys, or the investment-ideas report:
+
+1. Follow `skills/investment-ideas/SKILL.md`.
+2. Do not place live orders. Run:
+
+```bash
+python skills/investment-ideas/scripts/run_investment_ideas.py
+```
+
+3. Summarize inserted, updated, deleted, and skipped (not High conviction) counts per collection (`investment-long-term`, `investment-medium-term`, `investment-short-term`).
+4. Lead each collection with a short table: symbol, buy, target, conviction, and why (plus investor or top holder when present).
+5. Disclaimer: educational only, not SEBI advice.
+
 ## Mongo AI Analysis (persist High-conviction picks)
 
 When the user asks to **save / persist / store** suggestions into Mongo (or after a swing+ report):
