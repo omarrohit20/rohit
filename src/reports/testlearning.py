@@ -187,6 +187,8 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+                (abs(df['month3HighChange']) > 1) &
                 (df['PCT_day_change'] < 1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
@@ -204,6 +206,8 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+                (abs(df['month3HighChange']) > 1) &
                 (df['PCT_day_change'] < 1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
@@ -221,6 +225,8 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+                (abs(df['month3HighChange']) > 1) &
                 (df['PCT_day_change'] < 1) &
                 (df['PCT_day_change'] > -1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
@@ -239,6 +245,8 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+                (abs(df['month3LowChange']) > 1) &
                 (df['PCT_day_change'] > -1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
@@ -256,6 +264,8 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+                (abs(df['month3LowChange']) > 1) &
                 (df['PCT_day_change'] > -1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
@@ -273,6 +283,8 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+                (abs(df['month3LowChange']) > 1) &
                 (df['PCT_day_change'] < 1) &
                 (df['PCT_day_change'] > -1) &
                 (keys.isin(bullish) | keys.isin(bearish)) &
@@ -472,7 +484,8 @@ def main():
             filtered_df = df[
                 (keys.isin(bullish) | keys.isin(bearish)) &
                 ((df['PCT_change'] >= 1.4) | (df['PCT_day_change_pre1'] >= 1.4) | keys.isin(bearish)) &
-                 (~keys.isin(bearish_high_scan_news)) &
+                (~keys.isin(bearish_high_scan_news)) &
+                (df['PCT_day_change'] >= -1) &
                 (df['forecast_day_PCT10_change'] > -10) &
                 (df['PCT_day_change'] <= 5) &
                 (df['PCT_change'] <= 4) &
@@ -494,6 +507,7 @@ def main():
             filtered_df = df[
                 (keys.isin(bullish) | keys.isin(bearish)) &
                 (~keys.isin(bullish_high_scan_news)) &
+                (df['PCT_day_change'] < 1) &
                 (df['forecast_day_PCT10_change'] < 10) &
                 (df['PCT_day_change'] >= -5) &
                 (df['PCT_change'] >= -4) &
@@ -519,6 +533,7 @@ def main():
                 (keys.isin(bullish) | keys.isin(bearish)) &
                 ((df['PCT_change'] >= 1.4) | (df['PCT_day_change_pre1'] >= 1.4) | keys.isin(bearish)) &
                 (~keys.isin(bearish_high_scan_news)) &
+                (df['PCT_day_change'] >= -1) &
                 (df['forecast_day_PCT10_change'] > -10) &
                 (df['PCT_day_change'] <= 5) &
                 (df['PCT_change'] <= 4) &
@@ -541,6 +556,7 @@ def main():
             filtered_df = df[
                 (keys.isin(bullish) | keys.isin(bearish)) &
                 (~keys.isin(bullish_high_scan_news)) &
+                (df['PCT_day_change'] < 1) &
                 (df['forecast_day_PCT10_change'] < 10) &
                 (df['PCT_day_change'] >= -5) &
                 (df['PCT_change'] >= -4) &

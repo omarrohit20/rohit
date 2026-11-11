@@ -60,6 +60,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['forecast_day_PCT10_change'] < 10) &
                 (
                         (((df['PCT_day_change'] < 2) | (df['PCT_day_change_pre1'] < 2)) &
                          ((df['PCT_day_change'] < 1.5) & (df['PCT_change'] < 1.5)) &
@@ -213,6 +214,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                (df['forecast_day_PCT10_change'] > -10) &
                 (
                         (~(df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) &
                          ((df['PCT_day_change'] > -1.5) & (df['PCT_day_change_pre1'] > -1.5)) &

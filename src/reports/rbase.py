@@ -773,6 +773,14 @@ DCH_BAND_CHOICES = (
     "|Dch| > 2",
     "|Dch| > 3",
 )
+_EXTRA_DATA_FILTER_CHOICES = (
+    "close > 50",
+    "|PCT_day_change_pre1| < 1.5 or |PCT_day_change_pre2| < 1.5",
+    "|month3LowChange| > 1",
+    "|month3HighChange| > 1",
+)
+DATA_FILTER_CHOICES = DCH_BAND_CHOICES + _EXTRA_DATA_FILTER_CHOICES
+_DCH_BAND_CHOICE_SET = frozenset(DCH_BAND_CHOICES)
 _DCH_ABS_BAND_THRESHOLDS = (
     ("|Dch| > 1", 1),
     ("|Dch| > 2", 2),
@@ -826,7 +834,7 @@ def persist_sidebar_prefs():
         "news_sentiment": sentiment,
         "scrip_index": scrip_index,
         "excluded_industries": [str(x) for x in excluded if x is not None and str(x).strip()],
-        "dch_bands": [str(x) for x in dch if x in DCH_BAND_CHOICES],
+        "dch_bands": [str(x) for x in dch if x in DATA_FILTER_CHOICES],
         "exclude_mcap": [str(x) for x in mcap if x in EXCLUDE_MCAP_CHOICES],
         "updated_at": ts,
     }
@@ -869,7 +877,7 @@ def apply_sidebar_prefs_from_db():
         ]
     dch = doc.get("dch_bands") or []
     if isinstance(dch, (list, tuple)):
-        st.session_state[_DCH_BAND_KEY] = [str(x) for x in dch if x in DCH_BAND_CHOICES]
+        st.session_state[_DCH_BAND_KEY] = [str(x) for x in dch if x in DATA_FILTER_CHOICES]
     mcap = doc.get("exclude_mcap") or []
     if isinstance(mcap, (list, tuple)):
         st.session_state[_EXCLUDE_MCAP_KEY] = [str(x) for x in mcap if x in EXCLUDE_MCAP_CHOICES]
@@ -993,14 +1001,18 @@ def filter_df_by_excluded_industries(df):
     return filtered
 
 
-def current_pct_day_change_bands():
+def current_data_filters():
     try:
         picked = st.session_state.get(_DCH_BAND_KEY) or []
     except Exception:
         picked = []
     if not isinstance(picked, (list, tuple)):
         picked = [picked]
-    return frozenset(b for b in picked if b in DCH_BAND_CHOICES)
+    return frozenset(b for b in picked if b in DATA_FILTER_CHOICES)
+
+
+def current_pct_day_change_bands():
+    return current_data_filters() & _DCH_BAND_CHOICE_SET
 
 
 def current_exclude_mcap_ceiling():
@@ -1069,23 +1081,59 @@ def filter_df_by_exclude_mcap(df):
     return filtered
 
 
-def filter_df_by_pct_day_change(df):
-    """Keep rows in any selected PCT_day_change band (OR across bands)."""
-    bands = current_pct_day_change_bands()
-    if not bands or df is None:
+def filter_df_by_data_filtering(df):
+    """Apply sidebar Data filtering: Dch bands OR among themselves; other rules AND."""
+    picked = current_data_filters()
+    if not picked or df is None:
         return df
     work = _underlying_table(df)
     if work is None or getattr(work, "empty", True):
         return df
-    if "PCT_day_change" not in getattr(work, "columns", []):
-        return df
-    pct = pd.to_numeric(work["PCT_day_change"], errors="coerce")
-    keep = pd.Series(False, index=work.index)
-    if "Between -1 and 1" in bands:
-        keep |= pct.between(-1, 1, inclusive="both")
-    for label, threshold in _DCH_ABS_BAND_THRESHOLDS:
-        if label in bands:
-            keep |= pct.abs() > threshold
+
+    keep = pd.Series(True, index=work.index)
+    dch_bands = picked & _DCH_BAND_CHOICE_SET
+    extra = picked - _DCH_BAND_CHOICE_SET
+
+    if dch_bands:
+        if "PCT_day_change" not in getattr(work, "columns", []):
+            if not extra:
+                return df
+        else:
+            pct = pd.to_numeric(work["PCT_day_change"], errors="coerce")
+            dch_keep = pd.Series(False, index=work.index)
+            if "Between -1 and 1" in dch_bands:
+                dch_keep |= pct.between(-1, 1, inclusive="both")
+            for label, threshold in _DCH_ABS_BAND_THRESHOLDS:
+                if label in dch_bands:
+                    dch_keep |= pct.abs() > threshold
+            keep &= dch_keep.fillna(False)
+
+    if "close > 50" in extra and "close" in work.columns:
+        close = pd.to_numeric(work["close"], errors="coerce")
+        keep &= close > 50
+
+    pre_rule = "|PCT_day_change_pre1| < 1.5 or |PCT_day_change_pre2| < 1.5"
+    if pre_rule in extra:
+        has_pre1 = "PCT_day_change_pre1" in work.columns
+        has_pre2 = "PCT_day_change_pre2" in work.columns
+        if has_pre1 or has_pre2:
+            pre_keep = pd.Series(False, index=work.index)
+            if has_pre1:
+                pre1 = pd.to_numeric(work["PCT_day_change_pre1"], errors="coerce")
+                pre_keep |= pre1.abs() < 1.5
+            if has_pre2:
+                pre2 = pd.to_numeric(work["PCT_day_change_pre2"], errors="coerce")
+                pre_keep |= pre2.abs() < 1.5
+            keep &= pre_keep.fillna(False)
+
+    if "|month3LowChange| > 1" in extra and "month3LowChange" in work.columns:
+        m3lo = pd.to_numeric(work["month3LowChange"], errors="coerce")
+        keep &= m3lo.abs() > 1
+
+    if "|month3HighChange| > 1" in extra and "month3HighChange" in work.columns:
+        m3hi = pd.to_numeric(work["month3HighChange"], errors="coerce")
+        keep &= m3hi.abs() > 1
+
     filtered = work.loc[keep.fillna(False)].reset_index(drop=True)
     if work is not df and hasattr(df, "copy"):
         try:
@@ -1098,11 +1146,15 @@ def filter_df_by_pct_day_change(df):
     return filtered
 
 
+def filter_df_by_pct_day_change(df):
+    return filter_df_by_data_filtering(df)
+
+
 def _apply_global_table_filters(df):
     df = filter_df_by_news_sentiment(df)
     df = filter_df_by_excluded_industries(df)
     df = filter_df_by_exclude_mcap(df)
-    return filter_df_by_pct_day_change(df)
+    return filter_df_by_data_filtering(df)
 
 
 _BULL_BEAR_SENTIMENTS = frozenset({"bullish", "bearish"})
@@ -1294,11 +1346,12 @@ def render_scrip_index_sidebar():
             n = len(excluded)
             st.sidebar.caption(f"Excluding {n} industr{'y' if n == 1 else 'ies'}")
         st.sidebar.multiselect(
-            "Dch band (PCT_day_change)",
-            options=list(DCH_BAND_CHOICES),
+            "Data filtering",
+            options=list(DATA_FILTER_CHOICES),
             key=_DCH_BAND_KEY,
             on_change=persist_sidebar_prefs,
-            help="Keep rows in any selected band (-1 to 1, |Dch| > 1/2/3). Empty = show all.",
+            help="Dch bands: keep rows matching any selected band (OR). Other rules apply together (AND). "
+            "Empty = show all.",
         )
         st.sidebar.multiselect(
             "Exclude by market cap (crores)",

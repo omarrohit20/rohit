@@ -1187,7 +1187,7 @@ def main():
                 (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (abs(df['PCT_day_change']) > 0.5) &
-                (df['PCT_day_change'] <= 2.5) &
+                (df['PCT_day_change'] <= 1.3) &
                 (df['PCT_change'] <= 3)
                 ]
 
@@ -1260,7 +1260,7 @@ def main():
                 (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (abs(df['PCT_day_change']) > 0.5) &
-                (df['PCT_day_change'] >= -2.5) &
+                (df['PCT_day_change'] >= -1.3) &
                 (df['PCT_change'] >= -3)
                 ]
 

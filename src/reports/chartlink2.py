@@ -71,24 +71,29 @@ def main():
         try:
             filtered_df = df[
                 (
-                    (((df['PCT_day_change'] < 2) | (df['PCT_day_change_pre1'] < 2)) &
-                    ((df['PCT_day_change'] < 1.5) & (df['PCT_change'] < 1.5)) &
-                    ((df['forecast_day_PCT10_change'] < 1) | (df['forecast_day_PCT5_change'] < 1) | (df['forecast_day_PCT7_change'] < 1) ) &
-                    (df['forecast_day_PCT10_change'] > -2) & 
-                    (df['forecast_day_PCT7_change'] > -1) & 
-                    (df['forecast_day_PCT5_change'] > -1) & 
-                    (df['forecast_day_PCT10_change'] < 3))
-                    |
-                    (((df['PCT_day_change'] < 0.5) | (df['PCT_day_change_pre1'] < 0.5) | (df['PCT_day_change_pre2'] < 0.5)) &
-                    ((df['PCT_day_change'] > 0.5) | (abs(df['PCT_day_change_pre1']) > 0.5) | (abs(df['PCT_day_change_pre2']) > 0.5)) &
-                    ((df['PCT_day_change'] < 2) | (df['PCT_day_change_pre1'] < 2)) &
-                    ((df['PCT_day_change'] > -0.3) | (df['PCT_day_change_pre2'] > -0.3)) &
-                    ((df['yearHighChange'] < 0) | (df['monthHighChange'] < 0) | (df['forecast_day_PCT10_change'] < -6)) &
                     (
-                        ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT10_change'] < 15)) |
-                        (((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] > 0))) |
-                        ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] <= -0.5))
-                    ))
+                        ((df['PCT_day_change'] < 2) | (df['PCT_day_change_pre1'] < 2)) &
+                        ((df['PCT_day_change'] < 1.5) & (df['PCT_change'] < 1.5)) &
+                        ((df['forecast_day_PCT10_change'] < 1) | (df['forecast_day_PCT5_change'] < 1) | (df['forecast_day_PCT7_change'] < 1) ) &
+                        (df['forecast_day_PCT10_change'] > -2) & 
+                        (df['forecast_day_PCT7_change'] > -1) & 
+                        (df['forecast_day_PCT5_change'] > -1) & 
+                        (df['forecast_day_PCT10_change'] < 3)
+                    )
+                    |
+                    (
+                        (df['forecast_day_PCT10_change'] < 10) &
+                        ((df['PCT_day_change'] < 0.5) | (df['PCT_day_change_pre1'] < 0.5) | (df['PCT_day_change_pre2'] < 0.5)) &
+                        ((df['PCT_day_change'] > 0.5) | (abs(df['PCT_day_change_pre1']) > 0.5) | (abs(df['PCT_day_change_pre2']) > 0.5)) &
+                        ((df['PCT_day_change'] < 2) | (df['PCT_day_change_pre1'] < 2)) &
+                        ((df['PCT_day_change'] > -0.3) | (df['PCT_day_change_pre2'] > -0.3)) &
+                        ((df['yearHighChange'] < 0) | (df['monthHighChange'] < 0) | (df['forecast_day_PCT10_change'] < -6)) &
+                        (
+                            ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] > 2) & (df['forecast_day_PCT10_change'] < 15)) |
+                            (((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] > 0))) |
+                            ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] <= -0.5))
+                        )
+                    )
                 )
                 ]
             
@@ -221,25 +226,30 @@ def main():
         try:
             filtered_df = df[
                 (
-                    (~(df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & 
-                    ((df['PCT_day_change'] > -1.5) & (df['PCT_day_change_pre1'] > -1.5)) &
-                    ((df['forecast_day_PCT5_change'] > -1) | (df['forecast_day_PCT5_change'] > -1) | (df['forecast_day_PCT7_change'] > -1)) &
-                    (df['forecast_day_PCT10_change'] < 2) & 
-                    (df['forecast_day_PCT7_change'] < 1) & 
-                    (df['forecast_day_PCT5_change'] < 1) & 
-                    (df['forecast_day_PCT10_change'] > -3))
-                    | 
-                    ((~df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) &
-                    ((df['PCT_day_change'] > -0.5) | (df['PCT_day_change_pre1'] > -0.5) | (df['PCT_day_change_pre2'] > -0.5)) &
-                    ((df['PCT_day_change'] < -0.5) | (abs(df['PCT_day_change_pre1']) > 0.5) | (abs(df['PCT_day_change_pre2']) > 0.5)) &
-                    ((df['PCT_day_change'] > -2) | (df['PCT_day_change_pre1'] > -2)) &
-                    ((df['PCT_day_change'] < 0.3) | (df['PCT_day_change_pre2'] < 0.3)) &
-                    ((df['yearLowChange'] > 0) | (df['monthLowChange'] > 0) | (df['forecast_day_PCT10_change'] > 6)) &
                     (
-                        ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT10_change'] > -15)) |
-                        (((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] < 0))) |
-                        ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] >= 0.5))
-                    ))
+                        ~(df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & 
+                        ((df['PCT_day_change'] > -1.5) & (df['PCT_day_change_pre1'] > -1.5)) &
+                        ((df['forecast_day_PCT5_change'] > -1) | (df['forecast_day_PCT5_change'] > -1) | (df['forecast_day_PCT7_change'] > -1)) &
+                        (df['forecast_day_PCT10_change'] < 2) & 
+                        (df['forecast_day_PCT7_change'] < 1) & 
+                        (df['forecast_day_PCT5_change'] < 1) & 
+                        (df['forecast_day_PCT10_change'] > -3)
+                    )
+                    | 
+                    (
+                        (df['forecast_day_PCT10_change'] > -10) &
+                        (~df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) &
+                        ((df['PCT_day_change'] > -0.5) | (df['PCT_day_change_pre1'] > -0.5) | (df['PCT_day_change_pre2'] > -0.5)) &
+                        ((df['PCT_day_change'] < -0.5) | (abs(df['PCT_day_change_pre1']) > 0.5) | (abs(df['PCT_day_change_pre2']) > 0.5)) &
+                        ((df['PCT_day_change'] > -2) | (df['PCT_day_change_pre1'] > -2)) &
+                        ((df['PCT_day_change'] < 0.3) | (df['PCT_day_change_pre2'] < 0.3)) &
+                        ((df['yearLowChange'] > 0) | (df['monthLowChange'] > 0) | (df['forecast_day_PCT10_change'] > 6)) &
+                        (
+                            ((df['systemtime'].str.contains('9:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] < -2) & (df['forecast_day_PCT10_change'] > -15)) |
+                            (((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] < 0))) |
+                            ((df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) & (df['forecast_day_PCT10_change'] >= 0.5))
+                        )
+                    )
                 )
                 ]
             
@@ -740,7 +750,9 @@ def main():
             allowed = rb.news_sentiment_scrips('Bullish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 keys.isin(allowed) &
+                (abs(df['month3HighChange']) > 1) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
@@ -756,7 +768,9 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 ((keys.isin(bullish)) | (keys.isin(bearish)) | (df['PCT_day_change'] < 1) ) &
+                (abs(df['month3HighChange']) > 1) &
                 (df['PCT_day_change'] < 3) &
                 (df['PCT_change'] < 3) &
                 ((abs(df['PCT_day_change_pre1']) > 1) | (abs(df['PCT_day_change']) > 1) | (abs(df['PCT_change']) > 1)) &
@@ -779,6 +793,8 @@ def main():
             bullish = rb.news_sentiment_scrips('Bullish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+                (abs(df['month3HighChange']) > 1) &
                 ((df['PCT_day_change'] < 1) ) &
                 ((df['PCT_day_change_pre1'] < 0.5) | (df['PCT_day_change_pre2'] < 0.5) | ((df['PCT_day_change_pre1'] < 1) & (df['PCT_day_change_pre2'] < 1)) ) &
                 (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
@@ -801,7 +817,9 @@ def main():
             allowed = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 keys.isin(allowed) &
+                (abs(df['month3LowChange']) > 1) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False))
@@ -817,7 +835,9 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 ((keys.isin(bullish)) | (keys.isin(bearish)) | (df['PCT_day_change'] > -1) ) &
+                (abs(df['month3LowChange']) > 1) &
                 (df['PCT_day_change'] < 3) &
                 (df['PCT_change'] < 3) &
                 ((abs(df['PCT_day_change_pre1']) > 1) | (abs(df['PCT_day_change']) > 1) | (abs(df['PCT_change']) > 1)) &
@@ -841,6 +861,8 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+                (abs(df['month3LowChange']) > 1) &
                 ((df['PCT_day_change'] > -1) ) &
                 ((df['PCT_day_change_pre1'] > -0.5) | (df['PCT_day_change_pre2'] > -0.5) | ((df['PCT_day_change_pre1'] > -1) & (df['PCT_day_change_pre2'] > -1))) &
                 (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
@@ -866,6 +888,8 @@ def main():
             allowed = rb.news_sentiment_scrips('Bullish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+                (abs(df['month3HighChange']) > 1) &
                 keys.isin(allowed)
                 ]
         except KeyError as e:
@@ -879,7 +903,9 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 ((keys.isin(bullish)) | (keys.isin(bearish)) | (df['PCT_day_change'] < 1) ) &
+                (abs(df['month3HighChange']) > 1) &
                 (df['PCT_day_change'] < 3) &
                 (df['PCT_change'] < 3) &
                 ((abs(df['PCT_day_change_pre1']) > 1) | (abs(df['PCT_day_change']) > 1) | (abs(df['PCT_change']) > 1)) &
@@ -895,6 +921,8 @@ def main():
             bullish = rb.news_sentiment_scrips('Bullish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+                (abs(df['month3HighChange']) > 1) &
                 ((df['PCT_day_change'] < 1) ) &
                 ((df['PCT_day_change_pre1'] < 0.5) | (df['PCT_day_change_pre2'] < 0.5) | ((df['PCT_day_change_pre1'] < 1) & (df['PCT_day_change_pre2'] < 1)) ) &
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
@@ -913,7 +941,9 @@ def main():
             allowed = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
-                keys.isin(allowed) 
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+                (abs(df['month3LowChange']) > 1) &
+                keys.isin(allowed)
                 ]
         except KeyError as e:
             pass
@@ -926,7 +956,9 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 ((keys.isin(bullish)) | (keys.isin(bearish)) | (df['PCT_day_change'] > -1) ) &
+                (abs(df['month3LowChange']) > 1) &
                 (df['PCT_day_change'] < 3) &
                 (df['PCT_change'] < 3) &
                 ((abs(df['PCT_day_change_pre1']) > 1) | (abs(df['PCT_day_change']) > 1) | (abs(df['PCT_change']) > 1)) &
@@ -943,6 +975,8 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+                (abs(df['month3LowChange']) > 1) &
                 ((df['PCT_day_change'] > -1) ) &
                 ((df['PCT_day_change_pre1'] > -0.5) | (df['PCT_day_change_pre2'] > -0.5) | ((df['PCT_day_change_pre1'] > -1) & (df['PCT_day_change_pre2'] > -1))) &
                 (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
@@ -971,6 +1005,7 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bullish)) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, na=False)) &
@@ -1000,6 +1035,7 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bullish)) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, na=False)) &
@@ -1028,6 +1064,7 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bearish)) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, na=False)) &
@@ -1057,6 +1094,7 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bearish)) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, na=False)) &
@@ -1085,6 +1123,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, na=False)) &
@@ -1107,7 +1146,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
-            filtered_df = df
+            filtered_df = df[
+                (abs(df['month3HighChange']) > 1) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) 
+            ]
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
@@ -1123,6 +1165,7 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 (~df['systemtime'].str.contains('10:15', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:2', case=False, na=False)) &
                 (~df['systemtime'].str.contains('10:3', case=False, na=False)) &
@@ -1145,7 +1188,10 @@ def main():
         empty_df = pd.DataFrame(columns=expected_columns)
         filtered_df = df
         try:
-            filtered_df = df
+            filtered_df = df[
+                (abs(df['month3LowChange']) > 1) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5)))
+            ]
         except KeyError as e:
             print("")
         if len(filtered_df) >= 1:
@@ -1169,6 +1215,8 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bullish)) &
+                (abs(df['month3HighChange']) > 1) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
                 (df['yearLowChange'] > 15) &
                 (df['forecast_day_PCT10_change'] > -8) &
@@ -1186,6 +1234,8 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bullish)) &
+                (abs(df['month3HighChange']) > 1) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
                 (df['yearLowChange'] > 15) &
                 (df['PCT_day_change'] < 3) &
@@ -1207,6 +1257,8 @@ def main():
             bullish = rb.news_sentiment_scrips('Bullish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (abs(df['month3HighChange']) > 1) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 (keys.isin(bullish))
                 ]
         except KeyError as e:
@@ -1220,6 +1272,8 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bearish)) &
+                (abs(df['month3LowChange']) > 1) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
                 (df['forecast_day_PCT10_change'] < 8) &
                 (df['PCT_day_change_pre2'] < 0.5) &
@@ -1236,6 +1290,8 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bearish)) &
+                (abs(df['month3LowChange']) > 1) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
                 (df['PCT_day_change'] > -3) &
                 (df['PCT_day_change'] < 1.5) &
@@ -1256,6 +1312,8 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (abs(df['month3LowChange']) > 1) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 (keys.isin(bearish))
             ]
         except KeyError as e:
@@ -1272,6 +1330,8 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bullish)) &
+                (abs(df['month3HighChange']) > 1) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT7_change'] > 2) | (df['forecast_day_PCT5_change'] > 2)) &
                 ((df['PCT_day_change_pre2'] > -1) | (df['PCT_day_change_pre1'] < 0)) &
                 (df['PCT_day_change'] > -1.5) &
@@ -1296,6 +1356,8 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bullish)) &
+                (abs(df['month3HighChange']) > 1) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 #((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
                 (df['PCT_day_change'] > -1.5) &
                 (df['forecast_day_PCT10_change'] > -2) &
@@ -1328,6 +1390,8 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bullish)) &
+                (abs(df['month3HighChange']) > 1) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 ((df['PCT_day_change_pre2'] > 1) | (df['PCT_day_change_pre1'] > 1)) &
                 (df['yearLowChange'] > 15)
                 ]
@@ -1342,6 +1406,8 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bearish)) &
+                (abs(df['month3LowChange']) > 1) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 ((df['forecast_day_PCT10_change'] < -2) | (df['forecast_day_PCT7_change'] < -2) | (df['forecast_day_PCT5_change'] < -2)) &
                 ((df['PCT_day_change_pre2'] < 1) | (df['PCT_day_change_pre1'] > 0)) &
                 (df['PCT_day_change'] < 1.5) &
@@ -1365,6 +1431,8 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bearish)) &
+                (abs(df['month3LowChange']) > 1) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 (df['PCT_day_change'] < 1.5) &
                 (df['forecast_day_PCT10_change'] < 2) &
                 (df['forecast_day_PCT10_change'] > -10) &
@@ -1396,6 +1464,8 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bearish)) &
+                (abs(df['month3LowChange']) > 1) &
+                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
                 ((df['PCT_day_change_pre2'] < -1) | (df['PCT_day_change_pre1'] < -1)) &
                 (df['yearHighChange'] < -15)
                 ]
