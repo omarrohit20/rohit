@@ -778,6 +778,102 @@ _DCH_ABS_BAND_THRESHOLDS = (
     ("|Dch| > 2", 2),
     ("|Dch| > 3", 3),
 )
+_EXCLUDE_MCAP_KEY = "exclude_mcap_greater_than"
+# Labels shown in sidebar → crores threshold (Nsedata.scrip.marketcap).
+EXCLUDE_MCAP_CHOICES = (
+    "Exclude mcap > 300,000",
+    "Exclude mcap > 400,000",
+    "Exclude mcap > 500,000",
+    "Exclude mcap > 700,000",
+    "Exclude mcap > 1,000,000",
+)
+_EXCLUDE_MCAP_THRESHOLDS = {
+    "Exclude mcap > 300,000": 300_000.0,
+    "Exclude mcap > 400,000": 400_000.0,
+    "Exclude mcap > 500,000": 500_000.0,
+    "Exclude mcap > 700,000": 700_000.0,
+    "Exclude mcap > 1,000,000": 1_000_000.0,
+}
+_SIDEBAR_PREFS_COLL = "reports_sidebar_prefs"
+_SIDEBAR_PREFS_ID = "global"
+_SIDEBAR_PREFS_TS_KEY = "_reports_sidebar_prefs_ts"
+
+
+def _sidebar_prefs_collection():
+    return dbnse[_SIDEBAR_PREFS_COLL]
+
+
+def persist_sidebar_prefs():
+    """Save shared left-bar filters to Nsedata.reports_sidebar_prefs (cross-page)."""
+    ts = time.time()
+    sentiment = str(st.session_state.get(_news_preview._NEWS_SENTIMENT_KEY) or "All")
+    if sentiment not in _news_preview.NEWS_SENTIMENT_CHOICES:
+        sentiment = "All"
+    scrip_index = str(st.session_state.get(_SCRIP_INDEX_KEY) or "All")
+    if scrip_index not in SCRIP_INDEX_CHOICES:
+        scrip_index = "All"
+    excluded = st.session_state.get(_EXCLUDED_INDUSTRIES_KEY) or []
+    if not isinstance(excluded, (list, tuple)):
+        excluded = [excluded]
+    dch = st.session_state.get(_DCH_BAND_KEY) or []
+    if not isinstance(dch, (list, tuple)):
+        dch = [dch]
+    mcap = st.session_state.get(_EXCLUDE_MCAP_KEY) or []
+    if not isinstance(mcap, (list, tuple)):
+        mcap = [mcap]
+    doc = {
+        "_id": _SIDEBAR_PREFS_ID,
+        "news_sentiment": sentiment,
+        "scrip_index": scrip_index,
+        "excluded_industries": [str(x) for x in excluded if x is not None and str(x).strip()],
+        "dch_bands": [str(x) for x in dch if x in DCH_BAND_CHOICES],
+        "exclude_mcap": [str(x) for x in mcap if x in EXCLUDE_MCAP_CHOICES],
+        "updated_at": ts,
+    }
+    try:
+        _sidebar_prefs_collection().replace_one({"_id": _SIDEBAR_PREFS_ID}, doc, upsert=True)
+        st.session_state[_SIDEBAR_PREFS_TS_KEY] = ts
+    except Exception:
+        pass
+
+
+def apply_sidebar_prefs_from_db():
+    """Load shared filters when another report page (or tab) changed them."""
+    try:
+        doc = _sidebar_prefs_collection().find_one({"_id": _SIDEBAR_PREFS_ID})
+    except Exception:
+        return
+    if not doc:
+        return
+    ts = doc.get("updated_at")
+    if ts is None:
+        return
+    try:
+        if float(st.session_state.get(_SIDEBAR_PREFS_TS_KEY, -1)) >= float(ts):
+            return
+    except (TypeError, ValueError):
+        pass
+    sentiment = str(doc.get("news_sentiment") or "All")
+    if sentiment in _news_preview.NEWS_SENTIMENT_CHOICES:
+        st.session_state[_news_preview._NEWS_SENTIMENT_KEY] = sentiment
+    scrip_index = str(doc.get("scrip_index") or "All")
+    if scrip_index in SCRIP_INDEX_CHOICES:
+        st.session_state[_SCRIP_INDEX_KEY] = scrip_index
+    industries = doc.get("excluded_industries") or []
+    if isinstance(industries, (list, tuple)):
+        valid_industries = set(get_industry_choices())
+        st.session_state[_EXCLUDED_INDUSTRIES_KEY] = [
+            str(x)
+            for x in industries
+            if x is not None and str(x).strip() and (not valid_industries or str(x) in valid_industries)
+        ]
+    dch = doc.get("dch_bands") or []
+    if isinstance(dch, (list, tuple)):
+        st.session_state[_DCH_BAND_KEY] = [str(x) for x in dch if x in DCH_BAND_CHOICES]
+    mcap = doc.get("exclude_mcap") or []
+    if isinstance(mcap, (list, tuple)):
+        st.session_state[_EXCLUDE_MCAP_KEY] = [str(x) for x in mcap if x in EXCLUDE_MCAP_CHOICES]
+    st.session_state[_SIDEBAR_PREFS_TS_KEY] = ts
 
 
 def current_scrip_index():
@@ -907,6 +1003,72 @@ def current_pct_day_change_bands():
     return frozenset(b for b in picked if b in DCH_BAND_CHOICES)
 
 
+def current_exclude_mcap_ceiling():
+    """Lowest selected crores threshold (strictest hide-above rule)."""
+    try:
+        picked = st.session_state.get(_EXCLUDE_MCAP_KEY) or []
+    except Exception:
+        picked = []
+    if not isinstance(picked, (list, tuple)):
+        picked = [picked]
+    thresholds = [
+        _EXCLUDE_MCAP_THRESHOLDS[label]
+        for label in picked
+        if label in _EXCLUDE_MCAP_THRESHOLDS
+    ]
+    if not thresholds:
+        return None
+    return min(thresholds)
+
+
+@st.cache_data(ttl=86_400)
+def _scrip_mcap_map_crores():
+    """scrip (upper) → marketcap in crores from Nsedata.scrip (cache 24h)."""
+    caps: dict[str, float] = {}
+    try:
+        for d in dbnse.scrip.find({"marketcap": {"$exists": True, "$ne": None}}, {"scrip": 1, "marketcap": 1}):
+            scrip = str(d.get("scrip") or "").strip().upper()
+            if not scrip:
+                continue
+            try:
+                cap = float(d.get("marketcap"))
+            except (TypeError, ValueError):
+                continue
+            if cap > 0:
+                caps[scrip] = cap
+    except Exception:
+        pass
+    return caps
+
+
+def filter_df_by_exclude_mcap(df):
+    """Drop rows whose Nsedata.scrip.marketcap is above the selected ceiling(s)."""
+    ceiling = current_exclude_mcap_ceiling()
+    if ceiling is None or df is None:
+        return df
+    work = _underlying_table(df)
+    if work is None or getattr(work, "empty", True):
+        return df
+    if "scrip" not in getattr(work, "columns", []):
+        return df
+    mcap_map = _scrip_mcap_map_crores()
+    if not mcap_map:
+        return df
+    keys = work["scrip"].astype(str).str.strip().str.upper()
+    caps = keys.map(mcap_map)
+    keep = caps.isna() | (caps <= ceiling)
+    filtered = work.loc[keep].reset_index(drop=True)
+    if work is not df and hasattr(df, "copy"):
+        try:
+            out = df.copy()
+            out.data = filtered
+            out.columns = filtered.columns
+            return out
+        except Exception:
+            pass
+    return filtered
+
+
 def filter_df_by_pct_day_change(df):
     """Keep rows in any selected PCT_day_change band (OR across bands)."""
     bands = current_pct_day_change_bands()
@@ -939,6 +1101,7 @@ def filter_df_by_pct_day_change(df):
 def _apply_global_table_filters(df):
     df = filter_df_by_news_sentiment(df)
     df = filter_df_by_excluded_industries(df)
+    df = filter_df_by_exclude_mcap(df)
     return filter_df_by_pct_day_change(df)
 
 
@@ -1107,10 +1270,12 @@ def filter_df_by_scrip_index(df):
 def render_scrip_index_sidebar():
     """Sidebar control used by the reports index and standalone pages."""
     try:
+        apply_sidebar_prefs_from_db()
         st.sidebar.selectbox(
             "Scrip index",
             list(SCRIP_INDEX_CHOICES),
             key=_SCRIP_INDEX_KEY,
+            on_change=persist_sidebar_prefs,
             help="Filter every table by Nsedata.scrip index: F&O (futures), Nifty 500, or cash.",
         )
         choice = current_scrip_index()
@@ -1121,6 +1286,7 @@ def render_scrip_index_sidebar():
             "Exclude industries",
             options=industries,
             key=_EXCLUDED_INDUSTRIES_KEY,
+            on_change=persist_sidebar_prefs,
             help="Hide rows by Nsedata industry and by scrip (matches Chartlink labels like I.T → Information Technology).",
         )
         excluded = current_excluded_industries()
@@ -1131,8 +1297,20 @@ def render_scrip_index_sidebar():
             "Dch band (PCT_day_change)",
             options=list(DCH_BAND_CHOICES),
             key=_DCH_BAND_KEY,
+            on_change=persist_sidebar_prefs,
             help="Keep rows in any selected band (-1 to 1, |Dch| > 1/2/3). Empty = show all.",
         )
+        st.sidebar.multiselect(
+            "Exclude by market cap (crores)",
+            options=list(EXCLUDE_MCAP_CHOICES),
+            key=_EXCLUDE_MCAP_KEY,
+            on_change=persist_sidebar_prefs,
+            help="Hide rows whose Nsedata.scrip.marketcap is above the chosen threshold(s). "
+            "With multiple picks, the lowest threshold wins. Saved in Nsedata.reports_sidebar_prefs.",
+        )
+        mcap_ceiling = current_exclude_mcap_ceiling()
+        if mcap_ceiling is not None:
+            st.sidebar.caption(f"Hiding scrips with marketcap > {mcap_ceiling:,.0f} cr")
     except Exception as e:
         if "duplicate" not in type(e).__name__.lower() and "duplicate" not in str(e).lower():
             raise

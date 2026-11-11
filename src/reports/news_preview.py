@@ -101,6 +101,11 @@ def current_news_sentiment():
 
 
 def render_sidebar_controls():
+    try:
+        import rbase as _rb
+        _rb.apply_sidebar_prefs_from_db()
+    except Exception:
+        pass
     st.sidebar.markdown("---")
     st.sidebar.subheader("News & sentiment")
     st.sidebar.checkbox(
@@ -111,11 +116,18 @@ def render_sidebar_controls():
     )
     if _NEWS_SENTIMENT_KEY not in st.session_state:
         st.session_state[_NEWS_SENTIMENT_KEY] = "All"
+    try:
+        import rbase as _rb
+        _on_sentiment_change = _rb.persist_sidebar_prefs
+    except Exception:
+        _on_sentiment_change = None
     st.sidebar.selectbox(
         "News sentiment",
         list(NEWS_SENTIMENT_CHOICES),
         key=_NEWS_SENTIMENT_KEY,
-        help="Keep table rows whose scrip_news overall_sentiment is Bullish, Bearish, or either.",
+        on_change=_on_sentiment_change,
+        help="Keep table rows whose scrip_news overall_sentiment is Bullish, Bearish, or either. "
+        "Saved in Nsedata.reports_sidebar_prefs.",
     )
     choice = current_news_sentiment()
     if choice != "All":
