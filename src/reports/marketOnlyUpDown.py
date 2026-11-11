@@ -408,31 +408,7 @@ def main():
             print("")
         rb.render(st, filtered_df, 'Sell All Processor   +   Crossed 2 Day Low', column_order=rb.column_order_p, color='LG', renderf10sell01=True)
     
-    col1, col2, col4, col5 = st.columns(4)
-    with col1:
-        df = rb.getintersectdf('buy_all_processor', 'buy-breakout')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] > 2) | (df['forecast_day_PCT10_change'] < -6)) &
-                (df['PCT_day_change'] > -2) &
-                (~df['processor'].str.contains('Check-News')) &
-                (~df['processor'].str.contains('supertrend-morning-buy')) &
-                (~df['processor'].str.contains('checkChartBuy/')) &
-                (~df['processor'].str.contains('buy-breakout')) &
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'BuyAllProcessor + BuyBreakout', column_order=rb.column_order_p, color='LG', renderf10buy01=True)
-        else:
-            rb.render(st, empty_df, 'BuyAllProcessor + BuyBreakout', column_order=rb.column_order_p, color='LG', renderf10buy01=True)
+    col2, col5 = st.columns(2)
     with col2:
         df = rb.getdf('buy_all_processor')
         filtered_df = df
@@ -453,31 +429,6 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'BuyAllProcessor+ZPre1_Upstairs', column_order=rb.column_order_default, color='LG', renderf10buy01=True)
-    with col4:
-        df = rb.getintersectdf('sell_all_processor', 'buy-breakout')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
-                (df['PCT_day_change'] < 2) &
-                (~df['processor'].str.contains('Check-News'))&
-                (~df['processor'].str.contains('checkChartSell/')) &
-                (~df['processor'].str.contains('supertrend-morning-sell'))&
-                (~df['processor'].str.contains('sell-breakout')) &
-                (~df['processor'].str.contains('checkChartSell')) &
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('09:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'SellAllProcessor + SellBreakout', column_order=rb.column_order_p, color='LG', renderf10sell01=True)
-        else:
-            rb.render(st, empty_df, 'SellAllProcessor + SellBreakout', column_order=rb.column_order_p, color='LG', renderf10sell01=True) 
     with col5:
         df = rb.getdf('sell_all_processor')
         filtered_df = df

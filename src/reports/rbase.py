@@ -769,15 +769,22 @@ _EXCLUDED_INDUSTRIES_KEY = "excluded_industries_filter"
 _DCH_BAND_KEY = "pct_day_change_keep_bands"
 DCH_BAND_CHOICES = (
     "Between -1 and 1",
+    "Between -1.5 and 1.5",
+    "Dch > -1",
+    "Dch < 1",
     "|Dch| > 1",
     "|Dch| > 2",
     "|Dch| > 3",
 )
+_UPTREND_ONLY = "Uptrend only"
+_DOWNTREND_ONLY = "Downtrend only"
 _EXTRA_DATA_FILTER_CHOICES = (
     "close > 50",
     "|PCT_day_change_pre1| < 1.5 or |PCT_day_change_pre2| < 1.5",
     "|month3LowChange| > 1",
     "|month3HighChange| > 1",
+    _UPTREND_ONLY,
+    _DOWNTREND_ONLY,
 )
 DATA_FILTER_CHOICES = DCH_BAND_CHOICES + _EXTRA_DATA_FILTER_CHOICES
 _DCH_BAND_CHOICE_SET = frozenset(DCH_BAND_CHOICES)
@@ -1081,6 +1088,22 @@ def filter_df_by_exclude_mcap(df):
     return filtered
 
 
+def _pre1_or_pre2_abs_under_15(work):
+    """|PCT_day_change_pre1| < 1.5 or |PCT_day_change_pre2| < 1.5; None if neither column exists."""
+    has_pre1 = "PCT_day_change_pre1" in work.columns
+    has_pre2 = "PCT_day_change_pre2" in work.columns
+    if not has_pre1 and not has_pre2:
+        return None
+    pre_keep = pd.Series(False, index=work.index)
+    if has_pre1:
+        pre1 = pd.to_numeric(work["PCT_day_change_pre1"], errors="coerce")
+        pre_keep |= pre1.abs() < 1.5
+    if has_pre2:
+        pre2 = pd.to_numeric(work["PCT_day_change_pre2"], errors="coerce")
+        pre_keep |= pre2.abs() < 1.5
+    return pre_keep.fillna(False)
+
+
 def filter_df_by_data_filtering(df):
     """Apply sidebar Data filtering: Dch bands OR among themselves; other rules AND."""
     picked = current_data_filters()
@@ -1103,6 +1126,12 @@ def filter_df_by_data_filtering(df):
             dch_keep = pd.Series(False, index=work.index)
             if "Between -1 and 1" in dch_bands:
                 dch_keep |= pct.between(-1, 1, inclusive="both")
+            if "Between -1.5 and 1.5" in dch_bands:
+                dch_keep |= pct.between(-1.5, 1.5, inclusive="both")
+            if "Dch > -1" in dch_bands:
+                dch_keep |= pct > -1
+            if "Dch < 1" in dch_bands:
+                dch_keep |= pct < 1
             for label, threshold in _DCH_ABS_BAND_THRESHOLDS:
                 if label in dch_bands:
                     dch_keep |= pct.abs() > threshold
@@ -1114,17 +1143,29 @@ def filter_df_by_data_filtering(df):
 
     pre_rule = "|PCT_day_change_pre1| < 1.5 or |PCT_day_change_pre2| < 1.5"
     if pre_rule in extra:
-        has_pre1 = "PCT_day_change_pre1" in work.columns
-        has_pre2 = "PCT_day_change_pre2" in work.columns
-        if has_pre1 or has_pre2:
-            pre_keep = pd.Series(False, index=work.index)
-            if has_pre1:
-                pre1 = pd.to_numeric(work["PCT_day_change_pre1"], errors="coerce")
-                pre_keep |= pre1.abs() < 1.5
-            if has_pre2:
-                pre2 = pd.to_numeric(work["PCT_day_change_pre2"], errors="coerce")
-                pre_keep |= pre2.abs() < 1.5
-            keep &= pre_keep.fillna(False)
+        pre_keep = _pre1_or_pre2_abs_under_15(work)
+        if pre_keep is not None:
+            keep &= pre_keep
+
+    if _UPTREND_ONLY in extra:
+        if "month3HighChange" in work.columns and "PCT_day_change" in work.columns:
+            m3hi = pd.to_numeric(work["month3HighChange"], errors="coerce")
+            keep &= m3hi.abs() > 1
+            pct = pd.to_numeric(work["PCT_day_change"], errors="coerce")
+            keep &= pct > -1
+            pre_keep = _pre1_or_pre2_abs_under_15(work)
+            if pre_keep is not None:
+                keep &= pre_keep
+
+    if _DOWNTREND_ONLY in extra:
+        if "month3LowChange" in work.columns and "PCT_day_change" in work.columns:
+            m3lo = pd.to_numeric(work["month3LowChange"], errors="coerce")
+            keep &= m3lo.abs() > 1
+            pct = pd.to_numeric(work["PCT_day_change"], errors="coerce")
+            keep &= pct < 1
+            pre_keep = _pre1_or_pre2_abs_under_15(work)
+            if pre_keep is not None:
+                keep &= pre_keep
 
     if "|month3LowChange| > 1" in extra and "month3LowChange" in work.columns:
         m3lo = pd.to_numeric(work["month3LowChange"], errors="coerce")
