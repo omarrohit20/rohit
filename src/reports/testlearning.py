@@ -310,6 +310,9 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bullish)) &
+                (~df['systemtime'].str.contains('09:35', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (
@@ -361,6 +364,9 @@ def main():
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
                 (keys.isin(bearish)) &
+                (~df['systemtime'].str.contains('09:35', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (

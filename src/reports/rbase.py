@@ -775,6 +775,9 @@ DCH_BAND_CHOICES = (
     "|Dch| > 1",
     "|Dch| > 2",
     "|Dch| > 3",
+    "|Dch| < 1",
+    "|Dch| < 2",
+    "|Dch| < 3",
 )
 _UPTREND_ONLY = "Uptrend only"
 _DOWNTREND_ONLY = "Downtrend only"
@@ -783,19 +786,27 @@ _EXTRA_DATA_FILTER_CHOICES = (
     "|PCT_day_change_pre1| < 1.5 or |PCT_day_change_pre2| < 1.5",
     "|month3LowChange| > 1",
     "|month3HighChange| > 1",
+    "yearLowChange > 10",
+    "yearHighChange < -10",
     _UPTREND_ONLY,
     _DOWNTREND_ONLY,
 )
 DATA_FILTER_CHOICES = DCH_BAND_CHOICES + _EXTRA_DATA_FILTER_CHOICES
 _DCH_BAND_CHOICE_SET = frozenset(DCH_BAND_CHOICES)
-_DCH_ABS_BAND_THRESHOLDS = (
+_DCH_ABS_GT_BAND_THRESHOLDS = (
     ("|Dch| > 1", 1),
     ("|Dch| > 2", 2),
     ("|Dch| > 3", 3),
 )
+_DCH_ABS_LT_BAND_THRESHOLDS = (
+    ("|Dch| < 1", 1),
+    ("|Dch| < 2", 2),
+    ("|Dch| < 3", 3),
+)
 _EXCLUDE_MCAP_KEY = "exclude_mcap_greater_than"
 # Labels shown in sidebar → crores threshold (Nsedata.scrip.marketcap).
 EXCLUDE_MCAP_CHOICES = (
+    "Exclude mcap > 200,000",
     "Exclude mcap > 300,000",
     "Exclude mcap > 400,000",
     "Exclude mcap > 500,000",
@@ -803,6 +814,7 @@ EXCLUDE_MCAP_CHOICES = (
     "Exclude mcap > 1,000,000",
 )
 _EXCLUDE_MCAP_THRESHOLDS = {
+    "Exclude mcap > 200,000": 200_000.0,
     "Exclude mcap > 300,000": 300_000.0,
     "Exclude mcap > 400,000": 400_000.0,
     "Exclude mcap > 500,000": 500_000.0,
@@ -1132,9 +1144,12 @@ def filter_df_by_data_filtering(df):
                 dch_keep |= pct > -1
             if "Dch < 1" in dch_bands:
                 dch_keep |= pct < 1
-            for label, threshold in _DCH_ABS_BAND_THRESHOLDS:
+            for label, threshold in _DCH_ABS_GT_BAND_THRESHOLDS:
                 if label in dch_bands:
                     dch_keep |= pct.abs() > threshold
+            for label, threshold in _DCH_ABS_LT_BAND_THRESHOLDS:
+                if label in dch_bands:
+                    dch_keep |= pct.abs() < threshold
             keep &= dch_keep.fillna(False)
 
     if "close > 50" in extra and "close" in work.columns:
@@ -1148,21 +1163,33 @@ def filter_df_by_data_filtering(df):
             keep &= pre_keep
 
     if _UPTREND_ONLY in extra:
-        if "month3HighChange" in work.columns and "PCT_day_change" in work.columns:
+        if (
+            "month3HighChange" in work.columns
+            and "PCT_day_change" in work.columns
+            and "yearLowChange" in work.columns
+        ):
             m3hi = pd.to_numeric(work["month3HighChange"], errors="coerce")
             keep &= m3hi.abs() > 1
             pct = pd.to_numeric(work["PCT_day_change"], errors="coerce")
             keep &= pct > -1
+            ylo = pd.to_numeric(work["yearLowChange"], errors="coerce")
+            keep &= ylo > 10
             pre_keep = _pre1_or_pre2_abs_under_15(work)
             if pre_keep is not None:
                 keep &= pre_keep
 
     if _DOWNTREND_ONLY in extra:
-        if "month3LowChange" in work.columns and "PCT_day_change" in work.columns:
+        if (
+            "month3LowChange" in work.columns
+            and "PCT_day_change" in work.columns
+            and "yearHighChange" in work.columns
+        ):
             m3lo = pd.to_numeric(work["month3LowChange"], errors="coerce")
             keep &= m3lo.abs() > 1
             pct = pd.to_numeric(work["PCT_day_change"], errors="coerce")
             keep &= pct < 1
+            yhi = pd.to_numeric(work["yearHighChange"], errors="coerce")
+            keep &= yhi < -10
             pre_keep = _pre1_or_pre2_abs_under_15(work)
             if pre_keep is not None:
                 keep &= pre_keep
@@ -1174,6 +1201,14 @@ def filter_df_by_data_filtering(df):
     if "|month3HighChange| > 1" in extra and "month3HighChange" in work.columns:
         m3hi = pd.to_numeric(work["month3HighChange"], errors="coerce")
         keep &= m3hi.abs() > 1
+
+    if "yearLowChange > 10" in extra and "yearLowChange" in work.columns:
+        ylo = pd.to_numeric(work["yearLowChange"], errors="coerce")
+        keep &= ylo > 10
+
+    if "yearHighChange < -10" in extra and "yearHighChange" in work.columns:
+        yhi = pd.to_numeric(work["yearHighChange"], errors="coerce")
+        keep &= yhi < -10
 
     filtered = work.loc[keep.fillna(False)].reset_index(drop=True)
     if work is not df and hasattr(df, "copy"):
