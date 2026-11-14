@@ -6,6 +6,8 @@ Does **not** use breakout scan tables. Does **not** scrape sectoral feeds.
 
 Agent instructions: [SKILL.md](SKILL.md). Shared scrape/score/upsert: [../scan-news-conviction/scripts/ingest_scan_news.py](../scan-news-conviction/scripts/ingest_scan_news.py). Scoring: [../scan-news-conviction/references/scoring.md](../scan-news-conviction/references/scoring.md).
 
+**Two phases:** (1) **scrip-by-scrip** Google/RSS only for `futures=Yes`; (2) **MEDIA TV BATCH** maps TV headlines to **all** `Nsedata.scrip` rows. `--scrips` filters phase 1 on a full run; phase 2 always uses the full NSE map.
+
 ## When a scrip is written
 
 | Condition | Action |
@@ -79,6 +81,9 @@ python indian-trading-skills/skills/scan-news-conviction-futures/scripts/ingest_
 | `--sleep` | `0.35` | Pause between Google News requests |
 | `--limit` | `0` | Max scrips to check (`0` = all) |
 | `--scrips` | | Comma-separated filter, e.g. `RELIANCE,TCS` |
+| `--skip-media-tv` | off | Skip batched CNBC/Zee/ET high-conviction pass at end of run |
+
+End of run: **MEDIA TV BATCH** — 4 Google queries total (not per scrip) for CNBC-TV18, Zee Business, ET Now, ET markets; maps to **all** `Nsedata.scrip` (not futures-only); **published today only**; prints **SUMMARY - MEDIA TV BATCH** and **MEDIA TV NEWS** (new headlines this pass).
 
 Needs MongoDB `mongodb://localhost:27017` and `pip install pymongo feedparser`.
 

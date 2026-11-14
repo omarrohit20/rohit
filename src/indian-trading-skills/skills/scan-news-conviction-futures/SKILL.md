@@ -44,15 +44,21 @@ python indian-trading-skills/skills/scan-news-conviction-futures/scripts/ingest_
 | `--min-impact` | `4` | Keep high-impact items (1–10) |
 | `--sleep` | `0.35` | Pause between Google News requests |
 | `--limit` | `0` | Max scrips to check (`0` = all) |
-| `--scrips` | | Comma-separated filter, e.g. `RELIANCE,TCS` |
+| `--scrips` | | Comma filter for **futures per-scrip loop** only (`RELIANCE,TCS`); media batch ignores this on full runs |
+| `--skip-media-tv` | off | Skip batched CNBC/Zee/ET end-of-run pass |
+| `--media-tv-only` | off | Run **only** the batched CNBC/Zee/ET pass (no per-scrip scrape) |
 
 ## Universe
 
-| DB | Collection | Filter |
-|----|------------|--------|
-| `Nsedata` | `scrip` | `futures=Yes` |
+Two phases — do not mix them:
 
-Do **not** use breakout scan tables. Include every futures scrip.
+| Phase | DB | Collection | Filter |
+|-------|-----|------------|--------|
+| Per-scrip scrape | `Nsedata` | `scrip` | `futures=Yes` only |
+| MEDIA TV BATCH (end of run) | `Nsedata` | `scrip` | **All NSE symbols** (entire collection) |
+
+Do **not** use breakout scan tables for the futures loop. Include every futures scrip in phase 1.  
+`--scrips` limits phase 1 only; media batch still uses the full NSE map on a normal full run.
 
 ## Write rule
 
@@ -118,6 +124,17 @@ breakout table tags). New headlines are **appended** to stored articles (deduped
 old, replace the whole document and set a **new** `insertion_date`.
 
 ## After the run
+
+### Media TV batch (end of run, default on)
+
+After the per-scrip loop, one **batched** pass (not 218× Google) pulls CNBC-TV18, Zee Business, ET Now, and Economic Times results/earnings headlines **published today only** (strict date). Headlines are mapped to **all** `Nsedata.scrip` symbols (futures + non-futures) via **strict title match** (word boundaries; generic tokens like `enterprises` / `electric` cannot fan out to unrelated names), then **upsert** only when:
+
+- New title vs stored `scrip_news`, and
+- **High** conviction after merge, **or** a TV outlet **results/earnings** headline (impact ≥ 6), **or** index-name (`Nsedata.scrip.index=Yes`) catalyst on TV
+
+Disable with `--skip-media-tv`. Run only with `--media-tv-only`.
+
+Ends with **SUMMARY - MEDIA TV BATCH** plus **MEDIA TV NEWS** (today’s new headlines from this pass).
 
 Always print the script **SUMMARY** block: futures count, purged (expired futures-only),
 skipped (no new headline), insert/update/overwrite, errors, sentiment/conviction tallies, High conviction

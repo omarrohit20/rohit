@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
-"""All futures scrips → upsert on new company/analyst headline today/yesterday
-or a board/results/dividend event dated today or tomorrow.
+"""Futures skill: per-scrip loop (futures=Yes only), then MEDIA TV BATCH (all NSE).
+
+Phase 1 — scrip-by-scrip: every ``Nsedata.scrip`` row with ``futures=Yes``; fetch
+company/analyst/regulatory headlines; upsert on new today/yesterday headline or
+board/results/dividend event today/tomorrow.
+
+Phase 2 — MEDIA TV BATCH (unless ``--skip-media-tv``): one batched CNBC/Zee/ET pull;
+map headlines to **all** rows in ``Nsedata.scrip`` (full NSE symbol map), not
+futures-only.
 
 Skill: scan-news-conviction-futures
 Writes: Nsedata.scrip_news only
@@ -30,6 +37,7 @@ DEFAULT_COMPANY_NEWS_DAYS = ingest.DEFAULT_FUTURES_COMPANY_NEWS_DAYS
 
 
 def collect_futures_scrips(client: MongoClient) -> dict[str, dict]:
+    """Per-scrip loop universe: ``Nsedata.scrip`` where ``futures=Yes`` only."""
     found: dict[str, dict] = {}
     for doc in client[SCAN_DB][SCRIP_COLLECTION].find(
         {"futures": "Yes"},
@@ -40,7 +48,7 @@ def collect_futures_scrips(client: MongoClient) -> dict[str, dict]:
             continue
         rec = found.setdefault(
             scrip,
-            {"industry": "", "company": "", "scan_tables": {UNIVERSE_TAG}},
+            {"industry": "", "company": "", "index": "", "scan_tables": {UNIVERSE_TAG}},
         )
         rec["scan_tables"].add(UNIVERSE_TAG)
         ind = doc.get("industry")
@@ -49,6 +57,9 @@ def collect_futures_scrips(client: MongoClient) -> dict[str, dict]:
         comp = doc.get("company")
         if comp and not rec["company"]:
             rec["company"] = str(comp).strip()
+        idx = doc.get("index")
+        if idx is not None and not rec.get("index"):
+            rec["index"] = str(idx).strip()
     return found
 
 
@@ -185,11 +196,71 @@ def main() -> None:
     )
     parser.add_argument("--min-impact", type=int, default=4)
     parser.add_argument("--sleep", type=float, default=0.35)
-    parser.add_argument("--scrips", default="")
+    parser.add_argument(
+        "--scrips",
+        default="",
+        help="Comma filter for per-scrip futures loop only (full NSE map still used for media batch unless --media-tv-only)",
+    )
     parser.add_argument("--limit", type=int, default=0)
+    parser.add_argument(
+        "--skip-media-tv",
+        action="store_true",
+        help="Skip end-of-run CNBC/Zee/ET batched media pass",
+    )
+    parser.add_argument(
+        "--media-tv-only",
+        action="store_true",
+        help="Run only the batched CNBC/Zee/ET media pass (no per-scrip scrape or purge)",
+    )
     args = parser.parse_args()
+    if args.media_tv_only and args.skip_media_tv:
+        parser.error("--media-tv-only and --skip-media-tv cannot be used together")
 
     now = datetime.now()
+    client = MongoClient(args.uri, serverSelectionTimeoutMS=8000)
+    client.admin.command("ping")
+    coll = client[SCAN_DB][TARGET_COLLECTION]
+    ingest.setup_indexes(coll)
+
+    if args.media_tv_only:
+        try:
+            ingest.check_news_source_connectivity()
+        except ingest.nf.FeedFetchError as exc:
+            parser.error(str(exc))
+        universe = ingest.collect_media_tv_universe(client)
+        if args.scrips:
+            want = {
+                ingest._norm_scrip(s)
+                for s in args.scrips.split(",")
+                if ingest._norm_scrip(s)
+            }
+            universe = {k: v for k, v in universe.items() if k in want}
+        print("Skill: scan-news-conviction-futures (MEDIA TV BATCH only)")
+        print(f"Scrips in media map (all Nsedata.scrip): {len(universe)}")
+        print(f"Writes only: {SCAN_DB}.{TARGET_COLLECTION}")
+        counts = {"insert": 0, "update": 0, "overwrite": 0}
+        processed: list[dict[str, Any]] = []
+        errors: list[tuple[str, str]] = []
+        media_counts, media_processed, media_errors = ingest.apply_futures_media_tv_batch(
+            coll,
+            universe,
+            now=now,
+            min_impact=args.min_impact,
+            sleep_s=args.sleep,
+            universe_tag=UNIVERSE_TAG,
+        )
+        counts.update(media_counts)
+        processed.extend(media_processed)
+        errors.extend(media_errors)
+        ingest.print_media_tv_summary_and_news(
+            now=now,
+            counts=counts,
+            processed=processed,
+            errors=errors,
+        )
+        client.close()
+        return
+
     try:
         ingest.check_news_source_connectivity()
         regulatory_pool = ingest.dedupe_fresh_calendar(
@@ -199,11 +270,6 @@ def main() -> None:
         )
     except ingest.nf.FeedFetchError as exc:
         parser.error(str(exc))
-
-    client = MongoClient(args.uri, serverSelectionTimeoutMS=8000)
-    client.admin.command("ping")
-    coll = client[SCAN_DB][TARGET_COLLECTION]
-    ingest.setup_indexes(coll)
 
     purge_count, purge_scrips = ingest.purge_stale_futures_skill_rows(
         coll, now, args.retain_days
@@ -325,6 +391,32 @@ def main() -> None:
         except Exception as exc:
             errors.append((scrip, str(exc)))
             print(f"    ERROR: {exc}", file=sys.stderr)
+
+    if not args.skip_media_tv:
+        media_universe = ingest.collect_media_tv_universe(client)
+        print(
+            f"\nMEDIA TV BATCH map: all Nsedata.scrip ({len(media_universe)} symbols; "
+            f"per-scrip loop was futures-only, n={len(all_scrips)})"
+        )
+        media_counts, media_processed, media_errors = ingest.apply_futures_media_tv_batch(
+            coll,
+            media_universe,
+            now=now,
+            min_impact=args.min_impact,
+            sleep_s=args.sleep,
+            universe_tag=UNIVERSE_TAG,
+        )
+        for key in ("insert", "update", "overwrite"):
+            counts[key] = counts.get(key, 0) + media_counts.get(key, 0)
+        processed.extend(media_processed)
+        errors.extend(media_errors)
+        if media_processed:
+            ingest.print_media_tv_summary_and_news(
+                now=now,
+                counts=media_counts,
+                processed=media_processed,
+                errors=media_errors,
+            )
 
     print_summary(
         now=now,

@@ -1170,8 +1170,11 @@ def filter_df_by_data_filtering(df):
         ):
             m3hi = pd.to_numeric(work["month3HighChange"], errors="coerce")
             keep &= m3hi.abs() > 1
+            mhi = pd.to_numeric(work["monthHighChange"], errors="coerce")
+            keep &= mhi.abs() > 1
             pct = pd.to_numeric(work["PCT_day_change"], errors="coerce")
             keep &= pct > -1
+            keep &= pct.abs() < 3
             ylo = pd.to_numeric(work["yearLowChange"], errors="coerce")
             keep &= ylo > 10
             pre_keep = _pre1_or_pre2_abs_under_15(work)
@@ -1186,8 +1189,11 @@ def filter_df_by_data_filtering(df):
         ):
             m3lo = pd.to_numeric(work["month3LowChange"], errors="coerce")
             keep &= m3lo.abs() > 1
+            mlo = pd.to_numeric(work["monthLowChange"], errors="coerce")
+            keep &= mlo.abs() > 1
             pct = pd.to_numeric(work["PCT_day_change"], errors="coerce")
             keep &= pct < 1
+            keep &= pct.abs() < 3
             yhi = pd.to_numeric(work["yearHighChange"], errors="coerce")
             keep &= yhi < -10
             pre_keep = _pre1_or_pre2_abs_under_15(work)

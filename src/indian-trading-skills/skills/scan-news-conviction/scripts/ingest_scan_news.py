@@ -181,6 +181,8 @@ GENERIC_COMPANY_SHORT_TOKENS = frozenset(
         "limited",
         "company",
         "corporation",
+        "electric",
+        "electronics",
         "the",
         "and",
     }
@@ -199,6 +201,42 @@ CORPORATE_EVENT_RE = re.compile(
     r"results on|dividend on"
     r")\b",
     re.I,
+)
+MEDIA_TV_OUTLET_RE = re.compile(
+    r"\b("
+    r"cnbc[\s-]?tv18|cnbc\s+tv|"
+    r"zee\s+business|zeebiz|"
+    r"et\s+now|etnow|"
+    r"economic\s+times|economictimes|et\s+markets|etmarkets"
+    r")\b",
+    re.I,
+)
+MEDIA_TV_RESULTS_RE = re.compile(
+    r"\b("
+    r"results?|earnings|quarterly|q1|q2|q3|q4|"
+    r"guidance|concall|conference call|pat\b|profit|revenue|"
+    r"net\s+income|ebitda|bottom\s*line|top\s*line"
+    r")\b",
+    re.I,
+)
+MEDIA_TV_IMPACT_FLOOR = 6
+MEDIA_TV_GOOGLE_QUERIES = (
+    (
+        'CNBC-TV18 OR "CNBC TV18" OR site:cnbctv18.com India stock results earnings',
+        "Media CNBC-TV18",
+    ),
+    (
+        '"Zee Business" OR site:zeebiz.com India stock results earnings quarterly',
+        "Media Zee Business",
+    ),
+    (
+        '"ET Now" OR site:etnownews.com India stock results earnings',
+        "Media ET Now",
+    ),
+    (
+        "site:economictimes.indiatimes.com markets stocks results earnings guidance India",
+        "Media Economic Times",
+    ),
 )
 _MONTH_NUM = {
     "jan": 1,
@@ -426,6 +464,73 @@ def _mentions_scrip_or_company(text: str, scrip: str, company: str = "") -> bool
 def headline_primarily_mentions_company(title: str, scrip: str, company: str = "") -> bool:
     """Headline must name the scrip or company; summary-only matches do not count."""
     return _mentions_scrip_or_company((title or "").strip(), scrip, company)
+
+
+def _title_has_word(title: str, word: str) -> bool:
+    w = (word or "").strip().lower()
+    if not w or not title:
+        return False
+    return bool(re.search(rf"\b{re.escape(w)}\b", title.lower()))
+
+
+def _title_has_phrase(title: str, phrase: str) -> bool:
+    p = (phrase or "").strip().lower()
+    if not p or not title:
+        return False
+    parts = [re.escape(t) for t in p.split() if t]
+    if not parts:
+        return False
+    pat = r"\b" + r"\s+".join(parts) + r"\b"
+    return bool(re.search(pat, title.lower()))
+
+
+def media_tv_headline_targets_scrip(title: str, scrip: str, company: str = "") -> bool:
+    """Strict media-TV match: company/scrip must appear in the **title** (word boundaries).
+
+    Blocks fan-out from generic tokens (e.g. ``enterprises`` in ``Amber Enterprises``
+    attaching to every ``* Enterprises`` name).
+    """
+    title = (title or "").strip()
+    if not title:
+        return False
+    su = (_norm_scrip(scrip) or "").lower()
+    if su and _title_has_word(title, su):
+        return True
+
+    short = company_short_name(company)
+    if short:
+        if len(short.split()) >= 2 and _title_has_phrase(title, short):
+            return True
+        short_parts = [
+            p.lower()
+            for p in short.split()
+            if p and p.lower() not in GENERIC_COMPANY_SHORT_TOKENS
+        ]
+        if len(short_parts) >= 2:
+            if _title_has_phrase(title, " ".join(short_parts[:2])):
+                return True
+        elif len(short_parts) == 1 and len(short_parts[0]) >= 4:
+            if _title_has_word(title, short_parts[0]):
+                return True
+
+    distinctive: list[str] = []
+    for token in _company_match_tokens(company):
+        if token.lower() in GENERIC_COMPANY_SHORT_TOKENS:
+            continue
+        if " " in token:
+            if _title_has_phrase(title, token):
+                return True
+            continue
+        if len(token) < 5:
+            continue
+        distinctive.append(token.lower())
+    if len(distinctive) >= 2:
+        if all(_title_has_word(title, t) for t in distinctive[:2]):
+            return True
+    elif len(distinctive) == 1 and _title_has_word(title, distinctive[0]):
+        return True
+
+    return False
 
 
 def _is_multi_stock_roundup(title: str, summary: str, scrip: str) -> bool:
@@ -926,6 +1031,82 @@ def futures_scrip_set(client: MongoClient) -> set[str]:
     return found
 
 
+_FUTURES_FLAG_RE = re.compile(r"^(yes|y|true|1)$", re.I)
+
+
+def _scrip_doc_is_futures(value) -> bool:
+    return bool(_FUTURES_FLAG_RE.match(str(value or "").strip()))
+
+
+def collect_media_tv_universe(client: MongoClient, *, scan_days: int = 14) -> dict[str, dict]:
+    """Full NSE symbol map for MEDIA TV BATCH only (every ``Nsedata.scrip`` row).
+
+    The futures per-scrip scrape uses ``futures=Yes`` only; this map is wider.
+    """
+    db = client[SCAN_DB]
+    futures = futures_scrip_set(client)
+    found: dict[str, dict] = {}
+    for doc in db[SCRIP_COLLECTION].find(
+        {},
+        {"scrip": 1, "industry": 1, "company": 1, "index": 1, "futures": 1},
+    ):
+        scrip = _norm_scrip(doc.get("scrip"))
+        if not scrip:
+            continue
+        is_fut = _scrip_doc_is_futures(doc.get("futures")) or scrip in futures
+        rec = found.setdefault(
+            scrip,
+            {
+                "industry": "",
+                "company": "",
+                "index": "",
+                "futures": is_fut,
+                "scan_tables": set(),
+            },
+        )
+        rec["futures"] = rec["futures"] or is_fut
+        if is_fut:
+            rec["scan_tables"].add(FUTURES_SKILL_TAG)
+        ind = doc.get("industry")
+        if ind and not rec["industry"]:
+            rec["industry"] = str(ind).strip()
+        comp = doc.get("company")
+        if comp and not rec["company"]:
+            rec["company"] = str(comp).strip()
+        idx = doc.get("index")
+        if idx is not None and not rec.get("index"):
+            rec["index"] = str(idx).strip()
+
+    scan_uni, _ = collect_scrips(client, scan_days, futures)
+    for scrip, meta in scan_uni.items():
+        if scrip in found:
+            found[scrip]["scan_tables"] |= set(meta.get("scan_tables") or [])
+            if not found[scrip]["industry"] and meta.get("industry"):
+                found[scrip]["industry"] = str(meta["industry"]).strip()
+            if not found[scrip]["company"] and meta.get("company"):
+                found[scrip]["company"] = str(meta["company"]).strip()
+        else:
+            found[scrip] = {
+                "industry": str(meta.get("industry") or "").strip(),
+                "company": str(meta.get("company") or "").strip(),
+                "index": "",
+                "futures": scrip in futures,
+                "scan_tables": set(meta.get("scan_tables") or []),
+            }
+            if scrip in futures:
+                found[scrip]["scan_tables"].add(FUTURES_SKILL_TAG)
+    _enrich_company_names(client, found)
+    return found
+
+
+def media_tv_scan_tables(meta: dict, universe_tag: str = FUTURES_SKILL_TAG) -> list[str]:
+    """scan_tables for media-TV upsert — do not tag non-futures with futures-only."""
+    tables = {str(t) for t in (meta.get("scan_tables") or set()) if t}
+    if not tables and meta.get("futures"):
+        tables.add(universe_tag)
+    return sorted(tables)
+
+
 def collect_scrips(
     client: MongoClient, days: int, futures: set[str] | None = None
 ) -> tuple[dict[str, dict], dict[str, int]]:
@@ -1065,6 +1246,233 @@ def _as_article(title, summary, link, source, published, kind_hint: str) -> dict
     }
 
 
+def is_media_tv_outlet(article: dict) -> bool:
+    blob = " ".join(
+        str(article.get(k) or "")
+        for k in ("title", "summary", "link", "source")
+    )
+    return bool(MEDIA_TV_OUTLET_RE.search(blob))
+
+
+def is_futures_index_scrip(meta: dict) -> bool:
+    index = str(meta.get("index") or "").strip().lower()
+    return index in {"yes", "y", "true", "1"}
+
+
+def media_tv_scrip_eligible(
+    article: dict, scrip: str, meta: dict
+) -> bool:
+    title = (article.get("title") or "").strip()
+    summary = (article.get("summary") or "").strip()
+    text = f"{title} {summary}".strip()
+    company = meta.get("company") or ""
+    if not media_tv_headline_targets_scrip(title, scrip, company):
+        return False
+    if article.get("event_type") == "Earnings" or MEDIA_TV_RESULTS_RE.search(text):
+        return True
+    if not COMPANY_CATALYST_RE.search(text):
+        return False
+    if is_futures_index_scrip(meta):
+        return True
+    return False
+
+
+def boost_media_tv_article(article: dict) -> dict:
+    out = dict(article)
+    out["kind"] = "news"
+    out["media_tv"] = True
+    impact = int(out.get("impact_score") or 0) + 2
+    out["impact_score"] = min(10, max(impact, MEDIA_TV_IMPACT_FLOOR))
+    return out
+
+
+def fetch_media_tv_results_batch(sleep_s: float) -> list[dict]:
+    """One batched pull from CNBC / Zee / ET — not per-scrip Google queries."""
+    merged: list[dict] = []
+    seen_title: set[str] = set()
+    for query, source in MEDIA_TV_GOOGLE_QUERIES:
+        try:
+            items = _parse_feed(_google_rss(query), source, "news")
+        except nf.FeedFetchError as exc:
+            print(f"  warn: media TV {source}: {exc}", file=sys.stderr)
+            if sleep_s:
+                time.sleep(sleep_s)
+            continue
+        for article in items:
+            if not is_media_tv_outlet(article):
+                continue
+            title = (article.get("title") or "").strip()
+            if GENERIC_MARKET_NEWS_RE.search(title):
+                continue
+            key = _title_key(title)
+            if not key or key in seen_title:
+                continue
+            seen_title.add(key)
+            merged.append(article)
+        if sleep_s:
+            time.sleep(sleep_s)
+    return merged
+
+
+def map_media_articles_to_scrips(
+    articles: list[dict],
+    universe: dict[str, dict],
+) -> dict[str, list[dict]]:
+    by_scrip: dict[str, list[dict]] = {}
+    for article in articles:
+        if not is_media_tv_outlet(article):
+            continue
+        title = (article.get("title") or "").strip()
+        summary = (article.get("summary") or "").strip()
+        if not title:
+            continue
+        candidates: set[str] = set()
+        for sym in nf.detect_stocks(title, summary):
+            su = _norm_scrip(sym) or ""
+            if su in universe and media_tv_headline_targets_scrip(
+                title, su, universe[su].get("company") or ""
+            ):
+                candidates.add(su)
+        for scrip, meta in universe.items():
+            company = meta.get("company") or ""
+            if media_tv_headline_targets_scrip(title, scrip, company):
+                candidates.add(scrip)
+        for scrip in candidates:
+            meta = universe[scrip]
+            if _is_multi_stock_roundup(title, summary, scrip):
+                continue
+            if not media_tv_scrip_eligible(article, scrip, meta):
+                continue
+            by_scrip.setdefault(scrip, []).append(boost_media_tv_article(article))
+    return by_scrip
+
+
+def media_tv_batch_should_write(
+    new_items: list[dict],
+    merged_articles: list[dict],
+    meta: dict,
+) -> bool:
+    """Write when conviction is High or a new TV results / index headline qualifies."""
+    if not new_items:
+        return False
+    scoring = drop_regulatory_unless_high_conviction(merged_articles)
+    _, conviction = conviction_from_articles(scoring)
+    if conviction == REGULATORY_STORAGE_CONVICTION or conviction == "High":
+        return True
+    for article in new_items:
+        if not article.get("media_tv"):
+            continue
+        if int(article.get("impact_score") or 0) < MEDIA_TV_IMPACT_FLOOR:
+            continue
+        title = (article.get("title") or "").strip()
+        summary = (article.get("summary") or "").strip()
+        text = f"{title} {summary}"
+        if MEDIA_TV_RESULTS_RE.search(text) or is_futures_index_scrip(meta):
+            return True
+    return False
+
+
+def apply_futures_media_tv_batch(
+    coll,
+    universe: dict[str, dict],
+    *,
+    now: datetime,
+    min_impact: int,
+    sleep_s: float,
+    universe_tag: str = FUTURES_SKILL_TAG,
+) -> tuple[dict[str, int], list[dict[str, Any]], list[tuple[str, str]]]:
+    """End-of-run: batch CNBC/Zee/ET headlines → scrip_news (no per-scrip scrape).
+
+    Universe is all Nsedata.scrip symbols (futures + non-futures). Headlines must be
+    published **today** only (strict date; no undated/yesterday).
+    """
+    counts = {"insert": 0, "update": 0, "overwrite": 0}
+    processed: list[dict[str, Any]] = []
+    errors: list[tuple[str, str]] = []
+    print(
+        "\nMEDIA TV BATCH (CNBC-TV18 / Zee Business / ET Now / ET — batched, "
+        "all Nsedata.scrip map, today only, not per-scrip)"
+    )
+    raw = fetch_media_tv_results_batch(sleep_s)
+    fresh = dedupe_media_tv_today(raw, now)
+    fresh = [a for a in fresh if int(a.get("impact_score") or 0) >= min_impact]
+    by_scrip = map_media_articles_to_scrips(fresh, universe)
+    print(
+        f"  media headlines: fetched={len(raw)} published_today={len(fresh)} "
+        f"scrips_matched={len(by_scrip)} universe={len(universe)}"
+    )
+    if not by_scrip:
+        print("  media TV: no scrip matches")
+        return counts, processed, errors
+
+    for scrip in sorted(by_scrip):
+        meta = universe[scrip]
+        industry = meta.get("industry") or ""
+        company = meta.get("company") or ""
+        tables = list(media_tv_scan_tables(meta, universe_tag))
+        existing = coll.find_one(
+            {"scrip": scrip},
+            {
+                "scrip": 1,
+                "insertion_date": 1,
+                "updated_at": 1,
+                "scan_tables": 1,
+                "news": 1,
+                "analyst_calls": 1,
+                "regulatory_news": 1,
+                "articles": 1,
+            },
+        )
+        if existing:
+            tables = sorted(
+                set(tables) | {str(t) for t in (existing.get("scan_tables") or []) if t}
+            )
+        candidates = by_scrip[scrip]
+        filtered: list[dict] = []
+        for article in candidates:
+            if not is_published_today_strict(article.get("published"), now):
+                continue
+            if not media_tv_headline_targets_scrip(
+                (article.get("title") or "").strip(), scrip, company
+            ):
+                continue
+            if not is_new_futures_headline(article, existing):
+                continue
+            filtered.append(article)
+        if not filtered:
+            continue
+        cleaned = select_futures_company_news(filtered, min_impact, now)
+        if not cleaned:
+            continue
+        merged = merge_stored_and_new_articles(existing, cleaned)
+        merged = drop_regulatory_unless_high_conviction(merged)
+        before_keys = stored_futures_headline_title_keys(existing)
+        new_items = [
+            a
+            for a in merged
+            if _title_key(a.get("title") or "") not in before_keys
+        ]
+        if not media_tv_batch_should_write(new_items, merged, meta):
+            continue
+        try:
+            action = upsert_scrip(coll, scrip, industry, tables, merged)
+            counts[action] = counts.get(action, 0) + 1
+            row = summary_row(scrip, industry, tables, merged, action)
+            row["media_tv"] = True
+            row["media_new"] = [a for a in new_items if a.get("media_tv")]
+            processed.append(row)
+            print(
+                f"  media {action} {scrip} new={len(new_items)} "
+                f"conviction={row['conviction']} sentiment={row['sentiment']}"
+            )
+        except Exception as exc:
+            errors.append((scrip, str(exc)))
+            print(f"  media ERROR {scrip}: {exc}", file=sys.stderr)
+    written = counts["insert"] + counts["update"] + counts["overwrite"]
+    print(f"  media TV writes: {written}")
+    return counts, processed, errors
+
+
 def _parse_feed(url: str, source: str, kind_hint: str) -> list[dict]:
     try:
         feed = feedparser.parse(url, request_headers=nf.RSS_REQUEST_HEADERS)
@@ -1171,6 +1579,33 @@ def is_published_today(published: Any, now: datetime, title: str = "") -> bool:
     if dt is None:
         return bool(title and COMPANY_CATALYST_RE.search(title))
     return dt.date() == now.date()
+
+
+def is_published_today_strict(published: Any, now: datetime) -> bool:
+    """Calendar today only; undated headlines do not qualify."""
+    dt = parse_published(published)
+    if dt is None:
+        return False
+    return dt.date() == now.date()
+
+
+def dedupe_media_tv_today(articles: list[dict], now: datetime) -> list[dict]:
+    """Media TV batch: dedupe headlines published today only."""
+    out: list[dict] = []
+    seen_title: set[str] = set()
+    seen_near: set[str] = set()
+    for article in articles:
+        if not is_published_today_strict(article.get("published"), now):
+            continue
+        tk = _title_key(article.get("title") or "")
+        nk = _near_dup_key(article.get("title") or "")
+        if not tk or tk in seen_title or (nk and nk in seen_near):
+            continue
+        seen_title.add(tk)
+        if nk:
+            seen_near.add(nk)
+        out.append(article)
+    return out
 
 
 def stored_company_news_today(doc: dict | None, now: datetime) -> bool:
@@ -1616,6 +2051,71 @@ def _headline_line(scrip: str, industry: str, article: dict) -> str:
     extra = f"  {industry}" if industry else ""
     when = f"  {pub}" if pub else ""
     return f"  {scrip:12} [{sent:8} i={impact}]{when}{extra}\n    {title}"
+
+
+def print_media_tv_summary_and_news(
+    *,
+    now: datetime,
+    counts: dict[str, int],
+    processed: list[dict[str, Any]],
+    errors: list[tuple[str, str]],
+    skill_name: str = "scan-news-conviction-futures-media",
+) -> None:
+    """Summary plus today’s new media-TV headlines from this run."""
+    written = (
+        counts.get("insert", 0)
+        + counts.get("update", 0)
+        + counts.get("overwrite", 0)
+    )
+    new_headlines = sum(len(r.get("media_new") or []) for r in processed)
+    high = [r for r in processed if r.get("conviction") == "High"]
+
+    print("\n" + "=" * 72)
+    print(f"SUMMARY - MEDIA TV BATCH ({skill_name})")
+    print("=" * 72)
+    print(f"Ran at:              {now.strftime('%Y-%m-%d %H:%M:%S')}")
+    print("Headline window:     published today only")
+    print(f"Written insert:      {counts.get('insert', 0)}")
+    print(f"Written update:      {counts.get('update', 0)}")
+    print(f"Written overwrite:   {counts.get('overwrite', 0)}")
+    print(f"Scrips written:      {written}")
+    print(f"New headlines added: {new_headlines}")
+    print(f"High conviction:     {len(high)}")
+    print(f"Errors:              {len(errors)}")
+    if high:
+        print("\nHigh conviction (this media pass):")
+        for row in high:
+            n_new = len(row.get("media_new") or [])
+            print(
+                f"  {row['scrip']:12} {row['action']:9} {row['sentiment']:8} "
+                f"new={n_new} total={row['items']}"
+            )
+    if errors:
+        print("\nErrors:")
+        for scrip, err in errors:
+            print(f"  {scrip}: {err}")
+
+    print("\n" + "-" * 72)
+    print("MEDIA TV NEWS (today — new headlines this run)")
+    print("-" * 72)
+    lines: list[tuple[int, str, str, dict]] = []
+    for row in processed:
+        for article in row.get("media_new") or []:
+            lines.append(
+                (
+                    int(article.get("impact_score") or 0),
+                    row["scrip"],
+                    row.get("industry") or "",
+                    article,
+                )
+            )
+    lines.sort(key=lambda t: (-t[0], t[1]))
+    if not lines:
+        print("  (none)")
+    else:
+        for _impact, scrip, industry, article in lines:
+            print(_headline_line(scrip, industry, article))
+    print("=" * 72)
 
 
 def print_news_digest(rows: list[dict[str, Any]], skill_name: str = "") -> None:
