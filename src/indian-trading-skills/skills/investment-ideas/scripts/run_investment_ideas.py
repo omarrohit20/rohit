@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build High-conviction investment ideas into three Nsedata collections.
+"""Build High- and Med-conviction Bullish investment ideas into three Nsedata collections.
 
 Examples:
   python skills/investment-ideas/scripts/run_investment_ideas.py
@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import html as html_lib
 import json
+import math
 import re
 import shutil
 import subprocess
@@ -19,6 +20,7 @@ import time
 import urllib.parse
 from collections import Counter, defaultdict
 from datetime import date, datetime, timedelta
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from typing import Any
 
@@ -46,10 +48,30 @@ COLL_LONG = "investment-long-term"
 COLL_MEDIUM = "investment-medium-term"
 COLL_SHORT = "investment-short-term"
 COLLECTIONS = (COLL_LONG, COLL_MEDIUM, COLL_SHORT)
+# Rows older than this many days (by insertion_date) are deleted each run.
+# The same window caps the target estimate so a target never outlives its row.
 PURGE_DAYS = {
-    COLL_LONG: None,
-    COLL_MEDIUM: 90,
-    COLL_SHORT: 20,
+    COLL_LONG: 90,
+    COLL_MEDIUM: 30,
+    COLL_SHORT: 10,
+}
+# Minimum upside from buy_price to target_price, in percent. Rows at or below it
+# are not saved, and existing ones are deleted on each run. --long-min-return,
+# --medium-min-return and --short-min-return override.
+MIN_RETURN_PCT = {
+    COLL_LONG: 50.0,
+    COLL_MEDIUM: 30.0,
+    COLL_SHORT: 20.0,
+}
+# A symbol already in a longer horizon is not kept in a shorter one.
+COVERED_BY = {
+    COLL_MEDIUM: (COLL_LONG,),
+    COLL_SHORT: (COLL_LONG, COLL_MEDIUM),
+}
+HORIZON_LABEL = {
+    COLL_LONG: "long-term (up to 3 months)",
+    COLL_MEDIUM: "medium-term (up to 1 month)",
+    COLL_SHORT: "short-term (up to 10 days)",
 }
 
 USER_AGENT = (
@@ -58,6 +80,7 @@ USER_AGENT = (
 )
 NSE_PAGE = "https://www.nseindia.com/companies-listing/corporate-filings-shareholding-pattern"
 NSE_ORIGIN = "https://www.nseindia.com"
+NSE_CACHE_COLL = "nse_shareholding_cache"
 SCREENER_HEADERS = {
     "User-Agent": USER_AGENT,
     "Accept": "text/html,application/xhtml+xml",
@@ -79,7 +102,6 @@ BREAKOUTS = (
         "table": "breakoutYH",
         "fallback": None,
         "collection": COLL_LONG,
-        "horizon_label": "long-term (about 6-18 months)",
         "scorer": "long",
         "lookback": True,
         "window": "6 months",
@@ -88,35 +110,47 @@ BREAKOUTS = (
         "table": "breakoutY2H",
         "fallback": None,
         "collection": COLL_LONG,
-        "horizon_label": "long-term (about 6-18 months)",
         "scorer": "long",
         "lookback": True,
         "window": "6 months",
     },
     {
-        "table": "breakoutW2H",
-        "fallback": "breakoutW2HR",
-        "collection": COLL_SHORT,
-        "horizon_label": "short-term (about 2-6 weeks)",
-        "scorer": "short",
+        "table": "breakoutMH",
+        "fallback": None,
+        "collection": COLL_LONG,
+        "scorer": "long",
         "lookback": False,
         "window": "the live scan window",
+    },
+    {
+        "table": "nearY5H",
+        "fallback": None,
+        "collection": COLL_LONG,
+        "scorer": "long",
+        "lookback": True,
+        "window": "6 months",
     },
     {
         "table": "breakoutM2H",
         "fallback": None,
         "collection": COLL_MEDIUM,
-        "horizon_label": "medium-term (about 1-3 months)",
         "scorer": "swing",
         "lookback": False,
         "window": "the live scan window",
     },
     {
-        "table": "breakoutMH",
+        "table": "movingavg_crossed_up",
         "fallback": None,
-        "collection": COLL_LONG,
-        "horizon_label": "long-term (about 3-12 months)",
-        "scorer": "long",
+        "collection": COLL_MEDIUM,
+        "scorer": "swing",
+        "lookback": False,
+        "window": "the live scan window",
+    },
+    {
+        "table": "breakoutW2H",
+        "fallback": "breakoutW2HR",
+        "collection": COLL_SHORT,
+        "scorer": "short",
         "lookback": False,
         "window": "the live scan window",
     },
@@ -137,6 +171,15 @@ GENERIC_HOLDERS = {
     "indian",
     "foreign",
     "any other",
+}
+# Blank-category rows in NSE's public table that are buckets, not holders.
+PUBLIC_BUCKETS = {
+    "other",
+    "others",
+    "clearing members",
+    "esop or esos or esps",
+    "huf",
+    "trusts",
 }
 
 
@@ -334,12 +377,120 @@ def parse_order_book(page: str) -> float | None:
     return None
 
 
-def parse_screener(page: str) -> dict[str, float | None]:
+def parse_pros_cons(page: str) -> tuple[list[str], list[str]]:
+    """Screener's auto-generated Pros and Cons bullets."""
+    out: list[list[str]] = []
+    for cls in ("pros", "cons"):
+        match = re.search(rf'<div class="{cls}"[^>]*>(.*?)</div>', page, flags=re.S)
+        items = re.findall(r"<li[^>]*>(.*?)</li>", match.group(1), flags=re.S) if match else []
+        out.append([strip_tags(item).rstrip(".") for item in items if strip_tags(item)])
+    return out[0], out[1]
+
+
+def parse_screener(page: str) -> dict[str, Any]:
+    pros, cons = parse_pros_cons(page)
     return {
         "marketcap_cr": parse_market_cap(page),
         "sales_cr": parse_annual_sales(page),
         "order_book_cr": parse_order_book(page),
+        "pros": pros,
+        "cons": cons,
     }
+
+
+NEWS_DAYS = 30
+NEWS_SKIP_WORDS = {"the", "india", "indian", "limited", "ltd", "industries", "company"}
+# Quote and estimate listing pages that Google News returns as articles.
+NEWS_LISTING = re.compile(
+    r"(?:nse|bse):[A-Z0-9&_-]+\s*$|analyst insights, price targets|\([A-Z0-9&-]+\.(?:NS|BO)\)"
+    r"|share price(?: live)?(?: today)?\b|stock price live|stock price & chart|stock forecast"
+    r"|stock analysis\s*$|circuit today|price, data and peers"
+    # Round-ups that list many companies.
+    r"|among \d+\+? (?:companies|stocks)|picks \d+ stocks|top stock picks|stocks to (?:buy|watch)"
+    r"|stocks in news|top gainers|trade spotlight|buy, sell or hold",
+    re.I,
+)
+
+
+def load_news(db) -> dict[str, dict]:
+    fields = {"_id": 0, "scrip": 1, "news": 1, "analyst_calls": 1, "overall_sentiment": 1, "conviction": 1}
+    return {str(doc["scrip"]): doc for doc in db["scrip_news"].find({}, fields) if doc.get("scrip")}
+
+
+NEWS_MARKET_WORDS = re.compile(r"\b(?:shares?|stocks?|ltd|limited|nse|bse|q[1-4]|results?|ipo)\b", re.I)
+
+
+def _news_mentions(title: str, symbol: str, company: str) -> bool:
+    """Ticker as a whole word, or the company's first two significant words as words.
+
+    Short tickers (LT, PNB) only match through the company name. A one-word name
+    (Titan, Trent) also needs a market word, so namesakes in other news are skipped.
+    """
+    if len(symbol) >= 4 and re.search(rf"(?<![A-Za-z0-9]){re.escape(symbol)}(?![A-Za-z0-9])", title):
+        return True
+    words = list(
+        dict.fromkeys(w for w in re.split(r"[^a-z0-9]+", company.lower()) if len(w) > 2 and w not in NEWS_SKIP_WORDS)
+    )
+    if not words:
+        return False
+    text = title.lower()
+    if not all(re.search(rf"\b{re.escape(word)}\b", text) for word in words[:2]):
+        return False
+    return len(words) > 1 or bool(NEWS_MARKET_WORDS.search(title))
+
+
+def news_impact(news: dict[str, dict], symbol: str, company: str) -> dict[str, Any]:
+    """Strongest recent headline about this company from Nsedata.scrip_news.
+
+    Returns the stored fields plus `text`, a clause for `why`. Articles must name the
+    company (scrip_news sometimes holds another company's story) and be within NEWS_DAYS.
+    """
+    doc = news.get(symbol)
+    if not doc:
+        return {"text": "news: none on file"}
+    cutoff = datetime.now() - timedelta(days=NEWS_DAYS)
+    picked: list[tuple[int, datetime, dict]] = []
+    for article in (doc.get("news") or []) + (doc.get("analyst_calls") or []):
+        title = str(article.get("title") or "").strip()
+        for _ in range(2):  # Google News appends " - Source", sometimes twice
+            head, sep, source = title.rpartition(" - ")
+            if not (sep and head and len(source.split()) <= 4):
+                break
+            title = head.strip()
+        if not title or NEWS_LISTING.search(title) or not _news_mentions(title, symbol, company):
+            continue
+        try:
+            published = parsedate_to_datetime(str(article.get("published"))).replace(tzinfo=None)
+        except (TypeError, ValueError):
+            continue
+        if published < cutoff:
+            continue
+        picked.append((int(article.get("impact_score") or 0), published, {**article, "title": title}))
+    sentiment = doc.get("overall_sentiment") or "Neutral"
+    conviction = doc.get("conviction") or "Low"
+    out: dict[str, Any] = {"news_sentiment": sentiment, "news_conviction": conviction}
+    if not picked:
+        out["text"] = f"news: {sentiment} ({conviction}), no company news in last {NEWS_DAYS} days"
+        return out
+    impact, published, top = max(picked, key=lambda item: (item[0], item[1]))
+    out.update(
+        {
+            "news_headline": top["title"],
+            "news_event": top.get("event_type") or "General",
+            "news_impact_score": impact,
+            "news_date": published.date().isoformat(),
+            "news_link": top.get("link") or "",
+        }
+    )
+    out["text"] = (
+        f"news: {sentiment} ({conviction}) - {top['title']} "
+        f"[{out['news_event']}, {top.get('sentiment') or 'Neutral'}, impact {impact}, {published:%d %b}]"
+    )
+    return out
+
+
+def news_fields(impact: dict[str, Any]) -> dict[str, Any]:
+    return {k: v for k, v in impact.items() if k != "text"}
 
 
 def load_investors(path: Path) -> list[tuple[str, list[str]]]:
@@ -403,6 +554,59 @@ def buy_price_from_daily(daily: list[dict]) -> float | None:
     return qs.round_tick(close)
 
 
+def daily_scan(symbol: str, daily: list[dict]) -> dict:
+    """Scan-style fields from daily bars, for ideas that have no scan row.
+
+    The scorers read 3/5-day change and distance from last week's high and low.
+    Without them a bare {scrip, close} scan can never reach High or Med conviction.
+    """
+    closes = [bar["close"] for bar in daily if bar.get("close")]
+    if not closes:
+        return {"scrip": symbol, "close": None}
+    close = closes[-1]
+
+    def change(days: int) -> float:
+        base = closes[-1 - days] if len(closes) > days else 0
+        return round((close / base - 1) * 100, 2) if base else 0.0
+
+    scan: dict[str, Any] = {
+        "scrip": symbol,
+        "close": close,
+        "forecast_day_PCT3_change": change(3),
+        "forecast_day_PCT5_change": change(5),
+    }
+    week = [bar for bar in daily[-6:-1] if bar.get("high") and bar.get("low")]
+    if week:
+        scan["weekHighChange"] = round((close / max(bar["high"] for bar in week) - 1) * 100, 2)
+        scan["weekLowChange"] = round((close / min(bar["low"] for bar in week) - 1) * 100, 2)
+    return scan
+
+
+def local_gate(
+    client, symbol: str, kind: str, collection: str, stats: RunStats
+) -> tuple[dict, dict | None, dict | None]:
+    """Score from local Mongo only, so HTTP is spent only on names that can be saved.
+
+    Returns (enrich, block, meta). meta is None when the name is not High/Med Bullish
+    or its target upside is at or below the collection minimum (upsert_idea would
+    reject it anyway).
+    """
+    enrich = qs.enrich_symbol(client, symbol)
+    scan = daily_scan(symbol, enrich["daily"])
+    block = score_block(kind, scan, enrich)
+    meta = passes_gate(block, scan)
+    if not meta:
+        stats.skip_low(collection)
+        return enrich, block, None
+    price = buy_price_from_daily(enrich["daily"])
+    upside = target_plan(collection, kind, block, price, enrich["daily"]).get("target_pct") or 0
+    minimum = MIN_RETURN_PCT[collection]
+    if not upside > minimum:
+        stats.extra[f"{collection}:return-at-or-below-{minimum:g}%"] += 1
+        return enrich, block, None
+    return enrich, block, meta
+
+
 def score_block(kind: str, scan: dict, enrich: dict) -> dict | None:
     daily = enrich["daily"]
     if kind == "long":
@@ -412,11 +616,60 @@ def score_block(kind: str, scan: dict, enrich: dict) -> dict | None:
     return qs.score_swing_3_5(scan, daily)
 
 
+def _block_atr(kind: str, block: dict, daily: list[dict]) -> float:
+    close = float(block.get("close") or 0)
+    bars = daily[-20:] if kind == "swing" else daily
+    value = qs.atr(bars, 14) if len(bars) >= 15 else None
+    return value or close * 0.02
+
+
+def target_reason(kind: str, block: dict, daily: list[dict]) -> str:
+    """Say how the scorer picked t1."""
+    close = float(block.get("close") or 0)
+    if kind == "long":
+        high52 = block.get("high52")
+        if high52 and close < float(high52):
+            return f"52-week high {qs.round_tick(float(high52))}"
+        return "new-high extension: 27.2% of the 52-week range above the close"
+    atr_v = _block_atr(kind, block, daily)
+    if kind == "short" and float(block["t1"]) < qs.round_tick(close + atr_v):
+        return "20-day swing high"
+    return f"1 ATR(14) above the close (ATR {qs.round_tick(atr_v)})"
+
+
+def target_plan(collection: str, kind: str, block: dict, buy: float | None, daily: list[dict]) -> dict:
+    """Target price, % upside from buy, reason, estimated days and date to reach it.
+
+    Days use the random-walk rule of thumb (distance / ATR) squared trading days,
+    converted to calendar days and capped at the collection's purge window.
+    """
+    target = qs.round_tick(float(block["t1"]))
+    plan: dict[str, Any] = {"target_price": target, "target_reason": target_reason(kind, block, daily)}
+    if not buy or buy <= 0:
+        return plan
+    plan["target_pct"] = round((target - buy) / buy * 100, 2)
+    atr_v = _block_atr(kind, block, daily)
+    trading = math.ceil(((target - buy) / atr_v) ** 2) if atr_v > 0 and target > buy else 1
+    days = math.ceil(max(trading, 1) * 7 / 5)
+    limit = PURGE_DAYS[collection]
+    if days > limit:
+        days = limit
+        plan["target_reason"] += f"; estimate capped at the {limit}-day window"
+    plan["target_days"] = days
+    plan["target_date"] = (date.today() + timedelta(days=days)).isoformat()
+    return plan
+
+
+ACCEPTED_CONVICTION = {"High", "Med"}
+# Idea types saved whatever their conviction, sentiment, or target upside.
+UNGATED_IDEAS = {"celebrity"}
+
+
 def passes_gate(block: dict | None, scan: dict) -> dict | None:
     if not block or block.get("t1") is None:
         return None
     meta = qs.derive_conviction_sentiment(block, qs.extract_scan_signals(scan))
-    if meta.get("conviction") == "High" and meta.get("sentiment") == "Bullish":
+    if meta.get("conviction") in ACCEPTED_CONVICTION and meta.get("sentiment") == "Bullish":
         return meta
     return None
 
@@ -431,6 +684,10 @@ def breakout_why(table: str, hit_count: int, window: str, scan: dict, daily: lis
         bits.append("near week high")
     elif table == "breakoutM2H":
         bits.append("near 2-month high")
+    elif table == "nearY5H":
+        bits.append("near 5-year high")
+    elif table == "movingavg_crossed_up":
+        bits.append("moving averages crossed up")
     closes = [bar["close"] for bar in daily if bar.get("close")]
     if len(closes) >= 200:
         average = qs.sma(closes, 200)
@@ -477,6 +734,22 @@ def purge_old(db, stats: RunStats) -> None:
             }
         )
         stats.by_coll[name]["deleted"] += result.deleted_count
+    for name, minimum in MIN_RETURN_PCT.items():
+        upside = {
+            "$multiply": [
+                {"$divide": [{"$subtract": ["$target_price", "$buy_price"]}, "$buy_price"]},
+                100,
+            ]
+        }
+        result = db[name].delete_many(
+            {
+                "idea_type": {"$nin": sorted(UNGATED_IDEAS)},
+                "buy_price": {"$gt": 0},
+                "target_price": {"$ne": None},
+                "$expr": {"$lte": [upside, minimum]},
+            }
+        )
+        stats.by_coll[name]["deleted"] += result.deleted_count
 
 
 def upsert_idea(coll, doc: dict, stats: RunStats, collection: str) -> None:
@@ -484,9 +757,18 @@ def upsert_idea(coll, doc: dict, stats: RunStats, collection: str) -> None:
     if not why or doc.get("buy_price") is None or doc.get("target_price") is None:
         stats.extra[f"{collection}:missing-why-or-price"] += 1
         return
+    ungated = doc.get("idea_type") in UNGATED_IDEAS
+    minimum = MIN_RETURN_PCT.get(collection)
+    if not ungated and minimum is not None and not (doc.get("target_pct") or 0) > minimum:
+        stats.extra[f"{collection}:return-at-or-below-{minimum:g}%"] += 1
+        return
+    for longer in COVERED_BY.get(collection, ()):
+        if coll.database[longer].find_one({"symbol": doc["symbol"]}, {"_id": 1}):
+            stats.extra[f"{collection}:covered-by-{longer.removeprefix('investment-')}"] += 1
+            return
     doc["why"] = why
-    doc["conviction"] = "High"
-    doc["sentiment"] = "Bullish"
+    if not ungated:
+        doc["sentiment"] = "Bullish"
     key = doc["dedupe_key"]
     now = datetime.now()
     insert_only = {
@@ -505,6 +787,26 @@ def upsert_idea(coll, doc: dict, stats: RunStats, collection: str) -> None:
     else:
         bucket["updated"] += 1
     bucket["rows"].append(payload)
+
+
+def drop_covered_by_longer(db, stats: RunStats) -> None:
+    """Delete rows whose symbol is in a longer horizon (run after every stage).
+
+    Medium is swept before short so short is checked against the final medium set.
+    """
+    for collection in (COLL_MEDIUM, COLL_SHORT):
+        bucket = stats.by_coll[collection]
+        for longer in COVERED_BY[collection]:
+            symbols = db[longer].distinct("symbol")
+            if not symbols:
+                continue
+            result = db[collection].delete_many({"symbol": {"$in": symbols}})
+            if not result.deleted_count:
+                continue
+            bucket["deleted"] += result.deleted_count
+            stats.extra[f"{collection}:covered-by-{longer.removeprefix('investment-')}"] += result.deleted_count
+            covered = set(symbols)
+            bucket["rows"] = [row for row in bucket["rows"] if row.get("symbol") not in covered]
 
 
 def scrip_map(db) -> dict[str, dict]:
@@ -545,7 +847,7 @@ def group_breakout_rows(rows: list[dict], since: date | None) -> dict[str, list[
     return grouped
 
 
-def run_breakouts(db, client, args, stats: RunStats, scrips: dict[str, dict]) -> None:
+def run_breakouts(db, client, args, stats: RunStats, scrips: dict[str, dict], news: dict[str, dict]) -> None:
     since = months_ago(args.months) if args.months else None
     enrich_cache: dict[str, dict] = {}
     for spec in BREAKOUTS:
@@ -577,19 +879,22 @@ def run_breakouts(db, client, args, stats: RunStats, scrips: dict[str, dict]) ->
             price = buy_price_from_daily(enrich["daily"])
             info = scrips.get(symbol, {})
             as_of = (signal_date or date.today()).isoformat()
+            company = info.get("company") or symbol
+            impact = news_impact(news, symbol, company)
             doc = {
                 "idea_type": "breakout",
                 "symbol": symbol,
-                "company": info.get("company") or symbol,
+                "company": company,
                 "industry": scan.get("industry") or info.get("industry") or "",
-                "horizon_label": spec["horizon_label"],
+                "horizon_label": HORIZON_LABEL[spec["collection"]],
                 "buy_price": price,
-                "target_price": qs.round_tick(float(block["t1"])),
+                **target_plan(spec["collection"], spec["scorer"], block, price, enrich["daily"]),
                 "stoploss": qs.round_tick(float(block["stop"])) if block.get("stop") is not None else None,
-                "conviction": "High",
+                "conviction": meta["conviction"],
                 "sentiment": "Bullish",
                 "probability_score": int(meta["probability_score"]),
-                "why": breakout_why(table, hit_count, window, scan, enrich["daily"]),
+                "why": f"{breakout_why(table, hit_count, window, scan, enrich['daily'])}; {impact['text']}",
+                **news_fields(impact),
                 "source": table,
                 "source_table": table,
                 "hit_count": hit_count,
@@ -602,8 +907,9 @@ def run_breakouts(db, client, args, stats: RunStats, scrips: dict[str, dict]) ->
 
 
 class NseClient:
-    def __init__(self, pause: float) -> None:
+    def __init__(self, pause: float, cache=None) -> None:
         self.pause = pause
+        self.cache = cache  # Mongo collection of NSE shareholding responses
         self.cookie = str(Path.home() / ".cache")
         cache_dir = Path.home() / "AppData" / "Local" / "Temp"
         cache_dir.mkdir(parents=True, exist_ok=True)
@@ -614,14 +920,37 @@ class NseClient:
     def prime(self) -> None:
         if not self.curl:
             raise RuntimeError("curl is required for NSE shareholding")
+        # --max-time: without it a stalled NSE handshake blocks the run forever.
         subprocess.run(
-            [self.curl, "-sS", "-c", self.cookie, "-b", self.cookie, "-A", USER_AGENT, "-o", "NUL", "-L", NSE_PAGE],
+            [
+                self.curl, "-sS", "-c", self.cookie, "-b", self.cookie, "-A", USER_AGENT,
+                "-o", "NUL", "-L", "--connect-timeout", "10", "--max-time", "30", NSE_PAGE,
+            ],
             check=False,
             capture_output=True,
         )
         self._primed = True
 
     def get_json(self, path: str) -> Any:
+        # A filed quarter (ndsId) never changes; the quarter list is refreshed daily.
+        # Without this cache the celebrity stage costs ~2,500 calls (~55 min) per run.
+        max_age = None
+        if "corporate-share-holdings-equities" in path:
+            max_age = timedelta(days=3650)
+        elif "corporate-share-holdings-master" in path:
+            max_age = timedelta(days=1)
+        if self.cache is not None and max_age is not None:
+            hit = self.cache.find_one({"path": path, "fetched_at": {"$gte": datetime.now() - max_age}})
+            if hit:
+                return hit["payload"]
+        payload = self._get_json(path)
+        if self.cache is not None and max_age is not None:
+            self.cache.update_one(
+                {"path": path}, {"$set": {"payload": payload, "fetched_at": datetime.now()}}, upsert=True
+            )
+        return payload
+
+    def _get_json(self, path: str) -> Any:
         if not self._primed:
             self.prime()
         url = path if path.startswith("http") else NSE_ORIGIN + path
@@ -652,6 +981,8 @@ class NseClient:
                 "Accept: application/json, text/plain, */*",
                 "-H",
                 f"Referer: {NSE_PAGE}",
+                "--connect-timeout",
+                "10",
                 "--max-time",
                 "30",
                 url,
@@ -664,11 +995,18 @@ class NseClient:
         return proc.stdout or b""
 
 
+_SCREENER_SESSION = None
+
+
 def fetch_screener(symbol: str) -> str | None:
+    global _SCREENER_SESSION
     if requests is None:
         raise RuntimeError("requests is required for Screener")
+    if _SCREENER_SESSION is None:
+        _SCREENER_SESSION = requests.Session()
+        _SCREENER_SESSION.headers.update(SCREENER_HEADERS)
     for path in (f"/company/{urllib.parse.quote(symbol)}/consolidated/", f"/company/{urllib.parse.quote(symbol)}/"):
-        response = requests.get("https://www.screener.in" + path, headers=SCREENER_HEADERS, timeout=30)
+        response = _SCREENER_SESSION.get("https://www.screener.in" + path, timeout=(10, 30))
         if response.status_code == 404:
             continue
         response.raise_for_status()
@@ -710,7 +1048,7 @@ def holder_name_and_pct(row: dict) -> tuple[str, float] | None:
     pct = parse_number(row.get("noOfSharesHeld") if row.get("shareholderName") else None)
     if pct is None:
         pct = parse_number(row.get("COL_VIII") or row.get("perStake") or row.get("holding") or row.get("percentage"))
-    if not name or pct is None:
+    if not name or pct is None or name.lower().startswith(("total", "sub-total")):
         return None
     return name, pct
 
@@ -773,27 +1111,51 @@ def nse_symbol_path(symbol: str, record_id: str | None = None, index: str = "", 
     )
 
 
+def named_public_holders(nse: NseClient, symbol: str, record_id: str) -> list[dict]:
+    """Named holders above 1% from the full public-shareholder table.
+
+    NSE's `subIndex=shareholders` view now returns an empty list. The full table
+    mixes category headings (`category` "1", "a", ...) with named holders, which
+    have a blank `category`; sub-totals and catch-all buckets are dropped.
+    """
+    rows = as_row_list(nse.get_json(nse_symbol_path(symbol, record_id, "public-shareholder")))
+    named: list[dict] = []
+    for row in rows:
+        if str(row.get("category") or "").strip():
+            continue
+        name = str(row.get("COL_I") or row.get("COL_II") or "").strip()
+        lowered = name.lower()
+        if not name or lowered.startswith(("sub-total", "total")) or lowered in PUBLIC_BUCKETS:
+            continue
+        named.append(row)
+    return named
+
+
 def shareholding_bundle(nse: NseClient, symbol: str, record_id: str) -> tuple[list[dict], list[dict]]:
     summary = as_row_list(nse.get_json(nse_symbol_path(symbol, record_id, "summary")))
-    named = as_row_list(
-        nse.get_json(nse_symbol_path(symbol, record_id, "public-shareholder", "shareholders"))
-    )
-    return summary, named
+    return summary, named_public_holders(nse, symbol, record_id)
 
 
-def run_orderbook(db, client, args, stats: RunStats, scrips: dict[str, dict], nse: NseClient) -> None:
+def run_orderbook(
+    db, client, args, stats: RunStats, scrips: dict[str, dict], nse: NseClient, news: dict[str, dict]
+) -> None:
     coll = db[COLL_LONG]
     week_ago = datetime.now() - timedelta(days=7)
     symbols = [symbol for symbol, info in scrips.items() if is_capital_goods(info.get("industry"))]
     print(f"orderbook universe: {len(symbols)}")
     failures = 0
     for index, symbol in enumerate(symbols, start=1):
+        if index % 25 == 0:
+            print(f"orderbook progress {index}/{len(symbols)}")
         cached = coll.find_one(
             {"idea_type": "orderbook", "symbol": symbol, "page_fetched_at": {"$gte": week_ago}},
             {"_id": 1},
         )
         if cached:
             stats.extra["orderbook:cached"] += 1
+            continue
+        enrich, block, meta = local_gate(client, symbol, "long", COLL_LONG, stats)
+        if not meta:
             continue
         try:
             time.sleep(args.sleep)
@@ -823,13 +1185,6 @@ def run_orderbook(db, client, args, stats: RunStats, scrips: dict[str, dict], ns
         if not (order_book > market_cap and order_book > sales):
             stats.extra["orderbook:below-mcap-or-sales"] += 1
             continue
-        enrich = qs.enrich_symbol(client, symbol)
-        scan = {"scrip": symbol, "close": enrich["daily"][-1]["close"] if enrich["daily"] else None}
-        block = score_block("long", scan, enrich)
-        meta = passes_gate(block, scan)
-        if not meta:
-            stats.skip_low(COLL_LONG)
-            continue
         try:
             quarters = quarter_records(nse.get_json(nse_symbol_path(symbol)))
             holders: dict[str, Any] = {}
@@ -848,22 +1203,34 @@ def run_orderbook(db, client, args, stats: RunStats, scrips: dict[str, dict], ns
             holder_bit += f"; largest non-promoter {public} {pct_text(holders.get('top_public_holder_pct'))}"
         info = scrips.get(symbol, {})
         as_of = date.today().isoformat()
+        price = buy_price_from_daily(enrich["daily"])
+        company = info.get("company") or symbol
+        impact = news_impact(news, symbol, company)
+        pros = parsed["pros"]
+        cons = parsed["cons"]
+        outlook = f"; strengths: {'; '.join(pros[:2])}" if pros else ""
+        watch = f"; watch: {cons[0]}" if cons else ""
         doc = {
             "idea_type": "orderbook",
             "symbol": symbol,
-            "company": info.get("company") or symbol,
+            "company": company,
             "industry": info.get("industry") or "",
-            "horizon_label": "long-term (kept)",
-            "buy_price": buy_price_from_daily(enrich["daily"]),
-            "target_price": qs.round_tick(float(block["t1"])),
+            "horizon_label": HORIZON_LABEL[COLL_LONG],
+            "buy_price": price,
+            **target_plan(COLL_LONG, "long", block, price, enrich["daily"]),
             "stoploss": qs.round_tick(float(block["stop"])) if block.get("stop") is not None else None,
-            "conviction": "High",
+            "conviction": meta["conviction"],
             "sentiment": "Bullish",
             "probability_score": int(meta["probability_score"]),
             "why": (
                 f"Order book {order_book / market_cap:.1f}x market cap and "
-                f"{order_book / sales:.1f}x sales{holder_bit}"
+                f"{order_book / sales:.1f}x sales, about {order_book / sales:.1f} years of "
+                f"revenue visibility{outlook}{watch}; {impact['text']}{holder_bit}"
             ),
+            **news_fields(impact),
+            "order_book_years": round(order_book / sales, 2),
+            "screener_pros": pros,
+            "screener_cons": cons,
             "source": "screener",
             "as_of_date": as_of,
             "order_book_cr": round(order_book, 2),
@@ -876,11 +1243,18 @@ def run_orderbook(db, client, args, stats: RunStats, scrips: dict[str, dict], ns
             doc["t2"] = qs.round_tick(float(block["t2"]))
         doc.update({k: v for k, v in holders.items() if v is not None})
         upsert_idea(coll, doc, stats, COLL_LONG)
-        if index % 25 == 0:
-            print(f"orderbook progress {index}/{len(symbols)}")
 
 
-def run_celebrity(db, client, args, stats: RunStats, scrips: dict[str, dict], caps: dict[str, float], nse: NseClient) -> None:
+def run_celebrity(
+    db,
+    client,
+    args,
+    stats: RunStats,
+    scrips: dict[str, dict],
+    caps: dict[str, float],
+    nse: NseClient,
+    news: dict[str, dict],
+) -> None:
     investors = load_investors(SKILL_DIR / "references" / "investors.md")
     if not investors:
         print("celebrity: investor list is empty")
@@ -894,6 +1268,8 @@ def run_celebrity(db, client, args, stats: RunStats, scrips: dict[str, dict], ca
     print(f"celebrity universe: {len(universe)} small/mid names, quarters since {cutoff.isoformat()}")
     failures = 0
     for index, (symbol, crores, bucket) in enumerate(universe, start=1):
+        if index % 100 == 0:
+            print(f"celebrity progress {index}/{len(universe)}")
         try:
             quarters = quarter_records(nse.get_json(nse_symbol_path(symbol)))
             failures = 0
@@ -913,23 +1289,10 @@ def run_celebrity(db, client, args, stats: RunStats, scrips: dict[str, dict], ca
             stats.extra["celebrity:quarter-too-old"] += 1
             continue
         try:
-            latest_named = as_row_list(
-                nse.get_json(
-                    nse_symbol_path(symbol, str(latest_row.get("recordId")), "public-shareholder", "shareholders")
-                )
-            )
+            latest_named = named_public_holders(nse, symbol, str(latest_row.get("recordId")))
             previous_named: list[dict] = []
             if len(quarters) > 1:
-                previous_named = as_row_list(
-                    nse.get_json(
-                        nse_symbol_path(
-                            symbol,
-                            str(quarters[1][1].get("recordId")),
-                            "public-shareholder",
-                            "shareholders",
-                        )
-                    )
-                )
+                previous_named = named_public_holders(nse, symbol, str(quarters[1][1].get("recordId")))
         except Exception as exc:
             stats.extra["celebrity:http-error"] += 1
             print(f"nse holders {symbol}: {exc}")
@@ -947,39 +1310,58 @@ def run_celebrity(db, client, args, stats: RunStats, scrips: dict[str, dict], ca
         if not raised:
             stats.extra["celebrity:no-increase"] += 1
             continue
+        # No conviction or upside gate for celebrity buys: score only to record them.
         enrich = qs.enrich_symbol(client, symbol)
-        scan = {"scrip": symbol, "close": enrich["daily"][-1]["close"] if enrich["daily"] else None}
+        scan = daily_scan(symbol, enrich["daily"])
         block = score_block("swing", scan, enrich)
-        meta = passes_gate(block, scan)
-        if not meta:
-            stats.skip_low(COLL_MEDIUM, len(raised))
+        if not block or block.get("t1") is None:
+            stats.extra["celebrity:no-price-history"] += 1
             continue
+        meta = qs.derive_conviction_sentiment(block, qs.extract_scan_signals(scan))
         info = scrips.get(symbol, {})
         price = buy_price_from_daily(enrich["daily"])
+        plan = target_plan(COLL_MEDIUM, "swing", block, price, enrich["daily"])
         quarter = latest_date.isoformat()
+        company = info.get("company") or symbol
+        impact = news_impact(news, symbol, company)
+        pros: list[str] = []
+        cons: list[str] = []
+        try:
+            time.sleep(args.sleep)
+            page = fetch_screener(symbol)
+            if page:
+                pros, cons = parse_pros_cons(page)
+        except Exception as exc:
+            stats.extra["celebrity:screener-error"] += 1
+            print(f"screener {symbol}: {exc}")
+        draw = "; possible draws: " + "; ".join(pros[:2]) if pros else ""
+        watch = f"; watch: {cons[0]}" if cons else ""
         for canonical, latest_pct, previous_pct in raised:
             if previous_pct is None:
                 change = f"{canonical} newly holds {pct_text(latest_pct)} in the latest quarter"
                 change_pct = latest_pct
             else:
-                change = (
-                    f"{canonical} raised holding from {pct_text(previous_pct)} to "
-                    f"{pct_text(latest_pct)} in the latest quarter"
-                )
+                before, after = pct_text(previous_pct), pct_text(latest_pct)
+                if before == after:  # a small raise rounds away at one decimal
+                    before, after = f"{previous_pct:.2f}%", f"{latest_pct:.2f}%"
+                change = f"{canonical} raised holding from {before} to {after} in the latest quarter"
                 change_pct = latest_pct - previous_pct
             doc = {
                 "idea_type": "celebrity",
                 "symbol": symbol,
-                "company": info.get("company") or symbol,
+                "company": company,
                 "industry": info.get("industry") or "",
-                "horizon_label": "medium-term (about 1-3 months)",
+                "horizon_label": HORIZON_LABEL[COLL_MEDIUM],
                 "buy_price": price,
-                "target_price": qs.round_tick(float(block["t1"])),
+                **plan,
                 "stoploss": qs.round_tick(float(block["stop"])) if block.get("stop") is not None else None,
-                "conviction": "High",
-                "sentiment": "Bullish",
+                "conviction": meta["conviction"],
+                "sentiment": meta["sentiment"],
                 "probability_score": int(meta["probability_score"]),
-                "why": f"{change}; {bucket}",
+                "why": f"{change}; {bucket}{draw}{watch}; {impact['text']}",
+                **news_fields(impact),
+                "screener_pros": pros,
+                "screener_cons": cons,
                 "source": "nse-shareholding",
                 "as_of_date": quarter,
                 "investor_name": canonical,
@@ -992,8 +1374,132 @@ def run_celebrity(db, client, args, stats: RunStats, scrips: dict[str, dict], ca
             if block.get("t2") is not None:
                 doc["t2"] = qs.round_tick(float(block["t2"]))
             upsert_idea(db[COLL_MEDIUM], doc, stats, COLL_MEDIUM)
-        if index % 25 == 0:
-            print(f"celebrity progress {index}/{len(universe)}")
+
+
+DEALS_COLL = "nse_large_deals"
+DEALS_SNAPSHOT = "/api/snapshot-capital-market-largedeal"
+# Buyers worth following besides the celebrity list. Retail "operators" who buy
+# and sell the same day net to zero and drop out anyway.
+INSTITUTION_BUYER = re.compile(r"mutual fund|life insurance|general insurance|assurance", re.I)
+
+
+def store_deal_snapshot(db, nse: NseClient, stats: RunStats) -> None:
+    """Append today's NSE bulk and block deals to Nsedata.nse_large_deals.
+
+    NSE's historical deal API is blocked for scripts; the snapshot only covers
+    the latest session, so each run keeps it and the window builds up over days.
+    """
+    payload = nse.get_json(DEALS_SNAPSHOT)
+    coll = db[DEALS_COLL]
+    coll.create_index("deal_key", unique=True)
+    for deal_type, key in (("bulk", "BULK_DEALS_DATA"), ("block", "BLOCK_DEALS_DATA")):
+        for row in payload.get(key) or []:
+            stamp = parse_date(row.get("date"))
+            symbol = str(row.get("symbol") or "").strip()
+            client = str(row.get("clientName") or "").strip()
+            side = str(row.get("buySell") or "").strip().upper()
+            qty = parse_number(row.get("qty"))
+            if not (stamp and symbol and client and side in {"BUY", "SELL"} and qty):
+                continue
+            deal_key = f"{deal_type}|{stamp.isoformat()}|{symbol}|{client}|{side}|{qty:g}|{row.get('watp')}"
+            result = coll.update_one(
+                {"deal_key": deal_key},
+                {
+                    "$setOnInsert": {
+                        "deal_key": deal_key,
+                        "deal_type": deal_type,
+                        "date": stamp.isoformat(),
+                        "symbol": symbol,
+                        "company": row.get("name") or "",
+                        "client": client,
+                        "side": side,
+                        "qty": qty,
+                        "price": parse_number(row.get("watp")),
+                        "fetched_at": datetime.now(),
+                    }
+                },
+                upsert=True,
+            )
+            if result.upserted_id is not None:
+                stats.extra["deals:stored"] += 1
+
+
+def deal_buyer(client: str, investors: list[tuple[str, list[str]]]) -> str | None:
+    for canonical, variants in investors:
+        if any(names_match(client, variant) for variant in variants):
+            return canonical
+    if INSTITUTION_BUYER.search(client):
+        return client.title()
+    return None
+
+
+def run_deals(db, client, args, stats: RunStats, scrips: dict[str, dict], nse: NseClient, news: dict[str, dict]) -> None:
+    try:
+        store_deal_snapshot(db, nse, stats)
+    except Exception as exc:
+        stats.extra["deals:http-error"] += 1
+        print(f"nse deals snapshot: {exc}")
+    investors = load_investors(SKILL_DIR / "references" / "investors.md")
+    since = (date.today() - timedelta(days=args.deal_days)).isoformat()
+    # (symbol, buyer) -> net qty, buy qty, buy value, latest date, deal types
+    groups: dict[tuple[str, str], dict[str, Any]] = {}
+    for row in db[DEALS_COLL].find({"date": {"$gte": since}}):
+        buyer = deal_buyer(row["client"], investors)
+        if not buyer:
+            continue
+        group = groups.setdefault(
+            (row["symbol"], buyer), {"net": 0.0, "bought": 0.0, "value": 0.0, "date": "", "types": set()}
+        )
+        sign = 1 if row["side"] == "BUY" else -1
+        group["net"] += sign * row["qty"]
+        if sign > 0:
+            group["bought"] += row["qty"]
+            group["value"] += row["qty"] * (row.get("price") or 0)
+            group["date"] = max(group["date"], row["date"])
+            group["types"].add(row["deal_type"])
+    buys = {key: group for key, group in groups.items() if group["net"] > 0 and group["bought"] > 0}
+    print(f"deals: {len(buys)} net buys by tracked investors or institutions since {since}")
+    gated: dict[str, tuple] = {}
+    for (symbol, buyer), group in sorted(buys.items()):
+        if symbol not in gated:
+            gated[symbol] = local_gate(client, symbol, "swing", COLL_MEDIUM, stats)
+        enrich, block, meta = gated[symbol]
+        if not meta:
+            continue
+        info = scrips.get(symbol, {})
+        company = info.get("company") or symbol
+        price = buy_price_from_daily(enrich["daily"])
+        impact = news_impact(news, symbol, company)
+        deal_price = group["value"] / group["bought"] if group["value"] else None
+        types = "/".join(sorted(group["types"]))
+        at = f" at about {qs.round_tick(deal_price)}" if deal_price else ""
+        doc = {
+            "idea_type": "deal",
+            "symbol": symbol,
+            "company": company,
+            "industry": info.get("industry") or "",
+            "horizon_label": HORIZON_LABEL[COLL_MEDIUM],
+            "buy_price": price,
+            **target_plan(COLL_MEDIUM, "swing", block, price, enrich["daily"]),
+            "stoploss": qs.round_tick(float(block["stop"])) if block.get("stop") is not None else None,
+            "conviction": meta["conviction"],
+            "sentiment": "Bullish",
+            "probability_score": int(meta["probability_score"]),
+            "why": (
+                f"{buyer} net bought {group['net']:,.0f} shares in NSE {types} deals{at}, "
+                f"latest {group['date']}; {impact['text']}"
+            ),
+            **news_fields(impact),
+            "source": f"nse-{types}-deals",
+            "as_of_date": group["date"],
+            "investor_name": buyer,
+            "deal_net_qty": group["net"],
+            "deal_price": qs.round_tick(deal_price) if deal_price else None,
+            "dedupe_key": f"deal|{symbol}|{buyer}|{group['date']}",
+        }
+        if block.get("t2") is not None:
+            doc["t2"] = qs.round_tick(float(block["t2"]))
+        upsert_idea(db[COLL_MEDIUM], doc, stats, COLL_MEDIUM)
 
 
 def print_summary(stats: RunStats) -> None:
@@ -1014,24 +1520,49 @@ def print_summary(stats: RunStats) -> None:
         if not rows:
             continue
         print(f"\n{name}")
-        print("symbol | buy | target | conviction | why | holder")
+        print("symbol | buy | target | target % | days | by date | target reason | conviction | why | holder")
         ordered = sorted(rows, key=lambda row: (-(row.get("hit_count") or 0), row.get("symbol") or ""))
         for row in ordered:
             holder = row.get("investor_name") or row.get("top_holder_name") or ""
             print(
                 f"{row.get('symbol')} | {row.get('buy_price')} | {row.get('target_price')} | "
-                f"{row.get('conviction')} | {row.get('why')} | {holder}"
+                f"{row.get('target_pct')} | {row.get('target_days')} | {row.get('target_date')} | "
+                f"{row.get('target_reason')} | {row.get('conviction')} | {row.get('why')} | {holder}"
             )
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Upsert High-conviction investment ideas")
-    parser.add_argument("--only", choices=("breakout", "orderbook", "celebrity"))
+    parser = argparse.ArgumentParser(description="Upsert High- and Med-conviction Bullish investment ideas")
+    parser.add_argument("--only", choices=("breakout", "orderbook", "celebrity", "deals"))
     parser.add_argument("--months", type=int, default=6)
     parser.add_argument("--celebrity-months", type=int, default=3)
+    parser.add_argument("--deal-days", type=int, default=30, help="Window for stored NSE bulk/block deals")
     parser.add_argument("--sleep", type=float, default=1.0)
     parser.add_argument("--uri", default=DEFAULT_URI)
+    parser.add_argument(
+        "--long-min-return",
+        type=float,
+        default=MIN_RETURN_PCT[COLL_LONG],
+        help="Minimum target upside %% for investment-long-term (default 50)",
+    )
+    parser.add_argument(
+        "--medium-min-return",
+        type=float,
+        default=MIN_RETURN_PCT[COLL_MEDIUM],
+        help="Minimum target upside %% for investment-medium-term (default 30)",
+    )
+    parser.add_argument(
+        "--short-min-return",
+        type=float,
+        default=MIN_RETURN_PCT[COLL_SHORT],
+        help="Minimum target upside %% for investment-short-term (default 20)",
+    )
     args = parser.parse_args()
+    MIN_RETURN_PCT[COLL_LONG] = args.long_min_return
+    MIN_RETURN_PCT[COLL_MEDIUM] = args.medium_min_return
+    MIN_RETURN_PCT[COLL_SHORT] = args.short_min_return
+    # Progress must reach a redirected log as it happens, not at exit.
+    sys.stdout.reconfigure(line_buffering=True)
 
     client = MongoClient(args.uri, serverSelectionTimeoutMS=4000)
     client.admin.command("ping")
@@ -1040,16 +1571,26 @@ def main() -> None:
     ensure_indexes(db)
     purge_old(db, stats)
     scrips = scrip_map(db)
+    news = load_news(db)
     selected = args.only or "all"
-    if selected in {"all", "breakout"}:
-        run_breakouts(db, client, args, stats, scrips)
     nse = None
-    if selected in {"all", "orderbook", "celebrity"}:
-        nse = NseClient(args.sleep)
-    if selected in {"all", "orderbook"}:
-        run_orderbook(db, client, args, stats, scrips, nse)
-    if selected in {"all", "celebrity"}:
-        run_celebrity(db, client, args, stats, scrips, fundamental_caps(db), nse)
+    if selected in {"all", "orderbook", "celebrity", "deals"}:
+        db[NSE_CACHE_COLL].create_index("path", unique=True)
+        nse = NseClient(args.sleep, db[NSE_CACHE_COLL])
+    stages = (
+        ("breakout", lambda: run_breakouts(db, client, args, stats, scrips, news)),
+        ("orderbook", lambda: run_orderbook(db, client, args, stats, scrips, nse, news)),
+        ("deals", lambda: run_deals(db, client, args, stats, scrips, nse, news)),
+        ("celebrity", lambda: run_celebrity(db, client, args, stats, scrips, fundamental_caps(db), nse, news)),
+    )
+    for name, stage in stages:
+        if selected not in {"all", name}:
+            continue
+        started = time.time()
+        print(f"[{datetime.now():%H:%M:%S}] {name} start")
+        stage()
+        print(f"[{datetime.now():%H:%M:%S}] {name} done in {time.time() - started:.0f}s")
+    drop_covered_by_longer(db, stats)
     print_summary(stats)
 
 

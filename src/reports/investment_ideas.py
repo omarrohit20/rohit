@@ -9,17 +9,17 @@ SECTIONS = (
     (
         "investment-long-term",
         "Long-term",
-        "Kept. This collection is not purged.",
+        "Target upside above 50% only. Rows whose insertion date is older than 3 months are removed on the next job run.",
     ),
     (
         "investment-medium-term",
         "Medium-term",
-        "Rows whose insertion date is older than 3 months are removed on the next job run.",
+        "Target upside above 30% only, excluding long-term names. Rows whose insertion date is older than 1 month are removed on the next job run.",
     ),
     (
         "investment-short-term",
         "Short-term",
-        "Rows whose insertion date is older than 20 days are removed on the next job run.",
+        "Target upside above 20% only, excluding long- and medium-term names. Rows whose insertion date is older than 10 days are removed on the next job run.",
     ),
 )
 
@@ -30,6 +30,10 @@ PREFERRED = [
     "idea_type",
     "buy_price",
     "target_price",
+    "target_pct",
+    "target_days",
+    "target_date",
+    "target_reason",
     "stoploss",
     "conviction",
     "sentiment",
@@ -47,6 +51,15 @@ PREFERRED = [
     "sales_cr",
     "hit_count",
     "why",
+    "news_sentiment",
+    "news_conviction",
+    "news_headline",
+    "news_event",
+    "news_impact_score",
+    "news_date",
+    "order_book_years",
+    "screener_pros",
+    "screener_cons",
     "source",
     "as_of_date",
     "insertion_date",
@@ -66,10 +79,29 @@ def _load(collection: str) -> pd.DataFrame:
     frame = pd.DataFrame(docs)
     if "symbol" in frame.columns:
         frame["scrip"] = frame["symbol"]
+    _fill_target(frame)
     if "insertion_date" in frame.columns:
         frame["_sort"] = pd.to_datetime(frame["insertion_date"], errors="coerce")
         frame = frame.sort_values("_sort", ascending=False, na_position="last").drop(columns=["_sort"])
     return frame.reset_index(drop=True)
+
+
+def _fill_target(frame: pd.DataFrame) -> None:
+    """Fill target % and days for rows saved before the job stored them."""
+    def stored(column: str) -> pd.Series:
+        if column in frame.columns:
+            return pd.to_numeric(frame[column], errors="coerce")
+        return pd.Series(float("nan"), index=frame.index)
+
+    if {"buy_price", "target_price"} <= set(frame.columns):
+        buy = pd.to_numeric(frame["buy_price"], errors="coerce")
+        target = pd.to_numeric(frame["target_price"], errors="coerce")
+        pct = ((target - buy) / buy.where(buy > 0) * 100).round(2)
+        frame["target_pct"] = stored("target_pct").fillna(pct)
+    if {"target_date", "insertion_date"} <= set(frame.columns):
+        due = pd.to_datetime(frame["target_date"], errors="coerce")
+        start = pd.to_datetime(frame["insertion_date"], errors="coerce")
+        frame["target_days"] = stored("target_days").fillna((due - start).dt.days)
 
 
 def _filter(frame: pd.DataFrame, idea_type: str, query: str) -> pd.DataFrame:
@@ -98,9 +130,22 @@ def _show(frame: pd.DataFrame, widget_name: str) -> None:
     config = {
         "buy_price": st.column_config.NumberColumn("Buy", format="%.2f"),
         "target_price": st.column_config.NumberColumn("Target", format="%.2f"),
+        "target_pct": st.column_config.NumberColumn("Target %", format="%.1f%%"),
+        "target_days": st.column_config.NumberColumn("Days", format="%d"),
+        "target_date": st.column_config.TextColumn("Target by"),
+        "target_reason": st.column_config.TextColumn("Target reason", width="medium"),
         "stoploss": st.column_config.NumberColumn("Stop", format="%.2f"),
         "probability_score": st.column_config.NumberColumn("Prob%"),
         "why": st.column_config.TextColumn("Why", width="large"),
+        "news_sentiment": st.column_config.TextColumn("News"),
+        "news_conviction": st.column_config.TextColumn("News conviction"),
+        "news_headline": st.column_config.TextColumn("Headline", width="large"),
+        "news_event": st.column_config.TextColumn("Event"),
+        "news_impact_score": st.column_config.NumberColumn("Impact"),
+        "news_date": st.column_config.TextColumn("News date"),
+        "order_book_years": st.column_config.NumberColumn("Order book yrs", format="%.1f"),
+        "screener_pros": st.column_config.ListColumn("Pros"),
+        "screener_cons": st.column_config.ListColumn("Cons"),
         "holding_pct": st.column_config.NumberColumn("Holding %", format="%.2f"),
         "order_book_cr": st.column_config.NumberColumn("Order book cr", format="%.1f"),
         "marketcap_cr": st.column_config.NumberColumn("Mcap cr", format="%.1f"),
@@ -124,7 +169,19 @@ def main():
         pass
     rb._ensure_chart_preview_sidebar()
     st.title("Investment ideas")
-    st.caption("High conviction and Bullish only. Click a row index to open the chart when a scrip is present.")
+    st.caption("High or Med conviction, Bullish only (celebrity buys: any conviction and target). Click a row index to open the chart when a scrip is present.")
+
+    type_options = ["All", "breakout", "orderbook", "celebrity"]
+    picked, query = st.columns([1, 2])
+    with picked:
+        idea_type = st.selectbox(
+            "Idea type",
+            type_options,
+            format_func=lambda value: {"orderbook": "Order book", "breakout": "Breakout", "celebrity": "Celebrity"}.get(value, value),
+            key="idea_type",
+        )
+    with query:
+        search = st.text_input("Symbol or investor", key="search")
 
     for collection, title, note in SECTIONS:
         st.subheader(title)
@@ -137,17 +194,6 @@ def main():
         if frame.empty:
             st.info(JOB_HINT)
             continue
-        type_options = ["All", "breakout", "orderbook", "celebrity"]
-        picked, query = st.columns([1, 2])
-        with picked:
-            idea_type = st.selectbox(
-                "Idea type",
-                type_options,
-                format_func=lambda value: {"orderbook": "Order book", "breakout": "Breakout", "celebrity": "Celebrity"}.get(value, value),
-                key=f"idea_type_{collection}",
-            )
-        with query:
-            search = st.text_input("Symbol or investor", key=f"search_{collection}")
         shown = _filter(frame, idea_type, search)
         st.caption(f"{len(shown)} rows")
         if shown.empty:

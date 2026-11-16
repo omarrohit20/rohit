@@ -34,9 +34,10 @@ For local MongoDB multi-horizon trade/investment suggestions:
 - Skill: `skills/investment-ideas/SKILL.md`
 - Helper: `skills/investment-ideas/scripts/run_investment_ideas.py`
 - Investors: `skills/investment-ideas/references/investors.md`
-- Collections: `Nsedata.investment-long-term` (kept), `investment-medium-term` (3 months), `investment-short-term` (20 days)
-- Save High conviction and Bullish only, with `why`, `buy_price`, and `target_price`
-- After the run, report inserted / updated / deleted / skipped per collection, then a symbol, buy, target, conviction, why table
+- Sources: breakout scans plus `nearY5H` (long) and `movingavg_crossed_up` (medium), Screener order books, NSE bulk/block deal buys (stored daily in `Nsedata.nse_large_deals`), NSE celebrity holdings
+- Collections: `Nsedata.investment-long-term` (3 months, target upside > 50%), `investment-medium-term` (1 month, upside > 30%, no long-term symbols), `investment-short-term` (10 days, upside > 20%, no long- or medium-term symbols)
+- Save High or Med conviction and Bullish only (store the actual `conviction`); celebrity buys are saved regardless of conviction and target upside, with `why`, `buy_price`, `target_price`, `target_pct`, `target_reason`, `target_days`, and `target_date`
+- After the run, report inserted / updated / deleted / skipped per collection, then a symbol, buy, target, target %, days, target date, target reason, conviction, why table
 - Do not place live orders. Educational only, not SEBI advice
 
 ## Scan News Conviction Futures

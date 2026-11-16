@@ -76,8 +76,8 @@ When the user asks for **investment ideas**, order-book multibaggers, celebrity 
 python skills/investment-ideas/scripts/run_investment_ideas.py
 ```
 
-3. Summarize inserted, updated, deleted, and skipped (not High conviction) counts per collection (`investment-long-term`, `investment-medium-term`, `investment-short-term`).
-4. Lead each collection with a short table: symbol, buy, target, conviction, and why (plus investor or top holder when present).
+3. Summarize inserted, updated, deleted, and skipped (Low conviction or not Bullish) counts per collection (`investment-long-term`, `investment-medium-term`, `investment-short-term`).
+4. Lead each collection with a short table: symbol, buy, target, target %, days, target date, target reason, conviction, and why (plus investor or top holder when present).
 5. Disclaimer: educational only, not SEBI advice.
 
 ## Mongo AI Analysis (persist High-conviction picks)

@@ -179,126 +179,126 @@ def main():
     st.divider()
     st.divider()
 
-    col0, col1, col2, col3, col4, col5 = st.columns(6)
-    with col0:
-        df = rb.getdf('supertrend-morning-buy')
-        try:
-            bullish = rb.news_sentiment_scrips('Bullish')
-            bearish = rb.news_sentiment_scrips('Bearish')
-            keys = df['scrip'].astype(str).str.strip().str.upper()
-            df = df[
-                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
-                (abs(df['month3HighChange']) > 1) &
-                (df['PCT_day_change'] < 1) &
-                (keys.isin(bullish) | keys.isin(bearish)) &
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, df, 'Supertrend Morning Buy', color='LG', renderf10buy01=True, height=150)
-    with col1:
-        df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
-        try:
-            bullish = rb.news_sentiment_scrips('Bullish')
-            bearish = rb.news_sentiment_scrips('Bearish')
-            keys = df['scrip'].astype(str).str.strip().str.upper()
-            df = df[
-                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
-                (abs(df['month3HighChange']) > 1) &
-                (df['PCT_day_change'] < 1) &
-                (keys.isin(bullish) | keys.isin(bearish)) &
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, df, 'Crossed 2 Day Highs', color='LG', renderf10buy01=True, height=150)
-    with col2:
-        df = rb.getdf('crossed-day-high')
-        try:
-            bullish = rb.news_sentiment_scrips('Bullish')
-            bearish = rb.news_sentiment_scrips('Bearish')
-            keys = df['scrip'].astype(str).str.strip().str.upper()
-            df = df[
-                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
-                (abs(df['month3HighChange']) > 1) &
-                (df['PCT_day_change'] < 1) &
-                (df['PCT_day_change'] > -1) &
-                (keys.isin(bullish) | keys.isin(bearish)) &
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, df, 'Crossed Day Highs', color='LG', renderf10buy01=True, height=150)
-    with col3:
-        df = rb.getdf('supertrend-morning-sell')
-        try:
-            bullish = rb.news_sentiment_scrips('Bullish')
-            bearish = rb.news_sentiment_scrips('Bearish')
-            keys = df['scrip'].astype(str).str.strip().str.upper()
-            df = df[
-                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
-                (abs(df['month3LowChange']) > 1) &
-                (df['PCT_day_change'] > -1) &
-                (keys.isin(bullish) | keys.isin(bearish)) &
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, df, 'Supertrend Morning Sell', color='LG', renderf10sell01=True, height=150)
-    with col4:
-        df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
-        try:
-            bullish = rb.news_sentiment_scrips('Bullish')
-            bearish = rb.news_sentiment_scrips('Bearish')
-            keys = df['scrip'].astype(str).str.strip().str.upper()
-            df = df[
-                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
-                (abs(df['month3LowChange']) > 1) &
-                (df['PCT_day_change'] > -1) &
-                (keys.isin(bullish) | keys.isin(bearish)) &
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, df, 'Crossed 2 Day Lows', color='LG', renderf10sell01=True, height=150)
-    with col5:
-        df = rb.getdf('crossed-day-low')
-        try:
-            bullish = rb.news_sentiment_scrips('Bullish')
-            bearish = rb.news_sentiment_scrips('Bearish')
-            keys = df['scrip'].astype(str).str.strip().str.upper()
-            df = df[
-                ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
-                (abs(df['month3LowChange']) > 1) &
-                (df['PCT_day_change'] < 1) &
-                (df['PCT_day_change'] > -1) &
-                (keys.isin(bullish) | keys.isin(bearish)) &
-                (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, df, 'Crossed Day Lows', color='LG', renderf10sell01=True, height=150)
+    # col0, col1, col2, col3, col4, col5 = st.columns(6)
+    # with col0:
+    #     df = rb.getdf('supertrend-morning-buy')
+    #     try:
+    #         bullish = rb.news_sentiment_scrips('Bullish')
+    #         bearish = rb.news_sentiment_scrips('Bearish')
+    #         keys = df['scrip'].astype(str).str.strip().str.upper()
+    #         df = df[
+    #             ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+    #             (abs(df['month3HighChange']) > 1) &
+    #             (df['PCT_day_change'] < 1) &
+    #             (keys.isin(bullish) | keys.isin(bearish)) &
+    #             (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
+    #         ]
+    #     except KeyError as e:
+    #         print("")
+    #     rb.render(st, df, 'Supertrend Morning Buy', color='LG', renderf10buy01=True, height=150)
+    # with col1:
+    #     df = rb.getdf('09_30:checkChartBuy/Sell-morningDown(LastDaybeforeGT0-OR-MidacpCrossedMorningHigh)')
+    #     try:
+    #         bullish = rb.news_sentiment_scrips('Bullish')
+    #         bearish = rb.news_sentiment_scrips('Bearish')
+    #         keys = df['scrip'].astype(str).str.strip().str.upper()
+    #         df = df[
+    #             ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+    #             (abs(df['month3HighChange']) > 1) &
+    #             (df['PCT_day_change'] < 1) &
+    #             (keys.isin(bullish) | keys.isin(bearish)) &
+    #             (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
+    #         ]
+    #     except KeyError as e:
+    #         print("")
+    #     rb.render(st, df, 'Crossed 2 Day Highs', color='LG', renderf10buy01=True, height=150)
+    # with col2:
+    #     df = rb.getdf('crossed-day-high')
+    #     try:
+    #         bullish = rb.news_sentiment_scrips('Bullish')
+    #         bearish = rb.news_sentiment_scrips('Bearish')
+    #         keys = df['scrip'].astype(str).str.strip().str.upper()
+    #         df = df[
+    #             ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+    #             (abs(df['month3HighChange']) > 1) &
+    #             (df['PCT_day_change'] < 1) &
+    #             (df['PCT_day_change'] > -1) &
+    #             (keys.isin(bullish) | keys.isin(bearish)) &
+    #             (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
+    #         ]
+    #     except KeyError as e:
+    #         print("")
+    #     rb.render(st, df, 'Crossed Day Highs', color='LG', renderf10buy01=True, height=150)
+    # with col3:
+    #     df = rb.getdf('supertrend-morning-sell')
+    #     try:
+    #         bullish = rb.news_sentiment_scrips('Bullish')
+    #         bearish = rb.news_sentiment_scrips('Bearish')
+    #         keys = df['scrip'].astype(str).str.strip().str.upper()
+    #         df = df[
+    #             ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+    #             (abs(df['month3LowChange']) > 1) &
+    #             (df['PCT_day_change'] > -1) &
+    #             (keys.isin(bullish) | keys.isin(bearish)) &
+    #             (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
+    #         ]
+    #     except KeyError as e:
+    #         print("")
+    #     rb.render(st, df, 'Supertrend Morning Sell', color='LG', renderf10sell01=True, height=150)
+    # with col4:
+    #     df = rb.getdf('09_30:checkChartSell/Buy-morningup(LastDaybeforeLT0-OR-MidacpCrossedMorningLow)')
+    #     try:
+    #         bullish = rb.news_sentiment_scrips('Bullish')
+    #         bearish = rb.news_sentiment_scrips('Bearish')
+    #         keys = df['scrip'].astype(str).str.strip().str.upper()
+    #         df = df[
+    #             ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+    #             (abs(df['month3LowChange']) > 1) &
+    #             (df['PCT_day_change'] > -1) &
+    #             (keys.isin(bullish) | keys.isin(bearish)) &
+    #             (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
+    #         ]
+    #     except KeyError as e:
+    #         print("")
+    #     rb.render(st, df, 'Crossed 2 Day Lows', color='LG', renderf10sell01=True, height=150)
+    # with col5:
+    #     df = rb.getdf('crossed-day-low')
+    #     try:
+    #         bullish = rb.news_sentiment_scrips('Bullish')
+    #         bearish = rb.news_sentiment_scrips('Bearish')
+    #         keys = df['scrip'].astype(str).str.strip().str.upper()
+    #         df = df[
+    #             ((abs(df['PCT_day_change_pre1']) < 1.5)|((abs(df['PCT_day_change_pre2']) < 1.5))) &
+    #             (abs(df['month3LowChange']) > 1) &
+    #             (df['PCT_day_change'] < 1) &
+    #             (df['PCT_day_change'] > -1) &
+    #             (keys.isin(bullish) | keys.isin(bearish)) &
+    #             (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
+    #             (~df['systemtime'].str.contains('12:', case=False, regex=True, na=False))
+    #         ]
+    #     except KeyError as e:
+    #         print("")
+    #     rb.render(st, df, 'Crossed Day Lows', color='LG', renderf10sell01=True, height=150)
 
-    st.divider()
-    st.divider()
+    # st.divider()
+    # st.divider()
 
     
     col1, col2, col3, col4 = st.columns(4)
