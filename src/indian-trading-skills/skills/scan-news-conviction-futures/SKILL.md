@@ -142,6 +142,8 @@ list, directional High/Med list.
 
 Then print **SUMMARY NEWS DIGEST** — **company news + analyst headlines** from scrips processed this run (no sectoral section).
 
+Finally print **HIGH CONVICTION GIST** — **Bullish** and **Bearish** tables with **full headline text** (grouped when identical), **Today only — new inserts (12h)** with `Published` and `Impact` per row (no truncation), and **Regulatory — High conviction** listing every regulatory headline in full.
+
 ## Prerequisites
 
 - MongoDB `mongodb://localhost:27017`

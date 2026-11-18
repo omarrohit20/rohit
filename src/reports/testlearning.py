@@ -476,6 +476,83 @@ def main():
         rb.render(st, filtered_df, 'morning-volume-bs : morning-volume-breakout-sell', color='LG', renderf10sell01=True, height=200)
     
 
+    col1, col2, col4, col5 = st.columns(4)
+    with col1:
+        df = rb.getintersectdf('morning-volume-bs', 'morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['forecast_day_PCT10_change'] > 10) &
+                (df['PCT_day_change'] < 0.7) &
+                (df['PCT_day_change'] > -0.7) &
+                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:5', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, na=False)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'morning-volume-bs : morning-volume-breakout-buy', color='LG', renderf10buy01=True, height=200) 
+    with col2:
+        df = rb.getintersectdf('morning-volume-bs', 'morning-volume-breakout-buy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] < -1.5) &
+                (df['month3HighChange'] < 0) &
+                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:5', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, na=False)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'SELL: morning-volume-bs : morning-volume-breakout-buy', color='LG', renderf10buy01=True, height=200)   
+    with col4:
+        df = rb.getintersectdf('morning-volume-bs', 'morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['forecast_day_PCT10_change'] < -10) &
+                (df['PCT_day_change'] < 0.7) &
+                (df['PCT_day_change'] > -0.7) &
+                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:5', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, na=False)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'morning-volume-bs : morning-volume-breakout-sell', color='LG', renderf10sell01=True, height=200)
+    with col5:
+        df = rb.getintersectdf('morning-volume-bs', 'morning-volume-breakout-sell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] > 1.5) &
+                (df['month3LowChange'] > 0) &
+                (~df['systemtime'].str.contains('09:3', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, na=False)) &
+                (~df['systemtime'].str.contains('09:5', case=False, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, na=False)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BUY:morning-volume-bs : morning-volume-breakout-sell', color='LG', renderf10sell01=True, height=200)
+    
+    
+    
+
     col1, col3 = st.columns(2)
     with col1:
         df = rb.getintersectdf('morning-volume-bs', 'cash-buuy')

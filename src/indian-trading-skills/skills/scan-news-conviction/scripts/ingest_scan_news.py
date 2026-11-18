@@ -1459,6 +1459,7 @@ def apply_futures_media_tv_batch(
             counts[action] = counts.get(action, 0) + 1
             row = summary_row(scrip, industry, tables, merged, action)
             row["media_tv"] = True
+            row["new_articles"] = new_items
             row["media_new"] = [a for a in new_items if a.get("media_tv")]
             processed.append(row)
             print(
@@ -2115,6 +2116,390 @@ def print_media_tv_summary_and_news(
     else:
         for _impact, scrip, industry, article in lines:
             print(_headline_line(scrip, industry, article))
+    print("=" * 72)
+
+
+def _strip_headline_source(title: str) -> str:
+    t = (title or "").replace("\n", " ").strip()
+    if " - " in t:
+        left, right = t.rsplit(" - ", 1)
+        if right and len(right) <= 72:
+            t = left.strip()
+    return t
+
+
+def _dedupe_summary_rows_by_scrip(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    by: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        scrip = str(row.get("scrip") or "").upper()
+        if not scrip:
+            continue
+        prev = by.get(scrip)
+        if prev is None or int(row.get("items") or 0) >= int(prev.get("items") or 0):
+            by[scrip] = row
+    return [by[k] for k in sorted(by)]
+
+
+def _best_driver_article(row: dict[str, Any]) -> dict | None:
+    cands: list[dict] = []
+    for a in row.get("news") or []:
+        cands.append(a)
+    for a in row.get("analyst") or []:
+        cands.append(a)
+    for a in row.get("regulatory") or []:
+        cands.append(a)
+    if not cands:
+        return None
+
+    def _key(a: dict) -> tuple[datetime, int]:
+        dt = parse_published(a.get("published")) or datetime.min
+        return (dt, int(a.get("impact_score") or 0))
+
+    return max(cands, key=_key)
+
+
+def headline_driver_full(article: dict, industry: str = "") -> str:
+    """Full headline text for gist tables (no truncation)."""
+    title = _strip_headline_source(article.get("title") or "").replace("\n", " ").strip()
+    if title:
+        return title
+    theme = article.get("regulatory_theme") or ""
+    if theme:
+        return f"[{theme}] {industry or 'Regulatory headline'}".strip()
+    return industry or "Company headline"
+
+
+def headline_driver_gist(article: dict, industry: str = "") -> str:
+    """Short 'recent driver' line (legacy; gist summary uses headline_driver_full)."""
+    title = _strip_headline_source(article.get("title") or "")
+    tlow = title.lower()
+    kind = article.get("kind")
+
+    if kind == REGULATORY_KIND:
+        theme = str(article.get("regulatory_theme") or "")
+        if theme == "rbi_banking":
+            if "rupee" in tlow:
+                return "RBI/rupee-yield macro"
+            return "RBI / banking regulation"
+        if theme == "sebi_market":
+            return "SEBI / market-structure rules"
+        if theme == "irdai_distribution":
+            return "IRDAI / insurance distribution"
+        short = title[:70] + ("..." if len(title) > 70 else "")
+        return short or (industry or "Regulatory headline")
+
+    if MEDIA_TV_RESULTS_RE.search(title) or "q2" in tlow or "quarter" in tlow:
+        if any(w in tlow for w in ("plunge", "fall", "drop", "miss", "weak", "slump", "tank")):
+            return "Weak Q2 print"
+        if "dividend" in tlow:
+            return "Q2 results & dividend"
+        if any(w in tlow for w in ("target", "upgrade", "downgrade", "split on", "guidance")):
+            return "Post-Q2 analyst / target commentary"
+        return "Q2 results / earnings"
+
+    if "earnings slowdown" in tlow:
+        return "Earnings slowdown flagged (broker view)"
+    if "debt-free" in tlow or "buyback" in tlow:
+        return "Debt-free / buyback narrative"
+    if "top stock pick" in tlow or "top picks" in tlow:
+        return "Broker top picks after Q2 beats"
+    if ANALYST_RE.search(title) or "target price" in tlow:
+        return "Analyst / target price"
+    if GENERIC_MARKET_NEWS_RE.search(title) and industry:
+        return f"{industry} sector flow"
+    if industry and len(title) > 85:
+        return f"{industry} — " + title[:72] + "..."
+    if title:
+        return title[:75] + ("..." if len(title) > 75 else "")
+    return industry or "Company headline"
+
+
+_BANK_HIGH_EXPOSURE = frozenset(
+    {
+        "HDFCBANK",
+        "IDFCFIRSTB",
+        "RBLBANK",
+        "AUBANK",
+        "AXISBANK",
+        "SBIN",
+        "INDUSINDBK",
+        "ICICIBANK",
+        "KOTAKBANK",
+        "BANDHANBNK",
+        "FEDERALBNK",
+        "BANKBARODA",
+        "CANBK",
+        "UNIONBANK",
+        "PNB",
+    }
+)
+
+
+def _regulatory_gist_blurb(high_rows: list[dict[str, Any]]) -> str:
+    titles: list[str] = []
+    for row in high_rows:
+        for a in row.get("regulatory") or []:
+            titles.append(_strip_headline_source(a.get("title") or "").lower())
+    if not titles:
+        return ""
+    blob = " ".join(titles)
+    phrases: list[str] = []
+    if "rupee" in blob or " rbi" in blob or blob.startswith("rbi"):
+        phrases.append("rupee / RBI–banking macro")
+    if "inflation" in blob or "bond yield" in blob or "housing" in blob:
+        phrases.append("inflation & bond-yield impact on housing")
+    if "sebi" in blob:
+        line = "SEBI KYC / derivatives rules"
+        if any(r.get("scrip") == "BSE" for r in high_rows):
+            line += " on BSE (exchange exposure)"
+        phrases.append(line)
+    if "irdai" in blob or "insurance" in blob:
+        phrases.append("IRDAI / insurance distribution reform")
+    if not phrases:
+        short = titles[0][:90] + ("..." if len(titles[0]) > 90 else "")
+        phrases.append(short)
+    banks = any(str(r.get("scrip") or "").upper() in _BANK_HIGH_EXPOSURE for r in high_rows)
+    who = "high-exposure banks" if banks else "high-exposure scrips"
+    return f"Regulatory ({who}, stored with High conviction): {'; '.join(phrases)}."
+
+
+def _published_within_hours(
+    published: Any, now: datetime, *, hours: int = 12
+) -> bool:
+    """Today-only headline with publish time within the last *hours* (date-only = same day)."""
+    if not is_published_today_strict(published, now):
+        return False
+    dt = parse_published(published)
+    if dt is None:
+        return False
+    pub_text = str(published or "")
+    if (dt.hour == 0 and dt.minute == 0) and not re.search(
+        r"\d{1,2}:\d{2}", pub_text
+    ):
+        return True
+    age = now - dt
+    if age.total_seconds() < 0:
+        return True
+    return age <= timedelta(hours=hours)
+
+
+def _row_new_insertions(row: dict[str, Any]) -> list[dict]:
+    out: list[dict] = []
+    seen: set[str] = set()
+    for a in row.get("new_articles") or []:
+        key = _title_key(a.get("title") or "")
+        if key and key not in seen:
+            seen.add(key)
+            out.append(a)
+    for a in row.get("media_new") or []:
+        key = _title_key(a.get("title") or "")
+        if key and key not in seen:
+            seen.add(key)
+            out.append(a)
+    return out
+
+
+def _today_new_high_conviction_articles(
+    row: dict[str, Any], now: datetime, *, hours: int = 12
+) -> list[dict]:
+    """Headlines newly inserted this run (else today's news fallback) within the window."""
+    scored_kinds = {"news", "analyst", REGULATORY_KIND}
+    inserts = _row_new_insertions(row)
+    pool = (
+        inserts
+        if inserts
+        else list(row.get("news") or []) + list(row.get("analyst") or [])
+    )
+    out: list[dict] = []
+    for article in pool:
+        if article.get("kind") not in scored_kinds:
+            continue
+        if _published_within_hours(article.get("published"), now, hours=hours):
+            out.append(article)
+    return out
+
+
+def _md_table_cell(value: Any) -> str:
+    return str(value or "").replace("|", "\\|").replace("\n", " ").strip()
+
+
+def _print_markdown_table(headers: list[str], rows: list[list[Any]]) -> None:
+    """Pipe table for terminals, logs, and chat renderers."""
+    print("| " + " | ".join(headers) + " |")
+    print("| " + " | ".join("---" for _ in headers) + " |")
+    for row in rows:
+        print("| " + " | ".join(_md_table_cell(c) for c in row) + " |")
+
+
+def _print_high_conviction_gist_table(
+    sentiment: str,
+    groups: dict[tuple[str, str], set[str]],
+) -> int:
+    """One table: scrips sharing the same recent driver (single overall sentiment)."""
+    rows: list[tuple[str, list[str]]] = []
+    scrip_count = 0
+    for (sent, driver), scrips in groups.items():
+        if sent != sentiment:
+            continue
+        uniq = sorted(scrips)
+        rows.append((driver, uniq))
+        scrip_count += len(uniq)
+    if not rows:
+        return 0
+    rows.sort(key=lambda item: item[1][0])
+    print(f"\n{sentiment} — High conviction ({scrip_count})")
+    table_rows = [
+        [", ".join(sorted(set(scrips))), driver] for driver, scrips in rows
+    ]
+    _print_markdown_table(["Scrip", "Recent driver"], table_rows)
+    return scrip_count
+
+
+def _best_today_new_article(row: dict[str, Any], now: datetime, *, hours: int = 12) -> dict | None:
+    cands = _today_new_high_conviction_articles(row, now, hours=hours)
+    if not cands:
+        return None
+
+    def _key(a: dict) -> tuple[int, datetime]:
+        return (int(a.get("impact_score") or 0), parse_published(a.get("published")) or datetime.min)
+
+    return max(cands, key=_key)
+
+
+def _today_new_gist_for_row(row: dict[str, Any], now: datetime, *, hours: int = 12) -> str:
+    industry = str(row.get("industry") or "").strip()
+    article = _best_today_new_article(row, now, hours=hours)
+    if not article:
+        return ""
+    return headline_driver_full(article, industry)
+
+
+def _print_today_new_high_conviction_table(
+    high: list[dict[str, Any]],
+    now: datetime,
+    *,
+    hours: int = 12,
+) -> None:
+    """One today-window gist per High scrip (best new headline), grouped when identical."""
+    groups: dict[str, set[str]] = {}
+    for row in high:
+        gist = _today_new_gist_for_row(row, now, hours=hours)
+        if not gist:
+            continue
+        scrip = str(row.get("scrip") or "").upper()
+        groups.setdefault(gist, set()).add(scrip)
+    print(f"\nToday only — new High conviction inserts (last {hours}h, per scrip gist)")
+    if not groups:
+        print("  (none)")
+        return
+    scrip_count = sum(len(s) for s in groups.values())
+    print(f"  ({scrip_count} scrips)")
+    table_rows: list[list[str]] = []
+    for gist in sorted(groups.keys()):
+        scrips = sorted(groups[gist])
+        table_rows.append([", ".join(scrips), gist])
+    table_rows.sort(key=lambda r: r[0])
+    _print_markdown_table(["Scrip", "Today news gist"], table_rows)
+
+
+def _best_regulatory_article(row: dict[str, Any]) -> dict | None:
+    cands = list(row.get("regulatory") or [])
+    if not cands:
+        return None
+
+    def _key(a: dict) -> tuple[datetime, int]:
+        dt = parse_published(a.get("published")) or datetime.min
+        return (dt, int(a.get("impact_score") or 0))
+
+    return max(cands, key=_key)
+
+
+def _regulatory_gist_for_row(row: dict[str, Any]) -> str:
+    industry = str(row.get("industry") or "").strip()
+    article = _best_regulatory_article(row)
+    if not article:
+        return ""
+    gist = headline_driver_full(article, industry)
+    theme = str(article.get("regulatory_theme") or "")
+    if theme and gist and not gist.startswith("["):
+        gist = f"[{theme}] {gist}"
+    return gist
+
+
+def _print_regulatory_high_conviction_gist(high: list[dict[str, Any]]) -> None:
+    """One regulatory gist per High scrip (best headline), grouped when identical."""
+    groups: dict[str, set[str]] = {}
+    for row in high:
+        gist = _regulatory_gist_for_row(row)
+        if not gist:
+            continue
+        scrip = str(row.get("scrip") or "").upper()
+        groups.setdefault(gist, set()).add(scrip)
+    if not groups:
+        print("\nRegulatory — High conviction (per scrip gist)")
+        print("  (none)")
+        return
+    scrip_count = sum(len(s) for s in groups.values())
+    print(f"\nRegulatory — High conviction (per scrip gist, {scrip_count} scrips)")
+    table_rows: list[list[str]] = []
+    for gist in sorted(groups.keys()):
+        scrips = sorted(groups[gist])
+        table_rows.append([", ".join(scrips), gist])
+    table_rows.sort(key=lambda r: r[0])
+    _print_markdown_table(["Scrip", "Regulatory gist"], table_rows)
+
+
+def print_high_conviction_gist_summary(
+    rows: list[dict[str, Any]],
+    *,
+    now: datetime | None = None,
+    recent_hours: int = 12,
+    skill_name: str = "scan-news-conviction-futures",
+) -> None:
+    """Tabular High conviction gist + regulatory blurb (end of futures skill)."""
+    if now is None:
+        now = datetime.now()
+    deduped = _dedupe_summary_rows_by_scrip(rows)
+    high = [r for r in deduped if r.get("conviction") == "High"]
+    if not high:
+        return
+
+    entries: list[tuple[str, str, str]] = []
+    for row in high:
+        scrip = str(row.get("scrip") or "").upper()
+        sentiment = str(row.get("sentiment") or "Neutral")
+        industry = str(row.get("industry") or "").strip()
+        article = _best_driver_article(row)
+        if article:
+            driver = headline_driver_full(article, industry)
+        elif industry:
+            driver = f"{industry} headlines"
+        else:
+            driver = "New stored headlines"
+        if row.get("regulatory") and "(also regulatory pool)" not in driver:
+            driver = f"{driver} (also regulatory pool)"
+        entries.append((scrip, sentiment, driver))
+
+    groups: dict[tuple[str, str], list[str]] = {}
+    for scrip, sentiment, driver in entries:
+        key = (sentiment, driver)
+        groups.setdefault(key, set()).add(scrip)
+
+    print("\n" + "=" * 72)
+    print(f"HIGH CONVICTION GIST — {skill_name}")
+    print("=" * 72)
+    print(f"High conviction ({len(high)}) — headline gist")
+
+    _print_high_conviction_gist_table("Bullish", groups)
+    _print_high_conviction_gist_table("Bearish", groups)
+    other_sentiments = sorted(
+        {sent for sent, _ in groups if sent not in ("Bullish", "Bearish")}
+    )
+    for sent in other_sentiments:
+        _print_high_conviction_gist_table(sent, groups)
+
+    _print_today_new_high_conviction_table(high, now, hours=recent_hours)
+    _print_regulatory_high_conviction_gist(high)
     print("=" * 72)
 
 

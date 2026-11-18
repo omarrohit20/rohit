@@ -164,6 +164,11 @@ def print_summary(
 
     print("========================================================================")
     ingest.print_news_digest(processed, skill_name="scan-news-conviction-futures")
+    ingest.print_high_conviction_gist_summary(
+        processed,
+        now=now,
+        skill_name="scan-news-conviction-futures",
+    )
 
 
 def main() -> None:
@@ -257,6 +262,11 @@ def main() -> None:
             counts=counts,
             processed=processed,
             errors=errors,
+        )
+        ingest.print_high_conviction_gist_summary(
+            processed,
+            now=now,
+            skill_name="scan-news-conviction-futures",
         )
         client.close()
         return
@@ -382,6 +392,7 @@ def main() -> None:
             action = ingest.upsert_scrip(coll, scrip, industry, tables, merged)
             counts[action] = counts.get(action, 0) + 1
             row = ingest.summary_row(scrip, industry, tables, merged, action)
+            row["new_articles"] = list(new_items)
             processed.append(row)
             n_reg = sum(1 for a in new_items if a.get("kind") == ingest.REGULATORY_KIND)
             print(
