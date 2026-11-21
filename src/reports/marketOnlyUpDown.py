@@ -579,7 +579,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'MorningDown:UpAfterDown', height=100, color='LG')
         else:
             rb.render(st, empty_df, 'MorningDown:UpAfterDown', height=100, color='LG')
@@ -596,7 +596,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'MorningDown:lowTail', height=100, color='LG')
         else:
             rb.render(st, empty_df, 'MorningDown:lowTail', height=100, color='LG')
@@ -623,7 +623,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'MorningUp:DownInUptrend', height=100, color='LG')
         else:
             rb.render(st, empty_df, 'MorningUp:DownInUptrend', height=100, color='LG')
@@ -640,7 +640,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'MorningUp:highTail', height=100, color='LG')
         else:
             rb.render(st, empty_df, 'MorningUp:highTail', height=100, color='LG')
@@ -689,7 +689,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'Volume - BreakHigh', color='LG')
         else:
             rb.render(st, empty_df, 'Volume - BreakHigh', color='LG')
@@ -721,7 +721,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'Volume - ReversalLow', color='LG')
         else:
             rb.render(st, empty_df, 'Volume - ReversalLow', color='LG')
@@ -768,7 +768,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'Volume - BreakLow', color='LG')
         else:
             rb.render(st, empty_df, 'Volume - BreakLow', color='LG')
@@ -800,7 +800,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'Volume - ReversalHigh', color='LG')
         else:
             rb.render(st, empty_df, 'Volume - ReversalHigh', color='LG')
@@ -948,7 +948,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'BreakHigh - Breakout-Beey-2', color='LG')
         else:
             rb.render(st, empty_df, 'BreakHigh - Breakout-Beey-2', color='LG')
@@ -1000,7 +1000,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'ReversalBreakLow - Breakout-Beey-2', color='LG')
         else:
             rb.render(st, empty_df, 'ReversalBreakLow - Breakout-Beey-2', color='LG')
@@ -1051,7 +1051,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'BreakLow - Breakout-Siill-2', color='LG')
         else:
             rb.render(st, empty_df, 'BreakLow - Breakout-Siill-2', color='LG')
@@ -1103,7 +1103,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'ReversalBreakHigh - Breakout-Siill-2', color='LG')
         else:
             rb.render(st, empty_df, 'ReversalBreakHigh - Breakout-Siill-2', color='LG')
@@ -1169,7 +1169,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'BreakHigh - Volume', color='LG')
         else:
             rb.render(st, empty_df, 'BreakHigh - Volume', color='LG')
@@ -1231,7 +1231,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'ReversalBreakLow - Volume', color='LG')
         else:
             rb.render(st, empty_df, 'ReversalBreakLow - volume', color='LG')
@@ -1292,7 +1292,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'BreakLow - Volume', color='LG')
         else:
             rb.render(st, empty_df, 'BreakLow - Volume', color='LG')
@@ -1352,7 +1352,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        if len(filtered_df) < 20:
+        if rb.len_ok(len(filtered_df) < 20):
             rb.render(st, filtered_df, 'ReversalBreakHigh - Volume', color='LG')
         else:
             rb.render(st, empty_df, 'ReversalBreakHigh - Volume', color='LG')

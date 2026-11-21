@@ -135,7 +135,8 @@ def render_sidebar_controls():
         key=_NEWS_SENTIMENT_KEY,
         on_change=_on_sentiment_change,
         help="Keep table rows whose scrip_news overall_sentiment is Bullish, Bearish, or either. "
-        "The 'high conviction' options also require scrip_news conviction = High. "
+        "The 'high conviction' options also require scrip_news conviction = High, "
+        "and turn on 'Skip row-count checks' so tables always show. "
         "Saved in Nsedata.reports_sidebar_prefs.",
     )
     choice = current_news_sentiment()
@@ -144,6 +145,8 @@ def render_sidebar_controls():
             import rbase as _rb
             n = len(_rb.news_sentiment_scrips(choice))
             st.sidebar.caption(f"{n} scrips with {choice.lower()} news")
+            if choice.lower().endswith(" high conviction"):
+                st.sidebar.caption("Row-count checks skipped (tables always show).")
         except Exception:
             pass
 

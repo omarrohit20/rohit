@@ -1038,7 +1038,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 1:
+        if rb.len_ok(len(filtered_df) >= 1):
             rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day High', column_conf=rb.column_config_merged,
                         column_order=rb.column_order_p, color='LG')
         else:
@@ -1069,7 +1069,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 1:
+        if rb.len_ok(len(filtered_df) >= 1):
             rb.render(st, filtered_df, 'week2lh-not-reached + Crossed 2Day High', column_conf=rb.column_config_merged,
                         column_order=rb.column_order_p, color='LG')
         else:
@@ -1099,7 +1099,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 1:
+        if rb.len_ok(len(filtered_df) >= 1):
             rb.render(st, filtered_df, 'week2lh-not-reached + Crossed Day Low', column_conf=rb.column_config_merged,
                         column_order=rb.column_order_p, color='LG')
         else:
@@ -1130,7 +1130,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 1:
+        if rb.len_ok(len(filtered_df) >= 1):
             rb.render(st, filtered_df, 'week2lh-not-reached + Crossed 2Day Low', column_conf=rb.column_config_merged,
                         column_order=rb.column_order_p, color='LG')
         else:
@@ -1158,7 +1158,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 1:
+        if rb.len_ok(len(filtered_df) >= 1):
             rb.render(st, filtered_df, 'Crossed 2 Day High + Crossed Day High', column_conf=rb.column_config_merged,
                         column_order=rb.column_order_p, color='LG')
         else:
@@ -1177,7 +1177,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 1:
+        if rb.len_ok(len(filtered_df) >= 1):
             rb.render(st, filtered_df, 'supertrend-morning-buy + Crossed Day High', column_conf=rb.column_config_merged,
                         column_order=rb.column_order_p, color='LG')
         else:
@@ -1202,7 +1202,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 1:
+        if rb.len_ok(len(filtered_df) >= 1):
             rb.render(st, filtered_df, 'Crossed 2 Day Low + Crossed Day Low', column_conf=rb.column_config_merged,
                         column_order=rb.column_order_p, color='LG')
         else:
@@ -1221,7 +1221,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 1:
+        if rb.len_ok(len(filtered_df) >= 1):
             rb.render(st, filtered_df, 'supertrend-morning-sell + Crossed Day Low', column_conf=rb.column_config_merged,
                         column_order=rb.column_order_p, color='LG')
         else:
@@ -1405,7 +1405,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 1:
+        if rb.len_ok(len(filtered_df) >= 1):
             rb.render(st, filtered_df, 'BuyAllProcessor + buy-morning-volume-breakout(Trending)', column_order=rb.column_order_p, color='LG')
         else:
             rb.render(st, empty_df, 'BuyAllProcessor + buy-morning-volume-breakout(Trending)', column_order=rb.column_order_p, color='LG')
@@ -1479,7 +1479,7 @@ def main():
                 ]
         except KeyError as e:
             print("")
-        if len(filtered_df) >= 1:
+        if rb.len_ok(len(filtered_df) >= 1):
             rb.render(st, filtered_df, 'SellAllProcessor + sell-morning-volume-breakout(Trending)', column_order=rb.column_order_p, color='LG')
         else:
             rb.render(st, empty_df, 'SellAllProcessor + sell-morning-volume-breakout(Trending)', column_order=rb.column_order_p, color='LG') 

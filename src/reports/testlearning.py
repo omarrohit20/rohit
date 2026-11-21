@@ -23,162 +23,6 @@ def main():
 
     rb.testLearning = True
 
-    col1, col2 = st.columns(2)
-    with col1:
-        df = rb._filter_scan_news(rb.getintersectdf_ml('regressionhigh', 'regressionlow'), 'Bullish')
-        # df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_change'] > -1.3) &
-                (df['PCT_day_change'] > -1.3) &
-                (df['PCT_day_change'] < 0.5) &
-                (df['PCT_change'] < 1) &
-                ((df['PCT_day_change_pre1'] > 2 ) | (df['PCT_day_change_pre2'] > 2 )) &
-                ((df['PCT_day_change_pre1'] < 1 ) | (df['PCT_day_change_pre2'] < 1 )) &
-                # ((df['PCT_day_change_pre1'] < -1 ) | (df['PCT_day_change_pre2'] < -1 )) &
-                (df['forecast_day_PCT10_change'] > 8) &
-                #(df['forecast_day_PCT10_change'] < 15) &
-                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) < 3:
-            rb.render(st, filtered_df, 'BuyAtOpening:SellIfNiftyLT(-0.5)OrOpenedDown', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
-        else:
-            empty_df = pd.DataFrame(columns=filtered_df.columns)
-            rb.render(st, empty_df, 'BuyAtOpening:SellIfNiftyLT(-0.5)OrOpenedDown', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
-    with col2:
-        df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_day_change'] > 0.5) &
-                (df['PCT_day_change'] < 1.5) &
-                ((df['lowTail'] > 0.9) | (df['PCT_day_change'] > 0.9)) &
-                ((df['PCT_day_change_pre1'] > -2 ) & (df['PCT_day_change_pre2'] > -2 )) &
-                ((df['PCT_day_change_pre1'] < -1.3 ) & (df['PCT_day_change_pre2'] < -1.3 )) &
-                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'BuyAfter10:00-IfLT(-1.5)|SellAfter09:30-IfGT(1)', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
-    
-    col3, col4 = st.columns(2)
-    with col3:
-        df = rb._filter_scan_news(rb.getintersectdf_ml('regressionlow', 'regressionhigh'), 'Bearish')
-        # df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_change'] < 1.3) &
-                (df['PCT_day_change'] < 1.3) &
-                (df['PCT_day_change'] > -0.5) &
-                (df['PCT_change'] > -1) &
-                ((df['PCT_day_change_pre1'] < -2 ) | (df['PCT_day_change_pre2'] < -2 )) &
-                ((df['PCT_day_change_pre1'] > -1 ) | (df['PCT_day_change_pre2'] > -1 )) &
-                #((df['PCT_day_change_pre1'] > 1 ) | (df['PCT_day_change_pre2'] > 1 )) &
-                (df['forecast_day_PCT10_change'] < -8) &
-                #(df['forecast_day_PCT10_change'] > -15) &
-                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) < 3:
-            rb.render(st, filtered_df, 'SellAtOpening:BuyIfNiftyGT(0.5)OrOpenedUp', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
-        else:
-            empty_df = pd.DataFrame(columns=filtered_df.columns)
-            rb.render(st, empty_df, 'SellAtOpening:BuyIfNiftyGT(0.5)OrOpenedUp', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
-    with col4:
-        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_day_change'] < -0.5) &
-                (df['PCT_day_change'] > -1.5) &
-                ((df['highTail'] > 0.9) | (df['PCT_day_change'] < -0.9)) &
-                ((df['PCT_day_change_pre1'] < 2 ) & (df['PCT_day_change_pre2'] < 2 )) &
-                ((df['PCT_day_change_pre1'] > 1.3 ) & (df['PCT_day_change_pre2'] > 1.3 )) &
-                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'Sell-After-10:00-IfGT(1.5)|BuyAfter09:30-IfLT(-1)', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
-
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        df = rb._filter_scan_news(rb.getintersectdf_ml('regressionlow', 'regressionhigh'), 'Bullish')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_change'] > -4.5) &
-                (df['PCT_day_change'] > -4) &
-                (df['PCT_day_change'] < -2) &
-                ((df['PCT_day_change_pre1'] > -2 ) | (df['monthHighChange'] < 0)) &
-                ((df['PCT_day_change_pre1'] > 1 ) | (df['PCT_day_change_pre2'] > 1)) &
-                (df['forecast_day_PCT5_change'] < 4) &
-                (df['forecast_day_PCT10_change'] > 5) &
-                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'UpTrendMayBuy', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG', height=150)
-    with col2:
-        df = rb._filter_scan_news(rb.getintersectdf_ml('regressionlow', 'regressionhigh'), 'Bullish')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_change'] > -4.5) &
-                (df['PCT_day_change'] > -4) &
-                (df['PCT_day_change'] < -2) &
-                ((df['PCT_day_change_pre1'] > -2 ) | (df['monthHighChange'] < 0)) &
-                ((df['PCT_day_change_pre1'] > 1 ) | (df['PCT_day_change_pre2'] > 1)) &
-                (df['forecast_day_PCT5_change'] < 4) &
-                (df['forecast_day_PCT10_change'] > 5)
-                #((df['kNeighboursValue_reg'] < -2) | (df['mlpValue_reg'] < -2))
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'UpTrendMayBuy', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG', height=150)
-    with col3:
-        df = rb._filter_scan_news(rb.getintersectdf_ml('regressionhigh', 'regressionlow'), 'Bearish')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_change'] < 4.5) &
-                (df['PCT_day_change'] < 4) &
-                (df['PCT_day_change'] > 2) &
-                ((df['PCT_day_change_pre1'] < 2 ) | (df['monthLowChange'] > 0)) &
-                ((df['PCT_day_change_pre1'] < -1 ) | (df['PCT_day_change_pre2'] < -1)) &
-                (df['forecast_day_PCT5_change'] > -4) &
-                (df['forecast_day_PCT10_change'] < -5) &
-                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'DownTrendMaySell', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG', height=150)
-    with col4:
-        df = rb._filter_scan_news(rb.getintersectdf_ml('regressionhigh', 'regressionlow'), 'Bearish')
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (df['PCT_change'] < 4.5) &
-                (df['PCT_day_change'] < 4) &
-                (df['PCT_day_change'] > 2) &
-                ((df['PCT_day_change_pre1'] < 2 ) | (df['monthLowChange'] > 0)) &
-                ((df['PCT_day_change_pre1'] < -1 ) | (df['PCT_day_change_pre2'] < -1)) &
-                (df['forecast_day_PCT5_change'] > -4) &
-                (df['forecast_day_PCT10_change'] < -5) 
-                #((df['kNeighboursValue_reg'] > 2) | (df['mlpValue_reg'] > 2))
-                ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'DownTrendMaySell', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG', height=150)
-
-
-    st.divider()
-    st.divider()
-
     # col0, col1, col2, col3, col4, col5 = st.columns(6)
     # with col0:
     #     df = rb.getdf('supertrend-morning-buy')
@@ -551,8 +395,6 @@ def main():
         rb.render(st, filtered_df, 'BUY:morning-volume-bs : morning-volume-breakout-sell', color='LG', renderf10sell01=True, height=200)
     
     
-    
-
     col1, col3 = st.columns(2)
     with col1:
         df = rb.getintersectdf('morning-volume-bs', 'cash-buuy')
@@ -600,7 +442,6 @@ def main():
             print("")
         rb.render(st, filtered_df, 'DOWN: morning-volume-bs', color='LG', renderf10sell01=True, height=300)
     
-
     col1, col2 = st.columns(2)
     with col1:
         df = rb.getdf('cash-buuy')
@@ -649,6 +490,162 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'cash-seell', color='LG', renderf10sell01=True, height=300)
+
+
+    st.divider()
+    st.divider()
+
+    col1, col2 = st.columns(2)
+    with col1:
+        df = rb._filter_scan_news(rb.getintersectdf_ml('regressionhigh', 'regressionlow'), 'Bullish')
+        # df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] > -1.3) &
+                (df['PCT_day_change'] > -1.3) &
+                (df['PCT_day_change'] < 0.5) &
+                (df['PCT_change'] < 1) &
+                ((df['PCT_day_change_pre1'] > 2 ) | (df['PCT_day_change_pre2'] > 2 )) &
+                ((df['PCT_day_change_pre1'] < 1 ) | (df['PCT_day_change_pre2'] < 1 )) &
+                # ((df['PCT_day_change_pre1'] < -1 ) | (df['PCT_day_change_pre2'] < -1 )) &
+                (df['forecast_day_PCT10_change'] > 8) &
+                #(df['forecast_day_PCT10_change'] < 15) &
+                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
+                ]
+        except KeyError as e:
+            print("")
+        if rb.len_ok(len(filtered_df) < 3):
+            rb.render(st, filtered_df, 'BuyAtOpening:SellIfNiftyLT(-0.5)OrOpenedDown', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+        else:
+            empty_df = pd.DataFrame(columns=filtered_df.columns)
+            rb.render(st, empty_df, 'BuyAtOpening:SellIfNiftyLT(-0.5)OrOpenedDown', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+    with col2:
+        df = rb.getintersectdf_ml('regressionhigh', 'regressionlow')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] > 0.5) &
+                (df['PCT_day_change'] < 1.5) &
+                ((df['lowTail'] > 0.9) | (df['PCT_day_change'] > 0.9)) &
+                ((df['PCT_day_change_pre1'] > -2 ) & (df['PCT_day_change_pre2'] > -2 )) &
+                ((df['PCT_day_change_pre1'] < -1.3 ) & (df['PCT_day_change_pre2'] < -1.3 )) &
+                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'BuyAfter10:00-IfLT(-1.5)|SellAfter09:30-IfGT(1)', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+    
+    col3, col4 = st.columns(2)
+    with col3:
+        df = rb._filter_scan_news(rb.getintersectdf_ml('regressionlow', 'regressionhigh'), 'Bearish')
+        # df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] < 1.3) &
+                (df['PCT_day_change'] < 1.3) &
+                (df['PCT_day_change'] > -0.5) &
+                (df['PCT_change'] > -1) &
+                ((df['PCT_day_change_pre1'] < -2 ) | (df['PCT_day_change_pre2'] < -2 )) &
+                ((df['PCT_day_change_pre1'] > -1 ) | (df['PCT_day_change_pre2'] > -1 )) &
+                #((df['PCT_day_change_pre1'] > 1 ) | (df['PCT_day_change_pre2'] > 1 )) &
+                (df['forecast_day_PCT10_change'] < -8) &
+                #(df['forecast_day_PCT10_change'] > -15) &
+                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
+                ]
+        except KeyError as e:
+            print("")
+        if rb.len_ok(len(filtered_df) < 3):
+            rb.render(st, filtered_df, 'SellAtOpening:BuyIfNiftyGT(0.5)OrOpenedUp', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+        else:
+            empty_df = pd.DataFrame(columns=filtered_df.columns)
+            rb.render(st, empty_df, 'SellAtOpening:BuyIfNiftyGT(0.5)OrOpenedUp', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+    with col4:
+        df = rb.getintersectdf_ml('regressionlow', 'regressionhigh')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_day_change'] < -0.5) &
+                (df['PCT_day_change'] > -1.5) &
+                ((df['highTail'] > 0.9) | (df['PCT_day_change'] < -0.9)) &
+                ((df['PCT_day_change_pre1'] < 2 ) & (df['PCT_day_change_pre2'] < 2 )) &
+                ((df['PCT_day_change_pre1'] > 1.3 ) & (df['PCT_day_change_pre2'] > 1.3 )) &
+                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'Sell-After-10:00-IfGT(1.5)|BuyAfter09:30-IfLT(-1)', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG')
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        df = rb._filter_scan_news(rb.getintersectdf_ml('regressionlow', 'regressionhigh'), 'Bullish')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] > -4.5) &
+                (df['PCT_day_change'] > -4) &
+                (df['PCT_day_change'] < -2) &
+                ((df['PCT_day_change_pre1'] > -2 ) | (df['monthHighChange'] < 0)) &
+                ((df['PCT_day_change_pre1'] > 1 ) | (df['PCT_day_change_pre2'] > 1)) &
+                (df['forecast_day_PCT5_change'] < 4) &
+                (df['forecast_day_PCT10_change'] > 5) &
+                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'UpTrendMayBuy', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG', height=150)
+    with col2:
+        df = rb._filter_scan_news(rb.getintersectdf_ml('regressionlow', 'regressionhigh'), 'Bullish')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] > -4.5) &
+                (df['PCT_day_change'] > -4) &
+                (df['PCT_day_change'] < -2) &
+                ((df['PCT_day_change_pre1'] > -2 ) | (df['monthHighChange'] < 0)) &
+                ((df['PCT_day_change_pre1'] > 1 ) | (df['PCT_day_change_pre2'] > 1)) &
+                (df['forecast_day_PCT5_change'] < 4) &
+                (df['forecast_day_PCT10_change'] > 5)
+                #((df['kNeighboursValue_reg'] < -2) | (df['mlpValue_reg'] < -2))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'UpTrendMayBuy', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG', height=150)
+    with col3:
+        df = rb._filter_scan_news(rb.getintersectdf_ml('regressionhigh', 'regressionlow'), 'Bearish')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] < 4.5) &
+                (df['PCT_day_change'] < 4) &
+                (df['PCT_day_change'] > 2) &
+                ((df['PCT_day_change_pre1'] < 2 ) | (df['monthLowChange'] > 0)) &
+                ((df['PCT_day_change_pre1'] < -1 ) | (df['PCT_day_change_pre2'] < -1)) &
+                (df['forecast_day_PCT5_change'] > -4) &
+                (df['forecast_day_PCT10_change'] < -5) &
+                ((df['kNeighboursValue_reg'] != 0) | (df['mlpValue_reg'] != 0))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DownTrendMaySell', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG', height=150)
+    with col4:
+        df = rb._filter_scan_news(rb.getintersectdf_ml('regressionhigh', 'regressionlow'), 'Bearish')
+        filtered_df = df
+        try:
+            filtered_df = df[
+                (df['PCT_change'] < 4.5) &
+                (df['PCT_day_change'] < 4) &
+                (df['PCT_day_change'] > 2) &
+                ((df['PCT_day_change_pre1'] < 2 ) | (df['monthLowChange'] > 0)) &
+                ((df['PCT_day_change_pre1'] < -1 ) | (df['PCT_day_change_pre2'] < -1)) &
+                (df['forecast_day_PCT5_change'] > -4) &
+                (df['forecast_day_PCT10_change'] < -5) 
+                #((df['kNeighboursValue_reg'] > 2) | (df['mlpValue_reg'] > 2))
+                ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DownTrendMaySell', column_conf=rb.column_config_ml, column_order=rb.column_order_ml, renderml=True, color='LG', height=150)
 
 
     st.divider()

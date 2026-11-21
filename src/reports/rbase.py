@@ -791,6 +791,9 @@ _EXTRA_DATA_FILTER_CHOICES = (
     _UPTREND_ONLY,
     _DOWNTREND_ONLY,
 )
+# Not a row filter: makes every report's `if len(...) <op> N:` render gate pass (see len_ok).
+SKIP_ROW_COUNT_CHECKS = "Skip row-count checks (always show)"
+_EXTRA_DATA_FILTER_CHOICES = _EXTRA_DATA_FILTER_CHOICES + (SKIP_ROW_COUNT_CHECKS,)
 DATA_FILTER_CHOICES = DCH_BAND_CHOICES + _EXTRA_DATA_FILTER_CHOICES
 _DCH_BAND_CHOICE_SET = frozenset(DCH_BAND_CHOICES)
 _DCH_ABS_GT_BAND_THRESHOLDS = (
@@ -1030,6 +1033,22 @@ def current_data_filters():
     return frozenset(b for b in picked if b in DATA_FILTER_CHOICES)
 
 
+def skip_row_count_checks():
+    """True when Data filtering has 'Skip row-count checks' selected,
+    or News sentiment is one of the '... high conviction' choices."""
+    if SKIP_ROW_COUNT_CHECKS in current_data_filters():
+        return True
+    return _parse_news_sentiment_choice()[1]
+
+
+def len_ok(condition):
+    """Wrap a report's row-count gate, e.g. `if rb.len_ok(len(filtered_df) > 3):`.
+
+    Returns the condition as-is, or True when 'Skip row-count checks' is selected.
+    """
+    return True if skip_row_count_checks() else bool(condition)
+
+
 def current_pct_day_change_bands():
     return current_data_filters() & _DCH_BAND_CHOICE_SET
 
@@ -1118,7 +1137,7 @@ def _pre1_or_pre2_abs_under_15(work):
 
 def filter_df_by_data_filtering(df):
     """Apply sidebar Data filtering: Dch bands OR among themselves; other rules AND."""
-    picked = current_data_filters()
+    picked = current_data_filters() - {SKIP_ROW_COUNT_CHECKS}
     if not picked or df is None:
         return df
     work = _underlying_table(df)
@@ -1458,7 +1477,8 @@ def render_scrip_index_sidebar():
             key=_DCH_BAND_KEY,
             on_change=persist_sidebar_prefs,
             help="Dch bands: keep rows matching any selected band (OR). Other rules apply together (AND). "
-            "Empty = show all.",
+            "'Skip row-count checks' ignores each table's minimum/maximum row-count gate and always "
+            "shows the filtered rows. Empty = show all.",
         )
         st.sidebar.multiselect(
             "Exclude by market cap (crores)",
