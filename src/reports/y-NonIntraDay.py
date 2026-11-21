@@ -39,6 +39,7 @@ def main():
         pass
 
     # main title
+    rb.compact_page_top()
     st.title('ShortTerm')
 
     rb.zshortTerm = True

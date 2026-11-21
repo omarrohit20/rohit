@@ -168,6 +168,7 @@ def main():
     except Exception:
         pass
     rb._ensure_chart_preview_sidebar()
+    rb.compact_page_top()
     st.title("Investment ideas")
     st.caption("High or Med conviction, Bullish only (celebrity buys: any conviction and target). Click a row index to open the chart when a scrip is present.")
 

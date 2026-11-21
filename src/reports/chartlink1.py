@@ -20,6 +20,7 @@ def main():
         pass
 
     # main title
+    rb.compact_page_top()
     st.title('chartlink-1')
 
     # # Global collection selector at top

@@ -18,6 +18,7 @@ def main():
         pass
 
     # main title
+    rb.compact_page_top()
     st.title('DailyStatsDashboard')
 
     col1, col2, col3, col4, col5 = st.columns(5)

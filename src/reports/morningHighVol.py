@@ -13,13 +13,16 @@ def main():
     # setting the screen size (ignore if already set by index)
     try:
         st.set_page_config(layout="wide",
-                           page_title="TestLearning",
+                           page_title="MorningHighVolume",
                            initial_sidebar_state="expanded",)
     except Exception:
         pass
 
     # main title
-    st.title('Learning')
+    rb.compact_page_top()
+    st.title('Morning High Volume')
+    st.text('Ignore buy if opened in minus -0.5, Ignore sell if opened in plus +0.5')
+    st.divider()
 
     rb.testLearning = True
 
@@ -320,6 +323,8 @@ def main():
         rb.render(st, filtered_df, 'morning-volume-bs : morning-volume-breakout-sell', color='LG', renderf10sell01=True, height=200)
     
 
+    st.text('SellAfter09:40 If LastDayMarkeyGT+1todayMoved+0.7 And Consolidating Otherwise Buy Reversal If LastDayMarketDowntodayMoved+0.5')
+    st.text('BuyAfter09:40 If LastDayMarkeyLT-1todayMoved-0.7 And Consolidating Otherwise Sell Reversal If LastDayMarketUptodayMoved-0.5')
     col1, col2, col4, col5 = st.columns(4)
     with col1:
         df = rb.getintersectdf('morning-volume-bs', 'morning-volume-breakout-buy')
@@ -357,7 +362,7 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'SELL: morning-volume-bs : morning-volume-breakout-buy', color='LG', renderf10buy01=True, height=200)   
+        rb.render(st, filtered_df, 'SELLAfter09:40 morning-volume-bs : morning-volume-breakout-buy', color='LG', renderf10buy01=True, height=200)   
     with col4:
         df = rb.getintersectdf('morning-volume-bs', 'morning-volume-breakout-sell')
         expected_columns = list(set(df.columns))
@@ -392,10 +397,12 @@ def main():
             ]
         except KeyError as e:
             print("")
-        rb.render(st, filtered_df, 'BUY:morning-volume-bs : morning-volume-breakout-sell', color='LG', renderf10sell01=True, height=200)
+        rb.render(st, filtered_df, 'BUYAfter09:40 morning-volume-bs : morning-volume-breakout-sell', color='LG', renderf10sell01=True, height=200)
     
+    st.divider()
+    st.divider()
     
-    col1, col3 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         df = rb.getintersectdf('morning-volume-bs', 'cash-buuy')
         expected_columns = list(set(df.columns))
@@ -419,31 +426,7 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'UP: morning-volume-bs', color='LG', renderf10buy01=True, height=300)   
-    with col3:
-        df = rb.getintersectdf('morning-volume-bs', 'cash-seell')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            bullish = rb.news_sentiment_scrips('Bullish')
-            bearish = rb.news_sentiment_scrips('Bearish')
-            bullish_high_scan_news = rb.news_scrips_by_sentiment_conviction('Bullish', 'High')
-            keys = df['scrip'].astype(str).str.strip().str.upper()
-            filtered_df = df[
-                (keys.isin(bullish) | keys.isin(bearish)) &
-                (~keys.isin(bullish_high_scan_news)) &
-                (df['PCT_day_change'] < 1) &
-                (df['forecast_day_PCT10_change'] < 10) &
-                (df['PCT_day_change'] >= -5) &
-                (df['PCT_change'] >= -4) &
-                (~df['systemtime'].str.contains('10:', case=False, na=False)) 
-            ]
-        except KeyError as e:
-            print("")
-        rb.render(st, filtered_df, 'DOWN: morning-volume-bs', color='LG', renderf10sell01=True, height=300)
-    
-    col1, col2 = st.columns(2)
-    with col1:
+    with col2:
         df = rb.getdf('cash-buuy')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -467,7 +450,29 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'cash-buuy', color='LG', renderf10buy01=True,height=300)
-    with col2:
+    with col3:
+        df = rb.getintersectdf('morning-volume-bs', 'cash-seell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            bearish = rb.news_sentiment_scrips('Bearish')
+            bullish_high_scan_news = rb.news_scrips_by_sentiment_conviction('Bullish', 'High')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (keys.isin(bullish) | keys.isin(bearish)) &
+                (~keys.isin(bullish_high_scan_news)) &
+                (df['PCT_day_change'] < 1) &
+                (df['forecast_day_PCT10_change'] < 10) &
+                (df['PCT_day_change'] >= -5) &
+                (df['PCT_change'] >= -4) &
+                (~df['systemtime'].str.contains('10:', case=False, na=False)) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DOWN: morning-volume-bs', color='LG', renderf10sell01=True, height=300)
+    with col4:
         df = rb.getdf('cash-seell')
         expected_columns = list(set(df.columns))
         empty_df = pd.DataFrame(columns=expected_columns)
@@ -490,7 +495,6 @@ def main():
         except KeyError as e:
             print("")
         rb.render(st, filtered_df, 'cash-seell', color='LG', renderf10sell01=True, height=300)
-
 
     st.divider()
     st.divider()

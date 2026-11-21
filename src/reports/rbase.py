@@ -1033,6 +1033,30 @@ def current_data_filters():
     return frozenset(b for b in picked if b in DATA_FILTER_CHOICES)
 
 
+_COMPACT_TOP_CSS = """
+<style>
+/* Pull page content (title) up: Streamlit's default top padding is ~6rem. */
+[data-testid="stMainBlockContainer"], .block-container {
+    padding-top: 2.2rem !important;
+}
+/* Header bar overlays the page; keep its toolbar but make it see-through. */
+[data-testid="stHeader"] { background: transparent; }
+h1:first-of-type, [data-testid="stHeading"]:first-of-type h1 {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+</style>
+"""
+
+
+def compact_page_top():
+    """Remove the large blank space above each report page's title. Call every rerun."""
+    try:
+        st.markdown(_COMPACT_TOP_CSS, unsafe_allow_html=True)
+    except Exception:
+        pass
+
+
 def skip_row_count_checks():
     """True when Data filtering has 'Skip row-count checks' selected,
     or News sentiment is one of the '... high conviction' choices."""

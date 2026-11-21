@@ -13,6 +13,7 @@ def main():
                        initial_sidebar_state="expanded",)
 
     # main title
+    rb.compact_page_top()
     st.title('10:00 -11:15 AM : Confirm Trend with Crossed 2 Day Chart')
 
     rb.marketOnlyUpDown = True
