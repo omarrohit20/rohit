@@ -1243,7 +1243,9 @@ _BULL_BEAR_SENTIMENTS = frozenset({"bullish", "bearish"})
 _scrip_sentiments = None
 _scrip_news_nonblank = None
 _scrip_news_f_icon = None
+_scrip_high_conviction = None
 _scrip_sentiments_t = 0.0
+_HIGH_CONVICTION_SUFFIX = " high conviction"
 _SCRIP_SENT_TTL = 30.0
 _MIN_SECTORAL_FOR_SENTIMENT = 3
 
@@ -1276,6 +1278,7 @@ def _news_is_nonblank(doc):
 def _scrip_sentiment_map():
     """scrip → lowercase overall_sentiment (scrip + sentiment only, no articles)."""
     global _scrip_sentiments, _scrip_news_nonblank, _scrip_news_f_icon, _scrip_sentiments_t
+    global _scrip_high_conviction
     now = time.time()
     if _scrip_sentiments is not None and (now - _scrip_sentiments_t) < _SCRIP_SENT_TTL:
         return _scrip_sentiments
@@ -1290,16 +1293,20 @@ def _scrip_sentiment_map():
                 "sectoral_news": 1,
                 "analyst_calls": 1,
                 "scan_tables": 1,
+                "conviction": 1,
             },
         )
         sentiments = {}
         nonblank = set()
         f_icon = set()
+        high = set()
         for d in docs:
             scrip = str(d.get("scrip") or "").strip().upper()
             if not scrip:
                 continue
             sentiments[scrip] = _scrip_sentiment_value(d)
+            if str(d.get("conviction") or "").strip().lower() == "high":
+                high.add(scrip)
             if _news_is_nonblank(d):
                 nonblank.add(scrip)
             if not _news_preview.is_from_breakout_scan_table(d):
@@ -1307,11 +1314,13 @@ def _scrip_sentiment_map():
         _scrip_sentiments = sentiments
         _scrip_news_nonblank = frozenset(nonblank)
         _scrip_news_f_icon = frozenset(f_icon)
+        _scrip_high_conviction = frozenset(high)
         _scrip_sentiments_t = now
     except Exception:
         _scrip_sentiments = {}
         _scrip_news_nonblank = frozenset()
         _scrip_news_f_icon = frozenset()
+        _scrip_high_conviction = frozenset()
         _scrip_sentiments_t = now
     return _scrip_sentiments
 
@@ -1322,28 +1331,39 @@ def news_nonblank_scrips():
     return _scrip_news_nonblank or frozenset()
 
 
-def _wanted_news_sentiments(choice=None):
+def _parse_news_sentiment_choice(choice=None):
+    """Return (wanted sentiments or None, high_conviction_only) for a sidebar choice."""
     if choice is None:
         try:
             choice = _news_preview.current_news_sentiment()
         except Exception:
             choice = "All"
+    choice = str(choice).strip()
+    high_only = choice.lower().endswith(_HIGH_CONVICTION_SUFFIX)
+    if high_only:
+        choice = choice[: -len(_HIGH_CONVICTION_SUFFIX)].strip()
     if choice == "All":
-        return None
-    if choice == "Bullish or Bearish":
-        return _BULL_BEAR_SENTIMENTS
-    return frozenset({str(choice).strip().lower()})
+        return None, False
+    if choice.lower() == "bullish or bearish":
+        return _BULL_BEAR_SENTIMENTS, high_only
+    return frozenset({choice.lower()}), high_only
+
+
+def _wanted_news_sentiments(choice=None):
+    return _parse_news_sentiment_choice(choice)[0]
 
 
 def news_sentiment_scrips(choice=None, f_icon_only=False):
     """When f_icon_only, keep scrips whose news strip shows F (not breakout-scan ℹ)."""
-    wanted = _wanted_news_sentiments(choice)
+    wanted, high_only = _parse_news_sentiment_choice(choice)
     if wanted is None:
         allowed = None
     else:
         allowed = frozenset(
             scrip for scrip, sent in _scrip_sentiment_map().items() if sent in wanted
         )
+        if high_only:
+            allowed = allowed & (_scrip_high_conviction or frozenset())
     if not f_icon_only:
         return allowed
     _scrip_sentiment_map()
@@ -1372,12 +1392,17 @@ def news_scrips_by_sentiment_conviction(sentiment, conviction, scan_news_only=Tr
 
 def filter_df_by_news_sentiment(df):
     """Keep rows matching the sidebar News sentiment choice."""
-    wanted = _wanted_news_sentiments()
+    wanted, high_only = _parse_news_sentiment_choice()
     if wanted is None or df is None or getattr(df, "empty", True):
         return df
-    if "overall_sentiment" in getattr(df, "columns", []):
+    cols = getattr(df, "columns", [])
+    if "overall_sentiment" in cols and (not high_only or "conviction" in cols):
         sent = df["overall_sentiment"].astype(str).str.strip().str.lower()
-        return df[sent.isin(wanted)].reset_index(drop=True)
+        mask = sent.isin(wanted)
+        if high_only:
+            conv = df["conviction"].astype(str).str.strip().str.lower()
+            mask = mask & (conv == "high")
+        return df[mask].reset_index(drop=True)
     if "scrip" not in getattr(df, "columns", []):
         return df
     allowed = news_sentiment_scrips()

@@ -33,7 +33,15 @@ MIN_SECTORAL_FOR_SENTIMENT = 3
 
 _SESSION_ENABLED = "news_preview_enabled"
 _NEWS_SENTIMENT_KEY = "news_sentiment_filter"
-NEWS_SENTIMENT_CHOICES = ("All", "Bullish", "Bearish", "Bullish or Bearish")
+NEWS_SENTIMENT_CHOICES = (
+    "All",
+    "Bullish",
+    "Bearish",
+    "Bullish or Bearish",
+    "Bullish high conviction",
+    "Bearish high conviction",
+    "Bullish or Bearish high conviction",
+)
 _ROW_H = 35
 _HEADER_H = 36
 
@@ -127,6 +135,7 @@ def render_sidebar_controls():
         key=_NEWS_SENTIMENT_KEY,
         on_change=_on_sentiment_change,
         help="Keep table rows whose scrip_news overall_sentiment is Bullish, Bearish, or either. "
+        "The 'high conviction' options also require scrip_news conviction = High. "
         "Saved in Nsedata.reports_sidebar_prefs.",
     )
     choice = current_news_sentiment()
