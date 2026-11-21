@@ -679,10 +679,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (df['PCT_day_change'] < 1.3) &
                 ((df['mlData'].str.contains("MLBuy0")) | (df['mlData'].str.contains("MLBuy1")) | (df['mlData'].str.contains("MLBuy2"))) &
@@ -701,10 +700,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (
                 (
@@ -745,10 +743,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (df['PCT_day_change'] > -1.3) &
                 (((df['mlData'].str.contains("MLSell0")) | (df['mlData'].str.contains("MLSell1")) | (df['mlData'].str.contains("MLSell2")))) & 
@@ -767,10 +764,9 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('09:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False)) &
                 (
                     (
@@ -806,7 +802,7 @@ def main():
 
     
     st.divider()
-
+    st.divider()
 
 
     col1, col2, col3, col4 = st.columns(4)
@@ -975,7 +971,11 @@ def main():
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
         try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bearish) | keys.isin(bullish)) &
                 (df['year5HighChange'] < 0) &
                 (df['lowTail'] < 1.5) &
                 (df['PCT_day_change'] < -1.5) &
@@ -1012,7 +1012,11 @@ def main():
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
         try:
+            bearish = rb.news_sentiment_scrips('Bearish')
+            bullish = rb.news_sentiment_scrips('Bullish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                (keys.isin(bearish) | keys.isin(bullish)) &
                 (df['highTail'] < 1.5) &
                 (df['PCT_day_change'] > 1.5) &
                 (df['PCT_change'] > 1.5) &

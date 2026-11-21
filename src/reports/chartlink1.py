@@ -52,12 +52,14 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (df['forecast_day_PCT10_change'] < 1) &
+                #(df['forecast_day_PCT10_change'] < 1) &
                 (df['monthLowChange'] > -3) &
+                ((df['yearLowChange'] > 15) | (df['PCT_day_change_pre2'] > 1)) &
+                (((df['PCT_day_change_pre1'] > -0.5) & (df['PCT_day_change_pre2'] > -0.5)) | (abs(df['PCT_day_change_pre1']) > 1.5) | (abs(df['PCT_day_change_pre2']) > 1.5)) &
                 # (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
                 # (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                # (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11', case=False, regex=True, na=False))
+                (~df['systemtime'].str.contains('11:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('12', case=False, regex=True, na=False))
             ]
         except KeyError as e:
             print("")
@@ -71,12 +73,15 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (df['forecast_day_PCT10_change'] < 1) &
+                # (df['forecast_day_PCT10_change'] < 1) &
                 (df['monthLowChange'] > -3) &
+                ((df['yearLowChange'] < -15) | (df['PCT_day_change_pre2'] < -1)) &
+                (((df['PCT_day_change_pre1'] > -0.5) & (df['PCT_day_change_pre2'] > -0.5)) | (abs(df['PCT_day_change_pre1']) > 1.5) | (abs(df['PCT_day_change_pre2']) > 1.5)) &
                 # (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
                 # (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
                 # (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11', case=False, regex=True, na=False))
+                (~df['systemtime'].str.contains('11:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('12', case=False, regex=True, na=False))
             ]
         except KeyError as e:
             print("")
@@ -86,12 +91,14 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (df['forecast_day_PCT10_change'] > -1) &
+                # (df['forecast_day_PCT10_change'] > -1) &
                 (df['monthHighChange'] < 3) &
+                ((df['yearHighChange'] < -15) | (df['PCT_day_change_pre2'] < -1)) &
+                (((df['PCT_day_change_pre1'] < 0.5) & (df['PCT_day_change_pre2'] < 0.5)) | (abs(df['PCT_day_change_pre1']) > 1.5) | (abs(df['PCT_day_change_pre2']) > 1.5)) &
                 # (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
                 # (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                # (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11', case=False, regex=True, na=False))
+                (~df['systemtime'].str.contains('11:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('12', case=False, regex=True, na=False))
             ]
         except KeyError as e:
             print("")
@@ -105,12 +112,15 @@ def main():
         filtered_df = df
         try:
             filtered_df = df[
-                (df['forecast_day_PCT10_change'] > -1) &
+                # (df['forecast_day_PCT10_change'] > -1) &
                 (df['monthHighChange'] < 3) &
+                ((df['yearHighChange'] < -15) | (df['PCT_day_change_pre2'] < -1)) &
+                (((df['PCT_day_change_pre1'] < 0.5) & (df['PCT_day_change_pre2'] < 0.5)) | (abs(df['PCT_day_change_pre1']) > 1.5) | (abs(df['PCT_day_change_pre2']) > 1.5)) &
                 # (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
                 # (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
                 # (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11', case=False, regex=True, na=False))
+                (~df['systemtime'].str.contains('11:5', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('12', case=False, regex=True, na=False))
             ]
         except KeyError as e:
             print("")
@@ -181,7 +191,7 @@ def main():
                     (
                         ((df['forecast_day_PCT10_change'] < 0) & (df['forecast_day_PCT7_change'] < 0) & (df['forecast_day_PCT5_change'] < 0)) &
                         keys.isin(bearish) &
-                        (df['PCT_day_change'] < -2.3)
+                        ((df['PCT_day_change'] < -2.3) & (df['PCT_day_change_pre1'] < -1.5))
                     )
                 )
                 ]
@@ -248,7 +258,7 @@ def main():
                     (
                         ((df['forecast_day_PCT10_change'] > 0) & (df['forecast_day_PCT7_change'] > 0) & (df['forecast_day_PCT5_change'] > 0)) &
                         keys.isin(bullish) &
-                        (df['PCT_day_change'] > 2.3)
+                        ((df['PCT_day_change'] > 2.3) & (df['PCT_day_change_pre1'] > 1.5))
                     )
                 )
                 ]
@@ -1326,7 +1336,11 @@ def main():
         df = rb.getdf('morning-volume-breakout-buy')
         filtered_df = df
         try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                ((keys.isin(bullish)) | (keys.isin(bearish))) &
                 ((df['forecast_day_PCT10_change'] > 2) | ((df['forecast_day_PCT10_change'] < -6) & (df['forecast_day_PCT5_change'] < 0))) &
                 (df['yearLowChange'] > 15) &
                 #(df['yearHighChange'] > -35) &
@@ -1384,7 +1398,11 @@ def main():
         df = rb.getdf('morning-volume-breakout-sell')
         filtered_df = df
         try:
+            bullish = rb.news_sentiment_scrips('Bullish')
+            bearish = rb.news_sentiment_scrips('Bearish')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
+                ((keys.isin(bullish)) | (keys.isin(bearish))) &
                 ((df['forecast_day_PCT10_change'] < -2) | ((df['forecast_day_PCT10_change'] > 6) & (df['forecast_day_PCT5_change'] > 0))) &
                 (df['yearHighChange'] < -15) &
                 (df['highTail'] < 1) &
@@ -1409,7 +1427,7 @@ def main():
             filtered_df = df[
                 (~df['filter3'].str.startswith('ReversalHighYear', na=False)) &
                 (~df['filter3'].str.startswith('ReversalHighMonth6', na=False)) &
-                # ((df['forecast_day_PCT10_change'] >=2) | (df['forecast_day_PCT10_change'] <= -6)) &
+                ((df['forecast_day_PCT10_change'] >=2) | (df['forecast_day_PCT10_change'] <= -6)) &
                 (~df['processor'].str.contains('cash-buy-morning-volume')) &
                 (~df['processor'].str.contains('Check-News')) &
                 (~df['processor'].str.contains('supertrend')) &
@@ -1420,7 +1438,10 @@ def main():
                 #(~df['processor'].str.contains('1-Bbuyy-morningUp-downConsolidation')) &
                 # (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 # (~df['systemtime'].str.contains('10:00', case=False, regex=True, na=False)) &
-                # (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
                 ]
         except KeyError as e:
@@ -1438,7 +1459,7 @@ def main():
             filtered_df = df[
                 (~df['filter3'].str.startswith('ReversalLowYear', na=False)) &
                 (~df['filter3'].str.startswith('ReversalLowMonth6', na=False)) &
-                # ((df['forecast_day_PCT10_change'] <= -2) | (df['forecast_day_PCT10_change'] > 6)) &
+                ((df['forecast_day_PCT10_change'] <= -2) | (df['forecast_day_PCT10_change'] > 6)) &
                 (~df['processor'].str.contains('cash-sell-morning-volume')) &
                 (~df['processor'].str.contains('Check-News')) &
                 (~df['processor'].str.contains('supertrend')) &
@@ -1449,7 +1470,10 @@ def main():
                 #(~df['processor'].str.contains('1-Sselll-morningDown')) &
                 # (~df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
                 # (~df['systemtime'].str.contains('10:00', case=False, regex=True, na=False)) &
-                # (~df['systemtime'].str.contains('10:05', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:2', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
                 (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
                 ]
         except KeyError as e:
@@ -1460,7 +1484,7 @@ def main():
             rb.render(st, empty_df, 'SellAllProcessor + week2lh-not-reached', color='LG')
 
 
-    col10, col1, col2, col30, col3, col4 = st.columns(6)
+    col10, col1, col30, col3= st.columns(4)
     with col10:
         df = rb.getdf('buy_all_processor')
         expected_columns = list(set(df.columns))
@@ -1518,38 +1542,6 @@ def main():
             rb.render(st, filtered_df, 'BuyAllProcessor', color='LG')
         else:
             rb.render(st, empty_df, 'BuyAllProcessor', color='LG')
-    with col2:
-        df = rb.getdf('buy_all_processor')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['filter3'].str.startswith('ReversalHighYear', na=False)) &
-                (~df['filter3'].str.startswith('ReversalHighMonth6', na=False)) &
-                (abs(df['monthHighChange']) >= 2.5) &
-                (abs(df['yearLowChange']) >= 5) &
-                (~df['processor'].str.contains('cash-buy-morning-volume')) &
-                (~df['processor'].str.contains('Check-News')) &
-                (~df['processor'].str.contains('supertrend')) &
-                (~df['processor'].str.contains('09_30:checkChartBuy')) &
-                (~df['processor'].str.contains('Sell-morningDown')) &
-                (~df['processor'].str.contains('buy-breakout')) &
-                (~df['processor'].str.contains('Breakout-Buy-after-10')) &
-                (~df['processor'].str.contains('1-Bbuyy-morningUp')) &
-                (~df['processor'].str.contains('buy-breakout')) &
-                (df['processor'].str.contains('buy-dayconsolidation')) &
-                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'BuyAllProcessor', height=100)
-        else:
-            rb.render(st, empty_df, 'BuyAllProcessor', height=100)
     with col30:
         df = rb.getdf('sell_all_processor')
         expected_columns = list(set(df.columns))
@@ -1607,40 +1599,7 @@ def main():
             rb.render(st, filtered_df, 'SellAllProcessor', color='LG')
         else:
             rb.render(st, empty_df, 'SellAllProcessor', color='LG')
-    with col4:
-        df = rb.getdf('sell_all_processor')
-        expected_columns = list(set(df.columns))
-        empty_df = pd.DataFrame(columns=expected_columns)
-        filtered_df = df
-        try:
-            filtered_df = df[
-                (~df['filter3'].str.startswith('ReversalLowYear', na=False)) &
-                (~df['filter3'].str.startswith('ReversalLowMonth6', na=False)) &
-                (abs(df['monthLowChange']) >= 2.5) &
-                (abs(df['yearHighChange']) >= 5) &
-
-                (~df['processor'].str.contains('cash-sell-morning-volume')) &
-                (~df['processor'].str.contains('Check-News')) &
-                (~df['processor'].str.contains('supertrend')) &
-                (~df['processor'].str.contains('09_30:checkChartSell')) &
-                (~df['processor'].str.contains('Buy-morningup')) &
-                (~df['processor'].str.contains('sell-breakout')) &
-                (~df['processor'].str.contains('Breakout-Sell-after-10')) &
-                (~df['processor'].str.contains('1-Sselll-morningDown')) &
-                (~df['processor'].str.contains('sell-breakout')) &
-                (df['processor'].str.contains('sell-dayconsolidation')) &
-                (~df['systemtime'].str.contains('10:3', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('10:5', case=False, regex=True, na=False)) &
-                (~df['systemtime'].str.contains('11:', case=False, regex=True, na=False))
-                ]
-        except KeyError as e:
-            print("")
-        if len(filtered_df) >= 1:
-            rb.render(st, filtered_df, 'SellAllProcessor', height=100)
-        else:
-            rb.render(st, empty_df, 'SellAllProcessor', height=100)
-
+    
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
