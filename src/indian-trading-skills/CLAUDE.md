@@ -40,6 +40,15 @@ For local MongoDB multi-horizon trade/investment suggestions:
 - After the run, report inserted / updated / deleted / skipped per collection, then a symbol, buy, target, target %, days, target date, target reason, conviction, why table
 - Do not place live orders. Educational only, not SEBI advice
 
+## Superstar holdings
+
+- Skill: `skills/superstar-holdings/SKILL.md`
+- Helper: `skills/superstar-holdings/scripts/run_superstar_holdings.py` (reuses `investment-ideas` NSE fetcher, cache, name matching)
+- Investors: `skills/superstar-holdings/references/investors.md`
+- Collections: `Nsedata.superstar_holdings` (current state per scrip|investor), `superstar_holdings_history`, `superstar_scan_state`, `superstar_runs`
+- Incremental: stocks whose latest quarter is already read are skipped, so daily runs are cheap
+- After the run relay only the `SUMMARY superstar-holdings` block. Educational only, not SEBI advice
+
 ## Scan News Conviction Futures
 
 - Skill: `skills/scan-news-conviction-futures/SKILL.md`

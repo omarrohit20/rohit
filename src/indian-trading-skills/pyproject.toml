@@ -40,4 +40,5 @@ testpaths = [
     "skills/india-stock-analysis/scripts/tests",
     "skills/options-strategy-advisor/scripts/tests",
     "skills/backtest-expert/scripts/tests",
+    "skills/superstar-holdings/scripts/tests",
 ]

@@ -80,6 +80,21 @@ python skills/investment-ideas/scripts/run_investment_ideas.py
 4. Lead each collection with a short table: symbol, buy, target, target %, days, target date, target reason, conviction, and why (plus investor or top holder when present).
 5. Disclaimer: educational only, not SEBI advice.
 
+## Superstar holdings
+
+When the user asks for **superstar / celebrity / big-investor holdings** (Kedia, Dolly Khanna, Kacholia, …), their new buys, cuts, exits, or the superstar holdings dashboard:
+
+1. Follow `skills/superstar-holdings/SKILL.md`.
+2. Do not place live orders. Run:
+
+```bash
+python skills/superstar-holdings/scripts/run_superstar_holdings.py
+```
+
+3. Relay only the printed `SUMMARY superstar-holdings` block; do not query Mongo or read the log unless asked (keeps tokens low).
+4. Writes `Nsedata.superstar_holdings`, `superstar_holdings_history`, `superstar_scan_state`, `superstar_runs`. Report page: `reports/superstar_holdings.py`.
+5. Disclaimer: educational only, not SEBI advice.
+
 ## Mongo AI Analysis (persist High-conviction picks)
 
 When the user asks to **save / persist / store** suggestions into Mongo (or after a swing+ report):

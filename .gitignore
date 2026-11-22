@@ -20,3 +20,6 @@ src/output/*
 src/reports/__pycache__/*
 .vscode/launch.json
 src/indian-trading-skills/myenv/*
+
+# superstar-holdings run log
+src/indian-trading-skills/skills/*/output/
