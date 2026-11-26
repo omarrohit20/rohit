@@ -1817,12 +1817,14 @@ def main():
             bullish = rb.news_sentiment_scrips('Bullish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df_2 = df[
-                    (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
+                    (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) 
                 ]
             if len(filtered_df_2) < 10:
                 filtered_df = filtered_df[
                     (keys.isin(bullish)) &
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                    (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) &
+                    (df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                    (df['systemtime'].str.contains('10:5', case=False, regex=True, na=False))
                 ]
             else:
                 filtered_df = empty_df
@@ -1836,7 +1838,9 @@ def main():
             bullish = rb.news_sentiment_scrips('Bullish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
-                (keys.isin(bullish)) 
+                (keys.isin(bullish)) &
+                (df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (df['systemtime'].str.contains('10:5', case=False, regex=True, na=False))
             ]
         except KeyError as e:
             print("")
@@ -1850,12 +1854,15 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df_2 = df[
-                    (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False))
+                    (df['systemtime'].str.contains('09:2', case=False, regex=True, na=False)) 
                 ]
             if len(filtered_df_2) < 10:
                 filtered_df = filtered_df[
                     (keys.isin(bearish)) &
-                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False))
+                    (~df['systemtime'].str.contains('09:', case=False, regex=True, na=False)) &
+                    (df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                    (df['systemtime'].str.contains('10:5', case=False, regex=True, na=False))
+
                 ]
             else:
                 filtered_df = empty_df
@@ -1869,7 +1876,9 @@ def main():
             bearish = rb.news_sentiment_scrips('Bearish')
             keys = df['scrip'].astype(str).str.strip().str.upper()
             filtered_df = df[
-                (keys.isin(bearish)) 
+                (keys.isin(bearish)) &
+                (df['systemtime'].str.contains('10:4', case=False, regex=True, na=False)) &
+                (df['systemtime'].str.contains('10:5', case=False, regex=True, na=False))
             ]
         except KeyError as e:
             print("")

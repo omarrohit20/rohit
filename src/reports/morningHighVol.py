@@ -496,6 +496,75 @@ def main():
             print("")
         rb.render(st, filtered_df, 'cash-seell', color='LG', renderf10sell01=True, height=300)
 
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        df = rb.getintersectdf('morning-volume-bs', 'cash-buuy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            bullish_high_scan_news = rb.news_scrips_by_sentiment_conviction('Bullish', 'High')
+            bearish_high_scan_news = rb.news_scrips_by_sentiment_conviction('Bearish', 'High')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (keys.isin(bullish_high_scan_news) | keys.isin(bearish_high_scan_news)) &
+                (df['PCT_day_change'] > -2.5)  
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'UP: morning-volume-bs', color='LG', renderf10buy01=True, height=300)   
+    with col2:
+        df = rb.getdf('cash-buuy')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            bullish_high_scan_news = rb.news_scrips_by_sentiment_conviction('Bullish', 'High')
+            bearish_high_scan_news = rb.news_scrips_by_sentiment_conviction('Bearish', 'High')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (keys.isin(bullish_high_scan_news) | keys.isin(bearish_high_scan_news)) &
+                (df['PCT_day_change'] > -2.5) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'cash-buuy', color='LG', renderf10buy01=True,height=300)
+    with col3:
+        df = rb.getintersectdf('morning-volume-bs', 'cash-seell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            bullish_high_scan_news = rb.news_scrips_by_sentiment_conviction('Bullish', 'High')
+            bearish_high_scan_news = rb.news_scrips_by_sentiment_conviction('Bearish', 'High')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (keys.isin(bullish_high_scan_news) | keys.isin(bearish_high_scan_news)) &
+                (df['PCT_day_change'] < 2.5) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'DOWN: morning-volume-bs', color='LG', renderf10sell01=True, height=300)
+    with col4:
+        df = rb.getdf('cash-seell')
+        expected_columns = list(set(df.columns))
+        empty_df = pd.DataFrame(columns=expected_columns)
+        filtered_df = df
+        try:
+            bullish_high_scan_news = rb.news_scrips_by_sentiment_conviction('Bullish', 'High')
+            bearish_high_scan_news = rb.news_scrips_by_sentiment_conviction('Bearish', 'High')
+            keys = df['scrip'].astype(str).str.strip().str.upper()
+            filtered_df = df[
+                (keys.isin(bullish_high_scan_news) | keys.isin(bearish_high_scan_news)) &
+                (df['PCT_day_change'] < 2.5) 
+            ]
+        except KeyError as e:
+            print("")
+        rb.render(st, filtered_df, 'cash-seell', color='LG', renderf10sell01=True, height=300)
+
+
+
     st.divider()
     st.divider()
 
